@@ -1,0 +1,3 @@
+[build]
+  publish = "design"
+  command = ""    # leave empty for pure static sites
