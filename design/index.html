@@ -8,10 +8,7 @@
 </head>
 <body>
   <!-- Video Background -->
-  <video
-    class="bg-video"
-    autoplay muted loop playsinline preload="auto"
-  >
+  <video class="bg-video" autoplay muted loop playsinline preload="auto">
     <source src="assets/videos/background.webm" type="video/webm">
     <source src="assets/videos/background.mp4" type="video/mp4">
   </video>
@@ -22,15 +19,21 @@
       <a href="/" class="logo-link">
         <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo"/>
       </a>
-      <nav class="nav">
-        <a href="#hero">Home</a>
-        <a href="#why">Why Us</a>
-        <a href="#path">Your Path</a>
-        <a href="#advantages">Advantages</a>
-        <a href="#mission">Mission</a>
-        <a href="#plans">Plans</a>
+
+      <!-- Hamburger Toggle -->
+      <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+
+      <!-- Nav Drawer -->
+      <nav class="nav-drawer" id="navDrawer">
+        <a href="#application">Apply</a>
+        <a href="about.html">About</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms &amp; Conditions</a>
+        <a href="login.html">Login</a>
+        <a href="#plans">Investment Plans</a>
       </nav>
-      <button class="cta" onclick="location.href='#application'">Begin Your Journey</button>
     </header>
 
     <!-- Hero Section -->
@@ -136,14 +139,22 @@
 
   <script src="js/main.js"></script>
   <script>
-    // Simple testimonial slider
-    (() => {
+    // Hamburger toggle
+    const btn = document.getElementById('hamburgerBtn');
+    const drawer = document.getElementById('navDrawer');
+    btn.addEventListener('click', () => {
+      drawer.classList.toggle('open');
+      btn.classList.toggle('active');
+    });
+
+    // Testimonials slider
+    (function() {
       const items = document.querySelectorAll('.testimonial'),
             prev = document.querySelector('.test-nav.prev'),
             next = document.querySelector('.test-nav.next');
       let idx = 0;
-      function show(i){
-        items.forEach((el, j)=> el.classList.toggle('active', j===i));
+      function show(i) {
+        items.forEach((el,j)=> el.classList.toggle('active', j===i));
       }
       prev.onclick = () => { idx = (idx-1+items.length)%items.length; show(idx); };
       next.onclick = () => { idx = (idx+1)%items.length; show(idx); };
