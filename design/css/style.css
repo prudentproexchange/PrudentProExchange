@@ -239,3 +239,83 @@ a { text-decoration: none; color: inherit; }
 .plans-page .cta-section button {
   margin-top: 1rem;
 }
+/* Privacy Policy Page Specific */
+
+/* Layout: main content + sidebar */
+.privacy-page {
+  display: flex;
+  flex-direction: row;
+  margin-top: 2rem;
+  padding-bottom: 4rem;
+}
+/* Table of Contents */
+.toc {
+  position: sticky;
+  top: 6rem;
+  flex: 0 0 200px;
+  margin-left: 2rem;
+  background: rgba(0,0,0,0.7);
+  padding: 1rem;
+  border-radius: 6px;
+}
+.toc h3 {
+  margin-bottom: 0.5rem;
+  color: #FFD700;
+  font-size: 1.1rem;
+}
+.toc ul {
+  list-style: none;
+  padding: 0;
+}
+.toc ul li {
+  margin: 0.5rem 0;
+}
+.toc ul li a {
+  color: #ccc;
+  font-size: 0.9rem;
+  transition: color 0.2s;
+}
+.toc ul li a:hover {
+  color: #FFD700;
+}
+
+/* Main sections adjust to occupy remaining space */
+.privacy-page > section {
+  flex: 1;
+  margin-right: 2rem;
+}
+/* Ensure last section has no extra margin */
+.privacy-page > section:last-of-type {
+  margin-right: 0;
+}
+
+/* Portal Card */
+.portal-card {
+  background: rgba(255, 215, 0, 0.1);
+  border: 2px solid #FFD700;
+  border-radius: 8px;
+  padding: 1.5rem;
+  max-width: 700px;
+  margin: 0 auto;
+  text-align: center;
+}
+.portal-card h3 {
+  background: linear-gradient(45deg, #FFD700, #FFB300);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+}
+
+/* Ensure CTA Section at bottom spans full width */
+.privacy-page .cta-section {
+  text-align: center;
+  width: 100%;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 900px) {
+  .privacy-page { flex-direction: column; }
+  .toc { display: none; }
+  .privacy-page > section { margin-right: 0; }
+}
