@@ -18,13 +18,17 @@
       <a href="/" class="logo-link">
         <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo"/>
       </a>
-      <nav class="nav">
-        <a href="/">Home</a>
-        <a href="about.html" class="active">About</a>
-        <a href="#plans">Plans</a>
+      <button class="hamburger" id="hamburgerBtn2" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="nav-drawer" id="navDrawer2">
         <a href="#application">Apply</a>
+        <a href="about.html" class="active">About</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms &amp; Conditions</a>
+        <a href="login.html">Login</a>
+        <a href="#plans">Investment Plans</a>
       </nav>
-      <button class="cta" onclick="location.href='#application'">Step Into the Divine Legacy</button>
     </header>
 
     <main class="about-page">
@@ -101,9 +105,7 @@
       <!-- Team Placeholder -->
       <section id="team" class="section section-light">
         <h2 class="section-title">Our Pillars</h2>
-        <p class="section-text">
-          <!-- Replace with CEO, Analysts, and key bios as needed -->
-        </p>
+        <p class="section-text"><!-- Add CEO, Analysts, key bios here --></p>
       </section>
 
       <!-- Final CTA -->
@@ -113,9 +115,18 @@
         <button class="cta primary" onclick="location.href='#application'">Step Into the Divine Legacy</button>
       </section>
 
-      <!-- Application Anchor -->
       <div id="application"></div>
     </main>
   </div>
+
+  <script>
+    // Hamburger toggle for About page
+    const btn2 = document.getElementById('hamburgerBtn2');
+    const drawer2 = document.getElementById('navDrawer2');
+    btn2.addEventListener('click', () => {
+      drawer2.classList.toggle('open');
+      btn2.classList.toggle('active');
+    });
+  </script>
 </body>
 </html>
