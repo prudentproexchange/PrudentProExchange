@@ -1,84 +1,97 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title>Apply • PrudentProExchange</title>
   <link rel="stylesheet" href="css/style.css"/>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 </head>
 <body>
-  <!-- Video Background -->
+  <!-- Background & Header (same as login) -->
   <video class="bg-video" autoplay muted loop playsinline preload="auto">
     <source src="assets/videos/background.webm" type="video/webm">
     <source src="assets/videos/background.mp4" type="video/mp4">
   </video>
-
   <div class="overlay">
-    <header class="site-header">…<!-- same as before -->…</header>
+    <header class="site-header">…</header>
 
     <main class="form-page">
       <section class="section section-light">
         <h1 class="section-title gold">Begin Your Journey</h1>
-        <p class="section-text">Fill out the form below to create your account and start ascending to wealth.</p>
+        <p class="section-text">
+          Sign up and submit your deposit proof. Once we confirm, your investment will start accruing.
+        </p>
         <form id="applicationForm" class="form-container">
           <label>Full Name<input type="text" name="full_name" required/></label>
-          <label>Email Address<input type="email" name="email" required/></label>
+          <label>Email<input type="email" name="email" required/></label>
           <label>Password<input type="password" name="password" required/></label>
-          <label>Phone Number<input type="tel" name="phone" required/></label>
-          <label>Investment Amount<input type="number" name="amount" min="200" required/></label>
-          <label>Choose Package
-            <select name="package" required>
-              <option value="">Select…</option>
-              <option value="basic">Dawn Star (5%)</option>
-              <option value="standard">Rising Comet (6.5%)</option>
-              <option value="silver">Lunar Glow (7.5%)</option>
-              <option value="gold">Solar Flare (8.5%)</option>
-              <option value="diamond">Galactic Crown (10%)</option>
-            </select>
+          <label>Phone<input type="tel" name="phone" required/></label>
+
+          <h3 class="section-sub">Investment</h3>
+          <p>Send your chosen amount (min $200) to:</p>
+          <code id="walletAddress">0xABC123...DEF</code>
+          <label>Amount ($)<input type="number" name="amount" min="200" required/></label>
+          <label>Plan<select name="plan" required>
+            <option value="">Select…</option>
+            <option value="basic">Dawn Star (5%)</option>
+            <option value="standard">Rising Comet (6.5%)</option>
+            <option value="silver">Lunar Glow (7.5%)</option>
+            <option value="gold">Solar Flare (8.5%)</option>
+            <option value="diamond">Galactic Crown (10%)</option>
+          </select></label>
+          <label>Proof of Payment
+            <input type="file" name="proof" accept="image/*,application/pdf" required/>
           </label>
-          <button type="submit" class="cta primary">Submit Application</button>
+
+          <button type="submit" class="cta primary">Submit & Sign Up</button>
         </form>
       </section>
     </main>
   </div>
 
   <script>
-    // Initialize Supabase
-    const SUPABASE_URL = 'https://https://iwkdznjqfbsfkscnbrkc.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU';
-    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const supabase = supabase.createClient(
+      'https://iwkdznjqfbsfkscnbrkc.supabase.co',
+      'eyJhbGciOiJIUzI1Ni...kAbiU'
+    );
 
-    // Handle form submission
-    document.getElementById('applicationForm').addEventListener('submit', async e => {
-      e.preventDefault();
-      const form = e.target;
-      const full_name = form.full_name.value;
-      const email     = form.email.value;
-      const password  = form.password.value;
-      const phone     = form.phone.value;
-      const amount    = form.amount.value;
-      const pkg       = form.package.value;
+    document.getElementById('applicationForm')
+      .addEventListener('submit', async e => {
+        e.preventDefault();
+        const f = e.target;
+        // 1. Sign up user
+        let { user, error: su } = await supabase.auth.signUp({
+          email: f.email.value, password: f.password.value
+        });
+        if (su) return alert('Sign-up error: '+su.message);
 
-      // 1. Sign up user
-      let { user, error: signUpError } = await supabase.auth.signUp({ email, password });
-      if (signUpError) return alert('Sign-up error: ' + signUpError.message);
+        // 2. Insert profile
+        let { error: pErr } = await supabase.from('profiles').insert({
+          id: user.id, full_name: f.full_name.value, phone: f.phone.value
+        });
+        if(pErr) return alert('Profile error: '+pErr.message);
 
-      // 2. Insert profile (trigger will add referral_code)
-      let { error: profileError } = await supabase
-        .from('profiles')
-        .insert({ id: user.id, full_name, phone });
-      if (profileError) return alert('Profile error: ' + profileError.message);
+        // 3. Upload proof
+        const file = f.proof.files[0];
+        const { data: upload, error: upErr } = await supabase
+          .storage.from('proofs')
+          .upload(`${user.id}/${Date.now()}_${file.name}`, file);
+        if(upErr) return alert('Upload error: '+upErr.message);
+        const url = supabase.storage.from('proofs').getPublicUrl(upload.path).publicURL;
 
-      // 3. Insert application
-      let { error: appError } = await supabase
-        .from('applications')
-        .insert({ user_id: user.id, full_name, email, phone, amount, package: pkg });
-      if (appError) return alert('Application error: ' + appError.message);
+        // 4. Insert investment
+        let { error: invErr } = await supabase.from('investments').insert({
+          user_id: user.id,
+          amount: f.amount.value,
+          plan: f.plan.value,
+          deposit_address: document.getElementById('walletAddress').textContent,
+          proof_url: url
+        });
+        if(invErr) return alert('Investment error: '+invErr.message);
 
-      alert('Application submitted! Check your email to confirm your account.');
-      form.reset();
-    });
+        alert('Application submitted! Awaiting confirmation.');
+        window.location.href = 'login.html';
+      });
   </script>
 </body>
 </html>
