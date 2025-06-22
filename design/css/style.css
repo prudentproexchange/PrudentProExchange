@@ -411,3 +411,111 @@ a { text-decoration: none; color: inherit; }
   align-self: center;
   width: 100%;
 }
+/* Dashboard Page Specific */
+
+.dashboard-page {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  padding: 2rem;
+  margin-top: 4rem; /* below header */
+}
+
+/* Base card style */
+.dash-card {
+  background: rgba(0,0,0,0.6);
+  border: 2px solid #FFD700;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.dash-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 30px rgba(0,0,0,0.7);
+}
+
+/* Growth card */
+.growth-card {
+  grid-column: 1 / -1;
+  text-align: center;
+}
+.growth-card .growth-value {
+  font-size: 2.5rem;
+  margin: 1rem 0;
+  font-family: monospace;
+}
+.growth-card .growth-sub {
+  color: #ddd;
+}
+
+/* Summary card */
+.summary-card p {
+  margin: 0.5rem 0;
+}
+
+/* Calculator card */
+.calculator-card label {
+  display: block;
+  margin-bottom: 1rem;
+  color: #fff;
+}
+.calculator-card input,
+.calculator-card select {
+  margin-top: 0.5rem;
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: none;
+}
+.calculator-card .calc-result {
+  margin-top: 1rem;
+  font-weight: bold;
+  color: #FFD700;
+}
+
+/* Transfer card */
+.transfer-card form {
+  display: flex;
+  flex-direction: column;
+}
+.transfer-card label {
+  margin-bottom: 1rem;
+  color: #fff;
+}
+.transfer-card select,
+.transfer-card input {
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: none;
+}
+
+/* History table */
+.history-card {
+  grid-column: 1 / -1;
+}
+.history-table {
+  width: 100%;
+  border-collapse: collapse;
+  color: #fff;
+}
+.history-table th,
+.history-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+}
+.history-table th {
+  background: rgba(255,215,0,0.1);
+  color: #FFD700;
+  text-align: left;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .dashboard-page {
+    grid-template-columns: 1fr;
+    margin-top: 6rem;
+  }
+  .growth-card { font-size: 0.9rem; }
+}
