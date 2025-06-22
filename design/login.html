@@ -1,50 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title>Login • PrudentProExchange</title>
   <link rel="stylesheet" href="css/style.css"/>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 </head>
 <body>
-  <!-- Video Background -->
   <video class="bg-video" autoplay muted loop playsinline preload="auto">
     <source src="assets/videos/background.webm" type="video/webm">
     <source src="assets/videos/background.mp4" type="video/mp4">
   </video>
-
   <div class="overlay">
-    <header class="site-header">
-      <a href="/" class="logo-link">
-        <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo"/>
-      </a>
-      <button class="hamburger" id="hamburgerLogin" aria-label="Menu">
-        <span></span><span></span><span></span>
-      </button>
-      <nav class="nav-drawer" id="navDrawerLogin">
-        <a href="application.html">Apply</a>
-        <a href="about.html">About</a>
-        <a href="privacy.html">Privacy Policy</a>
-        <a href="terms.html">Terms &amp; Conditions</a>
-        <a href="login.html" class="active">Login</a>
-        <a href="plans.html">Investment Plans</a>
-      </nav>
-    </header>
+    <header class="site-header">…</header>
 
     <main class="form-page">
       <section class="section section-light">
         <h1 class="section-title gold">Welcome Back</h1>
-        <p class="section-text">Log in to access your dashboard and manage your investments.</p>
         <form id="loginForm" class="form-container">
-          <label>
-            Email Address
-            <input type="email" name="email" placeholder="you@example.com" required/>
-          </label>
-          <label>
-            Password
-            <input type="password" name="password" placeholder="••••••••" required/>
-          </label>
+          <label>Email<input type="email" name="email" required/></label>
+          <label>Password<input type="password" name="password" required/></label>
           <button type="submit" class="cta primary">Log In</button>
         </form>
       </section>
@@ -52,35 +27,21 @@
   </div>
 
   <script>
-    // Hamburger toggle
-    const btnLogin = document.getElementById('hamburgerLogin'),
-          drawerLogin = document.getElementById('navDrawerLogin');
-    btnLogin.addEventListener('click', () => {
-      drawerLogin.classList.toggle('open');
-      btnLogin.classList.toggle('active');
-    });
+    const supabase = supabase.createClient(
+      'https://iwkdznjqfbsfkscnbrkc.supabase.co',
+      'eyJhbGciOiJIUzI1Ni...kAbiU'
+    );
 
-    // Initialize Supabase client
-    const SUPABASE_URL = 'https://iwkdznjqfbsfkscnbrkc.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU';
-    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    // Handle login and redirect to dashboard
-    document.getElementById('loginForm').addEventListener('submit', async e => {
-      e.preventDefault();
-      const form = e.target;
-      const { email, password } = form.elements;
-      const { error } = await supabase.auth.signInWithPassword({
-        email: email.value,
-        password: password.value
-      });
-      if (error) {
-        alert('Login error: ' + error.message);
-      } else {
-        // Redirect on successful login
+    document.getElementById('loginForm')
+      .addEventListener('submit', async e => {
+        e.preventDefault();
+        const { error } = await supabase.auth.signInWithPassword({
+          email: e.target.email.value,
+          password: e.target.password.value
+        });
+        if (error) return alert('Login error: '+error.message);
         window.location.href = 'dashboard.html';
-      }
-    });
+      });
   </script>
 </body>
 </html>
