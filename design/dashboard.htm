@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard • PrudentProExchange</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <!-- Include Supabase or your API client here -->
+</head>
+<body>
+  <!-- Video Background -->
+  <video class="bg-video" autoplay muted loop playsinline preload="auto">
+    <source src="assets/videos/background.webm" type="video/webm">
+    <source src="assets/videos/background.mp4" type="video/mp4">
+  </video>
+
+  <div class="overlay">
+    <!-- Header -->
+    <header class="site-header">
+      <a href="/" class="logo-link">
+        <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo"/>
+      </a>
+      <button class="hamburger" id="hamburgerDash" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="nav-drawer" id="navDrawerDash">
+        <a href="dashboard.html" class="active">Dashboard</a>
+        <a href="plans.html">Investment Plans</a>
+        <a href="calculator.html">Calculator</a>
+        <a href="transfer.html">Transfers</a>
+        <a href="history.html">History</a>
+        <a href="profile.html">Profile</a>
+        <a href="logout.html">Log Out</a>
+      </nav>
+    </header>
+
+    <main class="dashboard-page">
+      <!-- Live Growth Card -->
+      <section class="dash-card growth-card">
+        <h2>Live Investment Growth</h2>
+        <div class="growth-value" id="growthValue">$0.00</div>
+        <div class="growth-sub">Updates every second</div>
+      </section>
+
+      <!-- Referral & Summary -->
+      <section class="dash-card summary-card">
+        <h2>Your Summary</h2>
+        <p><strong>Referral Code:</strong> <span id="referralCode">—</span></p>
+        <p><strong>Total Invested:</strong> <span id="totalInvested">$0.00</span></p>
+        <p><strong>Available for Withdrawal:</strong> <span id="availableWithdraw">$0.00</span></p>
+      </section>
+
+      <!-- Investment Calculator -->
+      <section class="dash-card calculator-card">
+        <h2>Investment Calculator</h2>
+        <label>Amount ($): <input type="number" id="calcAmount" min="200" /></label>
+        <label>Plan:
+          <select id="calcPlan">
+            <option value="5">Dawn Star (5%)</option>
+            <option value="6.5">Rising Comet (6.5%)</option>
+            <option value="7.5">Lunar Glow (7.5%)</option>
+            <option value="8.5">Solar Flare (8.5%)</option>
+            <option value="10">Galactic Crown (10%)</option>
+          </select>
+        </label>
+        <button class="cta" id="calcBtn">Calculate</button>
+        <div class="calc-result" id="calcResult">Projected Weekly Return: $0.00</div>
+      </section>
+
+      <!-- Transfers -->
+      <section class="dash-card transfer-card">
+        <h2>Transfer Funds</h2>
+        <form id="transferForm">
+          <label>From:
+            <select id="fromAccount">
+              <option value="main">Main Wallet</option>
+              <option value="investment">Investment Wallet</option>
+            </select>
+          </label>
+          <label>To:
+            <select id="toAccount">
+              <option value="investment">Investment Wallet</option>
+              <option value="main">Main Wallet</option>
+            </select>
+          </label>
+          <label>Amount ($):
+            <input type="number" id="transferAmount" min="1" />
+          </label>
+          <button type="submit" class="cta">Transfer</button>
+        </form>
+      </section>
+
+      <!-- Transaction History -->
+      <section class="dash-card history-card">
+        <h2>Transaction History</h2>
+        <table class="history-table" id="historyTable">
+          <thead>
+            <tr><th>Date</th><th>Type</th><th>Amount</th><th>Status</th></tr>
+          </thead>
+          <tbody>
+            <!-- Filled dynamically -->
+          </tbody>
+        </table>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // Hamburger toggle
+    const btnD = document.getElementById('hamburgerDash'),
+          drawerD = document.getElementById('navDrawerDash');
+    btnD.addEventListener('click', ()=> {
+      drawerD.classList.toggle('open');
+      btnD.classList.toggle('active');
+    });
+
+    // Stub data and functions for demo (replace with real API calls)
+
+    // 1. Live Growth Update
+    let invested = 10000, rate = 0.075, start = Date.now(), term = 7*24*3600*1000;
+    function updateGrowth() {
+      let elapsed = Math.min(Date.now()-start, term);
+      let growth = invested * rate * (elapsed/term);
+      document.getElementById('growthValue').textContent = '$' + growth.toFixed(2);
+      if(elapsed < term) requestAnimationFrame(updateGrowth);
+    }
+    updateGrowth();
+
+    // 2. Summary (mock)
+    document.getElementById('referralCode').textContent = 'ABC12345';
+    document.getElementById('totalInvested').textContent = '$' + invested.toFixed(2);
+    document.getElementById('availableWithdraw').textContent = '$' + (invested*rate).toFixed(2);
+
+    // 3. Calculator
+    document.getElementById('calcBtn').onclick = ()=>{
+      let amt = parseFloat(document.getElementById('calcAmount').value)||0;
+      let r = parseFloat(document.getElementById('calcPlan').value)/100;
+      let proj = amt*r;
+      document.getElementById('calcResult').textContent = 
+        'Projected Weekly Return: $' + proj.toFixed(2);
+    };
+
+    // 4. Transfer (stub)
+    document.getElementById('transferForm').onsubmit = e=>{
+      e.preventDefault();
+      let amt = document.getElementById('transferAmount').value;
+      alert('Transferred $' + amt);
+      // push to history
+      let row = document.createElement('tr');
+      row.innerHTML = `<td>${new Date().toLocaleString()}</td>
+        <td>Transfer</td><td>$${amt}</td><td>Completed</td>`;
+      document.querySelector('#historyTable tbody').prepend(row);
+    };
+
+    // 5. Seed history (mock)
+    ['Deposit','Withdrawal','Investment'].forEach((type,i)=>{
+      let row = document.createElement('tr');
+      row.innerHTML = `<td>${new Date(Date.now()-(i+1)*3600000).toLocaleString()}</td>
+        <td>${type}</td><td>$${(i+1)*500}</td><td>Completed</td>`;
+      document.querySelector('#historyTable tbody').append(row);
+    });
+  </script>
+</body>
+</html>
