@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PrudentProExchange</title>
+  <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+  <!-- Video Background with WebM + MP4 fallback -->
+  <video
+    class="bg-video"
+    autoplay
+    muted
+    loop
+    playsinline
+    preload="auto"
+  >
+    <source src="assets/videos/background.webm" type="video/webm">
+    <source src="assets/videos/background.mp4" type="video/mp4">
+    <!-- Fallback color fill -->
+  </video>
+
+  <!-- Glass-morphic Overlay -->
+  <div class="overlay">
+    <header class="site-header">
+      <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo"/>
+      <nav class="nav">
+        <a href="#features">Features</a>
+        <a href="#how-it-works">How It Works</a>
+        <a href="#join">Join Now</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <button class="cta">Get Started</button>
+    </header>
+
+    <main class="hero">
+      <h1 class="hero-title">Invest Smarter. Earn Weekly Returns.</h1>
+      <p class="hero-subtitle">5% Weekly Yield on Your Crypto Investments</p>
+      <button class="cta primary">Start Earning Today</button>
+      <div id="ticker" class="ticker">Loading live rates…</div>
+      <div class="scroll-indicator">
+        <span>Scroll</span>
+        <div class="chevrons">
+          <div class="chevron"></div>
+          <div class="chevron"></div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
