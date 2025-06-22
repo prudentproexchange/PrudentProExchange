@@ -319,3 +319,43 @@ a { text-decoration: none; color: inherit; }
   .toc { display: none; }
   .privacy-page > section { margin-right: 0; }
 }
+/* Terms & Conditions Page Specific */
+
+/* Layout: main + sidebar */
+.terms-page {
+  display: flex;
+  flex-direction: row;
+  margin-top: 2rem;
+  padding-bottom: 4rem;
+}
+/* Reuse .toc styles from privacy page */
+.terms-page .toc { /* same as privacy */
+  position: sticky; top: 6rem;
+  flex: 0 0 200px; margin-left: 2rem;
+  background: rgba(0,0,0,0.7); padding: 1rem;
+  border-radius: 6px;
+}
+.terms-page .toc h3 { color: #FFD700; font-size: 1.1rem; margin-bottom: 0.5rem; }
+.terms-page .toc ul li a { color: #ccc; font-size: 0.9rem; transition: color 0.2s; }
+.terms-page .toc ul li a:hover { color: #FFD700; }
+
+/* Main sections flex */
+.terms-page > section {
+  flex: 1; margin-right: 2rem;
+}
+.terms-page > section:last-of-type { margin-right: 0; }
+
+/* Lists inside sections */
+.terms-page .features-list {
+  list-style: none; padding: 0; margin: 1rem 0;
+}
+.terms-page .features-list li {
+  margin-bottom: 0.75rem; font-size: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .terms-page { flex-direction: column; }
+  .terms-page .toc { display: none; }
+  .terms-page > section { margin-right: 0; }
+}
