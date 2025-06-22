@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="css/style.css"/>
 </head>
 <body>
-  <!-- Video Background with WebM + MP4 fallback -->
+  <!-- Video Background -->
   <video
     class="bg-video"
     autoplay
@@ -18,26 +18,30 @@
   >
     <source src="assets/videos/background.webm" type="video/webm">
     <source src="assets/videos/background.mp4" type="video/mp4">
-    <!-- Fallback color fill -->
   </video>
 
-  <!-- Glass-morphic Overlay -->
   <div class="overlay">
     <header class="site-header">
       <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo"/>
       <nav class="nav">
-        <a href="#features">Features</a>
-        <a href="#how-it-works">How It Works</a>
-        <a href="#join">Join Now</a>
-        <a href="#contact">Contact</a>
+        <a href="#hero">Home</a>
+        <a href="#why">Why Us</a>
+        <a href="#path">Your Path</a>
+        <a href="#mission">Mission</a>
+        <a href="#plans">Plans</a>
       </nav>
-      <button class="cta">Get Started</button>
+      <button class="cta" onclick="location.href='#application'">Begin Your Journey</button>
     </header>
 
-    <main class="hero">
-      <h1 class="hero-title">Invest Smarter. Earn Weekly Returns.</h1>
-      <p class="hero-subtitle">5% Weekly Yield on Your Crypto Investments</p>
-      <button class="cta primary">Start Earning Today</button>
+    <!-- Hero Section -->
+    <main id="hero" class="hero">
+      <h1 class="hero-title">Ascend to Wealth. Elevate the World.</h1>
+      <p class="hero-subtitle">
+        Step into a realm where your investments soar up to 10% weekly, weaving prosperity for you and communities worldwide. Secure. Visionary. Divine.
+      </p>
+      <button class="cta primary" onclick="location.href='#application'">
+        Begin Your Journey
+      </button>
       <div id="ticker" class="ticker">Loading live rates…</div>
       <div class="scroll-indicator">
         <span>Scroll</span>
@@ -47,6 +51,66 @@
         </div>
       </div>
     </main>
+
+    <!-- Why Us -->
+    <section id="why" class="section section-dark">
+      <h2 class="section-title gold">Why PrudentProExchange Stands Above?</h2>
+      <ul class="features-list">
+        <li><strong>Sanctuary of Trust:</strong> U.S.-registered and SEC-compliant, a fortress of reliability.</li>
+        <li><strong>Masters of Markets:</strong> A decade-plus of crypto and forex brilliance since 2009.</li>
+        <li><strong>Wings of Impact:</strong> Every gain empowers underserved voices in the global marketplace.</li>
+        <li><strong>Golden Harvest:</strong> Reap up to 10% weekly, delivered with celestial precision.</li>
+      </ul>
+    </section>
+
+    <!-- Your Path -->
+    <section id="path" class="section section-light">
+      <h2 class="section-title">Your Path to Prosperity</h2>
+      <ol class="path-list">
+        <li><strong>Enter the Gates:</strong> Create your account in moments with just $200.</li>
+        <li><strong>Rest in Assurance:</strong> Our sages of finance weave your funds into thriving markets.</li>
+        <li><strong>Behold the Bounty:</strong> Watch profits bloom weekly, free to claim after 7 days.</li>
+      </ol>
+    </section>
+
+    <!-- Divine Advantages -->
+    <section class="section section-dark">
+      <h2 class="section-title gold">Divine Advantages</h2>
+      <ul class="features-list">
+        <li><strong>Swift Ascension:</strong> Join in minutes, fund with ease across multiple channels.</li>
+        <li><strong>Crystal Vision:</strong> Gaze upon real-time dashboards and weekly revelations.</li>
+        <li><strong>Tailored Destiny:</strong> Select from five sacred plans to match your ambition.</li>
+        <li><strong>Shared Glory:</strong> Invite kin and amplify your rewards in harmony.</li>
+        <li><strong>Instant Grace:</strong> Summon your funds anytime, delivered within 24 hours.</li>
+      </ul>
+    </section>
+
+    <!-- Mission -->
+    <section id="mission" class="section section-light">
+      <h2 class="section-title">Our Celestial Mission</h2>
+      <p class="section-text">
+        At PrudentProExchange, we are architects of a decentralized dawn, forging a future where blockchain’s purity meets unparalleled trading artistry.
+        Since 2012, we’ve sculpted a sanctuary of wealth that transcends borders, blending high-performance node networks with a mission to make prosperity a universal hymn. Your investment ignites a movement—secure, scalable, and eternally impactful.
+      </p>
+    </section>
+
+    <!-- Ethereal Edge -->
+    <section class="section section-dark">
+      <h2 class="section-title gold">The Ethereal Edge</h2>
+      <p class="section-text">
+        Powered by the Cosmos: Our platform dances on a global lattice of bare-metal blockchain nodes, ensuring every transaction is an unbreakable vow of security and transparency. This is not just investing—it’s a revolution in decentralized divinity.
+      </p>
+    </section>
+
+    <!-- Call to Action -->
+    <section id="plans" class="section section-light cta-section">
+      <h2 class="section-title">Join the Eternal Tide</h2>
+      <p class="section-text">Rise into an era where your wealth crafts legacies and lifts humanity. Begin today, and let your success ripple through the ages.</p>
+      <button class="cta primary" onclick="location.href='#plans'">Discover Your Plan</button>
+    </section>
+
+    <!-- Placeholder for application page anchor -->
+    <div id="application"></div>
   </div>
 
   <script src="js/main.js"></script>
