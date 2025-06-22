@@ -10,23 +10,23 @@
   <!-- Video Background -->
   <video
     class="bg-video"
-    autoplay
-    muted
-    loop
-    playsinline
-    preload="auto"
+    autoplay muted loop playsinline preload="auto"
   >
     <source src="assets/videos/background.webm" type="video/webm">
     <source src="assets/videos/background.mp4" type="video/mp4">
   </video>
 
+  <!-- Glass-morphic Overlay -->
   <div class="overlay">
     <header class="site-header">
-      <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo"/>
+      <a href="/" class="logo-link">
+        <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo"/>
+      </a>
       <nav class="nav">
         <a href="#hero">Home</a>
         <a href="#why">Why Us</a>
         <a href="#path">Your Path</a>
+        <a href="#advantages">Advantages</a>
         <a href="#mission">Mission</a>
         <a href="#plans">Plans</a>
       </nav>
@@ -37,7 +37,7 @@
     <main id="hero" class="hero">
       <h1 class="hero-title">Ascend to Wealth. Elevate the World.</h1>
       <p class="hero-subtitle">
-        Step into a realm where your investments soar up to 10% weekly, weaving prosperity for you and communities worldwide. Secure. Visionary. Divine.
+        Step into a realm where your investments soar up to <strong>10% weekly</strong>, weaving prosperity for you and communities worldwide. Secure. Visionary. Divine.
       </p>
       <button class="cta primary" onclick="location.href='#application'">
         Begin Your Journey
@@ -58,7 +58,7 @@
       <ul class="features-list">
         <li><strong>Sanctuary of Trust:</strong> U.S.-registered and SEC-compliant, a fortress of reliability.</li>
         <li><strong>Masters of Markets:</strong> A decade-plus of crypto and forex brilliance since 2009.</li>
-        <li><strong>Wings of Impact:</strong> Every gain empowers underserved voices in the global marketplace.</li>
+        <li><strong>Wings of Impact:</strong> Every gain empowers underserved voices globally.</li>
         <li><strong>Golden Harvest:</strong> Reap up to 10% weekly, delivered with celestial precision.</li>
       </ul>
     </section>
@@ -74,45 +74,80 @@
     </section>
 
     <!-- Divine Advantages -->
-    <section class="section section-dark">
+    <section id="advantages" class="section section-dark">
       <h2 class="section-title gold">Divine Advantages</h2>
       <ul class="features-list">
         <li><strong>Swift Ascension:</strong> Join in minutes, fund with ease across multiple channels.</li>
-        <li><strong>Crystal Vision:</strong> Gaze upon real-time dashboards and weekly revelations.</li>
-        <li><strong>Tailored Destiny:</strong> Select from five sacred plans to match your ambition.</li>
-        <li><strong>Shared Glory:</strong> Invite kin and amplify your rewards in harmony.</li>
-        <li><strong>Instant Grace:</strong> Summon your funds anytime, delivered within 24 hours.</li>
+        <li><strong>Crystal Vision:</strong> Real-time dashboards and weekly revelations.</li>
+        <li><strong>Tailored Destiny:</strong> Five sacred plans to match your ambition.</li>
+        <li><strong>Shared Glory:</strong> Invite kin and amplify your rewards.</li>
+        <li><strong>Instant Grace:</strong> Withdraw anytime—funds delivered within 24h.</li>
       </ul>
     </section>
 
+    <!-- Testimonials Slider -->
+    <section class="section section-light">
+      <h2 class="section-title">What Our Pioneers Say</h2>
+      <div class="testimonials">
+        <div class="testimonial active">
+          <p>“PrudentProExchange transformed my portfolio. 10% weekly is unreal!”</p>
+          <span>— Alex M., USA</span>
+        </div>
+        <div class="testimonial">
+          <p>“Trustworthy, transparent, and impactful—my favorite platform.”</p>
+          <span>— Priya S., India</span>
+        </div>
+        <div class="testimonial">
+          <p>“Investing has never felt so divine. Withdrawals in 24h!”</p>
+          <span>— Carlos L., Brazil</span>
+        </div>
+        <button class="test-nav prev">&lt;</button>
+        <button class="test-nav next">&gt;</button>
+      </div>
+    </section>
+
     <!-- Mission -->
-    <section id="mission" class="section section-light">
-      <h2 class="section-title">Our Celestial Mission</h2>
+    <section id="mission" class="section section-dark">
+      <h2 class="section-title gold">Our Celestial Mission</h2>
       <p class="section-text">
-        At PrudentProExchange, we are architects of a decentralized dawn, forging a future where blockchain’s purity meets unparalleled trading artistry.
-        Since 2012, we’ve sculpted a sanctuary of wealth that transcends borders, blending high-performance node networks with a mission to make prosperity a universal hymn. Your investment ignites a movement—secure, scalable, and eternally impactful.
+        At PrudentProExchange, we are architects of a decentralized dawn, forging a future where blockchain’s purity meets unparalleled trading artistry. Since 2012, we’ve sculpted a sanctuary of wealth that transcends borders. Your investment ignites a movement—secure, scalable, and eternally impactful.
       </p>
     </section>
 
-    <!-- Ethereal Edge -->
-    <section class="section section-dark">
-      <h2 class="section-title gold">The Ethereal Edge</h2>
-      <p class="section-text">
-        Powered by the Cosmos: Our platform dances on a global lattice of bare-metal blockchain nodes, ensuring every transaction is an unbreakable vow of security and transparency. This is not just investing—it’s a revolution in decentralized divinity.
-      </p>
-    </section>
-
-    <!-- Call to Action -->
+    <!-- Call to Action / Plans -->
     <section id="plans" class="section section-light cta-section">
       <h2 class="section-title">Join the Eternal Tide</h2>
       <p class="section-text">Rise into an era where your wealth crafts legacies and lifts humanity. Begin today, and let your success ripple through the ages.</p>
       <button class="cta primary" onclick="location.href='#plans'">Discover Your Plan</button>
     </section>
 
-    <!-- Placeholder for application page anchor -->
+    <!-- Newsletter Signup -->
+    <section class="section section-dark">
+      <h2 class="section-title gold">Stay Connected</h2>
+      <form class="newsletter" onsubmit="alert('Subscribed!'); return false;">
+        <input type="email" placeholder="Your email address" required />
+        <button type="submit" class="cta">Subscribe</button>
+      </form>
+    </section>
+
+    <!-- Application Anchor -->
     <div id="application"></div>
   </div>
 
   <script src="js/main.js"></script>
+  <script>
+    // Simple testimonial slider
+    (() => {
+      const items = document.querySelectorAll('.testimonial'),
+            prev = document.querySelector('.test-nav.prev'),
+            next = document.querySelector('.test-nav.next');
+      let idx = 0;
+      function show(i){
+        items.forEach((el, j)=> el.classList.toggle('active', j===i));
+      }
+      prev.onclick = () => { idx = (idx-1+items.length)%items.length; show(idx); };
+      next.onclick = () => { idx = (idx+1)%items.length; show(idx); };
+    })();
+  </script>
 </body>
 </html>
