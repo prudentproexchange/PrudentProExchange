@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>PrudentProExchange</title>
   <link rel="stylesheet" href="css/style.css"/>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 </head>
 <body>
   <!-- Video Background -->
@@ -26,23 +27,21 @@
         <a href="application.html">Apply</a>
         <a href="about.html">About</a>
         <a href="privacy.html">Privacy Policy</a>
-        <a href="terms.html">Terms &amp; Conditions</a>
+        <a href="terms.html">Terms & Conditions</a>
         <a href="login.html">Login</a>
         <a href="plans.html">Investment Plans</a>
       </nav>
     </header>
 
     <!-- Hero Section -->
-    <main id="hero" class="hero">
+    <main id="hero" class="hero" data-aos="fade-up">
       <h1 class="hero-title">Ascend to Wealth. Elevate the World.</h1>
       <p class="hero-subtitle">
         Step into a realm where your investments soar up to <strong>10% weekly</strong>, weaving prosperity for you and communities worldwide. Secure. Visionary. Divine.
       </p>
-      <!-- UPDATED: Goes to application.html -->
       <button class="cta primary" onclick="location.href='application.html'">
         Begin Your Journey
       </button>
-
       <div id="ticker" class="ticker">Loading live rates…</div>
       <div class="scroll-indicator">
         <span>Scroll</span>
@@ -54,7 +53,7 @@
     </main>
 
     <!-- Why Us Section -->
-    <section id="why" class="section section-dark">
+    <section id="why" class="section section-dark" data-aos="fade-up">
       <h2 class="section-title gold">Why PrudentProExchange Stands Above?</h2>
       <ul class="features-list">
         <li><strong>Sanctuary of Trust:</strong> U.S.-registered and SEC-compliant, a fortress of reliability.</li>
@@ -64,8 +63,27 @@
       </ul>
     </section>
 
+    <!-- Investment Calculator Section -->
+    <section id="calculator" class="section section-light" data-aos="fade-up">
+      <h2 class="section-title">Investment Calculator</h2>
+      <form id="calcForm">
+        <label for="plan">Select Your Plan:</label>
+        <select id="plan" name="plan">
+          <option value="basic">Basic (5% weekly, $200 - $4,999)</option>
+          <option value="standard">Standard (6.5% weekly, $5,000 - $14,999)</option>
+          <option value="silver">Silver (7.5% weekly, $15,000 - $49,999)</option>
+          <option value="gold">Gold (8.5% weekly, $50,000 - $999,999)</option>
+          <option value="diamond">Diamond (10% weekly, $100,000+)</option>
+        </select>
+        <label for="amount">Investment Amount ($):</label>
+        <input type="number" id="amount" name="amount" min="200" required>
+        <button type="button" class="cta" onclick="calculateReturn()">Calculate</button>
+      </form>
+      <div id="calcResult" class="calc-result"></div>
+    </section>
+
     <!-- Your Path Section -->
-    <section id="path" class="section section-light">
+    <section id="path" class="section section-light" data-aos="fade-up">
       <h2 class="section-title">Your Path to Prosperity</h2>
       <ol class="path-list">
         <li><strong>Enter the Gates:</strong> Create your account in moments with just $200.</li>
@@ -75,7 +93,7 @@
     </section>
 
     <!-- Divine Advantages Section -->
-    <section id="advantages" class="section section-dark">
+    <section id="advantages" class="section section-dark" data-aos="fade-up">
       <h2 class="section-title gold">Divine Advantages</h2>
       <ul class="features-list">
         <li><strong>Swift Ascension:</strong> Join in minutes, fund with ease across multiple channels.</li>
@@ -86,8 +104,19 @@
       </ul>
     </section>
 
+    <!-- Our Vision Section -->
+    <section id="vision" class="section section-dark" data-aos="fade-up">
+      <h2 class="section-title gold">Our Vision</h2>
+      <div class="video-container">
+        <video controls>
+          <source src="assets/videos/company_video.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+    </section>
+
     <!-- Testimonials Section -->
-    <section class="section section-light">
+    <section class="section section-light" data-aos="fade-up">
       <h2 class="section-title">What Our Pioneers Say</h2>
       <div class="testimonials">
         <div class="testimonial active">
@@ -102,13 +131,81 @@
           <p>“Investing has never felt so divine. Withdrawals in 24h!”</p>
           <span>— Carlos L., Brazil</span>
         </div>
-        <button class="test-nav prev">&lt;</button>
-        <button class="test-nav next">&gt;</button>
+        <button class="test-nav prev"><</button>
+        <button class="test-nav next">></button>
       </div>
     </section>
 
+    <!-- FAQ Section -->
+    <section id="faq" class="section section-light" data-aos="fade-up">
+      <h2 class="section-title">Frequently Asked Questions</h2>
+      <details>
+        <summary>1. What is PrudentProExchange?</summary>
+        <p>PrudentProExchange is not merely a platform; it is a celestial gateway to the future of finance. Registered in the United States (Reg. No. 0001230714), it stands as a beacon of innovation, crafted by master traders who navigate the vast cosmos of cryptocurrency and multi-exchange markets. Here, passive income flows like a river of stars, offering discerning investors a path to prosperity that is both simple and divinely reliable.</p>
+      </details>
+      <details>
+        <summary>2. Is PrudentProExchange available for the public?</summary>
+        <p>The gates of PrudentProExchange are open to all who have reached the age of enlightenment (18+), in harmony with the laws of the land. Step into a realm where opportunity knows no bounds, and join a community united in the pursuit of financial ascension.</p>
+      </details>
+      <details>
+        <summary>3. How can I verify the credentials and authenticity of PrudentProExchange?</summary>
+        <p>Trust is the cornerstone of our celestial abode. PrudentProExchange, founded on May 25, 2012, and unveiled to the world in 2014, is a registered entity with the United States Securities and Exchange Commission (SEC). Verify our sacred bond through the SEC’s EDGAR database, a scroll of truth accessible via this link: <a href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=0001230714&owner=include&count=40">SEC EDGAR</a>. Our mission is to illuminate the digital economy, empowering all to bask in its glow.</p>
+      </details>
+      <details>
+        <summary>4. How does PrudentProExchange make profit?</summary>
+        <p>In the grand theatre of the markets, PrudentProExchange performs a symphony of strategy. Our sages of digital assets, with roots tracing back to the dawn of cryptocurrency in 2009, wield their expertise to extract and trade the most luminous cryptocurrencies. They dance with market trends, turning chaos into harmony, and volatility into a cascade of profits through masterful navigation of cryptocurrency trading and foreign exchange.</p>
+      </details>
+      <details>
+        <summary>5. How do I create an account?</summary>
+        <p>Embark on your celestial journey with ease:<br>
+        • I. Click the ‘GET STARTED’ button, like igniting a star in the night sky.<br>
+        • II. Fill the sacred fields with your details, each one a step closer to the stars.<br>
+        • III. Submit your application by clicking ‘REGISTER,’ and ascend into the cosmos of PrudentProExchange.</p>
+      </details>
+      <details>
+        <summary>6. How do I make a deposit?</summary>
+        <p>To bestow your investment upon the stars:<br>
+        • I. Enter your account DASHBOARD, your celestial command center.<br>
+        • II. Select DEPOSIT, opening the gateway to the heavens.<br>
+        • III. Choose your Investment Plan, your destined path among the constellations.<br>
+        • IV. Specify the Amount, your offering to the cosmic forces.<br>
+        • V. Select Wallet, your vessel of transaction, swift and secure.<br>
+        • VI. Confirm by clicking MAKE DEPOSIT, and watch your wealth soar among the stars.</p>
+      </details>
+      <details>
+        <summary>7. How do I make a withdrawal?</summary>
+        <p>To summon your celestial rewards:<br>
+        • I. Access your DASHBOARD, the heart of your financial empire.<br>
+        • II. Select WITHDRAW, calling forth the bounty of your endeavors.<br>
+        • III. Add a Wallet if needed, your treasure chest awaiting its fill.<br>
+        • IV. Enter the Amount, the riches you rightfully claim.<br>
+        • V. Choose your Wallet, the path through which your wealth shall flow.<br>
+        • VI. Confirm with MAKE WITHDRAWAL, and your treasures shall descend from the heavens.</p>
+      </details>
+      <details>
+        <summary>8. Is it possible to transfer from my PrudentProExchange to another user account?</summary>
+        <p>In the spirit of unity, transfers between accounts are a gesture of cosmic cooperation, free from the burden of fees. Share the light of prosperity with fellow travelers.</p>
+      </details>
+      <details>
+        <summary>9. How can I earn a referral commission?</summary>
+        <p>Become a herald of opportunity. By sharing your unique referral link, you invite others to join this celestial voyage. Each qualified deposit through your link adds a star to your constellation of wealth, earning you divine commissions.</p>
+      </details>
+      <details>
+        <summary>10. What does UTC mean in PrudentProExchange?</summary>
+        <p>UTC, the United States Trading Certificate, is a mark of honor and authenticity. It signifies your verified place in our celestial community, a badge of trust and belonging.</p>
+      </details>
+      <details>
+        <summary>11. Can I have multiple accounts?</summary>
+        <p>In the sacred halls of PrudentProExchange, integrity reigns supreme. Each soul is granted one account, ensuring fairness and trust. Any attempt to breach this covenant will result in the eternal freeze of assets and banishment from our realm.</p>
+      </details>
+      <details>
+        <summary>12. How long does it take my profits to reflect on my PrudentProExchange Account Balance?</summary>
+        <p>As the mining cycle completes its celestial dance, your profits manifest instantly in your account balance. Witness the fruits of your investment bloom without delay, a testament to our divine IVF efficiency.</p>
+      </details>
+    </section>
+
     <!-- Mission Section -->
-    <section id="mission" class="section section-dark">
+    <section id="mission" class="section section-dark" data-aos="fade-up">
       <h2 class="section-title gold">Our Celestial Mission</h2>
       <p class="section-text">
         At PrudentProExchange, we are architects of a decentralized dawn, forging a future where blockchain’s purity meets unparalleled trading artistry. Since 2012, we’ve sculpted a sanctuary of wealth that transcends borders.
@@ -116,24 +213,29 @@
     </section>
 
     <!-- CTA to Plans -->
-    <section id="plans" class="section section-light cta-section">
+    <section id="plans" class="section section-light cta-section" data-aos="fade-up">
       <h2 class="section-title">Join the Eternal Tide</h2>
       <p class="section-text">Rise into an era where your wealth crafts legacies and lifts humanity. Begin today and let your success ripple through the ages.</p>
-      <!-- UPDATED: Goes to plans.html -->
       <button class="cta primary" onclick="location.href='plans.html'">Discover Your Plan</button>
     </section>
 
     <!-- Newsletter Section -->
-    <section class="section section-dark">
+    <section class="section section-dark" data-aos="fade-up">
       <h2 class="section-title gold">Stay Connected</h2>
       <form class="newsletter" onsubmit="alert('Subscribed!'); return false;">
         <input type="email" placeholder="Your email address" required />
         <button type="submit" class="cta">Subscribe</button>
       </form>
     </section>
+
+    <!-- Footer -->
+    <footer class="section section-dark" data-aos="fade-up">
+      <p>Current UTC Time: <span id="utcTime"></span></p>
+    </footer>
   </div>
 
   <script src="js/main.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
     // Hamburger toggle
     const btn = document.getElementById('hamburgerBtn');
@@ -155,6 +257,57 @@
       prev.onclick = () => { idx = (idx-1+items.length)%items.length; show(idx); };
       next.onclick = () => { idx = (idx+1)%items.length; show(idx); };
     })();
+
+    // Investment Calculator
+    function calculateReturn() {
+      const plan = document.getElementById('plan').value;
+      const amount = parseFloat(document.getElementById('amount').value);
+      let rate, min, max;
+      switch(plan) {
+        case 'basic': rate = 0.05; min = 200; max = 4999; break;
+        case 'standard': rate = 0.065; min = 5000; max = 14999; break;
+        case 'silver': rate = 0.075; min = 15000; max = 49999; break;
+        case 'gold': rate = 0.085; min = 50000; max = 999999; break;
+        case 'diamond': rate = 0.10; min = 100000; max = Infinity; break;
+      }
+      if (isNaN(amount) || amount < min || amount > max) {
+        document.getElementById('calcResult').innerHTML = `Please enter a valid amount within the selected plan's range: $${min} - $${max === Infinity ? 'No limit' : max}.`;
+      } else {
+        const weeklyReturn = amount * rate;
+        document.getElementById('calcResult').innerHTML = `Weekly Return: $${weeklyReturn.toFixed(2)}`;
+      }
+    }
+
+    // Live Ticker
+    async function updateTicker() {
+      try {
+        const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=usd');
+        const data = await response.json();
+        const btcPrice = data.bitcoin.usd;
+        const ethPrice = data.ethereum.usd;
+        document.getElementById('ticker').innerHTML = `BTC: $${btcPrice} | ETH: $${ethPrice}`;
+      } catch (error) {
+        console.error('Error fetching ticker data:', error);
+        document.getElementById('ticker').innerHTML = 'Live rates unavailable';
+      }
+    }
+    setInterval(updateTicker, 60000);
+    updateTicker();
+
+    // UTC Time
+    function updateUTCTime() {
+      const now = new Date();
+      const utcString = now.toUTCString();
+      document.getElementById('utcTime').innerHTML = utcString;
+    }
+    setInterval(updateUTCTime, 1000);
+    updateUTCTime();
+
+    // Initialize AOS
+    AOS.init({
+      duration: 800,
+      once: true
+    });
   </script>
 </body>
 </html>
