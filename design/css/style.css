@@ -1,111 +1,79 @@
-/* 1. Reset & Base */
-* { margin: 0; padding: 0; box-sizing: border-box; }
-html, body { height: 100%; font-family: 'Segoe UI', sans-serif; color: #fff; }
-a { text-decoration: none; color: inherit; }
+/* New Section Base Styles */
+.section {
+  padding: 4rem 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+.section-light { background: rgba(0,0,0,0.6); }
+.section-dark  { background: rgba(0,0,0,0.8); }
 
-/* 2. Video Background */
-.bg-video {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100vw; height: 100vh;
-  object-fit: cover;
-  z-index: -1;
-  background: #000; /* fallback fill */
+/* Section Titles */
+.section-title {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  color: #fff;
 }
-
-/* 3. Glass-morphic Overlay */
-.overlay {
-  position: relative;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.5);
-  backdrop-filter: blur(6px);
-  display: flex;
-  flex-direction: column;
-}
-
-/* 4. Header */
-.site-header {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 1rem 2rem;
-  background: rgba(0,0,0,0.3);
-}
-.logo { height: 45px; }
-.nav a { margin: 0 1rem; font-weight: 500; transition: color 0.2s; }
-.nav a:hover { color: #FFD700; }
-.cta {
-  border: 2px solid #FFD700;
-  padding: 0.5rem 1rem; border-radius: 4px;
-  background: transparent; cursor: pointer;
-  transition: background 0.3s, color 0.3s;
-}
-.cta.primary,
-.cta:hover {
-  background: #FFD700;
-  color: #000;
-}
-
-/* 5. Hero Section */
-.hero {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center; justify-content: center;
-  text-align: center; padding: 2rem;
-}
-.hero-title {
-  font-size: 3rem;
-  letter-spacing: 2px;
-  text-transform: uppercase;
+.section-title.gold {
   background: linear-gradient(45deg, #FFD700, #FFB300);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: fadeInDown 1s ease-out forwards;
-}
-.hero-subtitle {
-  margin: 1rem 0 2rem;
-  font-size: 1.25rem;
-  opacity: 0;
-  animation: fadeInUp 1s ease-out 0.5s forwards;
 }
 
-@keyframes fadeInDown {
-  from { opacity: 0; transform: translateY(-30px); }
-  to { opacity: 1; transform: none; }
+/* Features & Path Lists */
+.features-list,
+.path-list {
+  list-style: none;
+  margin: 0 auto;
+  padding: 0;
+  max-width: 700px;
 }
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(30px); }
-  to { opacity: 1; transform: none; }
+.features-list li,
+.path-list li {
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
 }
-
-/* 6. Live Ticker */
-.ticker {
-  margin-top: 2rem;
-  padding: 0.5rem 1rem;
-  background: rgba(255,255,255,0.1);
-  border-radius: 3px;
-  font-family: monospace;
-  letter-spacing: 1px;
+.path-list { counter-reset: step; }
+.path-list li {
+  position: relative;
+  padding-left: 2.5rem;
 }
-
-/* 7. Scroll Indicator */
-.scroll-indicator {
+.path-list li::before {
+  counter-increment: step;
+  content: counter(step);
   position: absolute;
-  bottom: 2rem;
+  left: 0; top: 0;
+  background: #FFD700;
+  color: #000;
+  font-weight: bold;
+  width: 2rem; height: 2rem;
+  border-radius: 50%;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  opacity: 0.7;
-  animation: bounce 2s infinite;
-  font-size: 0.85rem;
+  justify-content: center;
 }
-.chevrons .chevron {
-  width: 10px; height: 10px;
-  border-right: 2px solid #fff;
-  border-bottom: 2px solid #fff;
-  transform: rotate(45deg);
-  margin: 3px;
+
+/* Section Paragraph Text */
+.section-text {
+  max-width: 700px;
+  margin: 0 auto 2rem;
+  font-size: 1.05rem;
+  color: #ddd;
+  text-align: center;
 }
-@keyframes bounce {
-  0%,100% { transform: translateY(0); }
-  50%     { transform: translateY(8px); }
+
+/* CTA Section */
+.cta-section {
+  text-align: center;
+}
+.cta-section .cta {
+  margin-top: 1.5rem;
+  font-size: 1.1rem;
+  padding: 0.75rem 1.5rem;
+}
+
+/* Ensure hero scroll indicator stays above new sections */
+.scroll-indicator {
+  z-index: 1;
 }
