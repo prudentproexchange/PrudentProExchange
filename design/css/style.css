@@ -519,3 +519,93 @@ a { text-decoration: none; color: inherit; }
   }
   .growth-card { font-size: 0.9rem; }
 }
+/* Investment Calculator */
+#calcForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  max-width: 400px;
+  margin: 0 auto;
+}
+#calcForm label {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  color: #fff;
+}
+#calcForm select, #calcForm input {
+  padding: 0.75rem;
+  border-radius: 4px;
+  border: 1px solid #FFD700;
+  background: #111;
+  color: #fff;
+  font-size: 1rem;
+}
+#calcForm button {
+  width: 100%;
+  max-width: 200px;
+}
+.calc-result {
+  margin-top: 1rem;
+  font-size: 1.2rem;
+  color: #FFD700;
+  text-align: center;
+}
+
+/* Video Container */
+.video-container {
+  position: relative;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  height: 0;
+  overflow: hidden;
+  max-width: 100%;
+  margin: 0 auto;
+}
+.video-container video, .video-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 2px solid #FFD700;
+  border-radius: 4px;
+}
+
+/* FAQ Section */
+details {
+  margin-bottom: 1rem;
+  border: 1px solid #FFD700;
+  border-radius: 4px;
+  padding: 0.5rem;
+  background: rgba(0,0,0,0.6);
+}
+summary {
+  cursor: pointer;
+  font-weight: bold;
+  color: #FFD700;
+  padding: 0.5rem;
+}
+details[open] summary {
+  color: #fff;
+}
+details p {
+  padding: 0.5rem;
+  color: #ddd;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 1rem;
+  background: rgba(0,0,0,0.8);
+  border-top: 1px solid #FFD700;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 600px) {
+  .hero-title { font-size: 2rem; }
+  .hero-subtitle { font-size: 1rem; }
+  .section { padding: 2rem 1rem; }
+  #calcForm { padding: 0 1rem; }
+}
