@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login • PrudentProExchange</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+</head>
+<body>
+  <!-- Video Background -->
+  <video class="bg-video" autoplay muted loop playsinline preload="auto">
+    <source src="assets/videos/background.webm" type="video/webm">
+    <source src="assets/videos/background.mp4" type="video/mp4">
+  </video>
+
+  <div class="overlay">
+    <header class="site-header">…<!-- same nav header -->…</header>
+
+    <main class="form-page">
+      <section class="section section-light">
+        <h1 class="section-title gold">Welcome Back</h1>
+        <p class="section-text">Log in to access your dashboard and manage your investments.</p>
+        <form id="loginForm" class="form-container">
+          <label>Email Address<input type="email" name="email" required/></label>
+          <label>Password<input type="password" name="password" required/></label>
+          <button type="submit" class="cta primary">Log In</button>
+        </form>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // Initialize Supabase
+    const SUPABASE_URL = 'https://YOUR_PROJECT.supabase.co';
+    const SUPABASE_ANON_KEY = 'YOUR_ANON_KEY';
+    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // Handle login
+    document.getElementById('loginForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      const { email, password } = e.target;
+      let { error } = await supabase.auth.signInWithPassword({
+        email: email.value,
+        password: password.value
+      });
+      if (error) return alert('Login error: ' + error.message);
+      alert('Login successful! Redirecting…');
+      window.location.href = '/dashboard.html'; // your post-login page
+    });
+  </script>
+</body>
+</html>
