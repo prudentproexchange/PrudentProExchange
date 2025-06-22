@@ -3,25 +3,170 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>PrudentProExchange</title>
-  <link rel="stylesheet" href="css/style.css"/>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
-  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <title>PrudentProExchange - Next-Gen Investment Platform</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* Reset & Base */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { height: 100%; font-family: 'Segoe UI', 'Poppins', sans-serif; color: #fff; overflow-x: hidden; }
+    a { text-decoration: none; color: inherit; }
+
+    /* Video Background */
+    .bg-video {
+      position: fixed; top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      object-fit: cover; z-index: -1;
+      filter: brightness(0.5);
+    }
+
+    /* Glass-morphic Overlay */
+    .overlay {
+      position: relative; background: rgba(5, 15, 30, 0.85); backdrop-filter: blur(8px);
+      min-height: 100vh; display: flex; flex-direction: column;
+    }
+
+    /* Header */
+    .site-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 2rem; background: rgba(0,0,0,0.3); position: sticky; top: 0; z-index: 100;
+      border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+    }
+    .logo { height: 45px; }
+
+    /* Hamburger Menu */
+    .hamburger {
+      width: 30px; height: 22px; display: flex; flex-direction: column; justify-content: space-between;
+      background: none; border: none; cursor: pointer; z-index: 20;
+    }
+    .hamburger span {
+      height: 3px; background: #FFD700; border-radius: 2px; transition: transform 0.3s, opacity 0.3s;
+    }
+    .hamburger.active span:nth-child(1) { transform: translateY(9px) rotate(45deg); }
+    .hamburger.active span:nth-child(2) { opacity: 0; }
+    .hamburger.active span:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
+    .nav-drawer {
+      position: fixed; top: 0; right: -250px; width: 250px; height: 100%;
+      background: rgba(5, 15, 30, 0.95); padding: 4rem 1.5rem; transition: right 0.3s; z-index: 15;
+      border-left: 1px solid rgba(255, 215, 0, 0.2);
+    }
+    .nav-drawer.open { right: 0; }
+    .nav-drawer a { margin: 0.75rem 0; font-size: 1.1rem; font-weight: 500; padding: 0.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .nav-drawer a:hover { color: #FFD700; }
+
+    /* CTA Buttons */
+    .cta {
+      border: 2px solid #FFD700; padding: 0.75rem 1.75rem; border-radius: 30px; background: transparent;
+      cursor: pointer; transition: all 0.3s ease; font-weight: 600; letter-spacing: 0.5px;
+    }
+    .cta.primary, .cta:hover { background: linear-gradient(45deg, #FFD700, #FFB300); color: #000; box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3); }
+    .cta.primary:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(255, 215, 0, 0.4); }
+
+    /* Hero */
+    .hero {
+      display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+      padding: 2rem; min-height: 100vh;
+    }
+    .hero-title {
+      font-size: 3.5rem; text-transform: uppercase; background: linear-gradient(45deg, #FFD700, #FFB300);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 1.5rem;
+      font-weight: 800; text-shadow: 0 5px 15px rgba(0,0,0,0.3); animation: fadeInDown 1s ease-out forwards;
+    }
+    .hero-subtitle {
+      margin: 1rem auto 2.5rem; font-size: 1.35rem; max-width: 800px; line-height: 1.7; color: #e0e0ff;
+      animation: fadeInUp 1s ease-out 0.5s forwards; opacity: 0;
+    }
+    @keyframes fadeInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: none; } }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: none; } }
+
+    /* Real-time Info */
+    .realtime-info { display: flex; justify-content: center; gap: 1.5rem; margin: 1.5rem 0; flex-wrap: wrap; }
+    .info-card { background: rgba(255, 215, 0, 0.08); border: 1px solid rgba(255, 215, 0, 0.2); border-radius: 10px; padding: 0.75rem 1.5rem; min-width: 200px; }
+    .info-card .label { font-size: 0.9rem; color: #aaa; margin-bottom: 0.3rem; }
+    .info-card .value { font-size: 1.4rem; font-weight: 600; color: #FFD700; font-family: monospace; }
+
+    /* Ticker */
+    .ticker { margin-top: 1.5rem; padding: 0.75rem 1.5rem; background: rgba(255,255,255,0.05); border-radius: 30px; max-width: 90%; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
+    .ticker-content { display: flex; gap: 2.5rem; animation: tickerScroll 30s linear infinite; }
+    .ticker-item { display: flex; align-items: center; gap: 0.5rem; white-space: nowrap; }
+    .ticker-item .crypto { color: #FFD700; font-weight: 600; }
+    .ticker-item .price { color: #4ade80; }
+    @keyframes tickerScroll { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
+
+    /* Sections */
+    .section { padding: 6rem 2rem; max-width: 1200px; margin: 0 auto; }
+    .section-title { font-size: 2.5rem; margin-bottom: 3rem; text-align: center; font-weight: 700; }
+    .section-title.gold { background: linear-gradient(45deg, #FFD700, #FFB300); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .section-title:after { content: ''; display: block; width: 80px; height: 4px; background: linear-gradient(90deg, #FFD700, #FFB300); margin: 1rem auto 0; border-radius: 2px; }
+    .section-text { max-width: 800px; margin: 0 auto 1.5rem; line-height: 1.7; font-size: 1.1rem; color: #e0e0ff; }
+
+    /* Investment Calculator */
+    .calculator-section { background: linear-gradient(135deg, rgba(10,25,47,0.9), rgba(20,30,60,0.9)); border-radius: 20px; padding: 4rem; margin: 3rem auto; border: 1px solid rgba(255, 215, 0, 0.2); }
+    .calculator-container { display: flex; gap: 3rem; flex-wrap: wrap; }
+    .calculator-inputs, .calculator-results { flex: 1; min-width: 300px; }
+    .calculator-results { background: rgba(0,0,0,0.3); border-radius: 15px; padding: 2rem; border: 1px solid rgba(255,215,0,0.2); }
+    .input-group { margin-bottom: 1.5rem; }
+    .input-group label { display: block; margin-bottom: 0.75rem; font-weight: 500; color: #e0e0ff; }
+    .input-group input, .input-group select { width: 100%; padding: 0.9rem 1.2rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.4); color: white; font-size: 1rem; }
+    .input-group input[type="range"] { padding: 0; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; }
+    .input-group input[type="range"]::-webkit-slider-thumb { width: 20px; height: 20px; border-radius: 50%; background: #FFD700; cursor: pointer; -webkit-appearance: none; }
+    .plan-indicator { display: flex; justify-content: space-between; margin-top: 0.5rem; font-size: 0.9rem; color: #aaa; }
+    .result-item { display: flex; justify-content: space-between; margin-bottom: 1.2rem; padding-bottom: 1.2rem; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .result-item:last-child { border-bottom: none; }
+    .result-label { color: #aaa; }
+    .result-value { font-weight: 600; font-size: 1.2rem; color: #FFD700; }
+    .highlight-result { background: rgba(255,215,0,0.1); padding: 1.5rem; border-radius: 10px; margin-top: 1.5rem; text-align: center; border: 1px solid rgba(255,215,0,0.3); }
+    .highlight-result .value { font-size: 2rem; font-weight: 700; color: #FFD700; margin: 0.5rem 0; }
+
+    /* Video Section */
+    .video-section { text-align: center; margin: 5rem auto; }
+    .video-container { max-width: 900px; margin: 0 auto; border-radius: 20px; overflow: hidden; border: 1px solid rgba(255, 215, 0, 0.3); }
+    .video-container video { width: 100%; display: block; }
+
+    /* FAQ Section */
+    .faq-section { background: linear-gradient(135deg, rgba(10,20,40,0.9), rgba(15,25,50,0.9)); border-radius: 20px; padding: 5rem 3rem; margin: 4rem auto; border: 1px solid rgba(255, 215, 0, 0.2); }
+    .faq-container { max-width: 900px; margin: 0 auto; }
+    .faq-item { margin-bottom: 1.5rem; border-radius: 12px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); transition: all 0.3s ease; }
+    .faq-item.active { border-color: rgba(255, 215, 0, 0.4); background: rgba(255,215,0,0.05); }
+    .faq-question { padding: 1.5rem; font-size: 1.2rem; font-weight: 600; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+    .faq-question:hover { color: #FFD700; }
+    .faq-question i { transition: transform 0.3s; }
+    .faq-item.active .faq-question i { transform: rotate(180deg); }
+    .faq-answer { padding: 0 1.5rem; max-height: 0; overflow: hidden; transition: max-height 0.3s ease, padding 0.3s ease; color: #e0e0ff; line-height: 1.7; }
+    .faq-item.active .faq-answer { max-height: 1000px; padding: 0 1.5rem 1.5rem; }
+
+    /* Additional Features */
+    .live-chat { position: fixed; bottom: 20px; right: 20px; background: #FFD700; color: #000; padding: 10px 20px; border-radius: 30px; cursor: pointer; z-index: 1000; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+    .quick-start { display: flex; justify-content: space-around; flex-wrap: wrap; margin: 4rem auto; max-width: 1200px; }
+    .step { text-align: center; max-width: 200px; margin-bottom: 2rem; }
+    .step i { font-size: 3rem; color: #FFD700; margin-bottom: 1rem; }
+    .step h3 { color: #FFD700; margin-bottom: 0.5rem; }
+    .step p { color: #e0e0ff; }
+    .dark-mode-toggle { position: fixed; top: 20px; right: 20px; background: transparent; border: none; color: #FFD700; font-size: 1.5rem; cursor: pointer; z-index: 1000; }
+    .contact-form { max-width: 600px; margin: 4rem auto; }
+    .contact-form input, .contact-form textarea { width: 100%; padding: 0.9rem 1.2rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.4); color: white; font-size: 1rem; margin-bottom: 1rem; }
+    .contact-form button { width: 100%; padding: 1rem; background: linear-gradient(45deg, #FFD700, #FFB300); color: #000; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; }
+    .contact-form button:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(255, 215, 0, 0.4); }
+
+    /* Footer */
+    .site-footer { text-align: center; padding: 3rem 2rem; background: rgba(0,0,0,0.5); border-top: 1px solid rgba(255, 215, 0, 0.2); }
+    .footer-links { display: flex; justify-content: center; gap: 2rem; margin: 1.5rem 0; flex-wrap: wrap; }
+    .footer-links a { color: #aaa; transition: color 0.3s; }
+    .footer-links a:hover { color: #FFD700; }
+    .copyright { color: #777; margin-top: 1.5rem; }
+  </style>
 </head>
 <body>
-  <!-- Full-Width Video Background with Parallax -->
-  <div class="video-wrapper">
-    <video class="bg-video" autoplay muted loop playsinline preload="auto">
-      <source src="assets/videos/background.webm" type="video/webm">
-      <source src="assets/videos/background.mp4" type="video/mp4">
-    </video>
-  </div>
+  <!-- Video Background -->
+  <video class="bg-video" autoplay muted loop playsinline preload="auto">
+    <source src="https://your-supabase-url.com/your-background-video.mp4" type="video/mp4">
+  </video>
 
   <div class="overlay">
-    <!-- Sticky Header -->
-    <header class="site-header" id="header">
+    <!-- Header -->
+    <header class="site-header">
       <a href="/" class="logo-link">
-        <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo"/>
+        <img src="https://your-supabase-url.com/your-logo.svg" alt="PrudentProExchange Logo" class="logo"/>
       </a>
       <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
         <span></span><span></span><span></span>
@@ -37,71 +182,250 @@
     </header>
 
     <!-- Hero Section -->
-    <main id="hero" class="hero" data-aos="fade-up">
+    <main id="hero" class="hero">
       <h1 class="hero-title">Ascend to Wealth. Elevate the World.</h1>
       <p class="hero-subtitle">
         Step into a realm where your investments soar up to <strong>10% weekly</strong>, weaving prosperity for you and communities worldwide. Secure. Visionary. Divine.
       </p>
-      <button class="cta primary" onclick="location.href='application.html'">
-        Begin Your Journey
-      </button>
+      <div class="realtime-info">
+        <div class="info-card">
+          <div class="label">CURRENT TIME</div>
+          <div class="value" id="current-time">00:00:00</div>
+        </div>
+        <div class="info-card">
+          <div class="label">TODAY'S DATE</div>
+          <div class="value" id="current-date">June 23, 2025</div>
+        </div>
+      </div>
+      <button class="cta primary" onclick="location.href='application.html'">Begin Your Journey</button>
+      <div id="ticker" class="ticker">
+        <div class="ticker-content">
+          <div class="ticker-item"><span class="crypto">BTC:</span> <span class="price">$64,382.10</span> <span class="change">+1.2%</span></div>
+          <div class="ticker-item"><span class="crypto">ETH:</span> <span class="price">$3,512.75</span> <span class="change">+0.8%</span></div>
+          <div class="ticker-item"><span class="crypto">GOLD:</span> <span class="price">$2,350.40</span> <span class="change">+0.4%</span></div>
+          <div class="ticker-item"><span class="crypto">OIL:</span> <span class="price">$78.92</span> <span class="change">-0.3%</span></div>
+          <div class="ticker-item"><span class="crypto">NASDAQ:</span> <span class="price">16,842.30</span> <span class="change">+0.7%</span></div>
+        </div>
+      </div>
     </main>
 
-    <!-- Why Us Section -->
-    <section id="why" class="section section-dark" data-aos="fade-up">
-      <h2 class="section-title gold">Why PrudentProExchange Stands Above?</h2>
-      <ul class="features-list">
-        <li><strong>Sanctuary of Trust:</strong> U.S.-registered and SEC-compliant, a fortress of reliability.</li>
-        <li><strong>Masters of Markets:</strong> A decade-plus of crypto and forex brilliance since 2009.</li>
-        <li><strong>Wings of Impact:</strong> Every gain empowers underserved voices globally.</li>
-        <li><strong>Golden Harvest:</strong> Reap up to 10% weekly, delivered with celestial precision.</li>
-      </ul>
+    <!-- Investment Calculator -->
+    <section class="calculator-section">
+      <h2 class="section-title gold">Investment Calculator</h2>
+      <div class="calculator-container">
+        <div class="calculator-inputs">
+          <div class="input-group">
+            <label for="investment-amount">Investment Amount ($)</label>
+            <input type="range" id="amount-slider" min="200" max="500000" value="5000" step="100">
+            <input type="number" id="investment-amount" min="200" max="500000" value="5000">
+            <div class="plan-indicator">
+              <span id="min-amount">$200</span>
+              <span id="max-amount">$500,000</span>
+            </div>
+          </div>
+          <div class="input-group">
+            <label for="investment-plan">Investment Plan</label>
+            <select id="investment-plan">
+              <option value="basic">Basic Package (5% weekly)</option>
+              <option value="standard">Standard Package (6.5% weekly)</option>
+              <option value="silver">Silver Package (7.5% weekly)</option>
+              <option value="gold">Gold Package (8.5% weekly)</option>
+              <option value="diamond">Diamond Package (10% weekly)</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label for="investment-period">Investment Period (weeks)</label>
+            <input type="number" id="investment-period" min="1" max="52" value="12">
+          </div>
+          <button class="cta primary" id="calculate-btn">Calculate Returns</button>
+        </div>
+        <div class="calculator-results">
+          <div class="result-item">
+            <div class="result-label">Weekly Return</div>
+            <div class="result-value" id="weekly-return">$325.00</div>
+          </div>
+          <div class="result-item">
+            <div class="result-label">Total Return</div>
+            <div class="result-value" id="total-return">$3,900.00</div>
+          </div>
+          <div class="result-item">
+            <div class="result-label">Total Profit</div>
+            <div class="result-value" id="total-profit">$3,250.00</div>
+          </div>
+          <div class="result-item">
+            <div class="result-label">ROI</div>
+            <div class="result-value" id="roi">65.0%</div>
+          </div>
+          <div class="highlight-result">
+            <div class="label">Your Balance After <span id="period-display">12</span> Weeks</div>
+            <div class="value" id="final-balance">$8,900.00</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Video Section -->
+    <section class="video-section">
+      <h2 class="section-title gold">Our Vision in Motion</h2>
+      <p class="section-text">Witness how PrudentProExchange transforms the investment landscape.</p>
+      <div class="video-container">
+        <video controls>
+          <source src="https://your-supabase-url.com/your-company-video.mp4" type="video/mp4">
+        </video>
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section">
+      <h2 class="section-title gold">Frequently Asked Questions</h2>
+      <div class="faq-container" id="faq-container"></div>
+    </section>
+
+    <!-- Quick Start Guide -->
+    <section class="quick-start">
+      <h2 class="section-title gold">How It Works</h2>
+      <div class="step">
+        <i class="fas fa-user-plus"></i>
+        <h3>Sign Up</h3>
+        <p>Create your account in minutes.</p>
+      </div>
+      <div class="step">
+        <i class="fas fa-wallet"></i>
+        <h3>Deposit Funds</h3>
+        <p>Choose your payment method.</p>
+      </div>
+      <div class="step">
+        <i class="fas fa-chart-line"></i>
+        <h3>Start Investing</h3>
+        <p>Select a plan and grow your wealth.</p>
+      </div>
+    </section>
+
+    <!-- Contact Form -->
+    <section class="contact-form">
+      <h2 class="section-title gold">Contact Us</h2>
+      <form onsubmit="alert('Message sent!'); return false;">
+        <input type="text" placeholder="Your Name" required>
+        <input type="email" placeholder="Your Email" required>
+        <textarea placeholder="Your Message" rows="5" required></textarea>
+        <button type="submit">Send Message</button>
+      </form>
     </section>
 
     <!-- Footer -->
-    <footer class="section section-dark" data-aos="fade-up">
-      <p>© 2023 PrudentProExchange. All Rights Reserved.</p>
+    <footer class="site-footer">
+      <div class="footer-links">
+        <a href="about.html">About Us</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms & Conditions</a>
+        <a href="contact.html">Contact</a>
+        <a href="support.html">Support</a>
+      </div>
+      <p class="copyright">© 2025 PrudentProExchange. All rights reserved. SEC Registered #0001230714</p>
     </footer>
 
-    <!-- Back to Top Button -->
-    <button id="backToTop" class="back-to-top" aria-label="Back to Top">
-      <span>↑</span>
-    </button>
+    <!-- Live Chat Button -->
+    <div class="live-chat" onclick="alert('Live chat coming soon!')">Live Chat</div>
   </div>
 
-  <script src="js/main.js"></script>
-  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
-    // Initialize AOS for animations
-    AOS.init({ duration: 1000, once: true });
+    // Real-time Clock and Date
+    function updateDateTime() {
+      const now = new Date();
+      document.getElementById('current-time').textContent = now.toLocaleTimeString();
+      document.getElementById('current-date').textContent = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    }
+    setInterval(updateDateTime, 1000);
+    updateDateTime();
 
-    // Back to Top Button
-    const backToTopBtn = document.getElementById('backToTop');
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 300) {
-        backToTopBtn.classList.add('show');
-      } else {
-        backToTopBtn.classList.remove('show');
+    // Hamburger Menu
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const navDrawer = document.getElementById('navDrawer');
+    hamburgerBtn.addEventListener('click', () => {
+      navDrawer.classList.toggle('open');
+      hamburgerBtn.classList.toggle('active');
+    });
+
+    // Investment Calculator
+    const plans = {
+      basic: { min: 200, max: 4999, rate: 0.05 },
+      standard: { min: 5000, max: 14999, rate: 0.065 },
+      silver: { min: 15000, max: 49999, rate: 0.075 },
+      gold: { min: 50000, max: 999999, rate: 0.085 },
+      diamond: { min: 100000, max: 1000000, rate: 0.10 }
+    };
+    const amountInput = document.getElementById('investment-amount');
+    const amountSlider = document.getElementById('amount-slider');
+    const planSelect = document.getElementById('investment-plan');
+    const periodInput = document.getElementById('investment-period');
+    const calculateBtn = document.getElementById('calculate-btn');
+    const minAmount = document.getElementById('min-amount');
+    const maxAmount = document.getElementById('max-amount');
+
+    amountSlider.addEventListener('input', () => { amountInput.value = amountSlider.value; updatePlan(); calculateReturns(); });
+    amountInput.addEventListener('input', () => { amountSlider.value = amountInput.value; updatePlan(); calculateReturns(); });
+    planSelect.addEventListener('change', calculateReturns);
+    periodInput.addEventListener('input', calculateReturns);
+    calculateBtn.addEventListener('click', calculateReturns);
+
+    function updatePlan() {
+      const amount = parseFloat(amountInput.value);
+      for (const [key, plan] of Object.entries(plans)) {
+        if (amount >= plan.min && amount <= plan.max) {
+          planSelect.value = key;
+          minAmount.textContent = '$' + plan.min.toLocaleString();
+          maxAmount.textContent = '$' + plan.max.toLocaleString();
+          break;
+        }
       }
-    });
-    backToTopBtn.addEventListener('click', () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function calculateReturns() {
+      const amount = parseFloat(amountInput.value);
+      const planKey = planSelect.value;
+      const weeks = parseInt(periodInput.value) || 1;
+      const plan = plans[planKey];
+
+      if (amount < plan.min) amountInput.value = plan.min;
+      if (amount > plan.max) amountInput.value = plan.max;
+
+      const weeklyReturn = amount * plan.rate;
+      const totalReturn = weeklyReturn * weeks;
+      const totalProfit = totalReturn;
+      const roi = (totalProfit / amount * 100).toFixed(1);
+      const finalBalance = amount + totalReturn;
+
+      document.getElementById('weekly-return').textContent = '$' + weeklyReturn.toFixed(2);
+      document.getElementById('total-return').textContent = '$' + totalReturn.toFixed(2);
+      document.getElementById('total-profit').textContent = '$' + totalProfit.toFixed(2);
+      document.getElementById('roi').textContent = roi + '%';
+      document.getElementById('final-balance').textContent = '$' + finalBalance.toLocaleString(undefined, { minimumFractionDigits: 2 });
+      document.getElementById('period-display').textContent = weeks;
+    }
+    updatePlan();
+    calculateReturns();
+
+    // FAQ Accordion
+    const faqData = [
+      { question: "What is PrudentProExchange?", answer: "A U.S.-registered investment platform offering up to 10% weekly returns with a focus on global impact." },
+      { question: "How do I create an account?", answer: "Click 'GET STARTED', fill in your details, and submit to join." },
+      { question: "How can I verify authenticity?", answer: "Check our SEC registration (#0001230714) on EDGAR: https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=0001230714" }
+    ];
+    const faqContainer = document.getElementById('faq-container');
+    faqData.forEach(faq => {
+      const item = document.createElement('div');
+      item.className = 'faq-item';
+      item.innerHTML = `<div class="faq-question">${faq.question}<i class="fas fa-chevron-down"></i></div><div class="faq-answer">${faq.answer}</div>`;
+      item.querySelector('.faq-question').addEventListener('click', () => item.classList.toggle('active'));
+      faqContainer.appendChild(item);
     });
 
-    // Parallax Effect for Background Video
-    window.addEventListener('scroll', () => {
-      const scrollPosition = window.pageYOffset;
-      document.querySelector('.bg-video').style.transform = `translateY(${scrollPosition * 0.5}px)`;
-    });
-
-    // Sticky Header Style Change
-    window.addEventListener('scroll', () => {
-      const header = document.getElementById('header');
-      if (window.scrollY > 50) {
-        header.classList.add('scrolled');
-      } else {
-        header.classList.remove('scrolled');
-      }
+    // Smooth Scrolling
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', (e) => {
+        e.preventDefault();
+        document.querySelector(anchor.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+      });
     });
   </script>
 </body>
