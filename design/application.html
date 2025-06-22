@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Apply • PrudentProExchange</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+</head>
+<body>
+  <!-- Video Background -->
+  <video class="bg-video" autoplay muted loop playsinline preload="auto">
+    <source src="assets/videos/background.webm" type="video/webm">
+    <source src="assets/videos/background.mp4" type="video/mp4">
+  </video>
+
+  <div class="overlay">
+    <header class="site-header">…<!-- same as before -->…</header>
+
+    <main class="form-page">
+      <section class="section section-light">
+        <h1 class="section-title gold">Begin Your Journey</h1>
+        <p class="section-text">Fill out the form below to create your account and start ascending to wealth.</p>
+        <form id="applicationForm" class="form-container">
+          <label>Full Name<input type="text" name="full_name" required/></label>
+          <label>Email Address<input type="email" name="email" required/></label>
+          <label>Password<input type="password" name="password" required/></label>
+          <label>Phone Number<input type="tel" name="phone" required/></label>
+          <label>Investment Amount<input type="number" name="amount" min="200" required/></label>
+          <label>Choose Package
+            <select name="package" required>
+              <option value="">Select…</option>
+              <option value="basic">Dawn Star (5%)</option>
+              <option value="standard">Rising Comet (6.5%)</option>
+              <option value="silver">Lunar Glow (7.5%)</option>
+              <option value="gold">Solar Flare (8.5%)</option>
+              <option value="diamond">Galactic Crown (10%)</option>
+            </select>
+          </label>
+          <button type="submit" class="cta primary">Submit Application</button>
+        </form>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // Initialize Supabase
+    const SUPABASE_URL = 'https://YOUR_PROJECT.supabase.co';
+    const SUPABASE_ANON_KEY = 'YOUR_ANON_KEY';
+    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // Handle form submission
+    document.getElementById('applicationForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      const form = e.target;
+      const full_name = form.full_name.value;
+      const email     = form.email.value;
+      const password  = form.password.value;
+      const phone     = form.phone.value;
+      const amount    = form.amount.value;
+      const pkg       = form.package.value;
+
+      // 1. Sign up user
+      let { user, error: signUpError } = await supabase.auth.signUp({ email, password });
+      if (signUpError) return alert('Sign-up error: ' + signUpError.message);
+
+      // 2. Insert profile (trigger will add referral_code)
+      let { error: profileError } = await supabase
+        .from('profiles')
+        .insert({ id: user.id, full_name, phone });
+      if (profileError) return alert('Profile error: ' + profileError.message);
+
+      // 3. Insert application
+      let { error: appError } = await supabase
+        .from('applications')
+        .insert({ user_id: user.id, full_name, email, phone, amount, package: pkg });
+      if (appError) return alert('Application error: ' + appError.message);
+
+      alert('Application submitted! Check your email to confirm your account.');
+      form.reset();
+    });
+  </script>
+</body>
+</html>
