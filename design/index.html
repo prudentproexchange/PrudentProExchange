@@ -13,19 +13,17 @@
     <source src="assets/videos/background.mp4" type="video/mp4">
   </video>
 
-  <!-- Glass-morphic Overlay -->
   <div class="overlay">
+    <!-- Header with Hamburger Menu -->
     <header class="site-header">
       <a href="/" class="logo-link">
         <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo"/>
       </a>
-      <!-- Hamburger Toggle -->
       <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
         <span></span><span></span><span></span>
       </button>
-      <!-- Nav Drawer -->
       <nav class="nav-drawer" id="navDrawer">
-        <a href="#application">Apply</a>
+        <a href="application.html">Apply</a>
         <a href="about.html">About</a>
         <a href="privacy.html">Privacy Policy</a>
         <a href="terms.html">Terms &amp; Conditions</a>
@@ -40,9 +38,11 @@
       <p class="hero-subtitle">
         Step into a realm where your investments soar up to <strong>10% weekly</strong>, weaving prosperity for you and communities worldwide. Secure. Visionary. Divine.
       </p>
-      <button class="cta primary" onclick="location.href='#application'">
+      <!-- UPDATED: Goes to application.html -->
+      <button class="cta primary" onclick="location.href='application.html'">
         Begin Your Journey
       </button>
+
       <div id="ticker" class="ticker">Loading live rates…</div>
       <div class="scroll-indicator">
         <span>Scroll</span>
@@ -53,7 +53,7 @@
       </div>
     </main>
 
-    <!-- Why Us -->
+    <!-- Why Us Section -->
     <section id="why" class="section section-dark">
       <h2 class="section-title gold">Why PrudentProExchange Stands Above?</h2>
       <ul class="features-list">
@@ -64,7 +64,7 @@
       </ul>
     </section>
 
-    <!-- Your Path -->
+    <!-- Your Path Section -->
     <section id="path" class="section section-light">
       <h2 class="section-title">Your Path to Prosperity</h2>
       <ol class="path-list">
@@ -74,7 +74,7 @@
       </ol>
     </section>
 
-    <!-- Divine Advantages -->
+    <!-- Divine Advantages Section -->
     <section id="advantages" class="section section-dark">
       <h2 class="section-title gold">Divine Advantages</h2>
       <ul class="features-list">
@@ -86,7 +86,7 @@
       </ul>
     </section>
 
-    <!-- Testimonials Slider -->
+    <!-- Testimonials Section -->
     <section class="section section-light">
       <h2 class="section-title">What Our Pioneers Say</h2>
       <div class="testimonials">
@@ -107,22 +107,23 @@
       </div>
     </section>
 
-    <!-- Celestial Mission -->
+    <!-- Mission Section -->
     <section id="mission" class="section section-dark">
       <h2 class="section-title gold">Our Celestial Mission</h2>
       <p class="section-text">
-        At PrudentProExchange, we are architects of a decentralized dawn, forging a future where blockchain’s purity meets unparalleled trading artistry. Since 2012, we’ve sculpted a sanctuary of wealth that transcends borders. Your investment ignites a movement—secure, scalable, and eternally impactful.
+        At PrudentProExchange, we are architects of a decentralized dawn, forging a future where blockchain’s purity meets unparalleled trading artistry. Since 2012, we’ve sculpted a sanctuary of wealth that transcends borders.
       </p>
     </section>
 
-    <!-- CTA for Plans -->
+    <!-- CTA to Plans -->
     <section id="plans" class="section section-light cta-section">
       <h2 class="section-title">Join the Eternal Tide</h2>
-      <p class="section-text">Rise into an era where your wealth crafts legacies and lifts humanity. Begin today, and let your success ripple through the ages.</p>
+      <p class="section-text">Rise into an era where your wealth crafts legacies and lifts humanity. Begin today and let your success ripple through the ages.</p>
+      <!-- UPDATED: Goes to plans.html -->
       <button class="cta primary" onclick="location.href='plans.html'">Discover Your Plan</button>
     </section>
 
-    <!-- Newsletter Signup -->
+    <!-- Newsletter Section -->
     <section class="section section-dark">
       <h2 class="section-title gold">Stay Connected</h2>
       <form class="newsletter" onsubmit="alert('Subscribed!'); return false;">
@@ -130,9 +131,6 @@
         <button type="submit" class="cta">Subscribe</button>
       </form>
     </section>
-
-    <!-- Application Anchor -->
-    <div id="application"></div>
   </div>
 
   <script src="js/main.js"></script>
