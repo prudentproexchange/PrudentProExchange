@@ -5,208 +5,291 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Privacy Policy • PrudentProExchange</title>
   <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/privacy.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
 </head>
-<body>
+<body class="privacy-page">
   <!-- Video Background -->
   <video class="bg-video" autoplay muted loop playsinline preload="auto">
     <source src="assets/videos/background.webm" type="video/webm">
     <source src="assets/videos/background.mp4" type="video/mp4">
+    Your browser does not support the video tag.
   </video>
 
   <div class="overlay">
     <header class="site-header">
-      <a href="/" class="logo-link"><img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo"/></a>
-      <button class="hamburger" id="hamburgerBtn4" aria-label="Menu"><span></span><span></span><span></span></button>
+      <button id="theme-toggle" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
+      <a href="/" class="logo-link">
+        <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo"/>
+      </a>
+      <button class="hamburger" id="hamburgerBtn4" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
       <nav class="nav-drawer" id="navDrawer4">
-        <a href="#application">Apply</a>
+        <a href="/#application">Apply</a>
         <a href="about.html">About</a>
         <a href="privacy.html" class="active">Privacy Policy</a>
-        <a href="terms.html">Terms &amp; Conditions</a>
+        <a href="terms.html">Terms & Conditions</a>
         <a href="login.html">Login</a>
-        <a href="plans.html">Investment Plans</a>
+        <a href="/#plans">Investment Plans</a>
       </nav>
     </header>
 
-    <main class="privacy-page">
-      <!-- Sidebar Table of Contents -->
-      <aside class="toc">
-        <h3>Contents</h3>
-        <ul>
-          <li><a href="#mission">1. Our Sacred Mission</a></li>
-          <li><a href="#collect">2. What We Collect</a></li>
-          <li><a href="#use">3. How We Use Your Information</a></li>
-          <li><a href="#share">4. Sharing Your Information</a></li>
-          <li><a href="#rights">5. Your Divine Rights</a></li>
-          <li><a href="#security">6. Fortress of Security</a></li>
-          <li><a href="#cookies">7. Cookies & Tracking</a></li>
-          <li><a href="#global">8. Global Harmony</a></li>
-          <li><a href="#retain">9. Preserving Your Legacy</a></li>
-          <li><a href="#update">10. Evolving Excellence</a></li>
-          <li><a href="#contact">11. Reach Out to Us</a></li>
-          <li><a href="#portal">12. The Celestial Privacy Portal</a></li>
-          <li><a href="#oath">13. Our Eternal Oath</a></li>
-        </ul>
-      </aside>
+    <div class="main-content">
+      <main class="privacy-page container">
+        <!-- Sidebar Table of Contents -->
+        <aside class="toc" data-aos="fade-right">
+          <h3 class="toc-title">Table of Contents</h3>
+          <ul class="toc-list">
+            <li><a href="#mission">1. Our Sacred Mission</a></li>
+            <li><a href="#collect">2. What We Collect</a></li>
+            <li><a href="#use">3. How We Use Your Information</a></li>
+            <li><a href="#share">4. Sharing Your Information</a></li>
+            <li><a href="#rights">5. Your Divine Rights</a></li>
+            <li><a href="#security">6. Fortress of Security</a></li>
+            <li><a href="#cookies">7. Cookies & Tracking</a></li>
+            <li><a href="#global">8. Global Harmony</a></li>
+            <li><a href="#retain">9. Preserving Your Legacy</a></li>
+            <li><a href="#update">10. Evolving Excellence</a></li>
+            <li><a href="#contact">11. Reach Out to Us</a></li>
+            <li><a href="#portal">12. The Celestial Privacy Portal</a></li>
+            <li><a href="#oath">13. Our Eternal Oath</a></li>
+          </ul>
+        </aside>
 
-      <section id="mission" class="section section-light">
-        <h2 class="section-title gold">1. Our Sacred Mission</h2>
-        <p class="section-text">
-          Prudentproexchnage is more than an investment platform—it’s a sanctuary of trust and prosperity. As a global leader, we collect and process personal information to deliver exceptional financial services. This policy applies to our website, trading platform, mobile app, and all interactions with our clients. We adhere to the highest international privacy standards, including GDPR, CCPA, and beyond, ensuring your peace of mind no matter where you are.
-        </p>
-      </section>
+        <!-- Main Content Sections -->
+        <section id="mission" class="section" data-aos="fade-up">
+          <h2 class="section-title gold">1. Our Sacred Mission</h2>
+          <p class="section-text">
+            PrudentProExchange is more than an investment platform—it’s a sanctuary of trust and prosperity. As a global leader, we collect and process personal information to deliver exceptional financial services. This policy applies to our website, trading platform, mobile app, and all interactions with our clients. We adhere to the highest international privacy standards, including GDPR, CCPA, and beyond, ensuring your peace of mind no matter where you are.
+          </p>
+        </section>
 
-      <section id="collect" class="section section-dark">
-        <h2 class="section-title gold">2. What We Collect</h2>
-        <ul class="features-list">
-          <li><strong>Personal Identity:</strong> Name, email, phone, address.</li>
-          <li><strong>Financial Keys:</strong> Bank details, payment methods, investment history.</li>
-          <li><strong>Account Essence:</strong> Username, encrypted password, settings.</li>
-          <li><strong>Digital Footprints:</strong> IP, device type, browsing behavior.</li>
-          <li><strong>Verification Tokens:</strong> Government IDs, proof of address.</li>
-          <li><strong>Your Voice:</strong> Communication preferences, feedback.</li>
-        </ul>
-        <p class="section-text">
-          <em>How We Gather:</em> Directly from you, automatically via technology, and from trusted partners for compliance.
-        </p>
-      </section>
+        <section id="collect" class="section" data-aos="fade-up">
+          <h2 class="section-title gold">2. What We Collect</h2>
+          <ul class="features-list">
+            <li><strong>Personal Identity:</strong> Name, email, phone, address.</li>
+            <li><strong>Financial Keys:</strong> Bank details, payment methods, investment history.</li>
+            <li><strong>Account Essence:</strong> Username, encrypted password, settings.</li>
+            <li><strong>Digital Footprints:</strong> IP, device type, browsing behavior.</li>
+            <li><strong>Verification Tokens:</strong> Government IDs, proof of address.</li>
+            <li><strong>Your Voice:</strong> Communication preferences, feedback.</li>
+          </ul>
+          <p class="section-text">
+            <em>How We Gather:</em> Directly from you, automatically via technology, and from trusted partners for compliance.
+          </p>
+        </section>
 
-      <section id="use" class="section section-light">
-        <h2 class="section-title">3. How We Use Your Information</h2>
-        <ul class="features-list">
-          <li><strong>Service Mastery:</strong> Process trades, manage accounts, tailor experiences.</li>
-          <li><strong>Divine Communication:</strong> Send updates and support responses.</li>
-          <li><strong>Guardian of Law:</strong> Meet AML/KYC requirements.</li>
-          <li><strong>Shield Against Shadows:</strong> Detect and prevent fraud.</li>
-          <li><strong>Guiding Light:</strong> Personalized promotions (opt-in/opt-out anytime).</li>
-          <li><strong>Fortification:</strong> Enhance platform security and performance.</li>
-        </ul>
-      </section>
+        <section id="use" class="section" data-aos="fade-up">
+          <h2 class="section-title">3. How We Use Your Information</h2>
+          <ul class="features-list">
+            <li><strong>Service Mastery:</strong> Process trades, manage accounts, tailor experiences.</li>
+            <li><strong>Divine Communication:</strong> Send updates and support responses.</li>
+            <li><strong>Guardian of Law:</strong> Meet AML/KYC requirements.</li>
+            <li><strong>Shield Against Shadows:</strong> Detect and prevent fraud.</li>
+            <li><strong>Guiding Light:</strong> Personalized promotions (opt-in/opt-out anytime).</li>
+            <li><strong>Fortification:</strong> Enhance platform security and performance.</li>
+          </ul>
+        </section>
 
-      <section id="share" class="section section-dark">
-        <h2 class="section-title gold">4. Sharing Your Information</h2>
-        <p class="section-text">
-          We share only what’s necessary:  
+        <section id="share" class="section" data-aos="fade-up">
+          <h2 class="section-title gold">4. Sharing Your Information</h2>
+          <p class="section-text">
+            We share only what’s necessary:
+          </p>
           <ul class="features-list">
             <li><strong>Inner Circle:</strong> Affiliates for seamless service.</li>
             <li><strong>Trusted Allies:</strong> Vendors under strict agreements.</li>
             <li><strong>Guardians of Order:</strong> Regulators or law enforcement when required.</li>
             <li><strong>Ambassadors:</strong> Introducing brokers/affiliates with your approval.</li>
           </ul>
-          We never trade your data for profit—your trust is our currency.
-        </p>
-      </section>
+          <p class="section-text">
+            We never trade your data for profit—your trust is our currency.
+          </p>
+        </section>
 
-      <section id="rights" class="section section-light">
-        <h2 class="section-title">5. Your Divine Rights</h2>
-        <ul class="features-list">
-          <li><strong>Revelation:</strong> See all we hold about you.</li>
-          <li><strong>Restoration:</strong> Correct errors.</li>
-          <li><strong>Erasure:</strong> Request deletion (legal retention applies).</li>
-          <li><strong>Freedom:</strong> Opt-out of promotions or restrict uses.</li>
-          <li><strong>Mobility:</strong> Transfer your data elsewhere.</li>
-        </ul>
-        <p class="section-text">
-          Exercise your rights via <a href="mailto:privacy@prudentproexchnage.com">privacy@prudentproexchnage.com</a>.
-        </p>
-      </section>
+        <section id="rights" class="section" data-aos="fade-up">
+          <h2 class="section-title">5. Your Divine Rights</h2>
+          <ul class="features-list">
+            <li><strong>Revelation:</strong> See all we hold about you.</li>
+            <li><strong>Restoration:</strong> Correct errors.</li>
+            <li><strong>Erasure:</strong> Request deletion (legal retention applies).</li>
+            <li><strong>Freedom:</strong> Opt-out of promotions or restrict uses.</li>
+            <li><strong>Mobility:</strong> Transfer your data elsewhere.</li>
+          </ul>
+          <p class="section-text">
+            Exercise your rights via <a href="mailto:privacy@prudentproexchange.com">privacy@prudentproexchange.com</a>.
+          </p>
+        </section>
 
-      <section id="security" class="section section-dark">
-        <h2 class="section-title gold">6. Fortress of Security</h2>
-        <ul class="features-list">
-          <li><strong>Celestial Encryption:</strong> In transit and at rest.</li>
-          <li><strong>Sacred Gates:</strong> Multi-factor authentication.</li>
-          <li><strong>Vigilant Sentinels:</strong> Firewalls & intrusion detection.</li>
-          <li><strong>Holy Audits:</strong> Regular external reviews.</li>
-          <li><strong>Disciples of Care:</strong> Trained privacy team.</li>
-        </ul>
-        <p class="section-text">
-          In the unlikely event of a breach, we’ll notify you instantly and restore order.
-        </p>
-      </section>
+        <section id="security" class="section" data-aos="fade-up">
+          <h2 class="section-title gold">6. Fortress of Security</h2>
+          <ul class="features-list">
+            <li><strong>Celestial Encryption:</strong> In transit and at rest.</li>
+            <li><strong>Sacred Gates:</strong> Multi-factor authentication.</li>
+            <li><strong>Vigilant Sentinels:</strong> Firewalls & intrusion detection.</li>
+            <li><strong>Holy Audits:</strong> Regular external reviews.</li>
+            <li><strong>Disciples of Care:</strong> Trained privacy team.</li>
+          </ul>
+          <p class="section-text">
+            In the unlikely event of a breach, we’ll notify you instantly and restore order.
+          </p>
+        </section>
 
-      <section id="cookies" class="section section-light">
-        <h2 class="section-title">7. Cookies &amp; Celestial Tracking</h2>
-        <p class="section-text">
-          We use cookies—beacons of light—to enhance your journey, analyze patterns, and personalize offerings. Control them via your browser or the Celestial Privacy Portal. See our <a href="#portal">Cookie Codex</a> within the portal.
-        </p>
-      </section>
+        <section id="cookies" class="section" data-aos="fade-up">
+          <h2 class="section-title">7. Cookies & Celestial Tracking</h2>
+          <p class="section-text">
+            We use cookies—beacons of light—to enhance your journey, analyze patterns, and personalize offerings. Control them via your browser or the Celestial Privacy Portal. See our <a href="#portal">Cookie Codex</a> within the portal.
+          </p>
+        </section>
 
-      <section id="global" class="section section-dark">
-        <h2 class="section-title gold">8. Global Harmony</h2>
-        <p class="section-text">
-          As a worldwide sanctuary, we may transfer your data across borders under legal safeguards (e.g., Standard Contractual Clauses) to maintain your protection.
-        </p>
-      </section>
+        <section id="global" class="section" data-aos="fade-up">
+          <h2 class="section-title gold">8. Global Harmony</h2>
+          <p class="section-text">
+            As a worldwide sanctuary, we may transfer your data across borders under legal safeguards (e.g., Standard Contractual Clauses) to maintain your protection.
+          </p>
+        </section>
 
-      <section id="retain" class="section section-light">
-        <h2 class="section-title">9. Preserving Your Legacy</h2>
-        <p class="section-text">
-          We retain data only as long as it serves you or the law demands:  
+        <section id="retain" class="section" data-aos="fade-up">
+          <h2 class="section-title">9. Preserving Your Legacy</h2>
+          <p class="section-text">
+            We retain data only as long as it serves you or the law demands:
+          </p>
           <ul class="features-list">
             <li>Active accounts: Indefinitely.</li>
             <li>Transactions: 7 years (financial regulations).</li>
             <li>Unneeded data: Erased with precision.</li>
           </ul>
-        </p>
-      </section>
+        </section>
 
-      <section id="update" class="section section-dark">
-        <h2 class="section-title gold">10. Evolving Excellence</h2>
-        <p class="section-text">
-          This policy evolves with laws and best practices. Major updates will be communicated via email or our platform, inviting you to embrace the new covenant.
-        </p>
-      </section>
-
-      <section id="contact" class="section section-light">
-        <h2 class="section-title">11. Reach Out to Us</h2>
-        <p class="section-text">
-          Your voice matters—contact our Guardians of Privacy:<br>
-          <strong>Email:</strong> <a href="mailto:privacy@prudentproexchnage.com">privacy@prudentproexchnage.com</a><br>
-          <strong>Phone:</strong> +1 (800) 777-8888<br>
-          <strong>Address:</strong> 777 Prosperity Way, Celestial City, NY 10001
-        </p>
-      </section>
-
-      <section id="portal" class="section section-dark">
-        <h2 class="section-title gold">12. The Celestial Privacy Portal</h2>
-        <div class="portal-card">
-          <h3>World-First Innovation</h3>
+        <section id="update" class="section" data-aos="fade-up">
+          <h2 class="section-title gold">10. Evolving Excellence</h2>
           <p class="section-text">
-            Accessible via your account, this portal grants you:
+            This policy evolves with laws and best practices. Major updates will be communicated via email or our platform, inviting you to embrace the new covenant.
+          </p>
+        </section>
+
+        <section id="contact" class="section" data-aos="fade-up">
+          <h2 class="section-title">11. Reach Out to Us</h2>
+          <p class="section-text">
+            Your voice matters—contact our Guardians of Privacy:
+          usurp
+            <ul class="features-list">
+              <li><strong>Email:</strong> <a href="mailto:privacy@prudentproexchange.com">privacy@prudentproexchange.com</a></li>
+              <li><strong>Phone:</strong> +1 (800) 777-8888</li>
+              <li><strong>Address:</strong> 777 Prosperity Way, Celestial City, NY 10001</li>
+            </ul>
+          </p>
+        </section>
+
+        <section id="portal" class="section" data-aos="fade-up">
+          <h2 class="section-title gold">12. The Celestial Privacy Portal</h2>
+          <div class="portal-card">
+            <h3>World-First Innovation</h3>
+            <p class="section-text">
+              Accessible via your account, this portal grants you:
+            </p>
+            <ul class="features-list">
+              <li>A window to your data.</li>
+              <li>Control over sharing & communications.</li>
+              <li>Ability to summon or banish records.</li>
+              <li>Real-time tracking of your requests.</li>
+            </ul>
+            <button class="cta primary" onclick="location.href='login.html'">Enter the Portal</button>
+          </div>
+        </section>
+
+        <section id="oath" class="section cta-section" data-aos="fade-up">
+          <h2 class="section-title gold">13. Our Eternal Oath</h2>
+          <p class="section-text">
+            At PrudentProExchange, we forge a bond beyond the ordinary. We vow to:
           </p>
           <ul class="features-list">
-            <li>A window to your data.</li>
-            <li>Control over sharing & communications.</li>
-            <li>Ability to summon or banish records.</li>
-            <li>Real-time tracking of your requests.</li>
+            <li>Illuminate: Privacy wisdom through guides and tips.</li>
+            <li>Listen: Welcome your counsel.</li>
+            <li>Ascend: Continuously elevate our standards.</li>
           </ul>
-          <button class="cta primary" onclick="location.href='login.html'">Enter the Portal</button>
-        </div>
-      </section>
+          <p class="section-text">
+            This is our celestial covenant—making us the ultimate investment sanctuary.
+          </p>
+          <button class="cta primary" onclick="location.href='/#application'">Begin Your Journey</button>
+        </section>
 
-      <section id="oath" class="section section-light cta-section">
-        <h2 class="section-title">13. Our Eternal Oath</h2>
-        <p class="section-text">
-          At Prudentproexchnage, we forge a bond beyond the ordinary. We vow to:<br>
-          • Illuminate: Privacy wisdom through guides and tips.<br>
-          • Listen: Welcome your counsel.<br>
-          • Ascend: Continuously elevate our standards.<br>
-          This is our celestial covenant—making us the ultimate investment sanctuary.
-        </p>
-        <button class="cta primary" onclick="location.href='#application'">Begin Your Journey</button>
-      </section>
+        <div id="application"></div>
+      </main>
+    </div>
 
-      <div id="application"></div>
-    </main>
+    <!-- Footer -->
+    <footer class="section section-dark site-footer" data-aos="fade-up">
+      <div class="footer-content">
+        <p class="utc-time">UTC Time: <span id="utcTime"></span></p>
+        <p class="local-time">Local Time: <span id="localTime"></span></p>
+        <p class="local-date">Local Date: <span id="localDate"></span></p>
+        <nav class="footer-links">
+          <a href="about.html">About Us</a>
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="terms.html">Terms & Conditions</a>
+        </nav>
+        <p class="copyright">© 2025 PrudentProExchange. All Rights Reserved. SEC Registration #0001230714</p>
+      </div>
+    </footer>
   </div>
 
+  <button id="back-to-top" aria-label="Back to top">🚀</button>
+
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="js/main.js"></script>
   <script>
-    const btn4 = document.getElementById('hamburgerBtn4'),
-          drawer4 = document.getElementById('navDrawer4');
-    btn4.addEventListener('click', ()=> {
+    // Hamburger toggle for Privacy page
+    const btn4 = document.getElementById('hamburgerBtn4');
+    const drawer4 = document.getElementById('navDrawer4');
+    btn4.addEventListener('click', () => {
       drawer4.classList.toggle('open');
       btn4.classList.toggle('active');
     });
+
+    // Local Time and Date
+    function updateLocalTime() {
+      const now = new Date();
+      document.getElementById('localTime').textContent = now.toLocaleTimeString();
+      document.getElementById('localDate').textContent = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    }
+    setInterval(updateLocalTime, 1000);
+    updateLocalTime();
+
+    // UTC Time
+    function updateUTCTime() {
+      document.getElementById('utcTime').textContent = new Date().toUTCString();
+    }
+    setInterval(updateUTCTime, 1000);
+    updateUTCTime();
+
+    // Theme Toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('light-theme');
+      const icon = themeToggle.querySelector('i');
+      icon.classList.toggle('fa-moon');
+      icon.classList.toggle('fa-sun');
+    });
+
+    // Back to Top
+    document.getElementById('back-to-top').addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // Smooth Scrolling for Table of Contents
+    document.querySelectorAll('.toc-list a').forEach(anchor => {
+      anchor.addEventListener('click', (e) => {
+        e.preventDefault();
+        document.querySelector(anchor.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+
+    // Initialize AOS
+    AOS.init({ duration: 800, once: true });
   </script>
 </body>
 </html>
