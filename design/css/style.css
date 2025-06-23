@@ -28,7 +28,7 @@ body {
   top: 0;
   left: 0;
   width: 100%;
-  height: 100vh; /* Full height to cover up to crypto ticker */
+  height: 100vh;
   overflow: hidden;
   z-index: -2;
 }
@@ -248,7 +248,7 @@ body {
   overflow: hidden;
   margin: 1.5rem 0;
   position: relative;
-  z-index: 2; /* Ensure it’s above videos */
+  z-index: 2;
 }
 .tradingview-widget-container {
   width: 100%;
@@ -265,7 +265,7 @@ body {
   border-radius: 10px;
   backdrop-filter: blur(10px);
   position: relative;
-  z-index: 2; /* Above background videos */
+  z-index: 2;
 }
 .section-dark { background: rgba(0, 0, 0, 0.8); }
 .section-light { background: var(--glass-bg); }
@@ -650,7 +650,7 @@ body {
   height: 50px;
   font-size: 1.5rem;
   cursor: pointer;
-  display: block; /* Always visible */
+  display: block;
   transition: all 0.3s;
   z-index: 1000;
 }
@@ -867,36 +867,89 @@ body {
   .crypto-ticker { padding: 0.5rem; }
   .step { max-width: 100%; }
 }
-/* Hero Video Background (Homepage Top to Crypto Prices) */
-.hero-video-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh; /* Full height to cover up to crypto ticker */
-  overflow: hidden;
-  z-index: -2;
-}
-.hero-video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 1; /* Ensure visibility */
+
+/* Homepage-Specific Styles */
+/* These styles apply only to the homepage when <body class="homepage"> is present */
+
+.homepage .hero {
+  padding: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
-/* Main Content Video Background (Homepage Rest of the Page) */
-.main-content-video-container {
-  position: absolute;
-  top: 100vh; /* Start below hero section */
-  left: 0;
-  width: 100%;
-  height: calc(100% - 100vh); /* Cover remaining page */
-  overflow: hidden;
-  z-index: -3;
+.homepage .hero-title {
+  font-size: 4.5rem;
+  font-family: 'Playfair Display', serif;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
-.main-content-video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 1; /* Ensure visibility */
+
+.homepage .hero-subtitle {
+  font-size: 1.6rem;
+}
+
+.homepage .crypto-ticker {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(255, 215, 0, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); }
+}
+
+.homepage .section {
+  transition: transform 0.3s;
+}
+
+.homepage .section:hover {
+  transform: perspective(1000px) rotateX(5deg);
+}
+
+.homepage .input-group input,
+.homepage .input-group select {
+  border-color: var(--primary);
+}
+
+.homepage .input-group input:focus,
+.homepage .input-group select:focus {
+  box-shadow: 0 0 5px var(--primary);
+}
+
+.homepage .testimonial.active {
+  transform: scale(1.05);
+  transition: transform 0.5s;
+}
+
+.homepage .faq-item.active {
+  background: rgba(255, 215, 0, 0.2);
+}
+
+.homepage .step i {
+  font-size: 3rem;
+}
+
+.homepage .step:hover {
+  background: rgba(255, 215, 0, 0.1);
+}
+
+/* Responsive Adjustments for Homepage */
+@media (max-width: 768px) {
+  .homepage .hero-title {
+    font-size: 3.5rem;
+  }
+  .homepage .hero-subtitle {
+    font-size: 1.4rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .homepage .hero-title {
+    font-size: 2.5rem;
+  }
+  .homepage .hero-subtitle {
+    font-size: 1.2rem;
+  }
 }
