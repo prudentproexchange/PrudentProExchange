@@ -18,7 +18,7 @@ body {
   height: 100vh;
   object-fit: cover;
   z-index: -1;
-  filter: brightness(0.72); /* Increased from 0.6 (60%) to 0.72 (72%) for a 20% brightness boost */
+  filter: brightness(0.936); /* Increased by 30% from 0.72 (72%) to 0.936 (93.6%) */
 }
 
 /* Glass-morphic Overlay */
@@ -44,7 +44,7 @@ body {
   border-bottom: 1px solid rgba(255, 215, 0, 0.2);
 }
 .logo {
-  height: 45px;
+  height: 60px; /* Increased from 45px for x3 prominence */
   display: block;
 }
 
@@ -70,6 +70,16 @@ body {
 .hamburger.active span:nth-child(2) { opacity: 0; }
 .hamburger.active span:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
 
+/* Theme Toggle Button */
+#theme-toggle {
+  background: none;
+  border: none;
+  color: #FFD700;
+  font-size: 1.5rem;
+  cursor: pointer;
+  margin-left: 1rem;
+}
+
 /* Nav Drawer */
 .nav-drawer {
   position: fixed;
@@ -86,16 +96,16 @@ body {
 .nav-drawer.open { right: 0; }
 .nav-drawer a {
   margin: 0.5rem 0;
-  font-size: 1rem; /* Slightly smaller for elegance */
+  font-size: 1rem;
   font-weight: 600;
-  padding: 0.75rem 1rem; /* Added padding for better touch area */
+  padding: 0.75rem 1rem;
   transition: all 0.3s ease;
   color: #fff;
   display: block;
-  border-radius: 5px; /* Rounded edges for polish */
+  border-radius: 5px;
 }
 .nav-drawer a:hover {
-  background: rgba(255, 215, 0, 0.2); /* Gold hover effect */
+  background: rgba(255, 215, 0, 0.2);
   color: #FFD700;
 }
 
@@ -200,19 +210,19 @@ body {
 
 /* Investment Calculator */
 .calculator-section {
-  background: rgba(0, 0, 0, 0.5); /* More transparent black for glass effect */
-  border-radius: 15px; /* Slightly smaller radius for sleekness */
-  padding: 3rem 2rem; /* Reduced padding */
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 15px;
+  padding: 3rem 2rem;
   margin: 3rem auto;
-  border: 1px solid rgba(255, 215, 0, 0.3); /* Subtle gold border */
-  backdrop-filter: blur(10px); /* Enhanced blur for glass effect */
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  backdrop-filter: blur(10px);
 }
 .calculator-container { display: flex; gap: 3rem; flex-wrap: wrap; }
 .calculator-inputs, .calculator-results { flex: 1; min-width: 300px; }
 .calculator-results {
-  background: rgba(0, 0, 0, 0.4); /* Slightly more transparent */
+  background: rgba(0, 0, 0, 0.4);
   border-radius: 10px;
-  padding: 1.5rem; /* Reduced padding */
+  padding: 1.5rem;
   border: 1px solid rgba(255, 215, 0, 0.2);
   backdrop-filter: blur(5px);
 }
@@ -262,12 +272,12 @@ body {
 
 /* Testimonials Section */
 .testimonials-section {
-  background: rgba(0, 0, 0, 0.7); /* Darker transparent background */
-  border-radius: 15px; /* Smaller radius for polish */
-  padding: 3rem 2rem; /* Reduced padding */
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 15px;
+  padding: 3rem 2rem;
   margin: 3rem auto;
-  border: 1px solid rgba(255, 215, 0, 0.3); /* Gold border */
-  backdrop-filter: blur(10px); /* Enhanced glass effect */
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  backdrop-filter: blur(10px);
 }
 .testimonials-container {
   position: relative;
@@ -278,22 +288,22 @@ body {
 .testimonial {
   display: none;
   text-align: center;
-  padding: 1.5rem; /* Reduced padding */
-  background: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+  padding: 1.5rem;
+  background: rgba(0, 0, 0, 0.5);
   border-radius: 10px;
-  border: 1px solid rgba(255, 215, 0, 0.2); /* Subtle gold border */
+  border: 1px solid rgba(255, 215, 0, 0.2);
   backdrop-filter: blur(5px);
 }
 .testimonial.active { display: block; }
 .testimonial-img {
-  width: 50px; /* Smaller image size */
+  width: 50px;
   height: 50px;
   border-radius: 50%;
   margin: 0 auto 0.75rem;
   object-fit: cover;
 }
 .testimonial p {
-  font-size: 1.1rem; /* Slightly smaller font */
+  font-size: 1.1rem;
   margin-bottom: 0.75rem;
   color: #e0e0ff;
   font-style: italic;
@@ -306,36 +316,36 @@ body {
 
 /* FAQ Section */
 .faq-section {
-  background: rgba(0, 0, 0, 0.7); /* Darker transparent background */
-  border-radius: 15px; /* Smaller radius for sleekness */
-  padding: 3rem 2rem; /* Reduced padding */
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 15px;
+  padding: 3rem 2rem;
   margin: 3rem auto;
-  border: 1px solid rgba(255, 215, 0, 0.3); /* Gold border */
-  backdrop-filter: blur(10px); /* Enhanced glass effect */
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  backdrop-filter: blur(10px);
 }
 .faq-container { max-width: 900px; margin: 0 auto; }
 .faq-item {
-  margin-bottom: 1rem; /* Reduced margin */
+  margin-bottom: 1rem;
   border-radius: 10px;
-  background: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
-  border: 1px solid rgba(255, 215, 0, 0.2); /* Subtle gold border */
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 215, 0, 0.2);
   transition: all 0.3s ease;
 }
 .faq-item.active {
-  background: rgba(255, 215, 0, 0.1); /* Light gold when active */
+  background: rgba(255, 215, 0, 0.1);
   border-color: rgba(255, 215, 0, 0.5);
 }
 .faq-question {
-  padding: 1rem 1.5rem; /* Adjusted padding */
-  font-size: 1.1rem; /* Smaller font size */
+  padding: 1rem 1.5rem;
+  font-size: 1.1rem;
   font-weight: 600;
   cursor: pointer;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  color: #FFD700; /* Gold text */
+  color: #FFD700;
 }
-.faq-question:hover { color: #fff; /* White on hover */ }
+.faq-question:hover { color: #fff; }
 .faq-question i { transition: transform 0.3s; }
 .faq-item.active .faq-question i { transform: rotate(180deg); }
 .faq-answer {
@@ -347,7 +357,7 @@ body {
   line-height: 1.6;
 }
 .faq-item.active .faq-answer {
-  max-height: 500px; /* Reduced max-height for compactness */
+  max-height: 500px;
   padding: 1rem 1.5rem;
 }
 
@@ -396,10 +406,150 @@ body {
   background: rgba(0, 0, 0, 0.5);
   border-top: 1px solid rgba(255, 215, 0, 0.2);
 }
-.footer-links { display: flex; justify-content: center; gap: 2rem; margin: 1.5rem 0; flex-wrap: wrap; }
-.footer-links a { color: #aaa; transition: color 0.3s; }
-.footer-links a:hover { color: #FFD700; }
-.copyright { color: #777; margin-top: 1.5rem; }
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  margin: 1.5rem 0;
+  flex-wrap: wrap;
+}
+.footer-links a {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #fff;
+  transition: color 0.3s;
+}
+.footer-links a:hover {
+  color: #FFD700;
+}
+.utc-time {
+  font-size: 1.2rem;
+  color: #FFD700;
+  margin-bottom: 1rem;
+}
+.copyright {
+  color: #aaa;
+  font-size: 0.9rem;
+  margin-top: 1.5rem;
+}
+
+/* Back to Top Button */
+#back-to-top {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background: #FFD700;
+  color: #000;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: none;
+  transition: all 0.3s;
+}
+#back-to-top:hover {
+  transform: scale(1.1);
+}
+
+/* Light Theme */
+.light-theme {
+  background: #f0f0f0;
+  color: #333;
+}
+.light-theme .overlay {
+  background: rgba(255, 255, 255, 0.8);
+}
+.light-theme .site-header {
+  background: rgba(255, 255, 255, 0.9);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+.light-theme .nav-drawer {
+  background: rgba(255, 255, 255, 0.9);
+  border-left: 1px solid rgba(0, 0, 0, 0.1);
+}
+.light-theme .nav-drawer a {
+  color: #333;
+}
+.light-theme .nav-drawer a:hover {
+  background: rgba(0, 0, 0, 0.1);
+  color: #000;
+}
+.light-theme .hero-title, .light-theme .section-title {
+  background: linear-gradient(45deg, #000, #333);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.light-theme .hero-subtitle, .light-theme .section-text {
+  color: #333;
+}
+.light-theme .cta {
+  color: #333;
+  border-color: #333;
+}
+.light-theme .cta.primary, .light-theme .cta:hover {
+  background: linear-gradient(45deg, #333, #666);
+  color: #fff;
+}
+.light-theme .info-card {
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+.light-theme .info-card .value {
+  color: #000;
+}
+.light-theme .ticker {
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+.light-theme .ticker-item .crypto {
+  color: #000;
+}
+.light-theme .ticker-item .price {
+  color: #008000;
+}
+.light-theme .section-dark {
+  background: rgba(255, 255, 255, 0.9);
+}
+.light-theme .section-light {
+  background: rgba(0, 0, 0, 0.05);
+}
+.light-theme .calculator-section, .light-theme .testimonials-section, .light-theme .faq-section {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+.light-theme .input-group input, .light-theme .input-group select {
+  background: rgba(255, 255, 255, 0.9);
+  color: #333;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+}
+.light-theme .result-value {
+  color: #000;
+}
+.light-theme .highlight-result {
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+.light-theme .testimonial p, .light-theme .faq-answer {
+  color: #333;
+}
+.light-theme .site-footer {
+  background: rgba(255, 255, 255, 0.9);
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+.light-theme .footer-links a {
+  color: #333;
+}
+.light-theme .footer-links a:hover {
+  color: #000;
+}
+.light-theme .utc-time {
+  color: #000;
+}
+.light-theme .copyright {
+  color: #555;
+}
 
 /* Responsive Adjustments */
 @media (max-width: 768px) {
