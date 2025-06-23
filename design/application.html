@@ -1,12 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Apply • PrudentProExchange</title>
   <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/application.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 </head>
-<body>
+<body class="application-page">
   <!-- Video Background -->
   <video class="bg-video" autoplay muted loop playsinline preload="auto">
     <source src="assets/videos/background.webm" type="video/webm">
@@ -14,6 +18,7 @@
   </video>
   <div class="overlay">
     <header class="site-header">
+      <button id="theme-toggle" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
       <a href="/" class="logo-link">
         <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo"/>
       </a>
@@ -24,77 +29,159 @@
         <a href="application.html" class="active">Apply</a>
         <a href="about.html">About</a>
         <a href="privacy.html">Privacy Policy</a>
-        <a href="terms.html">Terms &amp; Conditions</a>
+        <a href="terms.html">Terms & Conditions</a>
         <a href="login.html">Login</a>
         <a href="plans.html">Investment Plans</a>
       </nav>
     </header>
 
-    <main class="form-page">
-      <section class="section section-light">
-        <h1 class="section-title gold">Create Your Account</h1>
+    <main class="form-page container">
+      <section class="section section-light" data-aos="fade-up">
+        <h1 class="section-title gold">👋 Create an Account</h1>
         <p class="section-text">
-          Sign up now to access your dashboard, manage your investments, and track your growth.
+          Register to continue with PrudentProExchange and unlock personalized investment opportunities.
         </p>
         <form id="applicationForm" class="form-container">
-          <label>
-            Full Name  
-            <input type="text" name="full_name" required/>
+          <div class="form-grid">
+            <label>
+              First Name*
+              <input type="text" name="first_name" required aria-label="First Name"/>
+            </label>
+            <label>
+              Last Name*
+              <input type="text" name="last_name" required aria-label="Last Name"/>
+            </label>
+            <label>
+              Email Address*
+              <input type="email" name="email" required aria-label="Email Address"/>
+            </label>
+            <label>
+              Username*
+              <input type="text" name="username" required aria-label="Username"/>
+            </label>
+            <label>
+              Select Country*
+              <select name="country" required aria-label="Select Country">
+                <option value="" disabled selected>Select your country</option>
+                <option value="US">United States</option>
+                <option value="UK">United Kingdom</option>
+                <option value="CA">Canada</option>
+                <!-- Add more countries as needed -->
+              </select>
+            </label>
+            <label>
+              Referral Code (optional)
+              <input type="text" name="referral_code" aria-label="Referral Code"/>
+            </label>
+            <label>
+              Password*
+              <input type="password" name="password" required aria-label="Password"/>
+            </label>
+            <label>
+              Confirm Password*
+              <input type="password" name="confirm_password" required aria-label="Confirm Password"/>
+            </label>
+            <label class="photo-upload">
+              Profile Photo (optional)
+              <input type="file" name="photo" accept="image/*" aria-label="Profile Photo"/>
+            </label>
+          </div>
+          <label class="terms-agreement">
+            <input type="checkbox" name="terms" required aria-label="Terms Agreement"/>
+            I agree with the <a href="privacy.html">Privacy Policy</a> and <a href="terms.html">Terms & Conditions</a>
           </label>
-          <label>
-            Email Address  
-            <input type="email" name="email" required/>
-          </label>
-          <label>
-            Password  
-            <input type="password" name="password" required/>
-          </label>
-          <label>
-            Phone Number  
-            <input type="tel" name="phone" required/>
-          </label>
-          <button type="submit" class="cta primary">Sign Up</button>
+          <button type="submit" class="cta primary">Create Account</button>
+          <p class="login-link">Already have an account? <a href="login.html">Login</a></p>
         </form>
       </section>
     </main>
   </div>
 
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
+    AOS.init({ duration: 800, once: true });
+
     // Hamburger toggle
     const btnApp = document.getElementById('hamburgerApp'),
           drawerApp = document.getElementById('navDrawerApp');
-    btnApp.addEventListener('click', ()=>{
+    btnApp.addEventListener('click', () => {
       drawerApp.classList.toggle('open');
       btnApp.classList.toggle('active');
     });
 
+    // Theme toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('light-theme');
+      const icon = themeToggle.querySelector('i');
+      icon.classList.toggle('fa-moon');
+      icon.classList.toggle('fa-sun');
+    });
+
     // Supabase client
-    const supabase = supabase.createClient(
+    const supabase = Supabase.createClient(
       'https://iwkdznjqfbsfkscnbrkc.supabase.co',
-      'eyJhbGciOiJIUzI1Ni...kAbiU'
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU'
     );
 
     // Handle sign-up
-    document.getElementById('applicationForm')
-      .addEventListener('submit', async e => {
-        e.preventDefault();
-        const f = e.target;
-        // 1. Sign up
-        let { user, error: su } = await supabase.auth.signUp({
-          email: f.email.value,
-          password: f.password.value
-        });
-        if (su) return alert('Sign-up error: ' + su.message);
-        // 2. Create profile
-        let { error: pErr } = await supabase.from('profiles').insert({
-          id: user.id,
-          full_name: f.full_name.value,
-          phone: f.phone.value
-        });
-        if (pErr) return alert('Profile error: ' + pErr.message);
-        alert('Sign-up successful! Please log in to your dashboard.');
-        window.location.href = 'login.html';
+    document.getElementById('applicationForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const f = e.target;
+
+      // Validate passwords match
+      if (f.password.value !== f.confirm_password.value) {
+        alert('Passwords do not match.');
+        return;
+      }
+
+      // Validate terms agreement
+      if (!f.terms.checked) {
+        alert('You must agree to the Privacy Policy and Terms & Conditions.');
+        return;
+      }
+
+      // 1. Sign up with Supabase Auth
+      const { user, error: signUpError } = await supabase.auth.signUp({
+        email: f.email.value,
+        password: f.password.value,
       });
+      if (signUpError) {
+        alert('Sign-up error: ' + signUpError.message);
+        return;
+      }
+
+      // 2. Upload photo if provided
+      let photoUrl = null;
+      if (f.photo.files[0]) {
+        const { data, error: uploadError } = await supabase.storage
+          .from('profile-photos')
+          .upload(`${user.id}/${f.photo.files[0].name}`, f.photo.files[0]);
+        if (uploadError) {
+          alert('Photo upload error: ' + uploadError.message);
+          return;
+        }
+        photoUrl = data.path;
+      }
+
+      // 3. Create profile in Supabase
+      const { error: profileError } = await supabase.from('profiles').insert({
+        id: user.id,
+        first_name: f.first_name.value,
+        last_name: f.last_name.value,
+        username: f.username.value,
+        country: f.country.value,
+        referral_code: f.referral_code.value || null,
+        photo_url: photoUrl,
+      });
+      if (profileError) {
+        alert('Profile creation error: ' + profileError.message);
+        return;
+      }
+
+      alert('Sign-up successful! Please log in to your dashboard.');
+      window.location.href = 'login.html';
+    });
   </script>
 </body>
 </html>
