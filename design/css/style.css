@@ -1,44 +1,74 @@
 /* 1. Reset & Base */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; }
-html, body { height: 100%; font-family: 'Segoe UI', sans-serif; color: #fff; }
+html, body { 
+  height: 100%; 
+  font-family: 'Segoe UI', sans-serif; 
+  color: #fff; 
+  background: #000; /* Black background for the theme */
+}
 a { text-decoration: none; color: inherit; }
 
 /* 2. Video Background */
 .bg-video {
-  position: fixed; top: 0; left: 0;
-  width: 100vw; height: 100vh;
-  object-fit: cover; z-index: -1;
-  background: #000;
+  position: fixed; 
+  top: 0; 
+  left: 0;
+  width: 100vw; 
+  height: 100vh;
+  object-fit: cover; 
+  z-index: -1; /* Behind everything */
+  filter: brightness(0.5); /* Makes video visible but not overpowering */
 }
 
 /* 3. Glass-morphic Overlay */
 .overlay {
   position: relative;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.5);
-  backdrop-filter: blur(6px);
-  display: flex; flex-direction: column;
+  width: 100%; 
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* Semi-transparent black for glass effect */
+  backdrop-filter: blur(6px); /* Glass-morphic blur */
+  display: flex; 
+  flex-direction: column;
 }
 
 /* 4. Header */
 .site-header {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 1rem 2rem; background: rgba(0,0,0,0.3);
-  position: sticky; top: 0; z-index: 10;
+  display: flex; 
+  align-items: center; 
+  justify-content: space-between;
+  padding: 1rem 2rem; 
+  background: rgba(0, 0, 0, 0.3);
+  position: sticky; 
+  top: 0; 
+  z-index: 10;
+  border-bottom: 1px solid rgba(255, 215, 0, 0.2); /* Gold accent */
 }
-.logo { height: 45px; }
+.logo { 
+  height: 45px; 
+  display: block; /* Perfect logo display */
+}
 .logo-link { display: inline-block; }
 
 /* Hamburger Menu */
 .hamburger {
-  position: relative; width: 30px; height: 22px;
-  display: flex; flex-direction: column; justify-content: space-between;
-  background: none; border: none; cursor: pointer; z-index: 20;
+  position: relative; 
+  width: 30px; 
+  height: 22px;
+  display: flex; 
+  flex-direction: column; 
+  justify-content: space-between;
+  background: none; 
+  border: none; 
+  cursor: pointer; 
+  z-index: 20;
 }
 .hamburger span {
-  display: block; height: 3px; background: #FFD700;
-  border-radius: 2px; transition: transform 0.3s, opacity 0.3s;
+  display: block; 
+  height: 3px; 
+  background: #FFD700; /* Gold for theme */
+  border-radius: 2px; 
+  transition: transform 0.3s, opacity 0.3s;
 }
 .hamburger.active span:nth-child(1) {
   transform: translateY(9px) rotate(45deg);
@@ -50,43 +80,69 @@ a { text-decoration: none; color: inherit; }
 
 /* Nav Drawer */
 .nav-drawer {
-  position: fixed; top: 0; right: -250px;
-  width: 250px; height: 100%; background: rgba(0,0,0,0.9);
-  display: flex; flex-direction: column; padding: 4rem 1.5rem;
-  transition: right 0.3s; z-index: 15;
+  position: fixed; 
+  top: 0; 
+  right: -250px;
+  width: 250px; 
+  height: 100%; 
+  background: rgba(0, 0, 0, 0.9);
+  display: flex; 
+  flex-direction: column; 
+  padding: 4rem 1.5rem;
+  transition: right 0.3s; 
+  z-index: 15;
+  border-left: 1px solid rgba(255, 215, 0, 0.2); /* Gold accent */
 }
 .nav-drawer.open { right: 0; }
 .nav-drawer a {
-  margin: 0.75rem 0; font-size: 1.1rem; color: #fff; font-weight: 500;
+  margin: 0.75rem 0; 
+  font-size: 1.1rem; 
+  color: #fff; 
+  font-weight: 500;
   transition: color 0.2s;
 }
-.nav-drawer a:hover, .nav-drawer a.active { color: #FFD700; }
+.nav-drawer a:hover, .nav-drawer a.active { color: #FFD700; /* Gold on hover */ }
 
 /* CTA Buttons */
 .cta {
-  border: 2px solid #FFD700; padding: 0.5rem 1rem; border-radius: 4px;
-  background: transparent; cursor: pointer;
+  border: 2px solid #FFD700; /* Gold border */
+  padding: 0.5rem 1rem; 
+  border-radius: 4px;
+  background: transparent; 
+  cursor: pointer;
+  color: #fff; /* White text by default */
   transition: background 0.3s, color 0.3s;
 }
 .cta.primary, .cta:hover {
-  background: #FFD700; color: #000;
+  background: #FFD700; /* Gold background */
+  color: #000; /* Black text for contrast */
 }
 
 /* 5. Hero */
 .hero {
-  flex: 1; display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  text-align: center; padding: 2rem;
+  flex: 1; 
+  display: flex; 
+  flex-direction: column;
+  align-items: center; 
+  justify-content: center;
+  text-align: center; 
+  padding: 2rem;
 }
 .hero-title {
-  font-size: 3rem; letter-spacing: 2px; text-transform: uppercase;
-  background: linear-gradient(45deg, #FFD700, #FFB300);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  font-size: 3rem; 
+  letter-spacing: 2px; 
+  text-transform: uppercase;
+  background: linear-gradient(45deg, #FFD700, #FFB300); /* Gold gradient */
+  -webkit-background-clip: text; 
+  -webkit-text-fill-color: transparent;
   animation: fadeInDown 1s ease-out forwards;
 }
 .hero-subtitle {
-  margin: 1rem 0 2rem; font-size: 1.25rem; opacity: 0;
+  margin: 1rem 0 2rem; 
+  font-size: 1.25rem; 
+  opacity: 0;
   animation: fadeInUp 1s ease-out 0.5s forwards;
+  color: #e0e0ff; /* Light color for readability */
 }
 @keyframes fadeInDown {
   from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: none; }
@@ -97,71 +153,120 @@ a { text-decoration: none; color: inherit; }
 
 /* Ticker & Scroll */
 .ticker {
-  margin-top: 2rem; padding: 0.5rem 1rem;
-  background: rgba(255,255,255,0.1); border-radius: 3px;
-  font-family: monospace; letter-spacing: 1px;
+  margin-top: 2rem; 
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.1); 
+  border-radius: 3px;
+  font-family: monospace; 
+  letter-spacing: 1px;
+  border: 1px solid rgba(255, 215, 0, 0.2); /* Gold accent */
 }
 .scroll-indicator {
-  position: absolute; bottom: 2rem;
-  display: flex; flex-direction: column; align-items: center;
-  opacity: 0.7; animation: bounce 2s infinite; font-size: 0.85rem;
+  position: absolute; 
+  bottom: 2rem;
+  display: flex; 
+  flex-direction: column; 
+  align-items: center;
+  opacity: 0.7; 
+  animation: bounce 2s infinite; 
+  font-size: 0.85rem;
   z-index: 1;
 }
 .chevrons .chevron {
-  width: 10px; height: 10px;
-  border-right: 2px solid #fff; border-bottom: 2px solid #fff;
-  transform: rotate(45deg); margin: 3px;
+  width: 10px; 
+  height: 10px;
+  border-right: 2px solid #FFD700; /* Gold chevrons */
+  border-bottom: 2px solid #FFD700;
+  transform: rotate(45deg); 
+  margin: 3px;
 }
 @keyframes bounce {
-  0%,100% { transform: translateY(0); } 50% { transform: translateY(8px); }
+  0%, 100% { transform: translateY(0); } 50% { transform: translateY(8px); }
 }
 
 /* Sections & Typography */
 .section {
-  padding: 4rem 2rem; max-width: 900px; margin: 0 auto;
+  padding: 4rem 2rem; 
+  max-width: 900px; 
+  margin: 0 auto;
 }
-.section-light  { background: rgba(0,0,0,0.6); }
-.section-dark   { background: rgba(0,0,0,0.8); }
+.section-light  { background: rgba(0, 0, 0, 0.6); }
+.section-dark   { background: rgba(0, 0, 0, 0.8); }
 .section-title {
-  font-size: 2rem; margin-bottom: 1.5rem; text-align: center; color: #fff;
+  font-size: 2rem; 
+  margin-bottom: 1.5rem; 
+  text-align: center; 
+  color: #fff;
 }
 .section-title.gold {
-  background: linear-gradient(45deg, #FFD700, #FFB300);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background: linear-gradient(45deg, #FFD700, #FFB300); /* Gold gradient */
+  -webkit-background-clip: text; 
+  -webkit-text-fill-color: transparent;
 }
 .section-text, .features-list, .path-list {
-  max-width: 800px; margin: 0 auto 1.5rem; line-height: 1.6;
+  max-width: 800px; 
+  margin: 0 auto 1.5rem; 
+  line-height: 1.6;
+  color: #e0e0ff; /* Light color for readability */
 }
 .features-list, .path-list {
-  list-style: none; padding: 0;
+  list-style: none; 
+  padding: 0;
 }
 .path-list { counter-reset: step; }
 .path-list li {
-  position: relative; padding-left: 2.5rem; margin-bottom: 1rem;
+  position: relative; 
+  padding-left: 2.5rem; 
+  margin-bottom: 1rem;
 }
 .path-list li::before {
-  counter-increment: step; content: counter(step);
-  position: absolute; left: 0; top: 0;
-  background: #FFD700; color: #000;
-  width: 2rem; height: 2rem; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
+  counter-increment: step; 
+  content: counter(step);
+  position: absolute; 
+  left: 0; 
+  top: 0;
+  background: #FFD700; /* Gold circle */
+  color: #000;
+  width: 2rem; 
+  height: 2rem; 
+  border-radius: 50%;
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
 }
 
 /* Testimonials */
 .testimonials {
-  position: relative; max-width: 700px; margin: 0 auto; overflow: hidden;
+  position: relative; 
+  max-width: 700px; 
+  margin: 0 auto; 
+  overflow: hidden;
 }
 .testimonial {
-  display: none; text-align: center; font-style: italic; color: #ddd;
+  display: none; 
+  text-align: center; 
+  font-style: italic; 
+  color: #ddd;
 }
 .testimonial.active { display: block; }
-.testimonial span { display: block; margin-top: 0.5rem; font-weight: bold; }
+.testimonial span { 
+  display: block; 
+  margin-top: 0.5rem; 
+  font-weight: bold; 
+  color: #FFD700; /* Gold for emphasis */
+}
 
 /* Testimonial nav */
 .test-nav {
-  position: absolute; top: 50%; transform: translateY(-50%);
-  background: rgba(0,0,0,0.5); border: none; padding: 0.5rem 1rem;
-  cursor: pointer; font-size: 1.2rem; color: #fff;
+  position: absolute; 
+  top: 50%; 
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.5); 
+  border: none; 
+  padding: 0.5rem 1rem;
+  cursor: pointer; 
+  font-size: 1.2rem; 
+  color: #FFD700; /* Gold buttons */
 }
 .test-nav.prev { left: 0; }
 .test-nav.next { right: 0; }
@@ -169,42 +274,45 @@ a { text-decoration: none; color: inherit; }
 /* CTA Section & Newsletter */
 .cta-section { text-align: center; }
 .newsletter {
-  display: flex; justify-content: center; flex-wrap: wrap; gap: 1rem;
+  display: flex; 
+  justify-content: center; 
+  flex-wrap: wrap; 
+  gap: 1rem;
   margin-top: 1rem;
 }
 .newsletter input[type="email"] {
-  padding: 0.75rem 1rem; border: none; border-radius: 4px; width: 250px;
+  padding: 0.75rem 1rem; 
+  border: 1px solid #FFD700; /* Gold border */
+  border-radius: 4px; 
+  width: 250px;
+  background: #111; /* Dark input background */
+  color: #fff;
 }
-/* Investment Plans Page */
 
-/* Grid of plan cards */
+/* Investment Plans Page */
 .plans-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 2rem;
   margin-top: 2rem;
 }
-
-/* Individual plan card */
 .plan-card {
-  background: rgba(0,0,0,0.6);
-  border: 2px solid #FFD700;
+  background: rgba(0, 0, 0, 0.6);
+  border: 2px solid #FFD700; /* Gold border */
   border-radius: 8px;
   padding: 1.5rem;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
   transition: transform 0.3s, box-shadow 0.3s;
 }
 .plan-card:hover {
   transform: translateY(-8px);
-  box-shadow: 0 6px 30px rgba(0,0,0,0.7);
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.7);
 }
-
-/* Plan title with gradient text */
 .plan-title {
   font-size: 1.5rem;
   margin-bottom: 1rem;
   line-height: 1.2;
-  background: linear-gradient(45deg, #FFD700, #FFB300);
+  background: linear-gradient(45deg, #FFD700, #FFB300); /* Gold gradient */
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -215,8 +323,6 @@ a { text-decoration: none; color: inherit; }
   color: #ddd;
   margin-top: 0.25rem;
 }
-
-/* Details list */
 .plan-details {
   list-style: none;
   margin: 0;
@@ -225,42 +331,37 @@ a { text-decoration: none; color: inherit; }
 .plan-details li {
   margin-bottom: 0.5rem;
   font-size: 1rem;
+  color: #e0e0ff;
 }
-
-/* Overview paragraph */
 .plan-overview {
   margin-top: 1rem;
   font-size: 0.95rem;
   color: #ccc;
   line-height: 1.5;
 }
-
-/* Adjust final CTAs spacing */
 .plans-page .cta-section button {
   margin-top: 1rem;
 }
-/* Privacy Policy Page Specific */
 
-/* Layout: main content + sidebar */
+/* Privacy Policy Page Specific */
 .privacy-page {
   display: flex;
   flex-direction: row;
   margin-top: 2rem;
   padding-bottom: 4rem;
 }
-/* Table of Contents */
 .toc {
   position: sticky;
   top: 6rem;
   flex: 0 0 200px;
   margin-left: 2rem;
-  background: rgba(0,0,0,0.7);
+  background: rgba(0, 0, 0, 0.7);
   padding: 1rem;
   border-radius: 6px;
 }
 .toc h3 {
   margin-bottom: 0.5rem;
-  color: #FFD700;
+  color: #FFD700; /* Gold heading */
   font-size: 1.1rem;
 }
 .toc ul {
@@ -276,89 +377,75 @@ a { text-decoration: none; color: inherit; }
   transition: color 0.2s;
 }
 .toc ul li a:hover {
-  color: #FFD700;
+  color: #FFD700; /* Gold on hover */
 }
-
-/* Main sections adjust to occupy remaining space */
 .privacy-page > section {
   flex: 1;
   margin-right: 2rem;
 }
-/* Ensure last section has no extra margin */
 .privacy-page > section:last-of-type {
   margin-right: 0;
 }
-
-/* Portal Card */
-.portal-card {
-  background: rgba(255, 215, 0, 0.1);
-  border: 2px solid #FFD700;
-  border-radius: 8px;
-  padding: 1.5rem;
-  max-width: 700px;
-  margin: 0 auto;
-  text-align: center;
-}
-.portal-card h3 {
-  background: linear-gradient(45deg, #FFD700, #FFB300);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  font-size: 1.4rem;
-  margin-bottom: 1rem;
-}
-
-/* Ensure CTA Section at bottom spans full width */
 .privacy-page .cta-section {
   text-align: center;
   width: 100%;
 }
-
-/* Responsive Adjustments */
 @media (max-width: 900px) {
   .privacy-page { flex-direction: column; }
   .toc { display: none; }
   .privacy-page > section { margin-right: 0; }
 }
-/* Terms & Conditions Page Specific */
 
-/* Layout: main + sidebar */
+/* Terms & Conditions Page Specific */
 .terms-page {
   display: flex;
   flex-direction: row;
   margin-top: 2rem;
   padding-bottom: 4rem;
 }
-/* Reuse .toc styles from privacy page */
-.terms-page .toc { /* same as privacy */
-  position: sticky; top: 6rem;
-  flex: 0 0 200px; margin-left: 2rem;
-  background: rgba(0,0,0,0.7); padding: 1rem;
+.terms-page .toc {
+  position: sticky; 
+  top: 6rem;
+  flex: 0 0 200px; 
+  margin-left: 2rem;
+  background: rgba(0, 0, 0, 0.7); 
+  padding: 1rem;
   border-radius: 6px;
 }
-.terms-page .toc h3 { color: #FFD700; font-size: 1.1rem; margin-bottom: 0.5rem; }
-.terms-page .toc ul li a { color: #ccc; font-size: 0.9rem; transition: color 0.2s; }
-.terms-page .toc ul li a:hover { color: #FFD700; }
-
-/* Main sections flex */
+.terms-page .toc h3 { 
+  color: #FFD700; /* Gold heading */
+  font-size: 1.1rem; 
+  margin-bottom: 0.5rem; 
+}
+.terms-page .toc ul li a { 
+  color: #ccc; 
+  font-size: 0.9rem; 
+  transition: color 0.2s; 
+}
+.terms-page .toc ul li a:hover { 
+  color: #FFD700; /* Gold on hover */
+}
 .terms-page > section {
-  flex: 1; margin-right: 2rem;
+  flex: 1; 
+  margin-right: 2rem;
 }
 .terms-page > section:last-of-type { margin-right: 0; }
-
-/* Lists inside sections */
 .terms-page .features-list {
-  list-style: none; padding: 0; margin: 1rem 0;
+  list-style: none; 
+  padding: 0; 
+  margin: 1rem 0;
 }
 .terms-page .features-list li {
-  margin-bottom: 0.75rem; font-size: 1rem;
+  margin-bottom: 0.75rem; 
+  font-size: 1rem;
+  color: #e0e0ff;
 }
-
-/* Responsive */
 @media (max-width: 900px) {
   .terms-page { flex-direction: column; }
   .terms-page .toc { display: none; }
   .terms-page > section { margin-right: 0; }
 }
+
 /* Form Page Base */
 .form-page {
   display: flex;
@@ -367,19 +454,16 @@ a { text-decoration: none; color: inherit; }
   flex: 1;
   padding: 2rem;
 }
-
-/* Form Container */
 .form-container {
-  background: rgba(0,0,0,0.7);
+  background: rgba(0, 0, 0, 0.7);
   padding: 2rem;
-  border: 2px solid #FFD700;
+  border: 2px solid #FFD700; /* Gold border */
   border-radius: 8px;
   max-width: 400px;
   width: 100%;
   display: flex;
   flex-direction: column;
 }
-
 .form-container label {
   margin-bottom: 1rem;
   font-size: 1rem;
@@ -387,55 +471,48 @@ a { text-decoration: none; color: inherit; }
   display: flex;
   flex-direction: column;
 }
-
 .form-container input,
 .form-container select {
   margin-top: 0.5rem;
   padding: 0.75rem 1rem;
   border: none;
   border-radius: 4px;
-  font-size: 1rem;
+  background: #111; /* Dark input background */
+  color: #fff;
 }
-
 .form-container input::placeholder {
   color: #666;
 }
-
 .form-container select {
   background: #111;
   color: #fff;
 }
-
 .form-container .cta {
   margin-top: 1.5rem;
   align-self: center;
   width: 100%;
 }
-/* Dashboard Page Specific */
 
+/* Dashboard Page Specific */
 .dashboard-page {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 2rem;
   padding: 2rem;
-  margin-top: 4rem; /* below header */
+  margin-top: 4rem;
 }
-
-/* Base card style */
 .dash-card {
-  background: rgba(0,0,0,0.6);
-  border: 2px solid #FFD700;
+  background: rgba(0, 0, 0, 0.6);
+  border: 2px solid #FFD700; /* Gold border */
   border-radius: 8px;
   padding: 1.5rem;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
   transition: transform 0.3s, box-shadow 0.3s;
 }
 .dash-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 6px 30px rgba(0,0,0,0.7);
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.7);
 }
-
-/* Growth card */
 .growth-card {
   grid-column: 1 / -1;
   text-align: center;
@@ -444,17 +521,15 @@ a { text-decoration: none; color: inherit; }
   font-size: 2.5rem;
   margin: 1rem 0;
   font-family: monospace;
+  color: #FFD700; /* Gold value */
 }
 .growth-card .growth-sub {
   color: #ddd;
 }
-
-/* Summary card */
 .summary-card p {
   margin: 0.5rem 0;
+  color: #e0e0ff;
 }
-
-/* Calculator card */
 .calculator-card label {
   display: block;
   margin-bottom: 1rem;
@@ -467,14 +542,14 @@ a { text-decoration: none; color: inherit; }
   padding: 0.5rem;
   border-radius: 4px;
   border: none;
+  background: #111;
+  color: #fff;
 }
 .calculator-card .calc-result {
   margin-top: 1rem;
   font-weight: bold;
-  color: #FFD700;
+  color: #FFD700; /* Gold result */
 }
-
-/* Transfer card */
 .transfer-card form {
   display: flex;
   flex-direction: column;
@@ -489,9 +564,9 @@ a { text-decoration: none; color: inherit; }
   padding: 0.5rem;
   border-radius: 4px;
   border: none;
+  background: #111;
+  color: #fff;
 }
-
-/* History table */
 .history-card {
   grid-column: 1 / -1;
 }
@@ -503,15 +578,13 @@ a { text-decoration: none; color: inherit; }
 .history-table th,
 .history-table td {
   padding: 0.75rem 1rem;
-  border-bottom: 1px solid rgba(255,255,255,0.2);
+  border-bottom: 1px solid rgba(255, 215, 0, 0.2); /* Gold accent */
 }
 .history-table th {
-  background: rgba(255,215,0,0.1);
-  color: #FFD700;
+  background: rgba(255, 215, 0, 0.1); /* Gold tint */
+  color: #FFD700; /* Gold text */
   text-align: left;
 }
-
-/* Responsive adjustments */
 @media (max-width: 600px) {
   .dashboard-page {
     grid-template-columns: 1fr;
@@ -519,6 +592,7 @@ a { text-decoration: none; color: inherit; }
   }
   .growth-card { font-size: 0.9rem; }
 }
+
 /* Investment Calculator */
 #calcForm {
   display: flex;
@@ -537,7 +611,7 @@ a { text-decoration: none; color: inherit; }
 #calcForm select, #calcForm input {
   padding: 0.75rem;
   border-radius: 4px;
-  border: 1px solid #FFD700;
+  border: 1px solid #FFD700; /* Gold border */
   background: #111;
   color: #fff;
   font-size: 1rem;
@@ -549,14 +623,14 @@ a { text-decoration: none; color: inherit; }
 .calc-result {
   margin-top: 1rem;
   font-size: 1.2rem;
-  color: #FFD700;
+  color: #FFD700; /* Gold result */
   text-align: center;
 }
 
 /* Video Container */
 .video-container {
   position: relative;
-  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  padding-bottom: 56.25%;
   height: 0;
   overflow: hidden;
   max-width: 100%;
@@ -568,22 +642,22 @@ a { text-decoration: none; color: inherit; }
   left: 0;
   width: 100%;
   height: 100%;
-  border: 2px solid #FFD700;
+  border: 2px solid #FFD700; /* Gold border */
   border-radius: 4px;
 }
 
 /* FAQ Section */
 details {
   margin-bottom: 1rem;
-  border: 1px solid #FFD700;
+  border: 1px solid #FFD700; /* Gold border */
   border-radius: 4px;
   padding: 0.5rem;
-  background: rgba(0,0,0,0.6);
+  background: rgba(0, 0, 0, 0.6);
 }
 summary {
   cursor: pointer;
   font-weight: bold;
-  color: #FFD700;
+  color: #FFD700; /* Gold question */
   padding: 0.5rem;
 }
 details[open] summary {
@@ -598,8 +672,8 @@ details p {
 footer {
   text-align: center;
   padding: 1rem;
-  background: rgba(0,0,0,0.8);
-  border-top: 1px solid #FFD700;
+  background: rgba(0, 0, 0, 0.8);
+  border-top: 1px solid #FFD700; /* Gold border */
 }
 
 /* Responsive Adjustments */
