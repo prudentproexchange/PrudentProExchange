@@ -1,168 +1,214 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Terms &amp; Conditions • PrudentProExchange</title>
+  <title>Terms & Conditions • PrudentProExchange</title>
   <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/terms.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
 </head>
-<body>
+<body class="terms-page">
   <!-- Video Background -->
   <video class="bg-video" autoplay muted loop playsinline preload="auto">
     <source src="assets/videos/background.webm" type="video/webm">
     <source src="assets/videos/background.mp4" type="video/mp4">
+    Your browser does not support the video tag.
   </video>
 
   <div class="overlay">
     <header class="site-header">
+      <button id="theme-toggle" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
       <a href="/" class="logo-link">
         <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo"/>
       </a>
-      <button class="hamburger" id="hamburgerBtn5" aria-label="Menu"><span></span><span></span><span></span></button>
+      <button class="hamburger" id="hamburgerBtn5" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
       <nav class="nav-drawer" id="navDrawer5">
-        <a href="#application">Apply</a>
+        <a href="/#application">Apply</a>
         <a href="about.html">About</a>
         <a href="privacy.html">Privacy Policy</a>
-        <a href="terms.html" class="active">Terms &amp; Conditions</a>
+        <a href="terms.html" class="active">Terms & Conditions</a>
         <a href="login.html">Login</a>
-        <a href="plans.html">Investment Plans</a>
+        <a href="/#plans">Investment Plans</a>
       </nav>
     </header>
 
-    <main class="terms-page">
-      <!-- Sidebar Table of Contents -->
-      <aside class="toc">
-        <h3>Contents</h3>
-        <ul>
-          <li><a href="#opening">1. Account Opening</a></li>
-          <li><a href="#usage">2. Usage of the Trading Platform</a></li>
-          <li><a href="#activation">3. Activation of the Trading Account</a></li>
-          <li><a href="#transactions">4. Transactions</a></li>
-          <li><a href="#margin">5. Margin &amp; Funds Management</a></li>
-          <li><a href="#fees">6. Fees &amp; Charges</a></li>
-          <li><a href="#statements">7. Account Statements</a></li>
-          <li><a href="#bonuses">8. Bonuses</a></li>
-          <li><a href="#closing">9. Closing &amp; Cancellation</a></li>
-          <li><a href="#liability">10. Liability &amp; Indemnities</a></li>
-          <li><a href="#general">11. General Provisions</a></li>
-        </ul>
-      </aside>
+    <div class="main-content">
+      <main class="terms-page container">
+        <!-- Main Content Sections -->
+        <section id="opening" class="section" data-aos="fade-up">
+          <h2 class="section-title gold">1. Account Opening</h2>
+          <p class="section-text">
+            The Client may apply to open a Trading Account via our website by:
+          </p>
+          <ul class="features-list">
+            <li>Accepting this Agreement via “AGREE” and completing the application form.</li>
+            <li>Providing full, accurate information and notifying us of changes.</li>
+            <li>Being at least 18 years old or meeting local legal age.</li>
+          </ul>
+          <p class="section-text">
+            We reserve the right to refuse or terminate any account at our discretion.
+          </p>
+        </section>
 
-      <section id="opening" class="section section-light">
-        <h2 class="section-title gold">1. Account Opening</h2>
-        <p class="section-text">
-          The Client may apply to open a Trading Account via our website by:
-        </p>
-        <ul class="features-list">
-          <li>Accepting this Agreement via “AGREE” and completing the application form.</li>
-          <li>Providing full, accurate information and notifying us of changes.</li>
-          <li>Being at least 18 years old or meeting local legal age.</li>
-        </ul>
-        <p class="section-text">
-          We reserve the right to refuse or terminate any account at our discretion.
-        </p>
-      </section>
+        <section id="usage" class="section" data-aos="fade-up">
+          <h2 class="section-title gold">2. Usage of the Trading Platform</h2>
+          <ul class="features-list">
+            <li>The license is personal, non-transferable, and limited.</li>
+            <li>Keep access codes confidential; you are responsible for all activity.</li>
+            <li>Any breach of this Agreement is solely your responsibility.</li>
+          </ul>
+        </section>
 
-      <section id="usage" class="section section-dark">
-        <h2 class="section-title gold">2. Usage of the Trading Platform</h2>
-        <ul class="features-list">
-          <li>The license is personal, non-transferable, and limited.</li>
-          <li>Keep access codes confidential; you are responsible for all activity.</li>
-          <li>Any breach of this Agreement is solely your responsibility.</li>
-        </ul>
-      </section>
+        <section id="activation" class="section" data-aos="fade-up">
+          <h2 class="section-title">3. Activation of the Trading Account</h2>
+          <p class="section-text">
+            Activation occurs once we verify your credited funds. Additional requirements may apply to ensure regulatory compliance. Inactive or non-compliant accounts remain frozen until obligations are met.
+          </p>
+        </section>
 
-      <section id="activation" class="section section-light">
-        <h2 class="section-title">3. Activation of the Trading Account</h2>
-        <p class="section-text">
-          Activation occurs once we verify your credited funds. Additional requirements may apply to ensure regulatory compliance. Inactive or non-compliant accounts remain frozen until obligations are met.
-        </p>
-      </section>
+        <section id="transactions" class="section" data-aos="fade-up">
+          <h2 class="section-title gold">4. Transactions</h2>
+          <ul class="features-list">
+            <li><strong>Nature:</strong> Binary Options with fixed returns “in-the-money” or losses “out-of-money.”</li>
+            <li><strong>Quotes:</strong> Indicative, based on accepted market formulas; we may adjust or cancel in case of errors.</li>
+            <li><strong>Role:</strong> We may act as principal or agent; you act as principal.</li>
+            <li><strong>Authorization:</strong> All valid instructions from you are binding.</li>
+            <li><strong>Limits:</strong> We may set order limits or restrict terms without notice.</li>
+            <li><strong>Arbitrage:</strong> Prohibited; abusive cancellations (>20%) may forfeit profits.</li>
+          </ul>
+        </section>
 
-      <section id="transactions" class="section section-dark">
-        <h2 class="section-title gold">4. Transactions</h2>
-        <ul class="features-list">
-          <li><strong>Nature:</strong> Binary Options with fixed returns “in-the-money” or losses “out-of-money.”</li>
-          <li><strong>Quotes:</strong> Indicative, based on accepted market formulas; we may adjust or cancel in case of errors.</li>
-          <li><strong>Role:</strong> We may act as principal or agent; you act as principal.</li>
-          <li><strong>Authorization:</strong> All valid instructions from you are binding.</li>
-          <li><strong>Limits:</strong> We may set order limits or restrict terms without notice.</li>
-          <li><strong>Arbitrage:</strong> Prohibited; abusive cancellations (>20%) may forfeit profits.</li>
-        </ul>
-      </section>
+        <section id="margin" class="section" data-aos="fade-up">
+          <h2 class="section-title">5. Margin & Funds Management</h2>
+          <ul class="features-list">
+            <li>Transfer funds via approved methods; conversions at prevailing rates.</li>
+            <li>Bank transfers require SWIFT confirmation matching your info.</li>
+            <li>Funds become our property to secure your obligations.</li>
+            <li>Withdrawals processed within 24h, less any fees.</li>
+            <li>Funds must comply with anti-money laundering laws.</li>
+          </ul>
+        </section>
 
-      <section id="margin" class="section section-light">
-        <h2 class="section-title">5. Margin &amp; Funds Management</h2>
-        <ul class="features-list">
-          <li>Transfer funds via approved methods; conversions at prevailing rates.</li>
-          <li>Bank transfers require SWIFT confirmation matching your info.</li>
-          <li>Funds become our property to secure your obligations.</li>
-          <li>Withdrawals processed within 24h, less any fees.</li>
-          <li>Funds must comply with anti-money laundering laws.</li>
-        </ul>
-      </section>
+        <section id="fees" class="section" data-aos="fade-up">
+          <h2 class="section-title gold">6. Fees & Charges</h2>
+          <p class="section-text">
+            No brokerage fees or commissions. A flat transfer fee of 35 units per withdrawal may apply.
+          </p>
+        </section>
 
-      <section id="fees" class="section section-dark">
-        <h2 class="section-title gold">6. Fees &amp; Charges</h2>
-        <p class="section-text">
-          No brokerage fees or commissions. A flat transfer fee of 35 units per withdrawal may apply.
-        </p>
-      </section>
+        <section id="statements" class="section" data-aos="fade-up">
+          <h2 class="section-title">7. Account Statements</h2>
+          <p class="section-text">
+            View balances and statements on the platform. Definitions are available on our website.
+          </p>
+        </section>
 
-      <section id="statements" class="section section-light">
-        <h2 class="section-title">7. Account Statements</h2>
-        <p class="section-text">
-          View balances and statements on the platform. Definitions are available on our website.
-        </p>
-      </section>
+        <section id="bonuses" class="section" data-aos="fade-up">
+          <h2 class="section-title gold">8. Bonuses</h2>
+          <p class="section-text">
+            Bonuses or gifts are discretionary. Suspected fraud or breaches may result in forfeiture.
+          </p>
+        </section>
 
-      <section id="bonuses" class="section section-dark">
-        <h2 class="section-title gold">8. Bonuses</h2>
-        <p class="section-text">
-          Bonuses or gifts are discretionary. Suspected fraud or breaches may result in forfeiture.
-        </p>
-      </section>
+        <section id="closing" class="section" data-aos="fade-up">
+          <h2 class="section-title">9. Closing & Cancellation</h2>
+          <p class="section-text">
+            Either party may terminate with 10 business days’ notice or immediately for breaches. Upon termination, open positions must close, and obligations become due.
+          </p>
+        </section>
 
-      <section id="closing" class="section section-light">
-        <h2 class="section-title">9. Closing &amp; Cancellation</h2>
-        <p class="section-text">
-          Either party may terminate with 10 business days’ notice or immediately for breaches. Upon termination, open positions must close, and obligations become due.
-        </p>
-      </section>
+        <section id="liability" class="section" data-aos="fade-up">
+          <h2 class="section-title gold">10. Limitations of Liability & Indemnities</h2>
+          <p class="section-text">
+            Services are provided “as is.” We’re not liable for direct, indirect, or consequential losses. We may set off owed amounts against your debts.
+          </p>
+        </section>
 
-      <section id="liability" class="section section-dark">
-        <h2 class="section-title gold">10. Limitations of Liability &amp; Indemnities</h2>
-        <p class="section-text">
-          Services are provided “as is.” We’re not liable for direct, indirect, or consequential losses. We may set off owed amounts against your debts.
-        </p>
-      </section>
+        <section id="general" class="section" data-aos="fade-up">
+          <h2 class="section-title">11. General Provisions</h2>
+          <ul class="features-list">
+            <li><strong>Amendments:</strong> We may amend with 10 business days’ notice.</li>
+            <li><strong>Partial Invalidity:</strong> Invalid provisions don’t affect the rest.</li>
+            <li><strong>Joint Accounts:</strong> Any holder can act for all.</li>
+            <li><strong>Notices:</strong> Sent to your contact details; complaints to <a href="mailto:support@prudentproexchange.com">support@prudentproexchange.com</a>.</li>
+            <li><strong>Governing Law:</strong> U.S. law; exclusive American courts’ jurisdiction.</li>
+            <li><strong>No Assignment:</strong> You may not assign; we may to affiliates.</li>
+            <li><strong>Dormant Accounts:</strong> May incur fees or closure for inactivity.</li>
+            <li><strong>Language:</strong> English or mutually agreed language.</li>
+            <li><strong>Force Majeure:</strong> Not liable for uncontrollable events.</li>
+          </ul>
+        </section>
 
-      <section id="general" class="section section-light">
-        <h2 class="section-title">11. General Provisions</h2>
-        <ul class="features-list">
-          <li><strong>Amendments:</strong> We may amend with 10 business days’ notice.</li>
-          <li><strong>Partial Invalidity:</strong> Invalid provisions don’t affect the rest.</li>
-          <li><strong>Joint Accounts:</strong> Any holder can act for all.</li>
-          <li><strong>Notices:</strong> Sent to your contact details; complaints to <a href="mailto:support@prudentproexchange.com">support@prudentproexchange.com</a>.</li>
-          <li><strong>Governing Law:</strong> U.S. law; exclusive American courts’ jurisdiction.</li>
-          <li><strong>No Assignment:</strong> You may not assign; we may to affiliates.</li>
-          <li><strong>Dormant Accounts:</strong> May incur fees or closure for inactivity.</li>
-          <li><strong>Language:</strong> English or mutually agreed language.</li>
-          <li><strong>Force Majeure:</strong> Not liable for uncontrollable events.</li>
-        </ul>
-      </section>
+        <div id="application"></div>
+      </main>
+    </div>
 
-      <div id="application"></div>
-    </main>
+    <!-- Footer -->
+    <footer class="section section-dark site-footer" data-aos="fade-up">
+      <div class="footer-content">
+        <p class="utc-time">UTC Time: <span id="utcTime"></span></p>
+        <p class="local-time">Local Time: <span id="localTime"></span></p>
+        <p class="local-date">Local Date: <span id="localDate"></span></p>
+        <nav class="footer-links">
+          <a href="about.html">About Us</a>
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="terms.html">Terms & Conditions</a>
+        </nav>
+        <p class="copyright">© 2025 PrudentProExchange. All Rights Reserved. SEC Registration #0001230714</p>
+      </div>
+    </footer>
   </div>
 
+  <button id="back-to-top" aria-label="Back to top">🚀</button>
+
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="js/main.js"></script>
   <script>
-    const btn5 = document.getElementById('hamburgerBtn5'),
-          drawer5 = document.getElementById('navDrawer5');
-    btn5.addEventListener('click', ()=> {
+    // Hamburger toggle for Terms page
+    const btn5 = document.getElementById('hamburgerBtn5');
+    const drawer5 = document.getElementById('navDrawer5');
+    btn5.addEventListener('click', () => {
       drawer5.classList.toggle('open');
       btn5.classList.toggle('active');
     });
+
+    // Local Time and Date
+    function updateLocalTime() {
+      const now = new Date();
+      document.getElementById('localTime').textContent = now.toLocaleTimeString();
+      document.getElementById('localDate').textContent = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    }
+    setInterval(updateLocalTime, 1000);
+    updateLocalTime();
+
+    // UTC Time
+    function updateUTCTime() {
+      document.getElementById('utcTime').textContent = new Date().toUTCString();
+    }
+    setInterval(updateUTCTime, 1000);
+    updateUTCTime();
+
+    // Theme Toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('light-theme');
+      const icon = themeToggle.querySelector('i');
+      icon.classList.toggle('fa-moon');
+      icon.classList.toggle('fa-sun');
+    });
+
+    // Back to Top
+    document.getElementById('back-to-top').addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // Initialize AOS
+    AOS.init({ duration: 800, once: true });
   </script>
 </body>
 </html>
