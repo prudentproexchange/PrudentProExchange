@@ -42,11 +42,12 @@
   color: #e0e0ff;
   text-decoration: none;
   font-size: 1rem;
-  transition: color 0.3s ease;
+  transition: color 0.3s ease, transform 0.3s ease;
 }
 
 .privacy-page .toc-list a:hover {
   color: var(--primary);
+  transform: translateX(5px);
 }
 
 /* Ensure sections are transparent to use overlay background */
@@ -56,10 +57,21 @@
   margin-bottom: 4rem;
   border: 1px solid rgba(255, 215, 0, 0.3);
   border-radius: 10px;
-  flex: 1;
-  min-width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
   position: relative;
   z-index: 2;
+}
+
+.privacy-page .section::after {
+  content: '';
+  display: block;
+  width: 100px;
+  height: 1px;
+  background: rgba(255, 215, 0, 0.3);
+  margin: 2rem auto;
 }
 
 /* Styling for section titles */
@@ -91,7 +103,6 @@
   color: #fff;
   max-width: 800px;
   margin: 0 auto 1.5rem;
-  text-align: center;
 }
 
 /* Style the portal card */
