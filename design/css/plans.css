@@ -1,6 +1,6 @@
 /* Plans Page Specific Styles */
 :root {
-  --primary: #ffd700; /* Gold, from style.css */
+  --primary: #ffd700; /* Gold */
   --primary-dark: #cca300;
   --text-color: #fff;
   --glass-bg: rgba(255, 255, 255, 0.05);
@@ -72,15 +72,20 @@
   color: #e0e0ff;
   font-family: 'Poppins', sans-serif;
   max-width: 800px;
+  margin: 0 auto;
 }
 
 /* Plans grid */
+.plans-page .plans-grid {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
 .plans-page .plans-grid .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 2rem;
-  width: 100%;
-  max-width: 1200px;
 }
 
 .plans-page .plan-card {
@@ -147,11 +152,11 @@
 
 /* Spherical Investment Calculator */
 .plans-page .calculator-container {
-  width: 400px;
-  height: 400px;
+  width: 450px;
+  height: 450px;
   border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, #2a2a4a, #1a1a2e);
-  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 215, 0, 0.2);
+  background: radial-gradient(circle at 30% 30%, #000, #000);
+  box-shadow: inset 0 0 40px rgba(255, 215, 0, 0.1), 0 0 20px rgba(255, 215, 0, 0.2);
   position: relative;
   margin: 2rem auto;
   overflow: hidden;
@@ -163,59 +168,65 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 80%;
-  max-width: 300px;
+  width: 85%;
+  max-width: 350px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 0.4);
   padding: 1.5rem;
   border-radius: 10px;
   backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 215, 0, 0.2);
 }
 
 .plans-page .calculator-inner label {
-  color: #e0e0ff;
-  font-size: 1rem;
-  margin-bottom: 0.5rem;
+  color: var(--primary);
+  font-size: 0.9rem;
+  margin-bottom: 0.4rem;
   font-family: 'Playfair Display', serif;
   font-weight: 700;
+  text-align: left;
+  width: 100%;
 }
 
 .plans-page .calculator-inner select,
 .plans-page .calculator-inner input {
   width: 100%;
-  padding: 0.8rem;
-  margin-bottom: 1rem;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 215, 0, 0.3);
+  padding: 0.7rem;
+  margin-bottom: 0.8rem;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid var(--primary);
   border-radius: 5px;
   color: #fff;
-  font-size: 1rem;
-  font-family: 'Poppins', sans-serif;
+  font-size: 0.95rem;
+  font-family: 'Summer Font', cursive;
 }
 
 .plans-page .calculator-inner .cta {
   width: 100%;
-  padding: 0.8rem;
-  margin-bottom: 1rem;
+  padding: 0.6rem;
+  font-size: 0.95rem;
+  margin-bottom: 0.8rem;
 }
 
 .plans-page .range-text {
   color: #e0e0ff;
-  font-size: 0.9rem;
-  margin-bottom: 1rem;
+  font-size: 0.85rem;
+  margin-bottom: 0.8rem;
   text-align: center;
+  width: 100%;
 }
 
 .plans-page .result-text {
   color: #fff;
-  font-size: 1.1rem;
+  font-size: 1rem;
   text-align: center;
+  width: 100%;
 }
 
 .plans-page .result-text p {
-  margin: 0.5rem 0;
+  margin: 0.4rem 0;
 }
 
 .plans-page .result-text .gold {
@@ -226,18 +237,18 @@
 /* Orbiting Stars */
 .plans-page .orbiting-star {
   position: absolute;
-  width: 6px;
-  height: 6px;
-  background: #e0e0ff;
+  width: 5px;
+  height: 5px;
+  background: var(--primary);
   border-radius: 50%;
-  box-shadow: 0 0 5px #e0e0ff;
-  animation: orbit 10s linear infinite;
+  box-shadow: 0 0 4px var(--primary);
+  animation: orbit 12s linear infinite;
   animation-delay: calc(var(--orbit-delay, 0s));
 }
 
 @keyframes orbit {
-  0% { transform: translate(-50%, -50%) rotate(0deg) translateX(180px) rotate(0deg); }
-  100% { transform: translate(-50%, -50%) rotate(360deg) translateX(180px) rotate(-360deg); }
+  0% { transform: translate(-50%, -50%) rotate(0deg) translateX(200px) rotate(0deg); }
+  100% { transform: translate(-50%, -50%) rotate(360deg) translateX(200px) rotate(-360deg); }
 }
 
 /* Features and path lists */
@@ -245,6 +256,8 @@
 .plans-page .path-list {
   max-width: 800px;
   margin: 1rem auto;
+  padding: 0;
+  list-style: none;
 }
 
 .plans-page .features-list li,
@@ -293,6 +306,9 @@
   box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
   font-size: 1rem;
   padding: 0.75rem 1.75rem;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.3s;
 }
 
 .plans-page .cta.primary:hover {
@@ -336,17 +352,17 @@ body.light-theme .plans-page select,
 body.light-theme .plans-page input {
   background: rgba(255, 255, 255, 0.9);
   color: #333;
-  border: 1px solid rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--primary);
 }
 
 body.light-theme .plans-page .calculator-container {
-  background: radial-gradient(circle at 30% 30%, #e0e0ff, #d0d0e0);
-  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.2), 0 0 20px rgba(0, 0, 0, 0.1);
+  background: radial-gradient(circle at 30% 30%, #fff, #f0f0f0);
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.1), 0 0 20px rgba(0, 0, 0, 0.1);
 }
 
 body.light-theme .plans-page .orbiting-star {
-  background: #333;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  background: var(--primary);
+  box-shadow: 0 0 4px var(--primary);
 }
 
 /* Responsive adjustments */
@@ -366,15 +382,15 @@ body.light-theme .plans-page .orbiting-star {
     font-size: 1.1rem;
   }
   .plans-page .calculator-container {
-    width: 300px;
-    height: 300px;
+    width: 350px;
+    height: 350px;
   }
   .plans-page .orbiting-star {
     animation: orbit-mobile linear infinite;
   }
   @keyframes orbit-mobile {
-    0% { transform: translate(-50%, -50%) rotate(0deg) translateX(140px) rotate(0deg); }
-    100% { transform: translate(-50%, -50%) rotate(360deg) translateX(140px) rotate(-360deg); }
+    0% { transform: translate(-50%, -50%) rotate(0deg) translateX(160px) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg) translateX(160px) rotate(-360deg); }
   }
 }
 
@@ -399,12 +415,30 @@ body.light-theme .plans-page .orbiting-star {
     font-size: 1.5rem;
   }
   .plans-page .calculator-container {
-    width: 250px;
-    height: 250px;
+    width: 280px;
+    height: 280px;
   }
   .plans-page .calculator-inner {
     width: 90%;
-    max-width: 200px;
+    max-width: 240px;
+  }
+  .plans-page .calculator-inner label {
+    font-size: 0.85rem;
+  }
+  .plans-page .calculator-inner select,
+  .plans-page .calculator-inner input {
+    font-size: 0.9rem;
+    padding: 0.6rem;
+  direction: column;
+  .plans-page .calculator-inner .cta {
+    font-size: 0.9rem;
+    padding: 0.5rem;
+  }
+  .plans-page .range-text {
+    font-size: 0.8rem;
+  }
+  .plans-page .result-text {
+    font-size: 0.95rem;
   }
   .plans-page .orbiting-star {
     width: 4px;
@@ -412,7 +446,7 @@ body.light-theme .plans-page .orbiting-star {
     animation: orbit-mobile-small linear infinite;
   }
   @keyframes orbit-mobile-small {
-    0% { transform: translate(-50%, -50%) rotate(0deg) translateX(100px) rotate(0deg); }
-    100% { transform: translate(-50%, -50%) rotate(360deg) translateX(100px) rotate(-360deg); }
+    0% { transform: translate(-50%, -50%) rotate(0deg) translateX(120px) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg) translateX(120px) rotate(-360deg); }
   }
 }
