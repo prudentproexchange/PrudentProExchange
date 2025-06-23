@@ -39,26 +39,6 @@
 
     <div class="main-content">
       <main class="privacy-page container">
-        <!-- Sidebar Table of Contents -->
-        <aside class="toc" data-aos="fade-right">
-          <h3 class="toc-title">Table of Contents</h3>
-          <ul class="toc-list">
-            <li><a href="#mission">1. Our Sacred Mission</a></li>
-            <li><a href="#collect">2. What We Collect</a></li>
-            <li><a href="#use">3. How We Use Your Information</a></li>
-            <li><a href="#share">4. Sharing Your Information</a></li>
-            <li><a href="#rights">5. Your Divine Rights</a></li>
-            <li><a href="#security">6. Fortress of Security</a></li>
-            <li><a href="#cookies">7. Cookies & Tracking</a></li>
-            <li><a href="#global">8. Global Harmony</a></li>
-            <li><a href="#retain">9. Preserving Your Legacy</a></li>
-            <li><a href="#update">10. Evolving Excellence</a></li>
-            <li><a href="#contact">11. Reach Out to Us</a></li>
-            <li><a href="#portal">12. The Celestial Privacy Portal</a></li>
-            <li><a href="#oath">13. Our Eternal Oath</a></li>
-          </ul>
-        </aside>
-
         <!-- Main Content Sections -->
         <section id="mission" class="section" data-aos="fade-up">
           <h2 class="section-title gold">1. Our Sacred Mission</h2>
@@ -279,39 +259,8 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
-    // Smooth Scrolling for Table of Contents
-    document.querySelectorAll('.toc-list a').forEach(anchor => {
-      anchor.addEventListener('click', (e) => {
-        e.preventDefault();
-        document.querySelector(anchor.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
-      });
-    });
-
     // Initialize AOS
     AOS.init({ duration: 800, once: true });
-
-    // Video Playback with Enhanced Debugging
-    document.addEventListener('DOMContentLoaded', function() {
-      const playVideo = (videoElement, name) => {
-        if (videoElement) {
-          videoElement.play()
-            .then(() => console.log(`${name} video is playing successfully`))
-            .catch(error => {
-              console.error(`${name} video play failed:`, error);
-              setTimeout(() => {
-                videoElement.play()
-                  .then(() => console.log(`${name} video retry successful`))
-                  .catch(err => console.error(`Retry failed for ${name} video:`, err));
-              }, 1000);
-            });
-          // Additional event listeners for monitoring
-          videoElement.addEventListener('error', (e) => console.error(`${name} video error:`, e));
-          videoElement.addEventListener('stalled', () => console.warn(`${name} video stalled`));
-          videoElement.addEventListener('loadeddata', () => console.log(`${name} video data loaded`));
-        }
-      };
-      playVideo(document.querySelector('.bg-video'), 'Background');
-    });
   </script>
 </body>
 </html>
