@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>PrudentProExchange - Ascend to Wealth</title>
+  <title>PrudentProExchange</title>
   <link rel="stylesheet" href="css/style.css"/>
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -11,16 +11,15 @@
 <body>
   <!-- Video Background -->
   <video class="bg-video" autoplay muted loop playsinline preload="auto">
-    <source src="https://your-supabase-url.com/background.webm" type="video/webm">
-    <source src="https://your-supabase-url.com/background.mp4" type="video/mp4">
-    Your browser does not support the video tag.
+    <source src="assets/videos/background.webm" type="video/webm">
+    <source src="assets/videos/background.mp4" type="video/mp4">
   </video>
 
   <div class="overlay">
-    <!-- Header -->
+    <!-- Header with Hamburger Menu -->
     <header class="site-header">
       <a href="/" class="logo-link">
-        <img src="https://your-supabase-url.com/logo.svg" alt="PrudentProExchange Logo" class="logo"/>
+        <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo"/>
       </a>
       <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
         <span></span><span></span><span></span>
@@ -51,7 +50,9 @@
           <div class="value" id="current-date">June 23, 2025</div>
         </div>
       </div>
-      <button class="cta primary" onclick="location.href='application.html'">Begin Your Journey</button>
+      <button class="cta primary" onclick="location.href='application.html'">
+        Begin Your Journey
+      </button>
       <div id="ticker" class="ticker">
         <div class="ticker-content" id="ticker-content"></div>
       </div>
@@ -158,7 +159,7 @@
       <p class="section-text">Witness how PrudentProExchange transforms the investment landscape.</p>
       <div class="video-container">
         <video controls>
-          <source src="https://your-supabase-url.com/company_video.mp4" type="video/mp4">
+          <source src="assets/videos/company_video.mp4" type="video/mp4">
           Your browser does not support the video tag.
         </video>
       </div>
@@ -166,19 +167,19 @@
 
     <!-- Testimonials Section -->
     <section class="section section-light" data-aos="fade-up">
-      <h2 class="section-title">Voices of Our Pioneers</h2>
+      <h2 class="section-title">What Our Pioneers Say</h2>
       <div class="testimonials">
         <div class="testimonial active">
-          <p>“Joining PrudentProExchange was a game-changer for me. The 8.5% weekly returns on the Gold Plan have given me financial freedom I never thought possible, and knowing my investments support global communities feels incredible!”</p>
-          <span>— Sarah K., New York, USA</span>
+          <p>“PrudentProExchange transformed my portfolio. 10% weekly is unreal!”</p>
+          <span>— Alex M., USA</span>
         </div>
         <div class="testimonial">
-          <p>“I was skeptical at first, but PrudentProExchange’s transparency and SEC registration won me over. The platform is easy to use, and my withdrawals always arrive within 24 hours. It’s a blessing to be part of this journey!”</p>
-          <span>— Adebayo O., Lagos, Nigeria</span>
+          <p>“Trustworthy, transparent, and impactful—my favorite platform.”</p>
+          <span>— Priya S., India</span>
         </div>
         <div class="testimonial">
-          <p>“PrudentProExchange feels like a family. Their Diamond Plan delivers 10% weekly returns, and the real-time dashboard keeps me in control. I’ve referred friends, and we’re all thriving together!”</p>
-          <span>— Isabella M., São Paulo, Brazil</span>
+          <p>“Investing has never felt so divine. Withdrawals in 24h!”</p>
+          <span>— Carlos L., Brazil</span>
         </div>
         <button class="test-nav prev"><</button>
         <button class="test-nav next">></button>
@@ -191,23 +192,48 @@
       <div class="faq-container" id="faq-container">
         <div class="faq-item">
           <div class="faq-question">What is PrudentProExchange?<i class="fas fa-chevron-down"></i></div>
-          <div class="faq-answer">A U.S.-registered investment platform (SEC Reg. #0001230714) offering up to 10% weekly returns through expert crypto and forex trading, with a mission to empower global communities.</div>
+          <div class="faq-answer">PrudentProExchange is not merely a platform; it is a celestial gateway to the future of finance. Registered in the United States (Reg. No. 0001230714), it stands as a beacon of innovation, crafted by master traders who navigate the vast cosmos of cryptocurrency and multi-exchange markets.</div>
         </div>
         <div class="faq-item">
           <div class="faq-question">How do I create an account?<i class="fas fa-chevron-down"></i></div>
-          <div class="faq-answer">Click 'Begin Your Journey', complete the application form, and start with as little as $200.</div>
+          <div class="faq-answer">Click 'GET STARTED', fill in your details, and submit to join.</div>
         </div>
         <div class="faq-item">
           <div class="faq-question">How can I verify authenticity?<i class="fas fa-chevron-down"></i></div>
-          <div class="faq-answer">Verify our SEC registration (#0001230714) on <a href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=0001230714">SEC EDGAR</a>.</div>
+          <div class="faq-answer">Check our SEC registration (#0001230714) on EDGAR: <a href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=0001230714">SEC EDGAR</a>.</div>
+        </div>
+        <!-- Additional FAQs retained from original -->
+        <div class="faq-item">
+          <div class="faq-question">How does PrudentProExchange make profit?<i class="fas fa-chevron-down"></i></div>
+          <div class="faq-answer">Our sages of digital assets wield their expertise to extract and trade cryptocurrencies, turning market volatility into profits through masterful navigation.</div>
         </div>
         <div class="faq-item">
           <div class="faq-question">How do I make a deposit?<i class="fas fa-chevron-down"></i></div>
-          <div class="faq-answer">In your dashboard, select 'Deposit', choose your plan, specify the amount, select your wallet, and confirm.</div>
+          <div class="faq-answer">Enter your DASHBOARD, select DEPOSIT, choose your Investment Plan, specify the Amount, select Wallet, and confirm.</div>
         </div>
         <div class="faq-item">
           <div class="faq-question">How do I make a withdrawal?<i class="fas fa-chevron-down"></i></div>
-          <div class="faq-answer">From your dashboard, select 'Withdraw', enter the amount, choose your wallet, and confirm. Funds arrive within 24 hours.</div>
+          <div class="faq-answer">Access your DASHBOARD, select WITHDRAW, add a Wallet if needed, enter the Amount, choose your Wallet, and confirm.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">Can I transfer funds to another user?<i class="fas fa-chevron-down"></i></div>
+          <div class="faq-answer">Yes, transfers between accounts are free, fostering cosmic cooperation.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">How can I earn a referral commission?<i class="fas fa-chevron-down"></i></div>
+          <div class="faq-answer">Share your unique referral link to invite others and earn commissions on their qualified deposits.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">What does UTC mean?<i class="fas fa-chevron-down"></i></div>
+          <div class="faq-answer">UTC is the United States Trading Certificate, signifying your verified place in our community.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">Can I have multiple accounts?<i class="fas fa-chevron-down"></i></div>
+          <div class="faq-answer">No, each user is allowed one account to ensure fairness. Violations result in account freeze.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">How long for profits to reflect?<i class="fas fa-chevron-down"></i></div>
+          <div class="faq-answer">Profits appear instantly in your account balance upon completion of the mining cycle.</div>
         </div>
       </div>
     </section>
@@ -279,43 +305,43 @@
       </div>
       <p class="copyright">© 2025 PrudentProExchange. All rights reserved. SEC Registered #0001230714</p>
     </footer>
+
+    <!-- Live Chat Button -->
+    <div class="live-chat" onclick="alert('Live chat coming soon!')">Live Chat</div>
   </div>
 
+  <script src="js/main.js"></script>
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
     // Real-time Clock and Date
     function updateDateTime() {
       const now = new Date();
-      document.getElementById('current-time').textContent = now.toLocaleTimeString('en-GB', { hour12: false });
+      document.getElementById('current-time').textContent = now.toLocaleTimeString();
       document.getElementById('current-date').textContent = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
     }
     setInterval(updateDateTime, 1000);
     updateDateTime();
 
-    // Hamburger Menu
-    const hamburgerBtn = document.getElementById('hamburgerBtn');
-    const navDrawer = document.getElementById('navDrawer');
-    hamburgerBtn.addEventListener('click', () => {
-      navDrawer.classList.toggle('open');
-      hamburgerBtn.classList.toggle('active');
+    // Hamburger toggle
+    const btn = document.getElementById('hamburgerBtn');
+    const drawer = document.getElementById('navDrawer');
+    btn.addEventListener('click', () => {
+      drawer.classList.toggle('open');
+      btn.classList.toggle('active');
     });
 
-    // Testimonials Slider
-    const testimonials = document.querySelectorAll('.testimonial');
-    const prevBtn = document.querySelector('.test-nav.prev');
-    const nextBtn = document.querySelector('.test-nav.next');
-    let currentIndex = 0;
-    function showTestimonial(index) {
-      testimonials.forEach((item, i) => item.classList.toggle('active', i === index));
-    }
-    prevBtn.addEventListener('click', () => {
-      currentIndex = (currentIndex - 1 + testimonials.length) % testimonials.length;
-      showTestimonial(currentIndex);
-    });
-    nextBtn.addEventListener('click', () => {
-      currentIndex = (currentIndex + 1) % testimonials.length;
-      showTestimonial(currentIndex);
-    });
+    // Testimonials slider
+    (function() {
+      const items = document.querySelectorAll('.testimonial'),
+            prev = document.querySelector('.test-nav.prev'),
+            next = document.querySelector('.test-nav.next');
+      let idx = 0;
+      function show(i) {
+        items.forEach((el,j)=> el.classList.toggle('active', j===i));
+      }
+      prev.onclick = () => { idx = (idx-1+items.length)%items.length; show(idx); };
+      next.onclick = () => { idx = (idx+1)%items.length; show(idx); };
+    })();
 
     // Investment Calculator
     const plans = {
@@ -402,7 +428,8 @@
     // UTC Time
     function updateUTCTime() {
       const now = new Date();
-      document.getElementById('utcTime').textContent = now.toUTCString();
+      const utcString = now.toUTCString();
+      document.getElementById('utcTime').innerHTML = utcString;
     }
     setInterval(updateUTCTime, 1000);
     updateUTCTime();
@@ -423,7 +450,10 @@
     });
 
     // Initialize AOS
-    AOS.init({ duration: 800, once: true });
+    AOS.init({
+      duration: 800,
+      once: true
+    });
   </script>
 </body>
 </html>
