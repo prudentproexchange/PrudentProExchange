@@ -1,163 +1,309 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Dashboard • PrudentProExchange</title>
   <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/dashboard.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 </head>
-<body>
+<body class="dashboard-page">
+  <!-- Video Background -->
   <video class="bg-video" autoplay muted loop playsinline preload="auto">
     <source src="assets/videos/background.webm" type="video/webm">
     <source src="assets/videos/background.mp4" type="video/mp4">
   </video>
   <div class="overlay">
-    <header class="site-header">…</header>
+    <header class="site-header">
+      <button id="theme-toggle" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
+      <a href="/" class="logo-link">
+        <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo"/>
+      </a>
+      <button class="hamburger" id="hamburgerApp" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="nav-drawer" id="navDrawerApp">
+        <a href="application.html">Apply</a>
+        <a href="about.html">About</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms & Conditions</a>
+        <a href="login.html">Login</a>
+        <a href="plans.html">Investment Plans</a>
+        <a href="dashboard.html" class="active">Dashboard</a>
+      </nav>
+    </header>
 
-    <main class="dashboard-page">
-      <!-- Live Growth per investment -->
-      <section class="dash-card growth-card">
-        <h2>Live Investment Growth</h2>
-        <ul id="growthList"></ul>
-      </section>
+    <main class="dashboard-page container">
+      <section class="section section-light" data-aos="fade-up">
+        <h1 class="section-title gold">Your Dashboard</h1>
+        <p class="section-text">Manage your profile and account settings.</p>
 
-      <!-- Summary & Referral -->
-      <section class="dash-card summary-card">
-        <h2>Your Summary</h2>
-        <p><strong>Referral Code:</strong> <span id="refCode"></span></p>
-        <p><strong>Total Invested:</strong> <span id="totalInv"></span></p>
-        <p><strong>Available to Withdraw:</strong> <span id="availWdr"></span></p>
-      </section>
+        <!-- Profile Section -->
+        <div class="profile-container">
+          <h2 class="section-title gold">Profile</h2>
+          <div class="profile-photo">
+            <img id="profile-photo" src="" alt="Profile Photo" style="display: none;"/>
+            <p id="no-photo">No photo uploaded</p>
+          </div>
+          <div class="profile-details">
+            <p><strong>First Name:</strong> <span id="first-name"></span></p>
+            <p><strong>Last Name:</strong> <span id="last-name"></span></p>
+            <p><strong>Username:</strong> <span id="username"></span></p>
+            <p><strong>Email:</strong> <span id="email"></span></p>
+            <p><strong>Country:</strong> <span id="country"></span></p>
+            <p><strong>Referral Link:</strong> <a id="referral-link" href=""></a></p>
+          </div>
+          <button class="cta primary" id="edit-profile-btn">Edit Profile</button>
+        </div>
 
-      <!-- Initiate New Investment -->
-      <section class="dash-card invest-card">
-        <h2>New Investment</h2>
-        <p>Send to address:<br><code id="walletAddr">0xABC123...DEF</code></p>
-        <form id="newInvForm">
-          <label>Amount<input type="number" id="invAmount" min="200" required/></label>
-          <label>Plan<select id="invPlan" required>
-            <option value="basic">Dawn Star (5%)</option>
-            <option value="standard">Rising Comet (6.5%)</option>
-            <option value="silver">Lunar Glow (7.5%)</option>
-            <option value="gold">Solar Flare (8.5%)</option>
-            <option value="diamond">Galactic Crown (10%)</option>
-          </select></label>
-          <label>Proof<input type="file" id="invProof" required/></label>
-          <button type="submit" class="cta">Submit Investment</button>
+        <!-- Edit Profile Form (Hidden by Default) -->
+        <form id="editProfileForm" class="form-container" style="display: none;">
+          <h2 class="section-title gold">Edit Profile</h2>
+          <div class="form-grid">
+            <label>
+              First Name*
+              <input type="text" name="first_name" required aria-label="First Name"/>
+            </label>
+            <label>
+              Last Name*
+              <input type="text" name="last_name" required aria-label="Last Name"/>
+            </label>
+            <label>
+              Username*
+              <input type="text" name="username" required aria-label="Username"/>
+            </label>
+            <label>
+              Select Country*
+              <select name="country" required aria-label="Select Country">
+                <option value="" disabled>Select your country</option>
+                <option value="US">United States</option>
+                <option value="UK">United Kingdom</option>
+                <option value="CA">Canada</option>
+                <!-- Add more countries as needed -->
+              </select>
+            </label>
+            <label class="photo-upload">
+              Profile Photo (optional)
+              <input type="file" name="photo" accept="image/*" aria-label="Profile Photo"/>
+            </label>
+          </div>
+          <button type="submit" class="cta primary">Save Changes</button>
+          <button type="button" class="cta secondary" id="cancel-edit-btn">Cancel</button>
         </form>
-      </section>
 
-      <!-- Transfers -->
-      <section class="dash-card transfer-card">
-        <h2>Transfer Funds</h2>
-        <form id="transferForm">
-          <label>To (email)<input type="email" id="toEmail" required/></label>
-          <label>Amount<input type="number" id="trAmount" min="1" required/></label>
-          <button type="submit" class="cta">Transfer</button>
+        <!-- Change Password Form -->
+        <form id="changePasswordForm" class="form-container">
+          <h2 class="section-title gold">Change Password</h2>
+          <div class="form-grid">
+            <label>
+              Current Password*
+              <input type="password" name="current_password" required aria-label="Current Password"/>
+            </label>
+            <label>
+              New Password*
+              <input type="password" name="new_password" required aria-label="New Password"/>
+            </label>
+            <label>
+              Confirm New Password*
+              <input type="password" name="confirm_new_password" required aria-label="Confirm New Password"/>
+            </label>
+          </div>
+          <button type="submit" class="cta primary">Update Password</button>
         </form>
-      </section>
-
-      <!-- Transaction History -->
-      <section class="dash-card history-card">
-        <h2>History</h2>
-        <table class="history-table"><thead>
-          <tr><th>Date</th><th>Type</th><th>Amount</th><th>Status</th></tr>
-        </thead><tbody id="histBody"></tbody></table>
       </section>
     </main>
+
+    <footer class="section section-dark site-footer" data-aos="fade-up">
+      <div class="footer-content">
+        <p class="utc-time">UTC Time: <span id="utcTime"></span></p>
+        <p class="local-time">Local Time: <span id="localTime"></span></p>
+        <p class="local-date">Local Date: <span id="localDate"></span></p>
+        <nav class="footer-links">
+          <a href="about.html">About Us</a>
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="terms.html">Terms & Conditions</a>
+        </nav>
+        <p class="copyright">© 2025 PrudentProExchange. All Rights Reserved. SEC Registration #0001230714</p>
+      </div>
+    </footer>
   </div>
 
+  <button id="back-to-top" aria-label="Back to top">🚀</button>
+
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
-    const supabase = supabase.createClient(
+    AOS.init({ duration: 800, once: true });
+
+    // Hamburger toggle
+    const btnApp = document.getElementById('hamburgerApp'),
+          drawerApp = document.getElementById('navDrawerApp');
+    btnApp.addEventListener('click', () => {
+      drawerApp.classList.toggle('open');
+      btnApp.classList.toggle('active');
+    });
+
+    // Theme toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('light-theme');
+      const icon = themeToggle.querySelector('i');
+      icon.classList.toggle('fa-moon');
+      icon.classList.toggle('fa-sun');
+    });
+
+    // Back to top
+    document.getElementById('back-to-top').addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // Time displays
+    function updateLocalTime() {
+      const now = new Date();
+      document.getElementById('localTime').textContent = now.toLocaleTimeString();
+      document.getElementById('localDate').textContent = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    }
+    setInterval(updateLocalTime, 1000);
+    updateLocalTime();
+
+    function updateUTCTime() {
+      document.getElementById('utcTime').textContent = new Date().toUTCString();
+    }
+    setInterval(updateUTCTime, 1000);
+    updateUTCTime();
+
+    // Supabase client
+    const supabase = Supabase.createClient(
       'https://iwkdznjqfbsfkscnbrkc.supabase.co',
-      'eyJhbGciOiJIUzI1Ni...kAbiU'
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU'
     );
 
-    let user, profile;
-    async function init() {
-      user = supabase.auth.getUser().data.user;
-      if (!user) return window.location.href='login.html';
-      // fetch profile
-      profile = await supabase.from('profiles').select('*').eq('id', user.id).single();
-      document.getElementById('refCode').textContent = profile.data.referral_code;
+    // Load profile data
+    async function loadProfile() {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        alert('Please log in to access your dashboard.');
+        window.location.href = 'login.html';
+        return;
+      }
 
-      // fetch investments
-      let { data: invs } = await supabase.from('investments')
-        .select('*').eq('user_id', user.id);
-      let total=0, avail=0;
-      const ul = document.getElementById('growthList');
-      ul.innerHTML='';
-      invs.forEach(inv=>{
-        total += parseFloat(inv.amount);
-        if (inv.status==='confirmed') {
-          let created= new Date(inv.confirmed_at), now=new Date();
-          let elapsed = Math.min(now - created, 7*24e5*3600);
-          let rate = parseFloat({
-            basic:0.05,standard:0.065,silver:0.075,
-            gold:0.085,diamond:0.10
-          }[inv.plan]);
-          let growth = inv.amount * rate * (elapsed/(7*24e5*3600));
-          avail += inv.status==='completed'?0:growth;
-          let li = document.createElement('li');
-          li.textContent = `${inv.plan} – Invested $${inv.amount} → Growth $${growth.toFixed(2)}`;
-          ul.append(li);
-        }
-      });
-      document.getElementById('totalInv').textContent = '$'+total.toFixed(2);
-      document.getElementById('availWdr').textContent = '$'+avail.toFixed(2);
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', user.id)
+        .single();
 
-      // history
-      let { data: tx } = await supabase.from('transactions')
-        .select('*').eq('user_id', user.id).order('created_at',{ascending:false});
-      const tb = document.getElementById('histBody');
-      tx.forEach(t=>{
-        let tr = document.createElement('tr');
-        tr.innerHTML= `<td>${new Date(t.created_at).toLocaleString()}</td>
-          <td>${t.type}</td><td>$${t.amount}</td><td>—</td>`;
-        tb.append(tr);
-      });
+      if (error) {
+        alert('Error loading profile: ' + error.message);
+        return;
+      }
+
+      document.getElementById('first-name').textContent = data.first_name;
+      document.getElementById('last-name').textContent = data.last_name;
+      document.getElementById('username').textContent = data.username;
+      document.getElementById('email').textContent = user.email;
+      document.getElementById('country').textContent = data.country;
+      document.getElementById('referral-link').textContent = data.referral_link;
+      document.getElementById('referral-link').href = data.referral_link;
+
+      if (data.photo_url) {
+        const { data: urlData } = supabase.storage
+          .from('profile-photos')
+          .getPublicUrl(data.photo_url);
+        document.getElementById('profile-photo').src = urlData.publicUrl;
+        document.getElementById('profile-photo').style.display = 'block';
+        document.getElementById('no-photo').style.display = 'none';
+      }
+
+      // Populate edit form
+      document.querySelector('#editProfileForm [name="first_name"]').value = data.first_name;
+      document.querySelector('#editProfileForm [name="last_name"]').value = data.last_name;
+      document.querySelector('#editProfileForm [name="username"]').value = data.username;
+      document.querySelector('#editProfileForm [name="country"]').value = data.country;
     }
-    init();
 
-    // New investment
-    document.getElementById('newInvForm').addEventListener('submit', async e=>{
-      e.preventDefault();
-      const amt= e.target.invAmount.value, plan=e.target.invPlan.value,
-            file=e.target.invProof.files[0];
-      // upload proof
-      const { data:u, error:uerr } = await supabase.storage
-        .from('proofs').upload(`${user.id}/${Date.now()}_${file.name}`,file);
-      if (uerr) return alert(uerr.message);
-      const url = supabase.storage.from('proofs').getPublicUrl(u.path).publicURL;
-      // insert
-      await supabase.from('investments').insert({
-        user_id:user.id,amount:amt,plan:plan,
-        deposit_address:document.getElementById('walletAddr').textContent,
-        proof_url:url
-      });
-      alert('Investment submitted, pending confirmation.');
-      window.location.reload();
+    // Edit profile toggle
+    document.getElementById('edit-profile-btn').addEventListener('click', () => {
+      document.getElementById('editProfileForm').style.display = 'block';
+      document.getElementById('edit-profile-btn').style.display = 'none';
     });
 
-    // Transfer
-    document.getElementById('transferForm').addEventListener('submit', async e=>{
-      e.preventDefault();
-      const toEmail=e.target.toEmail.value, amt=e.target.trAmount.value;
-      let { data:toProf } = await supabase.from('profiles')
-        .select('id').eq('email',toEmail).single();
-      if (!toProf.data) return alert('User not found');
-      // create transfer
-      await supabase.from('transfers').insert({
-        from_user:user.id, to_user:toProf.data.id, amount:amt
-      });
-      // record transactions
-      await supabase.from('transactions').insert([
-        { user_id:user.id, type:'transfer_out', amount:amt },
-        { user_id:toProf.data.id, type:'transfer_in', amount:amt }
-      ]);
-      alert('Transfer complete.');
-      window.location.reload();
+    document.getElementById('cancel-edit-btn').addEventListener('click', () => {
+      document.getElementById('editProfileForm').style.display = 'none';
+      document.getElementById('edit-profile-btn').style.display = 'block';
     });
+
+    // Handle profile update
+    document.getElementById('editProfileForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const f = e.target;
+      const { data: { user } } = await supabase.auth.getUser();
+
+      // Upload new photo if provided
+      let photoUrl = null;
+      if (f.photo.files[0]) {
+        const { data, error: uploadError } = await supabase.storage
+          .from('profile-photos')
+          .upload(`${user.id}/${f.photo.files[0].name}`, f.photo.files[0], { upsert: true });
+        if (uploadError) {
+          alert('Photo upload error: ' + uploadError.message);
+          return;
+        }
+        photoUrl = data.path;
+      }
+
+      // Update profile
+      const updates = {
+        first_name: f.first_name.value,
+        last_name: f.last_name.value,
+        username: f.username.value,
+        country: f.country.value,
+      };
+      if (photoUrl) updates.photo_url = photoUrl;
+
+      const { error } = await supabase
+        .from('profiles')
+        .update(updates)
+        .eq('id', user.id);
+
+      if (error) {
+        alert('Profile update error: ' + error.message);
+        return;
+      }
+
+      alert('Profile updated successfully!');
+      document.getElementById('editProfileForm').style.display = 'none';
+      document.getElementById('edit-profile-btn').style.display = 'block';
+      loadProfile();
+    });
+
+    // Handle password change
+    document.getElementById('changePasswordForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const f = e.target;
+
+      if (f.new_password.value !== f.confirm_new_password.value) {
+        alert('New passwords do not match.');
+        return;
+      }
+
+      const { error } = await supabase.auth.updateUser({
+        password: f.new_password.value,
+      });
+
+      if (error) {
+        alert('Password update error: ' + error.message);
+        return;
+      }
+
+      alert('Password updated successfully!');
+      f.reset();
+    });
+
+    // Load profile on page load
+    loadProfile();
   </script>
 </body>
 </html>
