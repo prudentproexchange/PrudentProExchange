@@ -606,3 +606,104 @@ input-group {
   .testimonial p { font-size: 1rem; }
   .faq-question { font-size: 1rem.1rem; }
 }
+/* Add these to your existing css/style.css */
+
+/* ——— Logo ——— */
+.logo { height: 180px; }
+
+/* ——— Header layout ——— */
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 2rem;
+  background: rgba(0,0,0,0.4);
+}
+.header-left,
+.header-right { display: flex; align-items: center; }
+.header-datetime {
+  display: flex;
+  gap: 1rem;
+  margin-left: 1rem;
+}
+.dt-card {
+  text-align: center;
+}
+.dt-label {
+  display: block;
+  font-size: 0.75rem;
+  color: #aaa;
+}
+.dt-value {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #FFD700;
+  font-family: monospace;
+}
+
+/* ——— Hero improvements ——— */
+.hero-title {
+  font-size: 3rem;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+  background: linear-gradient(45deg,#FFD700,#FFB300);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.hero-subtitle {
+  font-size: 1.25rem;
+  max-width: 700px;
+  margin: 0 auto 2rem;
+  color: #e0e0e0;
+}
+
+/* ——— Ticker widget wrapper ——— */
+.ticker-widget {
+  margin: 2rem 0;
+}
+
+/* ——— “How It Works” ——— */
+.path-list {
+  list-style: none;
+  counter-reset: step;
+}
+.path-list li {
+  margin-bottom: 1rem;
+  padding-left: 2.5rem;
+  position: relative;
+}
+.path-list li::before {
+  counter-increment: step;
+  content: counter(step);
+  position: absolute;
+  left: 0; top: 0;
+  background: #FFD700;
+  color: #000;
+  width: 2rem; height: 2rem;
+  text-align: center;
+  line-height: 2rem;
+  border-radius: 50%;
+  font-weight: bold;
+}
+
+/* ——— Jet button ——— */
+#jet-to-top {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background: #FFD700;
+  color: #000;
+  border: none;
+  border-radius: 50%;
+  width: 50px; height: 50px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  cursor: pointer;
+  z-index: 1000;
+  transition: transform 0.3s ease;
+}
+#jet-to-top:hover { transform: scale(1.1); }
+
+/* You can leave the rest of your css intact. */
