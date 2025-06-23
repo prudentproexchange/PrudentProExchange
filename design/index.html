@@ -21,25 +21,26 @@
       height: 100%;
       object-fit: cover;
       z-index: -1;
-      /* Removed filter for clarity */
     }
     .main-content {
       position: relative;
       z-index: 1;
     }
     .main-content-video-container {
-      position: absolute;
+      position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      z-index: -1; /* Behind main content sections */
+      z-index: -1;
+      overflow: hidden;
     }
     .main-content-video {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      /* Removed filter for clarity */
+      transform: scale(1.1);
+      filter: brightness(0.5);
     }
   </style>
 </head>
@@ -262,7 +263,7 @@
             <div class="faq-question">Is it secure and legitimate?<i class="fas fa-chevron-down"></i></div>
             <div class="faq-answer">Yes, we’re SEC-compliant. Verify our registration (#0001230714) on EDGAR: <a href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=0001230714">SEC EDGAR</a>.</div>
           </div>
-2110          <div class="faq-item">
+          <div class="faq-item">
             <div class="faq-question">How do withdrawals work?<i class="fas fa-chevron-down"></i></div>
             <div class="faq-answer">Initiate a withdrawal directly from your dashboard by specifying the desired amount and your wallet address. Once submitted, your funds will be processed and delivered within 24 hours, subject to blockchain network congestion. </div>
           </div>
