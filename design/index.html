@@ -10,325 +10,327 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
 </head>
 <body class="homepage">
-  <!-- Single Video Background -->
-  <div class="video-background-container">
-    <video class="background-video" autoplay muted loop playsinline preload="auto">
-      <source src="design/assets/videos/directory/prudentproexchange.webm" type="video/webm">
-      <source src="design/assets/videos/directory/prudentproexchange.mp4" type="video/mp4">
-      Your browser does not support the video tag.
-    </video>
-  </div>
-
-  <!-- Header -->
-  <header class="site-header">
-    <button id="theme-toggle" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
-    <a href="/" class="logo-link">
-      <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo"/>
-    </a>
-    <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
-      <span></span><span></span><span></span>
-    </button>
-    <nav class="nav-drawer" id="navDrawer">
-      <a href="application.html">Apply</a>
-      <a href="about.html">About</a>
-      <a href="privacy.html">Privacy Policy</a>
-      <a href="terms.html">Terms & Conditions</a>
-      <a href="login.html">Login</a>
-      <a href="plans.html">Investment Plans</a>
-      <div class="dropdown">
-        <button class="dropbtn" onclick="toggleDropdown(this)">How We Manage Your Capital</button>
-        <div class="dropdown-content">
-          <a href="forex.html">FOREX TRADING</a>
-          <a href="agriculture.html">AGRICULTURE</a>
-          <a href="realestate.html">REAL ESTATE</a>
-          <a href="gold.html">GOLD-BACKED CURRENCIES</a>
-          <a href="metals.html">PRECIOUS METALS</a>
-          <a href="crypto.html">CRYPTOCURRENCY</a>
-          <a href="oilgas.html">OIL & GAS</a>
-          <a href="cannabis.html">MEDICAL CANNABIS</a>
-        </div>
-      </div>
-    </nav>
-  </header>
-
-  <!-- Hero Content -->
-  <main id="hero" class="hero" data-aos="fade-up">
-    <h1 class="hero-title">Invest with Confidence. Grow Your Wealth.</h1>
-    <p class="hero-subtitle">
-      Experience consistent returns of up to 10% weekly with our expertly managed investment plans. Secure, transparent, and designed for your financial growth.
-    </p>
-    <button class="cta primary" onclick="location.href='application.html'">
-      Start Investing Now
-    </button>
-  </main>
-
-  <!-- Rotating Live Crypto Prices Ticker -->
-  <section id="crypto-ticker" class="crypto-ticker" data-aos="fade-up">
-    <!-- TradingView Widget BEGIN -->
-    <div class="tradingview-widget-container">
-      <div class="tradingview-widget-container__widget"></div>
-      <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
-      {
-        "symbols": [
-          {"proName": "BITSTAMP:BTCUSD", "title": "BTC/USD"},
-          {"proName": "BITSTAMP:ETHUSD", "title": "ETH/USD"},
-          {"proName": "BINANCE:BNBUSDT", "title": "BNB/USDT"},
-          {"proName": "BITSTAMP:LTCUSD", "title": "LTC/USD"},
-          {"proName": "BITSTAMP:XRPUSD", "title": "XRP/USD"},
-          {"proName": "BINANCE:ADAUSDT", "title": "ADA/USDT"},
-          {"proName": "BINANCE:DOTUSDT", "title": "DOT/USDT"},
-          {"proName": "BINANCE:LINKUSDT", "title": "LINK/USDT"},
-          {"proName": "BITSTAMP:XLMUSD", "title": "XLM/USD"}
-        ],
-        "showSymbolLogo": true,
-        "colorTheme": "dark",
-        "isTransparent": false,
-        "displayMode": "adaptive",
-        "locale": "en"
-      }
-      </script>
+  <div class="overlay">
+    <!-- Main Content Video Background (Entire Page) -->
+    <div class="main-content-video-container">
+      <video class="main-content-video" autoplay muted loop playsinline preload="auto">
+        <source src="design/assets/videos/background.webm" type="video/webm">
+        <source src="design/assets/videos/background.MP4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
     </div>
-    <!-- TradingView Widget END -->
-  </section>
 
-  <!-- Why Us Section -->
-  <section id="why" class="section section-dark" data-aos="fade-up">
-    <h2 class="section-title">Why Choose PrudentProExchange?</h2>
-    <ul class="features-list">
-      <li><strong>Trusted Platform:</strong> U.S.-registered and SEC-compliant for unmatched reliability.</li>
-      <li><strong>Proven Expertise:</strong> Over a decade of excellence in crypto and forex since 2009.</li>
-      <li><strong>Global Impact:</strong> Your investments empower underserved communities worldwide.</li>
-      <li><strong>High Returns:</strong> Achieve up to 10% weekly with our strategic approach.</li>
-    </ul>
-  </section>
-
-  <!-- Investment Calculator Section -->
-  <section id="calculator" class="section section-light calculator-section" data-aos="fade-up">
-    <h2 class="section-title">Investment Calculator</h2>
-    <div class="calculator-container">
-      <div class="calculator-inputs">
-        <div class="input-group">
-          <label for="investment-amount">Investment Amount ($)</label>
-          <input type="range" id="amount-slider" min="200" max="1000000" value="200" step="100">
-          <input type="number" id="investment-amount" min="200" max="1000000" value="200">
-          <div class="plan-indicator">
-            <span id="min-amount">$200</span>
-            <span id="max-amount">$1,000,000</span>
-          </div>
-        </div>
-        <div class="input-group">
-          <label for="investment-plan">Investment Plan</label>
-          <select id="investment-plan">
-            <option value="basic">Basic (5% weekly, $200 - $4,999)</option>
-            <option value="standard">Standard (6.5% weekly, $5,000 - $14,999)</option>
-            <option value="silver">Silver (7.5% weekly, $15,000 - $49,999)</option>
-            <option value="gold">Gold (8.5% weekly, $50,000 - $99,999)</option>
-            <option value="diamond">Diamond (10% weekly, $100,000+)</option>
-          </select>
-        </div>
-        <div class="input-group">
-          <label for="investment-period">Investment Period (weeks)</label>
-          <input type="number" id="investment-period" min="1" max="52" value="1">
-        </div>
-        <button type="button" class="cta primary" id="calculate-btn">Calculate Returns</button>
-      </div>
-      <div class="calculator-results">
-        <div class="result-item">
-          <div class="result-label">Weekly Return</div>
-          <div class="result-value" id="weekly-return">$0.00</div>
-        </div>
-        <div class="result-item">
-          <div class="result-label">Total Return</div>
-          <div class="result-value" id="total-return">$0.00</div>
-        </div>
-        <div class="result-item">
-          <div class="result-label">Total Profit</div>
-          <div class="result-value" id="total-profit">$0.00</div>
-        </div>
-        <div class="result-item">
-          <div class="result-label">ROI</div>
-          <div class="result-value" id="roi">0.0%</div>
-        </div>
-        <div class="highlight-result">
-          <div class="label">Your Balance After <span id="period-display">1</span> Week</div>
-          <div class="value" id="final-balance">$0.00</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Your Path Section -->
-  <section id="path" class="section section-light" data-aos="fade-up">
-    <h2 class="section-title">Your Journey to Financial Success</h2>
-    <ol class="path-list">
-      <li><strong>Get Started:</strong> Open your account quickly with a minimum of $200.</li>
-      <li><strong>Expert Management:</strong> Our professionals optimize your funds in thriving markets.</li>
-      <li><strong>Realize Gains:</strong> Enjoy weekly profits, withdrawable after 7 days.</li>
-    </ol>
-  </section>
-
-  <!-- Divine Advantages Section -->
-  <section id="advantages" class="section section-dark" data-aos="fade-up">
-    <h2 class="section-title">Our Competitive Edge</h2>
-    <ul class="features-list">
-      <li><strong>Fast Onboarding:</strong> Join and fund your account in minutes.</li>
-      <li><strong>Real-Time Insights:</strong> Access dashboards and weekly performance updates.</li>
-      <li><strong>Flexible Plans:</strong> Choose from five tailored investment options.</li>
-      <li><strong>Referral Benefits:</strong> Invite others and boost your earnings.</li>
-      <li><strong>Quick Withdrawals:</strong> Access funds within 24 hours anytime.</li>
-    </ul>
-  </section>
-
-  <!-- Our Vision Section -->
-  <section id="vision" class="section section-dark" data-aos="fade-up">
-    <h2 class="section-title">Our Vision</h2>
-    <p class="section-text">Discover how PrudentProExchange redefines wealth creation.</p>
-  </section>
-
-  <!-- Testimonials Section -->
-  <section class="section section-light testimonials-section" data-aos="fade-up">
-    <h2 class="section-title">Client Success Stories</h2>
-    <div class="testimonials-container">
-      <div class="testimonial active">
-        <img src="assets/images/alex.jpg" alt="Alex M." class="testimonial-img">
-        <p>“With a $200 start, I saw impressive returns in weeks. PrudentProExchange delivers reliable, high-yield opportunities.”</p>
-        <span>— Alex M., USA</span>
-      </div>
-      <div class="testimonial">
-        <img src="assets/images/priya.jpg" alt="Priya S." class="testimonial-img">
-        <p>“This platform offers transparency and fast withdrawals. It’s empowered my financial decisions like never before.”</p>
-        <span>— Priya S., India</span>
-      </div>
-      <div class="testimonial">
-        <img src="assets/images/carlos.jpg" alt="Carlos L." class="testimonial-img">
-        <p>“My investment has grown steadily with clear insights. The global impact adds purpose to my returns.”</p>
-        <span>— Carlos L., Brazil</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- FAQ Section -->
-  <section id="faq" class="section section-light faq-section" data-aos="fade-up">
-    <h2 class="section-title">Frequently Asked Questions</h2>
-    <div class="faq-container" id="faq-container">
-      <div class="faq-item">
-        <div class="faq-question">What is PrudentProExchange?<i class="fas fa-chevron-down"></i></div>
-        <div class="faq-answer">PrudentProExchange is a U.S.-registered (Reg. No. 0001230714) investment platform leveraging cryptocurrency and forex expertise to deliver up to 10% weekly returns.</div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-question">How do I begin?<i class="fas fa-chevron-down"></i></div>
-        <div class="faq-answer">Click 'Start Investing Now', register, deposit at least $200, and select your plan.</div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-question">Is it secure and legitimate?<i class="fas fa-chevron-down"></i></div>
-        <div class="faq-answer">Yes, we’re SEC-compliant. Verify our registration (#0001230714) on EDGAR: <a href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=0001230714">SEC EDGAR</a>.</div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-question">How do withdrawals work?<i class="fas fa-chevron-down"></i></div>
-        <div class="faq-answer">From your dashboard, request a withdrawal, specify the amount and wallet, and receive funds within 24 hours.</div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-question">What returns can I expect?<i class="fas fa-chevron-down"></i></div>
-        <div class="faq-answer">Earn 5% to 10% weekly based on your chosen plan, credited after each cycle.</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Mission Section -->
-  <section id="mission" class="section section-dark" data-aos="fade-up">
-    <h2 class="section-title">Our Mission</h2>
-    <p class="section-text">
-      PrudentProExchange combines blockchain innovation with trading expertise to build wealth globally since 2012.
-    </p>
-  </section>
-
-  <!-- CTA to Plans -->
-  <section id="plans" class="section section-light cta-section" data-aos="fade-up">
-    <h2 class="section-title">Take Control of Your Financial Future</h2>
-    <p class="section-text">Start building wealth today with a platform designed for growth and stability.</p>
-    <button class="cta primary" onclick="location.href='plans.html'">Explore Plans</button>
-  </section>
-
-  <!-- How It Works Section -->
-  <section class="section section-dark quick-start" data-aos="fade-up">
-    <h2 class="section-title">How It Works</h2>
-    <div class="step">
-      <i class="fas fa-user-plus"></i>
-      <h3>Apply Now</h3>
-      <p>Create your account in minutes.</p>
-      <a href="application.html" class="cta">Apply</a>
-    </div>
-    <div class="step">
-      <i class="fas fa-wallet"></i>
-      <h3>Choose Plan</h3>
-      <p>Select your investment option.</p>
-      <a href="plans.html" class="cta">View Plans</a>
-    </div>
-    <div class="step">
-      <i class="fas fa-chart-line"></i>
-      <h3>Start Investing</h3>
-      <p>Begin growing your wealth.</p>
-      <a href="#" class="cta">Get Started</a>
-    </div>
-  </section>
-
-  <!-- Request Company Card Section -->
-  <section id="company-card" class="section section-light" data-aos="fade-up">
-    <h2 class="section-title">Request Company Card</h2>
-    <img src="assets/images/company_card.jpg" alt="Company Card" class="company-card-img">
-    <p class="company-card-text">
-      In response to a systemic gap in conventional banking services that has marginalized a significant portion of the population, this partnership seeks to provide access to essential financial products. Recent findings from a 2017 FDIC survey indicate that 25 percent of households in the United States and the United Kingdom are either unbanked or underbanked. Globally, this issue is even more acute, with a staggering 1.7 billion people lacking adequate banking access, as reported by the World Bank.
-      <br><br>
-      Through the PrudentProExchange Card initiative, investors can obtain a virtual card seamlessly, complemented by the delivery of a physical card via mail. With a minimum balance requirement of $50,000, the Blanassets Card offers a gateway to financial inclusivity. Accepted at over 45 million merchants and ATMs worldwide, it empowers users with the flexibility to conduct transactions wherever major credit cards are accepted.
-    </p>
-    <button class="cta primary" onclick="location.href='mailto:support@prudentproexchange.net'">Request Now</button>
-  </section>
-
-  <!-- Contact Form -->
-  <section class="section section-light contact-form" data-aos="fade-up">
-    <h2 class="section-title">Contact Us</h2>
-    <form onsubmit="alert('Message sent!'); return false;">
-      <input type="text" placeholder="Your Name" required>
-      <input type="email" placeholder="Your Email" required>
-      <textarea placeholder="Your Message" rows="5" required></textarea>
-      <button type="submit" class="cta primary">Send Message</button>
-    </form>
-  </section>
-
-  <!-- Newsletter Section -->
-  <section class="section section-dark" data-aos="fade-up">
-    <h2 class="section-title">Stay Informed</h2>
-    <form class="newsletter" onsubmit="alert('Subscribed!'); return false;">
-      <input type="email" placeholder="Your email address" required />
-      <button type="submit" class="cta">Subscribe</button>
-    </form>
-  </section>
-
-  <!-- Company PDF Navigation -->
-  <nav class="pdf-nav">
-    <a href="assets/docs/company.pdf" target="_blank">Click to view the Company PDF</a>
-  </nav>
-
-  <!-- Footer -->
-  <footer class="section section-dark site-footer" data-aos="fade-up">
-    <div class="footer-content">
-      <p class="utc-time">UTC Time: <span id="utcTime"></span></p>
-      <p class="local-time">Local Time: <span id="localTime"></span></p>
-      <p class="local-date">Local Date: <span id="localDate"></span></p>
-      <nav class="footer-links">
-        <a href="about.html">About Us</a>
+    <!-- Header -->
+    <header class="site-header">
+      <button id="theme-toggle" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
+      <a href="/" class="logo-link">
+        <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo"/>
+      </a>
+      <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="nav-drawer" id="navDrawer">
+        <a href="application.html">Apply</a>
+        <a href="about.html">About</a>
         <a href="privacy.html">Privacy Policy</a>
         <a href="terms.html">Terms & Conditions</a>
+        <a href="login.html">Login</a>
+        <a href="plans.html">Investment Plans</a>
+        <div class="dropdown">
+          <button class="dropbtn" onclick="toggleDropdown(this)">How We Manage Your Capital</button>
+          <div class="dropdown-content">
+            <a href="forex.html">FOREX TRADING</a>
+            <a href="agriculture.html">AGRICULTURE</a>
+            <a href="realestate.html">REAL ESTATE</a>
+            <a href="gold.html">GOLD-BACKED CURRENCIES</a>
+            <a href="metals.html">PRECIOUS METALS</a>
+            <a href="crypto.html">CRYPTOCURRENCY</a>
+            <a href="oilgas.html">OIL & GAS</a>
+            <a href="cannabis.html">MEDICAL CANNABIS</a>
+          </div>
+        </div>
       </nav>
-      <p class="copyright">© 2025 PrudentProExchange. All Rights Reserved. SEC Registration #0001230714</p>
-    </div>
-  </footer>
+    </header>
 
-  <!-- Back to Top Button -->
-  <button id="back-to-top" aria-label="Back to top">🚀</button>
+    <!-- Hero Content -->
+    <main id="hero" class="hero" data-aos="fade-up">
+      <h1 class="hero-title">Invest with Confidence. Grow Your Wealth.</h1>
+      <p class="hero-subtitle">
+        Experience consistent returns of up to 10% weekly with our expertly managed investment plans. Secure, transparent, and designed for your financial growth.
+      </p>
+      <button class="cta primary" onclick="location.href='application.html'">
+        Start Investing Now
+      </button>
+    </main>
 
-  <!-- Live Chat Button -->
-  <div class="live-chat" onclick="alert('Live chat coming soon!')">Live Chat</div>
+    <!-- Rotating Live Crypto Prices Ticker -->
+    <section id="crypto-ticker" class="crypto-ticker" data-aos="fade-up">
+      <!-- TradingView Widget BEGIN -->
+      <div class="tradingview-widget-container">
+        <div class="tradingview-widget-container__widget"></div>
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+        {
+          "symbols": [
+            {"proName": "BITSTAMP:BTCUSD", "title": "BTC/USD"},
+            {"proName": "BITSTAMP:ETHUSD", "title": "ETH/USD"},
+            {"proName": "BINANCE:BNBUSDT", "title": "BNB/USDT"},
+            {"proName": "BITSTAMP:LTCUSD", "title": "LTC/USD"},
+            {"proName": "BITSTAMP:XRPUSD", "title": "XRP/USD"},
+            {"proName": "BINANCE:ADAUSDT", "title": "ADA/USDT"},
+            {"proName": "BINANCE:DOTUSDT", "title": "DOT/USDT"},
+            {"proName": "BINANCE:LINKUSDT", "title": "LINK/USDT"},
+            {"proName": "BITSTAMP:XLMUSD", "title": "XLM/USD"}
+          ],
+          "showSymbolLogo": true,
+          "colorTheme": "dark",
+          "isTransparent": false,
+          "displayMode": "adaptive",
+          "locale": "en"
+        }
+        </script>
+      </div>
+      <!-- TradingView Widget END -->
+    </section>
+
+    <!-- Why Us Section -->
+    <section id="why" class="section section-dark" data-aos="fade-up">
+      <h2 class="section-title">Why Choose PrudentProExchange?</h2>
+      <ul class="features-list">
+        <li><strong>Trusted Platform:</strong> U.S.-registered and SEC-compliant for unmatched reliability.</li>
+        <li><strong>Proven Expertise:</strong> Over a decade of excellence in crypto and forex since 2009.</li>
+        <li><strong>Global Impact:</strong> Your investments empower underserved communities worldwide.</li>
+        <li><strong>High Returns:</strong> Achieve up to 10% weekly with our strategic approach.</li>
+      </ul>
+    </section>
+
+    <!-- Investment Calculator Section -->
+    <section id="calculator" class="section section-light calculator-section" data-aos="fade-up">
+      <h2 class="section-title">Investment Calculator</h2>
+      <div class="calculator-container">
+        <div class="calculator-inputs">
+          <div class="input-group">
+            <label for="investment-amount">Investment Amount ($)</label>
+            <input type="range" id="amount-slider" min="200" max="1000000" value="200" step="100">
+            <input type="number" id="investment-amount" min="200" max="1000000" value="200">
+            <div class="plan-indicator">
+              <span id="min-amount">$200</span>
+              <span id="max-amount">$1,000,000</span>
+            </div>
+          </div>
+          <div class="input-group">
+            <label for="investment-plan">Investment Plan</label>
+            <select id="investment-plan">
+              <option value="basic">Basic (5% weekly, $200 - $4,999)</option>
+              <option value="standard">Standard (6.5% weekly, $5,000 - $14,999)</option>
+              <option value="silver">Silver (7.5% weekly, $15,000 - $49,999)</option>
+              <option value="gold">Gold (8.5% weekly, $50,000 - $99,999)</option>
+              <option value="diamond">Diamond (10% weekly, $100,000+)</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label for="investment-period">Investment Period (weeks)</label>
+            <input type="number" id="investment-period" min="1" max="52" value="1">
+          </div>
+          <button type="button" class="cta primary" id="calculate-btn">Calculate Returns</button>
+        </div>
+        <div class="calculator-results">
+          <div class="result-item">
+            <div class="result-label">Weekly Return</div>
+            <div class="result-value" id="weekly-return">$0.00</div>
+          </div>
+          <div class="result-item">
+            <div class="result-label">Total Return</div>
+            <div class="result-value" id="total-return">$0.00</div>
+          </div>
+          <div class="result-item">
+            <div class="result-label">Total Profit</div>
+            <div class="result-value" id="total-profit">$0.00</div>
+          </div>
+          <div class="result-item">
+            <div class="result-label">ROI</div>
+            <div class="result-value" id="roi">0.0%</div>
+          </div>
+          <div class="highlight-result">
+            <div class="label">Your Balance After <span id="period-display">1</span> Week</div>
+            <div class="value" id="final-balance">$0.00</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Your Path Section -->
+    <section id="path" class="section section-light" data-aos="fade-up">
+      <h2 class="section-title">Your Journey to Financial Success</h2>
+      <ol class="path-list">
+        <li><strong>Get Started:</strong> Open your account quickly with a minimum of $200.</li>
+        <li><strong>Expert Management:</strong> Our professionals optimize your funds in thriving markets.</li>
+        <li><strong>Realize Gains:</strong> Enjoy weekly profits, withdrawable after 7 days.</li>
+      </ol>
+    </section>
+
+    <!-- Divine Advantages Section -->
+    <section id="advantages" class="section section-dark" data-aos="fade-up">
+      <h2 class="section-title">Our Competitive Edge</h2>
+      <ul class="features-list">
+        <li><strong>Fast Onboarding:</strong> Join and fund your account in minutes.</li>
+        <li><strong>Real-Time Insights:</strong> Access dashboards and weekly performance updates.</li>
+        <li><strong>Flexible Plans:</strong> Choose from five tailored investment options.</li>
+        <li><strong>Referral Benefits:</strong> Invite others and boost your earnings.</li>
+        <li><strong>Quick Withdrawals:</strong> Access funds within 24 hours anytime.</li>
+      </ul>
+    </section>
+
+    <!-- Our Vision Section -->
+    <section id="vision" class="section section-dark" data-aos="fade-up">
+      <h2 class="section-title">Our Vision</h2>
+      <p class="section-text">Discover how PrudentProExchange redefines wealth creation.</p>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="section section-light testimonials-section" data-aos="fade-up">
+      <h2 class="section-title">Client Success Stories</h2>
+      <div class="testimonials-container">
+        <div class="testimonial active">
+          <img src="assets/images/alex.jpg" alt="Alex M." class="testimonial-img">
+          <p>“With a $200 start, I saw impressive returns in weeks. PrudentProExchange delivers reliable, high-yield opportunities.”</p>
+          <span>— Alex M., USA</span>
+        </div>
+        <div class="testimonial">
+          <img src="assets/images/priya.jpg" alt="Priya S." class="testimonial-img">
+          <p>“This platform offers transparency and fast withdrawals. It’s empowered my financial decisions like never before.”</p>
+          <span>— Priya S., India</span>
+        </div>
+        <div class="testimonial">
+          <img src="assets/images/carlos.jpg" alt="Carlos L." class="testimonial-img">
+          <p>“My investment has grown steadily with clear insights. The global impact adds purpose to my returns.”</p>
+          <span>— Carlos L., Brazil</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="section section-light faq-section" data-aos="fade-up">
+      <h2 class="section-title">Frequently Asked Questions</h2>
+      <div class="faq-container" id="faq-container">
+        <div class="faq-item">
+          <div class="faq-question">What is PrudentProExchange?<i class="fas fa-chevron-down"></i></div>
+          <div class="faq-answer">PrudentProExchange is a U.S.-registered (Reg. No. 0001230714) investment platform leveraging cryptocurrency and forex expertise to deliver up to 10% weekly returns.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">How do I begin?<i class="fas fa-chevron-down"></i></div>
+          <div class="faq-answer">Click 'Start Investing Now', register, deposit at least $200, and select your plan.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">Is it secure and legitimate?<i class="fas fa-chevron-down"></i></div>
+          <div class="faq-answer">Yes, we’re SEC-compliant. Verify our registration (#0001230714) on EDGAR: <a href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=0001230714">SEC EDGAR</a>.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">How do withdrawals work?<i class="fas fa-chevron-down"></i></div>
+          <div class="faq-answer">From your dashboard, request a withdrawal, specify the amount and wallet, and receive funds within 24 hours.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">What returns can I expect?<i class="fas fa-chevron-down"></i></div>
+          <div class="faq-answer">Earn 5% to 10% weekly based on your chosen plan, credited after each cycle.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Mission Section -->
+    <section id="mission" class="section section-dark" data-aos="fade-up">
+      <h2 class="section-title">Our Mission</h2>
+      <p class="section-text">
+        PrudentProExchange combines blockchain innovation with trading expertise to build wealth globally since 2012.
+      </p>
+    </section>
+
+    <!-- CTA to Plans -->
+    <section id="plans" class="section section-light cta-section" data-aos="fade-up">
+      <h2 class="section-title">Take Control of Your Financial Future</h2>
+      <p class="section-text">Start building wealth today with a platform designed for growth and stability.</p>
+      <button class="cta primary" onclick="location.href='plans.html'">Explore Plans</button>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="section section-dark quick-start" data-aos="fade-up">
+      <h2 class="section-title">How It Works</h2>
+      <div class="step">
+        <i class="fas fa-user-plus"></i>
+        <h3>Apply Now</h3>
+        <p>Create your account in minutes.</p>
+        <a href="application.html" class="cta">Apply</a>
+      </div>
+      <div class="step">
+        <i class="fas fa-wallet"></i>
+        <h3>Choose Plan</h3>
+        <p>Select your investment option.</p>
+        <a href="plans.html" class="cta">View Plans</a>
+      </div>
+      <div class="step">
+        <i class="fas fa-chart-line"></i>
+        <h3>Start Investing</h3>
+        <p>Begin growing your wealth.</p>
+        <a href="#" class="cta">Get Started</a>
+      </div>
+    </section>
+
+    <!-- Request Company Card Section -->
+    <section id="company-card" class="section section-light" data-aos="fade-up">
+      <h2 class="section-title">Request Company Card</h2>
+      <img src="assets/images/company_card.jpg" alt="Company Card" class="company-card-img">
+      <p class="company-card-text">
+        In response to a systemic gap in conventional banking services that has marginalized a significant portion of the population, this partnership seeks to provide access to essential financial products. Recent findings from a 2017 FDIC survey indicate that 25 percent of households in the United States and the United Kingdom are either unbanked or underbanked. Globally, this issue is even more acute, with a staggering 1.7 billion people lacking adequate banking access, as reported by the World Bank.
+        <br><br>
+        Through the PrudentProExchange Card initiative, investors can obtain a virtual card seamlessly, complemented by the delivery of a physical card via mail. With a minimum balance requirement of $50,000, the Blanassets Card offers a gateway to financial inclusivity. Accepted at over 45 million merchants and ATMs worldwide, it empowers users with the flexibility to conduct transactions wherever major credit cards are accepted.
+      </p>
+      <button class="cta primary" onclick="location.href='mailto:support@prudentproexchange.net'">Request Now</button>
+    </section>
+
+    <!-- Contact Form -->
+    <section class="section section-light contact-form" data-aos="fade-up">
+      <h2 class="section-title">Contact Us</h2>
+      <form onsubmit="alert('Message sent!'); return false;">
+        <input type="text" placeholder="Your Name" required>
+        <input type="email" placeholder="Your Email" required>
+        <textarea placeholder="Your Message" rows="5" required></textarea>
+        <button type="submit" class="cta primary">Send Message</button>
+      </form>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="section section-dark" data-aos="fade-up">
+      <h2 class="section-title">Stay Informed</h2>
+      <form class="newsletter" onsubmit="alert('Subscribed!'); return false;">
+        <input type="email" placeholder="Your email address" required />
+        <button type="submit" class="cta">Subscribe</button>
+      </form>
+    </section>
+
+    <!-- Company PDF Navigation -->
+    <nav class="pdf-nav">
+      <a href="assets/docs/company.pdf" target="_blank">Click to view the Company PDF</a>
+    </nav>
+
+    <!-- Footer -->
+    <footer class="section section-dark site-footer" data-aos="fade-up">
+      <div class="footer-content">
+        <p class="utc-time">UTC Time: <span id="utcTime"></span></p>
+        <p class="local-time">Local Time: <span id="localTime"></span></p>
+        <p class="local-date">Local Date: <span id="localDate"></span></p>
+        <nav class="footer-links">
+          <a href="about.html">About Us</a>
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="terms.html">Terms & Conditions</a>
+        </nav>
+        <p class="copyright">© 2025 PrudentProExchange. All Rights Reserved. SEC Registration #0001230714</p>
+      </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" aria-label="Back to top">🚀</button>
+
+    <!-- Live Chat Button -->
+    <div class="live-chat" onclick="alert('Live chat coming soon!')">Live Chat</div>
+  </div>
 
   <script src="js/main.js"></script>
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
@@ -467,16 +469,17 @@
 
     // Force Background Video to Play with Retry
     document.addEventListener('DOMContentLoaded', function() {
-      const videoElement = document.querySelector('.background-video');
-      if (videoElement) {
-        videoElement.play().catch(error => {
-          console.log('Background video play failed:', error);
-          // Retry after 1 second
-          setTimeout(() => {
-            videoElement.play().catch(err => console.log('Retry failed for background video:', err));
-          }, 1000);
-        });
-      }
+      const playVideo = (videoElement, name) => {
+        if (videoElement) {
+          videoElement.play().catch(error => {
+            console.log(`${name} video play failed:`, error);
+            setTimeout(() => {
+              videoElement.play().catch(err => console.log(`Retry failed for ${name} video:`, err));
+            }, 1000);
+          });
+        }
+      };
+      playVideo(document.querySelector('.main-content-video'), 'Main');
     });
   </script>
 </body>
