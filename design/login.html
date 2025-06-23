@@ -1,47 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Login • PrudentProExchange</title>
   <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/login.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 </head>
-<body>
+<body class="login-page">
+  <!-- Video Background -->
   <video class="bg-video" autoplay muted loop playsinline preload="auto">
     <source src="assets/videos/background.webm" type="video/webm">
     <source src="assets/videos/background.mp4" type="video/mp4">
   </video>
   <div class="overlay">
-    <header class="site-header">…</header>
+    <header class="site-header">
+      <button id="theme-toggle" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
+      <a href="/" class="logo-link">
+        <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo"/>
+      </a>
+      <button class="hamburger" id="hamburgerApp" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="nav-drawer" id="navDrawerApp">
+        <a href="application.html">Apply</a>
+        <a href="about.html">About</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms & Conditions</a>
+        <a href="login.html" class="active">Login</a>
+        <a href="plans.html">Investment Plans</a>
+      </nav>
+    </header>
 
-    <main class="form-page">
-      <section class="section section-light">
-        <h1 class="section-title gold">Welcome Back</h1>
-        <form id="loginForm" class="form-container">
-          <label>Email<input type="email" name="email" required/></label>
-          <label>Password<input type="password" name="password" required/></label>
-          <button type="submit" class="cta primary">Log In</button>
-        </form>
+    <main class="form-page container">
+      <section class="section section-light" data-aos="fade-up">
+        <h1 class="section-title gold">👋 Welcome Back</h1>
+        <p class="section-text">
+          Log in to access your dashboard and manage your investments with PrudentProExchange.
+        </p>
+        <div class="form-wrapper">
+          <form id="loginForm" class="form-container">
+            <div class="form-grid">
+              <label>
+                Email Address*
+                <input type="email" name="email" required aria-label="Email Address"/>
+              </label>
+              <label>
+                Password*
+                <input type="password" name="password" required aria-label="Password"/>
+              </label>
+            </div>
+            <a href="#" class="forgot-password">Forgot Password?</a>
+            <button type="submit" class="cta primary">Log In</button>
+            <p class="signup-link">Don't have an account? <a href="application.html">Sign Up</a></p>
+          </form>
+        </div>
       </section>
     </main>
   </div>
 
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
-    const supabase = supabase.createClient(
+    AOS.init({ duration: 800, once: true });
+
+    // Hamburger toggle
+    const btnApp = document.getElementById('hamburgerApp'),
+          drawerApp = document.getElementById('navDrawerApp');
+    btnApp.addEventListener('click', () => {
+      drawerApp.classList.toggle('open');
+      btnApp.classList.toggle('active');
+    });
+
+    // Theme toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('light-theme');
+      const icon = themeToggle.querySelector('i');
+      icon.classList.toggle('fa-moon');
+      icon.classList.toggle('fa-sun');
+    });
+
+    // Supabase client
+    const supabase = Supabase.createClient(
       'https://iwkdznjqfbsfkscnbrkc.supabase.co',
-      'eyJhbGciOiJIUzI1Ni...kAbiU'
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU'
     );
 
-    document.getElementById('loginForm')
-      .addEventListener('submit', async e => {
-        e.preventDefault();
-        const { error } = await supabase.auth.signInWithPassword({
-          email: e.target.email.value,
-          password: e.target.password.value
-        });
-        if (error) return alert('Login error: '+error.message);
-        window.location.href = 'dashboard.html';
+    // Handle login
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const f = e.target;
+
+      // Sign in with Supabase Auth
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: f.email.value,
+        password: f.password.value,
       });
+
+      if (error) {
+        alert('Login error: ' + error.message);
+        return;
+      }
+
+      alert('Login successful! Redirecting to your dashboard.');
+      window.location.href = 'dashboard.html';
+    });
   </script>
 </body>
 </html>
