@@ -1,18 +1,86 @@
-/* General Styles for Plans Page */
+/* Plans Page Specific Styles */
+:root {
+  --primary: #ffd700; /* Gold, from style.css */
+  --primary-dark: #cca300;
+  --text-color: #fff;
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --shadow: rgba(0, 0, 0, 0.5);
+}
+
+/* Main container */
+.plans-page.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+  position: relative;
+  z-index: 2;
+}
+
+/* Section styling */
 .plans-page .section {
-  margin: 4rem auto;
+  background: var(--glass-bg);
+  padding: 3rem 2rem;
+  margin-bottom: 4rem;
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+.plans-page .section:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.plans-page .section-dark {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.plans-page .section-light {
+  background: var(--glass-bg);
+}
+
+/* Section titles */
 .plans-page .section-title {
-  font-family: 'Orbitron', sans-serif;
+  font-size: 2.5rem;
+  font-family: 'Playfair Display', serif;
+  color: var(--primary);
+  margin-bottom: 2.5rem;
+  position: relative;
+  text-shadow: 2px 2px 4px var(--shadow);
 }
 
-/* Plans Grid */
+.plans-page .section-title::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50px;
+  height: 2px;
+  background: var(--primary);
+}
+
+/* Section text */
+.plans-page .section-text {
+  font-size: 1.2rem;
+  line-height: 1.8;
+  color: #e0e0ff;
+  font-family: 'Poppins', sans-serif;
+  max-width: 800px;
+}
+
+/* Plans grid */
 .plans-page .plans-grid .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 2rem;
-  padding: 2rem;
+  width: 100%;
+  max-width: 1200px;
 }
 
 .plans-page .plan-card {
@@ -32,56 +100,62 @@
 
 .plans-page .plan-title {
   font-size: 1.8rem;
+  color: var(--primary);
+  font-family: 'Playfair Display', serif;
   margin-bottom: 1rem;
-  color: #ffd700;
 }
 
 .plans-page .plan-title small {
-  font-size: 1rem;
-  color: #ccc;
+  font-size: 0.9rem;
+  color: #e0e0ff;
+  font-family: 'Poppins', sans-serif;
 }
 
 .plans-page .plan-details {
   list-style: none;
-  padding: 0;
   margin: 1rem 0;
+  padding: 0;
 }
 
 .plans-page .plan-details li {
+  font-size: 1.1rem;
+  color: #e0e0ff;
+  margin-bottom: 0.5rem;
   position: relative;
-  padding-left: 1.5em;
-  margin-bottom: 0.8em;
-  color: #fff;
+  padding-left: 1.5rem;
 }
 
 .plans-page .plan-details li::before {
   content: "✦";
   position: absolute;
   left: 0;
-  color: #ffd700;
+  color: var(--primary);
 }
 
 .plans-page .plan-overview {
   font-size: 1rem;
-  color: #ddd;
+  color: #e0e0ff;
+  line-height: 1.6;
   margin-bottom: 1.5rem;
 }
 
 .plans-page .plan-card .cta {
   margin-top: 1rem;
+  padding: 0.75rem 1.75rem;
+  font-size: 1rem;
 }
 
-/* Spherical Calculator */
+/* Spherical Investment Calculator */
 .plans-page .calculator-container {
-  width: 450px;
-  height: 450px;
+  width: 400px;
+  height: 400px;
   border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, #4a4a6a, #1a1a2e);
-  box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.6), 0 0 40px rgba(255, 215, 0, 0.3);
+  background: radial-gradient(circle at 30% 30%, #2a2a4a, #1a1a2e);
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 215, 0, 0.2);
   position: relative;
   margin: 2rem auto;
   overflow: hidden;
-  transform: perspective(1000px) rotateX(10deg);
+  transform: perspective(1000px) rotateX(5deg);
 }
 
 .plans-page .calculator-inner {
@@ -90,65 +164,255 @@
   left: 50%;
   transform: translate(-50%, -50%);
   width: 80%;
-  text-align: center;
+  max-width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 1.5rem;
+  border-radius: 10px;
+  backdrop-filter: blur(5px);
+}
+
+.plans-page .calculator-inner label {
+  color: #e0e0ff;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
 }
 
 .plans-page .calculator-inner select,
 .plans-page .calculator-inner input {
   width: 100%;
   padding: 0.8rem;
-  margin: 0.5rem 0;
+  margin-bottom: 1rem;
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 215, 0, 0.3);
   border-radius: 5px;
   color: #fff;
   font-size: 1rem;
+  font-family: 'Poppins', sans-serif;
 }
 
 .plans-page .calculator-inner .cta {
   width: 100%;
   padding: 0.8rem;
-  margin: 0.5rem 0;
+  margin-bottom: 1rem;
 }
 
 .plans-page .range-text {
-  color: #ccc;
+  color: #e0e0ff;
   font-size: 0.9rem;
-  margin: 0.5rem 0;
+  margin-bottom: 1rem;
+  text-align: center;
 }
 
 .plans-page .result-text {
   color: #fff;
   font-size: 1.1rem;
-  margin-top: 1rem;
+  text-align: center;
+}
+
+.plans-page .result-text p {
+  margin: 0.5rem 0;
 }
 
 .plans-page .result-text .gold {
-  color: #ffd700;
+  color: var(--primary);
+  font-weight: 600;
 }
 
 /* Orbiting Stars */
 .plans-page .orbiting-star {
   position: absolute;
-  width: 10px;
-  height: 10px;
-  background: #ffd700;
+  width: 6px;
+  height: 6px;
+  background: #e0e0ff;
   border-radius: 50%;
-  animation: orbit calc(var(--i) * 2s) infinite linear;
+  box-shadow: 0 0 5px #e0e0ff;
+  animation: orbit 10s linear infinite;
+  animation-delay: calc(var(--orbit-delay, 0s));
 }
 
 @keyframes orbit {
-  0% { transform: rotate(0deg) translateX(200px) rotate(0deg); }
-  100% { transform: rotate(360deg) translateX(200px) rotate(-360deg); }
+  0% { transform: translate(-50%, -50%) rotate(0deg) translateX(180px) rotate(0deg); }
+  100% { transform: translate(-50%, -50%) rotate(360deg) translateX(180px) rotate(-360deg); }
 }
 
-/* Responsive Design */
+/* Features and path lists */
+.plans-page .features-list,
+.plans-page .path-list {
+  max-width: 800px;
+  margin: 1rem auto;
+}
+
+.plans-page .features-list li,
+.plans-page .path-list li {
+  font-size: 1.1rem;
+  color: #e0e0ff;
+  margin-bottom: 1.5rem;
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.plans-page .features-list li::before {
+  content: "✦";
+  position: absolute;
+  left: 0;
+  color: var(--primary);
+}
+
+.plans-page .path-list {
+  counter-reset: step;
+}
+
+.plans-page .path-list li {
+  padding-left: 2rem;
+}
+
+.plans-page .path-list li::before {
+  content: counter(step);
+  counter-increment: step;
+  position: absolute;
+  left: 0;
+  background: var(--primary);
+  color: #000;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+/* CTA buttons */
+.plans-page .cta.primary {
+  background: linear-gradient(45deg, var(--primary), var(--primary-dark));
+  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+  font-size: 1rem;
+  padding: 0.75rem 1.75rem;
+}
+
+.plans-page .cta.primary:hover {
+  background: linear-gradient(45deg, var(--primary-dark), var(--primary));
+  box-shadow: 0 6px 20px rgba(255, 215, 0, 0.5);
+  transform: translateY(-2px);
+}
+
+/* Light theme adjustments */
+body.light-theme .plans-page .section {
+  background: rgba(255, 255, 255, 0.9);
+  color: #333;
+}
+
+body.light-theme .plans-page .section-dark {
+  background: rgba(255, 255, 255, 0.9);
+}
+
+body.light-theme .plans-page .section-text,
+body.light-theme .plans-page .features-list li,
+body.light-theme .plans-page .path-list li,
+body.light-theme .plans-page .plan-details li,
+body.light-theme .plans-page .plan-overview,
+body.light-theme .plans-page .calculator-inner label,
+body.light-theme .plans-page .range-text,
+body.light-theme .plans-page .result-text {
+  color: #333;
+}
+
+body.light-theme .plans-page .plan-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+body.light-theme .plans-page .calculator-inner {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+body.light-theme .plans-page select,
+body.light-theme .plans-page input {
+  background: rgba(255, 255, 255, 0.9);
+  color: #333;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+body.light-theme .plans-page .calculator-container {
+  background: radial-gradient(circle at 30% 30%, #e0e0ff, #d0d0e0);
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.2), 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+body.light-theme .plans-page .orbiting-star {
+  background: #333;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+/* Responsive adjustments */
 @media (max-width: 768px) {
+  .plans-page.container {
+    padding: 3rem 1rem;
+  }
+  .plans-page .section {
+    padding: 2rem 1rem;
+  }
+  .plans-page .section-title {
+    font-size: 2rem;
+  }
+  .plans-page .section-text,
+  .plans-page .plan-details li,
+  .plans-page .plan-overview {
+    font-size: 1.1rem;
+  }
   .plans-page .calculator-container {
     width: 300px;
     height: 300px;
   }
-  .plans-page .plan-card {
-    padding: 1.5rem;
+  .plans-page .orbiting-star {
+    animation: orbit-mobile linear infinite;
+  }
+  @keyframes orbit-mobile {
+    0% { transform: translate(-50%, -50%) rotate(0deg) translateX(140px) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg) translateX(140px) rotate(-360deg); }
+  }
+}
+
+@media (max-width: 480px) {
+  .plans-page.container {
+    padding: 2rem 0.5rem;
+  }
+  .plans-page .section {
+    padding: 1.5rem 0.5rem;
+  }
+  .plans-page .section-title {
+    font-size: 1.8rem;
+  }
+  .plans-page .section-text,
+  .plans-page .plan-details li,
+  .plans-page .plan-overview,
+  .plans-page .features-list li,
+  .plans-page .path-list li {
+    font-size: 1rem;
+  }
+  .plans-page .plan-title {
+    font-size: 1.5rem;
+  }
+  .plans-page .calculator-container {
+    width: 250px;
+    height: 250px;
+  }
+  .plans-page .calculator-inner {
+    width: 90%;
+    max-width: 200px;
+  }
+  .plans-page .orbiting-star {
+    width: 4px;
+    height: 4px;
+    animation: orbit-mobile-small linear infinite;
+  }
+  @keyframes orbit-mobile-small {
+    0% { transform: translate(-50%, -50%) rotate(0deg) translateX(100px) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg) translateX(100px) rotate(-360deg); }
   }
 }
