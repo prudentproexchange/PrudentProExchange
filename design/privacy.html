@@ -175,13 +175,12 @@
           <h2 class="section-title">11. Reach Out to Us</h2>
           <p class="section-text">
             Your voice matters—contact our Guardians of Privacy:
-          usurp
-            <ul class="features-list">
-              <li><strong>Email:</strong> <a href="mailto:privacy@prudentproexchange.com">privacy@prudentproexchange.com</a></li>
-              <li><strong>Phone:</strong> +1 (800) 777-8888</li>
-              <li><strong>Address:</strong> 777 Prosperity Way, Celestial City, NY 10001</li>
-            </ul>
           </p>
+          <ul class="features-list">
+            <li><strong>Email:</strong> <a href="mailto:privacy@prudentproexchange.com">privacy@prudentproexchange.com</a></li>
+            <li><strong>Phone:</strong> +1 (800) 777-8888</li>
+            <li><strong>Address:</strong> 777 Prosperity Way, Celestial City, NY 10001</li>
+          </ul>
         </section>
 
         <section id="portal" class="section" data-aos="fade-up">
@@ -290,6 +289,29 @@
 
     // Initialize AOS
     AOS.init({ duration: 800, once: true });
+
+    // Video Playback with Enhanced Debugging
+    document.addEventListener('DOMContentLoaded', function() {
+      const playVideo = (videoElement, name) => {
+        if (videoElement) {
+          videoElement.play()
+            .then(() => console.log(`${name} video is playing successfully`))
+            .catch(error => {
+              console.error(`${name} video play failed:`, error);
+              setTimeout(() => {
+                videoElement.play()
+                  .then(() => console.log(`${name} video retry successful`))
+                  .catch(err => console.error(`Retry failed for ${name} video:`, err));
+              }, 1000);
+            });
+          // Additional event listeners for monitoring
+          videoElement.addEventListener('error', (e) => console.error(`${name} video error:`, e));
+          videoElement.addEventListener('stalled', () => console.warn(`${name} video stalled`));
+          videoElement.addEventListener('loadeddata', () => console.log(`${name} video data loaded`));
+        }
+      };
+      playVideo(document.querySelector('.bg-video'), 'Background');
+    });
   </script>
 </body>
 </html>
