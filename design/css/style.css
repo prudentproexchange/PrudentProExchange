@@ -833,3 +833,41 @@ body {
   .quick-start { flex-direction: column; align-items: center; }
   .step { max-width: 80%; }
 }
+/* Navigation Text Color for Visibility */
+.nav-drawer a, .dropbtn, .dropdown-content a {
+  color: #e0e0ff; /* Light lavender for contrast */
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+.nav-drawer a:hover, .dropdown-content a:hover {
+  color: #fff; /* White on hover for emphasis */
+}
+
+/* Company Card Section Text Styling */
+#company-card .section-text {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.2rem;
+  color: #FFD700; /* Gold to match theme */
+  text-align: center;
+  line-height: 1.8;
+  margin: 1.5rem 0;
+}
+
+/* PDF Navigation Styling */
+.pdf-nav {
+  text-align: center;
+  padding: 1rem;
+  background: var(--glass-bg);
+  border-top: 1px solid rgba(255, 215, 0, 0.2);
+}
+.pdf-nav a {
+  color: var(--primary);
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+.pdf-nav a:hover {
+  color: #fff;
+}
