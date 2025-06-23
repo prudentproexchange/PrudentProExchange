@@ -1,55 +1,5 @@
 /* Privacy Page Specific Styles */
 
-/* Main content container */
-.privacy-page {
-  display: flex;
-  flex-wrap: wrap;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem 1rem;
-}
-
-/* Table of Contents Sidebar */
-.privacy-page .toc {
-  flex: 0 0 250px;
-  margin-right: 2rem;
-  background: transparent;
-  border: 1px solid rgba(255, 215, 0, 0.3);
-  border-radius: 10px;
-  padding: 1.5rem;
-  position: sticky;
-  top: 100px;
-  z-index: 2;
-}
-
-.privacy-page .toc-title {
-  font-size: 1.8rem;
-  font-family: 'Playfair Display', serif;
-  color: var(--primary);
-  margin-bottom: 1.5rem;
-  text-align: center;
-}
-
-.privacy-page .toc-list {
-  list-style: none;
-}
-
-.privacy-page .toc-list li {
-  margin-bottom: 0.75rem;
-}
-
-.privacy-page .toc-list a {
-  color: #e0e0ff;
-  text-decoration: none;
-  font-size: 1rem;
-  transition: color 0.3s ease, transform 0.3s ease;
-}
-
-.privacy-page .toc-list a:hover {
-  color: var(--primary);
-  transform: translateX(5px);
-}
-
 /* Ensure sections are transparent to use overlay background */
 .privacy-page .section {
   background: transparent;
@@ -63,15 +13,7 @@
   text-align: center;
   position: relative;
   z-index: 2;
-}
-
-.privacy-page .section::after {
-  content: '';
-  display: block;
-  width: 100px;
-  height: 1px;
-  background: rgba(255, 215, 0, 0.3);
-  margin: 2rem auto;
+  width: 100%;
 }
 
 /* Styling for section titles */
@@ -102,7 +44,6 @@
   line-height: 1.8;
   color: #fff;
   max-width: 800px;
-  margin: 0 auto 1.5rem;
 }
 
 /* Style the portal card */
@@ -151,15 +92,6 @@
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-  .privacy-page {
-    flex-direction: column;
-  }
-  .privacy-page .toc {
-    flex: 0 0 100%;
-    margin-right: 0;
-    margin-bottom: 2rem;
-    position: static;
-  }
   .privacy-page .section {
     padding: 2rem 1rem;
   }
