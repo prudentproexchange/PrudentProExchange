@@ -37,6 +37,23 @@ body {
   filter: brightness(0.9);
 }
 
+/* Vision Video Background */
+.vision-video-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: -1;
+}
+.bg-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.9);
+}
+
 /* Glass-morphic Overlay */
 .overlay {
   position: relative;
@@ -106,7 +123,7 @@ body {
   right: -250px;
   width: 250px;
   height: 100%;
-  background: var(--glass-bg);
+  background: #000; /* Changed to black */
   padding: 4rem 1.5rem;
   transition: right 0.3s;
   z-index: 15;
@@ -221,6 +238,10 @@ body {
   overflow: hidden;
   margin: 1.5rem auto;
   position: relative;
+}
+.tradingview-widget-container {
+  width: 100%;
+  overflow: hidden;
 }
 
 /* Sections */
@@ -350,6 +371,7 @@ body {
 
 /* Video Section */
 .video-section {
+  position: relative; /* Added for background video */
   text-align: center;
   margin: 5rem auto;
 }
@@ -613,8 +635,9 @@ body {
   height: 50px;
   font-size: 1.5rem;
   cursor: pointer;
+  display: block; /* Always visible */
   transition: all 0.3s;
-  z-index: 100;
+  z-index: 1000; /* Above other layers */
 }
 #back-to-top:hover {
   transform: scale(1.1);
