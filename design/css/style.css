@@ -600,21 +600,6 @@ body {
 }
 #back-to-top:hover { transform: scale(1.1); }
 
-/* Live Chat Button */
-.live-chat {
-  position: fixed;
-  bottom: 6rem;
-  right: 2rem;
-  background: var(--primary);
-  color: #000;
-  padding: 0.75rem 1.5rem;
-  border-radius: 20px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s;
-}
-.live-chat:hover { background: var(--primary-dark); }
-
 /* Light Theme */
 .light-theme { background: #f0f0f0; color: #333; }
 .light-theme .site-header {
