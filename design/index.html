@@ -34,6 +34,11 @@
       height: 100%;
       z-index: -1;
       overflow: hidden;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .main-content-video-container.visible {
+      opacity: 1;
     }
     .main-content-video {
       width: 100%;
@@ -97,7 +102,7 @@
     <!-- Main Content Container -->
     <div class="main-content">
       <div class="main-content-video-container">
-        <video class="main-content-video" autoplay muted loop playsinline preload="auto">
+        <video class="main-content-video" muted loop playsinline preload="auto">
           <source src="assets/videos/background.webm" type="video/webm">
           <source src="assets/videos/background.mp4" type="video/mp4">
           Your browser does not support the video tag.
@@ -525,7 +530,52 @@
         }
       };
       playVideo(document.querySelector('.hero-video'), 'Hero');
-      playVideo(document.querySelector('.main-content-video'), 'Main');
+    });
+
+    // Video Sync Logic
+    document.addEventListener('DOMContentLoaded', function() {
+      const heroSection = document.querySelector('#hero');
+      const heroVideo = document.querySelector('.hero-video');
+      const mainVideoContainer = document.querySelector('.main-content-video-container');
+      const mainVideo = document.querySelector('.main-content-video');
+
+      if (heroVideo && mainVideo && heroSection && mainVideoContainer) {
+        // Ensure main video is initially paused
+        mainVideo.pause();
+
+        // Intersection Observer to detect hero section visibility
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              // Hero section is visible
+              mainVideoContainer.classList.remove('visible');
+              mainVideo.pause();
+              heroVideo.play().catch(e => console.error('Hero video play failed:', e));
+            } else {
+              // Hero section is out of view
+              mainVideoContainer.classList.add('visible');
+              mainVideo.currentTime = heroVideo.currentTime; // Sync playback
+              mainVideo.play().catch(e => console.error('Main video play failed:', e));
+              heroVideo.pause();
+            }
+          });
+        }, {
+          threshold: 0.1 // Trigger when 10% of hero section is visible
+        });
+
+        observer.observe(heroSection);
+
+        // Handle video looping for continuity
+        heroVideo.addEventListener('ended', () => {
+          heroVideo.currentTime = 0;
+          heroVideo.play();
+        });
+
+        mainVideo.addEventListener('ended', () => {
+          mainVideo.currentTime = 0;
+          mainVideo.play();
+        });
+      }
     });
   </script>
 </body>
