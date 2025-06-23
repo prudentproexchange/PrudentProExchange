@@ -871,3 +871,79 @@ body {
 .pdf-nav a:hover {
   color: #fff;
 }
+/* Hero Video Background */
+.hero-video-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  z-index: -1;
+}
+.hero-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.9);
+}
+
+/* Crypto Ticker */
+.crypto-ticker {
+  background: rgba(255, 255, 255, 0.1); /* Glassmorphic effect */
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  padding: 0.75rem;
+  max-width: 90%;
+  overflow: hidden;
+  margin: 1.5rem auto;
+  position: relative;
+}
+.ticker-content {
+  display: flex;
+  white-space: nowrap;
+  animation: tickerScroll 30s linear infinite;
+}
+.ticker-content span {
+  margin-right: 2rem;
+  font-size: 1.2rem;
+  color: #FFD700; /* Gold for visibility */
+  font-weight: 600;
+}
+@keyframes tickerScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); } /* Seamless loop with duplicated content */
+}
+
+/* Navigation Text Color */
+.nav-drawer a, .dropbtn, .dropdown-content a {
+  color: #FFD700; /* Gold for visibility */
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+.nav-drawer a:hover, .dropdown-content a:hover {
+  color: #fff; /* White on hover */
+}
+
+/* Request Company Card Text Styling */
+.company-card-text {
+  font-family: 'Playfair Display', serif; /* Mature, elegant font */
+  font-size: 1.2rem;
+  color: #FFD700; /* Gold to match theme */
+  text-align: center;
+  line-height: 1.8;
+  margin: 1.5rem 0;
+  padding: 0 1rem;
+}
+
+/* Light Theme Adjustments */
+.light-theme .nav-drawer a, .light-theme .dropbtn, .light-theme .dropdown-content a {
+  color: #000; /* Black for visibility in light theme */
+}
+.light-theme .nav-drawer a:hover, .light-theme .dropdown-content a:hover {
+  color: #333;
+}
+.light-theme .company-card-text {
+  color: #000; /* Black for light theme */
+}
