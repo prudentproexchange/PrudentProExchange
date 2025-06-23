@@ -20,15 +20,20 @@ body {
   --shadow: rgba(0, 0, 0, 0.5);
 }
 
-/* Video Background */
-.bg-video {
+/* Hero Video Background */
+.hero-video-container {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  object-fit: cover;
+  overflow: hidden;
   z-index: -1;
+}
+.hero-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   filter: brightness(0.9);
 }
 
@@ -55,7 +60,7 @@ body {
   border-bottom: 1px solid rgba(255, 215, 0, 0.2);
 }
 .logo {
-  height: 180px;
+  height: 80px;
   display: block;
 }
 
@@ -105,13 +110,13 @@ body {
   padding: 4rem 1.5rem;
   transition: right 0.3s;
   z-index: 15;
-  border-left: 1px solid var(--primary-dark);
+  border-left: 3px solid rgba(var(--primary-dark), 0.5);
 }
 .nav-drawer.open { right: 0; }
 .nav-drawer a {
+  background: #000;
   margin: 0.5rem 0;
   font-size: 1rem;
-  font-weight: 500;
   padding: 0.75rem 1rem;
   color: var(--text);
   display: block;
@@ -119,6 +124,43 @@ body {
   transition: all 0.3s;
 }
 .nav-drawer a:hover {
+  background: var(--primary-dark);
+  color: #000;
+}
+
+/* Dropdown Menu */
+.dropdown {
+  position: relative;
+}
+.dropbtn {
+  background: none;
+  border: none;
+  color: var(--text);
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+}
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background: #000;
+  min-width: 200px;
+  box-shadow: 0 8px 16px var(--shadow);
+  z-index: 1;
+  right: 0;
+  border-radius: 5px;
+}
+.dropdown-content a {
+  color: var(--text);
+  padding: 0.75rem 1rem;
+  background: #000;
+  display: block;
+  text-decoration: none;
+}
+.dropdown-content a:hover {
   background: var(--primary-dark);
   color: #000;
 }
@@ -169,25 +211,17 @@ body {
 @keyframes fadeInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: none; } }
 @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: none; } }
 
-/* Ticker */
-.ticker {
-  background: var(--glass-bg);
-  border: 1px solid var(--primary-dark);
+/* Crypto Ticker */
+.crypto-ticker {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 10px;
   padding: 0.75rem;
   max-width: 90%;
   overflow: hidden;
-  margin-top: 1.5rem;
+  margin: 1.5rem auto;
+  position: relative;
 }
-.ticker-content {
-  display: flex;
-  gap: 2rem;
-  animation: tickerScroll 15s linear infinite;
-}
-.ticker-item { display: flex; gap: 0.5rem; white-space: nowrap; }
-.ticker-item .crypto { color: var(--primary); font-weight: 600; }
-.ticker-item .price { color: #4ade80; }
-@keyframes tickerScroll { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
 
 /* Sections */
 .section {
@@ -195,7 +229,7 @@ body {
   max-width: 1200px;
   margin: 2rem auto;
   background: var(--glass-bg);
-  border: 1px solid rgba(255, 215, 0, 0.2);
+  border: 10px solid rgba(255, 215, 0, 0.2);
   border-radius: 10px;
   backdrop-filter: blur(10px);
 }
@@ -216,7 +250,7 @@ body {
   margin: 0 auto 1.5rem;
 }
 
-/* Features and Path Lists */
+/* Lists */
 .features-list, .path-list {
   max-width: 800px;
   margin: 0 auto;
@@ -445,6 +479,14 @@ body {
   text-align: center;
   max-width: 250px;
   margin: 1rem;
+  padding: 1.5rem;
+  background: var(--glass-bg);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 215, 0, 0.2);
+  transition: transform 0.3s;
+}
+.step:hover {
+  transform: translateY(-10px);
 }
 .step i {
   font-size: 2.5rem;
@@ -571,8 +613,8 @@ body {
   height: 50px;
   font-size: 1.5rem;
   cursor: pointer;
-  display: none;
   transition: all 0.3s;
+  z-index: 100;
 }
 #back-to-top:hover {
   transform: scale(1.1);
@@ -613,8 +655,20 @@ body {
 }
 .light-theme .nav-drawer a {
   color: #333;
+  background: #fff;
 }
 .light-theme .nav-drawer a:hover {
+  background: rgba(0, 0, 0, 0.1);
+  color: #000;
+}
+.light-theme .dropdown-content {
+  background: #fff;
+}
+.light-theme .dropdown-content a {
+  color: #333;
+  background: #fff;
+}
+.light-theme .dropdown-content a:hover {
   background: rgba(0, 0, 0, 0.1);
   color: #000;
 }
@@ -633,15 +687,9 @@ body {
   background: #000;
   color: #fff;
 }
-.light-theme .ticker {
+.light-theme .crypto-ticker {
   background: rgba(255, 255, 255, 0.9);
   border: 1px solid rgba(0, 0, 0, 0.1);
-}
-.light-theme .ticker-item .crypto {
-  color: #000;
-}
-.light-theme .ticker-item .price {
-  color: #008000;
 }
 .light-theme .section-dark {
   background: rgba(255, 255, 255, 0.9);
@@ -676,35 +724,17 @@ body {
   color: #555;
 }
 
-/* Responsive Adjustments */
-@media (max-width: 768px) {
-  .hero-title { font-size: 2.5rem; }
-  .hero-subtitle { font-size: 1.2rem; }
-  .section { padding: 3rem 1rem; }
-  .calculator-section, .testimonials-section, .faq-section { padding: 2rem 1rem; }
-  .calculator-container { flex-direction: column; gap: 2rem; }
-  .testimonials-container, .faq-container { max-width: 100%; }
-  .logo { height: 120px; }
+/* Company Card Styles */
+.company-card .section-text {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.2rem;
+  color: #FFD700;
+  text-align: center;
+  line-height: 1.8;
+  margin: 1.5rem 0;
 }
-
-@media (max-width: 480px) {
-  .hero-title { font-size: 2rem; }
-  .hero-subtitle { font-size: 1rem; }
-  .section { padding: 2rem 1rem; }
-  .section-title { font-size: 2rem; }
-  .calculator-section, .testimonials-section, .faq-section { padding: 2rem 1rem; }
-  .ticker { padding: 0.5rem; }
-  .ticker-content { gap: 1.5rem; }
-  .step { max-width: 100%; }
-}
-/* Company Card Image */
-.company-card-img {
-  display: block;
-  margin: 2rem auto;
-  max-width: 100%;
-  height: auto;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px var(--shadow);
+.light-theme .company-card-text {
+  color: #000;
 }
 
 /* PDF Navigation */
@@ -716,87 +746,13 @@ body {
 }
 .pdf-nav a {
   color: var(--primary);
+  font-family: 'Poppins', sans-serif;
   font-weight: 600;
   text-decoration: none;
-  transition: color 0.3s;
+  transition: color 0.3s ease;
 }
 .pdf-nav a:hover {
   color: #fff;
-}
-
-/* Dropdown Menu */
-.dropdown {
-  position: relative;
-}
-.dropbtn {
-  background: none;
-  border: none;
-  color: var(--text);
-  font-size: 1rem;
-  font-weight: 500;
-  padding: 0.75rem 1rem;
-  cursor: pointer;
-  width: 100%;
-  text-align: left;
-}
-.dropdown-content {
-  display: none;
-  position: absolute;
-  background: var(--glass-bg);
-  min-width: 200px;
-  box-shadow: 0 8px 16px var(--shadow);
-  z-index: 1;
-  right: 0;
-  border-radius: 5px;
-}
-.dropdown-content a {
-  color: var(--text);
-  padding: 0.75rem 1rem;
-  display: block;
-  text-decoration: none;
-}
-.dropdown-content a:hover {
-  background: var(--primary-dark);
-  color: #000;
-}
-
-/* Enhanced How It Works Steps */
-.quick-start {
-  display: flex;
-  justify-content: space-around;
-  flex-wrap: wrap;
-  margin: 4rem auto;
-  max-width: 1200px;
-}
-.step {
-  text-align: center;
-  max-width: 250px;
-  margin: 1rem;
-  padding: 1.5rem;
-  background: var(--glass-bg);
-  border-radius: 10px;
-  border: 1px solid rgba(255, 215, 0, 0.2);
-  transition: transform 0.3s;
-}
-.step:hover {
-  transform: translateY(-10px);
-}
-.step i {
-  font-size: 2.5rem;
-  color: var(--primary);
-  margin-bottom: 1rem;
-}
-.step h3 {
-  color: var(--primary);
-  margin-bottom: 0.5rem;
-}
-.step p {
-  color: #e0e0ff;
-}
-
-/* Light Theme Adjustments for New Elements */
-.light-theme .company-card-img {
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 .light-theme .pdf-nav {
   background: rgba(255, 255, 255, 0.9);
@@ -808,142 +764,69 @@ body {
 .light-theme .pdf-nav a:hover {
   color: #333;
 }
-.light-theme .dropdown-content {
-  background: rgba(255, 255, 255, 0.9);
-}
-.light-theme .dropdown-content a {
-  color: #333;
-}
-.light-theme .dropdown-content a:hover {
-  background: rgba(0, 0, 0, 0.1);
-  color: #000;
-}
-.light-theme .step {
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(0, 0, 0, 0.1);
-}
-.light-theme .step p {
-  color: #333;
-}
 
-/* Responsive Adjustments */
-@media (max-width: 768px) {
-  .company-card-img { max-width: 90%; }
-  .pdf-nav { padding: 0.5rem; }
-  .quick-start { flex-direction: column; align-items: center; }
-  .step { max-width: 80%; }
-}
-/* Navigation Text Color for Visibility */
+/* Navigation Text Colors */
 .nav-drawer a, .dropbtn, .dropdown-content a {
-  color: #e0e0ff; /* Light lavender for contrast */
+  color: #FFD700;
   text-decoration: none;
   font-weight: 500;
   transition: color 0.3s ease;
 }
 .nav-drawer a:hover, .dropdown-content a:hover {
-  color: #fff; /* White on hover for emphasis */
-}
-
-/* Company Card Section Text Styling */
-#company-card .section-text {
-  font-family: 'Poppins', sans-serif;
-  font-size: 1.2rem;
-  color: #FFD700; /* Gold to match theme */
-  text-align: center;
-  line-height: 1.8;
-  margin: 1.5rem 0;
-}
-
-/* PDF Navigation Styling */
-.pdf-nav {
-  text-align: center;
-  padding: 1rem;
-  background: var(--glass-bg);
-  border-top: 1px solid rgba(255, 215, 0, 0.2);
-}
-.pdf-nav a {
-  color: var(--primary);
-  font-family: 'Poppins', sans-serif;
-  font-weight: 600;
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-.pdf-nav a:hover {
   color: #fff;
 }
-/* Hero Video Background */
-.hero-video-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
-  z-index: -1;
+.light-theme .nav-drawer a, .light-theme .dropbtn, .light-theme .dropdown-content a {
+  color: #000;
 }
-.hero-video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  filter: brightness(0.9);
+.light-theme .nav-drawer a:hover, .light-theme .dropdown-content a:hover {
+  color: #333;
 }
 
-/* Crypto Ticker */
-.crypto-ticker {
-  background: rgba(255, 255, 255, 0.1); /* Glassmorphic effect */
-  border: 1px solid rgba(255, 255, 255, 0.2);
+/* Company Card Image */
+.company-card-img {
+  display: block;
+  margin: 2rem auto;
+  max-width: 100%;
+  height: auto;
   border-radius: 10px;
-  padding: 0.75rem;
-  max-width: 90%;
-  overflow: hidden;
-  margin: 1.5rem auto;
-  position: relative;
+  box-shadow: 0 4px 10px var(--shadow);
 }
-.ticker-content {
-  display: flex;
-  white-space: nowrap;
-  animation: tickerScroll 30s linear infinite;
-}
-.ticker-content span {
-  margin-right: 2rem;
-  font-size: 1.2rem;
-  color: #FFD700; /* Gold for visibility */
-  font-weight: 600;
-}
-@keyframes tickerScroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); } /* Seamless loop with duplicated content */
-}
-
-/* Navigation Text Color */
-.nav-drawer a, .dropbtn, .dropdown-content a {
-  color: #FFD700; /* Gold for visibility */
-  text-decoration: none;
-  font-weight: 500;
-  transition: color 0.3s ease;
-}
-.nav-drawer a:hover, .dropdown-content a:hover {
-  color: #fff; /* White on hover */
+.light-theme .company-card-img {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 /* Request Company Card Text Styling */
 .company-card-text {
-  font-family: 'Playfair Display', serif; /* Mature, elegant font */
+  font-family: 'Playfair Display', serif;
   font-size: 1.2rem;
-  color: #FFD700; /* Gold to match theme */
+  color: #FFD700;
   text-align: center;
   line-height: 1.8;
   margin: 1.5rem 0;
   padding: 0 1rem;
 }
 
-/* Light Theme Adjustments */
-.light-theme .nav-drawer a, .light-theme .dropbtn, .light-theme .dropdown-content a {
-  color: #000; /* Black for visibility in light theme */
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .hero-title { font-size: 2.5rem; }
+  .hero-subtitle { font-size: 1.2rem; }
+  .section { padding: 3rem 1rem; }
+  .calculator-section, .testimonials-section, .faq-section { padding: 2rem 1rem; }
+  .calculator-container { flex-direction: column; gap: 2rem; }
+  .testimonials-container, .faq-container { max-width: 100%; }
+  .logo { height: 60px; }
+  .company-card-img { max-width: 90%; }
+  .pdf-nav { padding: 0.5rem; }
+  .quick-start { flex-direction: column; align-items: center; }
+  .step { max-width: 80%; }
 }
-.light-theme .nav-drawer a:hover, .light-theme .dropdown-content a:hover {
-  color: #333;
-}
-.light-theme .company-card-text {
-  color: #000; /* Black for light theme */
+
+@media (max-width: 480px) {
+  .hero-title { font-size: 2rem; }
+  .hero-subtitle { font-size: 1rem; }
+  .section { padding: 2rem 1rem; }
+  .section-title { font-size: 2rem; }
+  .calculator-section, .testimonials-section, .faq-section { padding: 2rem 1rem; }
+  .crypto-ticker { padding: 0.5rem; }
+  .step { max-width: 100%; }
 }
