@@ -10,7 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
 </head>
 <body>
-  <!-- Hero Section with New Video Background -->
+  <!-- Hero Section with Video Background -->
   <div class="hero-video-container">
     <video class="hero-video" autoplay muted loop playsinline preload="auto">
       <source src="assets/videos/prudentproexchange.mp4" type="video/mp4">
@@ -63,7 +63,9 @@
 
     <!-- Rotating Live Crypto Prices Ticker -->
     <section id="crypto-ticker" class="crypto-ticker" data-aos="fade-up">
-      <div class="ticker-content" id="ticker-content"></div>
+      <div class="tradingview-widget-container">
+        <div class="tradingview-widget-container__widget"></div>
+      </div>
     </section>
 
     <!-- Why Us Section -->
@@ -306,7 +308,7 @@
     </footer>
 
     <!-- Back to Top Button -->
-    <button id="back-to-top" aria-label="Back to top"><i class="fas fa-arrow-up"></i></button>
+    <button id="back-to-top" aria-label="Back to top">🚀</button>
 
     <!-- Live Chat Button -->
     <div class="live-chat" onclick="alert('Live chat coming soon!')">Live Chat</div>
@@ -314,6 +316,25 @@
 
   <script src="js/main.js"></script>
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+  {
+    "symbols": [
+      {"proName": "BINANCE:BTCUSDT", "title": "BTC"},
+      {"proName": "BINANCE:ETHUSDT", "title": "ETH"},
+      {"proName": "BINANCE:BNBUSDT", "title": "BNB"},
+      {"proName": "BINANCE:LTCUSDT", "title": "LTC"},
+      {"proName": "BINANCE:XRPUSDT", "title": "XRP"},
+      {"proName": "BINANCE:ADAUSDT", "title": "ADA"},
+      {"proName": "BINANCE:DOTUSDT", "title": "DOT"},
+      {"proName": "BINANCE:LINKUSDT", "title": "LINK"},
+      {"proName": "BINANCE:XLMUSDT", "title": "XLM"}
+    ],
+    "colorTheme": "dark",
+    "isTransparent": true,
+    "displayMode": "adaptive",
+    "locale": "en"
+  }
+  </script>
   <script>
     // Local Time and Date
     function updateLocalTime() {
@@ -341,11 +362,7 @@
       icon.classList.toggle('fa-sun');
     });
 
-    // Back to Top (Appears immediately on scroll)
-    window.addEventListener('scroll', () => {
-      const backToTop = document.getElementById('back-to-top');
-      backToTop.style.display = window.scrollY > 0 ? 'block' : 'none';
-    });
+    // Back to Top
     document.getElementById('back-to-top').addEventListener('click', () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
@@ -398,7 +415,8 @@
     function calculateReturns() {
       const amount = parseFloat(amountInput.value);
       const planKey = planSelect.value;
-      const weeks = parseInt(periodInput.value) || 1;
+      const weeks = parseInt(periodInput.value);
+ || 1;
       const plan = plans[planKey];
 
       if (amount < plan.min) amountInput.value = plan.min;
@@ -450,32 +468,6 @@
       const dropdown = btn.nextElementSibling;
       dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
     }
-
-    // Live Crypto Prices Ticker
-    async function updateTicker() {
-      try {
-        const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,binancecoin,litecoin,ripple,cardano,polkadot,chainlink,stellar&vs_currencies=usd');
-        const data = await response.json();
-        const tickerContent = `
-          <span class="crypto">BTC: $${data.bitcoin.usd}</span>
-          <span class="crypto">ETH: $${data.ethereum.usd}</span>
-          <span class="crypto">BNB: $${data.binancecoin.usd}</span>
-          <span class="crypto">LTC: $${data.litecoin.usd}</span>
-          <span class="crypto">XRP: $${data.ripple.usd}</span>
-          <span class="crypto">ADA: $${data.cardano.usd}</span>
-          <span class="crypto">DOT: $${data.polkadot.usd}</span>
-          <span class="crypto">LINK: $${data.chainlink.usd}</span>
-          <span class="crypto">XLM: $${data.stellar.usd}</span>
-        `;
-        const ticker = document.getElementById('ticker-content');
-        ticker.innerHTML = tickerContent + tickerContent; // Duplicate for seamless loop
-      } catch (error) {
-        console.error('Error fetching ticker data:', error);
-        document.getElementById('ticker-content').innerHTML = 'Live rates unavailable';
-      }
-    }
-    setInterval(updateTicker, 60000); // Update every minute
-    updateTicker();
   </script>
 </body>
 </html>
