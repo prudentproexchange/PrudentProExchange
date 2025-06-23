@@ -18,7 +18,7 @@ body {
   height: 100vh;
   object-fit: cover;
   z-index: -1;
-  filter: brightness(0.6); /* Slightly brighter for better visibility */
+  filter: brightness(0.72); /* Increased from 0.6 (60%) to 0.72 (72%) for a 20% brightness boost */
 }
 
 /* Glass-morphic Overlay */
@@ -85,14 +85,19 @@ body {
 }
 .nav-drawer.open { right: 0; }
 .nav-drawer a {
-  margin: 0.75rem 0;
-  font-size: 1.1rem;
-  font-weight: 500;
-  padding: 0.5rem 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  transition: color 0.2s;
+  margin: 0.5rem 0;
+  font-size: 1rem; /* Slightly smaller for elegance */
+  font-weight: 600;
+  padding: 0.75rem 1rem; /* Added padding for better touch area */
+  transition: all 0.3s ease;
+  color: #fff;
+  display: block;
+  border-radius: 5px; /* Rounded edges for polish */
 }
-.nav-drawer a:hover { color: #FFD700; }
+.nav-drawer a:hover {
+  background: rgba(255, 215, 0, 0.2); /* Gold hover effect */
+  color: #FFD700;
+}
 
 /* CTA Buttons */
 .cta {
@@ -195,20 +200,20 @@ body {
 
 /* Investment Calculator */
 .calculator-section {
-  background: rgba(10, 25, 47, 0.7); /* Transparent glass effect */
-  border-radius: 20px;
-  padding: 4rem;
+  background: rgba(0, 0, 0, 0.5); /* More transparent black for glass effect */
+  border-radius: 15px; /* Slightly smaller radius for sleekness */
+  padding: 3rem 2rem; /* Reduced padding */
   margin: 3rem auto;
-  border: 1px solid rgba(255, 215, 0, 0.2);
-  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 215, 0, 0.3); /* Subtle gold border */
+  backdrop-filter: blur(10px); /* Enhanced blur for glass effect */
 }
 .calculator-container { display: flex; gap: 3rem; flex-wrap: wrap; }
 .calculator-inputs, .calculator-results { flex: 1; min-width: 300px; }
-.calculator-results { 
-  background: rgba(0, 0, 0, 0.3); 
-  border-radius: 15px; 
-  padding: 2rem; 
-  border: 1px solid rgba(255, 215, 0, 0.2); 
+.calculator-results {
+  background: rgba(0, 0, 0, 0.4); /* Slightly more transparent */
+  border-radius: 10px;
+  padding: 1.5rem; /* Reduced padding */
+  border: 1px solid rgba(255, 215, 0, 0.2);
   backdrop-filter: blur(5px);
 }
 .input-group { margin-bottom: 1.5rem; }
@@ -241,13 +246,13 @@ body {
 .result-item:last-child { border-bottom: none; }
 .result-label { color: #aaa; }
 .result-value { font-weight: 600; font-size: 1.2rem; color: #FFD700; }
-.highlight-result { 
-  background: rgba(255, 215, 0, 0.1); 
-  padding: 1.5rem; 
-  border-radius: 10px; 
-  margin-top: 1.5rem; 
-  text-align: center; 
-  border: 1px solid rgba(255, 215, 0, 0.3); 
+.highlight-result {
+  background: rgba(255, 215, 0, 0.1);
+  padding: 1.5rem;
+  border-radius: 10px;
+  margin-top: 1.5rem;
+  text-align: center;
+  border: 1px solid rgba(255, 215, 0, 0.3);
 }
 
 /* Video Section */
@@ -257,12 +262,12 @@ body {
 
 /* Testimonials Section */
 .testimonials-section {
-  background: rgba(10, 25, 47, 0.7); /* Transparent glass effect */
-  border-radius: 20px;
-  padding: 4rem;
+  background: rgba(0, 0, 0, 0.7); /* Darker transparent background */
+  border-radius: 15px; /* Smaller radius for polish */
+  padding: 3rem 2rem; /* Reduced padding */
   margin: 3rem auto;
-  border: 1px solid rgba(255, 215, 0, 0.2);
-  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 215, 0, 0.3); /* Gold border */
+  backdrop-filter: blur(10px); /* Enhanced glass effect */
 }
 .testimonials-container {
   position: relative;
@@ -273,76 +278,78 @@ body {
 .testimonial {
   display: none;
   text-align: center;
-  padding: 2rem;
-  background: rgba(0, 0, 0, 0.3);
-  border-radius: 15px;
-  border: 1px solid rgba(255, 215, 0, 0.2);
+  padding: 1.5rem; /* Reduced padding */
+  background: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+  border-radius: 10px;
+  border: 1px solid rgba(255, 215, 0, 0.2); /* Subtle gold border */
   backdrop-filter: blur(5px);
 }
 .testimonial.active { display: block; }
 .testimonial-img {
-  width: 60px;
-  height: 60px;
+  width: 50px; /* Smaller image size */
+  height: 50px;
   border-radius: 50%;
-  margin: 0 auto 1rem;
+  margin: 0 auto 0.75rem;
   object-fit: cover;
 }
-.testimonial p { 
-  font-size: 1.2rem; 
-  margin-bottom: 1rem; 
-  color: #e0e0ff; 
+.testimonial p {
+  font-size: 1.1rem; /* Slightly smaller font */
+  margin-bottom: 0.75rem;
+  color: #e0e0ff;
   font-style: italic;
 }
-.testimonial span { 
-  font-size: 1rem; 
-  color: #FFD700; 
+.testimonial span {
+  font-size: 0.9rem;
+  color: #FFD700;
   font-weight: 600;
 }
 
 /* FAQ Section */
 .faq-section {
-  background: rgba(10, 20, 40, 0.7); /* Transparent glass effect */
-  border-radius: 20px;
-  padding: 5rem 3rem;
-  margin: 4rem auto;
-  border: 1px solid rgba(255, 215, 0, 0.2);
-  backdrop-filter: blur(5px);
+  background: rgba(0, 0, 0, 0.7); /* Darker transparent background */
+  border-radius: 15px; /* Smaller radius for sleekness */
+  padding: 3rem 2rem; /* Reduced padding */
+  margin: 3rem auto;
+  border: 1px solid rgba(255, 215, 0, 0.3); /* Gold border */
+  backdrop-filter: blur(10px); /* Enhanced glass effect */
 }
 .faq-container { max-width: 900px; margin: 0 auto; }
-.faq-item { 
-  margin-bottom: 1.5rem; 
-  border-radius: 12px; 
-  background: rgba(0, 0, 0, 0.3); 
-  border: 1px solid rgba(255, 255, 255, 0.1); 
-  transition: all 0.3s ease; 
-  backdrop-filter: blur(5px);
+.faq-item {
+  margin-bottom: 1rem; /* Reduced margin */
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+  border: 1px solid rgba(255, 215, 0, 0.2); /* Subtle gold border */
+  transition: all 0.3s ease;
 }
-.faq-item.active { 
-  border-color: rgba(255, 215, 0, 0.4); 
-  background: rgba(255, 215, 0, 0.05); 
+.faq-item.active {
+  background: rgba(255, 215, 0, 0.1); /* Light gold when active */
+  border-color: rgba(255, 215, 0, 0.5);
 }
-.faq-question { 
-  padding: 1.5rem; 
-  font-size: 1.2rem; 
-  font-weight: 600; 
-  cursor: pointer; 
-  display: flex; 
-  justify-content: space-between; 
-  align-items: center; 
-  color: #fff;
+.faq-question {
+  padding: 1rem 1.5rem; /* Adjusted padding */
+  font-size: 1.1rem; /* Smaller font size */
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #FFD700; /* Gold text */
 }
-.faq-question:hover { color: #FFD700; }
+.faq-question:hover { color: #fff; /* White on hover */ }
 .faq-question i { transition: transform 0.3s; }
 .faq-item.active .faq-question i { transform: rotate(180deg); }
-.faq-answer { 
-  padding: 0 1.5rem; 
-  max-height: 0; 
-  overflow: hidden; 
-  transition: max-height 0.3s ease, padding 0.3s ease; 
-  color: #e0e0ff; 
-  line-height: 1.7; 
+.faq-answer {
+  padding: 0 1.5rem;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, padding 0.3s ease;
+  color: #e0e0ff;
+  line-height: 1.6;
 }
-.faq-item.active .faq-answer { max-height: 1000px; padding: 0 1.5rem 1.5rem; }
+.faq-item.active .faq-answer {
+  max-height: 500px; /* Reduced max-height for compactness */
+  padding: 1rem 1.5rem;
+}
 
 /* Quick Start Guide */
 .quick-start {
