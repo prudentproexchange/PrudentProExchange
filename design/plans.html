@@ -5,16 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Investment Plans • PrudentProExchange</title>
   <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
 </head>
 <body>
   <!-- Video Background -->
   <video class="bg-video" autoplay muted loop playsinline preload="auto">
     <source src="assets/videos/background.webm" type="video/webm">
     <source src="assets/videos/background.mp4" type="video/mp4">
+    Your browser does not support the video tag.
   </video>
 
   <div class="overlay">
     <header class="site-header">
+      <button id="theme-toggle" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
       <a href="/" class="logo-link">
         <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo"/>
       </a>
@@ -25,7 +30,7 @@
         <a href="#application">Apply</a>
         <a href="about.html">About</a>
         <a href="privacy.html">Privacy Policy</a>
-        <a href="terms.html">Terms &amp; Conditions</a>
+        <a href="terms.html">Terms & Conditions</a>
         <a href="login.html">Login</a>
         <a href="#plans" class="active">Investment Plans</a>
       </nav>
@@ -33,7 +38,7 @@
 
     <main class="plans-page">
       <!-- Hero -->
-      <section class="section section-light">
+      <section class="section section-light" data-aos="fade-up">
         <h1 class="section-title gold">Ascend to Your Financial Constellation</h1>
         <p class="section-text">
           Step into the celestial realm of PrudentProExchange, where your wealth takes flight among the stars. Our investment packages are constellations of opportunity, each a radiant beacon guiding you to prosperity. With fixed weekly returns and full liquidity after just 7 days, your journey blends predictability with divine flexibility.
@@ -41,9 +46,8 @@
       </section>
 
       <!-- Plans Grid -->
-      <section class="section section-dark">
+      <section class="section section-dark" data-aos="fade-up">
         <div class="plans-grid">
-          <!-- Dawn Star -->
           <div class="plan-card">
             <h2 class="plan-title">The Dawn Star<br><small>Basic Package</small></h2>
             <ul class="plan-details">
@@ -55,8 +59,6 @@
               A $200 investment yields $10 weekly, like the first star piercing the night sky. Withdraw profits and principal after one week.
             </p>
           </div>
-
-          <!-- Rising Comet -->
           <div class="plan-card">
             <h2 class="plan-title">The Rising Comet<br><small>Standard Package</small></h2>
             <ul class="plan-details">
@@ -68,8 +70,6 @@
               A $5,000 deposit generates $325 weekly, streaking toward brilliance. Full liquidity shines after seven days.
             </p>
           </div>
-
-          <!-- Lunar Glow -->
           <div class="plan-card">
             <h2 class="plan-title">The Lunar Glow<br><small>Silver Package</small></h2>
             <ul class="plan-details">
@@ -81,21 +81,17 @@
               A $15,000 investment yields $1,125 weekly, as steady as the moon’s embrace. Access your funds after one week.
             </p>
           </div>
-
-          <!-- Solar Flare -->
           <div class="plan-card">
             <h2 class="plan-title">The Solar Flare<br><small>Gold Package</small></h2>
             <ul class="plan-details">
               <li><strong>Weekly Return:</strong> 8.5%</li>
-              <li><strong>Range:</strong> $50,000 – $999,999</li>
+              <li><strong>Range:</strong> $50,000 – $99,999</li>
               <li><strong>Term:</strong> 7 days</li>
             </ul>
             <p class="plan-overview">
               A $50,000 deposit delivers $4,250 weekly, blazing like a solar flare. Withdraw anytime after seven days.
             </p>
           </div>
-
-          <!-- Galactic Crown -->
           <div class="plan-card">
             <h2 class="plan-title">The Galactic Crown<br><small>Diamond Package</small></h2>
             <ul class="plan-details">
@@ -110,8 +106,41 @@
         </div>
       </section>
 
+      <!-- Investment Calculator -->
+      <section class="section section-light" id="calculator" data-aos="fade-up">
+        <h2 class="section-title">Calculate Your Celestial Returns</h2>
+        <div class="calculator-container">
+          <!-- Orbiting Stars -->
+          <div class="orbiting-star" style="transform: translate(-50%, -50%) rotate(0deg) translateX(180px); animation-duration: 10s;"></div>
+          <div class="orbiting-star" style="transform: translate(-50%, -50%) rotate(72deg) translateX(180px); animation-duration: 15s;"></div>
+          <div class="orbiting-star" style="transform: translate(-50%, -50%) rotate(144deg) translateX(180px); animation-duration: 20s;"></div>
+          <div class="orbiting-star" style="transform: translate(-50%, -50%) rotate(216deg) translateX(180px); animation-duration: 25s;"></div>
+          <div class="orbiting-star" style="transform: translate(-50%, -50%) rotate(288deg) translateX(180px); animation-duration: 30s;"></div>
+          <div class="calculator-inner">
+            <label for="plan-select">Select Your Plan:</label>
+            <select id="plan-select">
+              <option value="">Select a Plan</option>
+              <option value="basic">The Dawn Star (Basic)</option>
+              <option value="standard">The Rising Comet (Standard)</option>
+              <option value="silver">The Lunar Glow (Silver)</option>
+              <option value="gold">The Solar Flare (Gold)</option>
+              <option value="diamond">The Galactic Crown (Diamond)</option>
+            </select>
+            <p id="amount-range" style="display:none;">Enter amount between <span id="min-amount"></span> and <span id="max-amount"></span></p>
+            <label for="amount-input">Investment Amount:</label>
+            <input type="number" id="amount-input" placeholder="Enter investment amount" step="100"/>
+            <button id="calculate-btn">Calculate</button>
+            <div id="results" style="display:none;">
+              <p>Weekly Return: <span id="weekly-return"></span></p>
+              <p>Total after 7 days: <span id="total-return"></span></p>
+            </div>
+            <div id="error-message" style="color:red; display:none; margin-top:10px;"></div>
+          </div>
+        </div>
+      </section>
+
       <!-- Path Steps -->
-      <section class="section section-light">
+      <section class="section section-light" data-aos="fade-up">
         <h2 class="section-title">Your Celestial Path to Wealth</h2>
         <ol class="path-list">
           <li><strong>Choose Your Constellation:</strong> Select the package that aligns with your divine aspirations.</li>
@@ -123,7 +152,7 @@
       </section>
 
       <!-- Why Illuminate -->
-      <section class="section section-dark">
+      <section class="section section-dark" data-aos="fade-up">
         <h2 class="section-title gold">Why Our Packages Illuminate the Night Sky</h2>
         <ul class="features-list">
           <li><strong>Stellar Certainty:</strong> Guaranteed weekly returns, as constant as the constellations.</li>
@@ -133,7 +162,7 @@
       </section>
 
       <!-- Tiers & CTA -->
-      <section class="section section-light cta-section">
+      <section class="section section-light cta-section" data-aos="fade-up">
         <h2 class="section-title">Ascend Through the Tiers</h2>
         <p class="section-text">
           Start with the Basic Package and, as your confidence soars, explore the higher realms of our investment universe. Each tier amplifies your rewards, drawing you closer to the financial firmament.
@@ -142,7 +171,7 @@
       </section>
 
       <!-- Final CTA -->
-      <section class="section section-dark cta-section">
+      <section class="section section-dark cta-section" data-aos="fade-up">
         <h2 class="section-title gold">Are You Ready to Chart Your Course?</h2>
         <p class="section-text">
           Select your constellation and embark on a journey to abundance. We craft not just investments, but a legacy written in the stars.
@@ -153,15 +182,144 @@
       <!-- Application Anchor -->
       <div id="application"></div>
     </main>
+
+    <!-- Footer -->
+    <footer class="section section-dark site-footer" data-aos="fade-up">
+      <div class="footer-content">
+        <p class="utc-time">UTC Time: <span id="utcTime"></span></p>
+        <p class="local-time">Local Time: <span id="localTime"></span></p>
+        <p class="local-date">Local Date: <span id="localDate"></span></p>
+        <nav class="footer-links">
+          <a href="about.html">About Us</a>
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="terms.html">Terms & Conditions</a>
+        </nav>
+        <p class="copyright">© 2025 PrudentProExchange. All Rights Reserved. SEC Registration #0001230714</p>
+      </div>
+    </footer>
   </div>
 
+  <button id="back-to-top" aria-label="Back to top">🚀</button>
+
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
-    // Hamburger toggle for Plans page
+    // Hamburger toggle
     const btn3 = document.getElementById('hamburgerBtn3');
     const drawer3 = document.getElementById('navDrawer3');
     btn3.addEventListener('click', () => {
       drawer3.classList.toggle('open');
       btn3.classList.toggle('active');
+    });
+
+    // Local Time and Date
+    function updateLocalTime() {
+      const now = new Date();
+      document.getElementById('localTime').textContent = now.toLocaleTimeString();
+      document.getElementById('localDate').textContent = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    }
+    setInterval(updateLocalTime, 1000);
+    updateLocalTime();
+
+    // UTC Time
+    function updateUTCTime() {
+      document.getElementById('utcTime').textContent = new Date().toUTCString();
+    }
+    setInterval(updateUTCTime, 1000);
+    updateUTCTime();
+
+    // Theme Toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('light-theme');
+      const icon = themeToggle.querySelector('i');
+      icon.classList.toggle('fa-moon');
+      icon.classList.toggle('fa-sun');
+    });
+
+    // Back to Top
+    document.getElementById('back-to-top').addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // Initialize AOS
+    AOS.init({ duration: 800, once: true });
+
+    // Investment Calculator Logic
+    const plans = [
+      { id: 'basic', name: 'The Dawn Star (Basic)', min: 200, max: 4999, percentage: 5 },
+      { id: 'standard', name: 'The Rising Comet (Standard)', min: 5000, max: 14999, percentage: 6.5 },
+      { id: 'silver', name: 'The Lunar Glow (Silver)', min: 15000, max: 49999, percentage: 7.5 },
+      { id: 'gold', name: 'The Solar Flare (Gold)', min: 50000, max: 99999, percentage: 8.5 },
+      { id: 'diamond', name: 'The Galactic Crown (Diamond)', min: 100000, max: Infinity, percentage: 10 }
+    ];
+
+    const planSelect = document.getElementById('plan-select');
+    const amountInput = document.getElementById('amount-input');
+    const amountRange = document.getElementById('amount-range');
+    const minAmount = document.getElementById('min-amount');
+    const maxAmount = document.getElementById('max-amount');
+    const calculateBtn = document.getElementById('calculate-btn');
+    const results = document.getElementById('results');
+    const weeklyReturn = document.getElementById('weekly-return');
+    const totalReturn = document.getElementById('total-return');
+    const errorMessage = document.getElementById('error-message');
+
+    planSelect.addEventListener('change', () => {
+      const selectedPlanId = planSelect.value;
+      if (selectedPlanId) {
+        const selectedPlan = plans.find(plan => plan.id === selectedPlanId);
+        if (selectedPlan) {
+          amountInput.min = selectedPlan.min;
+          amountInput.max = selectedPlan.max === Infinity ? '' : selectedPlan.max;
+          minAmount.textContent = `$${selectedPlan.min.toLocaleString()}`;
+          maxAmount.textContent = selectedPlan.max === Infinity ? 'or more' : `$${selectedPlan.max.toLocaleString()}`;
+          amountRange.style.display = 'block';
+        } else {
+          amountRange.style.display = 'none';
+        }
+      } else {
+        amountRange.style.display = 'none';
+      }
+    });
+
+    calculateBtn.addEventListener('click', () => {
+      const selectedPlanId = planSelect.value;
+      const amount = parseFloat(amountInput.value);
+
+      if (!selectedPlanId) {
+        errorMessage.textContent = 'Please select a plan.';
+        errorMessage.style.display = 'block';
+        results.style.display = 'none';
+        return;
+      }
+
+      const selectedPlan = plans.find(plan => plan.id === selectedPlanId);
+      if (!selectedPlan) {
+        errorMessage.textContent = 'Invalid plan selected.';
+        errorMessage.style.display = 'block';
+        results.style.display = 'none';
+        return;
+      }
+
+      if (isNaN(amount) || amount < selectedPlan.min || (selectedPlan.max !== Infinity && amount > selectedPlan.max)) {
+        errorMessage.textContent = `Amount must be between $${selectedPlan.min.toLocaleString()} and ${selectedPlan.max === Infinity ? 'or more' : `$${selectedPlan.max.toLocaleString()}`}.`;
+        errorMessage.style.display = 'block';
+        results.style.display = 'none';
+        return;
+      }
+
+      // Calculate returns
+      const weeklyProfit = (amount * selectedPlan.percentage) / 100;
+      const totalAfterWeek = amount + weeklyProfit;
+
+      // Format numbers
+      const formattedWeekly = weeklyProfit.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+      const formattedTotal = totalAfterWeek.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+
+      weeklyReturn.textContent = formattedWeekly;
+      totalReturn.textContent = formattedTotal;
+      results.style.display = 'block';
+      errorMessage.style.display = 'none';
     });
   </script>
 </body>
