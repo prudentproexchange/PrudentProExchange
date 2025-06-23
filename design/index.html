@@ -16,7 +16,7 @@
   </video>
 
   <div class="overlay">
-    <!-- Header with Hamburger Menu -->
+    <!-- Header with Hamburger Menu and Theme Toggle -->
     <header class="site-header">
       <a href="/" class="logo-link">
         <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo"/>
@@ -24,6 +24,7 @@
       <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
         <span></span><span></span><span></span>
       </button>
+      <button id="theme-toggle" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
       <nav class="nav-drawer" id="navDrawer">
         <a href="application.html">Apply</a>
         <a href="about.html">About</a>
@@ -271,16 +272,17 @@
 
     <!-- Footer -->
     <footer class="section section-dark site-footer" data-aos="fade-up">
-      <p>Current UTC Time: <span id="utcTime"></span></p>
+      <p class="utc-time">Current UTC Time: <span id="utcTime"></span></p>
       <div class="footer-links">
         <a href="about.html">About Us</a>
         <a href="privacy.html">Privacy Policy</a>
         <a href="terms.html">Terms & Conditions</a>
-        <a href="contact.html">Contact</a>
-        <a href="support.html">Support</a>
       </div>
       <p class="copyright">© 2025 PrudentProExchange. All rights reserved. SEC Registered #0001230714</p>
     </footer>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" aria-label="Back to top"><i class="fas fa-arrow-up"></i></button>
 
     <!-- Live Chat Button -->
     <div class="live-chat" onclick="alert('Live chat coming soon!')">Live Chat</div>
@@ -304,6 +306,34 @@
     btn.addEventListener('click', () => {
       drawer.classList.toggle('open');
       btn.classList.toggle('active');
+    });
+
+    // Theme toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('light-theme');
+      const icon = themeToggle.querySelector('i');
+      if (document.body.classList.contains('light-theme')) {
+        icon.classList.remove('fa-moon');
+        icon.classList.add('fa-sun');
+      } else {
+        icon.classList.toggle('fa-sun');
+        icon.classList.add('fa-moon');
+      }
+    });
+
+    // Back to top
+    window.addEventListener('scroll', () => {
+      const backToTop = document.getElementById('back-to-top');
+      if (window.scrollY > 300) {
+        backToTop.style.display = 'block';
+      } else {
+        backToTop.style.display = 'none';
+      }
+    });
+
+    document.getElementById('back-to-top').addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
     // Testimonials slider
