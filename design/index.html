@@ -478,17 +478,34 @@
     // Force Background Videos to Play
     document.addEventListener('DOMContentLoaded', function() {
       const heroVideo = document.querySelector('.hero-video');
-      if (heroVideo) {
-        heroVideo.play().catch(error => {
-          console.log('Hero video play failed:', error);
-        });
-      }
       const mainVideo = document.querySelector('.main-content-video');
-      if (mainVideo) {
-        mainVideo.play().catch(error => {
-          console.log('Main video play failed:', error);
-        });
+
+      function playVideo(video, name) {
+        if (video) {
+          const playPromise = video.play();
+          if (playPromise !== undefined) {
+            playPromise.then(() => {
+              console.log(`${name} video is playing successfully.`);
+            }).catch(error => {
+              console.error(`${name} video play failed:`, error.message);
+              // Fallback: Attempt to play on user interaction
+              document.addEventListener('click', function playOnClick() {
+                video.play().then(() => {
+                  console.log(`${name} video played after user interaction.`);
+                }).catch(err => {
+                  console.error(`${name} video failed after click:`, err.message);
+                });
+                document.removeEventListener('click', playOnClick);
+              }, { once: true });
+            });
+          }
+        } else {
+          console.error(`${name} video element not found.`);
+        }
       }
+
+      playVideo(heroVideo, 'Hero');
+      playVideo(mainVideo, 'Main Content');
     });
   </script>
 </body>
