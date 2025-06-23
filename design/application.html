@@ -41,58 +41,60 @@
         <p class="section-text">
           Register to continue with PrudentProExchange and unlock personalized investment opportunities.
         </p>
-        <form id="applicationForm" class="form-container">
-          <div class="form-grid">
-            <label>
-              First Name*
-              <input type="text" name="first_name" required aria-label="First Name"/>
+        <div class="form-wrapper">
+          <form id="applicationForm" class="form-container">
+            <div class="form-grid">
+              <label>
+                First Name*
+                <input type="text" name="first_name" required aria-label="First Name"/>
+              </label>
+              <label>
+                Last Name*
+                <input type="text" name="last_name" required aria-label="Last Name"/>
+              </label>
+              <label>
+                Email Address*
+                <input type="email" name="email" required aria-label="Email Address"/>
+              </label>
+              <label>
+                Username*
+                <input type="text" name="username" required aria-label="Username"/>
+              </label>
+              <label>
+                Select Country*
+                <select name="country" required aria-label="Select Country">
+                  <option value="" disabled selected>Select your country</option>
+                  <option value="US">United States</option>
+                  <option value="UK">United Kingdom</option>
+                  <option value="CA">Canada</option>
+                  <!-- Add more countries as needed -->
+                </select>
+              </label>
+              <label>
+                Referral Code (optional)
+                <input type="text" name="referral_code" aria-label="Referral Code"/>
+              </label>
+              <label>
+                Password*
+                <input type="password" name="password" required aria-label="Password"/>
+              </label>
+              <label>
+                Confirm Password*
+                <input type="password" name="confirm_password" required aria-label="Confirm Password"/>
+              </label>
+              <label class="photo-upload">
+                Profile Photo (optional)
+                <input type="file" name="photo" accept="image/*" aria-label="Profile Photo"/>
+              </label>
+            </div>
+            <label class="terms-agreement">
+              <input type="checkbox" name="terms" required aria-label="Terms Agreement"/>
+              I agree with the <a href="privacy.html">Privacy Policy</a> and <a href="terms.html">Terms & Conditions</a>
             </label>
-            <label>
-              Last Name*
-              <input type="text" name="last_name" required aria-label="Last Name"/>
-            </label>
-            <label>
-              Email Address*
-              <input type="email" name="email" required aria-label="Email Address"/>
-            </label>
-            <label>
-              Username*
-              <input type="text" name="username" required aria-label="Username"/>
-            </label>
-            <label>
-              Select Country*
-              <select name="country" required aria-label="Select Country">
-                <option value="" disabled selected>Select your country</option>
-                <option value="US">United States</option>
-                <option value="UK">United Kingdom</option>
-                <option value="CA">Canada</option>
-                <!-- Add more countries as needed -->
-              </select>
-            </label>
-            <label>
-              Referral Code (optional)
-              <input type="text" name="referral_code" aria-label="Referral Code"/>
-            </label>
-            <label>
-              Password*
-              <input type="password" name="password" required aria-label="Password"/>
-            </label>
-            <label>
-              Confirm Password*
-              <input type="password" name="confirm_password" required aria-label="Confirm Password"/>
-            </label>
-            <label class="photo-upload">
-              Profile Photo (optional)
-              <input type="file" name="photo" accept="image/*" aria-label="Profile Photo"/>
-            </label>
-          </div>
-          <label class="terms-agreement">
-            <input type="checkbox" name="terms" required aria-label="Terms Agreement"/>
-            I agree with the <a href="privacy.html">Privacy Policy</a> and <a href="terms.html">Terms & Conditions</a>
-          </label>
-          <button type="submit" class="cta primary">Create Account</button>
-          <p class="login-link">Already have an account? <a href="login.html">Login</a></p>
-        </form>
+            <button type="submit" class="cta primary">Create Account</button>
+            <p class="login-link">Already have an account? <a href="login.html">Login</a></p>
+          </form>
+        </div>
       </section>
     </main>
   </div>
