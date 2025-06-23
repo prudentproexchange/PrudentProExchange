@@ -1,0 +1,38 @@
+/* About Page Specific Styles */
+
+/* Center section content vertically and horizontally */
+.about-page .section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Improve readability of section text */
+.about-page .section-text {
+  font-size: 1.2rem;
+  line-height: 1.8;
+}
+
+/* Add depth to section titles */
+.about-page .section-title {
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Highlight the active navigation link */
+.nav-drawer a.active {
+  color: var(--primary);
+  font-weight: bold;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+  .about-page .section-text {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .about-page .section-text {
+    font-size: 1rem;
+  }
+}
