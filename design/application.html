@@ -118,6 +118,16 @@
       icon.classList.toggle('fa-sun');
     });
 
+    // Generate a random referral code
+    function generateReferralCode(length = 8) {
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      let code = '';
+      for (let i = 0; i < length; i++) {
+        code += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      return code;
+    }
+
     // Supabase client
     const supabase = Supabase.createClient(
       'https://iwkdznjqfbsfkscnbrkc.supabase.co',
@@ -140,6 +150,10 @@
         alert('You must agree to the Privacy Policy and Terms & Conditions.');
         return;
       }
+
+      // Generate unique referral link
+      const referralCode = generateReferralCode();
+      const referralLink = `https://prudentproexchange.com/referral/${referralCode}`;
 
       // 1. Sign up with Supabase Auth
       const { user, error: signUpError } = await supabase.auth.signUp({
@@ -172,6 +186,7 @@
         username: f.username.value,
         country: f.country.value,
         referral_code: f.referral_code.value || null,
+        referral_link: referralLink,
         photo_url: photoUrl,
       });
       if (profileError) {
