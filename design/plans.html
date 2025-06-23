@@ -8,29 +8,37 @@
   <link rel="stylesheet" href="css/plans.css"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
 </head>
-<body>
-  <video autoplay muted loop id="bg-video">
-    <source src="assets/stars.mp4" type="video/mp4">
+<body class="plans-page">
+  <!-- Video Background -->
+  <video class="bg-video" autoplay muted loop playsinline preload="auto">
+    <source src="assets/videos/background.webm" type="video/webm">
+    <source src="assets/videos/background.mp4" type="video/mp4">
+    Your browser does not support the video tag.
   </video>
+
   <div class="overlay">
-    <header>
-      <input type="checkbox" id="theme-toggle" hidden>
-      <label for="theme-toggle" class="theme-toggle-btn"><i class="fas fa-adjust"></i></label>
-      <a href="/" class="logo"><img src="assets/logo.png" alt="PrudentProExchange Logo"></a>
-      <input type="checkbox" id="nav-toggle" hidden>
-      <label for="nav-toggle" class="hamburger"><span></span><span></span><span></span></label>
-      <nav class="nav-drawer">
-        <a href="/">Home</a>
-        <a href="/plans" class="active">Investment Plans</a>
+    <header class="site-header">
+      <button id="theme-toggle" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
+      <a href="/" class="logo-link">
+        <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo"/>
+      </a>
+      <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="nav-drawer" id="planNav">
         <a href="#application">Apply</a>
-        <a href="/about">About Us</a>
-        <a href="/contact">Contact</a>
+        <a href="about.html">About</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms & Conditions</a>
+        <a href="login.html">Login</a>
+        <a href="#plans" class="active">Investment Plans</a>
       </nav>
     </header>
-    <main class="plans-page">
-      <!-- Hero Section -->
+
+    <main class="plans-page container">
+      <!-- Hero -->
       <section class="section section-light" data-aos="fade-up">
         <h1 class="section-title gold">Discover Your Path to Celestial Wealth</h1>
         <p class="section-text">
@@ -39,7 +47,7 @@
       </section>
 
       <!-- Plans Grid -->
-      <section class="section section-dark plans-grid" data-aos="fade-up">
+      <section class="section section-dark plans-grid" id="plans" data-aos="fade-up">
         <h2 class="section-title">Our Investment Constellations</h2>
         <div class="grid">
           <div class="plan-card" data-aos="zoom-in">
@@ -52,7 +60,7 @@
             <p class="plan-overview">
               Begin your celestial journey with a modest investment, earning steady returns as the first star lights up your financial sky.
             </p>
-            <button class="cta primary" onclick="location.href='#application'">Apply Now</button>
+            <button class="cta primary-button" onclick="location.href='#application'">Apply Now</button>
           </div>
           <div class="plan-card" data-aos="zoom-in" data-aos-delay="100">
             <h2 class="plan-title">The Nebula Glow<br><small>Standard Package</small></h2>
@@ -64,7 +72,7 @@
             <p class="plan-overview">
               Illuminate your portfolio with enhanced returns, like a nebula shining brightly in the cosmic expanse.
             </p>
-            <button class="cta primary" onclick="location.href='#application'">Apply Now</button>
+            <button class="location.href='#cta-button" onclick="viewPlan('standard')">Apply Now</button>
           </div>
           <div class="plan-card" data-aos="zoom-in" data-aos-delay="200">
             <h2 class="plan-title">The Lunar Crest<br><small>Silver Package</small></h2>
@@ -106,27 +114,29 @@
       </section>
 
       <!-- Spherical Investment Calculator -->
-      <section class="section section-light" data-aos="fade-up">
-        <h2 class="section-title gold">Calculate Your Celestial Returns</h2>
+      <section class="section section-light calculator" id="calculator" data-aos="fade-up">
+        <h2 class="section-title gold">Calculate Your Investment Returns</h2>
         <div class="calculator-container">
-          <div class="orbiting-star" style="--i: 1;"></div>
-          <div class="orbiting-star" style="--i: 2;"></div>
-          <div class="orbiting-star" style="--i: 3;"></div>
-          <div class="orbiting-star" style="--i: 4;"></div>
-          <div class="orbiting-star" style="--i: 5;"></div>
+          <div class="orbiting-star" style="--orbit-delay: 1s;"></div>
+          <div class="orbiting-star" style="--orbit-delay: 1.5s;"></div>
+          <div class="orbiting-star" style="--orbit-delay: 2s;"></div>
+          <div class="orbiting-star" style="--orbit-delay: 2.5s;"></div>
+          <div class="orbiting-star" style="--orbit-delay: 3s;"></div>
           <div class="calculator-inner">
+            <label for="plan-select">Investment Plan</label>
             <select id="plan-select">
               <option value="" disabled selected>Select a Plan</option>
-              <option value="basic">The Dawn Star (5%)</option>
-              <option value="standard">The Nebula Glow (6.5%)</option>
-              <option value="silver">The Lunar Crest (7.5%)</option>
-              <option value="gold">The Solar Flare (8.5%)</option>
-              <option value="diamond">The Galactic Crown (10%)</option>
+              <option value="basic">The Dawn Star (Basic - 5%)</option>
+              <option value="standard">The Nebula Glow (Standard - 6.5%)</option>
+              <option value="silver">The Lunar Crest (Silver - 7.5%)</option>
+              <option value="gold">The Solar Flare (Gold - 8.5%)</option>
+              <option value="diamond">The Galactic Crown (Diamond - 10%)</option>
             </select>
+            <label for="investment-amount">Investment Amount ($)</label>
+            <input type="number" id="investment-amount" placeholder="Enter amount" step="100" min="200"/>
             <p id="amount-range" class="range-text"></p>
-            <input type="number" id="investment-amount" placeholder="Enter amount ($)">
-            <button class="cta primary" onclick="calculateReturns()">Calculate</button>
-            <p id="result" class="result-text"></p>
+            <button class="cta primary" id="calculate-btn">Calculate Returns</button>
+            <div id="result" class="result-text"></div>
           </div>
         </div>
       </section>
@@ -154,14 +164,14 @@
       </section>
 
       <!-- Tiers & CTA -->
-      <section class="section section-dark" data-aos="fade-up">
+      <section class="section section-dark cta-section" data-aos="fade-up">
         <h2 class="section-title">Choose Your Celestial Tier</h2>
         <p class="section-text">Select a plan and start your ascent to financial stardom today.</p>
         <button class="cta primary" onclick="location.href='#application'">Get Started</button>
       </section>
 
       <!-- Final CTA -->
-      <section class="section section-light final-cta" data-aos="fade-up">
+      <section class="section section-light cta-section final-cta" data-aos="fade-up">
         <h2 class="section-title gold">Ready to Illuminate Your Future?</h2>
         <p class="section-text">Join PrudentProExchange now and let your wealth soar among the stars.</p>
         <button class="cta primary" onclick="location.href='#application'">Apply Now</button>
@@ -169,19 +179,68 @@
 
       <div id="application"></div>
     </main>
-    <footer>
-      <p>&copy; 2023 PrudentProExchange. All rights reserved.</p>
+
+    <!-- Footer -->
+    <footer class="section section-dark site-footer" data-aos="fade-up">
+      <div class="footer-content">
+        <p class="utc-time">UTC Time: <span id="utcTime"></span></p>
+        <p class="local-time">Local Time: <span id="localTime"></span></p>
+        <p class="local-date">Local Date: <span id="localDate"></span></p>
+        <nav class="footer-links">
+          <a href="about.html">About Us</a>
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="terms.html">Terms & Conditions</a>
+        </nav>
+        <p class="copyright">© 2025 PrudentProExchange. All Rights Reserved. SEC Registration #0001230714</p>
+      </div>
     </footer>
-    <button class="back-to-top" onclick="scrollToTop()"><i class="fas fa-arrow-up"></i></button>
   </div>
+
+  <button id="back-to-top" aria-label="Back to top">🚀</button>
 
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
-    AOS.init({ duration: 1000 });
-    function scrollToTop() {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+    // Initialize AOS
+    AOS.init({ duration: 800, once: true });
 
+    // Hamburger toggle
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const planNav = document.getElementById('planNav');
+    hamburgerBtn.addEventListener('click', () => {
+      planNav.classList.toggle('open');
+      hamburgerBtn.classList.toggle('active');
+    });
+
+    // Theme toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('light-theme');
+      const icon = themeToggle.querySelector('i');
+      icon.classList.toggle('fa-moon');
+      icon.classList.toggle('fa-sun');
+    });
+
+    // Back to top
+    document.getElementById('back-to-top').addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // Time displays
+    function updateLocalTime() {
+      const now = new Date();
+      document.getElementById('localTime').textContent = now.toLocaleTimeString();
+      document.getElementById('localDate').textContent = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    }
+    setInterval(updateLocalTime, 1000);
+    updateLocalTime();
+
+    function updateUTCTime() {
+      document.getElementById('utcTime').textContent = new Date().toUTCString();
+    }
+    setInterval(updateUTCTime, 1000);
+    updateUTCTime();
+
+    // Investment Calculator Logic
     const plans = {
       basic: { name: "The Dawn Star", percentage: 5, min: 200, max: 4999 },
       standard: { name: "The Nebula Glow", percentage: 6.5, min: 5000, max: 14999 },
@@ -190,37 +249,49 @@
       diamond: { name: "The Galactic Crown", percentage: 10, min: 100000, max: Infinity }
     };
 
-    document.getElementById('plan-select').addEventListener('change', function() {
-      const plan = plans[this.value];
-      document.getElementById('amount-range').textContent = plan 
-        ? `Allowed range: $${plan.min.toLocaleString()} - $${plan.max === Infinity ? 'Unlimited' : plan.max.toLocaleString()}` 
-        : '';
+    const planSelect = document.getElementById('plan-select');
+    const investmentAmount = document.getElementById('investment-amount');
+    const amountRange = document.getElementById('amount-range');
+    const calculateBtn = document.getElementById('calculate-btn');
+    const result = document.getElementById('result');
+
+    planSelect.addEventListener('change', () => {
+      const planKey = planSelect.value;
+      if (planKey) {
+        const plan = plans[planKey];
+        amountRange.textContent = `Enter amount between $${plan.min.toLocaleString()} and $${plan.max === Infinity ? 'Unlimited' : plan.max.toLocaleString()}`;
+        investmentAmount.min = plan.min;
+        investmentAmount.max = plan.max === Infinity ? '' : plan.max;
+      } else {
+        amountRange.textContent = '';
+        investmentAmount.min = 200;
+        investmentAmount.max = '';
+      }
     });
 
-    function calculateReturns() {
-      const planKey = document.getElementById('plan-select').value;
-      const amount = parseFloat(document.getElementById('investment-amount').value);
-      const resultElement = document.getElementById('result');
+    calculateBtn.addEventListener('click', () => {
+      const planKey = planSelect.value;
+      const amount = parseFloat(investmentAmount.value);
 
       if (!planKey) {
-        resultElement.textContent = 'Please select a plan.';
+        result.innerHTML = '<span style="color: #ff4d4d;">Please select a plan.</span>';
         return;
       }
 
       const plan = plans[planKey];
-      if (isNaN(amount) || amount < plan.min || amount > plan.max) {
-        resultElement.textContent = `Please enter an amount between $${plan.min.toLocaleString()} and $${plan.max === Infinity ? 'Unlimited' : plan.max.toLocaleString()}.`;
+      if (isNaN(amount) || amount < plan.min || (plan.max !== Infinity && amount > plan.max)) {
+        result.innerHTML = `<span style="color: #ff4d4d;">Please enter an amount between $${plan.min.toLocaleString()} and $${plan.max === Infinity ? 'Unlimited' : plan.max.toLocaleString()}.</span>`;
         return;
       }
 
       const weeklyReturn = (amount * plan.percentage) / 100;
       const total = amount + weeklyReturn;
 
-      resultElement.innerHTML = `
-        <span class="gold">Weekly Return:</span> $${weeklyReturn.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}<br>
-        <span class="gold">Total after 7 Days:</span> $${total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+      result.innerHTML = `
+        <p><span class="gold">Weekly Return:</span> $${weeklyReturn.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+        <p><span class="gold">Total after 7 Days:</span> $${total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
       `;
-    }
+    });
   </script>
 </body>
 </html>
