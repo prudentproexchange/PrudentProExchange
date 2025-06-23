@@ -3,23 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>PrudentProExchange</title>
-  <link rel="stylesheet" href="css/style.css"/>
-  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <title>PrudentProExchange - Next-Gen Investment Platform</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="styles.css"> <!-- Replace with your CSS file path -->
 </head>
 <body>
   <!-- Video Background -->
   <video class="bg-video" autoplay muted loop playsinline preload="auto">
-    <source src="assets/videos/background.webm" type="video/webm">
-    <source src="assets/videos/background.mp4" type="video/mp4">
+    <source src="https://your-supabase-url.com/your-background-video.mp4" type="video/mp4">
+    Your browser does not support the video tag.
   </video>
 
   <div class="overlay">
-    <!-- Header with Hamburger Menu -->
+    <!-- Header -->
     <header class="site-header">
       <a href="/" class="logo-link">
-        <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo"/>
+        <img src="https://your-supabase-url.com/your-logo.png" alt="PrudentProExchange Logo" class="logo"/>
       </a>
       <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
         <span></span><span></span><span></span>
@@ -35,7 +34,7 @@
     </header>
 
     <!-- Hero Section -->
-    <main id="hero" class="hero" data-aos="fade-up">
+    <main id="hero" class="hero">
       <h1 class="hero-title">Ascend to Wealth. Elevate the World.</h1>
       <p class="hero-subtitle">
         Step into a realm where your investments soar up to <strong>10% weekly</strong>, weaving prosperity for you and communities worldwide. Secure. Visionary. Divine.
@@ -43,218 +42,100 @@
       <div class="realtime-info">
         <div class="info-card">
           <div class="label">CURRENT TIME</div>
-          <div class="value" id="current-time">00:00:00</div>
+          <div class="value" id="current-time">01:13:00</div>
         </div>
         <div class="info-card">
           <div class="label">TODAY'S DATE</div>
-          <div class="value" id="current-date">June 23, 2025</div>
+          <div class="value" id="current-date">Monday, June 23, 2025</div>
         </div>
       </div>
-      <button class="cta primary" onclick="location.href='application.html'">
-        Begin Your Journey
-      </button>
+      <button class="cta primary" onclick="location.href='application.html'">Begin Your Journey</button>
       <div id="ticker" class="ticker">
-        <div class="ticker-content" id="ticker-content"></div>
-      </div>
-      <div class="scroll-indicator">
-        <span>Scroll</span>
-        <div class="chevrons">
-          <div class="chevron"></div>
-          <div class="chevron"></div>
+        <div class="ticker-content">
+          <div class="ticker-item"><span class="crypto">BTC:</span> <span class="price">$64,382.10</span> <span class="change">+1.2%</span></div>
+          <div class="ticker-item"><span class="crypto">ETH:</span> <span class="price">$3,512.75</span> <span class="change">+0.8%</span></div>
+          <div class="ticker-item"><span class="crypto">GOLD:</span> <span class="price">$2,350.40</span> <span class="change">+0.4%</span></div>
+          <div class="ticker-item"><span class="crypto">OIL:</span> <span class="price">$78.92</span> <span class="change">-0.3%</span></div>
+          <div class="ticker-item"><span class="crypto">NASDAQ:</span> <span class="price">16,842.30</span> <span class="change">+0.7%</span></div>
         </div>
       </div>
     </main>
 
-    <!-- Why Us Section -->
-    <section id="why" class="section section-dark" data-aos="fade-up">
-      <h2 class="section-title gold">Why PrudentProExchange Stands Above?</h2>
-      <ul class="features-list">
-        <li><strong>Sanctuary of Trust:</strong> U.S.-registered and SEC-compliant, a fortress of reliability.</li>
-        <li><strong>Masters of Markets:</strong> A decade-plus of crypto and forex brilliance since 2009.</li>
-        <li><strong>Wings of Impact:</strong> Every gain empowers underserved voices globally.</li>
-        <li><strong>Golden Harvest:</strong> Reap up to 10% weekly, delivered with celestial precision.</li>
-      </ul>
-    </section>
-
-    <!-- Investment Calculator Section -->
-    <section id="calculator" class="section section-light calculator-section" data-aos="fade-up">
+    <!-- Investment Calculator -->
+    <section class="calculator-section">
       <h2 class="section-title gold">Investment Calculator</h2>
       <div class="calculator-container">
         <div class="calculator-inputs">
           <div class="input-group">
             <label for="investment-amount">Investment Amount ($)</label>
-            <input type="range" id="amount-slider" min="200" max="1000000" value="5000" step="100">
-            <input type="number" id="investment-amount" min="200" max="1000000" value="5000">
+            <input type="range" id="amount-slider" min="200" max="500000" value="5000" step="100">
+            <input type="number" id="investment-amount" min="200" max="500000" value="5000">
             <div class="plan-indicator">
               <span id="min-amount">$200</span>
-              <span id="max-amount">$1,000,000</span>
+              <span id="max-amount">$500,000</span>
             </div>
           </div>
           <div class="input-group">
             <label for="investment-plan">Investment Plan</label>
             <select id="investment-plan">
-              <option value="basic">Basic (5% weekly, $200 - $4,999)</option>
-              <option value="standard">Standard (6.5% weekly, $5,000 - $14,999)</option>
-              <option value="silver">Silver (7.5% weekly, $15,000 - $49,999)</option>
-              <option value="gold">Gold (8.5% weekly, $50,000 - $999,999)</option>
-              <option value="diamond">Diamond (10% weekly, $100,000+)</option>
+              <option value="basic">Basic Package (5% weekly)</option>
+              <option value="standard">Standard Package (6.5% weekly)</option>
+              <option value="silver">Silver Package (7.5% weekly)</option>
+              <option value="gold">Gold Package (8.5% weekly)</option>
+              <option value="diamond">Diamond Package (10% weekly)</option>
             </select>
           </div>
           <div class="input-group">
             <label for="investment-period">Investment Period (weeks)</label>
             <input type="number" id="investment-period" min="1" max="52" value="12">
           </div>
-          <button type="button" class="cta primary" id="calculate-btn">Calculate Returns</button>
+          <button class="cta primary" id="calculate-btn">Calculate Returns</button>
         </div>
         <div class="calculator-results">
           <div class="result-item">
             <div class="result-label">Weekly Return</div>
-            <div class="result-value" id="weekly-return">$0.00</div>
+            <div class="result-value" id="weekly-return">$325.00</div>
           </div>
           <div class="result-item">
             <div class="result-label">Total Return</div>
-            <div class="result-value" id="total-return">$0.00</div>
+            <div class="result-value" id="total-return">$3,900.00</div>
           </div>
           <div class="result-item">
             <div class="result-label">Total Profit</div>
-            <div class="result-value" id="total-profit">$0.00</div>
+            <div class="result-value" id="total-profit">$3,250.00</div>
           </div>
           <div class="result-item">
             <div class="result-label">ROI</div>
-            <div class="result-value" id="roi">0.0%</div>
+            <div class="result-value" id="roi">65.0%</div>
           </div>
           <div class="highlight-result">
             <div class="label">Your Balance After <span id="period-display">12</span> Weeks</div>
-            <div class="value" id="final-balance">$0.00</div>
+            <div class="value" id="final-balance">$8,900.00</div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Your Path Section -->
-    <section id="path" class="section section-light" data-aos="fade-up">
-      <h2 class="section-title">Your Path to Prosperity</h2>
-      <ol class="path-list">
-        <li><strong>Enter the Gates:</strong> Create your account in moments with just $200.</li>
-        <li><strong>Rest in Assurance:</strong> Our sages of finance weave your funds into thriving markets.</li>
-        <li><strong>Behold the Bounty:</strong> Watch profits bloom weekly, free to claim after 7 days.</li>
-      </ol>
-    </section>
-
-    <!-- Divine Advantages Section -->
-    <section id="advantages" class="section section-dark" data-aos="fade-up">
-      <h2 class="section-title gold">Divine Advantages</h2>
-      <ul class="features-list">
-        <li><strong>Swift Ascension:</strong> Join in minutes, fund with ease across multiple channels.</li>
-        <li><strong>Crystal Vision:</strong> Real-time dashboards and weekly revelations.</li>
-        <li><strong>Tailored Destiny:</strong> Five sacred plans to match your ambition.</li>
-        <li><strong>Shared Glory:</strong> Invite kin and amplify your rewards.</li>
-        <li><strong>Instant Grace:</strong> Withdraw anytime—funds delivered within 24h.</li>
-      </ul>
-    </section>
-
-    <!-- Our Vision Section -->
-    <section id="vision" class="section section-dark video-section" data-aos="fade-up">
+    <!-- Video Section -->
+    <section class="video-section">
       <h2 class="section-title gold">Our Vision in Motion</h2>
       <p class="section-text">Witness how PrudentProExchange transforms the investment landscape.</p>
       <div class="video-container">
         <video controls>
-          <source src="assets/videos/company_video.mp4" type="video/mp4">
+          <source src="https://your-supabase-url.com/your-company-video.mp4" type="video/mp4">
           Your browser does not support the video tag.
         </video>
       </div>
     </section>
 
-    <!-- Testimonials Section -->
-    <section class="section section-light" data-aos="fade-up">
-      <h2 class="section-title">What Our Pioneers Say</h2>
-      <div class="testimonials">
-        <div class="testimonial active">
-          <p>“PrudentProExchange transformed my portfolio. 10% weekly is unreal!”</p>
-          <span>— Alex M., USA</span>
-        </div>
-        <div class="testimonial">
-          <p>“Trustworthy, transparent, and impactful—my favorite platform.”</p>
-          <span>— Priya S., India</span>
-        </div>
-        <div class="testimonial">
-          <p>“Investing has never felt so divine. Withdrawals in 24h!”</p>
-          <span>— Carlos L., Brazil</span>
-        </div>
-        <button class="test-nav prev"><</button>
-        <button class="test-nav next">></button>
-      </div>
-    </section>
-
     <!-- FAQ Section -->
-    <section id="faq" class="section section-light faq-section" data-aos="fade-up">
+    <section class="faq-section">
       <h2 class="section-title gold">Frequently Asked Questions</h2>
-      <div class="faq-container" id="faq-container">
-        <div class="faq-item">
-          <div class="faq-question">What is PrudentProExchange?<i class="fas fa-chevron-down"></i></div>
-          <div class="faq-answer">PrudentProExchange is not merely a platform; it is a celestial gateway to the future of finance. Registered in the United States (Reg. No. 0001230714), it stands as a beacon of innovation, crafted by master traders who navigate the vast cosmos of cryptocurrency and multi-exchange markets.</div>
-        </div>
-        <div class="faq-item">
-          <div class="faq-question">How do I create an account?<i class="fas fa-chevron-down"></i></div>
-          <div class="faq-answer">Click 'GET STARTED', fill in your details, and submit to join.</div>
-        </div>
-        <div class="faq-item">
-          <div class="faq-question">How can I verify authenticity?<i class="fas fa-chevron-down"></i></div>
-          <div class="faq-answer">Check our SEC registration (#0001230714) on EDGAR: <a href="https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=0001230714">SEC EDGAR</a>.</div>
-        </div>
-        <!-- Additional FAQs retained from original -->
-        <div class="faq-item">
-          <div class="faq-question">How does PrudentProExchange make profit?<i class="fas fa-chevron-down"></i></div>
-          <div class="faq-answer">Our sages of digital assets wield their expertise to extract and trade cryptocurrencies, turning market volatility into profits through masterful navigation.</div>
-        </div>
-        <div class="faq-item">
-          <div class="faq-question">How do I make a deposit?<i class="fas fa-chevron-down"></i></div>
-          <div class="faq-answer">Enter your DASHBOARD, select DEPOSIT, choose your Investment Plan, specify the Amount, select Wallet, and confirm.</div>
-        </div>
-        <div class="faq-item">
-          <div class="faq-question">How do I make a withdrawal?<i class="fas fa-chevron-down"></i></div>
-          <div class="faq-answer">Access your DASHBOARD, select WITHDRAW, add a Wallet if needed, enter the Amount, choose your Wallet, and confirm.</div>
-        </div>
-        <div class="faq-item">
-          <div class="faq-question">Can I transfer funds to another user?<i class="fas fa-chevron-down"></i></div>
-          <div class="faq-answer">Yes, transfers between accounts are free, fostering cosmic cooperation.</div>
-        </div>
-        <div class="faq-item">
-          <div class="faq-question">How can I earn a referral commission?<i class="fas fa-chevron-down"></i></div>
-          <div class="faq-answer">Share your unique referral link to invite others and earn commissions on their qualified deposits.</div>
-        </div>
-        <div class="faq-item">
-          <div class="faq-question">What does UTC mean?<i class="fas fa-chevron-down"></i></div>
-          <div class="faq-answer">UTC is the United States Trading Certificate, signifying your verified place in our community.</div>
-        </div>
-        <div class="faq-item">
-          <div class="faq-question">Can I have multiple accounts?<i class="fas fa-chevron-down"></i></div>
-          <div class="faq-answer">No, each user is allowed one account to ensure fairness. Violations result in account freeze.</div>
-        </div>
-        <div class="faq-item">
-          <div class="faq-question">How long for profits to reflect?<i class="fas fa-chevron-down"></i></div>
-          <div class="faq-answer">Profits appear instantly in your account balance upon completion of the mining cycle.</div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Mission Section -->
-    <section id="mission" class="section section-dark" data-aos="fade-up">
-      <h2 class="section-title gold">Our Celestial Mission</h2>
-      <p class="section-text">
-        At PrudentProExchange, we are architects of a decentralized dawn, forging a future where blockchain’s purity meets unparalleled trading artistry. Since 2012, we’ve sculpted a sanctuary of wealth that transcends borders.
-      </p>
-    </section>
-
-    <!-- CTA to Plans -->
-    <section id="plans" class="section section-light cta-section" data-aos="fade-up">
-      <h2 class="section-title">Join the Eternal Tide</h2>
-      <p class="section-text">Rise into an era where your wealth crafts legacies and lifts humanity. Begin today and let your success ripple through the ages.</p>
-      <button class="cta primary" onclick="location.href='plans.html'">Discover Your Plan</button>
+      <div class="faq-container" id="faq-container"></div>
     </section>
 
     <!-- Quick Start Guide -->
-    <section class="section section-dark quick-start" data-aos="fade-up">
+    <section class="quick-start">
       <h2 class="section-title gold">How It Works</h2>
       <div class="step">
         <i class="fas fa-user-plus"></i>
@@ -274,28 +155,18 @@
     </section>
 
     <!-- Contact Form -->
-    <section class="section section-light contact-form" data-aos="fade-up">
+    <section class="contact-form">
       <h2 class="section-title gold">Contact Us</h2>
       <form onsubmit="alert('Message sent!'); return false;">
         <input type="text" placeholder="Your Name" required>
         <input type="email" placeholder="Your Email" required>
         <textarea placeholder="Your Message" rows="5" required></textarea>
-        <button type="submit" class="cta primary">Send Message</button>
-      </form>
-    </section>
-
-    <!-- Newsletter Section -->
-    <section class="section section-dark" data-aos="fade-up">
-      <h2 class="section-title gold">Stay Connected</h2>
-      <form class="newsletter" onsubmit="alert('Subscribed!'); return false;">
-        <input type="email" placeholder="Your email address" required />
-        <button type="submit" class="cta">Subscribe</button>
+        <button type="submit">Send Message</button>
       </form>
     </section>
 
     <!-- Footer -->
-    <footer class="section section-dark site-footer" data-aos="fade-up">
-      <p>Current UTC Time: <span id="utcTime"></span></p>
+    <footer class="site-footer">
       <div class="footer-links">
         <a href="about.html">About Us</a>
         <a href="privacy.html">Privacy Policy</a>
@@ -305,43 +176,25 @@
       </div>
       <p class="copyright">© 2025 PrudentProExchange. All rights reserved. SEC Registered #0001230714</p>
     </footer>
-
-    <!-- Live Chat Button -->
-    <div class="live-chat" onclick="alert('Live chat coming soon!')">Live Chat</div>
   </div>
 
-  <script src="js/main.js"></script>
-  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
     // Real-time Clock and Date
     function updateDateTime() {
       const now = new Date();
-      document.getElementById('current-time').textContent = now.toLocaleTimeString();
+      document.getElementById('current-time').textContent = now.toLocaleTimeString('en-GB', { hour12: false });
       document.getElementById('current-date').textContent = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
     }
     setInterval(updateDateTime, 1000);
     updateDateTime();
 
-    // Hamburger toggle
-    const btn = document.getElementById('hamburgerBtn');
-    const drawer = document.getElementById('navDrawer');
-    btn.addEventListener('click', () => {
-      drawer.classList.toggle('open');
-      btn.classList.toggle('active');
+    // Hamburger Menu
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const navDrawer = document.getElementById('navDrawer');
+    hamburgerBtn.addEventListener('click', () => {
+      navDrawer.classList.toggle('open');
+      hamburgerBtn.classList.toggle('active');
     });
-
-    // Testimonials slider
-    (function() {
-      const items = document.querySelectorAll('.testimonial'),
-            prev = document.querySelector('.test-nav.prev'),
-            next = document.querySelector('.test-nav.next');
-      let idx = 0;
-      function show(i) {
-        items.forEach((el,j)=> el.classList.toggle('active', j===i));
-      }
-      prev.onclick = () => { idx = (idx-1+items.length)%items.length; show(idx); };
-      next.onclick = () => { idx = (idx+1)%items.length; show(idx); };
-    })();
 
     // Investment Calculator
     const plans = {
@@ -402,43 +255,19 @@
     updatePlan();
     calculateReturns();
 
-    // Live Ticker
-    async function updateTicker() {
-      try {
-        const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=usd');
-        const data = await response.json();
-        const btcPrice = data.bitcoin.usd;
-        const ethPrice = data.ethereum.usd;
-        const tickerContent = `
-          <div class="ticker-item"><span class="crypto">BTC:</span> <span class="price">$${btcPrice}</span> <span class="change">+1.2%</span></div>
-          <div class="ticker-item"><span class="crypto">ETH:</span> <span class="price">$${ethPrice}</span> <span class="change">+0.8%</span></div>
-          <div class="ticker-item"><span class="crypto">GOLD:</span> <span class="price">$2,350.40</span> <span class="change">+0.4%</span></div>
-          <div class="ticker-item"><span class="crypto">OIL:</span> <span class="price">$78.92</span> <span class="change">-0.3%</span></div>
-          <div class="ticker-item"><span class="crypto">NASDAQ:</span> <span class="price">16,842.30</span> <span class="change">+0.7%</span></div>
-        `;
-        document.getElementById('ticker-content').innerHTML = tickerContent;
-      } catch (error) {
-        console.error('Error fetching ticker data:', error);
-        document.getElementById('ticker-content').innerHTML = 'Live rates unavailable';
-      }
-    }
-    setInterval(updateTicker, 60000);
-    updateTicker();
-
-    // UTC Time
-    function updateUTCTime() {
-      const now = new Date();
-      const utcString = now.toUTCString();
-      document.getElementById('utcTime').innerHTML = utcString;
-    }
-    setInterval(updateUTCTime, 1000);
-    updateUTCTime();
-
     // FAQ Accordion
-    document.querySelectorAll('.faq-item').forEach(item => {
-      item.querySelector('.faq-question').addEventListener('click', () => {
-        item.classList.toggle('active');
-      });
+    const faqData = [
+      { question: "What is PrudentProExchange?", answer: "A U.S.-registered investment platform offering up to 10% weekly returns with a focus on global impact." },
+      { question: "How do I create an account?", answer: "Click 'GET STARTED', fill in your details, and submit to join." },
+      { question: "How can I verify authenticity?", answer: "Check our SEC registration (#0001230714) on EDGAR: https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=0001230714" }
+    ];
+    const faqContainer = document.getElementById('faq-container');
+    faqData.forEach(faq => {
+      const item = document.createElement('div');
+      item.className = 'faq-item';
+      item.innerHTML = `<div class="faq-question">${faq.question}<i class="fas fa-chevron-down"></i></div><div class="faq-answer">${faq.answer}</div>`;
+      item.querySelector('.faq-question').addEventListener('click', () => item.classList.toggle('active'));
+      faqContainer.appendChild(item);
     });
 
     // Smooth Scrolling
@@ -447,12 +276,6 @@
         e.preventDefault();
         document.querySelector(anchor.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
       });
-    });
-
-    // Initialize AOS
-    AOS.init({
-      duration: 800,
-      once: true
     });
   </script>
 </body>
