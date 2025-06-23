@@ -41,6 +41,23 @@
       object-fit: cover;
       /* Removed filter for clarity */
     }
+    /* New styles for the button to make it the best in the world */
+    .cta.primary {
+      background: linear-gradient(45deg, #007bff, #00c6ff);
+      color: white;
+      padding: 15px 30px;
+      border: none;
+      border-radius: 50px;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+    .cta.primary:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+    }
   </style>
 </head>
 <body class="homepage">
@@ -85,11 +102,8 @@
         Your browser does not support the video tag.
       </video>
       <h1 class="hero-title">Invest with Confidence. Grow Your Wealth.</h1>
-      <p class="hero-subtitle">
-        Experience consistent returns of up to 10% weekly with our expertly managed investment plans. Secure, transparent, and designed for your financial growth.
-      </p>
       <button class="cta primary" onclick="location.href='application.html'">
-        Start Investing Now
+        Get Started
       </button>
     </main>
 
@@ -97,7 +111,6 @@
     <div class="main-content">
       <div class="main-content-video-container">
         <video class="main-content-video" autoplay muted loop playsinline preload="auto">
-          <source src="assets/videos/background.webm" type="video/webm">
           <source src="assets/videos/background.MP4" type="video/mp4">
           Your browser does not support the video tag.
         </video>
