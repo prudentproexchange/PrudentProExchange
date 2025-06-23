@@ -13,9 +13,9 @@
   <!-- Hero Video Background (Top to Crypto Prices) -->
   <div class="hero-video-container">
     <video class="hero-video" autoplay muted loop playsinline preload="auto">
-      <source src="design/assets/videos/directory/prudentproexchange.webm" type="video/webm">
-      <source src="design/assets/videos/directory/prudentproexchange.MP4" type="video/mp4">
-      Your browser does not support the video tag.
+      <source src="assets/videos/prudentproexchange.webm" type="video/webm">
+      <source src="assets/videos/prudentproexchange.mp4" type="video/mp4">
+      <img src="assets/images/fallback-hero.jpg" alt="Hero Fallback Image" class="video-fallback">
     </video>
   </div>
 
@@ -95,9 +95,9 @@
     <!-- Main Content Video Background (Rest of the Page) -->
     <div class="main-content-video-container">
       <video class="main-content-video" autoplay muted loop playsinline preload="auto">
-        <source src="design/assets/videos/background.webm" type="video/webm">
-        <source src="design/assets/videos/background.MP4" type="video/mp4">
-        Your browser does not support the video tag.
+        <source src="assets/videos/background.webm" type="video/webm">
+        <source src="assets/videos/background.mp4" type="video/mp4">
+        <img src="assets/images/fallback-main.jpg" alt="Main Content Fallback Image" class="video-fallback">
       </video>
     </div>
 
@@ -476,22 +476,50 @@
       dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
     }
 
-    // Force Background Videos to Play with Retry
+    // Enhanced Video Playback with Retry and Fallback
     document.addEventListener('DOMContentLoaded', function() {
       const playVideo = (videoElement, name) => {
-        if (videoElement) {
-          videoElement.play().catch(error => {
+        if (!videoElement) {
+          console.warn(`${name} video element not found`);
+          return;
+        }
+        // Ensure video starts from beginning
+        videoElement.currentTime = 0;
+        // Attempt to play
+        const playPromise = videoElement.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(error => {
             console.log(`${name} video play failed:`, error);
+            // Show fallback image if available
+            const fallback = videoElement.parentElement.querySelector('.video-fallback');
+            if (fallback) fallback.style.display = 'block';
             // Retry after 1 second
             setTimeout(() => {
-              videoElement.play().catch(err => console.log(`Retry failed for ${name} video:`, err));
+              videoElement.play().catch(err => {
+                console.log(`Retry failed for ${name} video:`, err);
+              });
             }, 1000);
+          }).then(() => {
+            console.log(`${name} video playing successfully`);
           });
         }
       };
 
+      // Play both videos
       playVideo(document.querySelector('.hero-video'), 'Hero');
-      playVideo(document.querySelector('.main-content-video'), 'Main');
+      playVideo(document.querySelector('.main-content-video'), 'Main Content');
+
+      // Handle visibility changes to optimize playback
+      document.addEventListener('visibilitychange', () => {
+        const videos = document.querySelectorAll('video');
+        videos.forEach(video => {
+          if (document.visibilityState === 'hidden') {
+            video.pause();
+          } else {
+            playVideo(video, video.className);
+          }
+        });
+      });
     });
   </script>
 </body>
