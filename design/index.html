@@ -63,9 +63,31 @@
 
     <!-- Rotating Live Crypto Prices Ticker -->
     <section id="crypto-ticker" class="crypto-ticker" data-aos="fade-up">
+      <!-- TradingView Widget BEGIN -->
       <div class="tradingview-widget-container">
         <div class="tradingview-widget-container__widget"></div>
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+        {
+          "symbols": [
+            {"proName": "BITSTAMP:BTCUSD", "title": "BTC/USD"},
+            {"proName": "BITSTAMP:ETHUSD", "title": "ETH/USD"},
+            {"proName": "BINANCE:BNBUSDT", "title": "BNB/USDT"},
+            {"proName": "BITSTAMP:LTCUSD", "title": "LTC/USD"},
+            {"proName": "BITSTAMP:XRPUSD", "title": "XRP/USD"},
+            {"proName": "BINANCE:ADAUSDT", "title": "ADA/USDT"},
+            {"proName": "BINANCE:DOTUSDT", "title": "DOT/USDT"},
+            {"proName": "BINANCE:LINKUSDT", "title": "LINK/USDT"},
+            {"proName": "BITSTAMP:XLMUSD", "title": "XLM/USD"}
+          ],
+          "showSymbolLogo": true,
+          "colorTheme": "dark",
+          "isTransparent": false,
+          "displayMode": "adaptive",
+          "locale": "en"
+        }
+        </script>
       </div>
+      <!-- TradingView Widget END -->
     </section>
 
     <!-- Why Us Section -->
@@ -156,14 +178,13 @@
       </ul>
     </section>
 
-    <!-- Our Vision Section -->
+    <!-- Our Vision Section with Background Video -->
     <section id="vision" class="section section-dark video-section" data-aos="fade-up">
       <h2 class="section-title">Our Vision</h2>
       <p class="section-text">Discover how PrudentProExchange redefines wealth creation.</p>
-      <div class="video-container">
-        <video controls>
+      <div class="vision-video-container">
+        <video class="bg-video" autoplay muted loop playsinline preload="auto">
           <source src="assets/videos/company_video.mp4" type="video/mp4">
-          Your browser does not support the video tag.
         </video>
       </div>
     </section>
@@ -316,25 +337,6 @@
 
   <script src="js/main.js"></script>
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-  <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
-  {
-    "symbols": [
-      {"proName": "BINANCE:BTCUSDT", "title": "BTC"},
-      {"proName": "BINANCE:ETHUSDT", "title": "ETH"},
-      {"proName": "BINANCE:BNBUSDT", "title": "BNB"},
-      {"proName": "BINANCE:LTCUSDT", "title": "LTC"},
-      {"proName": "BINANCE:XRPUSDT", "title": "XRP"},
-      {"proName": "BINANCE:ADAUSDT", "title": "ADA"},
-      {"proName": "BINANCE:DOTUSDT", "title": "DOT"},
-      {"proName": "BINANCE:LINKUSDT", "title": "LINK"},
-      {"proName": "BINANCE:XLMUSDT", "title": "XLM"}
-    ],
-    "colorTheme": "dark",
-    "isTransparent": true,
-    "displayMode": "adaptive",
-    "locale": "en"
-  }
-  </script>
   <script>
     // Local Time and Date
     function updateLocalTime() {
@@ -415,8 +417,7 @@
     function calculateReturns() {
       const amount = parseFloat(amountInput.value);
       const planKey = planSelect.value;
-      const weeks = parseInt(periodInput.value);
- || 1;
+      const weeks = parseInt(periodInput.value) || 1;
       const plan = plans[planKey];
 
       if (amount < plan.min) amountInput.value = plan.min;
