@@ -22,9 +22,9 @@ body {
   --shadow: rgba(0, 0, 0, 0.5);
 }
 
-/* Hero Video Background (Homepage Top to Crypto Prices) */
+/* Hero Video Background (Top to Crypto Prices) */
 .hero-video-container {
-  position: absolute;
+  position: fixed; /* Changed to fixed for full-screen coverage */
   top: 0;
   left: 0;
   width: 100%;
@@ -37,14 +37,20 @@ body {
   height: 100%;
   object-fit: cover;
 }
-
-/* Main Content Video Background (Homepage Rest of the Page) */
-.main-content-video-container {
-  position: absolute;
-  top: 0;
-  left: 0;
+.video-fallback {
+  display: none;
   width: 100%;
   height: 100%;
+  object-fit: cover;
+}
+
+/* Main Content Video Background (Rest of the Page) */
+.main-content-video-container {
+  position: absolute;
+  top: calc(100vh + 100px); /* Start after crypto ticker */
+  left: 0;
+  width: 100%;
+  min-height: calc(100% - 100vh - 100px); /* Cover remaining page */
   overflow: hidden;
   z-index: -3;
 }
@@ -52,6 +58,9 @@ body {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 /* Glass-morphic Overlay */
@@ -59,7 +68,7 @@ body {
   position: relative;
   background: var(--overlay);
   backdrop-filter: blur(6px);
-  min-height: 100vh;
+  min-height: 100%;
   display: flex;
   flex-direction: column;
   z-index: 1;
@@ -665,7 +674,7 @@ body {
   right: 2rem;
   background: var(--primary);
   color: #000;
-  padding: 0.75rem 1.5rem;
+  padding: 0.75rem;
   border-radius: 20px;
   font-weight: 600;
   cursor: pointer;
@@ -677,11 +686,12 @@ body {
 
 /* Light Theme */
 .light-theme {
-  background: #f0f0f0;
+  background: #f0f4f8;
   color: #333;
 }
 .light-theme .overlay {
-  background: rgba(255, 255, 255, 0.8);
+  background: relative;
+  rgba(255, 0, 0.8);
 }
 .light-theme .site-header {
   background: rgba(255, 255, 255, 0.9);
@@ -717,7 +727,7 @@ body {
   color: #333;
 }
 .light-theme .cta {
-  color: #333;
+  color: #fff;
   background: #333;
   border: none;
 }
@@ -869,8 +879,6 @@ body {
 }
 
 /* Homepage-Specific Styles */
-/* These styles apply only to the homepage when <body class="homepage"> is present */
-
 .homepage .hero {
   padding: 0;
   min-height: 100vh;
@@ -881,9 +889,9 @@ body {
 }
 
 .homepage .hero-title {
-  font-size: 4.5rem;
+  font-size: 4rem;
   font-family: 'Playfair Display', serif;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  text-shadow: 2px 2px rgba(0, 0, 0, 0.5);
 }
 
 .homepage .hero-subtitle {
@@ -895,8 +903,8 @@ body {
 }
 
 @keyframes pulse {
-  0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.4); }
-  70% { box-shadow: 0 0 0 10px rgba(255, 215, 0, 0); }
+0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(255, 0, 0); }
   100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); }
 }
 
@@ -932,13 +940,13 @@ body {
 }
 
 .homepage .step:hover {
-  background: rgba(255, 215, 0, 0.1);
+  background: rgba(255, 255, 0, 0.1);
 }
 
 /* Responsive Adjustments for Homepage */
 @media (max-width: 768px) {
   .homepage .hero-title {
-    font-size: 3.5rem;
+    font-size: 3rem;
   }
   .homepage .hero-subtitle {
     font-size: 1.4rem;
