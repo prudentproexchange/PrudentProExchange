@@ -18,7 +18,7 @@ body {
   height: 100vh;
   object-fit: cover;
   z-index: -1;
-  filter: brightness(0.5);
+  filter: brightness(0.6); /* Slightly brighter for better visibility */
 }
 
 /* Glass-morphic Overlay */
@@ -195,21 +195,21 @@ body {
 
 /* Investment Calculator */
 .calculator-section {
-  background: linear-gradient(135deg, rgba(10, 25, 47, 0.7), rgba(20, 30, 60, 0.7));
-  backdrop-filter: blur(10px);
+  background: rgba(10, 25, 47, 0.7); /* Transparent glass effect */
   border-radius: 20px;
   padding: 4rem;
   margin: 3rem auto;
   border: 1px solid rgba(255, 215, 0, 0.2);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
 }
 .calculator-container { display: flex; gap: 3rem; flex-wrap: wrap; }
 .calculator-inputs, .calculator-results { flex: 1; min-width: 300px; }
-.calculator-results {
-  background: rgba(0, 0, 0, 0.5);
-  border-radius: 15px;
-  padding: 2rem;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+.calculator-results { 
+  background: rgba(0, 0, 0, 0.3); 
+  border-radius: 15px; 
+  padding: 2rem; 
+  border: 1px solid rgba(255, 215, 0, 0.2); 
+  backdrop-filter: blur(5px);
 }
 .input-group { margin-bottom: 1.5rem; }
 .input-group label { display: block; margin-bottom: 0.75rem; font-weight: 500; color: #e0e0ff; }
@@ -217,8 +217,8 @@ body {
   width: 100%;
   padding: 0.9rem 1.2rem;
   border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.4);
   color: white;
   font-size: 1rem;
 }
@@ -241,8 +241,14 @@ body {
 .result-item:last-child { border-bottom: none; }
 .result-label { color: #aaa; }
 .result-value { font-weight: 600; font-size: 1.2rem; color: #FFD700; }
-.highlight-result { background: rgba(255, 215, 0, 0.1); padding: 1.5rem; border-radius: 10px; margin-top: 1.5rem; text-align: center; border: 1px solid rgba(255, 215, 0, 0.3); }
-.highlight-result .value { font-size: 2rem; font-weight: 700; color: #FFD700; margin: 0.5rem 0; }
+.highlight-result { 
+  background: rgba(255, 215, 0, 0.1); 
+  padding: 1.5rem; 
+  border-radius: 10px; 
+  margin-top: 1.5rem; 
+  text-align: center; 
+  border: 1px solid rgba(255, 215, 0, 0.3); 
+}
 
 /* Video Section */
 .video-section { text-align: center; margin: 5rem auto; }
@@ -251,65 +257,91 @@ body {
 
 /* Testimonials Section */
 .testimonials-section {
-  background: linear-gradient(135deg, rgba(10, 20, 40, 0.7), rgba(15, 25, 50, 0.7));
-  backdrop-filter: blur(10px);
+  background: rgba(10, 25, 47, 0.7); /* Transparent glass effect */
   border-radius: 20px;
-  padding: 5rem 3rem;
-  margin: 4rem auto;
+  padding: 4rem;
+  margin: 3rem auto;
   border: 1px solid rgba(255, 215, 0, 0.2);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
 }
 .testimonials-container {
-  width: 100%;
-  overflow: hidden;
   position: relative;
-}
-.testimonials-wrapper {
-  display: flex;
-  animation: scroll 20s linear infinite;
+  overflow: hidden;
+  max-width: 800px;
+  margin: 0 auto;
 }
 .testimonial {
-  min-width: 300px;
-  margin-right: 2rem;
-  padding: 1.5rem;
-  background: rgba(255, 255, 255, 0.1);
+  display: none;
+  text-align: center;
+  padding: 2rem;
+  background: rgba(0, 0, 0, 0.3);
   border-radius: 15px;
   border: 1px solid rgba(255, 215, 0, 0.2);
+  backdrop-filter: blur(5px);
 }
+.testimonial.active { display: block; }
 .testimonial-img {
   width: 60px;
   height: 60px;
   border-radius: 50%;
+  margin: 0 auto 1rem;
   object-fit: cover;
-  margin-right: 1rem;
-  float: left;
 }
-.testimonial p { margin: 0 0 1rem; color: #e0e0ff; }
-.testimonial span { display: block; font-style: italic; color: #FFD700; }
-@keyframes scroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); } /* Adjusted to -50% since content is duplicated */
+.testimonial p { 
+  font-size: 1.2rem; 
+  margin-bottom: 1rem; 
+  color: #e0e0ff; 
+  font-style: italic;
 }
-.testimonials-wrapper:hover { animation-play-state: paused; }
+.testimonial span { 
+  font-size: 1rem; 
+  color: #FFD700; 
+  font-weight: 600;
+}
 
 /* FAQ Section */
 .faq-section {
-  background: linear-gradient(135deg, rgba(10, 20, 40, 0.7), rgba(15, 25, 50, 0.7));
-  backdrop-filter: blur(10px);
+  background: rgba(10, 20, 40, 0.7); /* Transparent glass effect */
   border-radius: 20px;
   padding: 5rem 3rem;
   margin: 4rem auto;
   border: 1px solid rgba(255, 215, 0, 0.2);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
 }
 .faq-container { max-width: 900px; margin: 0 auto; }
-.faq-item { margin-bottom: 1.5rem; border-radius: 12px; background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.3s ease; }
-.faq-item.active { border-color: rgba(255, 215, 0, 0.4); background: rgba(255, 215, 0, 0.05); }
-.faq-question { padding: 1.5rem; font-size: 1.2rem; font-weight: 600; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+.faq-item { 
+  margin-bottom: 1.5rem; 
+  border-radius: 12px; 
+  background: rgba(0, 0, 0, 0.3); 
+  border: 1px solid rgba(255, 255, 255, 0.1); 
+  transition: all 0.3s ease; 
+  backdrop-filter: blur(5px);
+}
+.faq-item.active { 
+  border-color: rgba(255, 215, 0, 0.4); 
+  background: rgba(255, 215, 0, 0.05); 
+}
+.faq-question { 
+  padding: 1.5rem; 
+  font-size: 1.2rem; 
+  font-weight: 600; 
+  cursor: pointer; 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  color: #fff;
+}
 .faq-question:hover { color: #FFD700; }
 .faq-question i { transition: transform 0.3s; }
 .faq-item.active .faq-question i { transform: rotate(180deg); }
-.faq-answer { padding: 0 1.5rem; max-height: 0; overflow: hidden; transition: max-height 0.3s ease, padding 0.3s ease; color: #e0e0ff; line-height: 1.7; }
+.faq-answer { 
+  padding: 0 1.5rem; 
+  max-height: 0; 
+  overflow: hidden; 
+  transition: max-height 0.3s ease, padding 0.3s ease; 
+  color: #e0e0ff; 
+  line-height: 1.7; 
+}
 .faq-item.active .faq-answer { max-height: 1000px; padding: 0 1.5rem 1.5rem; }
 
 /* Quick Start Guide */
@@ -363,12 +395,24 @@ body {
 .copyright { color: #777; margin-top: 1.5rem; }
 
 /* Responsive Adjustments */
-@media (max-width: 600px) {
+@media (max-width: 768px) {
+  .hero-title { font-size: 2.5rem; }
+  .hero-subtitle { font-size: 1.2rem; }
+  .section { padding: 3rem 1.5rem; }
+  .calculator-section, .testimonials-section, .faq-section { padding: 3rem 1.5rem; }
+  .calculator-container { flex-direction: column; gap: 2rem; }
+  .testimonials-container { max-width: 100%; }
+  .faq-container { padding: 0 1rem; }
+}
+
+@media (max-width: 480px) {
   .hero-title { font-size: 2rem; }
   .hero-subtitle { font-size: 1rem; }
   .section { padding: 2rem 1rem; }
-  .calculator-section, .testimonials-section, .faq-section { padding: 3rem 1.5rem; }
+  .calculator-section, .testimonials-section, .faq-section { padding: 2rem 1rem; }
   .realtime-info { gap: 1rem; }
   .info-card { min-width: 130px; padding: 0.5rem; }
   .info-card .value { font-size: 1.1rem; }
+  .testimonial p { font-size: 1rem; }
+  .faq-question { font-size: 1.1rem; }
 }
