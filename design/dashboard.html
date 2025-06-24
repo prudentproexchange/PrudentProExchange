@@ -20,7 +20,7 @@
   </video>
 
   <div class="overlay">
-    <!-- Header (Matches about.html) -->
+    <!-- Header -->
     <header class="site-header">
       <button id="theme-toggle" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
       <a href="dashboard.html" class="logo-link">
@@ -35,10 +35,10 @@
         <a href="transactions.html">Transactions</a>
         <a href="referrals.html">Referrals</a>
         <div class="account-menu">
-          <a href="#" class="account-toggle">Account ▾</a>
+          <a href="#" class="account-toggle" id="account-toggle">Account ▾</a>
           <ul class="submenu">
             <li><a href="profile-settings.html">Profile Settings</a></li>
-            <li><a href="transfer.html" id="transfer-balance-link">Transfer Balance</a></li>
+            <li><a href="transfer.html">Transfer Balance</a></li>
             <li><a href="change-password.html">Change Password</a></li>
             <li><a href="support.html">Support Ticket</a></li>
             <li><a href="promo-tools.html">Promotional Tools</a></li>
@@ -52,67 +52,71 @@
     </header>
     <div class="nav-overlay"></div>
 
-    <!-- Profile Section with Welcome Message -->
+    <!-- Profile Section -->
     <div class="profile-section">
       <div class="profile-container">
         <img id="navProfilePhoto" src="" alt="Profile" class="avatar" style="display: none;"/>
         <span id="defaultProfileIcon" class="avatar">👤</span>
       </div>
-      <div class="welcome-message">Welcome <span id="welcomeName"></span> to your dashboard 🏠</div>
+      <div class="welcome-message">Welcome, <span id="welcomeName"></span>, to Your Dashboard</div>
     </div>
 
     <!-- Main Content -->
     <main class="dashboard-page container">
       <section class="cards-grid" data-aos="fade-up">
+        <!-- Investments Dashboard (Moved to First Position) -->
+        <div class="card investment-card" data-aos="zoom-in">
+          <h2>Investments Dashboard</h2>
+          <div id="investments-container"></div>
+          <div id="no-investments" style="display: none;">
+            <p>No active investments currently.</p>
+            <a href="invest.html" class="btn">Start Investing Now</a>
+          </div>
+        </div>
+
         <div class="card how-it-works" data-aos="zoom-in">
-          <h2>How it Works</h2>
-          <p>This is how to invest on PrudentProExchange:</p>
+          <h2>How It Works</h2>
+          <p>Here’s how to invest with PrudentProExchange:</p>
           <ul>
-            <li>Fund your account using one of our deposit methods.</li>
-            <li>Choose a package/plan of your choice from our plan menu and activate.</li>
-            <li>Monitor your earnings from your dashboard.</li>
-            <li>Compounding of profits is allowed up to 4 months.</li>
-            <li>Our live support is always available to help you.</li>
+            <li>Deposit funds into your account using our secure payment options.</li>
+            <li>Select and activate an investment plan tailored to your goals.</li>
+            <li>Track your earnings directly from your dashboard.</li>
+            <li>Benefit from profit compounding for up to four months.</li>
+            <li>Access our dedicated live support whenever you need assistance.</li>
           </ul>
           <p class="brand">PrudentProExchange.net</p>
-          <a href="plans.html" class="btn">Choose Plan →</a>
+          <a href="plans.html" class="btn">Explore Plans</a>
         </div>
 
         <div class="card affiliate" data-aos="zoom-in">
           <h2>Affiliate Program</h2>
-          <p>Share this link and earn 10% on every deposit:</p>
+          <p>Share your unique referral link and earn a 10% commission on every deposit:</p>
           <input type="text" id="affiliateLink" readonly/>
-          <p>Your Referral Earnings: $<span id="refEarnings">0.00</span></p>
+          <p>Referral Earnings: $<span id="refEarnings">0.00</span></p>
         </div>
 
         <div class="card deposit-wallet" data-aos="zoom-in">
           <h2>Deposit Wallet</h2>
           $<span id="depositWallet">0.00</span>
           <p>Total Deposits: $<span id="totalDeposits">0.00</span></p>
-          <a href="deposit.html" class="btn">Deposit →</a>
+          <a href="deposit.html" class="btn">Add Funds</a>
         </div>
 
         <div class="card interest-wallet" data-aos="zoom-in">
           <h2>Interest Wallet</h2>
           $<span id="interestWallet">0.00</span>
           <p>Total Withdrawals: $<span id="totalWithdrawals">0.00</span></p>
-          <a href="withdraw.html" class="btn">Withdraw →</a>
+          <a href="withdraw.html" class="btn">Withdraw Funds</a>
         </div>
 
         <div class="card investments" data-aos="zoom-in">
           <h2>Total Invested: $<span id="totalInvested">0.00</span></h2>
-          <p>Promo Offer: $<span id="promoOffer">0.00</span> (<span id="promoPct">0</span>%)</p>
-          <a href="promo.html" class="btn">Claim Offer →</a>
-        </div>
-
-        <!-- New Investment Calculator Card -->
-        <div class="card investment-card" data-aos="zoom-in">
-          <h2>Investment Calculator</h2>
-          <div id="investment-status"></div>
+          <p>Promotional Offer: $<span id="promoOffer">0.00</span> (<span id="promoPct">0</span>%)</p>
+          <a href="promo.html" class="btn">Claim Offer</a>
         </div>
       </section>
 
-      <!-- Collapsible Transaction History -->
+      <!-- Transaction History -->
       <details class="transaction-history" data-aos="fade-up">
         <summary>Transaction History</summary>
         <table id="txTable">
@@ -129,7 +133,7 @@
       </details>
     </main>
 
-    <!-- Footer (Matches about.html) -->
+    <!-- Footer -->
     <footer class="section section-dark site-footer" data-aos="fade-up">
       <div class="footer-content">
         <p class="utc-time">UTC Time: <span id="utcTime"></span></p>
@@ -152,7 +156,7 @@
   <script>
     AOS.init({ duration: 800, once: true });
 
-    // Hamburger toggle with overlay
+    // Hamburger toggle
     const hamburgerBtn = document.getElementById('hamburgerBtn');
     const navDrawer = document.getElementById('navDrawer');
     const overlay = document.querySelector('.overlay');
@@ -162,7 +166,6 @@
       overlay.classList.toggle('nav-open');
     });
 
-    // Close nav when overlay is clicked
     const navOverlay = document.querySelector('.nav-overlay');
     navOverlay.addEventListener('click', () => {
       navDrawer.classList.remove('open');
@@ -179,12 +182,20 @@
       icon.classList.toggle('fa-sun');
     });
 
+    // Account menu toggle
+    const accountToggle = document.getElementById('account-toggle');
+    const submenu = accountToggle.nextElementSibling;
+    accountToggle.addEventListener('click', (e) => {
+      e.preventDefault();
+      submenu.classList.toggle('open');
+    });
+
     // Back to top
     document.getElementById('back-to-top').addEventListener('click', () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
-    // Time displays
+    // Time updates
     function updateLocalTime() {
       const now = new Date();
       document.getElementById('localTime').textContent = now.toLocaleTimeString();
@@ -228,9 +239,7 @@
         return;
       }
 
-      const userName = profile.first_name || 'User';
-      document.getElementById('welcomeName').textContent = userName;
-
+      document.getElementById('welcomeName').textContent = profile.first_name || 'User';
       if (profile.photo_url) {
         const { data: urlData } = supabaseClient.storage
           .from('profile-photos')
@@ -238,9 +247,6 @@
         document.getElementById('navProfilePhoto').src = urlData.publicUrl;
         document.getElementById('navProfilePhoto').style.display = 'block';
         document.getElementById('defaultProfileIcon').style.display = 'none';
-      } else {
-        document.getElementById('navProfilePhoto').style.display = 'none';
-        document.getElementById('defaultProfileIcon').style.display = 'block';
       }
 
       document.getElementById('affiliateLink').value = profile.referral_link || '';
@@ -253,32 +259,41 @@
       document.getElementById('promoOffer').textContent = (profile.promo_offer || 0).toFixed(2);
       document.getElementById('promoPct').textContent = profile.promo_pct || 0;
 
-      // Load active investment
+      // Load all active investments
       const { data: investments, error: invError } = await supabaseClient
         .from('investments')
-        .select('*')
+        .select('*, plan_name')
         .eq('user_id', user.id)
         .gt('end_time', new Date().toISOString())
-        .order('start_time', { ascending: false })
-        .limit(1);
+        .order('start_time', { ascending: false });
 
       if (invError) {
         console.error('Error loading investments:', invError);
-        alert('Error loading investments.');
+        alert('Error retrieving investment data.');
         return;
       }
 
+      const container = document.getElementById('investments-container');
+      const noInvestmentsDiv = document.getElementById('no-investments');
       if (investments.length > 0) {
-        const investment = investments[0];
-        startInvestmentCalculator(investment);
+        container.innerHTML = '';
+        investments.forEach(investment => {
+          const investmentDiv = document.createElement('div');
+          investmentDiv.className = 'investment-item';
+          investmentDiv.innerHTML = `
+            <p>Plan: <span>${investment.plan_name}</span></p>
+            <p>Invested Amount: $<span>${investment.invested_amount.toFixed(2)}</span></p>
+            <p>Current Profit: $<span class="current-profit">0.00</span></p>
+            <p>Time Remaining: <span class="time-left"></span></p>
+          `;
+          container.appendChild(investmentDiv);
+          startInvestmentCalculator(investment, investmentDiv);
+        });
       } else {
-        document.getElementById('investment-status').innerHTML = `
-          <p>No active investment.</p>
-          <a href="invest.html" class="btn">Invest Now</a>
-        `;
+        noInvestmentsDiv.style.display = 'block';
       }
 
-      // Load transactions (unchanged)
+      // Load transactions
       const { data: txns, error: txnsError } = await supabaseClient
         .from('transactions')
         .select('*')
@@ -287,58 +302,60 @@
 
       if (txnsError) {
         console.error('Error loading transactions:', txnsError);
-        alert('Error loading transactions.');
+        alert('Error retrieving transaction history.');
         return;
       }
 
       const tbody = document.querySelector('#txTable tbody');
       tbody.innerHTML = '';
       txns.forEach(t => {
-        const row = `<tr>
-          <td>${new Date(t.created_at).toLocaleString()}</td>
-          <td>${t.type}</td>
-          <td>$${t.amount.toFixed(2)}</td>
-          <td>${t.status}</td>
-        </tr>`;
-        tbody.insertAdjacentHTML('beforeend', row);
+        tbody.insertAdjacentHTML('beforeend', `
+          <tr>
+            <td>${new Date(t.created_at).toLocaleString()}</td>
+            <td>${t.type}</td>
+            <td>$${t.amount.toFixed(2)}</td>
+            <td>${t.status}</td>
+          </tr>
+        `);
       });
     }
 
-    // Investment calculator logic
-    function startInvestmentCalculator(investment) {
-      const { start_time, end_time, invested_amount, total_profit } = investment;
+    // Investment calculator logic for multiple investments
+    function startInvestmentCalculator(investment, investmentDiv) {
+      const { start_time, end_time, invested_amount, total_profit, plan_name } = investment;
       const startTime = new Date(start_time);
       const endTime = new Date(end_time);
       const totalSeconds = (endTime - startTime) / 1000;
       const profitPerSecond = total_profit / totalSeconds;
 
-      const statusDiv = document.getElementById('investment-status');
-      statusDiv.innerHTML = `
-        <p>Invested Amount: $<span id="invested-amount">${invested_amount.toFixed(2)}</span></p>
-        <p>Current Profit: $<span id="current-profit">0.00</span></p>
-        <p>Time Left: <span id="time-left"></span></p>
-      `;
+      const currentProfitSpan = investmentDiv.querySelector('.current-profit');
+      const timeLeftSpan = investmentDiv.querySelector('.time-left');
 
-      const updateInvestment = () => {
+      const updateInvestment = async () => {
         const now = new Date();
         if (now >= endTime) {
-          document.getElementById('current-profit').textContent = total_profit.toFixed(2);
-          document.getElementById('time-left').textContent = '0d 0h 0m 0s';
+          currentProfitSpan.textContent = total_profit.toFixed(2);
+          timeLeftSpan.textContent = '0d 0h 0m 0s';
           const message = document.createElement('p');
-          message.textContent = 'Investment cycle ended. Funds are in your interest wallet.';
-          statusDiv.appendChild(message);
+          message.textContent = 'Investment cycle completed. Profits have been transferred to your Interest Wallet.';
+          investmentDiv.appendChild(message);
           clearInterval(interval);
+
+          // Update interest wallet (assuming server-side handling for security)
+          // For demonstration, we’ll simulate the update on the client side
+          const currentWallet = parseFloat(document.getElementById('interestWallet').textContent);
+          document.getElementById('interestWallet').textContent = (currentWallet + total_profit).toFixed(2);
         } else {
           const elapsedSeconds = (now - startTime) / 1000;
           const currentProfit = Math.min(elapsedSeconds * profitPerSecond, total_profit);
-          document.getElementById('current-profit').textContent = currentProfit.toFixed(2);
+          currentProfitSpan.textContent = currentProfit.toFixed(2);
           const timeLeftMs = endTime - now;
-          document.getElementById('time-left').textContent = formatTimeLeft(timeLeftMs);
+          timeLeftSpan.textContent = formatTimeLeft(timeLeftMs);
         }
       };
 
       const interval = setInterval(updateInvestment, 1000);
-      updateInvestment(); // Initial update
+      updateInvestment();
     }
 
     function formatTimeLeft(ms) {
