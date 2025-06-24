@@ -138,7 +138,7 @@
     <!-- Footer -->
     <footer class="section section-dark site-footer" data-aos="fade-up">
       <div class="footer-content">
-        <p class="utc-time">UTC Time: <span id="utcTime"></span></p>
+        <p class="UTC-time">UTC Time: <span id="utcTime"></span></p>
         <p class="local-time">Local Time: <span id="localTime"></span></p>
         <p class="local-date">Local Date: <span id="localDate"></span></p>
         <nav class="footer-links">
@@ -347,7 +347,7 @@
           investmentDiv.appendChild(message);
           clearInterval(interval);
 
-          // Update interest wallet (assuming server-side handling for security)
+          // Update interest wallet (client-side for demo; server-side recommended)
           const currentWallet = parseFloat(document.getElementById('interestWallet').textContent);
           document.getElementById('interestWallet').textContent = (currentWallet + total_profit).toFixed(2);
         } else {
