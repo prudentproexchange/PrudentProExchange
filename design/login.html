@@ -66,6 +66,29 @@
   <script>
     AOS.init({ duration: 800, once: true });
 
+    // Global JS error + promise-rejection handlers
+    // (alerts on your iPhone so nothing is silent)
+    window.addEventListener('error', e => {
+      alert(`Error: ${e.message}\n(${e.filename}:${e.lineno})`);
+    });
+    window.addEventListener('unhandledrejection', e => {
+      alert(`Unhandled rejection: ${e.reason}`);
+    });
+
+    // Fix Supabase client from CDN bundle
+    const { createClient } = supabase;
+    const supabaseClient = createClient(
+      'https://iwkdznjqfbsfkscnbrkc.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU'
+    );
+
+    // If the user is already logged in, send them to dashboard
+    supabaseClient.auth.onAuthStateChange((event, session) => {
+      if (session) {
+        window.location.href = 'dashboard.html';
+      }
+    });
+
     // Hamburger toggle
     const btnApp = document.getElementById('hamburgerApp'),
           drawerApp = document.getElementById('navDrawerApp');
@@ -83,19 +106,13 @@
       icon.classList.toggle('fa-sun');
     });
 
-    // Supabase client
-    const supabase = Supabase.createClient(
-      'https://iwkdznjqfbsfkscnbrkc.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU'
-    );
-
     // Handle login
     document.getElementById('loginForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const f = e.target;
 
       // Sign in with Supabase Auth
-      const { data, error } = await supabase.auth.signInWithPassword({
+      const { data, error } = await supabaseClient.auth.signInWithPassword({
         email: f.email.value,
         password: f.password.value,
       });
