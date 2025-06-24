@@ -60,7 +60,7 @@ body {
 }
 
 .logo-link img {
-  height: 40px;
+  height: 60px;
   transition: transform 0.3s;
 }
 
@@ -164,6 +164,24 @@ body {
 
 .nav-drawer .submenu a:hover {
   color: var(--primary);
+}
+
+.nav-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 19;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s, visibility 0.3s;
+}
+
+.overlay.nav-open .nav-overlay {
+  opacity: 1;
+  visibility: visible;
 }
 
 /* Profile Section */
@@ -384,7 +402,7 @@ body {
     padding: 1rem;
   }
   .logo-link img {
-    height: 30px;
+    height: 40px;
   }
   .cards-grid {
     grid-template-columns: 1fr;
