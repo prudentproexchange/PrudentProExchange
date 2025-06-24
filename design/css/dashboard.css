@@ -38,12 +38,13 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
+  padding: 0.5rem 1rem; /* Reduced padding for smoother appearance */
   background: rgba(0, 0, 0, 0.8);
   backdrop-filter: blur(10px);
   position: sticky;
   top: 0;
   z-index: 10;
+  flex-wrap: wrap; /* Ensure logo doesn't overlap on smaller screens */
 }
 
 #theme-toggle {
@@ -60,7 +61,7 @@ body {
 }
 
 .logo-link img {
-  height: 900px; /* 3 times larger than previous 300px */
+  height: 900px;
   transition: transform 0.3s;
 }
 
@@ -286,12 +287,18 @@ body {
   text-decoration: none;
   border-radius: 5px;
   transition: background 0.3s, transform 0.3s;
-  float: right;
 }
 
 .card .btn:hover {
   background: linear-gradient(45deg, var(--primary-dark), var(--primary));
   transform: translateY(-2px);
+}
+
+.card .invest-btn {
+  display: block;
+  margin: 1rem auto;
+  text-align: center;
+  float: none;
 }
 
 .card input[readonly] {
@@ -405,18 +412,40 @@ body {
     font-size: 1.5rem;
   }
   .logo-link img {
-    height: 450px; /* Adjusted for tablets (3x 150px) */
+    height: 450px;
+  }
+  .site-header {
+    padding: 0.5rem 1rem;
   }
 }
 
 @media (max-width: 480px) {
   .site-header {
-    padding: 1rem;
+    padding: 0.25rem 0.5rem; /* Further reduced for mobile */
   }
   .logo-link img {
-    height: 180px; /* Adjusted for mobile (3x 60px) */
+    height: 180px;
   }
   .cards-grid {
     grid-template-columns: 1fr;
+  }
+  .profile-section {
+    padding: 0.5rem;
+  }
+  .avatar {
+    width: 30px;
+    height: 30px;
+    font-size: 1.2rem;
+  }
+  .welcome-message {
+    font-size: 0.9rem;
+  }
+}
+
+/* Ensure compatibility across devices */
+@media (max-width: 1024px) {
+  .site-header {
+    flex-wrap: wrap;
+    justify-content: space-around;
   }
 }
