@@ -75,6 +75,7 @@
             <p>No active investments currently.</p>
             <a href="invest.html" class="btn">Invest Now</a>
           </div>
+        </div>
 
         <div class="card how-it-works" data-aos="zoom-in">
           <h2>How It Works</h2>
@@ -438,6 +439,14 @@
           alert('Error: ' + err.message);
         }
       }
+    });
+
+    // Ensure background video plays
+    const video = document.querySelector('.bg-video');
+    video.addEventListener('canplay', () => {
+      video.play().catch(error => {
+        console.error('Error playing video:', error);
+      });
     });
   </script>
 </body>
