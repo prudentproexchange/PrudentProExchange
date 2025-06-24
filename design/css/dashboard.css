@@ -39,7 +39,7 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem;
-  background: var(--glass-bg);
+  background: rgba(0, 0, 0, 0.8); /* Updated to black layer background */
   backdrop-filter: blur(10px);
   position: sticky;
   top: 0;
@@ -60,7 +60,7 @@ body {
 }
 
 .logo-link img {
-  height: 60px; /* Increased from 40px to match about page */
+  height: 60px;
   transition: transform 0.3s;
 }
 
@@ -102,7 +102,7 @@ body {
   right: -100%;
   width: 80%;
   height: 100%;
-  background: var(--glass-bg);
+  background: rgba(0, 0, 0, 0.8); /* Updated to black layer background */
   backdrop-filter: blur(10px);
   transition: right 0.3s;
   z-index: 20;
@@ -121,13 +121,13 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5); /* Background layer when nav is open */
+  background: rgba(0, 0, 0, 0.5);
   z-index: 19;
   display: none;
 }
 
 .nav-drawer.open ~ .nav-overlay {
-  display: block; /* Shows overlay when nav-drawer is open */
+  display: block;
 }
 
 .nav-drawer a {
@@ -164,8 +164,8 @@ body {
   border-radius: 5px;
 }
 
-.nav-drawer.open .account-menu:hover .submenu {
-  display: block;
+.nav-drawer .submenu.open {
+  display: block; /* Toggle visibility on click */
 }
 
 .nav-drawer .submenu li {
@@ -191,7 +191,6 @@ body {
 }
 
 .profile-container {
-  position: relative;
   margin-right: 1rem;
 }
 
@@ -261,8 +260,8 @@ body {
 
 .card ul li {
   margin-bottom: 0.5rem;
-  position: relative;
   padding-left: 1.5rem;
+  position: relative;
 }
 
 .card ul li:before {
@@ -305,32 +304,29 @@ body {
   border-radius: 5px;
 }
 
-/* Investment Card Specific Styles */
-.investment-card #investment-status {
-  margin-top: 1rem;
+/* Investment Card Styles */
+.investment-item {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--primary);
+  border-radius: 5px;
+  background: rgba(0, 0, 0, 0.5);
 }
 
-.investment-card p {
+.investment-item p {
   margin: 0.5rem 0;
 }
 
 .investment-card .btn {
-  float: none; /* Override float for centered button */
   display: block;
-  margin: 1rem auto; /* Center the Invest Now button */
+  margin: 1rem auto;
   text-align: center;
+  float: none;
 }
 
 /* Transaction History */
 .transaction-history {
   margin-top: 4rem;
-}
-
-.transaction-history h2 {
-  font-size: 2rem;
-  color: var(--primary);
-  margin-bottom: 1rem;
-  font-family: 'Playfair Display', serif;
 }
 
 #txTable {
@@ -415,7 +411,7 @@ body {
     padding: 1rem;
   }
   .logo-link img {
-    height: 30px; /* Kept as is; adjust to 40px if preferred */
+    height: 40px; /* Increased for better visibility */
   }
   .cards-grid {
     grid-template-columns: 1fr;
