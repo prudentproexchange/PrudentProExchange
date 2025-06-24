@@ -60,7 +60,7 @@ body {
 }
 
 .logo-link img {
-  height: 60px;
+  height: 60px; /* Increased from 40px to match about page */
   transition: transform 0.3s;
 }
 
@@ -115,6 +115,21 @@ body {
   right: 0;
 }
 
+.nav-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* Background layer when nav is open */
+  z-index: 19;
+  display: none;
+}
+
+.nav-drawer.open ~ .nav-overlay {
+  display: block; /* Shows overlay when nav-drawer is open */
+}
+
 .nav-drawer a {
   display: block;
   padding: 1rem;
@@ -164,24 +179,6 @@ body {
 
 .nav-drawer .submenu a:hover {
   color: var(--primary);
-}
-
-.nav-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 19;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s, visibility 0.3s;
-}
-
-.overlay.nav-open .nav-overlay {
-  opacity: 1;
-  visibility: visible;
 }
 
 /* Profile Section */
@@ -308,6 +305,22 @@ body {
   border-radius: 5px;
 }
 
+/* Investment Card Specific Styles */
+.investment-card #investment-status {
+  margin-top: 1rem;
+}
+
+.investment-card p {
+  margin: 0.5rem 0;
+}
+
+.investment-card .btn {
+  float: none; /* Override float for centered button */
+  display: block;
+  margin: 1rem auto; /* Center the Invest Now button */
+  text-align: center;
+}
+
 /* Transaction History */
 .transaction-history {
   margin-top: 4rem;
@@ -402,7 +415,7 @@ body {
     padding: 1rem;
   }
   .logo-link img {
-    height: 40px;
+    height: 30px; /* Kept as is; adjust to 40px if preferred */
   }
   .cards-grid {
     grid-template-columns: 1fr;
