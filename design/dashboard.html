@@ -93,7 +93,10 @@
         <div class="card affiliate" data-aos="zoom-in">
           <h2>Affiliate Program</h2>
           <p>Share your unique referral link and earn a 10% commission on every deposit:</p>
-          <input type="text" id="affiliateLink" readonly/>
+          <div class="referral-link-container">
+            <input type="text" id="affiliateLink" readonly/>
+            <button class="copy-btn" title="Copy referral link" aria-label="Copy referral link"><i class="fas fa-copy"></i> Copy</button>
+          </div>
           <p>Referral Earnings: $<span id="refEarnings">0.00</span></p>
         </div>
 
@@ -200,6 +203,21 @@
     document.getElementById('back-to-top').addEventListener('click', () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
+
+    // Copy referral link
+    const copyBtn = document.querySelector('.copy-btn');
+    const affiliateLinkInput = document.getElementById('affiliateLink');
+    if (copyBtn && affiliateLinkInput) {
+      copyBtn.addEventListener('click', () => {
+        affiliateLinkInput.select();
+        document.execCommand('copy');
+        const originalContent = copyBtn.innerHTML;
+        copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+        setTimeout(() => {
+          copyBtn.innerHTML = originalContent;
+        }, 2000);
+      });
+    }
 
     // Time updates
     function updateLocalTime() {
