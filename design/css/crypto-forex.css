@@ -1,143 +1,140 @@
-/* Crypto & Forex Page Specific Styles */
-.crypto-forex-page .section {
-  background: rgba(0, 0, 0, 0.7);
-  border: 2px solid var(--primary);
-  border-radius: 15px;
-  padding: 3rem;
-  margin: 2rem auto;
-  max-width: 1000px;
+/* Crypto Page Specific Styles */
+
+/* Ensure sections are transparent to use overlay background */
+.crypto-page .section {
+  background: transparent;
+  padding: 3rem 2rem;
+  margin-bottom: 4rem;
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
-  color: #fff;
+  position: relative;
+  z-index: 2;
+  width: 100%;
 }
 
-.crypto-forex-page .section-title {
-  font-family: 'Playfair Display', serif;
+/* Styling for section titles */
+.crypto-page .section-title {
   font-size: 2.5rem;
-  font-weight: 700;
-  margin-bottom: 1.5rem;
-}
-
-.crypto-forex-page .section-title.gold {
-  color: var(--primary);
-}
-
-.crypto-forex-page .section-text {
-  font-family: 'Poppins', sans-serif;
-  font-size: 1.2rem;
-  line-height: 1.8;
-  margin-bottom: 1.5rem;
-}
-
-.subsection-title {
   font-family: 'Playfair Display', serif;
+  color: var(--primary);
+  text-align: center;
+  margin-bottom: 2.5rem;
+  position: relative;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.crypto-page .section-title::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50px;
+  height: 2px;
+  background: var(--primary);
+}
+
+/* Styling for sub-section titles */
+.crypto-page .sub-section-title {
   font-size: 1.8rem;
+  font-family: 'Playfair Display', serif;
   color: var(--primary);
   margin-top: 2rem;
   margin-bottom: 1rem;
 }
 
-.features-list {
-  list-style: none;
-  padding: 0;
-  text-align: left;
-  max-width: 800px;
-  margin: 1.5rem auto;
-}
-
-.features-list li {
-  font-family: 'Poppins', sans-serif;
+/* Improve readability of section text */
+.crypto-page .section-text {
   font-size: 1.2rem;
   line-height: 1.8;
-  margin-bottom: 1rem;
-  position: relative;
-  padding-left: 2rem;
+  color: #fff;
+  max-width: 800px;
 }
 
-.features-list li:before {
-  content: '•';
-  color: var(--primary);
-  font-size: 1.5rem;
-  position: absolute;
-  left: 0;
-}
-
-.image-container {
-  display: flex;
-  justify-content: center;
-  margin: 2rem 0;
-}
-
-.crypto-forex-image {
+/* Style the cryptocurrency image */
+.crypto-page .crypto-image {
   max-width: 100%;
   height: auto;
-  border: 2px solid var(--primary);
+  display: block;
+  margin: 0 auto;
   border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
-.cta-section .cta {
-  display: inline-block;
-  padding: 1rem 2rem;
-  font-size: 1.2rem;
-  font-family: 'Poppins', sans-serif;
-  background: var(--primary);
-  color: #000;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background 0.3s ease;
-  margin-top: 1.5rem;
+/* Style the image caption */
+.crypto-page .image-caption {
+  text-align: center;
+  font-style: italic;
+  color: #ccc;
+  margin-top: 1rem;
+  font-size: 1rem;
 }
 
-.cta-section .cta:hover {
-  background: #e6b800;
+/* Custom bullets for features list */
+.crypto-page .features-list {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: left;
 }
 
-/* Responsive Design */
+.crypto-page .features-list li {
+  list-style-type: none;
+  position: relative;
+  padding-left: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.crypto-page .features-list li::before {
+  content: "✦";
+  position: absolute;
+  left: 0;
+  color: var(--primary);
+}
+
+/* Highlight the active navigation link */
+.nav-drawer a.active {
+  color: var(--primary);
+  font-weight: bold;
+  background: rgba(255, 215, 0, 0.1);
+}
+
+/* Responsive adjustments */
 @media (max-width: 768px) {
-  .crypto-forex-page .section {
+  .crypto-page .section {
     padding: 2rem 1rem;
   }
-
-  .crypto-forex-page .section-title {
+  .crypto-page .section-title {
     font-size: 2rem;
   }
-
-  .crypto-forex-page .section-text {
+  .crypto-page .section-text {
     font-size: 1.1rem;
   }
-
-  .subsection-title {
+  .crypto-page .sub-section-title {
     font-size: 1.6rem;
   }
-
-  .features-list li {
-    font-size: 1.1rem;
+  .crypto-page .crypto-image {
+    max-width: 90%;
   }
 }
 
 @media (max-width: 480px) {
-  .crypto-forex-page .section {
+  .crypto-page .section {
     padding: 1.5rem 1rem;
   }
-
-  .crypto-forex-page .section-title {
+  .crypto-page .section-title {
     font-size: 1.8rem;
   }
-
-  .crypto-forex-page .section-text {
+  .crypto-page .section-text {
     font-size: 1rem;
   }
-
-  .subsection-title {
+  .crypto-page .sub-section-title {
     font-size: 1.4rem;
   }
-
-  .features-list li {
-    font-size: 1rem;
-  }
-
-  .cta-section .cta {
-    padding: 0.8rem 1.5rem;
-    font-size: 1rem;
+  .crypto-page .crypto-image {
+    max-width: 85%;
   }
 }
