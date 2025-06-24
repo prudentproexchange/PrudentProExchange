@@ -46,16 +46,20 @@
   max-width: 800px;
 }
 
-/* Style the image container */
+/* Style the image container to constrain the image */
 .gold-backed-page .image-container {
   display: flex;
   justify-content: center;
   margin: 2rem 0;
+  max-width: 800px; /* Limits the container width */
+  width: 100%; /* Makes it responsive */
 }
 
+/* Ensure the image fits perfectly within the container */
 .gold-backed-page .gold-backed-image {
-  max-width: 100%;
+  width: 100%;
   height: auto;
+  object-fit: contain; /* Keeps the image fully visible without distortion */
   border: 2px solid #ffd700;
   border-radius: 10px;
   box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
@@ -143,6 +147,9 @@
   .gold-backed-page .section-text {
     font-size: 1.1rem;
   }
+  .gold-backed-page .image-container {
+    max-width: 100%; /* Scales container on smaller screens */
+  }
   .gold-backed-page .cta {
     padding: 1rem 2rem;
     font-size: 1.2rem;
@@ -158,6 +165,9 @@
   }
   .gold-backed-page .section-text {
     font-size: 1rem;
+  }
+  .gold-backed-page .image-container {
+    max-width: 100%;
   }
   .gold-backed-page .cta {
     padding: 0.8rem 1.5rem;
