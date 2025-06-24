@@ -296,17 +296,22 @@
       document.getElementById('promoOffer').textContent = (profile.promo_offer || 0).toFixed(2);
       document.getElementById('promoPct').textContent = profile.promo_pct || 0;
 
-      // Load all active investments
+      // Load all active investments with plan name joined from investment_plans
       const { data: investments, error: invError } = await supabaseClient
         .from('investments')
-        .select('*, plan_name')
+        .select(`
+          *,
+          plan:investment_plans (
+            name
+          )
+        `)
         .eq('user_id', user.id)
         .gt('end_time', new Date().toISOString())
         .order('start_time', { ascending: false });
 
       if (invError) {
         console.error('Error loading investments:', invError);
-        alert('Error retrieving investment data.');
+        alert('Error retrieving investment data:\n' + invError.message);
         return;
       }
 
@@ -318,7 +323,7 @@
           const investmentDiv = document.createElement('div');
           investmentDiv.className = 'investment-item';
           investmentDiv.innerHTML = `
-            <p>Plan: <span>${investment.plan_name}</span></p>
+            <p>Plan: <span>${investment.plan ? investment.plan.name : 'Unknown'}</span></p>
             <p>Invested Amount: $<span>${investment.invested_amount.toFixed(2)}</span></p>
             <p>Current Profit: $<span class="current-profit">0.00</span></p>
             <p>Time Remaining: <span class="time-left"></span></p>
@@ -359,7 +364,7 @@
 
     // Investment calculator logic for multiple investments
     function startInvestmentCalculator(investment, investmentDiv) {
-      const { start_time, end_time, invested_amount, total_profit, plan_name } = investment;
+      const { start_time, end_time, invested_amount, total_profit } = investment;
       const startTime = new Date(start_time);
       const endTime = new Date(end_time);
       const totalSeconds = (endTime - startTime) / 1000;
