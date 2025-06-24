@@ -46,9 +46,9 @@ body {
   z-index: 10;
 }
 
-/* Make theme-toggle first */
+/* Theme toggle moved to the right before logo */
 #theme-toggle {
-  order: 1;
+  order: 3; /* Moved to appear after logo */
   background: none;
   border: none;
   color: var(--primary);
@@ -61,16 +61,18 @@ body {
   transform: rotate(180deg);
 }
 
-/* Logo second and larger */
+/* Logo larger (3x current size) */
 .logo-link {
-  order: 2;
-  margin-left: 1rem; /* space between toggle & logo */
+  order: 2; /* Appears before theme-toggle */
+  margin-left: 1rem; /* Space between hamburger (if visible) & logo */
 }
 
 .logo-link img {
-  height: 70px; /* bumped up from 50px to 70px */
+  height: 210px; /* Increased from 70px to 210px (3x) */
   width: auto;
   transition: transform 0.3s ease;
+  image-rendering: -webkit-optimize-contrast; /* Ensures crisp rendering */
+  image-rendering: crisp-edges; /* Fallback for other browsers */
 }
 
 .logo-link img:hover {
@@ -451,7 +453,7 @@ body {
     padding: 0.75rem 1rem;
   }
   .logo-link img {
-    height: 40px; /* Matches profile photo size */
+    height: 120px; /* Adjusted for smaller screens (still ~3x the original 40px) */
   }
   .profile-section {
     padding: 1rem;
@@ -477,7 +479,7 @@ body {
     padding: 0.5rem;
   }
   .logo-link img {
-    height: 30px; /* Matches profile photo size */
+    height: 90px; /* Adjusted for smaller screens (still ~3x the original 30px) */
   }
   .profile-section {
     padding: 0.75rem;
