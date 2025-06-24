@@ -22,7 +22,9 @@
   <div class="overlay">
     <!-- Header -->
     <header class="site-header">
+      <!-- Theme Toggle first -->
       <button id="theme-toggle" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
+      <!-- Then Logo -->
       <a href="dashboard.html" class="logo-link">
         <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo"/>
       </a>
@@ -277,7 +279,7 @@
       document.getElementById('refEarnings').textContent = (profile.referral_earnings || 0).toFixed(2);
       document.getElementById('depositWallet').textContent = (profile.deposit_wallet || 0).toFixed(2);
       document.getElementById('totalDeposits').textContent = (profile.total_deposits || 0).toFixed(2);
-      document.getElementById('interestWallet').textContent = (profile.interest_wallet || 0).toFixed(2);
+      document getElementById('interestWallet').textContent = (profile.interest_wallet || 0).toFixed(2);
       document.getElementById('totalWithdrawals').textContent = (profile.total_withdrawals || 0).toFixed(2);
       document.getElementById('totalInvested').textContent = (profile.total_invested || 0).toFixed(2);
       document.getElementById('promoOffer').textContent = (profile.promo_offer || 0).toFixed(2);
