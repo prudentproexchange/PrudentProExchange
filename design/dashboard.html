@@ -4,19 +4,24 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Dashboard • PrudentProExchange</title>
-  <link rel="stylesheet" href="css/style.css"/>
-  <link rel="stylesheet" href="css/dashboard.css"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <style>
-    /* Custom CSS for Dashboard Styling */
+    :root {
+      --primary-color: #FFD700; /* Gold */
+      --secondary-color: #000000; /* Black */
+      --text-color: #FFFFFF; /* White */
+      --overlay-color: rgba(0, 0, 0, 0.7); /* Dark overlay for video */
+    }
+
     body {
       font-family: 'Arial', sans-serif;
       margin: 0;
       padding: 0;
-      background: #f4f4f4;
-      color: #333;
+      background: var(--secondary-color);
+      color: var(--text-color);
+      overflow-x: hidden;
     }
 
     .bg-video {
@@ -31,7 +36,7 @@
 
     .overlay {
       position: relative;
-      background: rgba(0, 0, 0, 0.5);
+      background: var(--overlay-color);
       min-height: 100vh;
     }
 
@@ -40,12 +45,33 @@
       align-items: center;
       justify-content: space-between;
       padding: 15px 30px;
-      background: rgba(255, 255, 255, 0.95);
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      background: rgba(0, 0, 0, 0.9);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
     }
 
     .logo-link img {
       height: 40px;
+      margin-right: 20px;
+      transition: transform 0.3s;
+    }
+
+    .logo-link img:hover {
+      transform: scale(1.1);
+    }
+
+    .welcome-message {
+      font-size: 1.2em;
+      color: var(--primary-color);
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
     }
 
     .user-menu {
@@ -53,19 +79,30 @@
       display: flex;
       align-items: center;
       cursor: pointer;
+      margin-right: 20px;
     }
 
-    .user-menu .avatar {
+    .profile-container {
+      position: relative;
+    }
+
+    .avatar {
       width: 40px;
       height: 40px;
       border-radius: 50%;
       margin-right: 10px;
-      border: 2px solid #007bff;
+      border: 2px solid var(--primary-color);
+      background: var(--secondary-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5em;
+      color: var(--primary-color);
     }
 
     .user-menu span {
       font-weight: bold;
-      color: #333;
+      color: var(--primary-color);
     }
 
     .user-menu .submenu {
@@ -73,8 +110,8 @@
       position: absolute;
       top: 100%;
       right: 0;
-      background: #fff;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+      background: var(--secondary-color);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
       border-radius: 5px;
       padding: 10px;
       list-style: none;
@@ -89,14 +126,14 @@
     .user-menu .submenu li a {
       display: block;
       padding: 8px 12px;
-      color: #333;
+      color: var(--text-color);
       text-decoration: none;
       transition: background 0.3s;
     }
 
     .user-menu .submenu li a:hover {
-      background: #f0f0f0;
-      color: #007bff;
+      background: var(--primary-color);
+      color: var(--secondary-color);
     }
 
     .main-nav {
@@ -105,29 +142,16 @@
     }
 
     .main-nav a {
-      color: #333;
+      color: var(--text-color);
       text-decoration: none;
       font-weight: 500;
       padding: 8px 15px;
-      transition: color 0.3s;
+      transition: color 0.3s, transform 0.3s;
     }
 
     .main-nav a:hover, .main-nav a.active {
-      color: #007bff;
-    }
-
-    .welcome {
-      padding: 40px 30px;
-      text-align: left;
-      color: #fff;
-      background: linear-gradient(135deg, #007bff, #00c4cc);
-      border-radius: 10px;
-      margin: 20px;
-    }
-
-    .welcome h1 {
-      margin: 0;
-      font-size: 2.5em;
+      color: var(--primary-color);
+      transform: translateY(-2px);
     }
 
     .cards-grid {
@@ -138,10 +162,11 @@
     }
 
     .card {
-      background: #fff;
+      background: var(--secondary-color);
+      border: 1px solid var(--primary-color);
       border-radius: 10px;
       padding: 20px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
       transition: transform 0.3s;
     }
 
@@ -151,12 +176,12 @@
 
     .card h2 {
       margin: 0 0 15px;
-      color: #007bff;
+      color: var(--primary-color);
       font-size: 1.5em;
     }
 
     .card p, .card ul {
-      color: #666;
+      color: var(--text-color);
       line-height: 1.6;
     }
 
@@ -168,32 +193,34 @@
     .card .brand {
       text-align: center;
       font-size: 0.9em;
-      color: #999;
+      color: var(--primary-color);
       margin: 15px 0;
     }
 
     .card .btn {
       display: inline-block;
       padding: 10px 20px;
-      background: #007bff;
-      color: #fff;
+      background: var(--primary-color);
+      color: var(--secondary-color);
       text-decoration: none;
       border-radius: 5px;
       float: right;
-      transition: background 0.3s;
+      transition: background 0.3s, transform 0.3s;
     }
 
     .card .btn:hover {
-      background: #0056b3;
+      background: #e6c200; /* Darker gold */
+      transform: scale(1.05);
     }
 
     .card input[readonly] {
       width: 100%;
       padding: 8px;
       margin: 10px 0;
-      border: 1px solid #ddd;
+      border: 1px solid var(--primary-color);
       border-radius: 5px;
-      background: #f9f9f9;
+      background: var(--secondary-color);
+      color: var(--text-color);
     }
 
     .transaction-history {
@@ -201,34 +228,39 @@
     }
 
     .transaction-history h2 {
-      color: #fff;
+      color: var(--primary-color);
       margin-bottom: 15px;
     }
 
     .transaction-history table {
       width: 100%;
-      background: #fff;
+      background: var(--secondary-color);
       border-radius: 10px;
       overflow: hidden;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     }
 
     .transaction-history th, .transaction-history td {
       padding: 15px;
       text-align: left;
-      border-bottom: 1px solid #eee;
+      border-bottom: 1px solid var(--primary-color);
+      color: var(--text-color);
     }
 
     .transaction-history th {
-      background: #f5f5f5;
-      color: #333;
+      background: #111;
+    }
+
+    .transaction-history tr:nth-child(even) {
+      background: #111;
     }
 
     .site-footer {
-      background: #333;
-      color: #fff;
+      background: var(--secondary-color);
+      color: var(--text-color);
       padding: 20px;
       text-align: center;
+      border-top: 1px solid var(--primary-color);
     }
 
     .footer-content p {
@@ -236,29 +268,48 @@
     }
 
     .footer-links a {
-      color: #fff;
+      color: var(--text-color);
       margin: 0 10px;
       text-decoration: none;
+      transition: color 0.3s;
     }
 
     .footer-links a:hover {
-      color: #007bff;
+      color: var(--primary-color);
     }
 
     #back-to-top {
       position: fixed;
       bottom: 20px;
       right: 20px;
-      background: #007bff;
-      color: #fff;
+      background: var(--primary-color);
+      color: var(--secondary-color);
       border: none;
       padding: 10px;
       border-radius: 50%;
       cursor: pointer;
+      transition: background 0.3s, transform 0.3s;
     }
 
     #back-to-top:hover {
-      background: #0056b3;
+      background: #e6c200;
+      transform: scale(1.1);
+    }
+
+    @media (max-width: 768px) {
+      .site-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .header-right {
+        margin-top: 10px;
+      }
+
+      .main-nav {
+        flex-wrap: wrap;
+        gap: 10px;
+      }
     }
   </style>
 </head>
@@ -272,84 +323,79 @@
 
   <div class="overlay">
     <header class="site-header">
-      <a href="/" class="logo-link">
-        <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo"/>
-      </a>
-
-      <!-- Profile pic + dropdown menu -->
-      <div class="user-menu">
-        <img id="navProfilePhoto" src="" alt="Profile" class="avatar" style="display: none;"/>
-        <span id="navUsername"></span> ▾
-        <ul class="submenu">
-          <li><a href="profile-settings.html">Profile Settings</a></li>
-          <li><a href="#" id="transfer-balance-link">Transfer Balance</a></li>
-          <li><a href="change-password.html">Change Password</a></li>
-          <li><a href="support.html">Support Ticket</a></li>
-          <li><a href="promo-tools.html">Promotional Tools</a></li>
-          <li><a href="2fa.html">2FA Security</a></li>
-          <li><a href="#" id="logout-btn">Logout</a></li>
-        </ul>
+      <div class="header-left">
+        <a href="dashboard.html" class="logo-link">
+          <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo"/>
+        </a>
+        <div class="welcome-message">Welcome back! <span id="welcomeName"></span></div>
       </div>
-
-      <!-- Main nav -->
-      <nav class="main-nav">
-        <a href="dashboard.html" class="active">Dashboard 🏠</a>
-        <a href="withdraw.html">Withdraw</a>
-        <a href="transactions.html">Transactions</a>
-        <a href="referrals.html">Referrals</a>
-        <a href="account.html">Account</a>
-        <a href="kyc.html">KYC Verification</a>
-        <a href="transfer.html">Transfer</a>
-      </nav>
+      <div class="header-right">
+        <div class="user-menu">
+          <div class="profile-container">
+            <img id="navProfilePhoto" src="" alt="Profile" class="avatar" style="display: none;"/>
+            <span id="defaultProfileIcon" class="avatar">👤</span>
+          </div>
+          <span id="navUsername"></span> ▾
+          <ul class="submenu">
+            <li><a href="profile-settings.html">Profile Settings</a></li>
+            <li><a href="#" id="transfer-balance-link">Transfer Balance</a></li>
+            <li><a href="change-password.html">Change Password</a></li>
+            <li><a href="support.html">Support Ticket</a></li>
+            <li><a href="promo-tools.html">Promotional Tools</a></li>
+            <li><a href="2fa.html">2FA Security</a></li>
+            <li><a href="#" id="logout-btn">Logout</a></li>
+          </ul>
+        </div>
+        <nav class="main-nav">
+          <a href="dashboard.html" class="active">Dashboard 🏠</a>
+          <a href="withdraw.html">Withdraw</a>
+          <a href="transactions.html">Transactions</a>
+          <a href="referrals.html">Referrals</a>
+          <a href="account.html">Account</a>
+          <a href="kyc.html">KYC Verification</a>
+          <a href="transfer.html">Transfer</a>
+        </nav>
+      </div>
     </header>
 
     <main class="dashboard-page container">
-      <section class="welcome" data-aos="fade-up">
-        <h1>Welcome Back! User <span id="welcomeName"></span> - Dashboard 🏠</h1>
-      </section>
-
       <section class="cards-grid" data-aos="fade-up">
-        <!-- How it Works -->
-        <div class="card how-it-works">
+        <div class="card how-it-works" data-aos="zoom-in">
           <h2>How it Works</h2>
           <p>This is how to invest on PrudentProExchange:</p>
           <ul>
             <li>Fund your account using one of our deposit methods.</li>
-            <li>Choose a package/plan of your choice from our plan menu and activate (you will get a mail once your plan is active).</li>
-            <li>Monitor your earnings from your dashboard; once a plan expires, you can request a withdrawal.</li>
-            <li>Compounding of profits is allowed: profits can be compounded up to 4 months.</li>
-            <li>If you face any issues or need any information, our live support is always available to help you; click on the chat bubble located at the footer.</li>
+            <li>Choose a package/plan of your choice from our plan menu and activate.</li>
+            <li>Monitor your earnings from your dashboard.</li>
+            <li>Compounding of profits is allowed up to 4 months.</li>
+            <li>Our live support is always available to help you.</li>
           </ul>
           <p class="brand">PrudentProExchange.net</p>
           <a href="plans.html" class="btn">Choose Plan →</a>
         </div>
 
-        <!-- Affiliate Program -->
-        <div class="card affiliate">
+        <div class="card affiliate" data-aos="zoom-in">
           <h2>Affiliate Program</h2>
-          <p>Copy the link below, share with people, and earn 10% on every deposit they make.</p>
+          <p>Share this link and earn 10% on every deposit:</p>
           <input type="text" id="affiliateLink" readonly/>
-          <p>Your current Referral earning: $<span id="refEarnings">0.00</span></p>
+          <p>Your Referral Earnings: $<span id="refEarnings">0.00</span></p>
         </div>
 
-        <!-- Deposit Wallet -->
-        <div class="card deposit-wallet">
+        <div class="card deposit-wallet" data-aos="zoom-in">
           <h2>Deposit Wallet</h2>
           $<span id="depositWallet">0.00</span>
           <p>Total Deposits: $<span id="totalDeposits">0.00</span></p>
           <a href="deposit.html" class="btn">Deposit →</a>
         </div>
 
-        <!-- Interest Wallet -->
-        <div class="card interest-wallet">
+        <div class="card interest-wallet" data-aos="zoom-in">
           <h2>Interest Wallet</h2>
           $<span id="interestWallet">0.00</span>
           <p>Total Withdrawals: $<span id="totalWithdrawals">0.00</span></p>
           <a href="withdraw.html" class="btn">Withdraw →</a>
         </div>
 
-        <!-- Investments & Promo -->
-        <div class="card investments">
+        <div class="card investments" data-aos="zoom-in">
           <h2>Total Invested: $<span id="totalInvested">0.00</span></h2>
           <p>Promo Offer: $<span id="promoOffer">0.00</span> (<span id="promoPct">0</span>%)</p>
           <a href="promo.html" class="btn">Claim Offer →</a>
@@ -372,17 +418,17 @@
       </section>
     </main>
 
-    <footer class="section section-dark site-footer" data-aos="fade-up">
+    <footer class="site-footer" data-aos="fade-up">
       <div class="footer-content">
-        <p class="utc-time">UTC Time: <span id="utcTime"></span></p>
-        <p class="local-time">Local Time: <span id="localTime"></span></p>
-        <p class="local-date">Local Date: <span id="localDate"></span></p>
+        <p>UTC Time: <span id="utcTime"></span></p>
+        <p>Local Time: <span id="localTime"></span></p>
+        <p>Local Date: <span id="localDate"></span></p>
         <nav class="footer-links">
           <a href="about.html">About Us</a>
           <a href="privacy.html">Privacy Policy</a>
           <a href="terms.html">Terms & Conditions</a>
         </nav>
-        <p class="copyright">© 2025 PrudentProExchange. All Rights Reserved. SEC Registration #0001230714</p>
+        <p>© 2025 PrudentProExchange. All Rights Reserved.</p>
       </div>
     </footer>
   </div>
@@ -403,10 +449,7 @@
       const now = new Date();
       document.getElementById('localTime').textContent = now.toLocaleTimeString();
       document.getElementById('localDate').textContent = now.toLocaleDateString('en-US', {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
+        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
       });
     }
     setInterval(updateLocalTime, 1000);
@@ -433,7 +476,6 @@
         return;
       }
 
-      // Load extended profile
       const { data: profile, error: profileError } = await supabaseClient
         .from('profiles')
         .select('*')
@@ -442,22 +484,26 @@
 
       if (profileError) {
         console.error('Error loading profile:', profileError);
-        alert('Error loading profile. Please try again later.');
+        alert('Error loading profile.');
         return;
       }
 
-      // Welcome banner + nav username/photo
-      document.getElementById('welcomeName').textContent = profile.first_name || 'User';
-      document.getElementById('navUsername').textContent = profile.first_name || 'User';
+      const userName = profile.first_name || 'User';
+      document.getElementById('welcomeName').textContent = userName;
+      document.getElementById('navUsername').textContent = userName;
+
       if (profile.photo_url) {
         const { data: urlData } = supabaseClient.storage
           .from('profile-photos')
           .getPublicUrl(profile.photo_url);
         document.getElementById('navProfilePhoto').src = urlData.publicUrl;
         document.getElementById('navProfilePhoto').style.display = 'block';
+        document.getElementById('defaultProfileIcon').style.display = 'none';
+      } else {
+        document.getElementById('navProfilePhoto').style.display = 'none';
+        document.getElementById('defaultProfileIcon').style.display = 'flex';
       }
 
-      // Populate cards with fallback values
       document.getElementById('affiliateLink').value = profile.referral_link || '';
       document.getElementById('refEarnings').textContent = (profile.referral_earnings || 0).toFixed(2);
       document.getElementById('depositWallet').textContent = (profile.deposit_wallet || 0).toFixed(2);
@@ -468,7 +514,6 @@
       document.getElementById('promoOffer').textContent = (profile.promo_offer || 0).toFixed(2);
       document.getElementById('promoPct').textContent = profile.promo_pct || 0;
 
-      // Load transaction history
       const { data: txns, error: txnsError } = await supabaseClient
         .from('transactions')
         .select('*')
@@ -477,12 +522,12 @@
 
       if (txnsError) {
         console.error('Error loading transactions:', txnsError);
-        alert('Error loading transaction history. Please try again later.');
+        alert('Error loading transactions.');
         return;
       }
 
       const tbody = document.querySelector('#txTable tbody');
-      tbody.innerHTML = ''; // Clear existing rows
+      tbody.innerHTML = '';
       txns.forEach(t => {
         const row = `<tr>
           <td>${new Date(t.created_at).toLocaleString()}</td>
@@ -493,16 +538,13 @@
         tbody.insertAdjacentHTML('beforeend', row);
       });
 
-      // Real-time interest calculation (simplified for demo)
       let interestWallet = parseFloat(profile.interest_wallet || 0);
       setInterval(() => {
-        // Assuming a simple interest rate (e.g., 0.001% per second) for demo
         interestWallet += (profile.total_invested || 0) * 0.00001;
         document.getElementById('interestWallet').textContent = interestWallet.toFixed(2);
       }, 1000);
     }
 
-    // Event listeners
     document.getElementById('transfer-balance-link').addEventListener('click', e => {
       e.preventDefault();
       window.location.href = 'transfer.html';
@@ -510,14 +552,10 @@
 
     document.getElementById('logout-btn').addEventListener('click', async () => {
       const { error } = await supabaseClient.auth.signOut();
-      if (!error) {
-        window.location.href = 'login.html';
-      } else {
-        alert('Error logging out: ' + error.message);
-      }
+      if (!error) window.location.href = 'login.html';
+      else alert('Error logging out: ' + error.message);
     });
 
-    // Initialize dashboard on page load
     initDashboard();
   </script>
 </body>
