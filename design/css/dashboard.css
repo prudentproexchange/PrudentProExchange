@@ -38,13 +38,12 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.5rem 1rem; /* Reduced padding for smoother appearance */
+  padding: 1rem 2rem;
   background: rgba(0, 0, 0, 0.8);
   backdrop-filter: blur(10px);
   position: sticky;
   top: 0;
   z-index: 10;
-  flex-wrap: wrap; /* Ensure logo doesn't overlap on smaller screens */
 }
 
 #theme-toggle {
@@ -53,7 +52,7 @@ body {
   color: var(--primary);
   font-size: 1.5rem;
   cursor: pointer;
-  transition: transform 0.3s;
+  transition: transform 0.3s ease;
 }
 
 #theme-toggle:hover {
@@ -61,12 +60,13 @@ body {
 }
 
 .logo-link img {
-  height: 900px;
-  transition: transform 0.3s;
+  max-height: 10vh; /* Responsive height */
+  width: auto;
+  transition: transform 0.3s ease;
 }
 
 .logo-link img:hover {
-  transform: scale(1.1);
+  transform: scale(1.05);
 }
 
 .hamburger {
@@ -74,6 +74,7 @@ body {
   background: none;
   border: none;
   cursor: pointer;
+  padding: 0;
 }
 
 .hamburger span {
@@ -82,7 +83,7 @@ body {
   height: 3px;
   background: var(--primary);
   margin: 5px 0;
-  transition: all 0.3s;
+  transition: all 0.3s ease;
 }
 
 .hamburger.active span:nth-child(1) {
@@ -102,10 +103,11 @@ body {
   top: 0;
   right: -100%;
   width: 80%;
+  max-width: 300px;
   height: 100%;
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.9);
   backdrop-filter: blur(10px);
-  transition: right 0.3s;
+  transition: right 0.3s ease;
   z-index: 20;
   padding: 2rem;
   display: flex;
@@ -137,7 +139,7 @@ body {
   color: var(--text-color);
   text-decoration: none;
   font-size: 1.2rem;
-  transition: color 0.3s;
+  transition: color 0.3s ease;
 }
 
 .nav-drawer a:hover, .nav-drawer a.active {
@@ -154,6 +156,7 @@ body {
   color: var(--text-color);
   text-decoration: none;
   font-size: 1.2rem;
+  cursor: pointer;
 }
 
 .nav-drawer .submenu {
@@ -186,7 +189,7 @@ body {
 .profile-section {
   display: flex;
   align-items: center;
-  padding: 1rem 2rem;
+  padding: 1.5rem 2rem;
   background: var(--glass-bg);
   backdrop-filter: blur(10px);
 }
@@ -206,11 +209,13 @@ body {
   justify-content: center;
   font-size: 2rem;
   color: var(--primary);
+  object-fit: cover;
 }
 
 .welcome-message {
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   color: var(--primary);
+  font-family: 'Playfair Display', serif;
 }
 
 /* Main Content */
@@ -234,7 +239,7 @@ body {
   border: 1px solid var(--primary);
   border-radius: 10px;
   backdrop-filter: blur(10px);
-  transition: transform 0.3s, box-shadow 0.3s;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .card:hover {
@@ -286,7 +291,8 @@ body {
   color: #000;
   text-decoration: none;
   border-radius: 5px;
-  transition: background 0.3s, transform 0.3s;
+  font-weight: 600;
+  transition: background 0.3s ease, transform 0.3s ease;
 }
 
 .card .btn:hover {
@@ -296,9 +302,8 @@ body {
 
 .card .invest-btn {
   display: block;
-  margin: 1rem auto;
+  margin: 1rem auto 0;
   text-align: center;
-  float: none;
 }
 
 .card input[readonly] {
@@ -309,6 +314,7 @@ body {
   border: 1px solid var(--primary);
   color: #fff;
   border-radius: 5px;
+  font-size: 0.9rem;
 }
 
 /* Investment Card Styles */
@@ -322,13 +328,6 @@ body {
 
 .investment-item p {
   margin: 0.5rem 0;
-}
-
-.investment-card .btn {
-  display: block;
-  margin: 1rem auto;
-  text-align: center;
-  float: none;
 }
 
 /* Transaction History */
@@ -347,11 +346,13 @@ body {
   padding: 0.75rem;
   border: 1px solid var(--primary);
   color: #e0e0ff;
+  text-align: left;
 }
 
 #txTable th {
   background: var(--primary);
   color: #000;
+  font-weight: 600;
 }
 
 /* Footer */
@@ -365,12 +366,13 @@ body {
 
 .footer-content p, .footer-links a {
   color: #e0e0ff;
+  margin: 0.5rem 0;
 }
 
 .footer-links a {
   margin: 0 1rem;
   text-decoration: none;
-  transition: color 0.3s;
+  transition: color 0.3s ease;
 }
 
 .footer-links a:hover {
@@ -388,7 +390,8 @@ body {
   padding: 10px;
   border-radius: 50%;
   cursor: pointer;
-  transition: transform 0.3s;
+  font-size: 1.2rem;
+  transition: transform 0.3s ease;
 }
 
 #back-to-top:hover {
@@ -396,41 +399,56 @@ body {
 }
 
 /* Responsive Design */
+@media (max-width: 1024px) {
+  .site-header {
+    padding: 1rem;
+  }
+}
+
 @media (max-width: 768px) {
   .hamburger {
     display: block;
+  }
+  .site-header {
+    padding: 0.75rem 1rem;
+  }
+  .logo-link img {
+    max-height: 8vh;
   }
   .profile-section {
     padding: 1rem;
   }
   .welcome-message {
-    font-size: 1rem;
+    font-size: 1.2rem;
   }
   .avatar {
     width: 40px;
     height: 40px;
     font-size: 1.5rem;
   }
-  .logo-link img {
-    height: 450px;
+  .dashboard-page.container {
+    padding: 1rem;
   }
-  .site-header {
-    padding: 0.5rem 1rem;
+  .cards-grid {
+    grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 480px) {
   .site-header {
-    padding: 0.25rem 0.5rem; /* Further reduced for mobile */
+    padding: 0.5rem;
   }
   .logo-link img {
-    height: 180px;
-  }
-  .cards-grid {
-    grid-template-columns: 1fr;
+    max-height: 6vh;
   }
   .profile-section {
-    padding: 0.5rem;
+    padding: 0.75rem;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .profile-container {
+    margin-right: 0;
+    margin-bottom: 0.5rem;
   }
   .avatar {
     width: 30px;
@@ -438,14 +456,15 @@ body {
     font-size: 1.2rem;
   }
   .welcome-message {
-    font-size: 0.9rem;
+    font-size: 1rem;
   }
-}
-
-/* Ensure compatibility across devices */
-@media (max-width: 1024px) {
-  .site-header {
-    flex-wrap: wrap;
-    justify-content: space-around;
+  .card {
+    padding: 1.5rem;
+  }
+  .card h2 {
+    font-size: 1.5rem;
+  }
+  .card .btn {
+    padding: 0.5rem 1rem;
   }
 }
