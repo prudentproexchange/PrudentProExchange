@@ -1,35 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="PrudentProExchange: The global leader in managed crypto and forex investments, delivering unparalleled expertise and profitability.">
+  <meta name="keywords" content="crypto investment, forex trading, wealth management, PrudentProExchange">
+  <meta name="author" content="PrudentProExchange">
+  <meta name="robots" content="index, follow">
   <title>Crypto & Forex • PrudentProExchange</title>
-  <link rel="stylesheet" href="css/style.css" />
-  <link rel="stylesheet" href="css/crypto-forex.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/crypto-forex.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap">
+  <link rel="icon" href="assets/images/favicon.ico" type="image/x-icon">
 </head>
 <body class="crypto-forex-page">
   <!-- Background Video -->
-  <video autoplay muted loop playsinline id="backgroundVideo">
-    <source src="assets/videos/background.mp4" type="video/mp4" />
+  <video autoplay muted loop playsinline id="backgroundVideo" poster="assets/images/video-poster.jpg">
+    <source src="assets/videos/background.mp4" type="video/mp4">
+    <source src="assets/videos/background.webm" type="video/webm">
+    Your browser does not support the video tag.
   </video>
 
   <!-- Overlay Container -->
   <div class="overlay">
     <!-- Header -->
-    <header>
-      <div class="theme-toggle">
-        <i class="fas fa-adjust"></i>
+    <header role="banner">
+      <div class="theme-toggle" role="button" aria-label="Toggle dark/light theme" tabindex="0">
+        <i class="fas fa-adjust" aria-hidden="true"></i>
       </div>
-      <a href="/" class="logo">
-        <img src="assets/images/logo.png" alt="PrudentProExchange Logo" />
+      <a href="/" class="logo" aria-label="PrudentProExchange Home">
+        <img src="assets/images/logo.png" alt="PrudentProExchange Logo" width="150" height="50" loading="lazy">
       </a>
-      <button class="hamburger" id="hamburgerBtnCryptoForex">
-        <i class="fas fa-bars"></i>
+      <button class="hamburger" id="hamburgerBtnCryptoForex" aria-label="Toggle navigation" aria-expanded="false">
+        <i class="fas fa-bars" aria-hidden="true"></i>
       </button>
-      <nav class="nav-drawer" id="navDrawerCryptoForex">
+      <nav class="nav-drawer" id="navDrawerCryptoForex" role="navigation" aria-label="Main navigation">
         <a href="/#application">Apply</a>
         <a href="about.html">About</a>
         <a href="privacy.html">Privacy Policy</a>
@@ -43,7 +51,7 @@
     </header>
 
     <!-- Main Content -->
-    <main class="crypto-forex-page container">
+    <main class="crypto-forex-page container" role="main">
       <!-- Introduction Section -->
       <section id="intro" class="section" data-aos="fade-up">
         <h2 class="section-title gold">Mastering Wealth Creation with PrudentProExchange: The Global Leader in Managed Crypto and Forex Investments</h2>
@@ -53,7 +61,7 @@
       <!-- Image Section -->
       <section id="image" class="section" data-aos="fade-up">
         <div class="image-container">
-          <img src="assets/images/crypto-forex.jpg" alt="Crypto and Forex investment" class="crypto-forex-image" />
+          <img src="assets/images/crypto-forex.jpg" alt="Crypto and Forex investment illustration" class="crypto-forex-image" loading="lazy">
         </div>
       </section>
 
@@ -112,16 +120,16 @@
         <h2 class="section-title gold">Your Wealth, Our Responsibility</h2>
         <p class="section-text">In the fast-paced world of crypto and forex, PrudentProExchange offers a rare opportunity to secure and grow wealth with confidence. By entrusting your capital to us, you gain access to our unmatched expertise, advanced technology, ironclad security, and proven track record of profitability. We stand alone as the world’s premier platform for managed investments in these dynamic markets, delivering sustainable wealth creation through visionary wisdom and relentless dedication.</p>
         <p class="section-text">Entrust your financial future to PrudentProExchange today, and let us unlock the full potential of crypto and forex markets, securing your wealth with precision, profitability, and unparalleled success.</p>
-        <button class="cta primary" onclick="location.href='/#application'">Get Started</button>
+        <button class="cta primary" onclick="location.href='/#application'" aria-label="Get started with PrudentProExchange">Get Started</button>
       </section>
     </main>
 
     <!-- Footer -->
-    <footer>
+    <footer role="contentinfo">
       <div class="footer-content">
         <div class="time-display">
-          <p>Local Time: <span id="localTime"></span></p>
-          <p>UTC Time: <span id="utcTime"></span></p>
+          <p>Local Time: <span id="localTime" aria-live="polite"></span></p>
+          <p>UTC Time: <span id="utcTime" aria-live="polite"></span></p>
         </div>
         <div class="footer-links">
           <a href="about.html">About</a>
@@ -129,39 +137,58 @@
           <a href="terms.html">Terms</a>
         </div>
       </div>
-      <p>&copy; 2023 PrudentProExchange. All rights reserved.</p>
+      <p>© 2025 PrudentProExchange. All rights reserved.</p>
     </footer>
 
     <!-- Back to Top Button -->
-    <button class="back-to-top"><i class="fas fa-arrow-up"></i></button>
+    <button class="back-to-top" aria-label="Back to top"><i class="fas fa-arrow-up" aria-hidden="true"></i></button>
   </div>
 
   <!-- Scripts -->
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script src="js/main.js"></script>
   <script>
-    // Hamburger toggle for Crypto & Forex page
-    const btnCryptoForex = document.getElementById('hamburgerBtnCryptoForex');
-    const drawerCryptoForex = document.getElementById('navDrawerCryptoForex');
-    btnCryptoForex.addEventListener('click', () => {
-      drawerCryptoForex.classList.toggle('open');
-      btnCryptoForex.classList.toggle('active');
+    // Hamburger toggle
+    const hamburgerBtn = document.getElementById('hamburgerBtnCryptoForex');
+    const navDrawer = document.getElementById('navDrawerCryptoForex');
+    hamburgerBtn.addEventListener('click', () => {
+      const isOpen = navDrawer.classList.toggle('open');
+      hamburgerBtn.classList.toggle('active', isOpen);
+      hamburgerBtn.setAttribute('aria-expanded', isOpen);
+    });
+
+    // Close nav drawer on link click (mobile)
+    navDrawer.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        navDrawer.classList.remove('open');
+        hamburgerBtn.classList.remove('active');
+        hamburgerBtn.setAttribute('aria-expanded', 'false');
+      });
+    });
+
+    // Theme toggle with localStorage
+    const themeToggle = document.querySelector('.theme-toggle');
+    const currentTheme = localStorage.getItem('theme') || 'light';
+    if (currentTheme === 'dark') document.body.classList.add('dark-theme');
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark-theme');
+      localStorage.setItem('theme', document.body.classList.contains('dark-theme') ? 'dark' : 'light');
+    });
+    themeToggle.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        themeToggle.click();
+      }
     });
 
     // Local and UTC time updates
     function updateTime() {
       const now = new Date();
-      document.getElementById('localTime').textContent = now.toLocaleTimeString();
+      document.getElementById('localTime').textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
       document.getElementById('utcTime').textContent = now.toUTCString().split(' ')[4];
     }
     setInterval(updateTime, 1000);
     updateTime();
-
-    // Theme toggle
-    const themeToggle = document.querySelector('.theme-toggle');
-    themeToggle.addEventListener('click', () => {
-      document.body.classList.toggle('dark-theme');
-    });
 
     // Back to top button
     const backToTop = document.querySelector('.back-to-top');
@@ -172,12 +199,18 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
-    // AOS Initialization
-    AOS.init({ duration: 1000, once: true });
+    // AOS Initialization with reduced motion check
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      AOS.init({ duration: 1000, once: true });
+    }
 
     // Video playback optimization
     const video = document.getElementById('backgroundVideo');
-    video.playbackRate = 0.8;
+    if (window.innerWidth < 768 || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      video.playbackRate = 0.5; // Slower for mobile/reduced motion
+    } else {
+      video.playbackRate = 0.8;
+    }
   </script>
 </body>
 </html>
