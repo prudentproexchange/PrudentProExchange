@@ -288,24 +288,37 @@
 
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
-    AOS.init({ duration: 800, once: true });
+    // Initialize AOS
+    try {
+      AOS.init({ duration: 800, once: true });
+    } catch (err) {
+      alert('AOS initialization failed: ' + err.message);
+    }
 
     // Hamburger toggle
-    const btnApp = document.getElementById('hamburgerApp'),
-          drawerApp = document.getElementById('navDrawerApp');
-    btnApp.addEventListener('click', () => {
-      drawerApp.classList.toggle('open');
-      btnApp.classList.toggle('active');
-    });
+    try {
+      const btnApp = document.getElementById('hamburgerApp'),
+            drawerApp = document.getElementById('navDrawerApp');
+      btnApp.addEventListener('click', () => {
+        drawerApp.classList.toggle('open');
+        btnApp.classList.toggle('active');
+      });
+    } catch (err) {
+      alert('Hamburger menu setup failed: ' + err.message);
+    }
 
     // Theme toggle
-    const themeToggle = document.getElementById('theme-toggle');
-    themeToggle.addEventListener('click', () => {
-      document.body.classList.toggle('light-theme');
-      const icon = themeToggle.querySelector('i');
-      icon.classList.toggle('fa-moon');
-      icon.classList.toggle('fa-sun');
-    });
+    try {
+      const themeToggle = document.getElementById('theme-toggle');
+      themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('light-theme');
+        const icon = themeToggle.querySelector('i');
+        icon.classList.toggle('fa-moon');
+        icon.classList.toggle('fa-sun');
+      });
+    } catch (err) {
+      alert('Theme toggle setup failed: ' + err.message);
+    }
 
     // Generate a random referral code
     function generateReferralCode(length = 8) {
@@ -317,94 +330,105 @@
       return code;
     }
 
-    // Supabase client
-    const supabase = Supabase.createClient(
-      'https://iwkdznjqfbsfkscnbrkc.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU'
-    );
+    // Initialize Supabase client
+    let supabase;
+    try {
+      supabase = Supabase.createClient(
+        'https://iwkdznjqfbsfkscnbrkc.supabase.co',
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU'
+      );
+      alert('Supabase client initialized successfully.');
+    } catch (err) {
+      alert('Failed to initialize Supabase client: ' + err.message);
+      return;
+    }
 
     // Handle sign-up
-    document.getElementById('applicationForm').addEventListener('submit', async (event) => {
+    const form = document.getElementById('applicationForm');
+    if (!form) {
+      alert('Form element not found. Please check the HTML.');
+      return;
+    }
+
+    form.addEventListener('submit', async (event) => {
       event.preventDefault();
-      const form = event.target;
+      event.stopPropagation(); // Extra precaution to prevent form submission
+
+      const formData = new FormData(form);
 
       try {
         // Validate inputs
-        if (form.password.value !== form.confirm_password.value) {
+        const password = formData.get('password');
+        const confirmPassword = formData.get('confirm_password');
+        const terms = formData.get('terms');
+
+        if (password !== confirmPassword) {
           throw new Error('Passwords do not match.');
         }
-        if (!form.terms.checked) {
+        if (!terms) {
           throw new Error('You must agree to the Privacy Policy and Terms & Conditions.');
         }
+        if (password.length < 6) {
+          throw new Error('Password must be at least 6 characters long.');
+        }
 
-        console.log('Form data:', {
-          email: form.email.value,
-          first_name: form.first_name.value,
-          last_name: form.last_name.value,
-          username: form.username.value,
-          country: form.country.value,
-          referral_code: form.referral_code.value,
-        });
+        alert('Form validation passed. Attempting to sign up...');
 
         // Generate unique referral link
         const referralCode = generateReferralCode();
         const referralLink = `https://prudentproexchange.com/referral/${referralCode}`;
-        console.log('Generated referral link:', referralLink);
 
         // 1. Sign up with Supabase Auth
-        console.log('Attempting to sign up with email:', form.email.value);
+        const email = formData.get('email');
+        alert('Sending sign-up request for email: ' + email);
         const { data: authData, error: signUpError } = await supabase.auth.signUp({
-          email: form.email.value,
-          password: form.password.value,
+          email: email,
+          password: password,
           options: {
-            emailRedirectTo: 'https://prudentproexchange.com/login.html', // Redirect after email confirmation
+            emailRedirectTo: 'https://prudentproexchange.com/login.html',
           },
         });
 
         if (signUpError) {
-          console.error('Sign-up error:', signUpError);
           throw new Error(`Sign-up failed: ${signUpError.message}`);
         }
 
         const user = authData.user;
         if (!user) {
-          console.error('No user returned from signUp');
           throw new Error('User creation failed: No user data returned.');
         }
 
-        console.log('User signed up successfully:', user.id);
+        alert('User signed up successfully with ID: ' + user.id);
 
         // 2. Upload photo if provided
         let photoUrl = null;
-        if (form.photo.files[0]) {
-          console.log('Uploading photo for user:', user.id);
-          const file = form.photo.files[0];
-          const filePath = `${user.id}/${Date.now()}_${file.name}`; // Unique file name
+        const photo = formData.get('photo');
+        if (photo && photo.size > 0) {
+          alert('Uploading profile photo...');
+          const filePath = `${user.id}/${Date.now()}_${photo.name}`;
           const { data: storageData, error: uploadError } = await supabase.storage
             .from('profile-photos')
-            .upload(filePath, file, { upsert: true });
+            .upload(filePath, photo, { upsert: true });
 
           if (uploadError) {
-            console.error('Photo upload error:', uploadError);
             throw new Error(`Photo upload failed: ${uploadError.message}`);
           }
           photoUrl = storageData.path;
-          console.log('Photo uploaded successfully:', photoUrl);
+          alert('Photo uploaded successfully.');
         }
 
         // 3. Create profile in Supabase
-        console.log('Inserting profile for user:', user.id);
+        alert('Creating user profile...');
         const profileData = {
           id: user.id,
-          first_name: form.first_name.value,
-          last_name: form.last_name.value,
-          username: form.username.value,
-          country: form.country.value,
-          referral_code: form.referral_code.value || null,
+          first_name: formData.get('first_name'),
+          last_name: formData.get('last_name'),
+          username: formData.get('username'),
+          country: formData.get('country'),
+          referral_code: formData.get('referral_code') || null,
           referral_link: referralLink,
           photo_url: photoUrl,
         };
-        console.log('Profile data:', profileData);
 
         const { data: insertData, error: profileError } = await supabase
           .from('profiles')
@@ -412,17 +436,13 @@
           .select();
 
         if (profileError) {
-          console.error('Profile insertion error:', profileError);
           throw new Error(`Profile creation failed: ${profileError.message}`);
         }
-
-        console.log('Profile inserted successfully:', insertData);
 
         alert('Sign-up successful! Please check your email to confirm your account, then log in.');
         window.location.href = 'login.html';
       } catch (error) {
-        console.error('Error during sign-up process:', error);
-        alert(error.message || 'An unexpected error occurred. Please try again.');
+        alert('Error: ' + (error.message || 'An unexpected error occurred. Please try again.'));
       }
     });
   </script>
