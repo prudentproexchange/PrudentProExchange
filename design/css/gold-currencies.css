@@ -1,7 +1,7 @@
 /* Gold-Backed Currencies Page Specific Styles */
 
-/* Ensure sections are transparent to use overlay background */
-.gold-backed-page .section {
+/* Section styling */
+.gold-currencies-page .section {
   background: transparent;
   padding: 3rem 2rem;
   margin-bottom: 4rem;
@@ -16,8 +16,8 @@
   width: 100%;
 }
 
-/* Styling for section titles */
-.gold-backed-page .section-title {
+/* Section titles */
+.gold-currencies-page .section-title {
   font-size: 2.5rem;
   font-family: 'Playfair Display', serif;
   color: var(--primary);
@@ -27,7 +27,7 @@
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
-.gold-backed-page .section-title::after {
+.gold-currencies-page .section-title::after {
   content: '';
   position: absolute;
   bottom: -10px;
@@ -38,128 +38,104 @@
   background: var(--primary);
 }
 
-/* Improve readability of section text */
-.gold-backed-page .section-text {
+/* Section text */
+.gold-currencies-page .section-text {
   font-size: 1.2rem;
   line-height: 1.8;
   color: #fff;
   max-width: 800px;
 }
 
-/* Style the image container */
-.gold-backed-page .image-container {
+/* Image container */
+.gold-currencies-page .image-container {
   display: flex;
   justify-content: center;
   margin: 2rem 0;
-  width: 100%; /* Full width of the section */
 }
 
-/* Style the image to fit perfectly */
-.gold-backed-page .gold-backed-image {
+.gold-currencies-page .gold-currencies-image {
   max-width: 100%;
   height: auto;
   border: 2px solid var(--primary);
   border-radius: 10px;
-  box-sizing: border-box; /* Include border/padding in width */
 }
 
-/* Custom bullets for features list */
-.gold-backed-page .features-list {
+/* Features list */
+.gold-currencies-page .features-list {
   max-width: 800px;
   margin: 0 auto;
   text-align: left;
 }
 
-.gold-backed-page .features-list li {
+.gold-currencies-page .features-list li {
   list-style-type: none;
   position: relative;
   padding-left: 1.5rem;
   margin-bottom: 1.5rem;
 }
 
-.gold-backed-page .features-list li::before {
+.gold-currencies-page .features-list li::before {
   content: "✦";
   position: absolute;
   left: 0;
   color: var(--primary);
 }
 
-/* Highlight the active navigation link */
+/* Enhanced CTA button */
+.gold-currencies-page .cta.enhanced {
+  background: linear-gradient(135deg, var(--primary), #b8860b);
+  color: #000;
+  padding: 1.2rem 2.5rem;
+  font-size: 1.3rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+}
+
+.gold-currencies-page .cta.enhanced:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+  background: linear-gradient(135deg, #ffd700, #daa520);
+}
+
+/* Active navigation link */
 .nav-drawer a.active {
   color: var(--primary);
   font-weight: bold;
   background: rgba(255, 215, 0, 0.1);
 }
 
-/* Enhanced Call to Action Button */
-.gold-backed-page .cta {
-  background: linear-gradient(45deg, #ffd700, #ffaa00); /* Gold gradient */
-  color: #000;
-  padding: 1.2rem 2.5rem;
-  border: 2px solid #ffd700;
-  border-radius: 50px;
-  font-size: 1.3rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.4s ease;
-  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.5);
-  position: relative;
-  overflow: hidden;
-}
-
-.gold-backed-page .cta::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  transition: width 0.6s ease, height 0.6s ease;
-}
-
-.gold-backed-page .cta:hover::before {
-  width: 300px;
-  height: 300px;
-}
-
-.gold-backed-page .cta:hover {
-  transform: translateY(-5px) scale(1.05);
-  box-shadow: 0 8px 25px rgba(255, 215, 0, 0.8);
-  color: #fff;
-}
-
 /* Responsive adjustments */
 @media (max-width: 768px) {
-  .gold-backed-page .section {
+  .gold-currencies-page .section {
     padding: 2rem 1rem;
   }
-  .gold-backed-page .section-title {
+  .gold-currencies-page .section-title {
     font-size: 2rem;
   }
-  .gold-backed-page .section-text {
+  .gold-currencies-page .section-text {
     font-size: 1.1rem;
   }
-  .gold-backed-page .cta {
+  .gold-currencies-page .cta.enhanced {
     padding: 1rem 2rem;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
   }
 }
 
 @media (max-width: 480px) {
-  .gold-backed-page .section {
+  .gold-currencies-page .section {
     padding: 1.5rem 1rem;
   }
-  .gold-backed-page .section-title {
+  .gold-currencies-page .section-title {
     font-size: 1.8rem;
   }
-  .gold-backed-page .section-text {
+  .gold-currencies-page .section-text {
     font-size: 1rem;
   }
-  .gold-backed-page .cta {
+  .gold-currencies-page .cta.enhanced {
     padding: 0.8rem 1.5rem;
-    font-size: 1.1rem;
+    font-size: 1rem;
   }
 }
