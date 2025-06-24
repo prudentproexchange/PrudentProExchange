@@ -31,6 +31,7 @@
       </button>
       <nav class="nav-drawer" id="navDrawer">
         <a href="dashboard.html" class="active">Dashboard</a>
+        <a href="invest.html">Invest</a>
         <a href="withdraw.html">Withdraw</a>
         <a href="transactions.html">Transactions</a>
         <a href="referrals.html">Referrals</a>
@@ -166,11 +167,15 @@
       overlay.classList.toggle('nav-open');
     });
 
-    const navOverlay = document.querySelector('.nav-overlay');
-    navOverlay.addEventListener('click', () => {
-      navDrawer.classList.remove('open');
-      hamburgerBtn.classList.remove('active');
-      overlay.classList.remove('nav-open');
+    // Close nav when clicking outside
+    document.addEventListener('click', (event) => {
+      const isClickInsideNav = navDrawer.contains(event.target);
+      const isClickOnHamburger = hamburgerBtn.contains(event.target);
+      if (!isClickInsideNav && !isClickOnHamburger && navDrawer.classList.contains('open')) {
+        navDrawer.classList.remove('open');
+        hamburgerBtn.classList.remove('active');
+        overlay.classList.remove('nav-open');
+      }
     });
 
     // Theme toggle
@@ -342,7 +347,6 @@
           clearInterval(interval);
 
           // Update interest wallet (assuming server-side handling for security)
-          // For demonstration, we’ll simulate the update on the client side
           const currentWallet = parseFloat(document.getElementById('interestWallet').textContent);
           document.getElementById('interestWallet').textContent = (currentWallet + total_profit).toFixed(2);
         } else {
