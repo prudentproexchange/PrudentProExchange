@@ -60,7 +60,7 @@ body {
 }
 
 .logo-link img {
-  max-height: 10vh; /* Responsive height */
+  height: 60px; /* Updated from max-height: 10vh */
   width: auto;
   transition: transform 0.3s ease;
 }
@@ -109,7 +109,7 @@ body {
   backdrop-filter: blur(10px);
   transition: right 0.3s ease;
   z-index: 20;
-  padding: 2rem;
+  padding: 1rem; /* Reduced from 2rem */
   display: flex;
   flex-direction: column;
 }
@@ -135,10 +135,10 @@ body {
 
 .nav-drawer a {
   display: block;
-  padding: 1rem;
+  padding: 0.5rem 1rem; /* Reduced from 1rem */
   color: var(--text-color);
   text-decoration: none;
-  font-size: 1.2rem;
+  font-size: 1rem; /* Reduced from 1.2rem */
   transition: color 0.3s ease;
 }
 
@@ -152,10 +152,10 @@ body {
 
 .account-toggle {
   display: block;
-  padding: 1rem;
+  padding: 0.5rem 1rem; /* Reduced from 1rem */
   color: var(--text-color);
   text-decoration: none;
-  font-size: 1.2rem;
+  font-size: 1rem; /* Reduced from 1.2rem */
   cursor: pointer;
 }
 
@@ -178,7 +178,7 @@ body {
 
 .nav-drawer .submenu a {
   color: var(--text-color);
-  font-size: 1rem;
+  font-size: 0.9rem; /* Reduced from 1rem */
 }
 
 .nav-drawer .submenu a:hover {
@@ -413,7 +413,7 @@ body {
     padding: 0.75rem 1rem;
   }
   .logo-link img {
-    max-height: 8vh;
+    height: 50px; /* Adjusted from max-height: 8vh */
   }
   .profile-section {
     padding: 1rem;
@@ -439,7 +439,7 @@ body {
     padding: 0.5rem;
   }
   .logo-link img {
-    max-height: 6vh;
+    height: 40px; /* Adjusted from max-height: 6vh */
   }
   .profile-section {
     padding: 0.75rem;
