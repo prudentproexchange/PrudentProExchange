@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="css/application.css"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body class="application-page">
   <!-- Video Background -->
@@ -328,63 +328,89 @@
       e.preventDefault();
       const f = e.target;
 
-      // Validate passwords match
-      if (f.password.value !== f.confirm_password.value) {
-        alert('Passwords do not match.');
-        return;
-      }
-
-      // Validate terms agreement
-      if (!f.terms.checked) {
-        alert('You must agree to the Privacy Policy and Terms & Conditions.');
-        return;
-      }
-
-      // Generate unique referral link
-      const referralCode = generateReferralCode();
-      const referralLink = `https://prudentproexchange.com/referral/${referralCode}`;
-
-      // 1. Sign up with Supabase Auth
-      const { user, error: signUpError } = await supabase.auth.signUp({
-        email: f.email.value,
-        password: f.password.value,
-      });
-      if (signUpError) {
-        alert('Sign-up error: ' + signUpError.message);
-        return;
-      }
-
-      // 2. Upload photo if provided
-      let photoUrl = null;
-      if (f.photo.files[0]) {
-        const { data, error: uploadError } = await supabase.storage
-          .from('profile-photos')
-          .upload(`${user.id}/${f.photo.files[0].name}`, f.photo.files[0]);
-        if (uploadError) {
-          alert('Photo upload error: ' + uploadError.message);
-          return;
+      try {
+        // Validate passwords match
+        if (f.password.value !== f.confirm_password.value) {
+          throw new Error('Passwords do not match.');
         }
-        photoUrl = data.path;
-      }
 
-      // 3. Create profile in Supabase
-      const { error: profileError } = await supabase.from('profiles').insert({
-        id: user.id,
-        first_name: f.first_name.value,
-        last_name: f.last_name.value,
-        username: f.username.value,
-        country: f.country.value,
-        referral_code: f.referral_code.value || null,
-        referral_link: referralLink,
-        photo_url: photoUrl,
-      });
-      if (profileError) {
-        alert('Profile creation error: ' + profileError.message);
-        return;
-      }
+        // Validate terms agreement
+        if (!f.terms.checked) {
+          throw new Error('You must agree to the Privacy Policy and Terms & Conditions.');
+        }
 
-      alert('Sign-up successful! Please log in to your dashboard.');
-      window.location.href = 'login.html';
+        // Generate unique referral link
+        const referralCode = generateReferralCode();
+        const referralLink = `https://prudentproexchange.com/referral/${referralCode}`;
+
+        // 1. Sign up with Supabase Auth
+        console.log('Attempting to sign up with email:', f.email.value);
+        const { data: authData, error: signUpError } = await supabase.auth.signUp({
+          email: f.email.value,
+          password: f.password.value,
+        });
+
+        if (signUpError) {
+          console.error('Sign-up error:', signUpError);
+          throw new Error(`Sign-up failed: ${signUpError.message}`);
+        }
+
+        const user = authData.user;
+        if (!user) {
+          console.error('No user returned from signUp');
+          throw new Error('User creation failed: No user data returned.');
+        }
+
+        console.log('User signed up successfully:', user.id);
+
+        // 2. Upload photo if provided
+        let photoUrl = null;
+        if (f.photo.files[0]) {
+          console.log('Uploading photo for user:', user.id);
+          const { data: storageData, error: uploadError } = await supabase.storage
+            .from('profile-photos')
+            .upload(`${user.id}/${f.photo.files[0].name}`, f.photo.files[0], { upsert: true });
+          
+          if (uploadError) {
+            console.error('Photo upload error:', uploadError);
+            throw new Error(`Photo upload failed: ${uploadError.message}`);
+          }
+          photoUrl = storageData.path;
+          console.log('Photo uploaded successfully:', photoUrl);
+        }
+
+        // 3. Create profile in Supabase
+        console.log('Inserting profile for user:', user.id);
+        const profileData = {
+          id: user.id,
+          first_name: f.first_name.value,
+          last_name: f.last_name.value,
+          username: f.username.value,
+          country: f.country.value,
+          referral_code: f.referral_code.value || null,
+          referral_link: referralLink,
+          photo_url: photoUrl,
+        };
+        console.log('Profile data:', profileData);
+
+        const { data: insertData, error: profileError } = await supabase
+          .from('profiles')
+          .insert([profileData])
+          .select();
+
+        if (profileError) {
+          console.error('Profile insertion error:', profileError);
+          throw new Error(`Profile creation failed: ${profileError.message}`);
+        }
+
+        console.log('Profile inserted successfully:', insertData);
+
+        alert('Sign-up successful! Please check your email for confirmation and log in to your dashboard.');
+        window.location.href = 'login.html';
+      } catch (error) {
+        console.error('Error during sign-up process:', error);
+        alert(error.message || 'An unexpected error occurred. Please try again.');
+      }
     });
   </script>
 </body>
