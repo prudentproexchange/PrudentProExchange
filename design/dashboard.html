@@ -22,13 +22,15 @@
   <div class="overlay">
     <!-- Header -->
     <header class="site-header">
-      <button id="theme-toggle" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
       <a href="dashboard.html" class="logo-link">
         <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo"/>
       </a>
-      <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
-        <span></span><span></span><span></span>
-      </button>
+      <div class="header-right">
+        <button id="theme-toggle" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
+        <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
       <nav class="nav-drawer" id="navDrawer">
         <a href="dashboard.html" class="active">Dashboard</a>
         <a href="invest.html">Invest</a>
@@ -57,7 +59,7 @@
     <div class="profile-section">
       <div class="profile-container">
         <img id="navProfilePhoto" src="" alt="Profile" class="avatar" style="display: none;"/>
-        <span id="defaultProfileIcon" aria-hidden="true">👤</span>
+        <span id="defaultProfileIcon" class="avatar">👤</span>
       </div>
       <div class="welcome-message">Welcome to Your Dashboard! <span id="welcomeName"></span></div>
     </div>
@@ -83,7 +85,7 @@
             <li>Deposit funds into your account using our secure payment options.</li>
             <li>Select and activate an investment plan tailored to your goals.</li>
             <li>Track your earnings directly from your dashboard.</li>
-            <li>Benefit from profit compounding</li>
+            <li>Benefit from profit compounding for up to four months.</li>
             <li>Access our dedicated live support whenever you need assistance.</li>
           </ul>
           <p class="brand">PrudentProExchange.net</p>
@@ -108,15 +110,15 @@
         </div>
 
         <div class="card interest-wallet" data-aos="zoom-in">
-          <h2>Interest Earned</h2>
-          $<span id="balance">0.00</span>
+          <h2>Interest Wallet</h2>
+          $<span id="interestWallet">0.00</span>
           <p>Total Withdrawals: $<span id="totalWithdrawals">0.00</span></p>
-          <a href="withdraw.html" class="btn">Withdraw</a>
+          <a href="withdraw.html" class="btn">Withdraw Funds</a>
         </div>
 
         <div class="card investments" data-aos="zoom-in">
-          <h2>Total Invested: $<span id="totalInvested">0.00</h2></span>
-          <p>Promotional Offer: $<span id="promo">0</span> (<span id="promoPercent">0</span>)</p>
+          <h2>Total Invested: $<span id="totalInvested">0.00</span></h2>
+          <p>Promotional Offer: $<span id="promoOffer">0.00</span> (<span id="promoPct">0</span>%)</p>
           <a href="promo.html" class="btn">Claim Offer</a>
         </div>
       </section>
@@ -143,13 +145,13 @@
       <div class="footer-content">
         <p class="UTC-time">UTC Time: <span id="utcTime"></span></p>
         <p class="local-time">Local Time: <span id="localTime"></span></p>
-        <p class="local-date">Date: <span id="date"></span></p>
+        <p class="local-date">Local Date: <span id="localDate"></span></p>
         <nav class="footer-links">
-          <a href="about.html">About</a>
-          <a href="privacy.html">Privacy</a>
-          <a href="terms.html">Terms & Agreements</a>
+          <a href="about.html">About Us</a>
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="terms.html">Terms & Conditions</a>
         </nav>
-        <p class="footer">© 2024 PrudentExExchange. All Rights Reserved. SEC Registration #123456789</p>
+        <p class="copyright">© 2025 PrudentProExchange. All Rights Reserved. SEC Registration #0001230714</p>
       </div>
     </footer>
   </div>
@@ -159,47 +161,47 @@
   <!-- Scripts -->
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
-    AOS.init({ duration: 1000, once: true });
+    AOS.init({ duration: 800, once: true });
 
-    // Hamburger menu toggle
+    // Hamburger toggle
     const hamburgerBtn = document.getElementById('hamburgerBtn');
-    const navBar = document.getElementById('navBar');
+    const navDrawer = document.getElementById('navDrawer');
     const overlay = document.querySelector('.overlay');
     hamburgerBtn.addEventListener('click', () => {
-      navBar.classList.toggle('active');
+      navDrawer.classList.toggle('open');
       hamburgerBtn.classList.toggle('active');
       overlay.classList.toggle('nav-open');
     });
 
     // Close nav when clicking outside
     document.addEventListener('click', (event) => {
-      const isClickInsideNavBar = navBar.contains(event.target);
+      const isClickInsideNav = navDrawer.contains(event.target);
       const isClickOnHamburger = hamburgerBtn.contains(event.target);
-      if (!isClickInsideNavBar && !isClickOnHamburger && navBar.classList.contains('active-bar')) {
-        navBar.classList.remove('active');
+      if (!isClickInsideNav && !isClickOnHamburger && navDrawer.classList.contains('open')) {
+        navDrawer.classList.remove('open');
         hamburgerBtn.classList.remove('active');
         overlay.classList.remove('nav-open');
       }
     });
 
     // Theme toggle
-    const themeToggleBtn = document.getElementById('theme-toggle-btn');
-    themeToggleBtn.addEventListener('click', () => {
-      document.body.classList.toggle('light-mode');
-      const icon = themeToggleBtn.querySelector('i');
+    const themeToggle = document.getElementById('theme-toggle');
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('light-theme');
+      const icon = themeToggle.querySelector('i');
       icon.classList.toggle('fa-moon');
       icon.classList.toggle('fa-sun');
     });
 
     // Account menu toggle
-    const accountLink = document.getElementById('account-link');
-    const submenuMenu = accountLink.nextElementSibling;
-    accountLink.addEventListener('click', (e) => {
+    const accountToggle = document.getElementById('account-toggle');
+    const submenu = accountToggle.nextElementSibling;
+    accountToggle.addEventListener('click', (e) => {
       e.preventDefault();
-      menu.classList.toggle('active');
+      submenu.classList.toggle('open');
     });
 
-    // Back to top button
+    // Back to top
     document.getElementById('back-to-top').addEventListener('click', () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
@@ -220,26 +222,27 @@
     }
 
     // Time updates
-    function updateTime() {
+    function updateLocalTime() {
       const now = new Date();
       document.getElementById('localTime').textContent = now.toLocaleTimeString();
-      document.getElementById('dateTime').textContent = now.toLocaleDateString('en-US', {
-        weekday: 'long', month: 'long', day: 'numeric', year: 'numeric'
+      document.getElementById('localDate').textContent = now.toLocaleDateString('en-US', {
+        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
       });
     }
+    setInterval(updateLocalTime, 1000);
+    updateLocalTime();
+
     function updateUTCTime() {
       document.getElementById('utcTime').textContent = new Date().toUTCString();
     }
-    setInterval(updateTime, 1000);
     setInterval(updateUTCTime, 1000);
-    updateTime();
     updateUTCTime();
 
     // Supabase client
     const { createClient } = supabase;
     const supabaseClient = createClient(
       'https://iwkdznjqfbsfkscnbrkc.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPNQprkAbiU'
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU'
     );
 
     // Choose plan for amount function
@@ -280,23 +283,23 @@
           .getPublicUrl(profile.photo_url);
         document.getElementById('navProfilePhoto').src = urlData.publicUrl;
         document.getElementById('navProfilePhoto').style.display = 'block';
-        document.getElementById('defaultProfile').style.display = 'none';
+        document.getElementById('defaultProfileIcon').style.display = 'none';
       }
 
       document.getElementById('affiliateLink').value = profile.referral_link || '';
       document.getElementById('refEarnings').textContent = (profile.referral_earnings || 0).toFixed(2);
-      document.getElementById('deposit').textContent = (profile.deposit_wallet || 0).toFixed(2);
-      document.getElementById('totalDeposit').textContent = (profile.total_deposit || 0).toFixed(2);
-      document.getElementById('balance').textContent = (profile.balance || 0).toFixed(2);
-      document.getElementById('totalWithdraw').textContent = (profile.total_withdrawals || 0).toFixed(2);
+      document.getElementById('depositWallet').textContent = (profile.deposit_wallet || 0).toFixed(2);
+      document.getElementById('totalDeposits').textContent = (profile.total_deposits || 0).toFixed(2);
+      document.getElementById('interestWallet').textContent = (profile.interest_wallet || 0).toFixed(2);
+      document.getElementById('totalWithdrawals').textContent = (profile.total_withdrawals || 0).toFixed(2);
       document.getElementById('totalInvested').textContent = (profile.total_invested || 0).toFixed(2);
-      document.getElementById('promo').textContent = (profile.totalProfit || 0).toFixed(2);
-      document.getElementById('promoPercent').textContent = profile.totalProfit || 0;
+      document.getElementById('promoOffer').textContent = (profile.promo_offer || 0).toFixed(2);
+      document.getElementById('promoPct').textContent = profile.promo_pct || 0;
 
       // Load all active investments
       const { data: investments, error: invError } = await supabaseClient
         .from('investments')
-        .select('*, investment_plans')
+        .select('*, plan_name')
         .eq('user_id', user.id)
         .gt('end_time', new Date().toISOString())
         .order('start_time', { ascending: false });
@@ -312,16 +315,16 @@
       if (investments.length > 0) {
         container.innerHTML = '';
         investments.forEach(investment => {
-          const investmentData = document.createElement('div');
-          investmentData.className = 'investment-data';
-          investmentData.innerHTML = `
+          const investmentDiv = document.createElement('div');
+          investmentDiv.className = 'investment-item';
+          investmentDiv.innerHTML = `
             <p>Plan: <span>${investment.plan_name}</span></p>
-            <p>Invested Amount: $<span id="investedAmount">${investment.amount.toFixed(2)}</span></p>
-            <p>Current Profit: $<span id="profit">0.00</span></p>
-            <p>Time Remaining: <span id="timeLeft"></span></p>
+            <p>Invested Amount: $<span>${investment.invested_amount.toFixed(2)}</span></p>
+            <p>Current Profit: $<span class="current-profit">0.00</span></p>
+            <p>Time Remaining: <span class="time-left"></span></p>
           `;
-          container.appendChild(investmentData);
-          startInvestmentCalculator(investment, investmentData);
+          container.appendChild(investmentDiv);
+          startInvestmentCalculator(investment, investmentDiv);
         });
       } else {
         noInvestmentsDiv.style.display = 'block';
@@ -355,15 +358,15 @@
     }
 
     // Investment calculator logic for multiple investments
-    function startInvestmentCalculator(investment, investmentData) {
-      const { start_time, end_time, amount, total_profit, plan_name } = investment;
+    function startInvestmentCalculator(investment, investmentDiv) {
+      const { start_time, end_time, invested_amount, total_profit, plan_name } = investment;
       const startTime = new Date(start_time);
       const endTime = new Date(end_time);
       const totalSeconds = (endTime - startTime) / 1000;
       const profitPerSecond = total_profit / totalSeconds;
 
-      const currentProfitSpan = investmentData.querySelector('#profit');
-      const timeLeftSpan = investmentData.querySelector('#timeLeft');
+      const currentProfitSpan = investmentDiv.querySelector('.current-profit');
+      const timeLeftSpan = investmentDiv.querySelector('.time-left');
 
       const updateInvestment = async () => {
         const now = new Date();
@@ -372,12 +375,12 @@
           timeLeftSpan.textContent = '0d 0h 0m 0s';
           const message = document.createElement('p');
           message.textContent = 'Investment cycle completed. Profits have been transferred to your Interest Wallet.';
-          investmentData.appendChild(message);
+          investmentDiv.appendChild(message);
           clearInterval(interval);
 
           // Update interest wallet (client-side for demo; server-side recommended)
-          const currentWallet = parseFloat(document.getElementById('balance').textContent);
-          document.getElementById('balance').textContent = (currentWallet + total_profit).toFixed(2);
+          const currentWallet = parseFloat(document.getElementById('interestWallet').textContent);
+          document.getElementById('interestWallet').textContent = (currentWallet + total_profit).toFixed(2);
         } else {
           const elapsedSeconds = (now - startTime) / 1000;
           const currentProfit = Math.min(elapsedSeconds * profitPerSecond, total_profit);
