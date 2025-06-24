@@ -36,8 +36,8 @@ body {
 /* Header */
 .site-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   padding: 1rem 2rem;
   background: rgba(0, 0, 0, 0.8);
   backdrop-filter: blur(10px);
@@ -46,7 +46,9 @@ body {
   z-index: 10;
 }
 
+/* Make theme-toggle first */
 #theme-toggle {
+  order: 1;
   background: none;
   border: none;
   color: var(--primary);
@@ -59,8 +61,14 @@ body {
   transform: rotate(180deg);
 }
 
+/* Logo second and larger */
+.logo-link {
+  order: 2;
+  margin-left: 1rem; /* space between toggle & logo */
+}
+
 .logo-link img {
-  height: 50px; /* Matches profile photo size */
+  height: 70px; /* bumped up from 50px to 70px */
   width: auto;
   transition: transform 0.3s ease;
 }
