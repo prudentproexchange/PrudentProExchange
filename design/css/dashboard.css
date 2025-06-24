@@ -46,9 +46,13 @@ body {
   z-index: 10;
 }
 
-/* Theme toggle moved to the right before logo */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 #theme-toggle {
-  order: 3; /* Moved to appear after logo */
   background: none;
   border: none;
   color: var(--primary);
@@ -61,18 +65,14 @@ body {
   transform: rotate(180deg);
 }
 
-/* Logo larger (3x current size) */
 .logo-link {
-  order: 2; /* Appears before theme-toggle */
-  margin-left: 1rem; /* Space between hamburger (if visible) & logo */
+  margin-left: 1rem; /* space between toggle & logo */
 }
 
 .logo-link img {
-  height: 210px; /* Increased from 70px to 210px (3x) */
+  height: 210px; /* Exactly 3 times the original 70px */
   width: auto;
   transition: transform 0.3s ease;
-  image-rendering: -webkit-optimize-contrast; /* Ensures crisp rendering */
-  image-rendering: crisp-edges; /* Fallback for other browsers */
 }
 
 .logo-link img:hover {
@@ -453,7 +453,7 @@ body {
     padding: 0.75rem 1rem;
   }
   .logo-link img {
-    height: 120px; /* Adjusted for smaller screens (still ~3x the original 40px) */
+    height: 120px; /* Adjusted proportionally for smaller screens (70px * 3 = 210px, scaled down) */
   }
   .profile-section {
     padding: 1rem;
@@ -479,7 +479,7 @@ body {
     padding: 0.5rem;
   }
   .logo-link img {
-    height: 90px; /* Adjusted for smaller screens (still ~3x the original 30px) */
+    height: 90px; /* Adjusted proportionally for smaller screens (70px * 3 = 210px, scaled down) */
   }
   .profile-section {
     padding: 0.75rem;
