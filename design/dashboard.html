@@ -4,314 +4,12 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Dashboard • PrudentProExchange</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/dashboard.css"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-  <style>
-    :root {
-      --primary-color: #FFD700; /* Gold */
-      --secondary-color: #000000; /* Black */
-      --text-color: #FFFFFF; /* White */
-      --overlay-color: rgba(0, 0, 0, 0.7); /* Dark overlay for video */
-    }
-
-    body {
-      font-family: 'Arial', sans-serif;
-      margin: 0;
-      padding: 0;
-      background: var(--secondary-color);
-      color: var(--text-color);
-      overflow-x: hidden;
-    }
-
-    .bg-video {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      z-index: -1;
-    }
-
-    .overlay {
-      position: relative;
-      background: var(--overlay-color);
-      min-height: 100vh;
-    }
-
-    .site-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 15px 30px;
-      background: rgba(0, 0, 0, 0.9);
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-    }
-
-    .header-left {
-      display: flex;
-      align-items: center;
-    }
-
-    .logo-link img {
-      height: 40px;
-      margin-right: 20px;
-      transition: transform 0.3s;
-    }
-
-    .logo-link img:hover {
-      transform: scale(1.1);
-    }
-
-    .welcome-message {
-      font-size: 1.2em;
-      color: var(--primary-color);
-    }
-
-    .header-right {
-      display: flex;
-      align-items: center;
-    }
-
-    .user-menu {
-      position: relative;
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-      margin-right: 20px;
-    }
-
-    .profile-container {
-      position: relative;
-    }
-
-    .avatar {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      margin-right: 10px;
-      border: 2px solid var(--primary-color);
-      background: var(--secondary-color);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.5em;
-      color: var(--primary-color);
-    }
-
-    .user-menu span {
-      font-weight: bold;
-      color: var(--primary-color);
-    }
-
-    .user-menu .submenu {
-      display: none;
-      position: absolute;
-      top: 100%;
-      right: 0;
-      background: var(--secondary-color);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-      border-radius: 5px;
-      padding: 10px;
-      list-style: none;
-      min-width: 200px;
-      z-index: 10;
-    }
-
-    .user-menu:hover .submenu {
-      display: block;
-    }
-
-    .user-menu .submenu li a {
-      display: block;
-      padding: 8px 12px;
-      color: var(--text-color);
-      text-decoration: none;
-      transition: background 0.3s;
-    }
-
-    .user-menu .submenu li a:hover {
-      background: var(--primary-color);
-      color: var(--secondary-color);
-    }
-
-    .main-nav {
-      display: flex;
-      gap: 20px;
-    }
-
-    .main-nav a {
-      color: var(--text-color);
-      text-decoration: none;
-      font-weight: 500;
-      padding: 8px 15px;
-      transition: color 0.3s, transform 0.3s;
-    }
-
-    .main-nav a:hover, .main-nav a.active {
-      color: var(--primary-color);
-      transform: translateY(-2px);
-    }
-
-    .cards-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 20px;
-      padding: 20px;
-    }
-
-    .card {
-      background: var(--secondary-color);
-      border: 1px solid var(--primary-color);
-      border-radius: 10px;
-      padding: 20px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-      transition: transform 0.3s;
-    }
-
-    .card:hover {
-      transform: translateY(-5px);
-    }
-
-    .card h2 {
-      margin: 0 0 15px;
-      color: var(--primary-color);
-      font-size: 1.5em;
-    }
-
-    .card p, .card ul {
-      color: var(--text-color);
-      line-height: 1.6;
-    }
-
-    .card ul {
-      padding-left: 20px;
-      margin: 0 0 15px;
-    }
-
-    .card .brand {
-      text-align: center;
-      font-size: 0.9em;
-      color: var(--primary-color);
-      margin: 15px 0;
-    }
-
-    .card .btn {
-      display: inline-block;
-      padding: 10px 20px;
-      background: var(--primary-color);
-      color: var(--secondary-color);
-      text-decoration: none;
-      border-radius: 5px;
-      float: right;
-      transition: background 0.3s, transform 0.3s;
-    }
-
-    .card .btn:hover {
-      background: #e6c200; /* Darker gold */
-      transform: scale(1.05);
-    }
-
-    .card input[readonly] {
-      width: 100%;
-      padding: 8px;
-      margin: 10px 0;
-      border: 1px solid var(--primary-color);
-      border-radius: 5px;
-      background: var(--secondary-color);
-      color: var(--text-color);
-    }
-
-    .transaction-history {
-      padding: 20px;
-    }
-
-    .transaction-history h2 {
-      color: var(--primary-color);
-      margin-bottom: 15px;
-    }
-
-    .transaction-history table {
-      width: 100%;
-      background: var(--secondary-color);
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    }
-
-    .transaction-history th, .transaction-history td {
-      padding: 15px;
-      text-align: left;
-      border-bottom: 1px solid var(--primary-color);
-      color: var(--text-color);
-    }
-
-    .transaction-history th {
-      background: #111;
-    }
-
-    .transaction-history tr:nth-child(even) {
-      background: #111;
-    }
-
-    .site-footer {
-      background: var(--secondary-color);
-      color: var(--text-color);
-      padding: 20px;
-      text-align: center;
-      border-top: 1px solid var(--primary-color);
-    }
-
-    .footer-content p {
-      margin: 5px 0;
-    }
-
-    .footer-links a {
-      color: var(--text-color);
-      margin: 0 10px;
-      text-decoration: none;
-      transition: color 0.3s;
-    }
-
-    .footer-links a:hover {
-      color: var(--primary-color);
-    }
-
-    #back-to-top {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: var(--primary-color);
-      color: var(--secondary-color);
-      border: none;
-      padding: 10px;
-      border-radius: 50%;
-      cursor: pointer;
-      transition: background 0.3s, transform 0.3s;
-    }
-
-    #back-to-top:hover {
-      background: #e6c200;
-      transform: scale(1.1);
-    }
-
-    @media (max-width: 768px) {
-      .site-header {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .header-right {
-        margin-top: 10px;
-      }
-
-      .main-nav {
-        flex-wrap: wrap;
-        gap: 10px;
-      }
-    }
-  </style>
 </head>
 <body class="dashboard-page">
   <!-- Video Background -->
@@ -322,23 +20,25 @@
   </video>
 
   <div class="overlay">
+    <!-- Header (Matches about.html) -->
     <header class="site-header">
-      <div class="header-left">
-        <a href="dashboard.html" class="logo-link">
-          <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo"/>
-        </a>
-        <div class="welcome-message">Welcome back! <span id="welcomeName"></span></div>
-      </div>
-      <div class="header-right">
-        <div class="user-menu">
-          <div class="profile-container">
-            <img id="navProfilePhoto" src="" alt="Profile" class="avatar" style="display: none;"/>
-            <span id="defaultProfileIcon" class="avatar">👤</span>
-          </div>
-          <span id="navUsername"></span> ▾
+      <button id="theme-toggle" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
+      <a href="dashboard.html" class="logo-link">
+        <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo"/>
+      </a>
+      <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="nav-drawer" id="navDrawer">
+        <a href="dashboard.html" class="active">Dashboard</a>
+        <a href="withdraw.html">Withdraw</a>
+        <a href="transactions.html">Transactions</a>
+        <a href="referrals.html">Referrals</a>
+        <div class="account-menu">
+          <a href="#" class="account-toggle">Account ▾</a>
           <ul class="submenu">
             <li><a href="profile-settings.html">Profile Settings</a></li>
-            <li><a href="#" id="transfer-balance-link">Transfer Balance</a></li>
+            <li><a href="transfer.html" id="transfer-balance-link">Transfer Balance</a></li>
             <li><a href="change-password.html">Change Password</a></li>
             <li><a href="support.html">Support Ticket</a></li>
             <li><a href="promo-tools.html">Promotional Tools</a></li>
@@ -346,18 +46,21 @@
             <li><a href="#" id="logout-btn">Logout</a></li>
           </ul>
         </div>
-        <nav class="main-nav">
-          <a href="dashboard.html" class="active">Dashboard 🏠</a>
-          <a href="withdraw.html">Withdraw</a>
-          <a href="transactions.html">Transactions</a>
-          <a href="referrals.html">Referrals</a>
-          <a href="account.html">Account</a>
-          <a href="kyc.html">KYC Verification</a>
-          <a href="transfer.html">Transfer</a>
-        </nav>
-      </div>
+        <a href="kyc.html">KYC Verification</a>
+        <a href="transfer.html">Transfer</a>
+      </nav>
     </header>
 
+    <!-- Profile Section with Welcome Message -->
+    <div class="profile-section">
+      <div class="profile-container">
+        <img id="navProfilePhoto" src="" alt="Profile" class="avatar" style="display: none;"/>
+        <span id="defaultProfileIcon" class="avatar">👤</span>
+      </div>
+      <div class="welcome-message">Welcome <span id="welcomeName"></span> to your dashboard 🏠</div>
+    </div>
+
+    <!-- Main Content -->
     <main class="dashboard-page container">
       <section class="cards-grid" data-aos="fade-up">
         <div class="card how-it-works" data-aos="zoom-in">
@@ -418,26 +121,45 @@
       </section>
     </main>
 
-    <footer class="site-footer" data-aos="fade-up">
+    <!-- Footer (Matches about.html) -->
+    <footer class="section section-dark site-footer" data-aos="fade-up">
       <div class="footer-content">
-        <p>UTC Time: <span id="utcTime"></span></p>
-        <p>Local Time: <span id="localTime"></span></p>
-        <p>Local Date: <span id="localDate"></span></p>
+        <p class="utc-time">UTC Time: <span id="utcTime"></span></p>
+        <p class="local-time">Local Time: <span id="localTime"></span></p>
+        <p class="local-date">Local Date: <span id="localDate"></span></p>
         <nav class="footer-links">
           <a href="about.html">About Us</a>
           <a href="privacy.html">Privacy Policy</a>
           <a href="terms.html">Terms & Conditions</a>
         </nav>
-        <p>© 2025 PrudentProExchange. All Rights Reserved.</p>
+        <p class="copyright">© 2025 PrudentProExchange. All Rights Reserved. SEC Registration #0001230714</p>
       </div>
     </footer>
   </div>
 
   <button id="back-to-top" aria-label="Back to top">🚀</button>
 
+  <!-- Scripts -->
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
     AOS.init({ duration: 800, once: true });
+
+    // Hamburger toggle
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const navDrawer = document.getElementById('navDrawer');
+    hamburgerBtn.addEventListener('click', () => {
+      navDrawer.classList.toggle('open');
+      hamburgerBtn.classList.toggle('active');
+    });
+
+    // Theme toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('light-theme');
+      const icon = themeToggle.querySelector('i');
+      icon.classList.toggle('fa-moon');
+      icon.classList.toggle('fa-sun');
+    });
 
     // Back to top
     document.getElementById('back-to-top').addEventListener('click', () => {
@@ -490,7 +212,6 @@
 
       const userName = profile.first_name || 'User';
       document.getElementById('welcomeName').textContent = userName;
-      document.getElementById('navUsername').textContent = userName;
 
       if (profile.photo_url) {
         const { data: urlData } = supabaseClient.storage
@@ -501,7 +222,7 @@
         document.getElementById('defaultProfileIcon').style.display = 'none';
       } else {
         document.getElementById('navProfilePhoto').style.display = 'none';
-        document.getElementById('defaultProfileIcon').style.display = 'flex';
+        document.getElementById('defaultProfileIcon').style.display = 'block';
       }
 
       document.getElementById('affiliateLink').value = profile.referral_link || '';
@@ -537,18 +258,7 @@
         </tr>`;
         tbody.insertAdjacentHTML('beforeend', row);
       });
-
-      let interestWallet = parseFloat(profile.interest_wallet || 0);
-      setInterval(() => {
-        interestWallet += (profile.total_invested || 0) * 0.00001;
-        document.getElementById('interestWallet').textContent = interestWallet.toFixed(2);
-      }, 1000);
     }
-
-    document.getElementById('transfer-balance-link').addEventListener('click', e => {
-      e.preventDefault();
-      window.location.href = 'transfer.html';
-    });
 
     document.getElementById('logout-btn').addEventListener('click', async () => {
       const { error } = await supabaseClient.auth.signOut();
