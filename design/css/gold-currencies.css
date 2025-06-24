@@ -2,7 +2,7 @@
 
 /* Ensure sections are transparent to use overlay background */
 .gold-backed-page .section {
-  background: rgba(0, 0, 0, 0.5);
+  background: transparent;
   padding: 3rem 2rem;
   margin-bottom: 4rem;
   border: 1px solid rgba(255, 215, 0, 0.3);
@@ -20,7 +20,7 @@
 .gold-backed-page .section-title {
   font-size: 2.5rem;
   font-family: 'Playfair Display', serif;
-  color: #ffd700; /* Gold color */
+  color: var(--primary);
   text-align: center;
   margin-bottom: 2.5rem;
   position: relative;
@@ -35,7 +35,7 @@
   transform: translateX(-50%);
   width: 50px;
   height: 2px;
-  background: #ffd700;
+  background: var(--primary);
 }
 
 /* Improve readability of section text */
@@ -46,23 +46,21 @@
   max-width: 800px;
 }
 
-/* Style the image container to constrain the image */
+/* Style the image container */
 .gold-backed-page .image-container {
   display: flex;
   justify-content: center;
   margin: 2rem 0;
-  max-width: 800px; /* Limits the container width */
-  width: 100%; /* Makes it responsive */
+  width: 100%; /* Full width of the section */
 }
 
-/* Ensure the image fits perfectly within the container */
+/* Style the image to fit perfectly */
 .gold-backed-page .gold-backed-image {
-  width: 100%;
+  max-width: 100%;
   height: auto;
-  object-fit: contain; /* Keeps the image fully visible without distortion */
-  border: 2px solid #ffd700;
+  border: 2px solid var(--primary);
   border-radius: 10px;
-  box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+  box-sizing: border-box; /* Include border/padding in width */
 }
 
 /* Custom bullets for features list */
@@ -77,23 +75,20 @@
   position: relative;
   padding-left: 1.5rem;
   margin-bottom: 1.5rem;
-  color: #fff;
 }
 
 .gold-backed-page .features-list li::before {
   content: "✦";
   position: absolute;
   left: 0;
-  color: #ffd700;
+  color: var(--primary);
 }
 
-/* Subsection titles */
-.gold-backed-page .subsection-title {
-  font-size: 1.8rem;
-  font-family: 'Playfair Display', serif;
-  color: #ffd700;
-  margin-top: 2rem;
-  margin-bottom: 1rem;
+/* Highlight the active navigation link */
+.nav-drawer a.active {
+  color: var(--primary);
+  font-weight: bold;
+  background: rgba(255, 215, 0, 0.1);
 }
 
 /* Enhanced Call to Action Button */
@@ -147,9 +142,6 @@
   .gold-backed-page .section-text {
     font-size: 1.1rem;
   }
-  .gold-backed-page .image-container {
-    max-width: 100%; /* Scales container on smaller screens */
-  }
   .gold-backed-page .cta {
     padding: 1rem 2rem;
     font-size: 1.2rem;
@@ -165,9 +157,6 @@
   }
   .gold-backed-page .section-text {
     font-size: 1rem;
-  }
-  .gold-backed-page .image-container {
-    max-width: 100%;
   }
   .gold-backed-page .cta {
     padding: 0.8rem 1.5rem;
