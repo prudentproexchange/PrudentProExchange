@@ -5,68 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Agriculture • PrudentProExchange</title>
   <link rel="stylesheet" href="css/style.css"/>
-  <link rel="stylesheet" href="css/privacy.css"/>
+  <link rel="stylesheet" href="css/agriculture.css"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
-  <style>
-    .agriculture-page .hero-section {
-      text-align: center;
-      padding: 4rem 2rem;
-      background: rgba(0, 0, 0, 0.5);
-      border-bottom: 1px solid rgba(255, 215, 0, 0.3);
-      margin-bottom: 4rem;
-    }
-    .agriculture-page .hero-image {
-      max-width: 500px;
-      width: 100%;
-      height: auto;
-      margin: 0 auto;
-      display: block;
-      border: 2px solid var(--primary);
-      border-radius: 10px;
-    }
-    .agriculture-page .hero-title {
-      font-size: 3rem;
-      font-family: 'Playfair Display', serif;
-      color: var(--primary);
-      margin-top: 2rem;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-    }
-    @media (max-width: 768px) {
-      .agriculture-page .hero-title {
-        font-size: 2.5rem;
-      }
-      .agriculture-page .hero-image {
-        max-width: 300px;
-      }
-    }
-    @media (max-width: 480px) {
-      .agriculture-page .hero-title {
-        font-size: 2rem;
-      }
-      .agriculture-page .hero-image {
-        max-width: 250px;
-      }
-    }
-  </style>
 </head>
 <body class="agriculture-page">
+  <!-- Video Background -->
   <video class="bg-video" autoplay muted loop playsinline preload="auto" poster="assets/images/video-poster.jpg">
     <source src="assets/videos/background.webm" type="video/webm">
     <source src="assets/videos/background.mp4" type="video/mp4">
     Your browser does not support the video tag.
   </video>
+
   <div class="overlay">
     <header class="site-header">
       <button id="theme-toggle" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
       <a href="/" class="logo-link">
         <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo"/>
       </a>
-      <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
+      <button class="hamburger" id="hamburgerBtnAg" aria-label="Menu">
         <span></span><span></span><span></span>
       </button>
-      <nav class="nav-drawer" id="navDrawer">
+      <nav class="nav-drawer" id="navDrawerAg">
         <a href="/#application">Apply</a>
         <a href="about.html">About</a>
         <a href="privacy.html">Privacy Policy</a>
@@ -76,45 +37,116 @@
         <a href="agriculture.html" class="active">Agriculture</a>
       </nav>
     </header>
+
     <div class="main-content">
       <main class="agriculture-page container">
-        <section class="hero-section" data-aos="fade-up">
-          <img src="assets/images/tractor-coin.jpg" alt="Tractor on a Coin" class="hero-image"/>
-          <h1 class="hero-title">Revolutionizing Agricultural Investment</h1>
-        </section>
+        <!-- Introduction Section -->
         <section id="intro" class="section" data-aos="fade-up">
-          <h2 class="section-title gold">Pioneering Sustainable Growth and Unmatched Returns</h2>
+          <h2 class="section-title gold">Revolutionizing Agricultural Investment with PrudentProExchange: Pioneering Sustainable Growth and Unmatched Returns</h2>
           <p class="section-text">
             In an era defined by rapid population growth, shifting climate patterns, and an escalating demand for global food security, agricultural investment has emerged as both a lucrative opportunity and a vital necessity. PrudentProExchange stands as the world’s preeminent platform in this domain, transforming the way investors engage with agriculture. Through our innovative strategies, global expertise, and steadfast commitment to sustainability, we empower our clients to achieve exceptional financial returns while shaping a sustainable future. PrudentProExchange is not just an investment platform—it is a visionary force, redefining agriculture with precision, profitability, and unparalleled wisdom.
           </p>
         </section>
+
+        <!-- Image Section -->
+        <section id="image" class="section" data-aos="fade-up">
+          <div class="image-container">
+            <img src="assets/images/tractor-coin.jpg" alt="Tractor on a coin symbolizing agricultural investment" class="agriculture-image"/>
+          </div>
+        </section>
+
+        <!-- Exclusive Global Opportunities -->
         <section id="opportunities" class="section" data-aos="fade-up">
-          <h2 class="section-title">Exclusive Global Opportunities</h2>
+          <h2 class="section-title gold">Exclusive Global Opportunities</h2>
           <p class="section-text">
             PrudentProExchange provides investors with exclusive access to a meticulously curated portfolio of high-potential agricultural investments spanning the globe. Leveraging an extensive network of strategic partnerships, we unlock opportunities in established agricultural powerhouses, emerging markets, and frontier economies alike. This expansive reach enables our clients to diversify their investments across continents, tapping into dynamic growth trends and securing robust returns. By connecting investors to the world’s most promising agricultural ventures, PrudentProExchange ensures that client capital is positioned for maximum impact and profitability.
           </p>
         </section>
+
+        <!-- Advanced Technology and Data-Driven Precision -->
         <section id="technology" class="section" data-aos="fade-up">
           <h2 class="section-title gold">Advanced Technology and Data-Driven Precision</h2>
           <p class="section-text">
             At the heart of PrudentProExchange lies a commitment to harnessing cutting-edge technology for unrivaled investment outcomes. We employ artificial intelligence, machine learning, and predictive analytics to deliver real-time, data-driven insights that inform every decision. Our proprietary platform offers comprehensive monitoring and advanced modeling, enabling us to optimize resource allocation, enhance operational efficiency, and anticipate market shifts with pinpoint accuracy. This technological edge empowers our clients with transparency, confidence, and the ability to maximize returns while minimizing exposure to uncertainty.
           </p>
         </section>
+
+        <!-- Sustainability: The Foundation of Our Philosophy -->
         <section id="sustainability" class="section" data-aos="fade-up">
-          <h2 class="section-title">Sustainability: The Foundation of Our Philosophy</h2>
+          <h2 class="section-title gold">Sustainability: The Foundation of Our Philosophy</h2>
           <p class="section-text">
-            Sustainability is not an afterthought at PrudentProExchange—it is the cornerstone of our investment approach. We rigorously evaluate every project to ensure it delivers both financial success and meaningful environmental impact. By prioritizing sustainable farming practices, resource conservation, and biodiversity preservation, we align our investments with the United Nations Sustainable Development Goals (SDGs). This dual focus ensures that our clients’ capital not only generates substantial profits but also contributes to a resilient, equitable, and thriving global agricultural ecosystem.
+            Sustainability is not an afterthought at PrudentProExchange—it is the cornerstone of our investment approach. We rigorously evaluate every project to ensure it delivers both financial success and meaningful environmental impact. By prioritizing:
+          </p>
+          <ul class="features-list">
+            <li>Sustainable farming practices</li>
+            <li>Resource conservation</li>
+            <li>Biodiversity preservation</li>
+          </ul>
+          <p class="section-text">
+            we align our investments with the United Nations Sustainable Development Goals (SDGs). This dual focus ensures that our clients’ capital not only generates substantial profits but also contributes to a resilient, equitable, and thriving global agricultural ecosystem.
           </p>
         </section>
-        <section id="cta" class="section cta-section" data-aos="fade-up">
-          <h2 class="section-title">A Call to Transform the Future</h2>
+
+        <!-- World-Class Expertise and Strategic Collaboration -->
+        <section id="expertise" class="section" data-aos="fade-up">
+          <h2 class="section-title gold">World-Class Expertise and Strategic Collaboration</h2>
+          <p class="section-text">
+            PrudentProExchange is powered by a team of elite professionals with decades of combined experience in agriculture, finance, and technology. Our experts conduct exhaustive due diligence, oversee every investment with meticulous care, and provide ongoing guidance to ensure optimal performance. Beyond our internal talent, we cultivate partnerships with leading farmers, agricultural organizations, and research institutions worldwide. These collaborations keep us at the forefront of innovation, equipping us with the knowledge and resources to deliver outcomes that are unmatched in the industry.
+          </p>
+        </section>
+
+        <!-- Comprehensive Risk Management for Unwavering Security -->
+        <section id="risk-management" class="section" data-aos="fade-up">
+          <h2 class="section-title gold">Comprehensive Risk Management for Unwavering Security</h2>
+          <p class="section-text">
+            Agricultural investment carries inherent risks—from market volatility to climate uncertainties—but PrudentProExchange transforms these challenges into opportunities. We employ a sophisticated, multi-layered risk management framework that includes:
+          </p>
+          <ul class="features-list">
+            <li>Thorough risk assessments</li>
+            <li>Diversified portfolios</li>
+            <li>Advanced hedging strategies</li>
+          </ul>
+          <p class="section-text">
+            Coupled with stringent governance standards, transparent reporting, and full regulatory compliance, our approach safeguards client capital and instills absolute confidence. With PrudentProExchange, investors enjoy peace of mind knowing their wealth is protected by the best in the business.
+          </p>
+        </section>
+
+        <!-- Precision Capital Management: Maximizing Every Dollar -->
+        <section id="capital-management" class="section" data-aos="fade-up">
+          <h2 class="section-title gold">Precision Capital Management: Maximizing Every Dollar</h2>
+          <p class="section-text">
+            At PrudentProExchange, we manage client capital with unparalleled precision and dedication. Every investment is tailored to align with our clients’ unique financial objectives and risk profiles, ensuring a bespoke strategy that optimizes returns. Our process begins with rigorous vetting of opportunities, followed by continuous monitoring and adaptive management to capitalize on evolving market conditions. This disciplined, client-centric approach ensures that every dollar entrusted to us is deployed with care, delivering sustainable growth and preserving wealth for the long term.
+          </p>
+        </section>
+
+        <!-- Profit Assurance: A Legacy of Consistent Returns -->
+        <section id="profit-assurance" class="section" data-aos="fade-up">
+          <h2 class="section-title gold">Profit Assurance: A Legacy of Consistent Returns</h2>
+          <p class="section-text">
+            Our commitment to profitability is absolute. PrudentProExchange combines advanced analytics, expert oversight, and strategic diversification to generate consistent, reliable income streams for our clients. Our proven track record demonstrates our ability to outperform industry benchmarks, delivering returns that set the standard for excellence. Whether through high-yield projects in emerging markets or stable investments in established regions, we ensure that profits are not just a goal—they are a guarantee, rooted in our methodical and innovative approach.
+          </p>
+        </section>
+
+        <!-- Global Leadership: Insight and Wisdom That Define Excellence -->
+        <section id="leadership" class="section" data-aos="fade-up">
+          <h2 class="section-title gold">Global Leadership: Insight and Wisdom That Define Excellence</h2>
+          <p class="section-text">
+            What makes PrudentProExchange the undisputed best in the world? It is our unparalleled insight and wisdom in generating income from agriculture. We don’t merely follow trends—we anticipate them, using our deep understanding of global markets and technological advancements to stay ahead of the curve. Our strategic foresight, combined with an unmatched ability to forge transformative partnerships, positions us as the gold standard in agricultural investment. PrudentProExchange is more than a platform; it is the pinnacle of financial acumen, driving unprecedented value for our clients and redefining what’s possible in the sector.
+          </p>
+        </section>
+
+        <!-- A Call to Transform the Future -->
+        <section id="call-to-action" class="section cta-section" data-aos="fade-up">
+          <h2 class="section-title gold">A Call to Transform the Future</h2>
           <p class="section-text">
             As the world confronts the urgent challenge of sustainably feeding a growing population, PrudentProExchange offers a powerful opportunity for investors to achieve both financial prosperity and societal impact. With our exclusive global reach, state-of-the-art technology, unwavering commitment to sustainability, world-class expertise, robust risk management, and proven profit assurance, we stand alone as the premier platform for agricultural investment. Join PrudentProExchange today and become part of a movement that is revolutionizing agriculture, fostering innovation, and securing a prosperous, sustainable future for generations to come.
           </p>
-          <button class="cta primary" onclick="location.href='/#application'">Begin Your Journey</button>
+          <button class="cta primary" onclick="location.href='/#application'">Join Now</button>
         </section>
       </main>
     </div>
+
+    <!-- Footer -->
     <footer class="section section-dark site-footer" data-aos="fade-up">
       <div class="footer-content">
         <p class="utc-time">UTC Time: <span id="utcTime"></span></p>
@@ -129,15 +161,18 @@
       </div>
     </footer>
   </div>
+
   <button id="back-to-top" aria-label="Back to top">🚀</button>
+
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="js/main.js"></script>
   <script>
-    // Hamburger toggle
-    const btn = document.getElementById('hamburgerBtn');
-    const drawer = document.getElementById('navDrawer');
-    btn.addEventListener('click', () => {
-      drawer.classList.toggle('open');
-      btn.classList.toggle('active');
+    // Hamburger toggle for Agriculture page
+    const btnAg = document.getElementById('hamburgerBtnAg');
+    const drawerAg = document.getElementById('navDrawerAg');
+    btnAg.addEventListener('click', () => {
+      drawerAg.classList.toggle('open');
+      btnAg.classList.toggle('active');
     });
 
     // Local Time and Date
@@ -178,12 +213,16 @@
       const video = document.querySelector('.bg-video');
       let retryCount = 0;
       const maxRetries = 3;
-      const retryDelay = 1000;
+      const retryDelay = 1000; // 1 second
 
       if (video) {
+        // Attempt to play video
         const playVideo = () => {
           video.play()
-            .then(() => console.log('Background video is playing successfully'))
+            .then(() => {
+              console.log('Background video is playing successfully');
+              retryCount = 0; // Reset retry count on success
+            })
             .catch(error => {
               console.error(`Background video play failed (attempt ${retryCount + 1}):`, error);
               if (retryCount < maxRetries) {
@@ -194,22 +233,42 @@
               }
             });
         };
+
+        // Initial play attempt
         playVideo();
 
+        // Event listeners for monitoring
+        video.addEventListener('canplay', () => console.log('Background video can play'));
+        video.addEventListener('playing', () => console.log('Background video is actively playing'));
+        video.addEventListener('error', (e) => console.error('Background video error:', e));
+        video.addEventListener('stalled', () => console.warn('Background video stalled'));
+        video.addEventListener('loadeddata', () => console.log('Background video data loaded'));
+
+        // Handle page visibility to optimize performance
         document.addEventListener('visibilitychange', () => {
           if (document.visibilityState === 'visible') {
-            if (video.paused) playVideo();
+            if (video.paused) {
+              playVideo();
+            }
           } else {
             video.pause();
+            console.log('Background video paused due to tab inactivity');
           }
         });
 
+        // Force playback on user interaction if autoplay fails
         const forcePlayOnInteraction = () => {
-          if (video.paused) playVideo();
+          if (video.paused) {
+            playVideo();
+            console.log('Attempting to play background video on user interaction');
+          }
         };
 
+        // Add interaction listeners (scroll or click)
         window.addEventListener('scroll', forcePlayOnInteraction, { once: true });
         window.addEventListener('click', forcePlayOnInteraction, { once: true });
+      } else {
+        console.error('Background video element not found');
       }
     });
   </script>
