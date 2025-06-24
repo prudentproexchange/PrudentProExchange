@@ -1,190 +1,193 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Gold-Backed Currencies • PrudentProExchange</title>
-  <link rel="stylesheet" href="css/style.css" />
-  <link rel="stylesheet" href="css/gold-currencies.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet" />
-</head>
-<body class="gold-currencies-page">
-  <!-- Background Video -->
-  <video autoplay muted loop playsinline id="backgroundVideo" poster="assets/images/video-poster.jpg">
-    <source src="assets/videos/background.mp4" type="video/mp4" />
-  </video>
+/* Gold Currencies Page Specific Styles */
+.gold-currencies-page .section {
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.8));
+  border: 2px solid var(--primary);
+  border-radius: 15px;
+  padding: 3rem;
+  margin: 2rem auto;
+  max-width: 1000px;
+  text-align: center;
+  color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
 
-  <!-- Overlay Container -->
-  <div class="overlay">
-    <!-- Header -->
-    <header>
-      <div class="theme-toggle" aria-label="Toggle Theme">
-        <i class="fas fa-adjust"></i>
-      </div>
-      <a href="/" class="logo">
-        <img src="assets/images/logo.png" alt="PrudentProExchange Logo" />
-      </a>
-      <button class="hamburger" id="hamburgerBtnGold" aria-label="Toggle Menu">
-        <i class="fas fa-bars"></i>
-      </button>
-      <nav class="nav-drawer" id="navDrawerGold">
-        <a href="/#application">Apply</a>
-        <a href="about.html">About</a>
-        <a href="privacy.html">Privacy Policy</a>
-        <a href="terms.html">Terms & Conditions</a>
-        <a href="login.html">Login</a>
-        <a href="/#plans">Investment Plans</a>
-        <a href="agriculture.html">Agriculture</a>
-        <a href="gold-currencies.html" class="active">Gold-Backed Currencies</a>
-      </nav>
-    </header>
+.gold-currencies-page .section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
 
-    <!-- Main Content -->
-    <main class="gold-currencies-page container">
-      <!-- Introduction Section -->
-      <section id="intro" class="section" data-aos="fade-up">
-        <h2 class="section-title gold">Securing Wealth with PrudentProExchange: The Global Leader in Managed Gold-Backed Currency Investments</h2>
-        <p class="section-text">In an era of economic volatility and uncertainty, gold-backed currencies remain a beacon of stability, offering a time-tested foundation for wealth preservation and growth. At PrudentProExchange, we take this enduring value to new heights by expertly managing client capital in gold-backed currencies on their behalf. With unmatched expertise, innovative strategies, and an unwavering commitment to excellence, we deliver exceptional financial returns while safeguarding wealth. PrudentProExchange is not just an investment manager—it is the world’s premier authority, redefining wealth creation through the timeless stability of gold.</p>
-      </section>
+.gold-currencies-page .section-title.gold {
+  color: var(--primary);
+}
 
-      <!-- Image Section -->
-      <section id="image" class="section" data-aos="fade-up">
-        <figure class="image-container">
-          <img src="assets/images/gold-currency.jpg" alt="Gold-backed currency investment" class="gold-image" loading="lazy" />
-          <figcaption>Investing in the timeless value of gold-backed currencies.</figcaption>
-        </figure>
-      </section>
+.gold-currencies-page .section-text {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.2rem;
+  line-height: 1.8;
+  margin-bottom: 1.5rem;
+}
 
-      <!-- Timeless Strength Section -->
-      <section id="strength" class="section" data-aos="fade-up">
-        <h2 class="section-title gold">The Timeless Strength of Gold-Backed Currencies</h2>
-        <p class="section-text">Gold-backed currencies, directly tied to the intrinsic value of gold, provide a robust shield against economic turbulence. By linking currency to a tangible, finite asset, these systems ensure stability and trust. Here’s why they are a cornerstone of wealth management:</p>
-        <ul class="features-list">
-          <li><strong>Intrinsic Value:</strong> Gold’s inherent worth as a physical asset underpins the value of gold-backed currencies, ensuring your wealth is anchored by a real, enduring resource.</li>
-          <li><strong>Price Stability:</strong> Gold-backed currencies maintain long-term purchasing power, resisting the volatility and inflationary pressures that erode fiat currencies.</li>
-          <li><strong>Historical Trust:</strong> For centuries, gold has been a universal symbol of reliability, a legacy that gold-backed currencies carry forward, fostering confidence among investors worldwide.</li>
-          <li><strong>Inflation Protection:</strong> As fiat currencies falter under inflation, gold-backed currencies hold firm, preserving wealth through their stable, gold-tied value.</li>
-          <li><strong>Global Acceptance:</strong> Gold’s universal recognition makes gold-backed currencies ideal for international markets, enhancing their strategic value in a connected world.</li>
-        </ul>
-      </section>
+.subsection-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  color: var(--primary);
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
 
-      <!-- Why PrudentProExchange Section -->
-      <section id="why" class="section" data-aos="fade-up">
-        <h2 class="section-title gold">Why PrudentProExchange is the World’s Best Choice for Managed Gold-Backed Currency Investments</h2>
-        <p class="section-text">PrudentProExchange transforms client capital into lasting wealth by expertly managing investments in gold-backed currencies. Our platform combines visionary insight, cutting-edge technology, and meticulous stewardship to deliver unparalleled results. Here’s why we stand as the global leader:</p>
+.features-list {
+  list-style: none;
+  padding: 0;
+  text-align: left;
+  max-width: 800px;
+  margin: 1.5rem auto;
+}
 
-        <h3 class="subsection-title">Unrivaled Expertise and Strategic Mastery</h3>
-        <p class="section-text">Our team of seasoned professionals, with decades of experience in precious metals, currencies, and global finance, manages every aspect of your investment. We conduct rigorous market analysis, monitor geopolitical and economic trends, and identify the most lucrative gold-backed currency opportunities. This profound expertise ensures that your capital is deployed with precision, maximizing returns while preserving stability.</p>
+.features-list li {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.2rem;
+  line-height: 1.8;
+  margin-bottom: 1rem;
+  position: relative;
+  padding-left: 2rem;
+}
 
-        <h3 class="subsection-title">Disciplined Capital Management</h3>
-        <p class="section-text">At PrudentProExchange, we manage your capital with unparalleled care and precision. Our process begins with exhaustive due diligence, selecting only the most stable and high-potential gold-backed currency opportunities. We tailor each investment strategy to align with your financial goals and risk profile, ensuring a bespoke approach that optimizes growth. Through continuous monitoring and adaptive management, we navigate market dynamics to secure consistent, long-term returns.</p>
+.features-list li:before {
+  content: '•';
+  color: var(--primary);
+  font-size: 1.5rem;
+  position: absolute;
+  left: 0;
+}
 
-        <h3 class="subsection-title">Assured Profitability Through Strategic Diversification</h3>
-        <p class="section-text">We ensure profitability by strategically allocating client capital across a diversified portfolio of gold-backed currencies and complementary assets. Our advanced analytics and proprietary models enable us to anticipate market shifts, capitalize on emerging trends, and mitigate risks. This disciplined approach delivers reliable income streams that consistently outperform industry benchmarks, ensuring your wealth grows with certainty.</p>
+.image-container {
+  display: flex;
+  justify-content: center;
+  margin: 2rem 0;
+}
 
-        <h3 class="subsection-title">Cutting-Edge Technology for Optimal Outcomes</h3>
-        <p class="section-text">Our state-of-the-art platform leverages artificial intelligence, predictive analytics, and real-time data to drive superior investment decisions. By integrating these tools, we optimize portfolio performance, enhance efficiency, and provide transparent insights into your investments. Clients receive regular, detailed reports on portfolio performance and market trends, ensuring clarity and confidence in our management process.</p>
+.image-container figcaption {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1rem;
+  color: #ccc;
+  margin-top: 1rem;
+}
 
-        <h3 class="subsection-title">Uncompromising Security and Transparency</h3>
-        <p class="section-text">Security is the foundation of our service. PrudentProExchange employs robust cybersecurity measures, trusted custodial partnerships, and stringent regulatory compliance to protect your capital. Our commitment to transparency means you are always informed about how your wealth is managed, with clear, comprehensive updates on performance and strategy. This unwavering focus on security and openness gives you peace of mind, knowing your capital is in the safest hands.</p>
+.gold-image {
+  max-width: 100%;
+  height: auto;
+  border: 2px solid var(--primary);
+  border-radius: 10px;
+}
 
-        <h3 class="subsection-title">Global Reach, Precision Execution</h3>
-        <p class="section-text">Gold-backed currencies thrive in a global marketplace, and PrudentProExchange leverages its extensive network to access premier opportunities worldwide. From established markets to emerging economies, we deploy your capital strategically, capitalizing on currency stability and growth potential. Our localized expertise ensures that every investment is executed with precision, delivering maximum value in diverse markets.</p>
+.cta-section .cta {
+  display: inline-block;
+  padding: 1rem 2rem;
+  font-size: 1.2rem;
+  font-family: 'Poppins', sans-serif;
+  background: var(--primary);
+  color: #000;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 1.5rem;
+}
 
-        <h3 class="subsection-title">Wealth Preservation with a Modern Edge</h3>
-        <p class="section-text">Gold-backed currencies are synonymous with wealth preservation, and PrudentProExchange amplifies this strength through modern innovation. By anchoring your capital to the historical reliability of gold, we shield it from inflation, currency devaluation, and economic instability. Our forward-thinking strategies ensure that your wealth not only endures but thrives, creating a legacy of financial security.</p>
+.cta-section .cta:hover {
+  background: #e6b800;
+  transform: scale(1.05);
+}
 
-        <h3 class="subsection-title">The PrudentProExchange Difference: Wisdom That Redefines Excellence</h3>
-        <p class="section-text">What makes PrudentProExchange the most powerful and perfect platform for managed gold-backed currency investments? It is our unparalleled wisdom in generating income through strategic foresight and flawless execution. We don’t merely manage capital—we shape its future, anticipating market trends and seizing opportunities with unmatched precision. By blending the timeless trust in gold with cutting-edge innovation, we deliver results that set the global standard for excellence. PrudentProExchange is the epitome of financial mastery, transforming client wealth with unrivaled success.</p>
-      </section>
+/* Footer Styles */
+.time-display p {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.2rem;
+  margin: 0.5rem 0;
+}
 
-      <!-- Call to Action Section -->
-      <section id="cta" class="section cta-section" data-aos="fade-up">
-        <h2 class="section-title gold">Your Wealth, Our Responsibility</h2>
-        <p class="section-text">In a world of economic uncertainty, gold-backed currencies offer a rare opportunity to secure and grow wealth with stability. PrudentProExchange takes this opportunity to new heights by managing your capital with expertise, precision, and a relentless focus on profitability. With our unmatched insight, advanced technology, ironclad security, and proven track record, we stand alone as the world’s premier platform for gold-backed currency investments.</p>
-        <p class="section-text">Entrust your wealth to PrudentProExchange today, and let us anchor your financial future in the enduring value of gold, fortified by our visionary wisdom and unwavering commitment to your success.</p>
-        <button class="cta primary" onclick="location.href='/#application'">Get Started</button>
-      </section>
-    </main>
+.footer-links a {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.2rem;
+  margin: 0 1rem;
+  color: #fff;
+  text-decoration: none;
+}
 
-    <!-- Footer -->
-    <footer>
-      <div class="footer-content">
-        <div class="time-display">
-          <p>Local Time: <span id="localTime"></span></p>
-          <p>UTC Time: <span id="utcTime"></span></p>
-        </div>
-        <div class="footer-links">
-          <a href="about.html">About</a>
-          <a href="privacy.html">Privacy</a>
-          <a href="terms.html">Terms</a>
-        </div>
-      </div>
-    </footer>
+.footer-links a:hover {
+  color: var(--primary);
+}
 
-    <!-- Back to Top Button -->
-    <button class="back-to-top"><i class="fas fa-arrow-up"></i></button>
-  </div>
+/* Navigation Active Link */
+.nav-drawer a.active {
+  color: var(--primary);
+  font-weight: bold;
+}
 
-  <!-- Scripts -->
-  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-  <script src="js/main.js"></script>
-  <script>
-    // Hamburger toggle for Gold Currencies page
-    const btnGold = document.getElementById('hamburgerBtnGold');
-    const drawerGold = document.getElementById('navDrawerGold');
-    btnGold.addEventListener('click', () => {
-      drawerGold.classList.toggle('open');
-      btnGold.classList.toggle('active');
-      const icon = btnGold.querySelector('i');
-      icon.classList.toggle('fa-bars');
-      icon.classList.toggle('fa-times');
-    });
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .gold-currencies-page .section {
+    padding: 2.5rem;
+  }
 
-    // Close navigation drawer when a link is clicked
-    const navLinks = document.querySelectorAll('.nav-drawer a');
-    navLinks.forEach(link => {
-      link.addEventListener('click', () => {
-        drawerGold.classList.remove('open');
-        btnGold.classList.remove('active');
-        const icon = btnGold.querySelector('i');
-        icon.classList.remove('fa-times');
-        icon.classList.add('fa-bars');
-      });
-    });
+  .gold-currencies-page .section-title {
+    font-size: 2.5rem;
+  }
 
-    // Local and UTC time updates
-    function updateTime() {
-      const now = new Date();
-      document.getElementById('localTime').textContent = now.toLocaleTimeString();
-      document.getElementById('utcTime').textContent = now.toUTCString().split(' ')[4];
-    }
-    setInterval(updateTime, 1000);
-    updateTime();
+  .subsection-title {
+    font-size: 1.8rem;
+  }
+}
 
-    // Theme toggle
-    const themeToggle = document.querySelector('.theme-toggle');
-    themeToggle.addEventListener('click', () => {
-      document.body.classList.toggle('dark-theme');
-    });
+@media (max-width: 768px) {
+  .gold-currencies-page .section {
+    padding: 2rem 1rem;
+  }
 
-    // Back to top button
-    const backToTop = document.querySelector('.back-to-top');
-    window.addEventListener('scroll', () => {
-      backToTop.style.display = window.scrollY > 300 ? 'block' : 'none';
-    });
-    backToTop.addEventListener('click', () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
+  .gold-currencies-page .section-title {
+    font-size: 2rem;
+  }
 
-    // AOS Initialization
-    AOS.init({ duration: 1000, once: true });
+  .gold-currencies-page .section-text {
+    font-size: 1.1rem;
+  }
 
-    // Video playback optimization
-    const video = document.getElementById('backgroundVideo');
-    video.playbackRate = 0.8;
-  </script>
-</body>
-</html>
+  .subsection-title {
+    font-size: 1.6rem;
+  }
+
+  .features-list li {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .gold-currencies-page .section {
+    padding: 1.5rem 1rem;
+  }
+
+  .gold-currencies-page .section-title {
+    font-size: 1.8rem;
+  }
+
+  .gold-currencies-page .section-text {
+    font-size: 1rem;
+  }
+
+  .subsection-title {
+    font-size: 1.4rem;
+  }
+
+  .features-list li {
+    font-size: 1rem;
+  }
+
+  .cta-section .cta {
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+  }
+}
