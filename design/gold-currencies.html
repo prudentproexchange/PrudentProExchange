@@ -12,7 +12,7 @@
 </head>
 <body class="gold-currencies-page">
   <!-- Background Video -->
-  <video autoplay muted loop playsinline id="backgroundVideo">
+  <video autoplay muted loop playsinline id="backgroundVideo" poster="assets/images/video-poster.jpg">
     <source src="assets/videos/background.mp4" type="video/mp4" />
   </video>
 
@@ -20,13 +20,13 @@
   <div class="overlay">
     <!-- Header -->
     <header>
-      <div class="theme-toggle">
+      <div class="theme-toggle" aria-label="Toggle Theme">
         <i class="fas fa-adjust"></i>
       </div>
       <a href="/" class="logo">
         <img src="assets/images/logo.png" alt="PrudentProExchange Logo" />
       </a>
-      <button class="hamburger" id="hamburgerBtnGold">
+      <button class="hamburger" id="hamburgerBtnGold" aria-label="Toggle Menu">
         <i class="fas fa-bars"></i>
       </button>
       <nav class="nav-drawer" id="navDrawerGold">
@@ -51,9 +51,10 @@
 
       <!-- Image Section -->
       <section id="image" class="section" data-aos="fade-up">
-        <div class="image-container">
-          <img src="assets/images/gold-currency.jpg" alt="Gold-backed currency investment" class="gold-image" />
-        </div>
+        <figure class="image-container">
+          <img src="assets/images/gold-currency.jpg" alt="Gold-backed currency investment" class="gold-image" loading="lazy" />
+          <figcaption>Investing in the timeless value of gold-backed currencies.</figcaption>
+        </figure>
       </section>
 
       <!-- Timeless Strength Section -->
@@ -137,6 +138,21 @@
     btnGold.addEventListener('click', () => {
       drawerGold.classList.toggle('open');
       btnGold.classList.toggle('active');
+      const icon = btnGold.querySelector('i');
+      icon.classList.toggle('fa-bars');
+      icon.classList.toggle('fa-times');
+    });
+
+    // Close navigation drawer when a link is clicked
+    const navLinks = document.querySelectorAll('.nav-drawer a');
+    navLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        drawerGold.classList.remove('open');
+        btnGold.classList.remove('active');
+        const icon = btnGold.querySelector('i');
+        icon.classList.remove('fa-times');
+        icon.classList.add('fa-bars');
+      });
     });
 
     // Local and UTC time updates
