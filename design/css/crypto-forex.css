@@ -1,33 +1,4 @@
 /* Crypto & Forex Page Specific Styles */
-
-/* Ensure consistency with Privacy Policy page by using similar base styles */
-body.crypto-forex-page {
-  font-family: 'Poppins', sans-serif;
-  background: #000;
-  margin: 0;
-  padding: 0;
-  color: #fff;
-  overflow-x: hidden;
-}
-
-/* Background video styling */
-#backgroundVideo {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: -1;
-}
-
-/* Overlay for readability */
-.overlay {
-  position: relative;
-  z-index: 1;
-}
-
-/* Section styling consistent with Privacy Policy */
 .crypto-forex-page .section {
   background: rgba(0, 0, 0, 0.7);
   border: 2px solid var(--primary);
@@ -37,28 +8,26 @@ body.crypto-forex-page {
   max-width: 1000px;
   text-align: center;
   color: #fff;
-  box-sizing: border-box;
 }
 
-/* Title styling */
 .crypto-forex-page .section-title {
   font-family: 'Playfair Display', serif;
   font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 1.5rem;
+}
+
+.crypto-forex-page .section-title.gold {
   color: var(--primary);
 }
 
-/* Text styling */
 .crypto-forex-page .section-text {
   font-family: 'Poppins', sans-serif;
   font-size: 1.2rem;
   line-height: 1.8;
   margin-bottom: 1.5rem;
-  word-break: break-word; /* Prevents overflow of long words */
 }
 
-/* Subsection titles */
 .subsection-title {
   font-family: 'Playfair Display', serif;
   font-size: 1.8rem;
@@ -67,7 +36,6 @@ body.crypto-forex-page {
   margin-bottom: 1rem;
 }
 
-/* Features list */
 .features-list {
   list-style: none;
   padding: 0;
@@ -93,7 +61,6 @@ body.crypto-forex-page {
   left: 0;
 }
 
-/* Image container */
 .image-container {
   display: flex;
   justify-content: center;
@@ -107,7 +74,6 @@ body.crypto-forex-page {
   border-radius: 10px;
 }
 
-/* CTA button */
 .cta-section .cta {
   display: inline-block;
   padding: 1rem 2rem;
@@ -126,55 +92,10 @@ body.crypto-forex-page {
   background: #e6b800;
 }
 
-/* Footer styling (consistent with Privacy Policy) */
-footer {
-  background: rgba(0, 0, 0, 0.8);
-  padding: 2rem;
-  text-align: center;
-  color: #fff;
-}
-
-.footer-content {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  max-width: 1000px;
-  margin: 0 auto 1rem;
-}
-
-.footer-links a {
-  color: var(--primary);
-  margin: 0 1rem;
-  text-decoration: none;
-}
-
-.footer-links a:hover {
-  text-decoration: underline;
-}
-
-/* Back to top button */
-.back-to-top {
-  display: none;
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background: var(--primary);
-  color: #000;
-  border: none;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  cursor: pointer;
-  z-index: 1000;
-}
-
 /* Responsive Design */
-
-/* Tablets and smaller devices (≤ 768px) */
 @media (max-width: 768px) {
   .crypto-forex-page .section {
     padding: 2rem 1rem;
-    margin: 1.5rem auto;
   }
 
   .crypto-forex-page .section-title {
@@ -192,57 +113,11 @@ footer {
   .features-list li {
     font-size: 1.1rem;
   }
-
-  .cta-section .cta {
-    padding: 0.8rem 1.5rem;
-    font-size: 1.1rem;
-  }
-
-  /* Navigation drawer for mobile */
-  .nav-drawer {
-    width: 100%;
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.9);
-    z-index: 1000;
-    transform: translateX(-100%);
-    transition: transform 0.3s ease;
-  }
-
-  .nav-drawer.open {
-    transform: translateX(0);
-  }
-
-  .nav-drawer a {
-    display: block;
-    padding: 1rem;
-    font-size: 1.2rem;
-    color: #fff;
-    text-decoration: none;
-  }
-
-  .nav-drawer a:hover {
-    color: var(--primary);
-  }
-
-  /* Stack footer content */
-  .footer-content {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .footer-links {
-    margin-top: 1rem;
-  }
 }
 
-/* Small phones (≤ 480px) */
 @media (max-width: 480px) {
   .crypto-forex-page .section {
     padding: 1.5rem 1rem;
-    margin: 1rem auto;
   }
 
   .crypto-forex-page .section-title {
@@ -262,23 +137,7 @@ footer {
   }
 
   .cta-section .cta {
-    padding: 0.8rem 1.2rem;
+    padding: 0.8rem 1.5rem;
     font-size: 1rem;
-  }
-
-  .image-container {
-    margin: 1rem 0;
-  }
-
-  .crypto-forex-image {
-    border-width: 1px;
-  }
-
-  .nav-drawer a {
-    font-size: 1rem;
-  }
-
-  footer {
-    padding: 1.5rem;
   }
 }
