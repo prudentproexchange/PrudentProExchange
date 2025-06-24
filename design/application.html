@@ -324,30 +324,41 @@
     );
 
     // Handle sign-up
-    document.getElementById('applicationForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const f = e.target;
+    document.getElementById('applicationForm').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const form = event.target;
 
       try {
-        // Validate passwords match
-        if (f.password.value !== f.confirm_password.value) {
+        // Validate inputs
+        if (form.password.value !== form.confirm_password.value) {
           throw new Error('Passwords do not match.');
         }
-
-        // Validate terms agreement
-        if (!f.terms.checked) {
+        if (!form.terms.checked) {
           throw new Error('You must agree to the Privacy Policy and Terms & Conditions.');
         }
+
+        console.log('Form data:', {
+          email: form.email.value,
+          first_name: form.first_name.value,
+          last_name: form.last_name.value,
+          username: form.username.value,
+          country: form.country.value,
+          referral_code: form.referral_code.value,
+        });
 
         // Generate unique referral link
         const referralCode = generateReferralCode();
         const referralLink = `https://prudentproexchange.com/referral/${referralCode}`;
+        console.log('Generated referral link:', referralLink);
 
         // 1. Sign up with Supabase Auth
-        console.log('Attempting to sign up with email:', f.email.value);
+        console.log('Attempting to sign up with email:', form.email.value);
         const { data: authData, error: signUpError } = await supabase.auth.signUp({
-          email: f.email.value,
-          password: f.password.value,
+          email: form.email.value,
+          password: form.password.value,
+          options: {
+            emailRedirectTo: 'https://prudentproexchange.com/login.html', // Redirect after email confirmation
+          },
         });
 
         if (signUpError) {
@@ -365,12 +376,14 @@
 
         // 2. Upload photo if provided
         let photoUrl = null;
-        if (f.photo.files[0]) {
+        if (form.photo.files[0]) {
           console.log('Uploading photo for user:', user.id);
+          const file = form.photo.files[0];
+          const filePath = `${user.id}/${Date.now()}_${file.name}`; // Unique file name
           const { data: storageData, error: uploadError } = await supabase.storage
             .from('profile-photos')
-            .upload(`${user.id}/${f.photo.files[0].name}`, f.photo.files[0], { upsert: true });
-          
+            .upload(filePath, file, { upsert: true });
+
           if (uploadError) {
             console.error('Photo upload error:', uploadError);
             throw new Error(`Photo upload failed: ${uploadError.message}`);
@@ -383,11 +396,11 @@
         console.log('Inserting profile for user:', user.id);
         const profileData = {
           id: user.id,
-          first_name: f.first_name.value,
-          last_name: f.last_name.value,
-          username: f.username.value,
-          country: f.country.value,
-          referral_code: f.referral_code.value || null,
+          first_name: form.first_name.value,
+          last_name: form.last_name.value,
+          username: form.username.value,
+          country: form.country.value,
+          referral_code: form.referral_code.value || null,
           referral_link: referralLink,
           photo_url: photoUrl,
         };
@@ -405,7 +418,7 @@
 
         console.log('Profile inserted successfully:', insertData);
 
-        alert('Sign-up successful! Please check your email for confirmation and log in to your dashboard.');
+        alert('Sign-up successful! Please check your email to confirm your account, then log in.');
         window.location.href = 'login.html';
       } catch (error) {
         console.error('Error during sign-up process:', error);
