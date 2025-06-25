@@ -4,11 +4,12 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Dashboard • PrudentProExchange</title>
+  <link rel="stylesheet" href="css/style.css"/>
   <link rel="stylesheet" href="css/dashboard.css"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 </head>
 <body class="dashboard-page">
   <!-- Video Background -->
@@ -94,7 +95,7 @@
           <h2>Affiliate Program</h2>
           <p>Share your unique referral link and earn a 10% commission on every deposit:</p>
           <div class="referral-link-container">
-            <input type="text" id="  affiliateLink" readonly/>
+            <input type="text" id="affiliateLink" readonly/>
             <button class="copy-btn" title="Copy referral link" aria-label="Copy referral link"><i class="fas fa-copy"></i> Copy</button>
           </div>
           <p>Referral Earnings: $<span id="refEarnings">0.00</span></p>
@@ -157,7 +158,7 @@
   <button id="back-to-top" aria-label="Back to top">🚀</button>
 
   <!-- Scripts -->
-  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script招生 src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
     AOS.init({ duration: 800, once: true });
 
@@ -170,7 +171,7 @@
       hamburgerBtn.classList.toggle('active');
       overlay.classList.toggle('nav-open');
       if (navDrawer.classList.contains('open')) {
-        navDrawer.scrollTop = 0; // Scroll to top when drawer opens
+        navDrawer.scrollTop = 0exploration0; // Scroll to top when drawer opens
       }
     });
 
@@ -185,7 +186,7 @@
       }
     });
 
-    // Theme toggle
+   // Theme toggle
     const themeToggle = document.getElementById('theme-toggle');
     themeToggle.addEventListener('click', () => {
       document.body.classList.toggle('light-theme');
@@ -239,238 +240,209 @@
     setInterval(updateUTCTime, 1000);
     updateUTCTime();
 
-    // Supabase client initialization
-    if (typeof supabase === 'undefined') {
-      console.error('Supabase library not loaded. Please ensure the Supabase script is correctly included.');
-      alert('Failed to connect to the database. Please try again later.');
-    } else {
-      const supabaseClient = supabase.createClient(
-        'https://iwkdznjqfbsfkscnbrkc.supabase.co',
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU'
-      );
+    // Supabase client
+    const { createClient } = supabase;
+    const supabaseClient = createClient(
+      'https://iwkdznjqfbsfkscnbrkc.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU'
+    );
 
-      // Choose plan for amount function
-      async function choosePlanForAmount(amount) {
-        try {
-          const { data: plans, error } = await supabaseClient
-            .from('investment_plans')
-            .select('id, name, duration_days, roi_pct, min_amount, max_amount');
-          if (error) throw new Error(`Failed to fetch plans: ${error.message}`);
-          const plan = plans.find(p => amount >= p.min_amount && amount <= p.max_amount);
-          if (!plan) throw new Error('No plan matches that amount');
-          return plan;
-        } catch (err) {
-          console.error('Error in choosePlanForAmount:', err);
-          throw err;
-        }
-      }
-
-      // Initialize dashboard
-      async function initDashboard() {
-        try {
-          const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
-          if (authError || !user) {
-            console.error('Authentication error:', authError?.message || 'No user found');
-            alert('Please log in to access the dashboard.');
-            window.location.href = 'login.html';
-            return;
-          }
-
-          const { data: profile, error: profileError } = await supabaseClient
-            .from('profiles')
-            .select('*')
-            .eq('id', user.id)
-            .single();
-
-          if (profileError) {
-            console.error('Error loading profile:', profileError.message);
-            alert('Error loading profile: ' + profileError.message);
-            return;
-          }
-
-          document.getElementById('welcomeName').textContent = profile.first_name || 'User';
-          if (profile.photo_url) {
-            const { data: urlData } = supabaseClient.storage
-              .from('profile-photos')
-              .getPublicUrl(profile.photo_url);
-            if (urlData?.publicUrl) {
-              document.getElementById('navProfilePhoto').src = urlData.publicUrl;
-              document.getElementById('navProfilePhoto').style.display = 'block';
-              document.getElementById('defaultProfileIcon').style.display = 'none';
-            } else {
-              console.warn('No public URL for profile photo');
-            }
-          }
-
-          document.getElementById('affiliateLink').value = profile.referral_link || '';
-          document.getElementById('refEarnings').textContent = (profile.referral_earnings || 0).toFixed(2);
-          document.getElementById('depositWallet').textContent = (profile.deposit_wallet || 0).toFixed(2);
-          document.getElementById('totalDeposits').textContent = (profile.total_deposits || 0).toFixed(2);
-          document.getElementById('interestWallet').textContent = (profile.interest_wallet || 0).toFixed(2);
-          document.getElementById('totalWithdrawals').textContent = (profile.total_withdrawals || 0).toFixed(2);
-          document.getElementById('totalInvested').textContent = (profile.total_invested || 0).toFixed(2);
-          document.getElementById('promoOffer').textContent = (profile.promo_offer || 0).toFixed(2);
-          document.getElementById('promoPct').textContent = profile.promo_pct || 0;
-
-          // Load all active investments
-          const { data: investments, error: invError } = await supabaseClient
-            .from('investments')
-            .select(`
-              *,
-              plan:investment_plans(name)
-            `)
-            .eq('user_id', user.id)
-            .gt('end_time', new Date().toISOString())
-            .order('start_time', { ascending: false });
-
-          if (invError) {
-            console.error('Error loading investments:', invError.message);
-            alert('Error retrieving investment data: ' + invError.message);
-            return;
-          }
-
-          const container = document.getElementById('investments-container');
-          const noInvestmentsDiv = document.getElementById('no-investments');
-          if (investments?.length > 0) {
-            container.innerHTML = '';
-            investments.forEach(investment => {
-              const investmentDiv = document.createElement('div');
-              investmentDiv.className = 'investment-item';
-              investmentDiv.innerHTML = `
-                <p>Plan: <span>${investment.plan?.name || 'Unknown'}</span></p>
-                <p>Invested Amount: $<span>${(investment.invested_amount || 0).toFixed(2)}</span></p>
-                <p>Current Profit: $<span class="current-profit">0.00</span></p>
-                <p>Time Remaining: <span class="time-left"></span></p>
-              `;
-              container.appendChild(investmentDiv);
-              startInvestmentCalculator(investment, investmentDiv);
-            });
-          } else {
-            noInvestmentsDiv.style.display = 'block';
-          }
-
-          // Load transactions
-          const { data: txns, error: txnsError } = await supabaseClient
-            .from('transactions')
-            .select('*')
-            .eq('user_id', user.id)
-            .order('created_at', { ascending: false });
-
-          if (txnsError) {
-            console.error('Error loading transactions:', txnsError.message);
-            alert('Error retrieving transaction history: ' + txnsError.message);
-            return;
-          }
-
-          const tbody = document.querySelector('#txTable tbody');
-          tbody.innerHTML = '';
-          if (txns?.length > 0) {
-            txns.forEach(t => {
-              tbody.insertAdjacentHTML('beforeend', `
-                <tr>
-                  <td>${new Date(t.created_at).toLocaleString()}</td>
-                  <td>${t.type || 'Unknown'}</td>
-                  <td>$${t.amount?.toFixed(2) || '0.00'}</td>
-                  <td>${t.status || 'Unknown'}</td>
-                </tr>
-              `);
-            });
-          }
-        } catch (err) {
-          console.error('Error initializing dashboard:', err);
-          alert('Failed to initialize dashboard: ' + err.message);
-        }
-      }
-
-      // Investment calculator logic
-      function startInvestmentCalculator(investment, investmentDiv) {
-        const { start_time, end_time, invested_amount, total_profit } = investment;
-        const startTime = new Date(start_time);
-        const endTime = new Date(end_time);
-        const totalSeconds = (endTime - startTime) / 1000;
-        const profitPerSecond = total_profit / totalSeconds;
-
-        const currentProfitSpan = investmentDiv.querySelector('.current-profit');
-        const timeLeftSpan = investmentDiv.querySelector('.time-left');
-
-        const updateInvestment = () => {
-          const now = new Date();
-          if (now >= endTime) {
-            currentProfitSpan.textContent = total_profit.toFixed(2);
-            timeLeftSpan.textContent = '0d 0h 0m 0s';
-            const message = document.createElement('p');
-            message.textContent = 'Investment cycle completed. Profits have been transferred to your Interest Wallet.';
-            investmentDiv.appendChild(message);
-            clearInterval(interval);
-
-            // Update interest wallet (client-side for demo)
-            const currentWallet = parseFloat(document.getElementById('interestWallet').textContent);
-            document.getElementById('interestWallet').textContent = (currentWallet + total_profit).toFixed(2);
-          } else {
-            const elapsedSeconds = (now - startTime) / 1000;
-            const currentProfit = Math.min(elapsedSeconds * profitPerSecond, total_profit);
-            currentProfitSpan.textContent = currentProfit.toFixed(2);
-            const timeLeftMs = endTime - now;
-            timeLeftSpan.textContent = formatTimeLeft(timeLeftMs);
-          }
-        };
-
-        const interval = setInterval(updateInvestment, 1000);
-        updateInvestment();
-      }
-
-      function formatTimeLeft(ms) {
-        const seconds = Math.floor(ms / 1000);
-        const days = Math.floor(seconds / (24 * 3600));
-        const hours = Math.floor((seconds % (24 * 3600)) / 3600);
-        const minutes = Math.floor((seconds % 3600) / 60);
-        const secs = seconds % 60;
-        return `${days}d ${hours}h ${minutes}m ${secs}s`;
-      }
-
-      // Logout
-      document.getElementById('logout-btn').addEventListener('click', async () => {
-        try {
-          const { error } = await supabaseClient.auth.signOut();
-          if (error) throw new Error(`Logout failed: ${error.message}`);
-          window.location.href = 'login.html';
-        } catch (err) {
-          console.error('Logout error:', err);
-          alert('Error logging out: ' + err.message);
-        }
-      });
-
-      // Invest button
-      document.querySelector('.invest-btn')?.addEventListener('click', async (e) => {
-        e.preventDefault();
-        const amountStr = prompt('Enter investment amount:');
-        if (amountStr) {
-          const amount = parseFloat(amountStr);
-          if (isNaN(amount) || amount <= 0) {
-            alert('Invalid amount');
-            return;
-          }
-          try {
-            const plan = await choosePlanForAmount(amount);
-            const { data: { user } } = await supabaseClient.auth.getUser();
-            if (!user) throw new Error('User not authenticated');
-            await supabaseClient.rpc('start_investment', {
-              user_id: user.id,
-              plan_id: plan.id,
-              amount
-            });
-            alert('Investment started in the "' + plan.name + '" plan!');
-            location.reload();
-          } catch (err) {
-            console.error('Investment error:', err);
-            alert('Error: ' + err.message);
-          }
-        }
-      });
-
-      // Initialize dashboard
-      initDashboard();
+    // Choose plan for amount function
+    async function choosePlanForAmount(amount) {
+      const { data: plans, error } = await supabaseClient
+        .from('investment_plans')
+        .select('id, name, duration_days, roi_pct, min_amount, max_amount');
+      if (error) throw error;
+      const plan = plans.find(p => amount >= p.min_amount && amount <= p.max_amount);
+      if (!plan) throw new Error('No plan matches that amount');
+      return plan;
     }
+
+    // Initialize dashboard
+    async function initDashboard() {
+      const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
+      if (!user || authError) {
+        window.location.href = 'login.html';
+        return;
+      }
+
+      const { data: profile, error: profileError } = await supabaseClient
+        .from('profiles')
+        .select('*')
+        .eq('id', user.id)
+        .single();
+
+      if (profileError) {
+        console.error('Error loading profile:', profileError);
+        alert('Error loading profile.');
+        return;
+      }
+
+      document.getElementById('welcomeName').textContent = profile.first_name || 'User';
+      if (profile.photo_url) {
+        const { data: urlData } = supabaseClient.storage
+          .from('profile-photos')
+          .getPublicUrl(profile.photo_url);
+        document.getElementById('navProfilePhoto').src = urlData.publicUrl;
+        document.getElementById('navProfilePhoto').style.display = 'block';
+        document.getElementById('defaultProfileIcon').style.display = 'none';
+      }
+
+      document.getElementById('affiliateLink').value = profile.referral_link || '';
+      document.getElementById('refEarnings').textContent = (profile.referral_earnings || 0).toFixed(2);
+      document.getElementById('depositWallet').textContent = (profile.deposit_wallet || 0).toFixed(2);
+      document.getElementById('totalDeposits').textContent = (profile.total_deposits || 0).toFixed(2);
+      document.getElementById('interestWallet').textContent = (profile.interest_wallet || 0).toFixed(2);
+      document.getElementById('totalWithdrawals').textContent = (profile.total_withdrawals || 0).toFixed(2);
+      document.getElementById('totalInvested').textContent = (profile.total_invested || 0).toFixed(2);
+      document.getElementById('promoOffer').textContent = (profile.promo_offer || 0).toFixed(2);
+      document.getElementById('promoPct').textContent = profile.promo_pct || 0;
+
+      // Load all active investments with plan name joined from investment_plans
+      const { data: investments, error: invError } = await supabaseClient
+        .from('investments')
+        .select(`
+          *,
+          plan:investment_plans (
+            name
+          )
+        `)
+        .eq('user_id', user.id)
+        .gt('end_time', new Date().toISOString())
+        .order('start_time', { ascending: false });
+
+      if (invError) {
+        console.error('Error loading investments:', invError);
+        alert('Error retrieving investment data:\n' + invError.message);
+        return;
+      }
+
+      const container = document.getElementById('investments-container');
+      const noInvestmentsDiv = document.getElementById('no-investments');
+      if (investments.length > 0) {
+        container.innerHTML = '';
+        investments.forEach(investment => {
+          const investmentDiv = document.createElement('div');
+          investmentDiv.className = 'investment-item';
+          investmentDiv.innerHTML = `
+            <p>Plan: <span>${investment.plan ? investment.plan.name : 'Unknown'}</span></p>
+            <p>Invested Amount: $<span>${investment.invested_amount.toFixed(2)}</span></p>
+            <p>Current Profit: $<span class="current-profit">0.00</span></p>
+            <p>Time Remaining: <span class="time-left"></span></p>
+          `;
+          container.appendChild(investmentDiv);
+          startInvestmentCalculator(investment, investmentDiv);
+        });
+      } else {
+        noInvestmentsDiv.style.display = 'block';
+      }
+
+      // Load transactions
+      const { data: txns, error: txnsError } = await supabaseClient
+        .from('transactions')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false });
+
+      if (txnsError) {
+        console.error('Error loading transactions:', txnsError);
+        alert('Error retrieving transaction history.');
+        return;
+      }
+
+      const tbody = document.querySelector('#txTable tbody');
+      tbody.innerHTML = '';
+      txns.forEach(t => {
+        tbody.insertAdjacentHTML('beforeend', `
+          <tr>
+            <td>${new Date(t.created_at).toLocaleString()}</td>
+            <td>${t.type}</td>
+            <td>$${t.amount.toFixed(2)}</td>
+            <td>${t.status}</td>
+          </tr>
+        `);
+      });
+    }
+
+    // Investment calculator logic for multiple investments
+    function startInvestmentCalculator(investment, investmentDiv) {
+      const { start_time, end_time, invested_amount, total_profit } = investment;
+      const startTime = new Date(start_time);
+      const endTime = new Date(end_time);
+      const totalSeconds = (endTime - startTime) / 1000;
+      const profitPerSecond = total_profit / totalSeconds;
+
+      const currentProfitSpan = investmentDiv.querySelector('.current-profit');
+      const timeLeftSpan = investmentDiv.querySelector('.time-left');
+
+      const updateInvestment = async () => {
+        const now = new Date();
+        if (now >= endTime) {
+          currentProfitSpan.textContent = total_profit.toFixed(2);
+          timeLeftSpan.textContent = '0d 0h 0m 0s';
+          const message = document.createElement('p');
+          message.textContent = 'Investment cycle completed. Profits have been transferred to your Interest Wallet.';
+          investmentDiv.appendChild(message);
+          clearInterval(interval);
+
+          // Update interest wallet (client-side for demo; server-side recommended)
+          const currentWallet = parseFloat(document.getElementById('interestWallet').textContent);
+          document.getElementById('interestWallet').textContent = (currentWallet + total_profit).toFixed(2);
+        } else {
+          const elapsedSeconds = (now - startTime) / 1000;
+          const currentProfit = Math.min(elapsedSeconds * profitPerSecond, total_profit);
+          currentProfitSpan.textContent = currentProfit.toFixed(2);
+          const timeLeftMs = endTime - now;
+          timeLeftSpan.textContent = formatTimeLeft(timeLeftMs);
+        }
+      };
+
+      const interval = setInterval(updateInvestment, 1000);
+      updateInvestment();
+    }
+
+    function formatTimeLeft(ms) {
+      const seconds = Math.floor(ms / 1000);
+      const days = Math.floor(seconds / (24 * 3600));
+      const hours = Math.floor((seconds % (24 * 3600)) / 3600);
+      const minutes = Math.floor((seconds % 3600) / 60);
+      const secs = seconds % 60;
+      return `${days}d ${hours}h ${minutes}m ${secs}s`;
+    }
+
+    document.getElementById('logout-btn').addEventListener('click', async () => {
+      const { error } = await supabaseClient.auth.signOut();
+      if (!error) window.location.href = 'login.html';
+      else alert('Error logging out: ' + error.message);
+    });
+
+    initDashboard();
+
+    // Event listener for the Invest button
+    document.querySelector('.invest-btn').addEventListener('click', async (e) => {
+      e.preventDefault();
+      const amountStr = prompt('Enter investment amount:');
+      if (amountStr) {
+        const amount = parseFloat(amountStr);
+        if (isNaN(amount) || amount <= 0) {
+          alert('Invalid amount');
+          return;
+        }
+        try {
+          const plan = await choosePlanForAmount(amount);
+          const { data: { user } } = await supabaseClient.auth.getUser();
+          await supabaseClient.rpc('start_investment', {
+            user_id: user.id,
+            plan_id: plan.id,
+            amount
+          });
+          alert('Investment started in the "' + plan.name + '" plan!');
+          location.reload();
+        } catch (err) {
+          alert('Error: ' + err.message);
+        }
+      }
+    });
 
     // Ensure background video plays
     const video = document.querySelector('.bg-video');
