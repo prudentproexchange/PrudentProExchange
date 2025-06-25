@@ -136,7 +136,7 @@
           </thead>
           <tbody></tbody>
         </table>
-      </details>
+      </details5>
     </main>
 
     <!-- Footer -->
@@ -158,20 +158,19 @@
   <button id="back-to-top" aria-label="Back to top">🚀</button>
 
   <!-- Scripts -->
-  <script招生 src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
     AOS.init({ duration: 800, once: true });
 
     // Hamburger toggle
     const hamburgerBtn = document.getElementById('hamburgerBtn');
     const navDrawer = document.getElementById('navDrawer');
-    const overlay = document.querySelector('.overlay');
     hamburgerBtn.addEventListener('click', () => {
       navDrawer.classList.toggle('open');
       hamburgerBtn.classList.toggle('active');
-      overlay.classList.toggle('nav-open');
+      document.body.classList.toggle('nav-open');
       if (navDrawer.classList.contains('open')) {
-        navDrawer.scrollTop = 0exploration0; // Scroll to top when drawer opens
+        navDrawer.scrollTop = 0; // Scroll to top when drawer opens
       }
     });
 
@@ -182,11 +181,11 @@
       if (!isClickInsideNav && !isClickOnHamburger && navDrawer.classList.contains('open')) {
         navDrawer.classList.remove('open');
         hamburgerBtn.classList.remove('active');
-        overlay.classList.remove('nav-open');
+        document.body.classList.remove('nav-open');
       }
     });
 
-   // Theme toggle
+    // Theme toggle
     const themeToggle = document.getElementById('theme-toggle');
     themeToggle.addEventListener('click', () => {
       document.body.classList.toggle('light-theme');
