@@ -407,6 +407,22 @@
           console.log('Photo uploaded successfully:', photoUrl);
         }
 
+        // Look up referrer's UID
+        let referrerId = null;
+        if (form.referral_code.value) {
+          const { data: refProfile, error: refErr } = await supabaseClient
+            .from('profiles')
+            .select('id')
+            .eq('referral_code', form.referral_code.value)
+            .single();
+
+          if (refErr) {
+            console.warn('No such referral code:', refErr.message);
+          } else {
+            referrerId = refProfile.id;
+          }
+        }
+
         // 3. Create profile in Supabase
         console.log('Inserting profile for user:', user.id);
         const profileData = {
@@ -418,12 +434,13 @@
           referral_code: form.referral_code.value || null,
           referral_link: referralLink,
           photo_url: photoUrl,
+          referrer_id: referrerId,
         };
         console.log('Profile data:', profileData);
 
         const { data: insertData, error: profileError } = await supabaseClient
           .from('profiles')
-          .insert([profileData])
+          .upsert([profileData], { onConflict: 'id' })
           .select();
 
         if (profileError) {
