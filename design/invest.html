@@ -3,18 +3,18 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Invest • PrudentProExchange</title>
+  <title>Investment Plans • PrudentProExchange</title>
   <link rel="stylesheet" href="css/invest.css"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body class="invest-page">
   <!-- Video Background -->
   <video class="bg-video" autoplay muted loop playsinline preload="auto">
-    <source src="assets/videos/background.webm" type="video/webm">
-    <source src="assets/videos/background.mp4" type="video/mp4">
+    <source src="assets/videos/background.webm" type="video/webm"/>
+    <source src="assets/videos/background.mp4" type="video/mp4"/>
     Your browser does not support the video tag.
   </video>
 
@@ -58,253 +58,62 @@
     <!-- Profile Section -->
     <div class="profile-section">
       <div class="profile-container">
-        <img id="navProfilePhoto" src="" alt="Profile" class="avatar" style="display: none;"/>
+        <img id="navProfilePhoto" src="" alt="Profile Photo" class="avatar" style="display: none;"/>
         <span id="defaultProfileIcon" class="avatar">👤</span>
       </div>
-      <div class="welcome-message">Welcome to Invest! <span id="welcomeName"></span></div>
+      <div class="welcome-message">Welcome to Investment Plans, <span id="welcomeName">User</span>!</div>
     </div>
 
     <!-- Main Content -->
     <main class="invest-page container">
       <h1 class="page-title" data-aos="fade-down">Investment Plans</h1>
-      <div class="invest-grid" data-aos="fade-up">
-        <!-- Dawn Star -->
-        <div class="invest-card" data-aos="zoom-in">
+      <div class="plans-grid" data-aos="fade-up">
+        <div class="plan-card" data-plan="The Dawn Star (Basic)">
           <h2>The Dawn Star (Basic)</h2>
           <p>Weekly Return: 5%</p>
           <p>Investment Range: $200–$4,999</p>
-          <details class="payment-options">
-            <summary>Click to Choose a Payment Option</summary>
-            <div class="crypto-options">
-              <a href="bitcoin.html" class="crypto-option">
-                <img src="assets/images/bitcoin.png" alt="Bitcoin" class="crypto-image"/>
-                Bitcoin (BTC)
-              </a>
-              <a href="ethereum.html" class="crypto-option">
-                <img srchawascript://assets/images/ethereum.png" alt="Ethereum" class="crypto-image"/>
-                Ethereum (ETH)
-              </a>
-              <a href="tether.html" class="crypto-option">
-                <img src="assets/images/tether.png" alt="Tether" class="crypto-image"/>
-                Tether (USDT)
-              </a>
-              <a href="usdcoin.html" class="crypto-option">
-                <img src="assets/images/usdcoin.png" alt="USD Coin" class="crypto-image"/>
-                USD Coin (USDC)
-              </a>
-              <a href="binancecoin.html" class="crypto-option">
-                <img src="assets/images/binancecoin.png" alt="Binance Coin" class="crypto-image"/>
-                Binance Coin (BNB)
-              </a>
-              <a href="litecoin.html" class="crypto-option">
-                <img src="assets/images/litecoin.png" alt="Litecoin" class="crypto-image"/>
-                Litecoin (LTC)
-              </a>
-              <a href="tron.html" class="crypto-option">
-                <img src="assets/images/tron.png" alt="Tron" class="crypto-image"/>
-                Tron (TRX)
-              </a>
-              <a href="solana.html" class="crypto-option">
-                <img src="assets/images/solana.png" alt="Solana" class="crypto-image"/>
-                Solana (SOL)
-              </a>
-              <a href="xrp.html" class="crypto-option">
-                <img src="assets/images/xrp.png" alt="XRP" class="crypto-image"/>
-                XRP (Ripple)
-              </a>
-            </div>
-          </details>
+          <button class="invest-btn">Invest Now</button>
         </div>
-        <!-- Nebula Glow -->
-        <div class="invest-card" data-aos="zoom-in">
+        <div class="plan-card" data-plan="The Nebula Glow (Standard)">
           <h2>The Nebula Glow (Standard)</h2>
           <p>Weekly Return: 6.5%</p>
           <p>Investment Range: $5,000–$14,999</p>
-          <details class="payment-options">
-            <summary>Click to Choose a Payment Option</summary>
-            <div class="crypto-options">
-              <a href="bitcoin.html" class="crypto-option">
-                <img src="assets/images/bitcoin.png" alt="Bitcoin" class="crypto-image"/>
-                Bitcoin (BTC)
-              </a>
-              <a href="ethereum.html" class="crypto-option">
-                <img src="assets/images/ethereum.png" alt="Ethereum" class="crypto-image"/>
-                Ethereum (ETH)
-              </a>
-              <a href="tether.html" class="crypto-option">
-                <img src="assets/images/tether.png" alt="Tether" class="crypto-image"/>
-                Tether (USDT)
-              </a>
-              <a href="usdcoin.html" class="crypto-option">
-                <img src="assets/images/usdcoin.png" alt="USD Coin" class="crypto-image"/>
-                USD menggunakan Coin (USDC)
-              </a>
-              <a href="binancecoin.html" class="crypto-option">
-                <img src="assets/images/binancecoin.png" alt="Binance Coin" class="crypto-image"/>
-                Binance Coin (BNB)
-              </a>
-              <a href="litecoin.html" class="crypto-option">
-                <img src="assets/images/litecoin.png" alt="Litecoin" class="crypto-image"/>
-                Litecoin (LTC)
-              </a>
-              <a href="tron.html" class="crypto-option">
-                <img src="assets/images/tron.png" alt="Tron" class="crypto-image"/>
-                Tron (TRX)
-              </a>
-              <a href="solana.html" class="crypto-option">
-                <img src="assets/images/solana.png" alt="Solana" class="crypto-image"/>
-                Solana (SOL)
-              </a>
-              <a href="xrp.html" class="crypto-option">
-                <img src="assets/images/xrp.png" alt="XRP" class="crypto-image"/>
-                XRP (Ripple)
-              </a>
-            </div>
-          </details>
+          <button class="invest-btn">Invest Now</button>
         </div>
-        <!-- Lunar Crest -->
-        <div class="invest-card" data-aos="zoom-in">
+        <div class="plan-card" data-plan="The Lunar Crest (Silver)">
           <h2>The Lunar Crest (Silver)</h2>
           <p>Weekly Return: 7.5%</p>
           <p>Investment Range: $15,000–$49,999</p>
-          <details class="payment-options">
-            <summary>Click to Choose a Payment Option</summary>
-            <div class="crypto-options">
-              <a href="bitcoin.html" class="crypto-option">
-                <img src="assets/images/bitcoin.png" alt="Bitcoin" class="crypto-image"/>
-                Bitcoin (BTC)
-              </a>
-              <a href="ethereum.html" class="crypto-option">
-                <img src="assets/images/ethereum.png" alt="Ethereum" class="crypto-image"/>
-                Ethereum (ETH)
-              </a>
-              <a href="tether.html" class="crypto-option">
-                <img src="assets/images/tether.png" alt="Tether" class="crypto-image"/>
-                Tether (USDT)
-              </a>
-              <a href="usdcoin.html" class="crypto-option">
-                <img src="assets/images/usdcoin.png" alt="USD Coin" class="crypto-image"/>
-                USD Coin (USDC)
-              </a>
-              <a href="binancecoin.html" class="crypto-option">
-                <img src="assets/images/binancecoin.png" alt="Binance Coin" class="crypto-image"/>
-                Binance Coin (BNB)
-              </a>
-              <a href="litecoin.html" class="crypto-option">
-                <img src="assets/images/litecoin.png" alt="Litecoin" class="crypto-image"/>
-                Litecoin (LTC)
-              </a>
-              <a href="tron.html" class="crypto-option">
-                <img src="assets/images/tron.png" alt="Tron" class="crypto-image"/>
-                Tron (TRX)
-              </a>
-              <a href="solana.html" class="crypto-option">
-                <img src="assets/images/solana.png" alt="Solana" class="crypto-image"/>
-                Solana (SOL)
-              </a>
-              <a href="xrp.html" class="crypto-option">
-                <img src="assets/images/xrp.png" alt="XRP" class="crypto-image"/>
-                XRP (Ripple)
-              </a>
-            </div>
-          </details>
+          <button class="invest-btn">Invest Now</button>
         </div>
-        <!-- Solar Flare -->
-        <div class="invest-card" data-aos="zoom-in">
+        <div class="plan-card" data-plan="The Solar Flare (Gold)">
           <h2>The Solar Flare (Gold)</h2>
           <p>Weekly Return: 8.5%</p>
           <p>Investment Range: $50,000–$99,999</p>
-          <details class="payment-options">
-            <summary>Click to Choose a Payment Option</summary>
-            <div class="crypto-options">
-              <a href="bitcoin.html" class="crypto-option">
-                <img src="assets/images/bitcoin.png" alt="Bitcoin" class="crypto-image"/>
-                Bitcoin (BTC)
-              </a>
-              <a href="ethereum.html" class="crypto-option">
-                <img src="assets/images/ethereum.png" alt="Ethereum" class="crypto-image"/>
-                Ethereum (ETH)
-              </a>
-              <a href="tether.html" class="crypto-option">
-                <img src="assets/images/tether.png" alt="Tether" class="crypto-image"/>
-                Tether (USDT)
-              </a>
-              <a href="usdcoin.html" class="crypto-option">
-                <img src="assets/images/usdcoin.png" alt="USD Coin" class="crypto-image"/>
-                USD Coin (USDC)
-              </a>
-              <a href="binancecoin.html" class="crypto-option">
-                <img src="assets/images/binancecoin.png" alt="Binance Coin" class="crypto-image"/>
-                Binance Coin (BNB)
-              </a>
-              <a href="litecoin.html" class="crypto-option">
-                <img src="assets/images/litecoin.png" alt="Litecoin" class="crypto-image"/>
-                Litecoin (LTC)
-              </a>
-              <a href="tron.html" class="crypto-option">
-                <img src="assets/images/tron.png" alt="Tron" class="crypto-image"/>
-                Tron (TRX)
-              </a>
-              <a href="solana.html" class="crypto-option">
-                <img src="assets/images/solana.png" alt="Solana" class="crypto-image"/>
-                Solana (SOL)
-              </a>
-              <a href="xrp.html" class="crypto-option">
-                <img src="assets/images/xrp.png" alt="XRP" class="crypto-image"/>
-                XRP (Ripple)
-              </a>
-            </div>
-          </details>
+          <button class="invest-btn">Invest Now</button>
         </div>
-        <!-- Galactic Crown -->
-        <div class="invest-card" data-aos="zoom-in">
+        <div class="plan-card" data-plan="The Galactic Crown (Diamond)">
           <h2>The Galactic Crown (Diamond)</h2>
           <p>Weekly Return: 10%</p>
           <p>Investment Range: $100,000</p>
-          <details class="payment-options">
-            <summary>Click to Choose a Payment Option</summary>
-            <div class="crypto-options">
-              <a href="bitcoin.html" class="crypto-option">
-                <img src="assets/images/bitcoin.png" alt="Bitcoin" class="crypto-image"/>
-                Bitcoin (BTC)
-              </a>
-              <a href="ethereum.html" class="crypto-option">
-                <img src="assets/images/ethereum.png" alt="Ethereum" class="crypto-image"/>
-                Ethereum (ETH)
-              </a>
-              <a href="tether.html" class="crypto-option">
-                <img src="assets/images/tether.png" alt="Tether" class="crypto-image"/>
-                Tether (USDT)
-              </a>
-              <a href="usdcoin.html" class="crypto-option">
-                <img src="assets/images/usdcoin.png" alt="USD Coin" class="crypto-image"/>
-                USD Coin (USDC)
-              </a>
-              <a href="binancecoin.html" class="crypto-option">
-                <img src="assets/images/binancecoin.png" alt="Binance Coin" class="crypto-image"/>
-                Binance Coin (BNB)
-              </a>
-              <a href="litecoin.html" class="crypto-option">
-                <img src="assets/images/litecoin.png" alt="Litecoin" class="crypto-image"/>
-                Litecoin (LTC)
-              </a>
-              <a href="tron.html" class="crypto-option">
-                <img src="assets/images/tron.png" alt="Tron" class="crypto-image"/>
-                Tron (TRX)
-              </a>
-              <a href="solana.html" class="crypto-option">
-                <img src="assets/images/solana.png" alt="Solana" class="crypto-image"/>
-                Solana (SOL)
-              </a>
-              <a href="xrp.html" class="crypto-option">
-                <img src="assets/images/xrp.png" alt="XRP" class="crypto-image"/>
-                XRP (Ripple)
-              </a>
-            </div>
-          </details>
+          <button class="invest-btn">Invest Now</button>
         </div>
       </div>
     </main>
+
+    <!-- Crypto Selection Modal -->
+    <div class="modal" id="cryptoModal">
+      <div class="modal-content">
+        <h2>Select Payment Method</h2>
+        <p>Please choose a cryptocurrency to proceed with your investment in <span id="modalPlanName"></span>.</p>
+        <div class="crypto-options">
+          <button class="crypto-btn" data-crypto="bitcoin">Bitcoin (BTC)</button>
+          <button class="crypto-btn" data-crypto="ethereum">Ethereum (ETH)</button>
+          <!-- Add more cryptocurrencies as needed -->
+        </div>
+        <button class="close-btn">Cancel</button>
+      </div>
+    </div>
 
     <!-- Footer -->
     <footer class="section section-dark site-footer" data-aos="fade-up">
@@ -378,7 +187,7 @@
     // Time updates
     function updateLocalTime() {
       const now = new Date();
-      document.getElementById('localTime').textContent = now.toLocaleTimeString();
+      document.getElementById('localTime').textContent = now.toLocaleTimeString('en-US');
       document.getElementById('localDate').textContent = now.toLocaleDateString('en-US', {
         weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
       });
@@ -393,58 +202,103 @@
     updateUTCTime();
 
     // Supabase client
-    const { createClient } = supabase;
-    const supabaseClient = createClient(
+    const supabaseClient = supabase.createClient(
       'https://iwkdznjqfbsfkscnbrkc.supabase.co',
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU'
     );
 
     // Initialize page
     async function initPage() {
-      const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
-      if (!user || authError) {
-        window.location.href = 'login.html';
-        return;
-      }
+      try {
+        document.body.style.display = 'block';
+        const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
+        if (!user || authError) {
+          alert('Authentication required. Please log in to continue.');
+          window.location.href = 'login.html';
+          return;
+        }
 
-      const { data: profile, error: profileError } = await supabaseClient
-        .from('profiles')
-        .select('*')
-        .eq('id', user.id)
-        .single();
+        const { data: profile, error: profileError } = await supabaseClient
+          .from('profiles')
+          .select('first_name, photo_url')
+          .eq('id', user.id)
+          .single();
 
-      if (profileError) {
-        console.error('Error loading profile:', profileError);
-        alert('Error loading profile.');
-        return;
-      }
+        if (profileError) {
+          console.error('Error loading profile:', profileError);
+          alert('Unable to retrieve profile information. Please try again later.');
+          return;
+        }
 
-      document.getElementById('welcomeName').textContent = profile.first_name || 'User';
-      if (profile.photo_url) {
-        const { data: urlData } = supabaseClient.storage
-          .from('profile-photos')
-          .getPublicUrl(profile.photo_url);
-        document.getElementById('navProfilePhoto').src = urlData.publicUrl;
-        document.getElementById('navProfilePhoto').style.display = 'block';
-        document.getElementById('defaultProfileIcon').style.display = 'none';
+        document.getElementById('welcomeName').textContent = profile.first_name || 'User';
+        if (profile.photo_url) {
+          try {
+            const { data: urlData } = supabaseClient.storage
+              .from('profile-photos')
+              .getPublicUrl(profile.photo_url);
+            const profilePhoto = document.getElementById('navProfilePhoto');
+            profilePhoto.src = urlData.publicUrl;
+            profilePhoto.style.display = 'block';
+            document.getElementById('defaultProfileIcon').style.display = 'none';
+          } catch (err) {
+            console.error('Error loading profile photo:', err);
+          }
+        }
+      } catch (err) {
+        console.error('Initialization error:', err);
+        alert('An unexpected error occurred. Please try again or contact support.');
       }
     }
 
-    document.getElementById('logout-btn').addEventListener('click', async () => {
-      const { error } = await supabaseClient.auth.signOut();
-      if (!error) window.location.href = 'login.html';
-      else alert('Error logging out: ' + error.message);
+    // Crypto modal handling
+    const cryptoModal = document.getElementById('cryptoModal');
+    const modalPlanName = document.getElementById('modalPlanName');
+    const investButtons = document.querySelectorAll('.invest-btn');
+    const cryptoButtons = document.querySelectorAll('.crypto-btn');
+    const closeBtn = document.querySelector('.close-btn');
+    let selectedPlan = '';
+
+    investButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        selectedPlan = button.parentElement.getAttribute('data-plan');
+        modalPlanName.textContent = selectedPlan;
+        sessionStorage.setItem('selectedPlan', selectedPlan);
+        cryptoModal.style.display = 'flex';
+      });
     });
 
-    initPage();
+    cryptoButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const crypto = button.getAttribute('data-crypto');
+        const encodedPlan = encodeURIComponent(selectedPlan);
+        window.location.href = `${crypto}.html?plan=${encodedPlan}`;
+      });
+    });
 
-    // Ensure background video plays
+    closeBtn.addEventListener('click', () => {
+      cryptoModal.style.display = 'none';
+    });
+
+    // Logout
+    document.getElementById('logout-btn').addEventListener('click', async () => {
+      try {
+        const { error } = await supabaseClient.auth.signOut();
+        if (!error) window.location.href = 'login.html';
+        else alert('Error logging out: ' + error.message);
+      } catch (err) {
+        alert('An error occurred during logout. Please try again.');
+      }
+    });
+
+    // Video playback
     const video = document.querySelector('.bg-video');
     video.addEventListener('canplay', () => {
       video.play().catch(error => {
         console.error('Error playing video:', error);
       });
     });
+
+    initPage();
   </script>
 </body>
 </html>
