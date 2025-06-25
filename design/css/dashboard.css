@@ -17,10 +17,6 @@ body {
   overflow-x: hidden;
 }
 
-body.nav-open {
-  overflow: hidden;
-}
-
 .bg-video {
   position: fixed;
   top: 0;
@@ -121,7 +117,7 @@ body.nav-open {
   height: 100%;
   background: rgba(0, 0, 0, 0.9);
   backdrop-filter: blur(10px);
-  transition: right 0.3s ease;
+  transition: right 0.3s ease, top 0.3s ease, height 0.3s ease;
   z-index: 20;
   padding: 0 1rem; /* Remove top/bottom padding */
   display: flex;
@@ -144,7 +140,7 @@ body.nav-open {
   display: none;
 }
 
-body.nav-open .nav-overlay {
+.nav-drawer.open ~ .nav-overlay {
   display: block;
 }
 
