@@ -148,7 +148,7 @@
         <nav class="footer-links">
           <a href="about.html">About Us</a>
           <a href="privacy.html">Privacy Policy</a>
-          <a href462="terms.html">Terms & Conditions</a>
+          <a href="terms.html">Terms & Conditions</a>
         </nav>
         <p class="copyright">© 2025 PrudentProExchange. All Rights Reserved. SEC Registration #0001230714</p>
       </div>
@@ -165,15 +165,17 @@
     // Hamburger toggle
     const hamburgerBtn = document.getElementById('hamburgerBtn');
     const navDrawer = document.getElementById('navDrawer');
-    const overlay = document.querySelector('.overlay');
+    const overlay = document.querySelector('.nav-overlay');
     hamburgerBtn.addEventListener('click', () => {
       navDrawer.classList.toggle('open');
       hamburgerBtn.classList.toggle('active');
       overlay.classList.toggle('nav-open');
       if (navDrawer.classList.contains('open')) {
         const headerHeight = document.querySelector('.site-header').offsetHeight;
-        navDrawer.style.top = `${headerHeight}px`;
-        navDrawer.style.height = `calc(100% - ${headerHeight}px)`;
+        const profileSectionHeight = document.querySelector('.profile-section').offsetHeight;
+        const totalTopOffset = headerHeight + profileSectionHeight;
+        navDrawer.style.top = `${totalTopOffset}px`;
+        navDrawer.style.height = `calc(100% - ${totalTopOffset}px)`;
         navDrawer.scrollTop = 0; // Scroll to top when drawer opens
       } else {
         navDrawer.style.top = '0';
@@ -185,8 +187,10 @@
     window.addEventListener('resize', () => {
       if (navDrawer.classList.contains('open')) {
         const headerHeight = document.querySelector('.site-header').offsetHeight;
-        navDrawer.style.top = `${headerHeight}px`;
-        navDrawer.style.height = `calc(100% - ${headerHeight}px)`;
+        const profileSectionHeight = document.querySelector('.profile-section').offsetHeight;
+        const totalTopOffset = headerHeight + profileSectionHeight;
+        navDrawer.style.top = `${totalTopOffset}px`;
+        navDrawer.style.height = `calc(100% - ${totalTopOffset}px)`;
       }
     });
 
