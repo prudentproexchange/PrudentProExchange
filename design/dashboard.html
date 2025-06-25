@@ -162,15 +162,18 @@
   <script>
     AOS.init({ duration: 800, once: true });
 
-    // Hamburger toggle
-    const hamburgerBtn = document.getElementById('hamburgerBtn');
-    const navDrawer = document.getElementById('navDrawer');
-    const overlay = document.querySelector('.overlay');
-    hamburgerBtn.addEventListener('click', () => {
-      navDrawer.classList.toggle('open');
-      hamburgerBtn.classList.toggle('active');
-      overlay.classList.toggle('nav-open');
-    });
+   // Hamburger toggle
+const hamburgerBtn = document.getElementById('hamburgerBtn');
+const navDrawer = document.getElementById('navDrawer');
+const overlay = document.querySelector('.overlay');
+hamburgerBtn.addEventListener('click', () => {
+  navDrawer.classList.toggle('open');
+  hamburgerBtn.classList.toggle('active');
+  overlay.classList.toggle('nav-open');
+  if (navDrawer.classList.contains('open')) {
+    navDrawer.scrollTop = 0; // Scroll to top when drawer opens
+  }
+});
 
     // Close nav when clicking outside
     document.addEventListener('click', (event) => {
