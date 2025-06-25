@@ -119,10 +119,10 @@ body {
   backdrop-filter: blur(10px);
   transition: right 0.3s ease;
   z-index: 20;
-  padding: 1rem;
+  padding: 0 1rem; /* Remove top/bottom padding */
   display: flex;
   flex-direction: column;
-  overflow-y: auto; /* Added to ensure scrolling for long content */
+  overflow-y: auto;
 }
 
 .nav-drawer.open {
