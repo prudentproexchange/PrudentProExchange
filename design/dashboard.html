@@ -4,11 +4,10 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Dashboard • PrudentProExchange</title>
-  <link rel="stylesheet" href="css/style.css"/>
-  <link rel="stylesheet" href="css/dashboard.css"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="styles.css"/>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 </head>
 <body class="dashboard-page">
@@ -136,7 +135,7 @@
           </thead>
           <tbody></tbody>
         </table>
-      </details5>
+      </details>
     </main>
 
     <!-- Footer -->
@@ -165,10 +164,11 @@
     // Hamburger toggle
     const hamburgerBtn = document.getElementById('hamburgerBtn');
     const navDrawer = document.getElementById('navDrawer');
+    const overlay = document.querySelector('.overlay');
     hamburgerBtn.addEventListener('click', () => {
       navDrawer.classList.toggle('open');
       hamburgerBtn.classList.toggle('active');
-      document.body.classList.toggle('nav-open');
+      overlay.classList.toggle('nav-open');
       if (navDrawer.classList.contains('open')) {
         navDrawer.scrollTop = 0; // Scroll to top when drawer opens
       }
@@ -181,7 +181,7 @@
       if (!isClickInsideNav && !isClickOnHamburger && navDrawer.classList.contains('open')) {
         navDrawer.classList.remove('open');
         hamburgerBtn.classList.remove('active');
-        document.body.classList.remove('nav-open');
+        overlay.classList.remove('nav-open');
       }
     });
 
