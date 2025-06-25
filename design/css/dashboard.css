@@ -6,7 +6,6 @@
   --text-color: #fff;
   --glass-bg: rgba(255, 255, 255, 0.05);
   --shadow: rgba(0, 0, 0, 0.5);
-  --header-height: 80px; /* Define header height for consistent positioning */
 }
 
 body {
@@ -45,8 +44,6 @@ body {
   position: sticky;
   top: 0;
   z-index: 10;
-  height: var(--header-height); /* Set consistent height */
-  box-sizing: border-box;
 }
 
 .header-right {
@@ -113,20 +110,19 @@ body {
 
 .nav-drawer {
   position: fixed;
-  top: var(--header-height); /* Start below header */
+  top: 0;
   right: -100%;
   width: 80%;
   max-width: 300px;
-  height: calc(100% - var(--header-height)); /* Adjust height to fit below header */
+  height: 100vh; /* Updated to ensure full viewport height */
   background: rgba(0, 0, 0, 0.9);
   backdrop-filter: blur(10px);
   transition: right 0.3s ease;
   z-index: 20;
-  padding: 1rem; /* Add padding for content */
+  padding: 0 1rem; /* Remove top/bottom padding */
   display: flex;
   flex-direction: column;
-  overflow-y: auto; /* Ensure scrollable */
-  box-sizing: border-box;
+  overflow-y: auto;
 }
 
 .nav-drawer.open {
@@ -150,7 +146,7 @@ body {
 
 .nav-drawer a {
   display: block;
-  padding: 0.5rem 1rem;
+  padding: 0.25rem 1rem; /* Reduced padding to fit more links */
   color: var(--text-color);
   text-decoration: none;
   font-size: 1rem;
@@ -167,7 +163,7 @@ body {
 
 .account-toggle {
   display: block;
-  padding: 0.5rem 1rem;
+  padding: 0.25rem 1rem; /* Match reduced padding */
   color: var(--text-color);
   text-decoration: none;
   font-size: 1rem;
@@ -178,7 +174,7 @@ body {
   display: none;
   list-style: none;
   padding: 0;
-  margin: 0 0 1rem 1rem;
+  margin: 0 0 0.5rem 1rem; /* Reduced bottom margin */
   background: rgba(0, 0, 0, 0.8);
   border-radius: 5px;
 }
@@ -188,7 +184,7 @@ body {
 }
 
 .nav-drawer .submenu li {
-  padding: 0.5rem 1rem;
+  padding: 0.25rem 1rem; /* Reduced padding to fit more items */
 }
 
 .nav-drawer .submenu a {
@@ -447,27 +443,18 @@ body {
 @media (max-width: 1024px) {
   .site-header {
     padding: 1rem;
-    height: var(--header-height);
   }
 }
 
 @media (max-width: 768px) {
-  :root {
-    --header-height: 60px; /* Adjust header height for smaller screens */
-  }
   .hamburger {
     display: block;
   }
   .site-header {
     padding: 0.75rem 1rem;
-    height: var(--header-height);
   }
   .logo-link img {
-    height: 120px; /* Adjusted proportionally for smaller screens (70px * 3 = 210px, scaled down) */
-  }
-  .nav-drawer {
-    top: var(--header-height);
-    height: calc(100% - var(--header-height));
+    height: 120px; /* Adjusted proportionally for smaller screens */
   }
   .profile-section {
     padding: 1rem;
@@ -489,19 +476,11 @@ body {
 }
 
 @media (max-width: 480px) {
-  :root {
-    --header-height: 50px; /* Further adjust header height for very small screens */
-  }
   .site-header {
     padding: 0.5rem;
-    height: var(--header-height);
   }
   .logo-link img {
-    height: 90px; /* Adjusted proportionally for smaller screens (70px * 3 = 210px, scaled down) */
-  }
-  .nav-drawer {
-    top: var(--header-height);
-    height: calc(100% - var(--header-height));
+    height: 90px; /* Adjusted proportionally for smaller screens */
   }
   .profile-section {
     padding: 0.75rem;
@@ -535,5 +514,21 @@ body {
   .referral-link-container input,
   .referral-link-container button {
     width: 100%;
+  }
+}
+
+/* Media Query for Smaller Heights */
+@media (max-height: 600px) {
+  .nav-drawer a {
+    padding: 0.2rem 1rem;
+    font-size: 0.9rem;
+  }
+  .nav-drawer .submenu li {
+    padding: 0.2rem 1rem;
+    font-size: 0.8rem;
+  }
+  .account-toggle {
+    padding: 0.2rem 1rem;
+    font-size: 0.9rem;
   }
 }
