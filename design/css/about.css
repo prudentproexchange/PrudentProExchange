@@ -1,4 +1,4 @@
-/* About Page Specific Styles */
+//* About Page Specific Styles */
 
 /* Ensure sections are transparent to use overlay background */
 .about-page .section {
@@ -110,6 +110,47 @@
   background: rgba(255, 215, 0, 0.1);
 }
 
+/* Team Section Styles */
+.team-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+  justify-items: center;
+}
+
+.team-member {
+  text-align: center;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 1rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.team-member:hover {
+  transform: scale(1.05);
+}
+
+.team-member img {
+  width: 100%;
+  max-width: 150px;
+  height: auto;
+  border-radius: 50%;
+  margin-bottom: 1rem;
+}
+
+.team-member h3 {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+  color: #fff;
+}
+
+.team-member p {
+  font-size: 1rem;
+  color: #ccc;
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .about-page .section {
@@ -120,6 +161,9 @@
   }
   .about-page .section-text {
     font-size: 1.1rem;
+  }
+  .team-container {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   }
 }
 
@@ -136,39 +180,10 @@
   .about-page .icon-container i {
     font-size: 2.5rem;
   }
-}
-
-/* Team Members Styling */
-.team-members {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 2rem;
-}
-
-.team-member {
-  flex: 1 1 300px;
-  max-width: 300px;
-  text-align: center;
-  background: rgba(0, 0, 0, 0.5);
-  padding: 1rem;
-  border-radius: 10px;
-}
-
-.team-member img {
-  width: 100%;
-  height: auto;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-}
-
-.team-member h3 {
-  margin: 1rem 0 0.5rem;
-  font-size: 1.5rem;
-  color: var(--primary);
-}
-
-.team-member p {
-  font-size: 1.2rem;
-  color: #fff;
+  .team-member h3 {
+    font-size: 1rem;
+  }
+  .team-member p {
+    font-size: 0.9rem;
+  }
 }
