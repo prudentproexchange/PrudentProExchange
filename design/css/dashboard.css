@@ -122,6 +122,7 @@ body {
   padding: 1rem;
   display: flex;
   flex-direction: column;
+  overflow-y: auto; /* Added to ensure scrolling for long content */
 }
 
 .nav-drawer.open {
@@ -209,15 +210,15 @@ body {
 }
 
 .avatar {
-  width: 50px;
-  height: 50px;
+  width: 150px;
+  height: 150px;
   border-radius: 50%;
   border: 2px solid var(--primary);
   background: #000;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2rem;
+  font-size: 120px;
   color: var(--primary);
   object-fit: cover;
 }
@@ -462,9 +463,9 @@ body {
     font-size: 1.2rem;
   }
   .avatar {
-    width: 40px;
-    height: 40px;
-    font-size: 1.5rem;
+    width: 120px;
+    height: 120px;
+    font-size: 72px;
   }
   .dashboard-page.container {
     padding: 1rem;
@@ -491,9 +492,9 @@ body {
     margin-bottom: 0.5rem;
   }
   .avatar {
-    width: 30px;
-    height: 30px;
-    font-size: 1.2rem;
+    width: 90px;
+    height: 90px;
+    font-size: 57.6px;
   }
   .welcome-message {
     font-size: 1rem;
