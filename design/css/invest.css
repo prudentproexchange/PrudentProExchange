@@ -1,4 +1,4 @@
-/* Invest Page Styles */
+/* Investment Plans Page Styles */
 
 /* Root Variables */
 :root {
@@ -17,6 +17,7 @@ body {
   background: #000;
   color: var(--text-color);
   overflow-x: hidden;
+  display: block;
 }
 
 .bg-video {
@@ -39,7 +40,7 @@ body {
 .site-header {
   display: flex;
   align-items: center;
-theory: justify-content: space-between;
+  justify-content: space-between;
   padding: 1rem 2rem;
   background: rgba(0, 0, 0, 0.8);
   backdrop-filter: blur(10px);
@@ -205,6 +206,7 @@ theory: justify-content: space-between;
   padding: 1.5rem 2rem;
   background: var(--glass-bg);
   backdrop-filter: blur(10px);
+  z-index: 1;
 }
 
 .profile-container {
@@ -220,7 +222,7 @@ theory: justify-content: space-between;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 120px;
+  font-size: 2rem;
   color: var(--primary);
   object-fit: cover;
 }
@@ -236,95 +238,144 @@ theory: justify-content: space-between;
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
+  z-index: 5;
 }
 
 .page-title {
   font-size: 2.5rem;
   color: var(--primary);
-  text-align: center;
   margin-bottom: 2rem;
+  text-align: center;
   font-family: 'Playfair Display', serif;
 }
 
-.invest-grid {
+.plans-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 2rem;
 }
 
-.invest-card {
+.plan-card {
   background: var(--glass-bg);
-  padding: 1.5rem;
+  padding: 2rem;
   border: 1px solid var(--primary);
   border-radius: 10px;
+  text-align: center;
   backdrop-filter: blur(10px);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  text-align: center;
 }
 
-.invest-card:hover {
+.plan-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 10px 20px var(--shadow);
 }
 
-.invest-card h2 {
+.plan-card h2 {
   font-size: 1.8rem;
   color: var(--primary);
   margin-bottom: 1rem;
   font-family: 'Playfair Display', serif;
 }
 
-.invest-card p {
+.plan-card p {
   font-size: 1rem;
   color: #e0e0ff;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
 }
 
-.payment-options summary {
-  cursor: pointer;
-  padding: 0.75rem;
+.invest-btn {
   background: linear-gradient(45deg, var(--primary), var(--primary-dark));
   color: #000;
+  border: none;
+  padding: 0.75rem 1.5rem;
   border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
   font-weight: 600;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.invest-btn:hover {
+  background: linear-gradient(45deg, var(--primary-dark), var(--primary));
+  transform: translateY(-2px);
+}
+
+/* Modal Styles */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.modal-content {
+  background: var(--glass-bg);
+  padding: 2rem;
+  border: 1px solid var(--primary);
+  border-radius: 10px;
+  text-align: center;
+  max-width: 500px;
+  width: 90%;
+  backdrop-filter: blur(10px);
+}
+
+.modal-content h2 {
+  font-size: 2rem;
+  color: var(--primary);
+  margin-bottom: 1rem;
+  font-family: 'Playfair Display', serif;
+}
+
+.modal-content p {
+  font-size: 1rem;
+  color: #e0e0ff;
+  margin-bottom: 1.5rem;
+}
+
+.crypto-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.crypto-btn {
+  background: linear-gradient(45deg, var(--primary), var(--primary-dark));
+  color: #000;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.crypto-btn:hover {
+  background: linear-gradient(45deg, var(--primary-dark), var(--primary));
+  transform: translateY(-2px);
+}
+
+.close-btn {
+  background: #666;
+  color: #fff;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
   margin-top: 1rem;
   transition: background 0.3s ease;
 }
 
-.payment-options summary:hover {
-  background: linear-gradient(45deg, var(--primary-dark), var(--primary));
-}
-
-.crypto-options {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 0.5rem;
-  padding: 1rem;
-  background: rgba(0, 0, 0, 0.5);
-  border-radius: 5px;
-  margin-top: 0.5rem;
-}
-
-.crypto-option {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 5px;
-  text-decoration: none;
-  color: #e0e0ff;
-  font-size: 0.9rem;
-  transition: background 0.3s ease;
-}
-
-.crypto-option:hover {
-  background: rgba(255, 255, 255, 0.2);
-}
-
-.crypto-image {
-  width: 30px;
-  height: 30px;
+.close-btn:hover {
+  background: #888;
 }
 
 /* Footer */
@@ -409,15 +460,13 @@ body.light-theme .welcome-message {
   color: var(--primary-dark);
 }
 
-body.light-theme .invest-card {
+body.light-theme .plan-card,
+body.light-theme .modal-content {
   background: rgba(255, 255, 255, 0.05);
 }
 
-body.light-theme .invest-card p {
-  color: #333;
-}
-
-body.light-theme .crypto-option {
+body.light-theme .plan-card p,
+body.light-theme .modal-content p {
   color: #333;
 }
 
@@ -461,9 +510,6 @@ body.light-theme .footer-links a {
   .invest-page.container {
     padding: 1rem;
   }
-  .invest-grid {
-    grid-template-columns: 1fr;
-  }
 }
 
 @media (max-width: 480px) {
@@ -490,10 +536,16 @@ body.light-theme .footer-links a {
   .welcome-message {
     font-size: 1rem;
   }
-  .invest-card {
+  .plan-card {
     padding: 1rem;
   }
-  .invest-card h2 {
+  .plan-card h2 {
+    font-size: 1.5rem;
+  }
+  .modal-content {
+    padding: 1rem;
+  }
+  .modal-content h2 {
     font-size: 1.5rem;
   }
 }
