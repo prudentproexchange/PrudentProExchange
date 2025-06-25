@@ -68,7 +68,7 @@
     <main class="bitcoin-page container">
       <h1 class="page-title" data-aos="fade-down">Bitcoin Payment</h1>
       <div class="payment-details" data-aos="fade-up">
-        <h2 id="selected-plan">You have selected: <span id="plan-name">Loading...</span></h2>
+        <h2 id="selected-plan">Selected Investment Plan: <span id="plan-name">Loading...</span></h2>
         <p id="plan-details">Loading plan details...</p>
         <img src="assets/images/bitcoin.png" alt="Bitcoin" class="crypto-image" data-aos="zoom-in"/>
         <div class="wallet-container">
@@ -77,7 +77,13 @@
             <i class="fas fa-copy"></i> Copy Address
           </button>
         </div>
-        <p class="instruction">Please send your Bitcoin payment to the address above. Ensure the amount matches your selected plan's requirements.</p>
+        <p class="instruction">Please send your Bitcoin payment to the address above, ensuring the amount aligns with your selected plan's requirements.</p>
+        <div class="proof-upload">
+          <label for="proofUpload" class="upload-label">Upload Proof of Payment</label>
+          <input type="file" id="proofUpload" accept="image/*,application/pdf" />
+          <button class="confirm-btn" id="confirmPaymentBtn" disabled>Confirm Payment</button>
+        </div>
+        <p class="upload-instruction">Upload a screenshot or PDF of your transaction receipt to verify your payment. Once uploaded, click "Confirm Payment" to submit.</p>
       </div>
     </main>
 
@@ -165,10 +171,66 @@
       });
     }
 
+    // Proof of payment upload
+    const proofUpload = document.getElementById('proofUpload');
+    const confirmPaymentBtn = document.getElementById('confirmPaymentBtn');
+    proofUpload.addEventListener('change', () => {
+      confirmPaymentBtn.disabled = !proofUpload.files.length || walletAddressInput.value === 'Bitcoin wallet address not set';
+    });
+
+    // Confirm payment
+    confirmPaymentBtn.addEventListener('click', async () => {
+      if (!proofUpload.files.length) {
+        alert('Please upload proof of payment before confirming.');
+        return;
+      }
+
+      const file = proofUpload.files[0];
+      const { data: { user } } = await supabaseClient.auth.getUser();
+      if (!user) {
+        alert('User not authenticated. Please log in.');
+        return;
+      }
+
+      // Upload file to Supabase storage
+      const fileName = `${user.id}/${Date.now()}_${file.name}`;
+      const { error: uploadError } = await supabaseClient.storage
+        .from('payment-proofs')
+        .upload(fileName, file);
+
+      if (uploadError) {
+        alert('Error uploading proof of payment: ' + uploadError.message);
+        return;
+      }
+
+      // Record transaction in Supabase
+      const urlParams = new URLSearchParams(window.location.search);
+      const planName = urlParams.get('plan') || sessionStorage.getItem('selectedPlan');
+      const { error: transactionError } = await supabaseClient
+        .from('transactions')
+        .insert({
+          user_id: user.id,
+          type: 'investment_payment',
+          amount: 0, // Amount to be updated via admin panel or payment gateway
+          status: 'pending',
+          plan_name: planName,
+          proof_path: fileName,
+          currency: 'BTC'
+        });
+
+      if (transactionError) {
+        alert('Error recording payment: ' + transactionError.message);
+        return;
+      }
+
+      alert('Payment confirmation submitted successfully. Our team will review your proof of payment.');
+      window.location.href = 'dashboard.html';
+    });
+
     // Time updates
     function updateLocalTime() {
       const now = new Date();
-      document.getElementById('localTime').textContent = now.toLocaleTimeString();
+      document.getElementById('localTime').textContent = now.toLocaleTimeString('en-US');
       document.getElementById('localDate').textContent = now.toLocaleDateString('en-US', {
         weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
       });
@@ -183,7 +245,8 @@
     updateUTCTime();
 
     // Supabase client
-    const { createClient } = supabase;
+    const { createClient } = supabase ?
+
     const supabaseClient = createClient(
       'https://iwkdznjqfbsfkscnbrkc.supabase.co',
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU'
@@ -194,7 +257,7 @@
       { name: 'The Dawn Star (Basic)', return: '5%', range: '$200–$4,999' },
       { name: 'The Nebula Glow (Standard)', return: '6.5%', range: '$5,000–$14,999' },
       { name: 'The Lunar Crest (Silver)', return: '7.5%', range: '$15,000–$49,999' },
-      { name: 'The Solar Flare (Gold)', return: '8.5%', range: '$50,000–$99,999' },
+      { name: 'The Solar Flare (Gold)', return: '8.5%', glass-bg: '$50,000–$99,999' },
       { name: 'The Galactic Crown (Diamond)', return: '10%', range: '$100,000' }
     ];
 
@@ -214,7 +277,7 @@
 
       if (profileError) {
         console.error('Error loading profile:', profileError);
-        alert('Error loading profile.');
+        alert('Error retrieving profile information.');
         return;
       }
 
@@ -228,7 +291,7 @@
         document.getElementById('defaultProfileIcon').style.display = 'none';
       }
 
-      // Retrieve selected plan from URL parameter or session storage
+      // Retrieve selected plan
       const urlParams = new URLSearchParams(window.location.search);
       let planName = urlParams.get('plan') || sessionStorage.getItem('selectedPlan');
       const plan = investmentPlans.find(p => p.name === planName);
@@ -236,13 +299,13 @@
       if (plan) {
         document.getElementById('plan-name').textContent = plan.name;
         document.getElementById('plan-details').textContent = `Weekly Return: ${plan.return} | Investment Range: ${plan.range}`;
-        sessionStorage.setItem('selectedPlan', plan.name); // Store for persistence
+        sessionStorage.setItem('selectedPlan', plan.name);
       } else {
         document.getElementById('plan-name').textContent = 'No Plan Selected';
-        document.getElementById('plan-details').textContent = 'Please return to the Invest page to select a plan.';
+        document.getElementById('plan-details').textContent = 'Please return to the Investment page to select a plan.';
       }
 
-      // Fetch wallet address from Supabase (placeholder for admin panel integration)
+      // Fetch wallet address
       const { data: walletData, error: walletError } = await supabaseClient
         .from('wallets')
         .select('bitcoin_address')
@@ -252,9 +315,13 @@
       if (walletError || !walletData?.bitcoin_address) {
         document.getElementById('walletAddress').value = 'Bitcoin wallet address not set';
         document.getElementById('copyWalletBtn').disabled = true;
+        document.getElementById('confirmPaymentBtn').disabled = true;
       } else {
         document.getElementById('walletAddress').value = walletData.bitcoin_address;
         document.getElementById('copyWalletBtn').disabled = false;
+        if (proofUpload.files.length) {
+          document.getElementById('confirmPaymentBtn').disabled = false;
+        }
       }
     }
 
