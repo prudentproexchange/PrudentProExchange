@@ -6,6 +6,7 @@
   --text-color: #fff;
   --glass-bg: rgba(255, 255, 255, 0.05);
   --shadow: rgba(0, 0, 0, 0.5);
+  --header-height: 80px; /* Define header height for consistent positioning */
 }
 
 body {
@@ -44,6 +45,8 @@ body {
   position: sticky;
   top: 0;
   z-index: 10;
+  height: var(--header-height); /* Set consistent height */
+  box-sizing: border-box;
 }
 
 .header-right {
@@ -110,19 +113,20 @@ body {
 
 .nav-drawer {
   position: fixed;
-  top: 0;
+  top: var(--header-height); /* Start below header */
   right: -100%;
   width: 80%;
   max-width: 300px;
-  height: 100%;
+  height: calc(100% - var(--header-height)); /* Adjust height to fit below header */
   background: rgba(0, 0, 0, 0.9);
   backdrop-filter: blur(10px);
   transition: right 0.3s ease;
   z-index: 20;
-  padding: 0 1rem; /* Remove top/bottom padding */
+  padding: 1rem; /* Add padding for content */
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
+  overflow-y: auto; /* Ensure scrollable */
+  box-sizing: border-box;
 }
 
 .nav-drawer.open {
@@ -443,18 +447,27 @@ body {
 @media (max-width: 1024px) {
   .site-header {
     padding: 1rem;
+    height: var(--header-height);
   }
 }
 
 @media (max-width: 768px) {
+  :root {
+    --header-height: 60px; /* Adjust header height for smaller screens */
+  }
   .hamburger {
     display: block;
   }
   .site-header {
     padding: 0.75rem 1rem;
+    height: var(--header-height);
   }
   .logo-link img {
     height: 120px; /* Adjusted proportionally for smaller screens (70px * 3 = 210px, scaled down) */
+  }
+  .nav-drawer {
+    top: var(--header-height);
+    height: calc(100% - var(--header-height));
   }
   .profile-section {
     padding: 1rem;
@@ -476,11 +489,19 @@ body {
 }
 
 @media (max-width: 480px) {
+  :root {
+    --header-height: 50px; /* Further adjust header height for very small screens */
+  }
   .site-header {
     padding: 0.5rem;
+    height: var(--header-height);
   }
   .logo-link img {
     height: 90px; /* Adjusted proportionally for smaller screens (70px * 3 = 210px, scaled down) */
+  }
+  .nav-drawer {
+    top: var(--header-height);
+    height: calc(100% - var(--header-height));
   }
   .profile-section {
     padding: 0.75rem;
