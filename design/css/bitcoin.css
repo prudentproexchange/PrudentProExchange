@@ -327,7 +327,55 @@ body {
   transform: none;
 }
 
-.instruction {
+.proof-upload {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.upload-label {
+  font-size: 1.2rem;
+  color: var(--primary);
+  margin-bottom: 0.5rem;
+}
+
+#proofUpload {
+  width: 100%;
+  max-width: 400px;
+  padding: 0.75rem;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--primary);
+  border-radius: 5px;
+  color: #fff;
+  font-size: 1rem;
+}
+
+.confirm-btn {
+  background: linear-gradient(45deg, var(--primary), var(--primary-dark));
+  color: #000;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.confirm-btn:hover {
+  background: linear-gradient(45deg, var(--primary-dark), var(--primary));
+  transform: translateY(-2px);
+}
+
+.confirm-btn:disabled {
+  background: #666;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.instruction, .upload-instruction {
   font-size: 1rem;
   color: #e0e0ff;
   margin-top: 1rem;
@@ -419,11 +467,9 @@ body.light-theme .payment-details {
   background: rgba(255, 255, 255, 0.05);
 }
 
-body.light-theme .payment-details p {
-  color: #333;
-}
-
-body.light-theme .instruction {
+body.light-theme .payment-details p,
+body.light-theme .instruction,
+body.light-theme .upload-instruction {
   color: #333;
 }
 
@@ -507,11 +553,14 @@ body.light-theme .footer-links a {
     width: 120px;
     height: 120px;
   }
-  .wallet-container {
+  .wallet-container,
+  .proof-upload {
     flex-direction: column;
   }
   #walletAddress,
-  .copy-btn {
+  #proofUpload,
+  .copy-btn,
+  .confirm-btn {
     width: 100%;
   }
 }
