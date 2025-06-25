@@ -375,10 +375,19 @@
             emailRedirectTo: 'https://prudentproexchange.com/login.html', // Redirect after email confirmation
           },
         });
-
         if (signUpError) {
           console.error('Sign-up error:', signUpError);
           throw new Error(`Sign-up failed: ${signUpError.message}`);
+        }
+
+        // 1a. Immediately sign back in to obtain the JWT
+        const { data: sessionData, error: signInError } = await supabaseClient.auth.signInWithPassword({
+          email: form.email.value,
+          password: form.password.value,
+        });
+        if (signInError) {
+          console.error('Sign-in error:', signInError);
+          throw new Error(`Sign-in failed: ${signInError.message}`);
         }
 
         const user = authData.user;
