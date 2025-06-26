@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Investment Payment • PrudentProExchange</title>
+  <title>Payment Options • PrudentProExchange</title>
   <link rel="stylesheet" href="css/style.css"/>
   <link rel="stylesheet" href="css/investment-payment.css"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -61,95 +61,18 @@
         <img id="navProfilePhoto" src="" alt="Profile" class="avatar" style="display: none;"/>
         <span id="defaultProfileIcon" class="avatar">👤</span>
       </div>
-      <div class="welcome-message">Secure Payment, <span id="welcomeName"></span>!</div>
+      <div class="welcome-message">Welcome, <span id="welcomeName"></span>!</div>
     </div>
 
     <!-- Main Content -->
     <main class="payment-page container">
-      <section class="payment-details" data-aos="fade-up">
-        <h2>Complete Your Investment</h2>
-        <div class="investment-info">
-          <p>Plan: <span id="planName"></span></p>
-          <p>Amount: <span id="investmentAmount"></span> USD</p>
+      <section class="payment-options" data-aos="fade-up">
+        <h2>Choose Your Payment Method</h2>
+        <p class="investment-amount">Investment Amount: <span id="investmentAmount"></span> USD</p>
+        <div class="payment-methods-grid" id="paymentMethodsGrid">
+          <!-- Payment method cards will be dynamically inserted here -->
         </div>
       </section>
-
-      <section class="payment-methods" data-aos="fade-up">
-        <h3>Select Payment Method</h3>
-        <div class="methods-grid">
-          <div class="method-card" data-method="Bitcoin" data-ticker="BTC" data-wallet="1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa">
-            <img src="assets/images/bitcoin.png" alt="Bitcoin" class="method-icon"/>
-            <h4>Bitcoin (BTC)</h4>
-            <button class="btn select-method-btn">Select</button>
-          </div>
-          <div class="method-card" data-method="Ethereum" data-ticker="ETH" data-wallet="0x32Be343B94f860124dC4fEe278FDCBD38C102D88">
-            <img src="assets/images/ethereum.png" alt="Ethereum" class="method-icon"/>
-            <h4>Ethereum (ETH)</h4>
-            <button class="btn select-method-btn">Select</button>
-          </div>
-          <div class="method-card" data-method="Tether (ERC-20)" data-ticker="USDT" data-wallet="0x32Be343B94f860124dC4fEe278FDCBD38C102D88">
-            <img src="assets/images/tether.png" alt="Tether" class="method-icon"/>
-            <h4>Tether (USDT)</h4>
-            <button class="btn select-method-btn">Select</button>
-          </div>
-          <div class="method-card" data-method="Binance Coin" data-ticker="BNB" data-wallet="bnb1u7k7s3r6f3m6f3k3m6f3k3m6f3k3m6f3k3m6f">
-            <img src="assets/images/binance.png" alt="Binance Coin" class="method-icon"/>
-            <h4>Binance Coin (BNB)</h4>
-            <button class="btn select-method-btn">Select</button>
-          </div>
-          <div class="method-card" data-method="Tron" data-ticker="TRX" data-wallet="T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb">
-            <img src="assets/images/tron.png" alt="Tron" class="method-icon"/>
-            <h4>Tron (TRX)</h4>
-            <button class="btn select-method-btn">Select</button>
-          </div>
-          <div class="method-card" data-method="Litecoin" data-ticker="LTC" data-wallet="LTC1234567890abcdef1234567890abcdef">
-            <img src="assets/images/litecoin.png" alt="Litecoin" class="method-icon"/>
-            <h4>Litecoin (LTC)</h4>
-            <button class="btn select-method-btn">Select</button>
-          </div>
-          <div class="method-card" data-method="XRP (Ripple)" data-ticker="XRP" data-wallet="r3kmLJN5D28dHuH8vZNUZpMC43pEHpaocV">
-            <img src="assets/images/xrp.png" alt="XRP" class="method-icon"/>
-            <h4>XRP (Ripple)</h4>
-            <button class="btn select-method-btn">Select</button>
-          </div>
-          <div class="method-card" data-method="USD Coin (USDC)" data-ticker="USDC" data-wallet="0x32Be343B94f860124dC4fEe278FDCBD38C102D88">
-            <img src="assets/images/usdc.png" alt="USDC" class="method-icon"/>
-            <h4>USD Coin (USDC)</h4>
-            <button class="btn select-method-btn">Select</button>
-          </div>
-          <div class="method-card" data-method="Dogecoin" data-ticker="DOGE" data-wallet="D6Zed9hBgknnpGoPzCjLf3Bt2D3hD6D1qW">
-            <img src="assets/images/dogecoin.png" alt="Dogecoin" class="method-icon"/>
-            <h4>Dogecoin (DOGE)</h4>
-            <button class="btn select-method-btn">Select</button>
-          </div>
-          <div class="method-card" data-method="Solana" data-ticker="SOL" data-wallet="5Ey6X2J3b1V5z3K7m8L9z2K3J4b5N6m7P8q9R0t1U2v3W4x">
-            <img src="assets/images/solana.png" alt="Solana" class="method-icon"/>
-            <h4>Solana (SOL)</h4>
-            <button class="btn select-method-btn">Select</button>
-          </div>
-        </div>
-      </section>
-
-      <!-- Payment Instructions Modal -->
-      <div class="modal" id="paymentModal">
-        <div class="modal-content">
-          <span class="close-btn">&times;</span>
-          <h3>Payment Instructions for <span id="modalMethod"></span></h3>
-          <p>Please send <span id="modalAmount"></span> USD worth of <span id="modalTicker"></span> to the following address:</p>
-          <div class="wallet-address">
-            <p id="walletAddress"></p>
-            <button class="btn copy-btn" data-clipboard-target="#walletAddress">Copy Address</button>
-          </div>
-          <div class="qr-code" id="qrCode"></div>
-          <p class="note">Note: Ensure the exact amount is sent to avoid delays in processing.</p>
-          <div class="proof-upload">
-            <h4>Upload Proof of Payment</h4>
-            <input type="file" id="proofFile" accept="image/*,application/pdf" />
-            <button class="btn submit-proof-btn">Submit Proof</button>
-          </div>
-          <p id="uploadStatus"></p>
-        </div>
-      </div>
     </main>
 
     <!-- Footer -->
@@ -172,12 +95,10 @@
 
   <!-- Scripts -->
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script>
     AOS.init({ duration: 800, once: true });
 
-    // Supabase Client
+    // Supabase Client Initialization
     const { createClient } = supabase;
     const supabaseClient = createClient(
       'https://iwkdznjqfbsfkscnbrkc.supabase.co',
@@ -186,14 +107,14 @@
 
     // Initialize Payment Page
     async function initPaymentPage() {
-      // Check Authentication
+      // Authentication Check
       const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
       if (!user || authError) {
         window.location.href = 'login.html';
         return;
       }
 
-      // Load Profile
+      // Load User Profile
       const { data: profile, error: profileError } = await supabaseClient
         .from('profiles')
         .select('*')
@@ -201,7 +122,7 @@
         .single();
       if (profileError) {
         console.error('Error loading profile:', profileError);
-        alert('Error loading profile.');
+        alert('Failed to load your profile. Please try again.');
         return;
       }
 
@@ -215,134 +136,113 @@
         document.getElementById('defaultProfileIcon').style.display = 'none';
       }
 
-      // Get URL Parameters
+      // Retrieve Investment Amount from URL
       const urlParams = new URLSearchParams(window.location.search);
-      const plan = urlParams.get('plan');
-      const amount = urlParams.get('amount');
+      const amount = urlParams.get('amount') || '0';
+      document.getElementById('investmentAmount').textContent = parseFloat(amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-      if (!plan || !amount) {
-        alert('Invalid investment details.');
-        window.location.href = 'invest.html';
-        return;
-      }
+      // Define Payment Methods
+      const paymentMethods = [
+        { name: 'Bitcoin', symbol: 'BTC', logo: 'bitcoin.png' },
+        { name: 'Ethereum', symbol: 'ETH', logo: 'ethereum.png' },
+        { name: 'Tether (ERC-20)', symbol: 'USDT', logo: 'tether.png' },
+        { name: 'Binance Coin', symbol: 'BNB', logo: 'binance.png' },
+        { name: 'Tron', symbol: 'TRX', logo: 'tron.png' },
+        { name: 'Litecoin', symbol: 'LTC', logo: 'litecoin.png' },
+        { name: 'XRP (Ripple)', symbol: 'XRP', logo: 'xrp.png' },
+        { name: 'USD Coin (USDC)', symbol: 'USDC', logo: 'usdc.png' },
+        { name: 'Dogecoin', symbol: 'DOGE', logo: 'dogecoin.png' },
+        { name: 'Solana', symbol: 'SOL', logo: 'solana.png' }
+      ];
 
-      // Display Investment Details
-      const planNames = {
-        'dawn-star': 'The Dawn Star (Basic)',
-        'nebula-glow': 'The Nebula Glow (Standard)',
-        'lunar-crest': 'The Lunar Crest (Silver)',
-        'solar-flare': 'The Solar Flare (Gold)',
-        'galactic-crown': 'The Galactic Crown (Diamond)'
-      };
-      document histology.getElementById('planName').textContent = planNames[plan] || 'Unknown Plan';
-      document.getElementById('investmentAmount').textContent = parseFloat(amount).toFixed(2);
+      // Populate Payment Methods Grid
+      const grid = document.getElementById('paymentMethodsGrid');
+      paymentMethods.forEach(method => {
+        const card = document.createElement('div');
+        card.classList.add('payment-method-card');
+        card.innerHTML = `
+          <img src="assets/images/${method.logo}" alt="${method.name}" class="payment-logo"/>
+          <h3>${method.name}</h3>
+          <p>${method.symbol}</p>
+          <button class="btn select-payment-btn" data-method="${method.symbol}">Select</button>
+        `;
+        grid.appendChild(card);
+      });
+
+      // Handle Payment Method Selection
+      document.querySelectorAll('.select-payment-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const method = btn.getAttribute('data-method');
+          showUploadForm(method, user.id);
+        });
+      });
     }
 
-    // Payment Method Selection
-    document.querySelectorAll('.select-method-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const card = btn.closest('.method-card');
-        const method = card.getAttribute('data-method');
-        const ticker = card.getAttribute('data-ticker');
-        const wallet = card.getAttribute('data-wallet');
-        const amount = document.getElementById('investmentAmount').textContent;
+    // Show Upload Form for Proof of Payment
+    function showUploadForm(method, userId) {
+      // Remove existing upload section if any
+      const existingUpload = document.querySelector('.upload-section');
+      if (existingUpload) existingUpload.remove();
 
-        // Populate Modal
-        document.getElementById('modalMethod').textContent = method;
-        document.getElementById('modalTicker').textContent = ticker;
-        document.getElementById('modalAmount').textContent = amount;
-        document.getElementById('walletAddress').textContent = wallet;
+      const uploadSection = document.createElement('section');
+      uploadSection.classList.add('upload-section');
+      uploadSection.setAttribute('data-aos', 'fade-up');
+      uploadSection.innerHTML = `
+        <h3>Upload Proof of Payment for ${method}</h3>
+        <form id="uploadForm">
+          <input type="file" id="proofFile" accept="image/*,application/pdf" required/>
+          <button type="submit" class="btn upload-btn">Upload Proof</button>
+        </form>
+      `;
+      document.querySelector('main').appendChild(uploadSection);
+      AOS.refresh(); // Refresh AOS animations
 
-        // Generate QR Code
-        const qrCodeDiv = document.getElementById('qrCode');
-        qrCodeDiv.innerHTML = '';
-        new QRCode(qrCodeDiv, {
-          text: wallet,
-          width: 150,
-          height: 150,
-          colorDark: '#000000',
-          colorLight: '#ffffff',
-          correctLevel: QRCode.CorrectLevel.H
-        });
+      // Handle Form Submission
+      const form = document.getElementById('uploadForm');
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const fileInput = document.getElementById('proofFile');
+        const file = fileInput.files[0];
+        if (!file) {
+          alert('Please select a file to upload.');
+          return;
+        }
 
-        // Show Modal
-        document.getElementById('paymentModal').style.display = 'flex';
+        // Validate file size (e.g., max 5MB)
+        if (file.size > 5 * 1024 * 1024) {
+          alert('File size exceeds 5MB. Please upload a smaller file.');
+          return;
+        }
+
+        const fileName = `${userId}_${method}_${Date.now()}_${file.name}`;
+        const { data, error } = await supabaseClient.storage
+          .from('payment-proofs')
+          .upload(fileName, file);
+
+        if (error) {
+          console.error('Upload error:', error);
+          alert('Failed to upload proof of payment. Please try again.');
+        } else {
+          alert(`Proof of payment for ${method} uploaded successfully!`);
+          // Optionally redirect or clear form
+          form.reset();
+          uploadSection.remove();
+        }
       });
-    });
+    }
 
-    // Copy Wallet Address
-    new ClipboardJS('.copy-btn');
-
-    // Close Modal
-    document.querySelector('.close-btn').addEventListener('click', () => {
-      document.getElementById('paymentModal').style.display = 'none';
-    });
-
-    // Proof of Payment Upload
-    document.querySelector('.submit-proof-btn').addEventListener('click', async () => {
-      const fileInput = document.getElementById('proofFile');
-      const file = fileInput.files[0];
-      if (!file) {
-        document.getElementById('uploadStatus').textContent = 'Please select a file.';
-        return;
-      }
-
-      const { data: { user } } = await supabaseClient.auth.getUser();
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${user.id}/${Date.now()}.${fileExt}`;
-      const method = document.getElementById('modalMethod').textContent;
-      const amount = document.getElementById('modalAmount').textContent;
-
-      const { data, error } = await supabaseClient.storage
-        .from('payment-proofs')
-        .upload(fileName, file);
-
-      if (error) {
-        console.error('Upload error:', error);
-        document.getElementById('uploadStatus').textContent = 'Error uploading proof.';
-        return;
-      }
-
-      // Store Payment Record
-      const { error: dbError } = await supabaseClient
-        .from('payment_records')
-        .insert({
-          user_id: user.id,
-          plan: document.getElementById('planName').textContent,
-          amount: parseFloat(amount),
-          payment_method: method,
-          proof_path: fileName,
-          status: 'pending'
-        });
-
-      if (dbError) {
-        console.error('Database error:', dbError);
-        document.getElementById('uploadStatus').textContent = 'Error saving payment record.';
-        return;
-      }
-
-      document.getElementById('uploadStatus').textContent = 'Proof uploaded successfully! Awaiting verification.';
-      setTimeout(() => {
-        document.getElementById('paymentModal').style.display = 'none';
-        fileInput.value = '';
-        document.getElementById('uploadStatus').textContent = '';
-      }, 2000);
-    });
-
-    // Hamburger Toggle
+    // Hamburger Menu Toggle
     const hamburgerBtn = document.getElementById('hamburgerBtn');
     const navDrawer = document.getElementById('navDrawer');
-    const overlay = document.querySelector('.nav-overlay');
+    const overlay = document.querySelector('.overlay');
     hamburgerBtn.addEventListener('click', () => {
       navDrawer.classList.toggle('open');
       hamburgerBtn.classList.toggle('active');
       overlay.classList.toggle('nav-open');
-      if (navDrawer.classList.contains('open')) {
-        navDrawer.scrollTop = 0;
-      }
+      if (navDrawer.classList.contains('open')) navDrawer.scrollTop = 0;
     });
 
-    // Close Nav When Clicking Outside
+    // Close Navigation on Outside Click
     document.addEventListener('click', (event) => {
       const isClickInsideNav = navDrawer.contains(event.target);
       const isClickOnHamburger = hamburgerBtn.contains(event.target);
@@ -370,12 +270,12 @@
       submenu.classList.toggle('open');
     });
 
-    // Back to Top
+    // Back to Top Button
     document.getElementById('back-to-top').addEventListener('click', () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
-    // Time Updates
+    // Real-Time Clock Updates
     function updateLocalTime() {
       const now = new Date();
       document.getElementById('localTime').textContent = now.toLocaleTimeString();
@@ -395,11 +295,10 @@
     // Ensure Video Playback
     const video = document.querySelector('.bg-video');
     video.addEventListener('canplay', () => {
-      video.play().catch(error => {
-        console.error('Error playing video:', error);
-      });
+      video.play().catch(error => console.error('Video playback error:', error));
     });
 
+    // Initialize the Page
     initPaymentPage();
   </script>
 </body>
