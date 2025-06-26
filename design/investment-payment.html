@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Investment Payment • PrudentProExchange</title>
+  <title>Payment Options • PrudentProExchange</title>
   <link rel="stylesheet" href="css/style.css"/>
   <link rel="stylesheet" href="css/investment-payment.css"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -61,33 +61,19 @@
         <img id="navProfilePhoto" src="" alt="Profile" class="avatar" style="display: none;"/>
         <span id="defaultProfileIcon" class="avatar">👤</span>
       </div>
-      <div class="welcome-message">Welcome to Your Payment Page, <span id="welcomeName"></span>!</div>
+      <div class="welcome-message">Welcome to Your Investment Payment, <span id="welcomeName"></span>!</div>
     </div>
 
     <!-- Main Content -->
     <main class="investment-payment-page container">
-      <!-- Investment Details -->
-      <section class="investment-details" data-aos="fade-up">
-        <h2>Investment Details</h2>
-        <p id="investmentInfo">You are investing <span id="investmentAmount"></span> in the <span id="planName"></span> plan.</p>
-      </section>
-
-      <!-- Payment Methods -->
-      <section class="payment-methods" data-aos="fade-up">
-        <h2>Choose Your Payment Method</h2>
-        <div class="payment-methods-grid">
-          <!-- Payment method cards will be inserted here via JavaScript -->
+      <section class="payment-options" data-aos="fade-up">
+        <h2>Complete Your Investment Payment</h2>
+        <div class="investment-amount">
+          <p>Investment Amount: <span id="investmentAmount"></span> USD</p>
         </div>
-      </section>
-
-      <!-- Upload Proof Section (initially hidden) -->
-      <section class="upload-proof" id="uploadProofSection" style="display: none;" data-aos="zoom-in">
-        <h2>Upload Proof of Payment for <span id="selectedMethod"></span></h2>
-        <form id="uploadForm">
-          <input type="file" id="proofFile" accept="image/*,application/pdf" required>
-          <button type="submit" class="btn upload-btn">Submit Payment Proof</button>
-        </form>
-        <p id="uploadStatus"></p>
+        <div class="payment-methods-grid">
+          <!-- Payment Method Cards will be dynamically inserted here -->
+        </div>
       </section>
     </main>
 
@@ -121,24 +107,24 @@
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU'
     );
 
-    // Payment Methods Array (Dogecoin removed, XRP and Solana image paths corrected)
+    // Payment Methods
     const paymentMethods = [
-      { name: 'Bitcoin', symbol: 'BTC', logo: 'assets/images/bitcoin.png' },
-      { name: 'Ethereum', symbol: 'ETH', logo: 'assets/images/ethereum.png' },
-      { name: 'Tether (ERC-20)', symbol: 'USDT', logo: 'assets/images/tether.png' },
-      { name: 'Binance Coin', symbol: 'BNB', logo: 'assets/images/binance.png' },
-      { name: 'Tron', symbol: 'TRX', logo: 'assets/images/tron.png' },
-      { name: 'Litecoin', symbol: 'LTC', logo: 'assets/images/litecoin.png' },
-      { name: 'XRP (Ripple)', symbol: 'XRP', logo: 'assets/images/xrp.png' },
-      { name: 'USD Coin (USDC)', symbol: 'USDC', logo: 'assets/images/usdc.png' },
-      { name: 'Solana', symbol: 'SOL', logo: 'assets/images/solana.png' }
+      { name: 'Bitcoin', symbol: 'BTC', logo: 'bitcoin.png' },
+      { name: 'Ethereum', symbol: 'ETH', logo: 'ethereum.png' },
+      { name: 'Tether (ERC-20)', symbol: 'USDT', logo: 'tether.png' },
+      { name: 'Binance Coin', symbol: 'BNB', logo: 'binance.png' },
+      { name: 'Tron', symbol: 'TRX', logo: 'tron.png' },
+      { name: 'Litecoin', symbol: 'LTC', logo: 'litecoin.png' },
+      { name: 'XRP (Ripple)', symbol: 'XRP', logo: 'xrp.png' },
+      { name: 'USD Coin (USDC)', symbol: 'USDC', logo: 'usdc.png' },
+      { name: 'Dogecoin', symbol: 'DOGE', logo: 'dogecoin.png' },
+      { name: 'Solana', symbol: 'SOL', logo: 'solana.png' }
     ];
 
     // Initialize Payment Page
     async function initPaymentPage() {
       // Check Authentication
-      const { data: { user }, error: authErrorល
-
+      const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
       if (!user || authError) {
         window.location.href = 'login.html';
         return;
@@ -166,112 +152,126 @@
         document.getElementById('defaultProfileIcon').style.display = 'none';
       }
 
-      // Get Plan and Amount from URL
+      // Get Investment Amount from URL
       const urlParams = new URLSearchParams(window.location.search);
-      const plan = urlParams.get('plan');
       const amount = urlParams.get('amount');
-      if (!plan || !amount) {
-        alert('Invalid investment details.');
+      if (amount) {
+        document.getElementById('investmentAmount').textContent = amount;
+      } else {
+        alert('No investment amount specified.');
         window.location.href = 'invest.html';
-        return;
       }
 
-      // Display Investment Details
-      document.getElementById('investmentAmount').textContent = `$${parseFloat(amount).toLocaleString()}`;
-      document.getElementById('planName').textContent = plan.replace('-', ' ').toUpperCase();
-
-      // Generate Payment Method Cards
+      // Render Payment Methods
       const grid = document.querySelector('.payment-methods-grid');
       paymentMethods.forEach(method => {
         const card = document.createElement('div');
-        card.className = 'payment-card';
+        card.classList.add('payment-method-card');
         card.innerHTML = `
-          <img src="${method.logo}" alt="${method.name}" class="payment-logo"/>
+          <img src="assets/images/${method.logo}" alt="${method.name} Logo" class="payment-logo"/>
           <h3>${method.name} (${method.symbol})</h3>
-          <button class="btn select-method-btn" data-method="${method.name}">Select</button>
+          <button class="btn select-payment-btn" data-method="${method.symbol}">Select</button>
         `;
         grid.appendChild(card);
       });
 
-      // Add Event Listeners to Select Buttons
-      document.querySelectorAll('.select-method-btn endometriosis').forEach(btn => {
-        btn.addEventListener('click', () => {
+      // Handle Payment Method Selection
+      document.querySelectorAll('.select-payment-btn').forEach(btn => {
+        btn.addEventListener('click', async () => {
           const method = btn.getAttribute('data-method');
-          document.getElementById('selectedMethod').textContent = method;
-          document.getElementById('uploadProofSection').style.display = 'block';
-          document.getElementById('uploadStatus').textContent = '';
-          window.scrollTo({ top: document.getElementById('uploadProofSection').offsetTop - 100, behavior: 'smooth' });
+          const proofInput = document.createElement('input');
+          proofInput.type = 'file';
+          proofInput.accept = 'image/*';
+          proofInput.addEventListener('change', async (event) => {
+            const file = event.target.files[0];
+            if (file) {
+              const fileName = `${user.id}_${method}_${Date.now()}.png`;
+              const { data, error } = await supabaseClient.storage
+                .from('payment-proofs')
+                .upload(fileName, file);
+              if (error) {
+                console.error('Error uploading proof:', error);
+                alert('Error uploading proof of payment.');
+              } else {
+                alert('Proof of payment uploaded successfully.');
+              }
+            }
+          });
+          proofInput.click();
         });
       });
+    }
 
-      // Handle Upload Form Submission
-      document.getElementById('uploadForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const fileInput = document.getElementById('proofFile');
-        const file = fileInput.files[0];
-        if (!file) {
-          alert('Please select a file.');
-          return;
-        }
+    // Hamburger Toggle
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const navDrawer = document.getElementById('navDrawer');
+    const overlay = document.querySelector('.overlay');
+    hamburgerBtn.addEventListener('click', () => {
+      navDrawer.classList.toggle('open');
+      hamburgerBtn.classList.toggle('active');
+      overlay.classList.toggle('nav-open');
+      if (navDrawer.classList.contains('open')) {
+        navDrawer.scrollTop = 0;
+      }
+    });
 
-        // Validate file size (e.g., max 5MB)
-        if (file.size > 5 * 1024 * 1024) {
-          document.getElementById('uploadStatus').textContent = 'File size exceeds 5MB limit.';
-          return;
-        }
+    // Close Nav When Clicking Outside
+    document.addEventListener('click', (event) => {
+      const isClickInsideNav = navDrawer.contains(event.target);
+      const isClickOnHamburger = hamburgerBtn.contains(event.target);
+      if (!isClickInsideNav && !isClickOnHamburger && navDrawer.classList.contains('open')) {
+        navDrawer.classList.remove('open');
+        hamburgerBtn.classList.remove('active');
+        overlay.classList.remove('nav-open');
+      }
+    });
 
-        const userId = user.id;
-        const timestamp = Date.now();
-        const fileName = `${userId}_${timestamp}_${file.name}`;
+    // Theme Toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('light-theme');
+      const icon = themeToggle.querySelector('i');
+      icon.classList.toggle('fa-moon');
+      icon.classList.toggle('fa-sun');
+    });
 
-        // Show loading state
-        document.getElementById('uploadStatus').textContent = 'Uploading...';
-        const uploadBtn = document.querySelector('.upload-btn');
-        uploadBtn.disabled = true;
+    // Account Menu Toggle
+    const accountToggle = document.getElementById('account-toggle');
+    const submenu = accountToggle.nextElementSibling;
+    accountToggle.addEventListener('click', (e) => {
+      e.preventDefault();
+      submenu.classList.toggle('open');
+    });
 
-        // Upload to Supabase Storage
-        const { data: uploadData, error: uploadError } = await supabaseClient.storage
-          .from('payment-proofs')
-          .upload(fileName, file);
+    // Back to Top
+    document.getElementById('back-to-top').addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
 
-        if (uploadError) {
-          console.error('Error uploading file:', uploadError);
-          document.getElementById('uploadStatus').textContent = 'Error uploading proof. Please try again.';
-          uploadBtn.disabled = false;
-          return;
-        }
-
-        // Get public URL
-        const { data: urlData } = supabaseClient.storage
-          .from('payment-proofs')
-          .getPublicUrl(fileName);
-
-        // Insert into investments table
-        const { data: investmentData, error: investmentError } = await supabaseClient
-          .from('investments')
-          .insert({
-            user_id: userId,
-            plan: plan,
-            amount: parseFloat(amount),
-            payment_method: document.getElementById('selectedMethod').textContent,
-            proof_url: urlData.publicUrl,
-            status: 'pending'
-          });
-
-        if (investmentError) {
-          console.error('Error creating investment record:', investmentError);
-          document.getElementById('uploadStatus').textContent = 'Error submitting investment. Please contact support.';
-          uploadBtn.disabled = false;
-        } else {
-          document.getElementById('uploadStatus').textContent = 'Proof uploaded successfully! Your investment is pending approval.';
-          fileInput.value = '';
-          uploadBtn.disabled = false;
-          setTimeout(() => {
-            window.location.href = 'dashboard.html';
-          }, 3000);
-        }
+    // Time Updates
+    function updateLocalTime()/] {
+      const now = new Date();
+      document.getElementById('localTime').textContent = now.toLocaleTimeString();
+      document.getElementById('localDate').textContent = now.toLocaleDateString('en-US', {
+        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
       });
     }
+    setInterval(updateLocalTime, 1000);
+    updateLocalTime();
+
+    function updateUTCTime() {
+      document.getElementById('utcTime').textContent = new Date().toUTCString();
+    }
+    setInterval(updateUTCTime, 1000);
+    updateUTCTime();
+
+    // Ensure Video Playback
+    const video = document.querySelector('.bg-video');
+    video.addEventListener('canplay', () => {
+      video.play().catch(error => {
+        console.error('Error playing video:', error);
+      });
+    });
 
     initPaymentPage();
   </script>
