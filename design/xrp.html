@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>XRP Payment • PrudentProExchange</title>
+
+  <!-- core styles -->
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/xrp.css"/>
+
+  <!-- icons & animations -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
+
+  <!-- Supabase client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+</head>
+
+<body class="xrp-page">
+  <!-- Background video -->
+  <video class="bg-video" autoplay muted loop playsinline>
+    <source src="assets/videos/background.webm" type="video/webm">
+    <source src="assets/videos/background.mp4" type="video/mp4">
+  </video>
+
+  <div class="overlay">
+    <!-- ===== HEADER ===== -->
+    <header class="header" data-aos="fade-down">
+      <a href="dashboard.html" class="logo">
+        <img src="assets/images/logo.svg" alt="PrudentProExchange"/>
+      </a>
+      <nav class="nav">
+        <button class="hamburger" id="hamburgerBtn">
+          <span></span><span></span><span></span>
+        </button>
+        <ul class="nav-list" id="navDrawer">
+          <li><a href="dashboard.html">Dashboard</a></li>
+          <li><a href="invest.html">Invest</a></li>
+          <li><a href="withdraw.html">Withdraw</a></li>
+          <li><a href="transactions.html">Transactions</a></li>
+          <li><a href="referrals.html">Referrals</a></li>
+          <li class="account-menu">
+            <a href="#" id="account-toggle">Account ▾</a>
+            <ul class="submenu">
+              <li><a href="profile-settings.html">Profile Settings</a></li>
+              <li><a href="transfer.html">Transfer Balance</a></li>
+              <li><a href="change-password.html">Change Password</a></li>
+              <li><a href="support.html">Support Ticket</a></li>
+              <li><a href="promo-tools.html">Promotional Tools</a></li>
+              <li><a href="2fa.html">2FA Security</a></li>
+              <li><a href="#" id="logout-btn">Logout</a></li>
+            </ul>
+          </li>
+          <li><a href="kyc.html">KYC</a></li>
+          <li><a href="transfer.html">Transfer</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <!-- ===== PROFILE & WELCOME ===== -->
+    <section class="profile-section" data-aos="fade-up">
+      <img id="navProfilePhoto" class="avatar" alt="Profile photo" />
+      <span id="defaultProfileIcon" class="avatar placeholder">👤</span>
+      <h1>Welcome, <span id="welcomeName">User</span>!</h1>
+    </section>
+
+    <!-- ===== MAIN PAYMENT CARD ===== -->
+    <main class="main-content container" data-aos="fade-up">
+      <div class="card payment-card">
+        <img src="assets/images/xrp-logo.png" alt="XRP" class="crypto-logo"/>
+        <h2>XRP Payment</h2>
+
+        <div class="details">
+          <p><strong>Plan:</strong> <span id="planName"></span></p>
+          <p><strong>Return:</strong> <span id="weeklyReturn"></span></p>
+          <p><strong>Range:</strong> <span id="investmentRange"></span></p>
+          <p><strong>Amount:</strong> $<span id="investmentAmount">0.00</span></p>
+        </div>
+
+        <div class="wallet-section">
+          <label>Wallet Address:</label>
+          <div class="wallet-box">
+            <input type="text" id="walletAddress" readonly/>
+            <button class="copy-btn"><i class="fas fa-copy"></i></button>
+          </div>
+        </div>
+
+        <p class="instruction">
+          Send the exact amount above and upload your payment proof below.
+        </p>
+
+        <form id="paymentForm" class="upload-form">
+          <label for="proofUpload">Proof of Payment</label>
+          <input type="file" id="proofUpload" accept="image/png,image/jpeg,image/gif" required/>
+          <button type="submit" class="btn paid-btn">Paid</button>
+        </form>
+      </div>
+    </main>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer" data-aos="fade-up">
+      <div class="time-widgets">
+        <p>UTC: <span id="utcTime"></span></p>
+        <p>Local: <span id="localTime"></span></p>
+      </div>
+      <nav class="footer-nav">
+        <a href="about.html">About</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+      </nav>
+      <p class="copyright">
+        © 2025 PrudentProExchange. All Rights Reserved.
+      </p>
+    </footer>
+  </div>
+
+  <!-- notifications & back to top -->
+  <button id="notify-btn" class="notify-btn"><i class="fas fa-bell"></i></button>
+  <button id="back-to-top" class="back-top"><i class="fas fa-rocket"></i></button>
+
+  <!-- AOS & logic -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="js/xrp.js"></script>
+</body>
+</html>
