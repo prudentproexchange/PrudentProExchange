@@ -293,7 +293,13 @@
         document.getElementById('defaultProfileIcon').style.display = 'none';
       }
 
-      document.getElementById('affiliateLink').value = profile.referral_link || '';
+      // Update referral link to use .net domain
+      let referralLink = profile.referral_link || '';
+      if (referralLink.includes('prudentproexchange.com')) {
+        referralLink = referralLink.replace('prudentproexchange.com', 'prudentproexchange.net');
+      }
+      document.getElementById('affiliateLink').value = referralLink;
+      
       document.getElementById('refEarnings').textContent = (profile.referral_earnings || 0).toFixed(2);
       document.getElementById('depositWallet').textContent = (profile.deposit_wallet || 0).toFixed(2);
       document.getElementById('totalDeposits').textContent = (profile.total_deposits || 0).toFixed(2);
