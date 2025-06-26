@@ -1,47 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Supabase Upload Test</title>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Test Upload • PrudentProExchange</title>
+  <style>
+    body { font-family: sans-serif; padding: 2rem; max-width: 400px; margin: auto; }
+    label, button { display: block; margin: 1rem 0; }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 </head>
 <body>
-  <h1>File Upload to Supabase</h1>
-  <input type="file" id="fileInput">
-  <button id="uploadBtn">Upload</button>
-  <div id="output"></div>
+  <h1>Test File Upload</h1>
+  <form id="uploadForm">
+    <label>
+      Select a file to upload:
+      <input type="file" id="fileInput" required />
+    </label>
+    <button type="submit">Upload to test-uploads</button>
+  </form>
 
   <script>
-    // Your Supabase credentials:
-    const SUPABASE_URL     = 'https://iwkdznjqfbsfkscnbrkc.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU';
+    // 1️⃣ Initialize Supabase
+    const supabaseUrl = 'https://iwkdznjqfbsfkscnbrkc.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU';
+    const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    // 2️⃣ Form handling
+    document.getElementById('uploadForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      const file = document.getElementById('fileInput').files[0];
+      if (!file) return alert('No file selected!');
+      const fileName = `test-${Date.now()}-${file.name}`;
 
-    const fileInput = document.getElementById('fileInput');
-    const uploadBtn = document.getElementById('uploadBtn');
-    const output    = document.getElementById('output');
-
-    uploadBtn.addEventListener('click', async () => {
-      output.textContent = '';
-      const file = fileInput.files[0];
-      if (!file) {
-        output.textContent = 'No file selected.';
-        return;
-      }
-
-      const key = `test-uploads/${Date.now()}_${file.name}`;
-      output.textContent = 'Uploading...';
-
-      const { data, error } = await supabase
-        .storage
-        .from('payment-proofs')
-        .upload(key, file);
+      // 3️⃣ Upload to your test bucket
+      const { data, error } = await supabase.storage
+        .from('test-uploads')
+        .upload(fileName, file, { upsert: false });
 
       if (error) {
-        output.textContent = 'Upload failed:\n' + JSON.stringify(error);
+        alert('❌ Upload failed: ' + error.message);
       } else {
-        output.textContent = 'Upload successful! Path: ' + data.path;
+        alert('✅ Upload succeeded! File path: ' + data.path);
       }
     });
   </script>
