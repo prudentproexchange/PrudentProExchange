@@ -293,13 +293,8 @@
         document.getElementById('defaultProfileIcon').style.display = 'none';
       }
 
-      // Update referral link to use .net domain
-      let referralLink = profile.referral_link || '';
-      if (referralLink.includes('prudentproexchange.com')) {
-        referralLink = referralLink.replace('prudentproexchange.com', 'prudentproexchange.net');
-      }
-      document.getElementById('affiliateLink').value = referralLink;
-      
+      const referralLink = profile.referral_link.replace('prudentproexchange.com', 'prudentproexchange.net');
+      document.getElementById('affiliateLink').value = referralLink || '';
       document.getElementById('refEarnings').textContent = (profile.referral_earnings || 0).toFixed(2);
       document.getElementById('depositWallet').textContent = (profile.deposit_wallet || 0).toFixed(2);
       document.getElementById('totalDeposits').textContent = (profile.total_deposits || 0).toFixed(2);
@@ -443,32 +438,6 @@
     });
 
     initDashboard();
-
-    // Event listener for the Invest button (remove if not used)
-    // document.querySelector('.invest-btn').addEventListener('click', async (e) => {
-    //   e.preventDefault();
-    //   const amountStr = prompt('Enter investment amount:');
-    //   if (amountStr) {
-    //     const amount = parseFloat(amountStr);
-    //     if (isNaN(amount) || amount <= 0) {
-    //       alert('Invalid amount');
-    //       return;
-    //     }
-    //     try {
-    //       const plan = await choosePlanForAmount(amount);
-    //       const { data: { user } } = await supabaseClient.auth.getUser();
-    //       await supabaseClient.rpc('start_investment', {
-    //         user_id: user.id,
-    //         plan_id: plan.id,
-    //         amount
-    //       });
-    //       alert('Investment started in the "' + plan.name + '" plan!');
-    //       location.reload();
-    //     } catch (err) {
-    //       alert('Error: ' + err.message);
-    //     }
-    //   }
-    // });
 
     // Ensure background video plays
     const video = document.querySelector('.bg-video');
