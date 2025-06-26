@@ -1,12 +1,12 @@
-/* Investment Payment Page Specific Styles */
+/* Payment Page Specific Styles */
 
-.investment-payment-page.container {
+.payment-page.container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
 }
 
-/* Profile Section */
+/* Profile Section (Reused from invest.css) */
 .profile-section {
   display: flex;
   align-items: center;
@@ -45,37 +45,57 @@
   font-family: 'Playfair Display', serif;
 }
 
-/* Payment Options */
-.payment-options h2 {
+/* Payment Details */
+.payment-details h2 {
   font-size: 2.5rem;
   color: #ffd700; /* Gold */
-  margin-bottom: 2.5rem;
+  margin-bottom: 2rem;
   text-align: center;
   font-family: 'Playfair Display', serif;
   text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
 }
 
-.investment-amount {
+.investment-info {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 1.5rem;
+  border: 1px solid #ffd700; /* Gold */
+  border-radius: 10px;
+  backdrop-filter: blur(10px);
   text-align: center;
   margin-bottom: 2rem;
 }
 
-.investment-amount p {
-  font-size: 1.5rem;
+.investment-info p {
+  font-size: 1.2rem;
   color: #e0e0ff;
+  margin: 0.5rem 0;
 }
 
-.payment-methods-grid {
+.investment-info p span {
+  color: #ffd700; /* Gold */
+  font-weight: 600;
+}
+
+/* Payment Methods */
+.payment-methods h3 {
+  font-size: 2rem;
+  color: #ffd700; /* Gold */
+  margin-bottom: 2rem;
+  text-align: center;
+  font-family: 'Playfair Display', serif;
+}
+
+.methods-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 2rem;
+  gap: 1.5rem;
 }
 
-.payment-method-card {
+.method-card {
   background: rgba(255, 255, 255, 0.1);
-  padding: 2rem;
+  padding: 1.5rem;
   border: 1px solid #ffd700; /* Gold */
-  border-radius: 15px;
+  border-radius: 10px;
   backdrop-filter: blur(15px);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
   text-align: center;
@@ -85,25 +105,30 @@
   align-items: center;
 }
 
-.payment-method-card:hover {
+.method-card:hover {
   transform: translateY(-10px);
   box-shadow: 0 12px 40px rgba(255, 215, 0, 0.5); /* Gold glow */
 }
 
-.payment-logo {
-  width: 100px;
-  height: 100px;
+.method-icon {
+  width: 80px;
+  height: 80px;
   margin-bottom: 1rem;
+  transition: transform 0.3s ease;
 }
 
-.payment-method-card h3 {
+.method-card:hover .method-icon {
+  transform: scale(1.1);
+}
+
+.method-card h4 {
   font-size: 1.5rem;
   color: #ffd700; /* Gold */
   margin-bottom: 1rem;
   font-family: 'Playfair Display', serif;
 }
 
-.select-payment-btn {
+.select-method-btn {
   display: inline-block;
   padding: 0.75rem 1.5rem;
   background: linear-gradient(45deg, #ffd700, #cca300); /* Gold gradient */
@@ -116,15 +141,149 @@
   transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.select-payment-btn:hover {
+.select-method-btn:hover {
   background: linear-gradient(45deg, #cca300, #ffd700);
   transform: scale(1.05);
   box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
 }
 
+.select-method-btn:active {
+  transform: scale(0.95);
+}
+
+/* Modal Styles */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 2rem;
+  border: 1px solid #ffd700; /* Gold */
+  border-radius: 15px;
+  backdrop-filter: blur(15px);
+  max-width: 500px;
+  width: 90%;
+  text-align: center;
+  position: relative;
+}
+
+.close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 1.5rem;
+  color: #ffd700;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.close-btn:hover {
+  color: #cca300;
+}
+
+.modal-content h3 {
+  font-size: 1.75rem;
+  color: #ffd700; /* Gold */
+  margin-bottom: 1rem;
+  font-family: 'Playfair Display', serif;
+}
+
+.modal-content p {
+  font-size: 1.1rem;
+  color: #e0e0ff;
+  margin-bottom: 1rem;
+}
+
+.wallet-address {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 0.75rem;
+  border: 1px solid #ffd700;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+}
+
+.wallet-address p {
+  word-break: break-all;
+  font-size: 0.9rem;
+  color: #e0e0ff;
+}
+
+.copy-btn {
+  padding: 0.5rem 1rem;
+  background: linear-gradient(45deg, #ffd700, #cca300);
+  color: #000;
+  border: none;
+  border-radius: 5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.copy-btn:hover {
+  background: linear-gradient(45deg, #cca300, #ffd700);
+  transform: scale(1.05);
+}
+
+.qr-code {
+  margin: 1rem auto;
+}
+
+.note {
+  font-size: 0.9rem;
+  color: #ff9999;
+  margin-top: 1rem;
+}
+
+.proof-upload {
+  margin-top: 1.5rem;
+}
+
+.proof-upload h4 {
+  font-size: 1.25rem;
+  color: #ffd700;
+  margin-bottom: 0.75rem;
+}
+
+.proof-upload input[type="file"] {
+  display: block;
+  margin: 0 auto 1rem;
+  color: #e0e0ff;
+}
+
+.submit-proof-btn {
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(45deg, #ffd700, #cca300);
+  color: #000;
+  border: none;
+  border-radius: 5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.submit-proof-btn:hover {
+  background: linear-gradient(45deg, #cca300, #ffd700);
+  transform: scale(1.05);
+}
+
+#uploadStatus {
+  margin-top: 1rem;
+  color: #e0e0ff;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
-  .payment-methods-grid {
+  .methods-grid {
     grid-template-columns: 1fr;
   }
 
@@ -149,11 +308,24 @@
     font-size: 1.2rem;
   }
 
-  .payment-options h2 {
+  .payment-details h2 {
     font-size: 2rem;
   }
 
-  .payment-method-card h3 {
-    font-size: 1.5rem;
+  .payment-methods h3 {
+    font-size: 1.75rem;
+  }
+
+  .method-card h4 {
+    font-size: 1.25rem;
+  }
+
+  .method-icon {
+    width: 60px;
+    height: 60px;
+  }
+
+  .modal-content {
+    padding: 1.5rem;
   }
 }
