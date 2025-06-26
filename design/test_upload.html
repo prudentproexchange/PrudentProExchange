@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Test Upload • PrudentProExchange</title>
+  <style>
+    body { font-family: sans-serif; padding: 2rem; max-width: 400px; margin: auto; }
+    label, button { display: block; margin: 1rem 0; }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+</head>
+<body>
+  <h1>Test File Upload</h1>
+  <form id="uploadForm">
+    <label>
+      Select a file to upload:
+      <input type="file" id="fileInput" required />
+    </label>
+    <button type="submit">Upload to test-uploads</button>
+  </form>
+
+  <script>
+    // 1️⃣ Initialize Supabase
+    const supabaseUrl = 'https://iwkdznjqfbsfkscnbrkc.supabase.co';
+    const supabaseKey = 'YOUR_PUBLIC_ANON_KEY'; // replace with your anon key
+    const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+    // 2️⃣ Form handling
+    document.getElementById('uploadForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      const file = document.getElementById('fileInput').files[0];
+      if (!file) return alert('No file selected!');
+      const fileName = `test-${Date.now()}-${file.name}`;
+
+      // 3️⃣ Upload to your test bucket
+      const { data, error } = await supabase.storage
+        .from('test-uploads')
+        .upload(fileName, file, { upsert: false });
+
+      if (error) {
+        alert('❌ Upload failed: ' + error.message);
+      } else {
+        alert('✅ Upload succeeded! File path: ' + data.path);
+      }
+    });
+  </script>
+</body>
+</html>
