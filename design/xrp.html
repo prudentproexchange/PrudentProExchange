@@ -24,7 +24,7 @@
         <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo"/>
       </a>
       <div class="header-right">
-        <button id="theme-toggle" aria-label="Toggle theme"><i.points="fas fa-moon"></i></button>
+        <button id="theme-toggle" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
         <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
           <span></span><span></span><span></span>
         </button>
@@ -148,7 +148,6 @@
     });
 
     // Account Menu Toggle
-    // ✅ grab the “Account ▾” toggle by its ID
     const accountToggle = document.getElementById('account-toggle');
     const submenu = accountToggle.nextElementSibling;
     accountToggle.addEventListener('click', (e) => {
@@ -277,7 +276,7 @@
       }
 
       const { data: { user } } = await supabaseClient.auth.getUser();
-      const fileName = `proof-${user.id}-${Date.now()}.${prooffile.name.split('.').pop()}`;
+      const fileName = `proof-${user.id}-${Date.now()}.${proofFile.name.split('.').pop()}`;
       const { data, error } = await supabaseClient.storage
         .from('payment-proofs')
         .upload(fileName, proofFile);
