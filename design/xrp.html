@@ -9,46 +9,41 @@
 <body>
   <h1>Supabase Upload Test</h1>
   <input type="file" id="fileInput" />
-  <button id="uploadBtn">Upload to Supabase</button>
-  <pre id="output" style="background:#f0f0f0;padding:1em;"></pre>
+  <button id="uploadBtn">Upload</button>
+  <pre id="output" style="padding:1em; border:1px solid #ccc; white-space: pre-wrap;"></pre>
 
   <script>
-    // 🍀 Configure these two values:
-    const SUPABASE_URL    = 'https://iwkdznjqfbsfkscnbrkc.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.…';
+    // 🔧 Your Supabase settings
+    const SUPABASE_URL     = 'https://iwkdznjqfbsfkscnbrkc.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ...';
 
-    // 🚀 Initialize
-    const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    const out = document.getElementById('output');
+    // 🚀 Init
+    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // 🖼️ Grab elements
     const fileInput = document.getElementById('fileInput');
     const uploadBtn = document.getElementById('uploadBtn');
+    const output    = document.getElementById('output');
 
-    uploadBtn.onclick = async () => {
+    uploadBtn.addEventListener('click', async () => {
+      output.textContent = '';
       const file = fileInput.files[0];
-      out.textContent = ''; 
-      if (!file) {
-        return out.textContent = '❌ No file selected.';
-      }
+      if (!file) return output.textContent = '❌ No file selected.';
 
-      // create a unique path in your bucket:
-      // here: payment-proofs/user_test/<timestamp>_<filename>
-      const path = `user_test/${Date.now()}_${file.name}`;
+      const path = `test-uploads/${Date.now()}_${file.name}`;
 
-      out.textContent = `Uploading “${file.name}” → bucket “payment-proofs” at “${path}”…\n`;
+      output.textContent = `Uploading ${file.name} → ${path}...\n`;
 
-      // Upload
-      const { data, error } = await sb.storage
+      const { data, error } = await supabase
+        .storage
         .from('payment-proofs')
-        .upload(path, file, { cacheControl: '3600', upsert: false });
+        .upload(path, file);
 
       if (error) {
-        out.textContent += '❌ Upload error:\n' + JSON.stringify(error, null, 2);
+        output.textContent += '❌ Upload failed:\n' + JSON.stringify(error, null, 2);
       } else {
-        out.textContent += '✅ Uploaded!\nStored path:\n' + data.path;
+        output.textContent += '✅ Uploaded!\nPath: ' + data.path;
       }
-    };
+    });
   </script>
 </body>
 </html>
