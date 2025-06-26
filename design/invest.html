@@ -9,7 +9,6 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 </head>
 <body class="invest-page">
   <!-- Video Background -->
@@ -33,7 +32,7 @@
       </div>
       <nav class="nav-drawer" id="navDrawer">
         <a href="dashboard.html">Dashboard</a>
-        <a href="invest.html" class="active">Invest</a>
+        <a href="invest.html">Invest</a>
         <a href="withdraw.html">Withdraw</a>
         <a href="transactions.html">Transactions</a>
         <a href="referrals.html">Referrals</a>
@@ -55,263 +54,40 @@
     </header>
     <div class="nav-overlay"></div>
 
-    <!-- Profile Section -->
-    <div class="profile-section">
-      <div class="profile-container">
-        <img id="navProfilePhoto" src="" alt="Profile" class="avatar" style="display: none;"/>
-        <span id="defaultProfileIcon" class="avatar">👤</span>
-      </div>
-      <div class="welcome-message">Welcome to Your Investment Page, <span id="welcomeName"></span>!</div>
-    </div>
-
     <!-- Main Content -->
     <main class="invest-page container">
       <section class="investment-plans" data-aos="fade-up">
         <h2>Choose Your Investment Plan</h2>
         <div class="plans-grid">
-          <!-- Plan 1: The Dawn Star -->
-          <div class="card plan-card" data-aos="zoom-in">
+          <div class="plan-card">
             <h3>The Dawn Star (Basic)</h3>
             <p>5% weekly return</p>
             <p>Investment Range: $200 - $4,999</p>
-            <input type="number" class="amount-input" placeholder="Enter amount ($200 - $4,999)" min="200" max="4999"/>
-            <details class="payment-options">
-              <summary>Click to Choose Payment Option</summary>
-              <div class="crypto-options">
-                <a href="#" class="crypto-link" data-plan="dawn-star" data-min="200" data-max="4999"> <!-- Updated -->
-                  <img src="assets/images/bitcoin.PNG" alt="Bitcoin" class="crypto-image"/>
-                  <span>Bitcoin (BTC)</span>
-                </a>
-                <a href="#" class="crypto-link" data-plan="dawn-star" data-min="200" data-max="4999">
-                  <img src="assets/images/ethereum.PNG" alt="Ethereum" class="crypto-image"/>
-                  <span>Ethereum (ETH)</span>
-                </a>
-                <a href="#" class="crypto-link" data-plan="dawn-star" data-min="200" data-max="4999">
-                  <img src="assets/images/tether.PNG" alt="Tether" class="crypto-image"/>
-                  <span>Tether (USDT)</span>
-                </a>
-                <a href="#" class="crypto-link" data-plan="dawn-star" data-min="200" data-max="4999">
-                  <img src="assets/images/usdcoin.PNG" alt="USD Coin" class="crypto-image"/>
-                  <span>USD Coin (USDC)</span>
-                </a>
-                <a href="#" class="crypto-link" data-plan="dawn-star" data-min="200" data-max="4999">
-                  <img src="assets/images/binancecoin.PNG" alt="Binance Coin" class="crypto-image"/>
-                  <span>Binance Coin (BNB)</span>
-                </a>
-                <a href="#" class="crypto-link" data-plan="dawn-star" data-min="200" data-max="4999">
-                  <img src="assets/images/litecoin.PNG" alt="Litecoin" class="crypto-image"/>
-                  <span>Litecoin (LTC)</span>
-                </a>
-                <a href="#" class="crypto-link" data-plan="dawn-star" data-min="200" data-max="4999">
-                  <img src="assets/images/tron.PNG" alt="Tron" class="crypto-image"/>
-                  <span>Tron (TRX)</span>
-                </a>
-                <a href="#" class="crypto-link" data-plan="dawn-star" data-min="200" data-max="4999">
-                  <img src="assets/images/solana.PNG" alt="Solana" class="crypto-image"/>
-                  <span>Solana (SOL)</span>
-                </a>
-                <a href="#" class="crypto-link" data-plan="dawn-star" data-min="200" data-max="4999">
-                  <img src="assets/images/xrp.PNG" alt="XRP" class="crypto-image"/>
-                  <span>XRP</span>
-                </a>
-              </div>
-            </details>
+            <a href="investment-payment.html?plan=dawn-star" class="btn select-plan-btn">Click to Choose Payment Option</a>
           </div>
-
-          <!-- Plan 2: The Nebula Glow -->
-          <div class="card plan-card" data-aos="zoom-in">
+          <div class="plan-card">
             <h3>The Nebula Glow (Standard)</h3>
             <p>6.5% weekly return</p>
             <p>Investment Range: $5,000 - $14,999</p>
-            <input type="number" class="amount-input" placeholder="Enter amount ($5,000 - $14,999)" min="5000" max="14999"/>
-            <details class="payment-options">
-              <summary>Click to Choose Payment Option</summary>
-              <div class="crypto-options">
-                <a href="#" class="crypto-link" data-plan="nebula-glow" data-min="5000" data-max="14999">
-                  <img src="assets/images/bitcoin.PNG" alt="Bitcoin" class="crypto-image"/>
-                  <span>Bitcoin (BTC)</span>
-                </a>
-                <a href="#" class="crypto-link" data-plan="nebula-glow" data-min="5000" data-max="14999">
-                  <img src="assets/images/ethereum.PNG" alt="Ethereum" class="crypto-image"/>
-                  <span>Ethereum (ETH)</span>
-                </a>
-                <a href="#" class="crypto-link" data-plan="nebula-glow" data-min="5000" data-max="14999">
-                  <img src="assets/images/tether.PNG" alt="Tether" class="crypto-image"/>
-                  <span>Tether (USDT)</span>
-                </a>
-                <a href="#" class="crypto-link" data-plan="nebula-glow" data-min="5000" data-max="14999">
-                  <img src="assets/images/usdcoin.PNG" alt="USD Coin" class="crypto-image"/>
-                  <span>USD Coin (USDC)</span>
-                </a>
-                <a href="#" class="crypto-link" data-plan="nebula-glow" data-min="5000" data-max="14999">
-                  <img src="assets/images/binancecoin.PNG" alt="Binance Coin" class="crypto-image"/>
-                  <span>Binance Coin (BNB)</span>
-                </a>
-                <a href="#" class="crypto-link" data-plan="nebula-glow" data-min="5000" data-max="14999">
-                  <img src="assets/images/litecoin.PNG" alt="Litecoin" class="crypto-image"/>
-                  <span>Litecoin (LTC)</span>
-                </a>
-                <a href="#" class="crypto-link" data-plan="nebula-glow" data-min="5000" data-max="14999">
-                  <img src="assets/images/tron.PNG" alt="Tron" class="crypto-image"/>
-                  <span>Tron (TRX)</span>
-                </a>
-                <a href="#" class="crypto-link" data-plan="nebula-glow" data-min="5000" data-max="14999">
-                  <img src="assets/images/solana.PNG" alt="Solana" class="crypto-image"/>
-                  <span>Solana (SOL)</span>
-                </a>
-                <a href="#" class="crypto-link" data-plan="nebula-glow" data-min="5000" data-max="14999">
-                  <img src="assets/images/xrp.PNG" alt="XRP" class="crypto-image"/>
-                  <span>XRP</span>
-                </a>
-              </div>
-            </details>
+            <a href="investment-payment.html?plan=nebula-glow" class="btn select-plan-btn">Click to Choose Payment Option</a>
           </div>
-
-          <!-- Plan 3: The Lunar Crest -->
-          <div class="card plan-card" data-aos="zoom-in">
+          <div class="plan-card">
             <h3>The Lunar Crest (Silver)</h3>
             <p>7.5% weekly return</p>
             <p>Investment Range: $15,000 - $49,999</p>
-            <input type="number" class="amount-input" placeholder="Enter amount ($15,000 - $49,999)" min="15000" max="49999"/>
-            <details class="payment-options">
-              <summary>Click to Choose Payment Option</summary>
-              <div class="crypto-options">
-                <a href="#" class="crypto-link" data-plan="lunar-crest" data-min="15000" data-max="49999">
-                  <img src="assets/images/bitcoin.PNG" alt="Bitcoin" class="crypto-image"/>
-                  <span>Bitcoin (BTC)</span>
-                </a>
-                <a href="#" class="crypto-link" data-plan="lunar-crest" data-min="15000" data-max="49999">
-                  <img src="assets/images/ethereum.PNG" alt="Ethereum" class="crypto-image"/>
-                  <span>Ethereum (ETH)</span>
-                </a>
-                <a href="#" class="crypto-link" data-plan="lunar-crest" data-min="15000" data-max="49999">
-                  <img src="assets/images/tether.PNG" alt="Tether" class="crypto-image"/>
-                  <span>Tether (USDT)</span>
-                </a>
-                <a href="#" class="crypto-link" data-plan="lunar-crest" data-min="15000" data-max="49999">
-                  <img src="assets/images/usdcoin.PNG" alt="USD Coin" class="crypto-image"/>
-                  <span>USD Coin (USDC)</span>
-                </a>
-                <a href="#" class="crypto-link" data-plan="lunar-crest" data-min="15000" data-max="49999">
-                  <img src="assets/images/binancecoin.PNG" alt="Binance Coin" class="crypto-image"/>
-                  <span>Binance Coin (BNB)</span>
-                </a>
-                <a href="#" class="crypto-link" data-plan="lunar-crest" data-min="15000" data-max="49999">
-                  <img src="assets/images/litecoin.PNG" alt="Litecoin" class="crypto-image"/>
-                  <span>Litecoin (LTC)</span>
-                </a>
-                <a href="#" class="crypto-link" data-plan="lunar-crest" data-min="15000" data-max="49999">
-                  <img src="assets/images/tron.PNG" alt="Tron" class="crypto-image"/>
-                  <span>Tron (TRX)</span>
-                </a>
-                <a href="#" class="crypto-link" data-plan="lunar-crest" data-min="15000" data-max="49999">
-                  <img src="assets/images/solana.PNG" alt="Solana" class="crypto-image"/>
-                  <span>Solana (SOL)</span>
-                </a>
-                <a href="#" class="crypto-link" data-plan="lunar-crest" data-min="15000" data-max="49999">
-                  <img src="assets/images/xrp.PNG" alt="XRP" class="crypto-image"/>
-                  <span>XRP</span>
-                </a>
-              </div>
-            </details>
+            <a href="investment-payment.html?plan=lunar-crest" class="btn select-plan-btn">Click to Choose Payment Option</a>
           </div>
-
-          <!-- Plan 4: The Solar Flare -->
-          <div class="card plan-card" data-aos="zoom-in">
+          <div class="plan-card">
             <h3>The Solar Flare (Gold)</h3>
             <p>8.5% weekly return</p>
             <p>Investment Range: $50,000 - $99,999</p>
-            <input type="number" class="amount-input" placeholder="Enter amount ($50,000 - $99,999)" min="50000" max="99999"/>
-            <details class="payment-options">
-              <summary>Click to Choose Payment Option</summary>
-              <div class="crypto-options">
-                <a href="#" class="crypto-link" data-plan="solar-flare" data-min="50000" data-max="99999">
-                  <img src="assets/images/bitcoin.PNG" alt="Bitcoin" class="crypto-image"/>
-                  <span>Bitcoin (BTC)</span>
-                </a>
-                <a href="#" class="crypto-link" data-plan="solar-flare" data-min="50000" data-max="99999">
-                  <img src="assets/images/ethereum.PNG" alt="Ethereum" class="crypto-image"/>
-                  <span>Ethereum (ETH)</span>
-                </a>
-                <a href="#" class="crypto-link" data-plan="solar-flare" data-min="50000" data-max="99999">
-                  <img src="assets/images/tether.PNG" alt="Tether" class="crypto-image"/>
-                  <span>Tether (USDT)</span>
-                </a>
-                <a href="#" class="crypto-link" data-plan="solar-flare" data-min="50000" data-max="99999">
-                  <img src="assets/images/usdcoin.PNG" alt="USD Coin" class="crypto-image"/>
-                  <span>USD Coin (USDC)</span>
-                </a>
-                <a href="#" class="crypto-link" data-plan="solar-flare" data-min="50000" data-max="99999">
-                  <img src="assets/images/binancecoin.PNG" alt="Binance Coin" class="crypto-image"/>
-                  <span>Binance Coin (BNB)</span>
-                </a>
-                <a href="#" class="crypto-link" data-plan="solar-flare" data-min="50000" data-max="99999">
-                  <img src="assets/images/litecoin.PNG" alt="Litecoin" class="crypto-image"/>
-                  <span>Litecoin (LTC)</span>
-                </a>
-                <a href="#" class="crypto-link" data-plan="solar-flare" data-min="50000" data-max="99999">
-                  <img src="assets/images/tron.PNG" alt="Tron" class="crypto-image"/>
-                  <span>Tron (TRX)</span>
-                </a>
-                <a href="#" class="crypto-link" data-plan="solar-flare" data-min="50000" data-max="99999">
-                  <img src="assets/images/solana.PNG" alt="Solana" class="crypto-image"/>
-                  <span>Solana (SOL)</span>
-                </a>
-                <a href="#" class="crypto-link" data-plan="solar-flare" data-min="50000" data-max="99999">
-                  <img src="assets/images/xrp.PNG" alt="XRP" class="crypto-image"/>
-                  <span>XRP</span>
-                </a>
-              </div>
-            </details>
+            <a href="investment-payment.html?plan=solar-flare" class="btn select-plan-btn">Click to Choose Payment Option</a>
           </div>
-
-          <!-- Plan 5: The Galactic Crown -->
-          <div class="card plan-card" data-aos="zoom-in">
+          <div class="plan-card">
             <h3>The Galactic Crown (Diamond)</h3>
             <p>10% weekly return</p>
             <p>Investment Range: $100,000+</p>
-            <input type="number" class="amount-input" placeholder="Enter amount ($100,000+)" min="100000"/>
-            <details class="payment-options">
-              <summary>Click to Choose Payment Option</summary>
-              <div class="crypto-options">
-                <a href="#" class="crypto-link" data-plan="galactic-crown" data-min="100000">
-                  <img src="assets/images/bitcoin.PNG" alt="Bitcoin" class="crypto-image"/>
-                  <span>Bitcoin (BTC)</span>
-                </a>
-                <a href="#" class="crypto-link" data-plan="galactic-crown" data-min="100000">
-                  <img src="assets/images/ethereum.PNG" alt="Ethereum" class="crypto-image"/>
-                  <span>Ethereum (ETH)</span>
-                </a>
-                <a href="#" class="crypto-link" data-plan="galactic-crown" data-min="100000">
-                  <img src="assets/images/tether.PNG" alt="Tether" class="crypto-image"/>
-                  <span>Tether (USDT)</span>
-                </a>
-                <a href="#" class="crypto-link" data-plan="galactic-crown" data-min="100000">
-                  <img src="assets/images/usdcoin.PNG" alt="USD Coin" class="crypto-image"/>
-                  <span>USD Coin (USDC)</span>
-                </a>
-                <a href="#" class="crypto-link" data-plan="galactic-crown" data-min="100000">
-                  <img src="assets/images/binancecoin.PNG" alt="Binance Coin" class="crypto-image"/>
-                  <span>Binance Coin (BNB)</span>
-                </a>
-                <a href="#" class="crypto-link" data-plan="galactic-crown" data-min="100000">
-                  <img src="assets/images/litecoin.PNG" alt="Litecoin" class="crypto-image"/>
-                  <span>Litecoin (LTC)</span>
-                </a>
-                <a href="#" class="crypto-link" data-plan="galactic-crown" data-min="100000">
-                  <img src="assets/images/tron.PNG" alt="Tron" class="crypto-image"/>
-                  <span>Tron (TRX)</span>
-                </a>
-                <a href="#" class="crypto-link" data-plan="galactic-crown" data-min="100000">
-                  <img src="assets/images/solana.PNG" alt="Solana" class="crypto-image"/>
-                  <span>Solana (SOL)</span>
-                </a>
-                <a href="#" class="crypto-link" data-plan="galactic-crown" data-min="100000">
-                  <img src="assets/images/xrp.PNG" alt="XRP" class="crypto-image"/>
-                  <span>XRP</span>
-                </a>
-              </div>
-            </details>
+            <a href="investment-payment.html?plan=galactic-crown" class="btn select-plan-btn">Click to Choose Payment Option</a>
           </div>
         </div>
       </section>
@@ -402,70 +178,6 @@
     }
     setInterval(updateUTCTime, 1000);
     updateUTCTime();
-
-    // Supabase Client
-    const { createClient } = supabase;
-    const supabaseClient = createClient(
-      'https://iwkdznjqfbsfkscnbrkc.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU'
-    );
-
-    // Initialize Invest Page
-    async function initInvestPage() {
-      const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
-      if (!user || authError) {
-        window.location.href = 'login.html';
-        return;
-      }
-
-      const { data: profile, error: profileError } = await supabaseClient
-        .from('profiles')
-        .select('*')
-        .eq('id', user.id)
-        .single();
-      if (profileError) {
-        console.error('Error loading profile:', profileError);
-        alert('Error loading profile.');
-        return;
-      }
-
-      document.getElementById('welcomeName').textContent = profile.first_name || 'User';
-      if (profile.photo_url) {
-        const { data: urlData } = supabaseClient.storage
-          .from('profile-photos')
-          .getPublicUrl(profile.photo_url);
-        document.getElementById('navProfilePhoto').src = urlData.publicUrl;
-        document.getElementById('navProfilePhoto').style.display = 'block';
-        document.getElementById('defaultProfileIcon').style.display = 'none';
-      }
-
-      // Handle cryptocurrency link clicks
-      document.querySelectorAll('.crypto-link').forEach(link => {
-        link.addEventListener('click', (e) => {
-          e.preventDefault();
-          const plan = link.getAttribute('data-plan');
-          const min = parseFloat(link.getAttribute('data-min'));
-          const max = link.getAttribute('data-max') ? parseFloat(link.getAttribute('data-max')) : Infinity;
-          const amountInput = link.closest('.plan-card').querySelector('.amount-input');
-          const amount = parseFloat(amountInput.value);
-
-          if (!amount || isNaN(amount)) {
-            alert('Please enter an investment amount.');
-            return;
-          }
-
-          if (amount < min || amount > max) {
-            alert(`Please enter an amount between $${min.toLocaleString()} and $${(max === Infinity ? 'unlimited' : max.toLocaleString())}.`);
-            return;
-          }
-
-          const crypto = link.querySelector('span').textContent.toLowerCase().split(' ')[0];
-          window.location.href = `${crypto}.html?plan=${plan}&amount=${amount}`;
-        });
-      });
-    }
-
-    initInvestPage();
 
     // Ensure Video Playback
     const video = document.querySelector('.bg-video');
