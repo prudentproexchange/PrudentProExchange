@@ -12,7 +12,6 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 </head>
 <body class="bitcoin-page">
-  <!-- Video Background -->
   <video class="bg-video" autoplay muted loop playsinline preload="auto">
     <source src="assets/videos/background.webm" type="video/webm">
     <source src="assets/videos/background.mp4" type="video/mp4">
@@ -20,7 +19,6 @@
   </video>
 
   <div class="overlay">
-    <!-- Header -->
     <header class="site-header">
       <a href="dashboard.html" class="logo-link">
         <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo"/>
@@ -55,7 +53,6 @@
     </header>
     <div class="nav-overlay"></div>
 
-    <!-- Profile Section -->
     <div class="profile-section">
       <div class="profile-container">
         <img id="navProfilePhoto" src="" alt="Profile" class="avatar" style="display: none;"/>
@@ -64,7 +61,6 @@
       <div class="welcome-message">Welcome to Your Bitcoin Payment, <span id="welcomeName"></span>!</div>
     </div>
 
-    <!-- Main Content -->
     <main class="bitcoin-page container">
       <section class="payment-info" data-aos="fade-up">
         <div class="card payment-card">
@@ -80,18 +76,17 @@
               <input type="text" id="walletAddress" value="" readonly/>
               <button class="copy-btn" title="Copy wallet address" aria-label="Copy wallet address"><i class="fas fa-copy"></i> Copy</button>
             </div>
-            <p class="instruction">Please send the exact amount to the Bitcoin wallet address above. After payment, upload your proof of payment (e.g., transaction screenshot) below and click "Paid".</p>
+            <p class="instruction">Send the exact amount to the Bitcoin wallet address above. Upload proof of payment (e.g., transaction screenshot) below and click "Paid".</p>
           </div>
           <form id="paymentForm" enctype="multipart/form-data">
-            <label for="proofUpload" class="upload-label">Upload Proof of Payment:</label>
-            <input type="file" id="proofUpload" accept="image/*" required/>
+            <label for="proofUpload" class="upload-label">Upload Proof of Payment (PNG, JPG, GIF, max 5MB):</label>
+            <input type="file" id="proofUpload" accept="image/png, image/jpeg, image/gif" required/>
             <button type="submit" class="btn paid-btn">Paid</button>
           </form>
         </div>
       </section>
     </main>
 
-    <!-- Footer -->
     <footer class="section section-dark site-footer" data-aos="fade-up">
       <div class="footer-content">
         <p class="UTC-time">UTC Time: <span id="utcTime"></span></p>
@@ -109,7 +104,6 @@
 
   <button id="back-to-top" aria-label="Back to top">🚀</button>
 
-  <!-- Scripts -->
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
     AOS.init({ duration: 800, once: true });
@@ -122,12 +116,9 @@
       navDrawer.classList.toggle('open');
       hamburgerBtn.classList.toggle('active');
       overlay.classList.toggle('nav-open');
-      if (navDrawer.classList.contains('open')) {
-        navDrawer.scrollTop = 0;
-      }
+      if (navDrawer.classList.contains('open')) navDrawer.scrollTop = 0;
     });
 
-    // Close Nav When Clicking Outside
     document.addEventListener('click', (event) => {
       const isClickInsideNav = navDrawer.contains(event.target);
       const isClickOnHamburger = hamburgerBtn.contains(event.target);
@@ -213,7 +204,6 @@
         document.getElementById('defaultProfileIcon').style.display = 'none';
       }
 
-      // Define investment plans
       const plans = {
         'dawn-star': { name: 'The Dawn Star (Basic)', return: '5% weekly', range: '$200 - $4,999' },
         'nebula-glow': { name: 'The Nebula Glow (Standard)', return: '6.5% weekly', range: '$5,000 - $14,999' },
@@ -222,25 +212,22 @@
         'galactic-crown': { name: 'The Galactic Crown (Diamond)', return: '10% weekly', range: '$100,000+' }
       };
 
-      // Get plan and amount from URL parameters
       const urlParams = new URLSearchParams(window.location.search);
       const plan = urlParams.get('plan');
       const amount = urlParams.get('amount');
 
       if (!plan || !amount || !plans[plan]) {
-        alert('Invalid plan or amount specified. Please select an investment plan.');
+        alert('Invalid plan or amount. Please select an investment plan.');
         window.location.href = 'invest.html';
         return;
       }
 
-      // Display plan details and amount
       document.getElementById('planName').textContent = plans[plan].name;
       document.getElementById('weeklyReturn').textContent = plans[plan].return;
       document.getElementById('investmentRange').textContent = plans[plan].range;
       document.getElementById('investmentAmount').textContent = parseFloat(amount).toFixed(2);
 
-      // Fetch Bitcoin wallet address from Supabase
-      const { data: wallet, error: walletError } = await supabaseClient
+      const { data: wallet, error: walletError } = await supabaseClient加工
         .from('wallets')
         .select('address')
         .eq('currency', 'BTC')
@@ -261,12 +248,10 @@
       document.execCommand('copy');
       const originalContent = copyBtn.innerHTML;
       copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
-      setTimeout(() => {
-        copyBtn.innerHTML = originalContent;
-      }, 2000);
+      setTimeout(() => copyBtn.innerHTML = originalContent, 2000);
     });
 
-    // Handle Form Submission (Proof of Payment)
+    // Handle Form Submission
     const paymentForm = document.getElementById('paymentForm');
     paymentForm.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -276,8 +261,13 @@
         return;
       }
 
+      if (proofFile.size > 5 * 1024 * 1024) {
+        alert('File size exceeds 5MB limit.');
+        return;
+      }
+
       const { data: { user } } = await supabaseClient.auth.getUser();
-      const fileName = `proof-${user.id}-${Date.now()}.png`;
+      const fileName = `proof-${user.id}-${Date.now()}.${proofFile.name.split('.').pop()}`;
       const { data, error } = await supabaseClient.storage
         .from('proof-of-payment')
         .upload(fileName, proofFile);
@@ -287,7 +277,6 @@
         return;
       }
 
-      // Save transaction details
       const urlParams = new URLSearchParams(window.location.search);
       const amount = parseFloat(urlParams.get('amount'));
       const plan = urlParams.get('plan');
@@ -320,12 +309,9 @@
 
     initBitcoinPage();
 
-    // Ensure Video Playback
     const video = document.querySelector('.bg-video');
     video.addEventListener('canplay', () => {
-      video.play().catch(error => {
-        console.error('Error playing video:', error);
-      });
+      video.play().catch(error => console.error('Error playing video:', error));
     });
   </script>
 </body>
