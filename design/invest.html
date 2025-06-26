@@ -3,18 +3,19 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Investment Plans • PrudentProExchange</title>
+  <title>Invest • PrudentProExchange</title>
+  <link rel="stylesheet" href="css/style.css"/>
   <link rel="stylesheet" href="css/invest.css"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 </head>
 <body class="invest-page">
   <!-- Video Background -->
   <video class="bg-video" autoplay muted loop playsinline preload="auto">
-    <source src="assets/videos/background.webm" type="video/webm"/>
-    <source src="assets/videos/background.mp4" type="video/mp4"/>
+    <source src="assets/videos/background.webm" type="video/webm">
+    <source src="assets/videos/background.mp4" type="video/mp4">
     Your browser does not support the video tag.
   </video>
 
@@ -33,7 +34,6 @@
       <nav class="nav-drawer" id="navDrawer">
         <a href="dashboard.html">Dashboard</a>
         <a href="invest.html" class="active">Invest</a>
-        <a href="deposit.html">Deposit</a>
         <a href="withdraw.html">Withdraw</a>
         <a href="transactions.html">Transactions</a>
         <a href="referrals.html">Referrals</a>
@@ -58,62 +58,259 @@
     <!-- Profile Section -->
     <div class="profile-section">
       <div class="profile-container">
-        <img id="navProfilePhoto" src="" alt="Profile Photo" class="avatar" style="display: none;"/>
+        <img id="navProfilePhoto" src="" alt="Profile" class="avatar" style="display: none;"/>
         <span id="defaultProfileIcon" class="avatar">👤</span>
       </div>
-      <div class="welcome-message">Welcome to Investment Plans, <span id="welcomeName">User</span>!</div>
+      <div class="welcome-message">Welcome to Your Investment Page, <span id="welcomeName"></span>!</div>
     </div>
 
     <!-- Main Content -->
     <main class="invest-page container">
-      <h1 class="page-title" data-aos="fade-down">Investment Plans</h1>
-      <div class="plans-grid" data-aos="fade-up">
-        <div class="plan-card" data-plan="The Dawn Star (Basic)">
-          <h2>The Dawn Star (Basic)</h2>
-          <p>Weekly Return: 5%</p>
-          <p>Investment Range: $200–$4,999</p>
-          <button class="invest-btn">Invest Now</button>
-        </div>
-        <div class="plan-card" data-plan="The Nebula Glow (Standard)">
-          <h2>The Nebula Glow (Standard)</h2>
-          <p>Weekly Return: 6.5%</p>
-          <p>Investment Range: $5,000–$14,999</p>
-          <button class="invest-btn">Invest Now</button>
-        </div>
-        <div class="plan-card" data-plan="The Lunar Crest (Silver)">
-          <h2>The Lunar Crest (Silver)</h2>
-          <p>Weekly Return: 7.5%</p>
-          <p>Investment Range: $15,000–$49,999</p>
-          <button class="invest-btn">Invest Now</button>
-        </div>
-        <div class="plan-card" data-plan="The Solar Flare (Gold)">
-          <h2>The Solar Flare (Gold)</h2>
-          <p>Weekly Return: 8.5%</p>
-          <p>Investment Range: $50,000–$99,999</p>
-          <button class="invest-btn">Invest Now</button>
-        </div>
-        <div class="plan-card" data-plan="The Galactic Crown (Diamond)">
-          <h2>The Galactic Crown (Diamond)</h2>
-          <p>Weekly Return: 10%</p>
-          <p>Investment Range: $100,000</p>
-          <button class="invest-btn">Invest Now</button>
-        </div>
-      </div>
-    </main>
+      <section class="investment-plans" data-aos="fade-up">
+        <h2>Choose Your Investment Plan</h2>
+        <div class="plans-grid">
+          <!-- Plan 1: The Dawn Star -->
+          <div class="card plan-card" data-aos="zoom-in">
+            <h3>The Dawn Star (Basic)</h3>
+            <p>5% weekly return</p>
+            <p>Investment Range: $200 - $4,999</p>
+            <details class="payment-options">
+              <summary>Click to Choose Payment Option</summary>
+              <div class="crypto-options">
+                <a href="bitcoin.html?plan=dawn-star" class="crypto-link">
+                  <img src="assets/images/bitcoin.PNG" alt="Bitcoin" class="crypto-image"/>
+                  <span>Bitcoin (BTC)</span>
+                </a>
+                <a href="ethereum.html?plan=dawn-star" class="crypto-link">
+                  <img src="assets/images/ethereum.PNG" alt="Ethereum" class="crypto-image"/>
+                  <span>Ethereum (ETH)</span>
+                </a>
+                <a href="tether.html?plan=dawn-star" class="crypto-link">
+                  <img src="assets/images/tether.PNG" alt="Tether" class="crypto-image"/>
+                  <span>Tether (USDT)</span>
+                </a>
+                <a href="usdc.html?plan=dawn-star" class="crypto-link">
+                  <img src="assets/images/usdc.PNG" alt="USD Coin" class="crypto-image"/>
+                  <span>USD Coin (USDC)</span>
+                </a>
+                <a href="binancecoin.html?plan=dawn-star" class="crypto-link">
+                  <img src="assets/images/binancecoin.PNG" alt="Binance Coin" class="crypto-image"/>
+                  <span>Binance Coin (BNB)</span>
+                </a>
+                <a href="litecoin.html?plan=dawn-star" class="crypto-link">
+                  <img src="assets/images/litecoin.PNG" alt="Litecoin" class="crypto-image"/>
+                  <span>Litecoin (LTC)</span>
+                </a>
+                <a href="tron.html?plan=dawn-star" class="crypto-link">
+                  <img src="assets/images/tron.PNG" alt="Tron" class="crypto-image"/>
+                  <span>Tron (TRX)</span>
+                </a>
+                <a href="solana.html?plan=dawn-star" class="crypto-link">
+                  <img src="assets/images/solana.PNG" alt="Solana" class="crypto-image"/>
+                  <span>Solana (SOL)</span>
+                </a>
+                <a href="xrp.html?plan=dawn-star" class="crypto-link">
+                  <img src="assets/images/xrp.PNG" alt="XRP" class="crypto-image"/>
+                  <span>XRP</span>
+                </a>
+              </div>
+            </details>
+          </div>
 
-    <!-- Crypto Selection Modal -->
-    <div class="modal" id="cryptoModal">
-      <div class="modal-content">
-        <h2>Select Payment Method</h2>
-        <p>Please choose a cryptocurrency to proceed with your investment in <span id="modalPlanName"></span>.</p>
-        <div class="crypto-options">
-          <button class="crypto-btn" data-crypto="bitcoin">Bitcoin (BTC)</button>
-          <button class="crypto-btn" data-crypto="ethereum">Ethereum (ETH)</button>
-          <!-- Add more cryptocurrencies as needed -->
+          <!-- Plan 2: The Nebula Glow -->
+          <div class="card plan-card" data-aos="zoom-in">
+            <h3>The Nebula Glow (Standard)</h3>
+            <p>6.5% weekly return</p>
+            <p>Investment Range: $5,000 - $14,999</p>
+            <details class="payment-options">
+              <summary>Click to Choose Payment Option</summary>
+              <div class="crypto-options">
+                <a href="bitcoin.html?plan=nebula-glow" class="crypto-link">
+                  <img src="assets/images/bitcoin.PNG" alt="Bitcoin" class="crypto-image"/>
+                  <span>Bitcoin (BTC)</span>
+                </a>
+                <a href="ethereum.html?plan=nebula-glow" class="crypto-link">
+                  <img src="assets/images/ethereum.PNG" alt="Ethereum" class="crypto-image"/>
+                  <span>Ethereum (ETH)</span>
+                </a>
+                <a href="tether.html?plan=nebula-glow" class="crypto-link">
+                  <img src="assets/images/tether.PNG" alt="Tether" class="crypto-image"/>
+                  <span>Tether (USDT)</span>
+                </a>
+                <a href="usdc.html?plan=nebula-glow" class="crypto-link">
+                  <img src="assets/images/usdc.PNG" alt="USD Coin" class="crypto-image"/>
+                  <span>USD Coin (USDC)</span>
+                </a>
+                <a href="binancecoin.html?plan=nebula-glow" class="crypto-link">
+                  <img src="assets/images/binancecoin.PNG" alt="Binance Coin" class="crypto-image"/>
+                  <span>Binance Coin (BNB)</span>
+                </a/Cl>
+                <a href="litecoin.html?plan=nebula-glow" class="crypto-link">
+                  <img src="assets/images/litecoin.PNG" alt="Litecoin" class="crypto-image"/>
+                  <span>Litecoin (LTC)</span>
+                </a>
+                <a href="tron.html?plan=nebula-glow" class="crypto-link">
+                  <img src="assets/images/tron.PNG" alt="Tron" class="crypto-image"/>
+                  <span>Tron (TRX)</span>
+                </a>
+                <a href="solana.html?plan=nebula-glow" class="crypto-link">
+                  <img src="assets/images/solana.PNG" alt="Solana" class="crypto-image"/>
+                  <span>Solana (SOL)</span>
+                </a>
+                <a href="xrp.html?plan=nebula-glow" class="crypto-link">
+                  <img src="assets/images/xrp.PNG" alt="XRP" class="crypto-image"/>
+                  <span>XRP</span>
+                </a>
+              </div>
+            </details>
+          </div>
+
+          <!-- Plan 3: The Lunar Crest -->
+          <div class="card plan-card" data-aos="zoom-in">
+            <h3>The Lunar Crest (Silver)</h3>
+            <p>7.5% weekly return</p>
+            <p>Investment Range: $15,000 - $49,999</p>
+            <details class="payment-options">
+              <summary>Click to Choose Payment Option</summary>
+              <div class="crypto-options">
+                <a href="bitcoin.html?plan=lunar-crest" class="crypto-link">
+                  <img src="assets/images/bitcoin.PNG" alt="Bitcoin" class="crypto-image"/>
+                  <span>Bitcoin (BTC)</span>
+                </a>
+                <a href="ethereum.html?plan=lunar-crest" class="crypto-link">
+                  <img src="assets/images/ethereum.PNG" alt="Ethereum" class="crypto-image"/>
+                  <span>Ethereum (ETH)</span>
+                </a>
+                <a href="tether.html?plan=lunar-crest" class="crypto-link">
+                  <img src="assets/images/tether.PNG" alt="Tether" class="crypto-image"/>
+                  <span>Tether (USDT)</span>
+                </a>
+                <a href="usdc.html?plan=lunar-crest" class="crypto-link">
+                  <img src="assets/images/usdc.PNG" alt="USD Coin" class="crypto-image"/>
+                  <span>USD Coin (USDC)</span>
+                </a>
+                <a href="binancecoin.html?plan=lunar-crest" class="crypto-link">
+                  <img src="assets/images/binancecoin.PNG" alt="Binance Coin" class="crypto-image"/>
+                  <span>Binance Coin (BNB)</span>
+                </a>
+                <a href="litecoin.html?plan=lunar-crest" class="crypto-link">
+                  <img src="assets/images/litecoin.PNG" alt="Litecoin" class="crypto-image"/>
+                  <span>Litecoin (LTC)</span>
+                </a>
+                <a href="tron.html?plan=lunar-crest" class="crypto-link">
+                  <img src="assets/images/tront.PNG" alt="Tron" class="crypto-image"/>
+                  <span>Tron (TRX)</span>
+                </a>
+                <a href="solana.html?plan=lunar-crest" class="crypto-link">
+                  <img src="assets/images/solana.PNG" alt="Solana" class="crypto-image"/>
+                  <span>Solana (SOL)</span>
+                </a>
+                <a href="xrp.html?plan=lunar-crest" class="crypto-link">
+                  <img src="assets/images/xrp.PNG" alt="XRP" class="crypto-image"/>
+                  <span>XRP</span>
+                </a>
+              </div>
+            </details>
+          </div>
+
+          <!-- Plan 4: The Solar Flare -->
+          <div class="card plan-card" data-aos="zoom-in">
+            <h3>The Solar Flare (Gold)</h3>
+            <p>8.5% weekly return</p>
+            <p>Investment Range: $50,000 - $99,999</p>
+            <details class="payment-options">
+              <summary>Click to Choose Payment Option</summary>
+              <div class="crypto-options">
+                <a href="bitcoin.html?plan=solar-flare" class="crypto-link">
+                  <img src="assets/images/bitcoin.PNG" alt="Bitcoin" class="crypto-image"/>
+                  <span>Bitcoin (BTC)</span>
+                </a>
+                <a href="ethereum.html?plan=solar-flare" class="crypto-link">
+                  <img src="assets/images/ethereum.PNG" alt="Ethereum" class="crypto-image"/>
+                  <span>Ethereum (ETH)</span>
+                </a>
+                <a href="tether.html?plan=solar-flare" class="crypto-link">
+                  <img src="assets/images/tether.PNG" alt="Tether" class="crypto-image"/>
+                  <span>Tether (USDT)</span>
+                </a>
+                <a href="usdc.html?plan=solar-flare" class="crypto-link">
+                  <img src="assets/images/usdc.PNG" alt="USD Coin" class="crypto-image"/>
+                  <span>USD Coin (USDC)</span>
+                </a>
+                <a href="binancecoin.html?plan=solar-flare" class="crypto-link">
+                  <img src="assets/images/binancecoin.PNG" alt="Binance Coin" class="crypto-image"/>
+                  <span>Binance Coin (BNB)</span>
+                </a>
+                <a href="litecoin.html?plan=solar-flare" class="crypto-link">
+                  <img src="assets/images/litecoin.PNG" alt="Litecoin" class="crypto-image"/>
+                  <span>Litecoin (LTC)</span>
+                </a>
+                <a href="tron.html?plan=solar-flare" class="crypto-link">
+                  <img src="assets/images/tron.PNG" alt="Tron" class="crypto-image"/>
+                  <span>Tron (TRX)</span>
+                </a>
+                <a href="solana.html?plan=solar-flare" class="crypto-link">
+                  <img src="assets/images/solana.PNG" alt="Solana" class="crypto-image"/>
+                  <span>Solana (SOL)</span>
+                </a>
+                <a href="xrp.html?plan=solar-flare" class="crypto-link">
+                  <img src="assets/images/xrp.PNG" alt="XRP" class="crypto-image"/>
+                  <span>XRP</span>
+                </a>
+              </div>
+            </details>
+          </div>
+
+          <!-- Plan 5: The Galactic Crown -->
+          <div class="card plan-card" data-aos="zoom-in">
+            <h3>The Galactic Crown (Diamond)</h3>
+            <p>10% weekly return</p>
+            <p>Investment Range: $100,000+</p>
+            <details class="payment-options">
+              <summary>Click to Choose Payment Option</summary>
+              <div class="crypto-options">
+                <a href="bitcoin.html?plan=galactic-crown" class="crypto-link">
+                  <img src="assets/images/bitcoin.PNG" alt="Bitcoin" class="crypto-image"/>
+                  <span>Bitcoin (BTC)</span>
+                </a>
+                <a href="ethereum.html?plan=galactic-crown" class="crypto-link">
+                  <img src="assets/images/ethereum.PNG" alt="Ethereum" class="crypto-image"/>
+                  <span>Ethereum (ETH)</span>
+                </a>
+                <a href="tether.html?plan=galactic-crown" class="crypto-link">
+                  <img src="assets/images/tether.PNG" alt="Tether" class="crypto-image"/>
+                  <span>Tether (USDT)</span>
+                </a>
+                <a href="usdc.html?plan=galactic-crown" class="crypto-link">
+                  <img src="assets/images/usdc.PNG" alt="USD Coin" class="crypto-image"/>
+                  <span>USD Coin (USDC)</span>
+                </a>
+                <a href="binancecoin.html?plan=galactic-crown" class="crypto-link">
+                  <img src="assets/images/binancecoin.PNG" alt="Binance Coin" class="crypto-image"/>
+                  <span>Binance Coin (BNB)</span>
+                </a>
+                <a href="litecoin.html?plan=galactic-crown" class="crypto-link">
+                  <img src="assets/images/litecoin.PNG" alt="Litecoin" class="crypto-image"/>
+                  <span>Litecoin (LTC)</span>
+                </a>
+                <a href="tron.html?plan=galactic-crown" class="crypto-link">
+                  <img src="assets/images/tron.PNG" alt="Tron" class="crypto-image"/>
+                  <span>Tron (TRX)</span>
+                </a>
+                <a href="solana.html?plan=galactic-crown" class="crypto-link">
+                  <img src="assets/images/solana.PNG" alt="Solana" class="crypto-image"/>
+                  <span>Solana (SOL)</span>
+                </a>
+                <a href="xrp.html?plan=galactic-crown" class="crypto-link">
+                  <img src="assets/images/xrp.PNG" alt="XRP" class="crypto-image"/>
+                  <span>XRP</span>
+                </a>
+              </div>
+            </details>
+          </div>
         </div>
-        <button class="close-btn">Cancel</button>
-      </div>
-    </div>
+      </section>
+    </main>
 
     <!-- Footer -->
     <footer class="section section-dark site-footer" data-aos="fade-up">
@@ -138,7 +335,7 @@
   <script>
     AOS.init({ duration: 800, once: true });
 
-    // Hamburger toggle
+    // Hamburger Toggle
     const hamburgerBtn = document.getElementById('hamburgerBtn');
     const navDrawer = document.getElementById('navDrawer');
     const overlay = document.querySelector('.overlay');
@@ -151,7 +348,7 @@
       }
     });
 
-    // Close nav when clicking outside
+    // Close Nav When Clicking Outside
     document.addEventListener('click', (event) => {
       const isClickInsideNav = navDrawer.contains(event.target);
       const isClickOnHamburger = hamburgerBtn.contains(event.target);
@@ -162,7 +359,7 @@
       }
     });
 
-    // Theme toggle
+    // Theme Toggle
     const themeToggle = document.getElementById('theme-toggle');
     themeToggle.addEventListener('click', () => {
       document.body.classList.toggle('light-theme');
@@ -171,7 +368,7 @@
       icon.classList.toggle('fa-sun');
     });
 
-    // Account menu toggle
+    // Account Menu Toggle
     const accountToggle = document.getElementById('account-toggle');
     const submenu = accountToggle.nextElementSibling;
     accountToggle.addEventListener('click', (e) => {
@@ -179,15 +376,15 @@
       submenu.classList.toggle('open');
     });
 
-    // Back to top
+    // Back to Top
     document.getElementById('back-to-top').addEventListener('click', () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
-    // Time updates
+    // Time Updates
     function updateLocalTime() {
       const now = new Date();
-      document.getElementById('localTime').textContent = now.toLocaleTimeString('en-US');
+      document.getElementById('localTime').textContent = now.toLocaleTimeString();
       document.getElementById('localDate').textContent = now.toLocaleDateString('en-US', {
         weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
       });
@@ -201,104 +398,59 @@
     setInterval(updateUTCTime, 1000);
     updateUTCTime();
 
-    // Supabase client
-    const supabaseClient = supabase.createClient(
+    // Supabase Client
+    const { createClient } = supabase;
+    const supabaseClient = createClient(
       'https://iwkdznjqfbsfkscnbrkc.supabase.co',
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU'
     );
 
-    // Initialize page
-    async function initPage() {
-      try {
-        document.body.style.display = 'block';
-        const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
-        if (!user || authError) {
-          alert('Authentication required. Please log in to continue.');
-          window.location.href = 'login.html';
-          return;
-        }
+    // Initialize Invest Page
+    async function initInvestPage() {
+      const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
+      if (!user || authError) {
+        window.location.href = 'login.html';
+        return;
+      }
 
-        const { data: profile, error: profileError } = await supabaseClient
-          .from('profiles')
-          .select('first_name, photo_url')
-          .eq('id', user.id)
-          .single();
+      const { data: profile, error: profileError } = await supabaseClient
+        .from('profiles')
+        .select('*')
+        .eq('id', user.id)
+        .single();
+      if (profileError) {
+        console.error('Error loading profile:', profileError);
+        alert('Error loading profile.');
+        return;
+      }
 
-        if (profileError) {
-          console.error('Error loading profile:', profileError);
-          alert('Unable to retrieve profile information. Please try again later.');
-          return;
-        }
-
-        document.getElementById('welcomeName').textContent = profile.first_name || 'User';
-        if (profile.photo_url) {
-          try {
-            const { data: urlData } = supabaseClient.storage
-              .from('profile-photos')
-              .getPublicUrl(profile.photo_url);
-            const profilePhoto = document.getElementById('navProfilePhoto');
-            profilePhoto.src = urlData.publicUrl;
-            profilePhoto.style.display = 'block';
-            document.getElementById('defaultProfileIcon').style.display = 'none';
-          } catch (err) {
-            console.error('Error loading profile photo:', err);
-          }
-        }
-      } catch (err) {
-        console.error('Initialization error:', err);
-        alert('An unexpected error occurred. Please try again or contact support.');
+      document.getElementById('welcomeName').textContent = profile.first_name || 'User';
+      if (profile.photo_url) {
+        const { data: urlData } = supabaseClient.storage
+          .from('profile-photos')
+          .getPublicUrl(profile.photo_url);
+        document.getElementById('navProfilePhoto').src = urlData.publicUrl;
+        document.getElementById('navProfilePhoto').style.display = 'block';
+        document.getElementById('defaultProfileIcon').style.display = 'none';
       }
     }
 
-    // Crypto modal handling
-    const cryptoModal = document.getElementById('cryptoModal');
-    const modalPlanName = document.getElementById('modalPlanName');
-    const investButtons = document.querySelectorAll('.invest-btn');
-    const cryptoButtons = document.querySelectorAll('.crypto-btn');
-    const closeBtn = document.querySelector('.close-btn');
-    let selectedPlan = '';
-
-    investButtons.forEach(button => {
-      button.addEventListener('click', () => {
-        selectedPlan = button.parentElement.getAttribute('data-plan');
-        modalPlanName.textContent = selectedPlan;
-        sessionStorage.setItem('selectedPlan', selectedPlan);
-        cryptoModal.style.display = 'flex';
-      });
-    });
-
-    cryptoButtons.forEach(button => {
-      button.addEventListener('click', () => {
-        const crypto = button.getAttribute('data-crypto');
-        const encodedPlan = encodeURIComponent(selectedPlan);
-        window.location.href = `${crypto}.html?plan=${encodedPlan}`;
-      });
-    });
-
-    closeBtn.addEventListener('click', () => {
-      cryptoModal.style.display = 'none';
-    });
-
     // Logout
     document.getElementById('logout-btn').addEventListener('click', async () => {
-      try {
-        const { error } = await supabaseClient.auth.signOut();
-        if (!error) window.location.href = 'login.html';
-        else alert('Error logging out: ' + error.message);
-      } catch (err) {
-        alert('An error occurred during logout. Please try again.');
-      }
+      const { error } = await supabaseClient.auth.signOut();
+      if (!error) window.location.href = 'login.html';
+      else alert('Error logging out: ' + error.message);
     });
 
-    // Video playback
+    initInvestPage();
+
+    // Ensure Video Playback
     const video = document.querySelector('.bg-video');
     video.addEventListener('canplay', () => {
       video.play().catch(error => {
         console.error('Error playing video:', error);
       });
     });
-
-    initPage();
   </script>
 </body>
 </html>
