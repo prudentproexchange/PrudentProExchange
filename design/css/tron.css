@@ -1,8 +1,6 @@
-/* Tron Page Specific Styles */
-
 :root {
-  --primary: #ff0000; /* Bold Red */
-  --primary-dark: #cc0000; /* Darker Red for hover */
+  --primary: #ffd700; /* Gold */
+  --primary-dark: #cca300;
   --text-color: #fff;
   --glass-bg: rgba(255, 255, 255, 0.05);
   --shadow: rgba(0, 0, 0, 0.5);
@@ -21,7 +19,7 @@
   padding: 1.5rem 2rem;
   background: var(--glass-bg);
   backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(255, 0, 0, 0.2); /* Red border */
+  border-bottom: 1px solid rgba(255, 215, 0, 0.2);
 }
 
 .profile-container {
@@ -75,7 +73,7 @@
   left: -50%;
   width: 200%;
   height: 200%;
-  background: radial-gradient(circle, rgba(255, 0, 0, 0.1), transparent); /* Red glow */
+  background: radial-gradient(circle, rgba(255, 215, 0, 0.1), transparent);
   animation: glow 15s infinite;
 }
 
@@ -85,7 +83,7 @@
   100% { transform: scale(1); opacity: 0.5; }
 }
 
-.crypto-img {
+.crypto-image {
   width: 150px;
   height: 150px;
   margin-bottom: 2rem;
@@ -96,7 +94,7 @@
   transition: transform 0.3s ease;
 }
 
-.crypto-img:hover {
+.crypto-image:hover {
   transform: scale(1.1);
 }
 
@@ -107,6 +105,10 @@
   font-family: 'Playfair Display', serif;
   text-transform: uppercase;
   letter-spacing: 2px;
+}
+
+.payment-details {
+  margin-bottom: 2rem;
 }
 
 .payment-details p {
@@ -127,14 +129,14 @@
   margin: 1rem 0;
 }
 
-#wallet-address {
+#walletAddress {
   flex: 1;
   padding: 0.8rem;
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid var(--primary);
   color: var(--text-color);
   border-radius: 8px;
-  font-size: 1.1rem;
+  font-size: ))^!important;
   font-family: 'Poppins', sans-serif;
 }
 
@@ -163,7 +165,7 @@
   color: #d0d0ff;
 }
 
-#payment-form {
+#paymentForm {
   margin-top: 2rem;
 }
 
@@ -174,7 +176,7 @@
   margin-bottom: 0.5rem;
 }
 
-#proof-upload {
+#proofUpload {
   display: block;
   width: 100%;
   padding: 0.8rem;
@@ -201,10 +203,9 @@
 .paid-btn:hover {
   background: linear-gradient(45deg, var(--primary-dark), var(--primary));
   transform: scale(1.05);
-  box-shadow: 0 5px 15px rgba(255, 0, 0, 0.5); /* Red shadow */
+  box-shadow: 0 5px 15px rgba(255, 215, 0, 0.5);
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
   .profile-section {
     flex-direction: column;
@@ -233,7 +234,7 @@
     margin: 1rem;
   }
 
-  .crypto-img {
+  .crypto-image {
     width: 100px;
     height: 100px;
   }
@@ -250,7 +251,7 @@
     flex-direction: column;
   }
 
-  #wallet-address, .copy-btn {
+  #walletAddress, .copy-btn {
     width: 100%;
   }
 
