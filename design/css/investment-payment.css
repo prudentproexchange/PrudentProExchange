@@ -1,0 +1,96 @@
+/* Investment Payment Page Specific Styles */
+
+.investment-payment-page.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.investment-payment h2 {
+  font-size: 2rem;
+  color: #ffd700; /* Gold */
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-family: 'Playfair Display', serif;
+}
+
+#plan-details {
+  margin-bottom: 2rem;
+  text-align: center;
+  color: #e0e0ff;
+  font-size: 1.2rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  font-size: 1rem;
+  color: #e0e0ff;
+  margin-bottom: 0.5rem;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ffd700; /* Gold */
+  border-radius: 5px;
+  background: rgba(0, 0, 0, 0.3);
+  color: #e0e0ff;
+  font-size: 1rem;
+}
+
+.form-group p {
+  margin: 0.5rem 0;
+  color: #e0e0ff;
+}
+
+.form-group .instruction {
+  font-size: 0.9rem;
+  color: #ccc;
+}
+
+.copy-btn {
+  padding: 0.5rem 1rem;
+  background: linear-gradient(45deg, #ffd700, #cca300); /* Gold gradient */
+  color: #000;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.copy-btn:hover {
+  background: linear-gradient(45deg, #cca300, #ffd700);
+}
+
+.submit-btn {
+  display: block;
+  width: 100%;
+  padding: 1rem;
+  background: linear-gradient(45deg, #ffd700, #cca300); /* Gold gradient */
+  color: #000;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.submit-btn:hover {
+  background: linear-gradient(45deg, #cca300, #ffd700);
+  transform: scale(1 
+   
+.02);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .investment-payment-page.container {
+    padding: 1rem;
+  }
+}
