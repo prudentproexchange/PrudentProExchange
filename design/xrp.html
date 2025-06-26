@@ -3,89 +3,52 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>XRP Payment • PrudentProExchange</title>
-  <link rel="stylesheet" href="xrp.css">
+  <title>Supabase File Upload Test</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-  <!-- Background video -->
-  <video class="bg-video" autoplay muted loop playsinline>
-    <source src="assets/videos/background.mp4" type="video/mp4">
-  </video>
-
-  <!-- Main content -->
-  <div class="container">
-    <div class="card">
-      <h1>XRP Payment</h1>
-      <div class="wallet-section">
-        <label>Wallet Address</label>
-        <div class="wallet-copy">
-          <input id="walletAddress" readonly value="Loading…">
-          <button id="copyBtn">Copy</button>
-        </div>
-      </div>
-      <form id="paymentForm">
-        <label for="proofUpload">Upload Proof (PNG/JPG, ≤5 MB)</label>
-        <input type="file" id="proofUpload" accept="image/png,image/jpeg" required>
-        <button type="submit" class="btn">Paid</button>
-      </form>
-      <pre id="log" class="log"></pre>
-    </div>
-  </div>
+  <h1>Supabase Upload Test</h1>
+  <input type="file" id="fileInput" />
+  <button id="uploadBtn">Upload to Supabase</button>
+  <pre id="output" style="background:#f0f0f0;padding:1em;"></pre>
 
   <script>
-    const SUPABASE_URL = 'https://iwkdznjqfbsfkscnbrkc.supabase.co';
+    // 🍀 Configure these two values:
+    const SUPABASE_URL    = 'https://iwkdznjqfbsfkscnbrkc.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.…';
-    const supabase = supabaseJs.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    const log = msg => {
-      const box = document.getElementById('log');
-      box.textContent += msg + '\n';
-      box.scrollTop = box.scrollHeight;
-    };
+    // 🚀 Initialize
+    const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const out = document.getElementById('output');
 
-    document.addEventListener('DOMContentLoaded', async () => {
-      // Authenticate
-      const { data: { user }, error: uErr } = await supabase.auth.getUser();
-      if (uErr || !user) return log('Not logged in.');
+    // 🖼️ Grab elements
+    const fileInput = document.getElementById('fileInput');
+    const uploadBtn = document.getElementById('uploadBtn');
 
-      // Fetch XRP address
-      const { data: wallet, error: wErr } = await supabase
-        .from('wallets').select('address').eq('currency','XRP').single();
-      const wa = document.getElementById('walletAddress');
-      if (wErr || !wallet) {
-        wa.value = 'Error loading';
-        log('Wallet load error: ' + (wErr?.message || 'none'));
-      } else {
-        wa.value = wallet.address;
-        log('Wallet loaded.');
+    uploadBtn.onclick = async () => {
+      const file = fileInput.files[0];
+      out.textContent = ''; 
+      if (!file) {
+        return out.textContent = '❌ No file selected.';
       }
 
-      // Copy button
-      document.getElementById('copyBtn').onclick = async () => {
-        try {
-          await navigator.clipboard.writeText(wa.value);
-          log('Copied!');
-        } catch(e) {
-          log('Copy failed: ' + e.message);
-        }
-      };
+      // create a unique path in your bucket:
+      // here: payment-proofs/user_test/<timestamp>_<filename>
+      const path = `user_test/${Date.now()}_${file.name}`;
+
+      out.textContent = `Uploading “${file.name}” → bucket “payment-proofs” at “${path}”…\n`;
 
       // Upload
-      document.getElementById('paymentForm').onsubmit = async e => {
-        e.preventDefault();
-        const file = document.getElementById('proofUpload').files[0];
-        if (!file) return log('No file.');
-        if (file.size > 5*1024*1024) return log('Too big.');
+      const { data, error } = await sb.storage
+        .from('payment-proofs')
+        .upload(path, file, { cacheControl: '3600', upsert: false });
 
-        log('Uploading…');
-        const path = `${user.id}/${Date.now()}_${file.name}`;
-        const { data, error } = await supabase.storage
-          .from('payment-proofs').upload(path, file);
-        if (error) log('Upload error: ' + error.message);
-        else log('Uploaded to: ' + data.path);
-      };
-    });
+      if (error) {
+        out.textContent += '❌ Upload error:\n' + JSON.stringify(error, null, 2);
+      } else {
+        out.textContent += '✅ Uploaded!\nStored path:\n' + data.path;
+      }
+    };
   </script>
 </body>
 </html>
