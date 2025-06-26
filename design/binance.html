@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BNB Payment • PrudentProExchange</title>
+  <link rel="stylesheet" href="css/style.css"/> <!-- Shared styles -->
+  <link rel="stylesheet" href="css/binance.css"/> <!-- BNB-specific styles -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Cinzel:wght@400;700&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+</head>
+<body>
+  <!-- Background Overlay -->
+  <div class="bg-overlay">
+    <!-- Header -->
+    <header class="site-header">
+      <a href="dashboard.html" class="logo-link">
+        <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo"/>
+      </a>
+      <nav class="main-nav">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="invest.html">Invest</a>
+        <a href="withdraw.html">Withdraw</a>
+        <a href="profile.html">Profile</a>
+        <a href="#" id="logout-btn">Logout</a>
+      </nav>
+      <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
+        <i class="fas fa-bars"></i>
+      </button>
+    </header>
+
+    <!-- Greeting Section -->
+    <section class="greeting-section">
+      <h1>BNB Payment Portal</h1>
+      <p>Hello, <span id="userName">User</span>! Complete your investment below.</p>
+    </section>
+
+    <!-- Payment Panel -->
+    <main class="payment-container">
+      <div class="payment-panel">
+        <div class="crypto-icon">
+          <img src="assets/images/bnb.PNG" alt="BNB Icon"/>
+        </div>
+        <h2>Investment Details</h2>
+        <div class="details-grid">
+          <p><span class="label">Plan:</span> <span id="planName"></span></p>
+          <p><span class="label">Weekly Profit:</span> <span id="weeklyProfit"></span></p>
+          <p><span class="label">Range:</span> <span id="investmentRange"></span></p>
+          <p><span class="label">Amount:</span> $<span id="investmentAmount">0.00</span></p>
+        </div>
+        <div class="wallet-section">
+          <label>BNB Wallet Address:</label>
+          <div class="wallet-input">
+            <input type="text" id="walletAddress" readonly/>
+            <button class="copy-btn" aria-label="Copy address"><i class="fas fa-copy"></i></button>
+          </div>
+          <p class="note">Send the exact amount to this address and upload proof below.</p>
+        </div>
+        <form id="paymentForm" enctype="multipart/form-data">
+          <label for="proofFile" class="file-label">Upload Proof (PNG/JPG, max 5MB):</label>
+          <input type="file" id="proofFile" accept="image/png, image/jpeg" required/>
+          <button type="submit" class="submit-btn">Submit Payment</button>
+        </form>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+      <p>&copy; 2025 PrudentProExchange. All Rights Reserved.</p>
+      <p>Current Time: <span id="currentTime"></span></p>
+    </footer>
+  </div>
+
+  <!-- Scripts -->
+  <script>
+    // Menu Toggle
+    const menuToggle = document.getElementById('menuToggle');
+    const mainNav = document.querySelector('.main-nav');
+    menuToggle.addEventListener('click', () => {
+      mainNav.classList.toggle('active');
+      menuToggle.querySelector('i').classList.toggle('fa-bars');
+      menuToggle.querySelector('i').classList.toggle('fa-times');
+    });
+
+    // Time Update
+    function updateTime() {
+      document.getElementById('currentTime').textContent = new Date().toLocaleString();
+    }
+    setInterval(updateTime, 1000);
+    updateTime();
+
+    // Supabase Initialization
+    const { createClient } = supabase;
+    const supabaseClient = createClient(
+      'https://iwkdznjqfbsfkscnbrkc.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU'
+    );
+
+    // Page Initialization
+    async function initPage() {
+      const { data: { user }, error } = await supabaseClient.auth.getUser();
+      if (!user || error) {
+        window.location.href = 'login.html';
+        return;
+      }
+
+      const { data: profile } = await supabaseClient
+        .from('profiles')
+        .select('first_name')
+        .eq('id', user.id)
+        .single();
+      document.getElementById('userName').textContent = profile?.first_name || 'User';
+
+      const plans = {
+        'basic': { name: 'Basic Plan', profit: '5%', range: '$100 - $1,000' },
+        'premium': { name: 'Premium Plan', profit: '7%', range: '$1,001 - $5,000' },
+        'elite': { name: 'Elite Plan', profit: '10%', range: '$5,001+' }
+      };
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const plan = urlParams.get('plan');
+      const amount = urlParams.get('amount');
+
+      if (!plan || !amount || !plans[plan]) {
+        alert('Invalid plan or amount.');
+        window.location.href = 'invest.html';
+        return;
+      }
+
+      document.getElementById('planName').textContent = plans[plan].name;
+      document.getElementById('weeklyProfit').textContent = plans[plan].profit;
+      document.getElementById('investmentRange').textContent = plans[plan].range;
+      document.getElementById('investmentAmount').textContent = parseFloat(amount).toFixed(2);
+
+      const { data: wallet } = await supabaseClient
+        .from('wallets')
+        .select('address')
+        .eq('currency', 'BNB')
+        .single();
+      document.getElementById('walletAddress').value = wallet?.address || 'Address not found';
+    }
+
+    // Copy Button
+    document.querySelector('.copy-btn').addEventListener('click', () => {
+      const wallet = document.getElementById('walletAddress');
+      wallet.select();
+      document.execCommand('copy');
+      alert('Address copied!');
+    });
+
+    // Form Submission
+    document.getElementById('paymentForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const file = document.getElementById('proofFile').files[0];
+      if (!file || file.size > 5 * 1024 * 1024) {
+        alert('Please upload a valid file under 5MB.');
+        return;
+      }
+
+      const { data: { user } } = await supabaseClient.auth.getUser();
+      const fileName = `proof-${user.id}-${Date.now()}.${file.name.split('.').pop()}`;
+      const { error: uploadError } = await supabaseClient.storage
+        .from('proof-of-payment')
+        .upload(fileName, file);
+      if (uploadError) {
+        alert('Upload failed.');
+        return;
+      }
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const { error: insertError } = await supabaseClient
+        .from('transactions')
+        .insert({
+          user_id: user.id,
+          amount: parseFloat(urlParams.get('amount')),
+          currency: 'BNB',
+          proof_file: fileName,
+          status: 'pending',
+          investment_plan: urlParams.get('plan')
+        });
+      if (insertError) {
+        alert('Submission failed.');
+      } else {
+        alert('Payment submitted successfully!');
+        window.location.href = 'dashboard.html';
+      }
+    });
+
+    // Logout
+    document.getElementById('logout-btn').addEventListener('click', async () => {
+      await supabaseClient.auth.signOut();
+      window.location.href = 'login.html';
+    });
+
+    initPage();
+  </script>
+</body>
+</html>
