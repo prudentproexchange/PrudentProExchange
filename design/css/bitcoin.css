@@ -1,11 +1,10 @@
-/* Bitcoin Payment Page Specific Styles */
-
 :root {
   --primary: #ffd700; /* Gold */
   --primary-dark: #cca300;
   --text-color: #fff;
   --glass-bg: rgba(255, 255, 255, 0.05);
   --shadow: rgba(0, 0, 0, 0.5);
+  --dark-bg: rgba(0, 0, 0, 0.8);
 }
 
 .bitcoin-page.container {
@@ -14,7 +13,6 @@
   padding: 2rem;
 }
 
-/* Profile Section */
 .profile-section {
   display: flex;
   align-items: center;
@@ -54,9 +52,8 @@
   text-shadow: 0 2px 4px var(--shadow);
 }
 
-/* Payment Card */
 .payment-card {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--dark-bg);
   padding: 2.5rem;
   border: 2px solid var(--primary);
   border-radius: 20px;
@@ -110,7 +107,6 @@
   letter-spacing: 2px;
 }
 
-/* Payment Details */
 .payment-details {
   margin-bottom: 2rem;
 }
@@ -136,7 +132,7 @@
 #walletAddress {
   flex: 1;
   padding: 0.8rem;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(255, 255, 255, 0.1);
   border: 1px solid var(--primary);
   color: var(--text-color);
   border-radius: 8px;
@@ -169,7 +165,6 @@
   color: #d0d0ff;
 }
 
-/* Payment Form */
 #paymentForm {
   margin-top: 2rem;
 }
@@ -211,7 +206,6 @@
   box-shadow: 0 5px 15px rgba(255, 215, 0, 0.5);
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
   .profile-section {
     flex-direction: column;
@@ -219,7 +213,7 @@
     padding: 1rem;
   }
 
-  .profile-container {
+  .profile prision-container {
     margin-right: 0;
     margin-bottom: 0.5rem;
   }
