@@ -71,6 +71,9 @@
           <img src="assets/images/bitcoin.PNG" alt="Bitcoin" class="crypto-image"/>
           <h2>Bitcoin (BTC) Payment</h2>
           <div class="payment-details">
+            <p><strong>Investment Plan:</strong> <span id="planName"></span></p>
+            <p><strong>Weekly Return:</strong> <span id="weeklyReturn"></span></p>
+            <p><strong>Investment Range:</strong> <span id="investmentRange"></span></p>
             <p><strong>Investment Amount:</strong> $<span id="investmentAmount">0.00</span></p>
             <p><strong>Wallet Address:</strong></p>
             <div class="wallet-address">
@@ -210,15 +213,31 @@
         document.getElementById('defaultProfileIcon').style.display = 'none';
       }
 
-      // Get investment amount from URL parameter
+      // Define investment plans
+      const plans = {
+        'dawn-star': { name: 'The Dawn Star (Basic)', return: '5% weekly', range: '$200 - $4,999' },
+        'nebula-glow': { name: 'The Nebula Glow (Standard)', return: '6.5% weekly', range: '$5,000 - $14,999' },
+        'lunar-crest': { name: 'The Lunar Crest (Silver)', return: '7.5% weekly', range: '$15,000 - $49,999' },
+        'solar-flare': { name: 'The Solar Flare (Gold)', return: '8.5% weekly', range: '$50,000 - $99,999' },
+        'galactic-crown': { name: 'The Galactic Crown (Diamond)', return: '10% weekly', range: '$100,000+' }
+      };
+
+      // Get plan and amount from URL parameters
       const urlParams = new URLSearchParams(window.location.search);
+      const plan = urlParams.get('plan');
       const amount = urlParams.get('amount');
-      if (amount) {
-        document.getElementById('investmentAmount').textContent = parseFloat(amount).toFixed(2);
-      } else {
-        alert('No investment amount specified. Please select an investment plan.');
+
+      if (!plan || !amount || !plans[plan]) {
+        alert('Invalid plan or amount specified. Please select an investment plan.');
         window.location.href = 'invest.html';
+        return;
       }
+
+      // Display plan details and amount
+      document.getElementById('planName').textContent = plans[plan].name;
+      document.getElementById('weeklyReturn').textContent = plans[plan].return;
+      document.getElementById('investmentRange').textContent = plans[plan].range;
+      document.getElementById('investmentAmount').textContent = parseFloat(amount).toFixed(2);
     }
 
     // Copy Wallet Address
@@ -255,16 +274,19 @@
         return;
       }
 
-      // Optionally save transaction details to a table
-      const amount = document.getElementById('investmentAmount').textContent;
+      // Save transaction details
+      const urlParams = new URLSearchParams(window.location.search);
+      const amount = parseFloat(urlParams.get('amount'));
+      const plan = urlParams.get('plan');
       const { error: insertError } = await supabaseClient
         .from('transactions')
         .insert({
           user_id: user.id,
-          amount: parseFloat(amount),
+          amount,
           currency: 'BTC',
           proof_file: fileName,
-          status: 'pending'
+          status: 'pending',
+          investment_plan: plan
         });
       if (insertError) {
         console.error('Error saving transaction:', insertError);
