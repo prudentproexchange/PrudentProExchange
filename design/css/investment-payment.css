@@ -4,201 +4,122 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
-  color: #e0e0ff;
 }
 
 /* Profile Section */
 .profile-section {
   display: flex;
   align-items: center;
-  padding: 1rem;
-  background: rgba(0, 0, 0, 0.5);
-  border-radius: 10px;
-  margin-bottom: 1.5rem;
+  padding: 1.5rem 2rem;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 215, 0, 0.2);
 }
 
 .profile-container {
-  margin-right: 1.5rem;
+  margin-right: 1rem;
 }
 
 .avatar {
-  width: 100px;
-  height: 100px;
+  width: 150px;
+  height: 150px;
   border-radius: 50%;
-  object-fit: cover;
-  border: 3px solid #ffd700; /* Gold */
-  font-size: 60px;
+  border: 2px solid #ffd700; /* Gold */
+  background: #000;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.1);
+  font-size: 120px;
+  color: #ffd700; /* Gold */
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.avatar:hover {
+  transform: scale(1.05);
 }
 
 .welcome-message {
-  font-size: 1.2rem;
-  font-family: 'Poppins', sans-serif;
+  font-size: 1.5rem;
   color: #ffd700; /* Gold */
-}
-
-/* Investment Details */
-.investment-details {
-  background: rgba(255, 255, 255, 0.05);
-  padding: 2rem;
-  border-radius: 10px;
-  margin-bottom: 3rem;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-}
-
-.investment-details h2 {
-  font-size: 2.8rem;
-  color: #ffd700; /* Gold */
-  margin-bottom: 1.5rem;
   font-family: 'Playfair Display', serif;
-  text-align: center;
 }
 
-#investmentInfo {
-  font-size: 1.8rem;
-  color: #e0e0ff;
-  text-align: center;
-  font-weight: 500;
-}
-
-/* Payment Methods */
-.payment-methods {
-  margin-bottom: 2rem;
-}
-
-.payment-methods h2 {
+/* Payment Options */
+.payment-options h2 {
   font-size: 2.5rem;
   color: #ffd700; /* Gold */
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
   text-align: center;
   font-family: 'Playfair Display', serif;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.investment-amount {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.investment-amount p {
+  font-size: 1.5rem;
+  color: #e0e0ff;
 }
 
 .payment-methods-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 2rem;
 }
 
-.payment-card {
-  background: rgba(255, 255, 255, 0.08);
+.payment-method-card {
+  background: rgba(255, 255, 255, 0.1);
   padding: 2rem;
-  border: 2px solid #ffd700; /* Gold */
+  border: 1px solid #ffd700; /* Gold */
   border-radius: 15px;
+  backdrop-filter: blur(15px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
   text-align: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
-}
-
-.payment-card:hover {
-  transform: translateY(-15px);
-  box-shadow: 0 15px 50px rgba(255, 215, 0, 0.6); /* Gold glow */
-  background: rgba(255, 215, 0, 0.1);
-}
-
-.payment-logo {
-  width: 120px;
-  height: 120px;
-  margin-bottom: 1.5rem;
-  border-radius: 50%;
-  border: 3px solid #ffd700; /* Gold */
-  padding: 0.5rem;
-  background: rgba(0, 0, 0, 0.4);
-  object-fit: contain;
-}
-
-.payment-card h3 {
-  font-size: 1.8rem;
-  color: #ffd700; /* Gold */
-  margin-bottom: 1.5rem;
-  font-family: 'Playfair Display', serif;
-  font-weight: 700;
-}
-
-.select-method-btn {
-  display: inline-block;
-  padding: 1rem 2rem;
-  background: linear-gradient(45deg, #ffd700, #cca300); /* Gold gradient */
-  color: #000;
-  text-decoration: none;
-  border-radius: 8px;
-  font-weight: 600;
-  font-family: 'Poppins', sans-serif;
-  transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.select-method-btn:hover {
-  background: linear-gradient(45deg, #cca300, #ffd700);
-  transform: scale(1.1);
-  box-shadow: 0 5px 15px rgba(255, 215, 0, 0.7);
-}
-
-/* Upload Proof Section */
-.upload-proof {
-  background: rgba(255, 255, 255, 0.05);
-  padding: 2rem;
-  border-radius: 10px;
-  text-align: center;
-}
-
-.upload-proof h2 {
-  font-size: 2rem;
-  color: #ffd700; /* Gold */
-  margin-bottom: 1.5rem;
-  font-family: 'Playfair Display', serif;
-}
-
-#uploadForm {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
 }
 
-#proofFile {
-  padding: 0.75rem;
-  border: 2px solid #ffd700; /* Gold */
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.1);
-  color: #e0e0ff;
-  font-family: 'Poppins', sans-serif;
-  width: 100%;
-  max-width: 400px;
+.payment-method-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 12px 40px rgba(255, 215, 0, 0.5); /* Gold glow */
 }
 
-.upload-btn {
-  padding: 1.2rem 2.5rem;
+.payment-logo {
+  width: 100px;
+  height: 100px;
+  margin-bottom: 1rem;
+}
+
+.payment-method-card h3 {
+  font-size: 1.5rem;
+  color: #ffd700; /* Gold */
+  margin-bottom: 1rem;
+  font-family: 'Playfair Display', serif;
+}
+
+.select-payment-btn {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
   background: linear-gradient(45deg, #ffd700, #cca300); /* Gold gradient */
   color: #000;
   border: none;
-  border-radius: 8px;
+  border-radius: 5px;
   font-weight: 600;
   font-family: 'Poppins', sans-serif;
   cursor: pointer;
   transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-  margin-top: 1rem;
 }
 
-.upload-btn:hover {
+.select-payment-btn:hover {
   background: linear-gradient(45deg, #cca300, #ffd700);
-  transform: scale(1.1);
-  box-shadow: 0 5px 15px rgba(255, 215, 0, 0.7);
-}
-
-.upload-btn:disabled {
-  background: #666;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
-}
-
-#uploadStatus {
-  margin-top: 1.5rem;
-  font-size: 1.2rem;
-  color: #e0e0ff;
-  font-family: 'Poppins', sans-serif;
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
 }
 
 /* Responsive Design */
@@ -209,53 +130,30 @@
 
   .profile-section {
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     padding: 1rem;
   }
 
   .profile-container {
     margin-right: 0;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
   }
 
   .avatar {
-    width: 80px;
-    height: 80px;
-    font-size: 48px;
+    width: 120px;
+    height: 120px;
+    font-size: 72px;
   }
 
   .welcome-message {
-    font-size: 1rem;
-    text-align: center;
-  }
-
-  .investment-details h2,
-  .payment-methods h2,
-  .upload-proof h2 {
-    font-size: 1.8rem;
-  }
-
-  #investmentInfo {
     font-size: 1.2rem;
   }
-}
 
-@media (max-width: 480px) {
-  .payment-card {
-    padding: 1.5rem;
+  .payment-options h2 {
+    font-size: 2rem;
   }
 
-  .payment-logo {
-    width: 100px;
-    height: 100px;
-  }
-
-  .payment-card h3 {
+  .payment-method-card h3 {
     font-size: 1.5rem;
-  }
-
-  .select-method-btn,
-  .upload-btn {
-    padding: 0.75rem 1.5rem;
   }
 }
