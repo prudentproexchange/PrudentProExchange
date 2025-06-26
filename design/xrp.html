@@ -108,6 +108,14 @@
   <script>
     AOS.init({ duration: 800, once: true });
 
+    // Global error catching for better debugging, similar to the application page
+    window.addEventListener('error', event => {
+      alert(`Error: ${event.message}\nFile: ${event.filename}:${event.lineno}`);
+    });
+    window.addEventListener('unhandledrejection', event => {
+      alert(`Unhandled promise rejection:\n${event.reason}`);
+    });
+
     // Hamburger Toggle
     const hamburgerBtn = document.getElementById('hamburgerBtn');
     const navDrawer = document.getElementById('navDrawer');
@@ -139,7 +147,7 @@
     });
 
     // Account Menu Toggle
-    const accountToggle = document.getElementById('account-toggle');
+    const accountToggle = documenta href="#" class="account-toggle" id="account-toggle">Account ▾</a>
     const submenu = accountToggle.nextElementSibling;
     accountToggle.addEventListener('click', (e) => {
       e.preventDefault();
@@ -269,7 +277,7 @@
       const { data: { user } } = await supabaseClient.auth.getUser();
       const fileName = `proof-${user.id}-${Date.now()}.${proofFile.name.split('.').pop()}`;
       const { data, error } = await supabaseClient.storage
-        .from('proof-of-payment')
+        .from('payment-proofs') // Updated to 'payment-proofs' bucket as per your request
         .upload(fileName, proofFile);
       if (error) {
         console.error('Error uploading proof:', error);
@@ -281,7 +289,7 @@
       const amount = parseFloat(urlParams.get('amount'));
       const plan = urlParams.get('plan');
       const { error: insertError } = await supabaseClient
-        .from('transactions')
+        .from('transactions') // Kept as 'transactions'; change to 'payment-proofs' if you meant the table
         .insert({
           user_id: user.id,
           amount,
