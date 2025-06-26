@@ -1,48 +1,102 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-  <title>XRP Upload Test</title>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>XRP Payment • PrudentProExchange</title>
+  <link rel="stylesheet" href="xrp.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-  <h1>XRP Payment Proof Upload Test</h1>
-  <form id="testForm">
-    <label>
-      Pick proof image:
-      <input type="file" id="proofInput" accept="image/*" required/>
-    </label>
-    <button type="submit">Upload Proof</button>
-  </form>
-  <pre id="log"></pre>
+  <div class="container">
+    <div class="card">
+      <h1>XRP Payment</h1>
+
+      <div class="wallet-section">
+        <label>Wallet Address</label>
+        <div class="wallet-copy">
+          <input type="text" id="walletAddress" readonly value="Loading…"/>
+          <button id="copyBtn" title="Copy"><span>Copy</span></button>
+        </div>
+      </div>
+
+      <form id="paymentForm">
+        <label for="proofUpload">Upload Proof (PNG/JPG, ≤5 MB)</label>
+        <input type="file" id="proofUpload" accept="image/png,image/jpeg" required/>
+        <button type="submit" class="btn">Paid</button>
+      </form>
+
+      <pre id="log" class="log"></pre>
+    </div>
+  </div>
 
   <script>
+    // — Supabase Init —
     const SUPABASE_URL = 'https://iwkdznjqfbsfkscnbrkc.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU';
     const supabase = supabaseJs.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    const log = msg => {
-      document.getElementById('log').textContent += msg + '\n';
+    // — Helpers —
+    const log = (msg) => {
+      const box = document.getElementById('log');
+      box.textContent += msg + '\n';
+      box.scrollTop = box.scrollHeight;
     };
 
-    document.getElementById('testForm').addEventListener('submit', async e => {
-      e.preventDefault();
-      const file = document.getElementById('proofInput').files[0];
-      if (!file) return alert('Select a file first');
-      log(`Uploading ${file.name} (${file.size} bytes)…`);
-
-      // For testing we'll use bucket 'payment-proofs'
-      const filePath = `test/${Date.now()}-${file.name}`;
-      const { data, error } = await supabase.storage
-        .from('payment-proofs')
-        .upload(filePath, file);
-
-      if (error) {
-        log('Upload error: ' + error.message);
-      } else {
-        log('Upload success! Path: ' + data.path);
+    // — Main —
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Fetch current user (ensure logged in)
+      const { data: { user }, error: userErr } = await supabase.auth.getUser();
+      if (userErr || !user) {
+        log('Not authenticated – redirecting to login…');
+        return window.location.href = 'login.html';
       }
+
+      // Load XRP wallet address from your 'wallets' table
+      const { data: wallet, error: wErr } = await supabase
+        .from('wallets')
+        .select('address')
+        .eq('currency', 'XRP')
+        .single();
+
+      const walletInput = document.getElementById('walletAddress');
+      if (wErr || !wallet) {
+        walletInput.value = 'Error loading address';
+        log('Error loading XRP address: ' + (wErr?.message || 'none'));
+      } else {
+        walletInput.value = wallet.address;
+      }
+
+      // Copy button
+      document.getElementById('copyBtn').addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(walletInput.value);
+          log('Address copied!');
+        } catch (e) {
+          log('Copy failed: ' + e.message);
+        }
+      });
+
+      // Handle upload
+      document.getElementById('paymentForm').addEventListener('submit', async e => {
+        e.preventDefault();
+        const file = document.getElementById('proofUpload').files[0];
+        if (!file) return log('No file selected.');
+        if (file.size > 5 * 1024 * 1024) return log('File too large.');
+
+        log(`Uploading ${file.name}…`);
+        const path = `${user.id}/${Date.now()}_${file.name}`;
+        const { data, error } = await supabase.storage
+          .from('payment-proofs')
+          .upload(path, file, { upsert: false });
+
+        if (error) {
+          log('Upload error: ' + error.message);
+        } else {
+          log('Upload success: ' + data.path);
+          // Optionally insert into your transactions table here…
+        }
+      });
     });
   </script>
 </body>
