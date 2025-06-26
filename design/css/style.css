@@ -172,7 +172,8 @@ body {
 
 /* CTA Buttons */
 .cta {
-  padding: 0.75rem 1.75rem;
+  padding: 1rem 2.5rem; /* Increased size for prominence */
+  font-size: 1.2rem;    /* Larger text for readability */
   border-radius: 30px;
   background: var(--primary);
   color: #000;
@@ -180,14 +181,24 @@ body {
   border: none;
   cursor: pointer;
   transition: all 0.3s;
+  position: relative; /* Ensure proper stacking context */
+  z-index: 20; /* Increased to avoid overlap with header or other elements */
+  pointer-events: auto; /* Ensure clicks are registered */
+  display: inline-block; /* Ensure proper rendering as a link */
 }
 .cta:hover {
   background: var(--primary-dark);
   transform: scale(1.05);
 }
 .cta.primary {
-  background: var(--primary);
+  background: linear-gradient(45deg, #FFD700, #CCA300); /* Gold gradient */
+  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);       /* Subtle gold glow */
   color: #000;
+}
+.cta.primary:hover {
+  background: linear-gradient(45deg, #CCA300, #FFD700); /* Reversed gradient on hover */
+  box-shadow: 0 6px 20px rgba(255, 215, 0, 0.5);       /* Enhanced glow */
+  transform: translateY(-2px);                         /* Slight lift for modern feel */
 }
 
 /* Hero Section */
@@ -800,22 +811,7 @@ body {
   .homepage .hero-title { font-size: 2.5rem; }
   .homepage .hero-subtitle { font-size: 1.2rem; }
 }
-.cta {
-  padding: 1rem 2.5rem; /* Increased size for prominence */
-  font-size: 1.2rem;    /* Larger text for readability */
-  /* Existing styles remain */
-}
 
-.cta.primary {
-  background: linear-gradient(45deg, #FFD700, #CCA300); /* Gold gradient */
-  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);       /* Subtle gold glow */
-}
-
-.cta.primary:hover {
-  background: linear-gradient(45deg, #CCA300, #FFD700); /* Reversed gradient on hover */
-  box-shadow: 0 6px 20px rgba(255, 215, 0, 0.5);       /* Enhanced glow */
-  transform: translateY(-2px);                         /* Slight lift for modern feel */
-}
 /* Center content and constrain width */
 .container {
   max-width: 1200px;
@@ -875,17 +871,6 @@ body {
   align-items: center;
   justify-content: center;
   font-weight: bold;
-}
-
-/* Enhanced CTA button */
-.cta.primary {
-  font-size: 1.2em;
-  padding: 1em 2em;
-  transition: transform 0.3s ease;
-}
-
-.cta.primary:hover {
-  transform: scale(1.05); /* Slight zoom on hover */
 }
 
 /* Fixed video background */
