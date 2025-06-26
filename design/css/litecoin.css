@@ -1,8 +1,8 @@
 /* Litecoin Page Specific Styles */
 
 :root {
-  --primary: #c0c0c0; /* Silver */
-  --primary-dark: #a0a0a0;
+  --primary: #d9d9d9; /* Brighter Silver */
+  --primary-dark: #b0b0b0; /* Darker Silver for hover */
   --text-color: #fff;
   --glass-bg: rgba(255, 255, 255, 0.05);
   --shadow: rgba(0, 0, 0, 0.5);
@@ -21,7 +21,7 @@
   padding: 1.5rem 2rem;
   background: var(--glass-bg);
   backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(192, 192, 192, 0.2);
+  border-bottom: 1px solid rgba(217, 217, 217, 0.2); /* Silver border */
 }
 
 .profile-container {
@@ -75,7 +75,7 @@
   left: -50%;
   width: 200%;
   height: 200%;
-  background: radial-gradient(circle, rgba(192, 192, 192, 0.1), transparent);
+  background: radial-gradient(circle, rgba(217, 217, 217, 0.1), transparent); /* Silver glow */
   animation: glow 15s infinite;
 }
 
@@ -201,7 +201,7 @@
 .paid-btn:hover {
   background: linear-gradient(45deg, var(--primary-dark), var(--primary));
   transform: scale(1.05);
-  box-shadow: 0 5px 15px rgba(192, 192, 192, 0.5);
+  box-shadow: 0 5px 15px rgba(217, 217, 217, 0.5); /* Silver shadow */
 }
 
 /* Responsive Design */
