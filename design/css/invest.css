@@ -14,7 +14,7 @@
   padding: 2rem;
 }
 
-/* Profile Section (Corrected to Match Dashboard and Deposit Pages) */
+/* Profile Section */
 .profile-section {
   display: flex;
   align-items: center;
@@ -90,6 +90,18 @@
   font-size: 1.2rem;
   color: #e0e0ff;
   margin-bottom: 1rem;
+}
+
+.amount-input {
+  width: 100%;
+  padding: 0.8rem;
+  margin: 1rem 0;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid var(--primary);
+  color: #fff;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: 'Poppins', sans-serif;
 }
 
 .payment-options {
