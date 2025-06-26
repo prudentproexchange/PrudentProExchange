@@ -227,7 +227,7 @@
       document.getElementById('investmentRange').textContent = plans[plan].range;
       document.getElementById('investmentAmount').textContent = parseFloat(amount).toFixed(2);
 
-      const { data: wallet, error: walletError } = await supabaseClient
+      const { data: wallet, error: walletError } = await supabaseClient加工
         .from('wallets')
         .select('address')
         .eq('currency', 'BTC')
