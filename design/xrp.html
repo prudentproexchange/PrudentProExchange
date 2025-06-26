@@ -87,7 +87,7 @@
       </section>
     </main>
 
-    <footer class="section section-dark site-footer" data-aos="fade-up">
+    <footer class="section section-dark ##### site-footer" data-aos="fade-up">
       <div class="footer-content">
         <p class="UTC-time">UTC Time: <span id="utcTime"></span></p>
         <p class="local-time">Local Time: <span id="localTime"></span></p>
@@ -107,6 +107,7 @@
 
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
+    // Global error handlers
     window.onerror = function(message, source, lineno, colno, error) {
       alert(
         'JS Error:\n' +
@@ -119,7 +120,7 @@
 
     AOS.init({ duration: 800, once: true });
 
-    // Global error catching for better debugging, similar to the application page
+    // Additional global error catching
     window.addEventListener('error', event => {
       alert(`Error: ${event.message}\nFile: ${event.filename}:${event.lineno}`);
     });
@@ -127,74 +128,14 @@
       alert(`Unhandled promise rejection:\n${event.reason}`);
     });
 
-    // Hamburger Toggle
-    const hamburgerBtn = document.getElementById('hamburgerBtn');
-    const navDrawer = document.getElementById('navDrawer');
-    const overlay = document.querySelector('.overlay');
-    hamburgerBtn.addEventListener('click', () => {
-      navDrawer.classList.toggle('open');
-      hamburgerBtn.classList.toggle('active');
-      overlay.classList.toggle('nav-open');
-      if (navDrawer.classList.contains('open')) navDrawer.scrollTop = 0;
-    });
-
-    document.addEventListener('click', (event) => {
-      const isClickInsideNav = navDrawer.contains(event.target);
-      const isClickOnHamburger = hamburgerBtn.contains(event.target);
-      if (!isClickInsideNav && !isClickOnHamburger && navDrawer.classList.contains('open')) {
-        navDrawer.classList.remove('open');
-        hamburgerBtn.classList.remove('active');
-        overlay.classList.remove('nav-open');
-      }
-    });
-
-    // Theme Toggle
-    const themeToggle = document.getElementById('theme-toggle');
-    themeToggle.addEventListener('click', () => {
-      document.body.classList.toggle('light-theme');
-      const icon = themeToggle.querySelector('i');
-      icon.classList.toggle('fa-moon');
-      icon.classList.toggle('fa-sun');
-    });
-
-    // Account Menu Toggle
-    const accountToggle = document.getElementById('account-toggle');
-    const submenu = accountToggle.nextElementSibling;
-    accountToggle.addEventListener('click', (e) => {
-      e.preventDefault();
-      submenu.classList.toggle('open');
-    });
-
-    // Back to Top
-    document.getElementById('back-to-top').addEventListener('click', () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-
-    // Time Updates
-    function updateLocalTime() {
-      const now = new Date();
-      document.getElementById('localTime').textContent = now.toLocaleTimeString();
-      document.getElementById('localDate').textContent = now.toLocaleDateString('en-US', {
-        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
-      });
-    }
-    setInterval(updateLocalTime, 1000);
-    updateLocalTime();
-
-    function updateUTCTime() {
-      document.getElementById('utcTime').textContent = new Date().toUTCString();
-    }
-    setInterval(updateUTCTime, 1000);
-    updateUTCTime();
-
-    // Supabase Client
+    // Supabase Client (defined outside DOMContentLoaded as it doesn't depend on DOM)
     const { createClient } = supabase;
     const supabaseClient = createClient(
       'https://iwkdznjqfbsfkscnbrkc.supabase.co',
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU'
     );
 
-    // Initialize XRP Payment Page
+    // Function definitions
     async function initXrpPage() {
       const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
       if (!user || authError) {
@@ -249,7 +190,7 @@
       const { data: wallet, error: walletError } = await supabaseClient
         .from('wallets')
         .select('address')
-        .eq('currency', 'XRP')
+        .eq('currency', 'XRP') // Kept as 'XRP' for this page; change to 'BTC', 'ETH', etc., for other pages
         .single();
       if (walletError || !wallet) {
         console.error('Error fetching wallet address:', walletError);
@@ -259,78 +200,147 @@
       document.getElementById('walletAddress').value = wallet.address;
     }
 
-    // Copy Wallet Address
-    const copyBtn = document.querySelector('.copy-btn');
-    const walletAddressInput = document.getElementById('walletAddress');
-    copyBtn.addEventListener('click', () => {
-      walletAddressInput.select();
-      document.execCommand('copy');
-      const originalContent = copyBtn.innerHTML;
-      copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
-      setTimeout(() => copyBtn.innerHTML = originalContent, 2000);
-    });
+    function updateLocalTime() {
+      const now = new Date();
+      document.getElementById('localTime').textContent = now.toLocaleTimeString();
+      document.getElementById('localDate').textContent = now.toLocaleDateString('en-US', {
+        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+      });
+    }
 
-    // Handle Form Submission
-    const paymentForm = document.getElementById('paymentForm');
-    paymentForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const proofFile = document.getElementById('proofUpload').files[0];
-      if (!proofFile) {
-        alert('Please upload proof of payment.');
-        return;
-      }
+    function updateUTCTime() {
+      document.getElementById('utcTime').textContent = new Date().toUTCString();
+    }
 
-      if (proofFile.size > 5 * 1024 * 1024) {
-        alert('File size exceeds 5MB limit.');
-        return;
-      }
+    // DOMContentLoaded event listener for DOM-dependent code
+    document.addEventListener('DOMContentLoaded', () => {
+      // Initialize the XRP page
+      initXrpPage();
 
-      const { data: { user } } = await supabaseClient.auth.getUser();
-      const fileName = `proof-${user.id}-${Date.now()}.${proofFile.name.split('.').pop()}`;
-      const { data, error } = await supabaseClient.storage
-        .from('payment-proofs')
-        .upload(fileName, proofFile);
-      if (error) {
-        console.error('Error uploading proof:', error);
-        alert('Error uploading');
-        return;
-      }
+      // Hamburger Toggle
+      const hamburgerBtn = document.getElementById('hamburgerBtn');
+      const navDrawer = document.getElementById('navDrawer');
+      const overlay = document.querySelector('.overlay');
+      hamburgerBtn.addEventListener('click', () => {
+        navDrawer.classList.toggle('open');
+        hamburgerBtn.classList.toggle('active');
+        overlay.classList.toggle('nav-open');
+        if (navDrawer.classList.contains('open')) navDrawer.scrollTop = 0;
+      });
 
-      const urlParams = new URLSearchParams(window.location.search);
-      const amount = parseFloat(urlParams.get('amount'));
-      const plan = urlParams.get('plan');
-      const { error: insertError } = await supabaseClient
-        .from('transactions')
-        .insert({
-          user_id: user.id,
-          amount,
-          currency: 'XRP',
-          proof_file: fileName,
-          status: 'pending',
-          investment_plan: plan
-        });
-      if (insertError) {
-        console.error('Error saving transaction:', insertError);
-        alert('Error submitting payment.');
-        return;
-      }
+      document.addEventListener('click', (event) => {
+        const isClickInsideNav = navDrawer.contains(event.target);
+        const isClickOnHamburger = hamburgerBtn.contains(event.target);
+        if (!isClickInsideNav && !isClickOnHamburger && navDrawer.classList.contains('open')) {
+          navDrawer.classList.remove('open');
+          hamburgerBtn.classList.remove('active');
+          overlay.classList.remove('nav-open');
+        }
+      });
 
-      alert('Payment proof submitted successfully! Awaiting verification.');
-      window.location.href = 'dashboard.html';
-    });
+      // Theme Toggle
+      const themeToggle = document.getElementById('theme-toggle');
+      themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('light-theme');
+        const icon = themeToggle.querySelector('i');
+        icon.classList.toggle('fa-moon');
+        icon.classList.toggle('fa-sun');
+      });
 
-    // Logout
-    document.getElementById('logout-btn').addEventListener('click', async () => {
-      const { error } = await supabaseClient.auth.signOut();
-      if (!error) window.location.href = 'login.html';
-      else alert('Error logging out: ' + error.message);
-    });
+      // Account Menu Toggle
+      const accountToggle = document.getElementById('account-toggle');
+      const submenu = accountToggle.nextElementSibling;
+      accountToggle.addEventListener('click', (e) => {
+        e.preventDefault();
+        submenu.classList.toggle('open');
+      });
 
-    initXrpPage();
+      // Back to Top
+      document.getElementById('back-to-top').addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
 
-    const video = document.querySelector('.bg-video');
-    video.addEventListener('canplay', () => {
-      video.play().catch(error => console.error('Error playing video:', error));
+      // Time Updates
+      setInterval(updateLocalTime, 1000);
+      updateLocalTime();
+      setInterval(updateUTCTime, 1000);
+      updateUTCTime();
+
+      // Copy Wallet Address using Clipboard API
+      const copyBtn = document.querySelector('.copy-btn');
+      const walletAddressInput = document.getElementById('walletAddress');
+      copyBtn.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(walletAddressInput.value);
+          const orig = copyBtn.innerHTML;
+          copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+          setTimeout(() => copyBtn.innerHTML = orig, 2000);
+        } catch (err) {
+          alert('Copy failed: ' + err.message);
+        }
+      });
+
+      // Handle Form Submission
+      const paymentForm = document.getElementById('paymentForm');
+      paymentForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const proofFile = document.getElementById('proofUpload').files[0];
+        if (!proofFile) {
+          alert('Please upload proof of payment.');
+          return;
+        }
+
+        if (proofFile.size > 5 * 1024 * 1024) {
+          alert('File size exceeds 5MB limit.');
+          return;
+        }
+
+        const { data: { user } } = await supabaseClient.auth.getUser();
+        const fileName = `proof-${user.id}-${Date.now()}.${proofFile.name.split('.').pop()}`;
+        const { data, error } = await supabaseClient.storage
+          .from('payment-proofs')
+          .upload(fileName, proofFile);
+        if (error) {
+          console.error('Error uploading proof:', error);
+          alert('Error uploading');
+          return;
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const amount = parseFloat(urlParams.get('amount'));
+        const plan = urlParams.get('plan');
+        const { error: insertError } = await supabaseClient
+          .from('transactions')
+          .insert({
+            user_id: user.id,
+            amount,
+            currency: 'XRP',
+            proof_file: fileName,
+            status: 'pending',
+            investment_plan: plan
+          });
+        if (insertError) {
+          console.error('Error saving transaction:', insertError);
+          alert('Error submitting payment.');
+          return;
+        }
+
+        alert('Payment proof submitted successfully! Awaiting verification.');
+        window.location.href = 'dashboard.html';
+      });
+
+      // Logout
+      document.getElementById('logout-btn').addEventListener('click', async () => {
+        const { error } = await supabaseClient.auth.signOut();
+        if (!error) window.location.href = 'login.html';
+        else alert('Error logging out: ' + error.message);
+      });
+
+      // Video play
+      const video = document.querySelector('.bg-video');
+      video.addEventListener('canplay', () => {
+        video.play().catch(error => console.error('Error playing video:', error));
+      });
     });
   </script>
 </body>
