@@ -107,6 +107,16 @@
 
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
+    window.onerror = function(message, source, lineno, colno, error) {
+      alert(
+        'JS Error:\n' +
+        message + '\n' +
+        'at ' + source + ':' + lineno + ':' + colno
+      );
+      // return false so the error still shows up in console (if any)
+      return false;
+    };
+
     AOS.init({ duration: 800, once: true });
 
     // Global error catching for better debugging, similar to the application page
