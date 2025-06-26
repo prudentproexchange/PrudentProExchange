@@ -102,6 +102,7 @@
     </footer>
   </div>
 
+  <button id="notify-btn" aria-label="Notifications"><i class="fas fa-bell"></i></button>
   <button id="back-to-top" aria-label="Back to top">🚀</button>
 
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
@@ -147,7 +148,7 @@
     });
 
     // Account Menu Toggle
-    const accountToggle = documenta href="#" class="account-toggle" id="account-toggle">Account ▾</a>
+    const accountToggle = document.getElementById('account-toggle');
     const submenu = accountToggle.nextElementSibling;
     accountToggle.addEventListener('click', (e) => {
       e.preventDefault();
@@ -277,7 +278,7 @@
       const { data: { user } } = await supabaseClient.auth.getUser();
       const fileName = `proof-${user.id}-${Date.now()}.${proofFile.name.split('.').pop()}`;
       const { data, error } = await supabaseClient.storage
-        .from('payment-proofs') // Updated to 'payment-proofs' bucket as per your request
+        .from('payment-proofs')
         .upload(fileName, proofFile);
       if (error) {
         console.error('Error uploading proof:', error);
@@ -289,7 +290,7 @@
       const amount = parseFloat(urlParams.get('amount'));
       const plan = urlParams.get('plan');
       const { error: insertError } = await supabaseClient
-        .from('transactions') // Kept as 'transactions'; change to 'payment-proofs' if you meant the table
+        .from('transactions')
         .insert({
           user_id: user.id,
           amount,
