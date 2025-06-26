@@ -77,7 +77,7 @@
             <p><strong>Investment Amount:</strong> $<span id="investmentAmount">0.00</span></p>
             <p><strong>Wallet Address:</strong></p>
             <div class="wallet-address">
-              <input type="text" id="walletAddress" value="1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa" readonly/>
+              <input type="text" id="walletAddress" value="" readonly/>
               <button class="copy-btn" title="Copy wallet address" aria-label="Copy wallet address"><i class="fas fa-copy"></i> Copy</button>
             </div>
             <p class="instruction">Please send the exact amount to the Bitcoin wallet address above. After payment, upload your proof of payment (e.g., transaction screenshot) below and click "Paid".</p>
@@ -238,6 +238,19 @@
       document.getElementById('weeklyReturn').textContent = plans[plan].return;
       document.getElementById('investmentRange').textContent = plans[plan].range;
       document.getElementById('investmentAmount').textContent = parseFloat(amount).toFixed(2);
+
+      // Fetch Bitcoin wallet address from Supabase
+      const { data: wallet, error: walletError } = await supabaseClient
+        .from('wallets')
+        .select('address')
+        .eq('currency', 'BTC')
+        .single();
+      if (walletError || !wallet) {
+        console.error('Error fetching wallet address:', walletError);
+        alert('Error loading Bitcoin wallet address. Please contact support.');
+        return;
+      }
+      document.getElementById('walletAddress').value = wallet.address;
     }
 
     // Copy Wallet Address
