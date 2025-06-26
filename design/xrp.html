@@ -2,22 +2,20 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>Supabase File Upload Test</title>
+  <title>Supabase Upload Test</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-  <h1>Supabase Upload Test</h1>
-  <input type="file" id="fileInput" />
+  <h1>File Upload to Supabase</h1>
+  <input type="file" id="fileInput">
   <button id="uploadBtn">Upload</button>
-  <pre id="output" style="padding:1em; border:1px solid #ccc; white-space: pre-wrap;"></pre>
+  <div id="output"></div>
 
   <script>
-    // 🔧 Your Supabase settings
+    // Your Supabase credentials:
     const SUPABASE_URL     = 'https://iwkdznjqfbsfkscnbrkc.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ...';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU';
 
-    // 🚀 Init
     const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     const fileInput = document.getElementById('fileInput');
@@ -27,21 +25,23 @@
     uploadBtn.addEventListener('click', async () => {
       output.textContent = '';
       const file = fileInput.files[0];
-      if (!file) return output.textContent = '❌ No file selected.';
+      if (!file) {
+        output.textContent = 'No file selected.';
+        return;
+      }
 
-      const path = `test-uploads/${Date.now()}_${file.name}`;
-
-      output.textContent = `Uploading ${file.name} → ${path}...\n`;
+      const key = `test-uploads/${Date.now()}_${file.name}`;
+      output.textContent = 'Uploading...';
 
       const { data, error } = await supabase
         .storage
         .from('payment-proofs')
-        .upload(path, file);
+        .upload(key, file);
 
       if (error) {
-        output.textContent += '❌ Upload failed:\n' + JSON.stringify(error, null, 2);
+        output.textContent = 'Upload failed:\n' + JSON.stringify(error);
       } else {
-        output.textContent += '✅ Uploaded!\nPath: ' + data.path;
+        output.textContent = 'Upload successful! Path: ' + data.path;
       }
     });
   </script>
