@@ -12,7 +12,6 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 </head>
 <body class="tron-page">
-  <!-- Video Background -->
   <video class="bg-video" autoplay muted loop playsinline preload="auto">
     <source src="assets/videos/background.webm" type="video/webm">
     <source src="assets/videos/background.mp4" type="video/mp4">
@@ -20,7 +19,6 @@
   </video>
 
   <div class="overlay">
-    <!-- Header -->
     <header class="site-header">
       <a href="dashboard.html" class="logo-link">
         <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo"/>
@@ -55,7 +53,6 @@
     </header>
     <div class="nav-overlay"></div>
 
-    <!-- Profile Section -->
     <div class="profile-section">
       <div class="profile-container">
         <img id="navProfilePhoto" src="" alt="Profile" class="avatar" style="display: none;"/>
@@ -64,11 +61,10 @@
       <div class="welcome-message">Welcome to Your Tron Payment, <span id="welcomeName"></span>!</div>
     </div>
 
-    <!-- Main Content -->
     <main class="tron-page container">
       <section class="payment-info" data-aos="fade-up">
         <div class="card payment-card">
-          <img src="assets/images/tron.PNG" alt="Tron" class="crypto-image"/>
+          <img src="assets/images/tron.png" alt="Tron" class="crypto-image"/>
           <h2>Tron (TRX) Payment</h2>
           <div class="payment-details">
             <p><strong>Investment Plan:</strong> <span id="planName"></span></p>
@@ -80,7 +76,7 @@
               <input type="text" id="walletAddress" value="" readonly/>
               <button class="copy-btn" title="Copy wallet address" aria-label="Copy wallet address"><i class="fas fa-copy"></i> Copy</button>
             </div>
-            <p class="instruction">Please send the exact amount to the Tron wallet address above. After payment, upload your proof of payment (e.g., transaction screenshot) below and click "Paid".</p>
+            <p class="instruction">Send the exact amount to the Tron wallet address above. Upload proof of payment (e.g., transaction screenshot) below and click "Paid".</p>
           </div>
           <form id="paymentForm" enctype="multipart/form-data">
             <label for="proofUpload" class="upload-label">Upload Proof of Payment (PNG, JPG, GIF, max 5MB):</label>
@@ -91,7 +87,6 @@
       </section>
     </main>
 
-    <!-- Footer -->
     <footer class="section section-dark site-footer" data-aos="fade-up">
       <div class="footer-content">
         <p class="UTC-time">UTC Time: <span id="utcTime"></span></p>
@@ -109,7 +104,6 @@
 
   <button id="back-to-top" aria-label="Back to top">🚀</button>
 
-  <!-- Scripts -->
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
     AOS.init({ duration: 800, once: true });
@@ -117,7 +111,7 @@
     // Hamburger Toggle
     const hamburgerBtn = document.getElementById('hamburgerBtn');
     const navDrawer = document.getElementById('navDrawer');
-    const overlay = document.querySelector('.nav-overlay');
+    const overlay = document.querySelector('.overlay');
     hamburgerBtn.addEventListener('click', () => {
       navDrawer.classList.toggle('open');
       hamburgerBtn.classList.toggle('active');
@@ -125,7 +119,6 @@
       if (navDrawer.classList.contains('open')) navDrawer.scrollTop = 0;
     });
 
-    // Close Nav on Outside Click
     document.addEventListener('click', (event) => {
       const isClickInsideNav = navDrawer.contains(event.target);
       const isClickOnHamburger = hamburgerBtn.contains(event.target);
@@ -142,7 +135,7 @@
       document.body.classList.toggle('light-theme');
       const icon = themeToggle.querySelector('i');
       icon.classList.toggle('fa-moon');
-      icon.classList.toggle('fa-sun');
+ خصوصاً  icon.classList.toggle('fa-sun');
     });
 
     // Account Menu Toggle
@@ -280,7 +273,7 @@
         .upload(fileName, proofFile);
       if (error) {
         console.error('Error uploading proof:', error);
-        alert('Error uploading proof of payment.');
+        alertcq('Error uploading proof of payment.');
         return;
       }
 
