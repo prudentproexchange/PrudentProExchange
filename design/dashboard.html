@@ -26,9 +26,9 @@
         <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo"/>
       </a>
       <div class="header-right">
-        <button id="STOPPED HEREtheme-toggle" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
+        <button id="theme-toggle" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
         <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
-          <span DryRun: Skipped execution of element with id="hamburgerBtn" because it contains user interaction></span><span DryRun: Skipped execution of element with id="hamburgerBtn" because it contains user interaction></span><span DryRun: Skipped execution of element with id="hamburgerBtn" because it contains user interaction></span>
+          <span></span><span></span><span></span>
         </button>
       </div>
       <nav class="nav-drawer" id="navDrawer">
@@ -73,7 +73,12 @@
           <div id="investments-container"></div>
           <div id="no-investments" style="display: none;">
             <p>No active investments currently.</p>
-            <a href="invest.html" class="btn" id="invest-now-btn">Invest Now</a>
+            <select id="invest-option" style="margin: 1rem 0; padding: 0.5rem; background: rgba(0, 0, 0, 0.5); border: 1px solid var(--primary); color: #fff; border-radius: 5px; font-size: 0.9rem;">
+              <option value="" disabled selected>Select Investment Option</option>
+              <option value="accountbalance">Invest through Account Balance</option>
+              <option value="directly">Invest Directly</option>
+            </select>
+            <a href="#" class="btn" id="invest-now-btn">Invest Now</a>
           </div>
         </div>
 
@@ -362,20 +367,6 @@
           </tr>
         `);
       });
-
-      // Event listener for the Invest Now button
-      const investNowBtn = document.querySelector('#no-investments .btn');
-      if (investNowBtn) {
-        investNowBtn.addEventListener('click', (e) => {
-          e.preventDefault();
-          const investChoice = confirm('Would you like to invest using your Account Balance? Click OK for Account Balance or Cancel for Direct investment.');
-          if (investChoice) {
-            window.location.href = 'accountbalance.html';
-          } else {
-            window.location.href = 'invest.html';
-          }
-        });
-      }
     }
 
     // Investment calculator logic for multiple investments
@@ -430,36 +421,48 @@
       else alert('Error logging out: ' + error.message);
     });
 
-    initDashboard();
-
-    // Remove the incorrect event listener for .invest-btn
-    // The following code is commented out as it references a non-existent .invest-btn class
-    /*
-    document.querySelector('.invest-btn').addEventListener('click', async (e) => {
+    // Invest Now button handler
+    document.getElementById('invest-now-btn').addEventListener('click', (e) => {
       e.preventDefault();
-      const amountStr = prompt('Enter investment amount:');
-      if (amountStr) {
-        const amount = parseFloat(amountStr);
-        if (isNaN(amount) || amount <= 0) {
-          alert('Invalid amount');
-          return;
-        }
-        try {
-          const plan = await choosePlanForAmount(amount);
-          const { data: { user } } = await supabaseClient.auth.getUser();
-          await supabaseClient.rpc('start_investment', {
-            user_id: user.id,
-            plan_id: plan.id,
-            amount
-          });
-          alert('Investment started in the "' + plan.name + '" plan!');
-          location.reload();
-        } catch (err) {
-          alert('Error: ' + err.message);
-        }
+      const investOption = document.getElementById('invest-option').value;
+      if (!investOption) {
+        alert('Please select an investment option.');
+        return;
+      }
+      if (investOption === 'accountbalance') {
+        window.location.href = 'accountbalance.html';
+      } else if (investOption === 'directly') {
+        window.location.href = 'invest.html';
       }
     });
-    */
+
+    initDashboard();
+
+    // Event listener for the Invest button (remove if not used)
+    // document.querySelector('.invest-btn').addEventListener('click', async (e) => {
+    //   e.preventDefault();
+    //   const amountStr = prompt('Enter investment amount:');
+    //   if (amountStr) {
+    //     const amount = parseFloat(amountStr);
+    //     if (isNaN(amount) || amount <= 0) {
+    //       alert('Invalid amount');
+    //       return;
+    //     }
+    //     try {
+    //       const plan = await choosePlanForAmount(amount);
+    //       const { data: { user } } = await supabaseClient.auth.getUser();
+    //       await supabaseClient.rpc('start_investment', {
+    //         user_id: user.id,
+    //         plan_id: plan.id,
+    //         amount
+    //       });
+    //       alert('Investment started in the "' + plan.name + '" plan!');
+    //       location.reload();
+    //     } catch (err) {
+    //       alert('Error: ' + err.message);
+    //     }
+    //   }
+    // });
 
     // Ensure background video plays
     const video = document.querySelector('.bg-video');
