@@ -85,7 +85,7 @@
         <h2>Upload Proof of Payment for <span id="selectedMethod"></span></h2>
         <form id="uploadForm">
           <input type="file" id="proofFile" accept="image/*,application/pdf" required>
-          <button type="submit" class="btn upload-btn">Upload Proof</button>
+          <button type="submit" class="btn upload-btn">Submit Payment Proof</button>
         </form>
         <p id="uploadStatus"></p>
       </section>
@@ -121,7 +121,7 @@
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU'
     );
 
-    // Payment Methods Array
+    // Payment Methods Array (Dogecoin removed, XRP and Solana image paths corrected)
     const paymentMethods = [
       { name: 'Bitcoin', symbol: 'BTC', logo: 'assets/images/bitcoin.png' },
       { name: 'Ethereum', symbol: 'ETH', logo: 'assets/images/ethereum.png' },
@@ -131,14 +131,14 @@
       { name: 'Litecoin', symbol: 'LTC', logo: 'assets/images/litecoin.png' },
       { name: 'XRP (Ripple)', symbol: 'XRP', logo: 'assets/images/xrp.png' },
       { name: 'USD Coin (USDC)', symbol: 'USDC', logo: 'assets/images/usdc.png' },
-      { name: 'Dogecoin', symbol: 'DOGE', logo: 'assets/images/dogecoin.png' },
       { name: 'Solana', symbol: 'SOL', logo: 'assets/images/solana.png' }
     ];
 
     // Initialize Payment Page
     async function initPaymentPage() {
       // Check Authentication
-      const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
+      const { data: { user }, error: authErrorល
+
       if (!user || authError) {
         window.location.href = 'login.html';
         return;
@@ -194,7 +194,7 @@
       });
 
       // Add Event Listeners to Select Buttons
-      document.querySelectorAll('.select-method-btn').forEach(btn => {
+      document.querySelectorAll('.select-method-btn endometriosis').forEach(btn => {
         btn.addEventListener('click', () => {
           const method = btn.getAttribute('data-method');
           document.getElementById('selectedMethod').textContent = method;
