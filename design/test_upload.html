@@ -3,45 +3,47 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Test Upload • PrudentProExchange</title>
-  <style>
-    body { font-family: sans-serif; padding: 2rem; max-width: 400px; margin: auto; }
-    label, button { display: block; margin: 1rem 0; }
-  </style>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <title>Test Payment-Proof Upload</title>
 </head>
-<body>
-  <h1>Test File Upload</h1>
+<body style="font-family:sans-serif; padding:2rem; max-width:400px; margin:auto;">
+  <h1>Upload to payment-proofs</h1>
   <form id="uploadForm">
-    <label>
-      Select a file to upload:
-      <input type="file" id="fileInput" required />
-    </label>
-    <button type="submit">Upload to test-uploads</button>
+    <p>
+      <label>
+        Select a file:
+        <input type="file" id="fileInput" required />
+      </label>
+    </p>
+    <p><button type="submit">Upload</button></p>
   </form>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <script>
-    // 1️⃣ Initialize Supabase
+    // Initialize Supabase
     const supabaseUrl = 'https://iwkdznjqfbsfkscnbrkc.supabase.co';
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU';
     const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-    // 2️⃣ Form handling
-    document.getElementById('uploadForm').addEventListener('submit', async e => {
+    document.getElementById('uploadForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const file = document.getElementById('fileInput').files[0];
-      if (!file) return alert('No file selected!');
+      if (!file) {
+        alert('Please select a file first.');
+        return;
+      }
+
+      // Build a unique filename under your user (if you have auth) or timestamp
       const fileName = `test-${Date.now()}-${file.name}`;
 
-      // 3️⃣ Upload to your test bucket
+      // Upload to the payment-proofs bucket
       const { data, error } = await supabase.storage
-        .from('test-uploads')
+        .from('payment-proofs')
         .upload(fileName, file, { upsert: false });
 
       if (error) {
-        alert('❌ Upload failed: ' + error.message);
+        alert('❌ Upload failed:\n' + error.message);
       } else {
-        alert('✅ Upload succeeded! File path: ' + data.path);
+        alert('✅ Upload succeeded!\nFile path: ' + data.path);
       }
     });
   </script>
