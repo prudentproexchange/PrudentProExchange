@@ -28,29 +28,29 @@
       <div class="header-right">
         <button id="theme-toggle" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
         <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
-          <span></span><span></span><span></span></span>
+          <span></span><span></span><span></span>
         </button>
       </div>
-      <nav class="nav-drawer" id="navBar">
-        <a href="https://dashboard.html">Dashboard</a>
-        <a href="https://invest.html">Invest</a>
-        <a href="https://withdraw.html">Withdraw</a>
-        <a href="https://transactions.html">Transactions</a>
-        <a href="https://referrals.html">Referrals</a>
+      <nav class="nav-drawer" id="navDrawer">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="invest.html">Invest</a>
+        <a href="withdraw.html">Withdraw</a>
+        <a href="transactions.html">Transactions</a>
+        <a href="referrals.html">Referrals</a>
         <div class="account-menu">
-          <a href="#" class="account-toggle" id="accountToggle">Account ▾</a>
+          <a href="#" class="account-toggle" id="account-toggle">Account ▾</a>
           <ul class="submenu">
-            <li><a href="https://profile-settings.html">Profile Settings</a></li>
-            <li><a href="https://transfer.html">Transfer Balance</a></li>
-            <li><a href="https://change-password.html">Change Password</a></li>
-            <li><a href="https://support.html">Support Ticket</a></li>
-            <li><a href="https://promo-tools.html">Promotional Tools</a></li>
-            <li><a href="https://2fa.html">2FA</a></li>
+            <li><a href="profile-settings.html">Profile Settings</a></li>
+            <li><a href="transfer.html">Transfer Balance</a></li>
+            <li><a href="change-password.html">Change Password</a></li>
+            <li><a href="support.html">Support Ticket</a></li>
+            <li><a href="promo-tools.html">Promotional Tools</a></li>
+            <li><a href="2fa.html">2FA Security</a></li>
             <li><a href="#" id="logout-btn">Logout</a></li>
           </ul>
         </div>
-        <a href="https://kyc.html">KYC Verification</a>
-        <a href="https://transfer.html">Transfer</a>
+        <a href="kyc.html">KYC Verification</a>
+        <a href="transfer.html">Transfer</a>
       </nav>
     </header>
     <div class="nav-overlay"></div>
@@ -58,112 +58,111 @@
     <!-- Profile Section -->
     <div class="profile-section">
       <div class="profile-container">
-        <img id="profile-img" src="" alt="Profile" class="avatar" style="display: none;"/>
-        <span id="defaultProfile-img" class="avatar">👤</span>
+        <img id="navProfilePhoto" src="" alt="Profile" class="avatar" style="display: none;"/>
+        <span id="defaultProfileIcon" class="avatar">👤</span>
       </div>
       <div class="welcome-message">Welcome to Your Tron Payment, <span id="welcomeName"></span>!</div>
-      </div>
+    </div>
+
     <!-- Main Content -->
     <main class="tron-page container">
-      <section class="payment-info" data-row="fade-up">
+      <section class="payment-info" data-aos="fade-up">
         <div class="card payment-card">
-          <img src="https://assets/images/tron.PNG" alt="Tron" class="crypto-img"/>
+          <img src="assets/images/tron.PNG" alt="Tron" class="crypto-image"/>
           <h2>Tron (TRX) Payment</h2>
           <div class="payment-details">
             <p><strong>Investment Plan:</strong> <span id="planName"></span></p>
-            <p><strong>Weekly Return:</strong> <span id="weeklyReturns"></span></p>
-            <p><strong>Investment Range:</strong> <span id="range"></span></p>
-            <p><strong>Investment Amount:</strong> $<span id="amount">0.00</span></p>
+            <p><strong>Weekly Return:</strong> <span id="weeklyReturn"></span></p>
+            <p><strong>Investment Range:</strong> <span id="investmentRange"></span></p>
+            <p><strong>Investment Amount:</strong> $<span id="investmentAmount">0.00</span></p>
             <p><strong>Wallet Address:</strong></p>
             <div class="wallet-address">
-              <input type="text" id="wallet-address" value="" readonly />
-              <button class="copy-btn" title="Copy wallet address" aria-label="Copy wallet address to clipboard"><i class="fas fa-copy"></i> Copy</button>
+              <input type="text" id="walletAddress" value="" readonly/>
+              <button class="copy-btn" title="Copy wallet address" aria-label="Copy wallet address"><i class="fas fa-copy"></i> Copy</button>
             </div>
             <p class="instruction">Please send the exact amount to the Tron wallet address above. After payment, upload your proof of payment (e.g., transaction screenshot) below and click "Paid".</p>
           </div>
-          <form id="payment-form" enctype="multipart/form-data">
-            <label for="proof-upload" class="upload-label">Upload Proof of payment (PNG/JPEG):</label>
-            <input type="file" id="proof-upload" accept="image/*" required />
-            <button type="submit" class="btn paid-btn">Submit</button>
+          <form id="paymentForm" enctype="multipart/form-data">
+            <label for="proofUpload" class="upload-label">Upload Proof of Payment (PNG, JPG, GIF, max 5MB):</label>
+            <input type="file" id="proofUpload" accept="image/png, image/jpeg, image/gif" required/>
+            <button type="submit" class="btn paid-btn">Paid</button>
           </form>
         </div>
       </section>
     </main>
 
     <!-- Footer -->
-    <footer class="section section-dark site-footer" data-footer="fade-up">
+    <footer class="section section-dark site-footer" data-aos="fade-up">
       <div class="footer-content">
         <p class="UTC-time">UTC Time: <span id="utcTime"></span></p>
-        <p class="local-time">Local Time: <span id="local-time"></span></p>
-        <p class="local-date">Local Date: </span><span id="local-date"></span></p>
+        <p class="local-time">Local Time: <span id="localTime"></span></p>
+        <p class="local-date">Local Date: <span id="localDate"></span></p>
         <nav class="footer-links">
-          <a href="https://about.html">About Us</a>
-          <a href="https://privacy.html">Privacy</a>
-          <a href="https://terms.html">Terms & Conditions</a>
+          <a href="about.html">About Us</a>
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="terms.html">Terms & Conditions</a>
         </nav>
-        <p class="right">© 2025 PrudentProExchange. All Rights Reserved.</p>
+        <p class="copyright">© 2025 PrudentProExchange. All Rights Reserved. SEC Registration #0001230714</p>
       </div>
     </footer>
   </div>
 
-  <button id="footer-back-btn" aria-label="Back to top">Back</button>
+  <button id="back-to-top" aria-label="Back to top">🚀</button>
 
   <!-- Scripts -->
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
-    AOS.init({ duration: 0, once: true });
+    AOS.init({ duration: 800, once: true });
 
     // Hamburger Toggle
-    const hamburgerBtn = document.querySelectorById('hamburger-btn');
-    const navBar = document.querySelectorById('navBar');
-    const overlay = document.querySelector('.overlay');
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const navDrawer = document.getElementById('navDrawer');
+    const overlay = document.querySelector('.nav-overlay');
     hamburgerBtn.addEventListener('click', () => {
-      navBar.classList.toggle('open');
+      navDrawer.classList.toggle('open');
       hamburgerBtn.classList.toggle('active');
-      overlay.classList.toggle('active');
-      if (navBar.classList.contains('open')) {
-        navBar.scrollTop = 0;
+      overlay.classList.toggle('nav-open');
+      if (navDrawer.classList.contains('open')) navDrawer.scrollTop = 0;
+    });
+
+    // Close Nav on Outside Click
+    document.addEventListener('click', (event) => {
+      const isClickInsideNav = navDrawer.contains(event.target);
+      const isClickOnHamburger = hamburgerBtn.contains(event.target);
+      if (!isClickInsideNav && !isClickOnHamburger && navDrawer.classList.contains('open')) {
+        navDrawer.classList.remove('open');
+        hamburgerBtn.classList.remove('active');
+        overlay.classList.remove('nav-open');
       }
     });
 
-    // Close Nav When Clicking Outside
-    document.addEventListener('click', (event => {
-      const isClickInsideNav = navBar.contains(event.target);
-      const isClickOnHamburger = hamburgerBtn.contains(event.target);
-      if (!isClickInsideNav && !isClickOnHamburger && navBar.classList.contains('open')) {
-        navBar.classList.remove('open');
-        hamburgerBtn.classList.remove('active');
-        overlay.classList.remove('active');
-      }
-    }));
-
     // Theme Toggle
-    const themeToggle = document.querySelectorById('theme-toggle');
+    const themeToggle = document.getElementById('theme-toggle');
     themeToggle.addEventListener('click', () => {
       document.body.classList.toggle('light-theme');
-      const icon = document.querySelector('i');
+      const icon = themeToggle.querySelector('i');
       icon.classList.toggle('fa-moon');
       icon.classList.toggle('fa-sun');
     });
 
     // Account Menu Toggle
-    const accountToggle = document.querySelectorById('account-toggle');
+    const accountToggle = document.getElementById('account-toggle');
     const submenu = accountToggle.nextElementSibling;
-    accountToggle.addEventListener('click', (e => {
+    accountToggle.addEventListener('click', (e) => {
       e.preventDefault();
       submenu.classList.toggle('open');
-    }));
+    });
 
     // Back to Top
-    document.querySelectorById('footer-back-btn').addEventListener('click', () => {
+    document.getElementById('back-to-top').addEventListener('click', () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
     // Time Updates
     function updateLocalTime() {
-      const now = new DateTime();
-      document.querySelectorById('local-time').textContent = now.toLocaleTimeString();
-      document.querySelectorById('local-date').textContent = now.toLocaleDateString('en-US', {
+      const now = new Date();
+      document.getElementById('localTime').textContent = now.toLocaleTimeString();
+      document.getElementById('localDate').textContent = now.toLocaleDateString('en-US', {
         weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
       });
     }
@@ -171,27 +170,27 @@
     updateLocalTime();
 
     function updateUTCTime() {
-      document.querySelectorById('utcTime').textContent = new DateTime().toUTCString();
+      document.getElementById('utcTime').textContent = new Date().toUTCString();
     }
     setInterval(updateUTCTime, 1000);
     updateUTCTime();
 
     // Supabase Client
-    const { createClient } = supabaseClient;
+    const { createClient } = supabase;
     const supabaseClient = createClient(
       'https://iwkdznjqfbsfkscnbrkc.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdWJhYmFzZSIsInJlZiI6Iml3a2R6bmpxbWJzZm1zY25icm1jIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU'
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU'
     );
 
     // Initialize Tron Payment Page
     async function initTronPage() {
       const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
       if (!user || authError) {
-        window.location.href = 'https://login.html';
+        window.location.href = 'login.html';
         return;
       }
 
-      const { data: profile, error: profileError } = await supabaseClient.storage
+      const { data: profile, error: profileError } = await supabaseClient
         .from('profiles')
         .select('*')
         .eq('id', user.id)
@@ -202,14 +201,14 @@
         return;
       }
 
-      document.querySelectorById('welcomeName').textContent = profile.first_name || 'User';
+      document.getElementById('welcomeName').textContent = profile.first_name || 'User';
       if (profile.photo_url) {
         const { data: urlData } = supabaseClient.storage
-          .from('profile-img')
+          .from('profile-photos')
           .getPublicUrl(profile.photo_url);
-        document.querySelectorById('profile-img').value = urlData.publicUrl;
-        document.querySelectorById('profile-img').style.display = 'block';
-        document.querySelectorById('defaultProfile-img').style.display = 'none';
+        document.getElementById('navProfilePhoto').src = urlData.publicUrl;
+        document.getElementById('navProfilePhoto').style.display = 'block';
+        document.getElementById('defaultProfileIcon').style.display = 'none';
       }
 
       const plans = {
@@ -225,34 +224,34 @@
       const amount = urlParams.get('amount');
 
       if (!plan || !amount || !plans[plan]) {
-        alert('Invalid plan or amount. Please try again.');
-        window.location.href = 'https://invest.html';
+        alert('Invalid plan or amount. Please select an investment plan.');
+        window.location.href = 'invest.html';
         return;
       }
 
-      document.querySelectorById('planName').textContent = plans[plan].name;
-      document.querySelectorById('weeklyReturns').textContent = plans[plan].return;
-      document.querySelectorById('range').textContent = plans[plan].range;
-      document.querySelectorById('amount').textContent = parseFloat(amount).toFixed(2);
+      document.getElementById('planName').textContent = plans[plan].name;
+      document.getElementById('weeklyReturn').textContent = plans[plan].return;
+      document.getElementById('investmentRange').textContent = plans[plan].range;
+      document.getElementById('investmentAmount').textContent = parseFloat(amount).toFixed(2);
 
-      const { data: wallet, error: walletError } = await supabaseClient.storage
+      const { data: wallet, error: walletError } = await supabaseClient
         .from('wallets')
         .select('address')
         .eq('currency', 'TRX')
         .single();
       if (walletError || !wallet) {
         console.error('Error fetching wallet address:', walletError);
-        alert('Error retrieving Tron wallet address. Please contact support.');
+        alert('Error loading Tron wallet address. Please contact support.');
         return;
       }
-      document.querySelectorById('wallet-address').value = wallet.address;
+      document.getElementById('walletAddress').value = wallet.address;
     }
 
     // Copy Wallet Address
     const copyBtn = document.querySelector('.copy-btn');
-    const walletAddress = document.querySelectorById('wallet-address');
+    const walletAddressInput = document.getElementById('walletAddress');
     copyBtn.addEventListener('click', () => {
-      walletAddress.select();
+      walletAddressInput.select();
       document.execCommand('copy');
       const originalContent = copyBtn.innerHTML;
       copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
@@ -260,10 +259,10 @@
     });
 
     // Handle Form Submission
-    const paymentForm = document.querySelectorById('payment-form');
-    paymentForm.addEventListener('submit', async (e => {
+    const paymentForm = document.getElementById('paymentForm');
+    paymentForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const proofFile = document.querySelectorById('proof-upload').files[0];
+      const proofFile = document.getElementById('proofUpload').files[0];
       if (!proofFile) {
         alert('Please upload proof of payment.');
         return;
@@ -277,7 +276,7 @@
       const { data: { user } } = await supabaseClient.auth.getUser();
       const fileName = `proof-${user.id}-${Date.now()}.${proofFile.name.split('.').pop()}`;
       const { data, error } = await supabaseClient.storage
-        .from('proof-of-payment-img')
+        .from('proof-of-payment')
         .upload(fileName, proofFile);
       if (error) {
         console.error('Error uploading proof:', error);
@@ -288,12 +287,12 @@
       const urlParams = new URLSearchParams(window.location.search);
       const amount = parseFloat(urlParams.get('amount'));
       const plan = urlParams.get('plan');
-      const { error: insertError } = await supabaseClient.storage
+      const { error: insertError } = await supabaseClient
         .from('transactions')
         .insert({
           user_id: user.id,
           amount,
-          user: 'TRX',
+          currency: 'TRX',
           proof_file: fileName,
           status: 'pending',
           investment_plan: plan
@@ -305,13 +304,13 @@
       }
 
       alert('Payment proof submitted successfully! Awaiting verification.');
-      window.location.href = 'https://dashboard.html';
-    }));
+      window.location.href = 'dashboard.html';
+    });
 
     // Logout
-    document.querySelectorById('logout-btn').addEventListener('click', async () => {
-      const { error } = await supabaseClient.auth.logout();
-      if (!error) window.location.href = 'https://login.html';
+    document.getElementById('logout-btn').addEventListener('click', async () => {
+      const { error } = await supabaseClient.auth.signOut();
+      if (!error) window.location.href = 'login.html';
       else alert('Error logging out: ' + error.message);
     });
 
