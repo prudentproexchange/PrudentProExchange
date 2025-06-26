@@ -1,6 +1,5 @@
-/* Litecoin Page Specific Styles */
-
-body.litecoin-page {
+/* General Styles */
+body {
   margin: 0;
   font-family: 'Roboto', sans-serif;
   background: linear-gradient(135deg, #1a1a1a, #2c2c2c);
@@ -12,12 +11,59 @@ body.litecoin-page {
 .bg-overlay {
   position: relative;
   z-index: 1;
-  padding-bottom: 60px;
+  padding-bottom: 60px; /* Space for footer */
 }
 
-/* Header (inherits from style.css, but ensure silver accents) */
+/* Header */
 .site-header {
-  border-bottom: 1px solid #e6e6e6 !important;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: rgba(0, 0, 0, 0.7);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.logo {
+  height: 40px;
+}
+
+.user-profile {
+  margin-right: 1rem;
+}
+
+.profile-photo {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid #c0c0c0;
+}
+
+.main-nav {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.main-nav a {
+  color: #c0c0c0;
+  text-decoration: none;
+  font-weight: 400;
+  transition: color 0.3s;
+}
+
+.main-nav a:hover {
+  color: #fff;
+}
+
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.5rem;
+  cursor: pointer;
 }
 
 /* Greeting Section */
@@ -29,7 +75,7 @@ body.litecoin-page {
 .greeting-section h1 {
   font-family: 'Cinzel', serif;
   font-size: 2.5rem;
-  color: #e6e6e6 !important;
+  color: #c0c0c0;
   margin-bottom: 0.5rem;
 }
 
@@ -46,8 +92,8 @@ body.litecoin-page {
 }
 
 .payment-panel {
-  background: rgba(255, 255, 255, 0.05) !important;
-  border: 1px solid #e6e6e6 !important;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid #c0c0c0;
   border-radius: 15px;
   padding: 2rem;
   width: 100%;
@@ -55,19 +101,19 @@ body.litecoin-page {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
-.crypto-image {
+.crypto-icon img {
   display: block;
   width: 80px;
   height: 80px;
   margin: 0 auto 1.5rem;
   border-radius: 50%;
-  border: 2px solid #e6e6e6 !important;
+  border: 2px solid #c0c0c0;
 }
 
 .payment-panel h2 {
   font-family: 'Cinzel', serif;
   font-size: 1.8rem;
-  color: #e6e6e6 !important;
+  color: #fff;
   text-align: center;
   margin-bottom: 1.5rem;
 }
@@ -85,14 +131,14 @@ body.litecoin-page {
 }
 
 .label {
-  color: #e6e6e6 !important;
+  color: #c0c0c0;
   font-weight: 700;
 }
 
 .wallet-section label {
   display: block;
   font-size: 1.1rem;
-  color: #e6e6e6 !important;
+  color: #c0c0c0;
   margin-bottom: 0.5rem;
 }
 
@@ -105,23 +151,22 @@ body.litecoin-page {
   flex: 1;
   padding: 0.8rem;
   background: #333;
-  border: 1px solid #e6e6e6 !important;
+  border: 1px solid #c0c0c0;
   border-radius: 5px;
   color: #fff;
 }
 
 .copy-btn {
-  background: #e6e6e6 !important;
+  background: #c0c0c0;
   border: none;
   padding: 0.8rem 1rem;
   border-radius: 5px;
-  color: #1a1a1a !important;
   cursor: pointer;
   transition: background 0.3s;
 }
 
 .copy-btn:hover {
-  background: #b8b8b8 !important;
+  background: #a0a0a0;
 }
 
 .note {
@@ -130,58 +175,100 @@ body.litecoin-page {
   margin: 0.5rem 0 1.5rem;
 }
 
-.upload-label {
+.file-label {
   display: block;
-  color: #e6e6e6 !important;
+  color: #c0c0c0;
   margin-bottom: 0.5rem;
 }
 
-#proofUpload {
+#proofFile {
   width: 100%;
   padding: 0.8rem;
   background: #333;
-  border: 1px solid #e6e6e6 !important;
+  border: 1px solid #c0c0c0;
   border-radius: 5px;
   color: #fff;
   margin-bottom: 1rem;
 }
 
-.paid-btn {
+.submit-btn {
   width: 100%;
   padding: 1rem;
-  background: #e6e6e6 !important;
+  background: #c0c0c0;
   border: none;
   border-radius: 5px;
-  color: #1a1a1a !important;
+  color: #1a1a1a;
   font-weight: 700;
   cursor: pointer;
   transition: background 0.3s, transform 0.2s;
 }
 
-.paid-btn:hover {
-  background: #b8b8b8 !important;
+.submit-btn:hover {
+  background: #a0a0a0;
   transform: translateY(-2px);
+}
+
+/* Rocket Button */
+.rocket-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #c0c0c0;
+  border: none;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  color: #1a1a1a;
+  font-size: 1.5rem;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  transition: background 0.3s, transform 0.2s;
+}
+
+.rocket-btn:hover {
+  background: #a0a0a0;
+  transform: scale(1.1);
 }
 
 /* Footer */
 .site-footer {
-  border-top: 1px solid #e6e6e6 !important;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.7);
 }
 
-/* Back to Top Button */
-#back-to-top {
-  background: #e6e6e6 !important;
-  color: #1a1a1a !important;
+.site-footer p {
+  margin: 0.5rem 0;
+  font-size: 0.9rem;
+  color: #a0a0a0;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .details-grid {
-    grid-template-columns: 1fr;
+  .main-nav {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.9);
+    padding: 1rem;
   }
 
-  .payment-panel {
-    padding: 1.5rem;
+  .main-nav.active {
+    display: flex;
+  }
+
+  .menu-toggle {
+    display: block;
+  }
+
+  .details-grid {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -190,8 +277,18 @@ body.litecoin-page {
     font-size: 2rem;
   }
 
-  .crypto-image {
+  .payment-panel {
+    padding: 1.5rem;
+  }
+
+  .crypto-icon img {
     width: 60px;
     height: 60px;
+  }
+
+  .rocket-btn {
+    width: 50px;
+    height: 50px;
+    font-size: 1.2rem;
   }
 }
