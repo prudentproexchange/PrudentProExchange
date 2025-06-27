@@ -4,11 +4,125 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Admin Login • PrudentProExchange</title>
-  <link rel="stylesheet" href="css/admin-login.css"/>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: #000; /* Fallback if video fails */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .bg-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      z-index: -1;
+    }
+
+    .login-container {
+      background: rgba(0, 0, 0, 0.8); /* Semi-transparent black */
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+      width: 300px;
+      text-align: center;
+      animation: fadeIn 0.5s ease-in-out;
+      z-index: 1;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .logo {
+      display: block;
+      margin: 0 auto 1rem;
+      width: 100px;
+    }
+
+    h1 {
+      color: #fff;
+      margin-bottom: 1.5rem;
+      font-size: 1.5rem;
+    }
+
+    label {
+      color: #fff;
+      display: block;
+      margin-bottom: 0.5rem;
+      text-align: left;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.5rem;
+      margin-bottom: 1rem;
+      background: #222;
+      color: #fff;
+      border: 1px solid #ffd700;
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
+
+    input:focus {
+      border-color: #e6b800;
+      outline: none;
+    }
+
+    button {
+      width: 100%;
+      padding: 0.75rem;
+      background: #ffd700;
+      color: #000;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #e6b800;
+    }
+
+    button:disabled {
+      background: #aaa;
+      cursor: not-allowed;
+    }
+
+    .error {
+      color: #ff0000;
+      margin-top: 1rem;
+      text-align: center;
+    }
+
+    @media (max-width: 400px) {
+      .login-container {
+        width: 90%;
+        padding: 1.5rem;
+      }
+      h1 {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
 </head>
 <body>
+  <video class="bg-video" autoplay muted loop>
+    <source src="path/to/your/video.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
   <div class="login-container">
+    <img src="path/to/your/logo.png" alt="Logo" class="logo">
     <h1>Admin Login</h1>
     <form id="loginForm">
       <label for="email">Email</label>
@@ -28,8 +142,8 @@
 
     // Handle Form Submission
     const loginForm = document.getElementById('loginForm');
-    const loginBtn = document.getElementById('loginBtn');
-    const errorMsg = document.getElementById('errorMsg');
+    const loginBtn  = document.getElementById('loginBtn');
+    const errorMsg  = document.getElementById('errorMsg');
 
     loginForm.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -37,7 +151,7 @@
       loginBtn.disabled = true;
       loginBtn.textContent = 'Signing in…';
 
-      const email = document.getElementById('email').value;
+      const email    = document.getElementById('email').value;
       const password = document.getElementById('password').value;
 
       // Sign in with Supabase Auth
@@ -50,8 +164,9 @@
         return;
       }
 
-      // Check for admin role
+      // Optional: check for admin role/custom claim
       const user = data.user;
+      // e.g. assume you flag admins in a metadata field 'is_admin'
       const isAdmin = user.user_metadata?.is_admin === true;
       if (!isAdmin) {
         await supabase.auth.signOut();
