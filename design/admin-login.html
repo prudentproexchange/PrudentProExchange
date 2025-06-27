@@ -4,60 +4,8 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Admin Login • PrudentProExchange</title>
+  <link rel="stylesheet" href="css/admin-login.css"/>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-  <style>
-    body {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      margin: 0;
-      font-family: sans-serif;
-      background: #f5f5f5;
-    }
-    .login-container {
-      background: #fff;
-      padding: 2rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.1);
-      width: 100%;
-      max-width: 360px;
-    }
-    .login-container h1 {
-      margin-top: 0;
-      font-size: 1.5rem;
-      text-align: center;
-    }
-    .login-container label {
-      display: block;
-      margin: 1rem 0 0.5rem;
-    }
-    .login-container input {
-      width: 100%;
-      padding: 0.5rem;
-      box-sizing: border-box;
-    }
-    .login-container button {
-      width: 100%;
-      padding: 0.75rem;
-      margin-top: 1.5rem;
-      background: #0077cc;
-      color: #fff;
-      border: none;
-      cursor: pointer;
-      font-size: 1rem;
-      border-radius: 4px;
-    }
-    .login-container button:disabled {
-      background: #aaa;
-      cursor: not-allowed;
-    }
-    .error {
-      color: #c00;
-      margin-top: 1rem;
-      text-align: center;
-    }
-  </style>
 </head>
 <body>
   <div class="login-container">
@@ -73,15 +21,15 @@
   </div>
 
   <script>
-    // ── 1️⃣ Initialize Supabase Client ───────────────────────────────────────
+    // Initialize Supabase Client
     const SUPABASE_URL = 'https://iwkdznjqfbsfkscnbrkc.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU';
     const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // ── 2️⃣ Handle Form Submission ────────────────────────────────────────────
+    // Handle Form Submission
     const loginForm = document.getElementById('loginForm');
-    const loginBtn  = document.getElementById('loginBtn');
-    const errorMsg  = document.getElementById('errorMsg');
+    const loginBtn = document.getElementById('loginBtn');
+    const errorMsg = document.getElementById('errorMsg');
 
     loginForm.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -89,10 +37,10 @@
       loginBtn.disabled = true;
       loginBtn.textContent = 'Signing in…';
 
-      const email    = document.getElementById('email').value;
+      const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
 
-      // 2️⃣a Sign in with Supabase Auth
+      // Sign in with Supabase Auth
       const { data, error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) {
         errorMsg.textContent = error.message;
@@ -102,9 +50,8 @@
         return;
       }
 
-      // 2️⃣b Optional: check for admin role/custom claim
+      // Check for admin role
       const user = data.user;
-      // e.g. assume you flag admins in a metadata field 'is_admin'
       const isAdmin = user.user_metadata?.is_admin === true;
       if (!isAdmin) {
         await supabase.auth.signOut();
@@ -115,7 +62,7 @@
         return;
       }
 
-      // 2️⃣c Redirect to Admin Dashboard
+      // Redirect to Admin Dashboard
       window.location.href = 'admin-dashboard.html';
     });
   </script>
