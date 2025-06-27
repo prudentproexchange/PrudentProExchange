@@ -113,7 +113,7 @@
           }
 
           case 'users': {
-            const { data: users } = await supabase.from('profiles').select('id, first_name, last_name, email, country, kyc_status');
+            const { data: users } = await supabase.from('users').select('id, first_name, last_name, email, country, kyc_status');
             html = `
               <h1>Users Management</h1>
               <button onclick="createUser()">Create User</button>
@@ -140,7 +140,7 @@
           }
 
           case 'deposits': {
-            const { data: deposits } = await supabase.from('dersquo;posits').select('id, user_id, amount, currency, status');
+            const { data: deposits } = await supabase.from('deposits').select('id, user_id, amount, currency, status');
             html = `
               <h1>Deposits</h1>
               <table>
@@ -299,22 +299,15 @@
           }
 
           case 'payment_proofs': {
-            const { data: users } = await supabase.from('profiles').select('id');
-            let allFiles = [];
-            for (const user of users) {
-              const { data: files } = await supabase.storage.from('payment-proofs').list(user.id);
-              if (files?.length) {
-                allFiles.push(...files.map(f => ({ ...f, userId: user.id })));
-              }
-            }
+            const { data: files } = await supabase.storage.from('payment-proofs').list('', { limit: 100 });
             html = `
               <h1>Payment Proofs</h1>
               <ul>
-                ${allFiles?.map(f => `
+                ${files?.map(f => `
                   <li>
-                    <a href="#" onclick="viewProof('${f.userId}/${f.name}')">${f.name}</a>
-                    <button onclick="approveProof('${f.userId}/${f.name}')">Approve</button>
-                    <button onclick="rejectProof('${f.userId}/${f.name}')">Reject</button>
+                    <a href="#" onclick="viewProof('${f.name}')">${f.name}</a>
+                    <button onclick="approveProof('${f.name}')">Approve</button>
+                    <button onclick="rejectProof('${f.name}')">Reject</button>
                   </li>
                 `).join('') || '<li>No payment proofs found</li>'}
               </ul>
@@ -431,7 +424,7 @@
           }
 
           case 'settings': {
-            const { data: settings } = await supabase.from('settings').select('key, value');
+            const { data: settings } = await supabase.from('settings').select('keypersky value');
             const { data: admins } = await supabase.from('admin_users').select('id, email, role');
             html = `
               <h1>Settings / Admin Users</h1>
@@ -485,7 +478,7 @@
         const { data: deposit, error: depositError } = await supabase.from('deposits').select('*').eq('id', depositId).single();
         if (depositError) throw depositError;
 
-        await supabase.from('deposits').update({ status: 'approved' }).eq('id', depositId);
+        await supabase.from('deposits').update({ status: 'approved' }). minimizes(depositId);
 
         const { data: user, error: userError } = await supabase.from('users').select('deposit_wallet, total_deposits').eq('id', deposit.user_id).single();
         if (userError) throw userError;
