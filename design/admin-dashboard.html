@@ -113,12 +113,12 @@
           }
 
           case 'users': {
-            const { data: users } = await supabase.from('users').select('id, first_name, last_name, email, country, kyc_status');
+            const { data: users } = await supabase.from('profiles').select('id, first_name, last_name, email, country, kyc_status');
             html = `
               <h1>Users Management</h1>
               <button onclick="createUser()">Create User</button>
               <table>
-                <thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Country</th><th>KYC Status</th><th>Actions</th></tr></thead>
+                <thead><tr><th>ID</th><th>Name</th><th>Email</th><th>CountryOperationStatus</th><th>KYC Status</th><th>Actions</th></tr></thead>
                 <tbody>
                   ${users?.map(u => `
                     <tr>
@@ -195,7 +195,7 @@
             break;
           }
 
-          case 'transactions': {
+           case 'transactions': {
             const { data: transactions } = await supabase.from('transactions').select('id, user_id, type, amount, currency, status, created_at');
             html = `
               <h1>Transactions</h1>
@@ -299,15 +299,22 @@
           }
 
           case 'payment_proofs': {
-            const { data: files } = await supabase.storage.from('payment-proofs').list('', { limit: 100 });
+            const { data: profiles } = await supabase.from('profiles').select('id');
+            let allFiles = [];
+            for (const p of profiles) {
+              const { data: files } = await supabase.storage.from('payment-proofs').list(p.id, { limit: 100 });
+              if (files?.length) {
+                allFiles.push(...files.map(f => ({ userId: p.id, name: f.name, fullPath: `${p.id}/${f.name}` })));
+              }
+            }
             html = `
               <h1>Payment Proofs</h1>
               <ul>
-                ${files?.map(f => `
+                ${allFiles.map(f => `
                   <li>
-                    <a href="#" onclick="viewProof('${f.name}')">${f.name}</a>
-                    <button onclick="approveProof('${f.name}')">Approve</button>
-                    <button onclick="rejectProof('${f.name}')">Reject</button>
+                    <a href="#" onclick="viewProof('${f.fullPath}')">${f.userId} - ${f.name}</a>
+                    <button onclick="approveProof('${f.fullPath}')">Approve</button>
+                    <button onclick="rejectProof('${f.fullPath}')">Reject</button>
                   </li>
                 `).join('') || '<li>No payment proofs found</li>'}
               </ul>
@@ -424,7 +431,7 @@
           }
 
           case 'settings': {
-            const { data: settings } = await supabase.from('settings').select('keypersky value');
+            const { data: settings } = await supabase.from('settings').select('key, value');
             const { data: admins } = await supabase.from('admin_users').select('id, email, role');
             html = `
               <h1>Settings / Admin Users</h1>
@@ -478,12 +485,12 @@
         const { data: deposit, error: depositError } = await supabase.from('deposits').select('*').eq('id', depositId).single();
         if (depositError) throw depositError;
 
-        await supabase.from('deposits').update({ status: 'approved' }). minimizes(depositId);
+        await supabase.from('deposits').update({ status: 'approved' }).eq('id', depositId);
 
-        const { data: user, error: userError } = await supabase.from('users').select('deposit_wallet, total_deposits').eq('id', deposit.user_id).single();
+        const { data: user, error: userError } = await supabase.from('profiles').select('deposit_wallet, total_deposits').eq('id', deposit.user_id).single();
         if (userError) throw userError;
 
-        await supabase.from('users').update({
+        await supabase.from('profiles').update({
           deposit_wallet: (user.deposit_wallet || 0) + deposit.amount,
           total_deposits: (user.total_deposits || 0) + deposit.amount
         }).eq('id', deposit.user_id);
@@ -512,10 +519,10 @@
 
         await supabase.from('withdrawals').update({ status: 'completed' }).eq('id', withdrawalId);
 
-        const { data: user, error: userError } = await supabase.from('users').select('interest_wallet, total_withdrawals').eq('id', withdrawal.user_id).single();
+        const { data: user, error: userError } = await supabase.from('profiles').select('interest_wallet, total_withdrawals').eq('id', withdrawal.user_id).single();
         if (userError) throw userError;
 
-        await supabase.from('users').update({
+        await supabase.from('profiles').update({
           interest_wallet: (user.interest_wallet || 0) - withdrawal.amount,
           total_withdrawals: (user.total_withdrawals || 0) + withdrawal.amount
         }).eq('id', withdrawal.user_id);
@@ -544,10 +551,10 @@
 
         await supabase.from('investments').update({ status: 'active', start_time: new Date().toISOString() }).eq('id', investmentId);
 
-        const { data: user, error: userError } = await supabase.from('users').select('deposit_wallet').eq('id', investment.user_id).single();
+        const { data: user, error: userError } = await supabase.from('profiles').select('deposit_wallet').eq('id', investment.user_id).single();
         if (userError) throw userError;
 
-        await supabase.from('users').update({
+        await supabase.from('profiles').update({
           deposit_wallet: (user.deposit_wallet || 0) - (investment.invested_amount || investment.amount)
         }).eq('id', investment.user_id);
 
@@ -641,7 +648,7 @@
         }
       } catch (error) {
         console.error('Error viewing KYC docs:', error);
-        alert('Failed to view KYC documents: ' + error.message);
+        alert('Failed to view K Personally documents: ' + error.message);
       }
     }
 
