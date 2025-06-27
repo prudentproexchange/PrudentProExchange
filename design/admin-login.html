@@ -1,70 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Admin Login • PrudentProExchange</title>
-  <link rel="stylesheet" href="admin-login.css" />
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin Login • PrudentProExchange</title>
+    <link rel="stylesheet" href="admin-login.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 </head>
 <body>
-  <div class="login-container">
-    <h1>Admin Login</h1>
-    <form id="loginForm">
-      <label for="email">Email</label>
-      <input type="email" id="email" required />
-      <label for="password">Password</label>
-      <input type="password" id="password" required />
-      <button type="submit">Sign In <span id="loading" style="display: none;">⏳</span></button>
-    </form>
-  </div>
+    <!-- Background Video -->
+    <video autoplay muted loop id="background-video">
+        <source src="assets/videos/background.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
 
-  <script>
-    // Initialize Supabase
-    const SUPABASE_URL = 'https://iwkdznjqfbsfkscnbrkc.supabase.co';
-    const SUPABASE_ANON_KEY = 'YOUR_ANON_KEY_HERE'; // Replace with your anon key
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    <!-- Login Form Container -->
+    <div class="login-box">
+        <img src="assets/images/logo.png" alt="PrudentProExchange Logo" class="logo">
+        <h1>Admin Login</h1>
+        <form id="loginForm">
+            <label for="email">Email</label>
+            <input type="email" id="email" required />
+            <label for="password">Password</label>
+            <input type="password" id="password" required />
+            <button type="submit">Sign In <span id="loading" style="display: none;">⏳</span></button>
+        </form>
+    </div>
 
-    const loginForm = document.getElementById('loginForm');
-    const loadingIndicator = document.getElementById('loading');
+    <!-- JavaScript for Authentication -->
+    <script>
+        // Initialize Supabase
+        const SUPABASE_URL = 'https://iwkdznjqfbsfkscnbrkc.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU';
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    loginForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      loadingIndicator.style.display = 'inline'; // Show loading
+        const loginForm = document.getElementById('loginForm');
+        const loadingIndicator = document.getElementById('loading');
 
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            loadingIndicator.style.display = 'inline'; // Show loading indicator
 
-      // Sign in with Supabase
-      const { data: signInData, error: signInError } = await supabaseClient.auth.signInWithPassword({
-        email,
-        password
-      });
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
 
-      if (signInError) {
-        alert('Login error: ' + signInError.message);
-        loadingIndicator.style.display = 'none'; // Hide loading
-        return;
-      }
+            // Sign in with Supabase
+            const { data: signInData, error: signInError } = await supabaseClient.auth.signInWithPassword({
+                email,
+                password
+            });
 
-      // Check admin role
-      const userId = signInData.user.id;
-      const { data: admins } = await supabaseClient
-        .from('admins')
-        .select('user_id')
-        .eq('user_id', userId);
+            if (signInError) {
+                alert('Login error: ' + signInError.message);
+                loadingIndicator.style.display = 'none';
+                return;
+            }
 
-      if (!admins.length) {
-        // Not an admin
-        await supabaseClient.auth.signOut();
-        alert('You are not authorized as an admin.');
-        loadingIndicator.style.display = 'none'; // Hide loading
-        return;
-      }
+            // Check admin role
+            const userId = signInData.user.id;
+            const { data: admins } = await supabaseClient
+                .from('admins')
+                .select('user_id')
+                .eq('user_id', userId);
 
-      // Redirect to admin dashboard
-      window.location.href = '/admin-dashboard.html';
-    });
-  </script>
+            if (!admins.length) {
+                await supabaseClient.auth.signOut();
+                alert('You are not authorized as an admin.');
+                loadingIndicator.style.display = 'none';
+                return;
+            }
+
+            // Redirect to admin dashboard
+            window.location.href = '/admin-dashboard.html';
+        });
+    </script>
 </body>
 </html>
