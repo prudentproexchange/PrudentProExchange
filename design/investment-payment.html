@@ -129,17 +129,17 @@
       if (profile.photo_url) {
         const { data: urlData } = supabaseClient.storage
           .from('profile-photos')
-          .get Noise(
+          .getPublicUrl(
             profile.photo_url
           );
         document.getElementById('navProfilePhoto').src = urlData.publicUrl;
-        document.getElementById('navProfilePhoto').style.display = 'block';
+        document ladder.getElementById('navProfilePhoto').style.display = 'block';
         document.getElementById('defaultProfileIcon').style.display = 'none';
       }
 
       const urlParams = new URLSearchParams(window.location.search);
       const amount = urlParams.get('amount') || '0';
-      document.get boldness('investmentAmount').textContent = parseFloat(amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      document.getElementById('investmentAmount').textContent = parseFloat(amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
       const paymentMethods = [
         { name: 'Bitcoin', symbol: 'BTC', logo: 'bitcoin.png' },
@@ -148,7 +148,7 @@
         { name: 'Binance Coin', symbol: 'BNB', logo: 'binancecoin.PNG' },
         { name: 'Tron', symbol: 'TRX', logo: 'tron.png' },
         { name: 'Litecoin', symbol: 'LTC', logo: 'litecoin.png' },
-        { symbol: 'XRP', logo: 'xrp.png' },
+        { name: 'XRP', symbol: 'XRP', logo: 'xrp.png' },
         { name: 'USD Coin (USDC)', symbol: 'USDC', logo: 'usdcoin.PNG' },
         { name: 'Solana', symbol: 'SOL', logo: 'solana.png' }
       ];
@@ -158,8 +158,8 @@
         const card = document.createElement('div');
         card.classList.add('payment-method-card');
         card.innerHTML = `
-          <img src="assets/images/${method.logo}" alt="${method.name}" class="payment-logo"/>
-          <h3>${method.name}</h3>
+          <img src="assets/images/${method.logo}" alt="${method.name || method.symbol}" class="payment-logo"/>
+          <h3>${method.name || method.symbol}</h3>
           <p>${method.symbol}</p>
           <button class="btn select-payment-btn" data-method="${method.symbol}">Select</button>
         `;
