@@ -1,127 +1,111 @@
-/* Payment Page Specific Styles */
-
-.payment-page.container {
-  max-width: 1200px;
-  margin: 0 auto;
+/* Payment Section */
+.payment-section {
+  margin-top: 3rem;
   padding: 2rem;
-}
-
-/* Profile Section (Consistent with invest.css) */
-.profile-section {
-  display: flex;
-  align-items: center;
-  padding: 1.5rem 2rem;
   background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(255, 215, 0, 0.2);
-}
-
-.profile-container {
-  margin-right: 1rem;
-}
-
-.avatar {
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  border: 2px solid #ffd700; /* Gold */
-  background: #000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 120px;
-  color: #ffd700; /* Gold */
-  object-fit: cover;
-  transition: transform 0.3s ease;
-}
-
-.avatar:hover {
-  transform: scale(1.05);
-}
-
-.welcome-message {
-  font-size: 1.5rem;
-  color: #ffd700; /* Gold */
-  font-family: 'Playfair Display', serif;
-}
-
-/* Payment Options Section */
-.payment-options {
-  text-align: center;
-}
-
-.payment-options h2 {
-  font-size: 2.5rem;
-  color: #ffd700; /* Gold */
-  margin-bottom: 1rem;
-  font-family: 'Playfair Display', serif;
-  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-}
-
-.investment-amount {
-  font-size: 1.5rem;
-  color: #e0e0ff;
-  margin-bottom: 2rem;
-  font-family: 'Poppins', sans-serif;
-}
-
-.payment-methods-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 2rem;
-  margin-bottom: 3rem;
-}
-
-.payment-method-card {
-  background: rgba(255, 255, 255, 0.1);
-  padding: 2rem;
-  border: 2px solid #ffd metabolites700; /* Gold */
+  border: 1px solid #ffd700;
   border-radius: 15px;
-  backdrop-filter: blur(15px);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
-  text-align: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.payment-section h3 {
+  font-size: 1.8rem;
+  color: #ffd700;
+  margin-bottom: 1.5rem;
+  font-family: 'Playfair Display', serif;
+}
+
+.payment-section p {
+  font-size: 1.2rem;
+  color: #e0e0ff;
+  font-family: 'Poppins', sans-serif;
+  margin-bottom: 1rem;
+}
+
+.payment-section #walletAddress {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.5rem;
+  border-radius: 5px;
+  user-select: all;
+}
+
+.payment-section #copyButton {
+  padding: 0.5rem 1rem;
+  background: #ffd700;
+  color: #000;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.payment-section #copyButton:hover {
+  background: #cca300;
+}
+
+/* Proceed Button */
+#proceedButton {
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(45deg, #ffd700, #cca300);
+  color: #000;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  margin-top: 1rem;
+}
+
+#proceedButton:hover:not(:disabled) {
+  background: linear-gradient(45deg, #cca300, #ffd700);
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
+}
+
+#proceedButton:disabled {
+  background: #666;
+  cursor: not-allowed;
+}
+
+/* Blinking Animation */
+.blink {
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+/* Upload Form Container */
+#uploadFormContainer {
+  margin-top: 2rem;
+}
+
+#uploadFormContainer form {
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 1rem;
 }
 
-.payment-method-card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 12px 40px rgba(255, 215, 0, 0.5); /* Gold glow */
-  border-color: #cca300;
-}
-
-.payment-logo {
-  width: 100px;
-  height: 100px;
-  margin-bottom: 1rem;
-  transition: transform 0.3s ease;
-}
-
-.payment-method-card:hover .payment-logo {
-  transform: scale(1.1);
-}
-
-.payment-method-card h3 {
-  font-size: 1.75rem;
-  color: #ffd700; /* Gold */
-  font-weight: 700;
-  margin-bottom: 0.5rem;
-  font-family: 'Playfair Display', serif;
-}
-
-.payment-method-card p {
-  font-size: 1.25rem;
+#uploadFormContainer input[type="file"] {
+  padding: 0.5rem;
+  border: 1px solid #ffd700;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.1);
   color: #e0e0ff;
-  font-weight: 500;
-  margin-bottom: 1rem;
   font-family: 'Poppins', sans-serif;
 }
 
-.select-payment-btn {
+#uploadFormContainer .upload-btn {
   padding: 0.75rem 1.5rem;
-  background: linear-gradient(45deg, #ffd700, #cca300); /* Gold gradient */
+  background: linear-gradient(45deg, #ffd700, #cca300);
   color: #000;
   border: none;
   border-radius: 5px;
@@ -132,122 +116,8 @@
   transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.select-payment-btn:hover {
+#uploadFormContainer .upload-btn:hover {
   background: linear-gradient(45deg, #cca300, #ffd700);
   transform: scale(1.05);
   box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
-}
-
-/* Upload Section */
-.upload-section {
-  background: rgba(255, 255, 255, 0.05);
-  padding: 2rem;
-  border: 1px solid #ffd700; /* Gold */
-  border-radius: 15px;
-  max-width: 500px;
-  margin: 0 auto 3rem auto;
-  backdrop-filter: blur(10px);
-}
-
-.upload-section h3 {
-  font-size: 1.8rem;
-  color: #ffd700; /* Gold */
-  margin-bottom: 1.5rem;
-  font-family: 'Playfair Display', serif;
-}
-
-.upload-section form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-}
-
-.upload-section input[type="file"] {
-  padding: 0.5rem;
-  border: 1px solid #ffd700; /* Gold */
-  border-radius: 5px;
-  background: rgba(255, 255, 255, 0.1);
-  color: #e0e0ff;
-  font-family: 'Poppins', sans-serif;
-}
-
-.upload-section .upload-btn {
-  padding: 0.75rem 1.5rem;
-  background: linear-gradient(45deg, #ffd700, #cca300); /* Gold gradient */
-  color: #000;
-  border: none;
-  border-radius: 5px;
-  font-size: 1rem;
- 分野 font-weight: 600;
-  font-family: 'Poppins', sans-serif;
-  cursor: pointer;
-  transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.upload-section .upload-btn:hover {
-  background: linear-gradient(45deg, #cca300, #ffd700);
-  transform: scale(1.05);
-  box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-  .payment-methods-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .payment-options h2 {
-    font-size: 2rem;
-  }
-
-  .investment-amount {
-    font-size: 1.2rem;
-  }
-
-  .payment-method-card {
-    padding: 1.5rem;
-  }
-
-  .payment-logo {
-    width: 80px;
-    height: 80px;
-  }
-
-  .payment-method-card h3 {
-    font-size: 1.5rem;
-  }
-
-  .payment-method-card p {
-    font-size: 1rem;
-  }
-
-  .upload-section {
-    padding: 1.5rem;
-  }
-
-  .upload-section h3 {
-    font-size: 1.5rem;
-  }
-
-  .profile-section {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 1rem;
-  }
-
-  .profile-container {
-    margin-right: 0;
-    margin-bottom: 0.5rem;
-  }
-
-  .avatar {
-    width: 120px;
-    height: 120px;
-    font-size: 72px;
-  }
-
-  .welcome-message {
-    font-size: 1.2rem;
-  }
 }
