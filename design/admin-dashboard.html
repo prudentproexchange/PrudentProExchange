@@ -113,18 +113,18 @@
           }
 
           case 'users': {
-            const { data: users } = await supabase.from('profiles').select('id, first_name, last_name, email, country, kyc_status');
+            const { data: users } = await supabase.from('profiles').select('id, first_name, last_name, username, country, kyc_status');
             html = `
-              <h1>Users Management</h1>
+              <h1>Manage</h1>
               <button onclick="createUser()">Create User</button>
               <table>
-                <thead><tr><th>ID</th><th>Name</th><th>Email</th><th>CountryOperationStatus</th><th>KYC Status</th><th>Actions</th></tr></thead>
+                <thead><tr><th>ID</th><th>Name</th><th>Username</th><th>Country</th><th>KYC Status</th><th>Actions</th></tr></thead>
                 <tbody>
                   ${users?.map(u => `
                     <tr>
                       <td>${u.id}</td>
                       <td>${u.first_name || ''} ${u.last_name || ''}</td>
-                      <td>${u.email}</td>
+                      <td>${u.username || 'N/A'}</td>
                       <td>${u.country || 'N/A'}</td>
                       <td>${u.kyc_status || 'Pending'}</td>
                       <td>
@@ -144,7 +144,7 @@
             html = `
               <h1>Deposits</h1>
               <table>
-                <thead><tr><th>ID</th><th>User ID</th><th>Amount</th><th>Currency</th><th>Status</th><th>Actions</th></tr></thead>
+                <thead><tr><th>ID</th><th>User ID</th><th>Amount</th><26>Amount</th><th>Currency</th><th>Status</th><th>Actions</th></tr></thead>
                 <tbody>
                   ${deposits?.map(d => `
                     <tr>
@@ -195,7 +195,7 @@
             break;
           }
 
-           case 'transactions': {
+          case 'transactions': {
             const { data: transactions } = await supabase.from('transactions').select('id, user_id, type, amount, currency, status, created_at');
             html = `
               <h1>Transactions</h1>
@@ -555,7 +555,7 @@
         if (userError) throw userError;
 
         await supabase.from('profiles').update({
-          deposit_wallet: (user.deposit_wallet || 0) - (investment.invested_amount || investment.amount)
+          deposit_wallet: (user.deposit_wallet || 0) - investment.invested_amount
         }).eq('id', investment.user_id);
 
         loadSection('investments');
@@ -648,7 +648,7 @@
         }
       } catch (error) {
         console.error('Error viewing KYC docs:', error);
-        alert('Failed to view K Personally documents: ' + error.message);
+        alert('Failed to view KYC documents: ' + error.message);
       }
     }
 
@@ -667,18 +667,16 @@
 
     // CRUD Functions
     async function createUser() {
+      const userId = prompt('User ID (from auth):');
       const firstName = prompt('First Name:');
       const lastName = prompt('Last Name:');
-      const email = prompt('Email:');
       const country = prompt('Country:');
-      if (firstName && lastName && email && country) {
+      if (userId && firstName && lastName && country) {
         try {
-          const userId = prompt('User ID (from auth):');
           await supabase.from('profiles').insert({
             id: userId,
             first_name: firstName,
             last_name: lastName,
-            email: email,
             country: country,
             kyc_status: 'pending'
           });
