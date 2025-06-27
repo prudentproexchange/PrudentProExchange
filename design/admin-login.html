@@ -17,7 +17,7 @@
 
   <!-- Login Box -->
   <div class="login-box">
-    <img src="assets/images/logo.png" alt="PrudentProExchange Logo" class="logo">
+    <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo">
     <h1>Admin Login</h1>
     <form id="loginForm">
       <label for="email">Email</label>
@@ -30,7 +30,6 @@
 
   <!-- JavaScript for Authentication -->
   <script>
-    // Initialize Supabase
     const SUPABASE_URL = 'https://iwkdznjqfbsfkscnbrkc.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU';
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -40,12 +39,11 @@
 
     loginForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-      loadingIndicator.style.display = 'inline'; // Show loading
+      loadingIndicator.style.display = 'inline';
 
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
 
-      // Sign in with Supabase
       const { data: signInData, error: signInError } = await supabaseClient.auth.signInWithPassword({
         email,
         password
@@ -53,11 +51,10 @@
 
       if (signInError) {
         alert('Login error: ' + signInError.message);
-        loadingIndicator.style.display = 'none'; // Hide loading
+        loadingIndicator.style.display = 'none';
         return;
       }
 
-      // Check admin role
       const userId = signInData.user.id;
       const { data: admins } = await supabaseClient
         .from('admins')
@@ -65,14 +62,12 @@
         .eq('user_id', userId);
 
       if (!admins.length) {
-        // Not an admin
         await supabaseClient.auth.signOut();
         alert('You are not authorized as an admin.');
-        loadingIndicator.style.display = 'none'; // Hide loading
+        loadingIndicator.style.display = 'none';
         return;
       }
 
-      // Redirect to admin dashboard
       window.location.href = '/admin-dashboard.html';
     });
   </script>
