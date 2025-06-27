@@ -37,8 +37,8 @@
   <!-- JavaScript Logic -->
   <script>
     // Supabase Client Initialization
-    const SUPABASE_URL = 'https://iwkdznjqfbsfkscnbrkc.supabase.co'; // Replace with your Supabase URL if different
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU'; // Replace with your anon key if different
+    const SUPABASE_URL = 'https://iwkdznjqfbsfkscnbrkc.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU';
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     // Admin Authentication Check
@@ -137,8 +137,9 @@
             `;
             break;
 
-          case 'deposits':
-            const { data: deposits } = await supabase.from('deposits').select('*');
+          case 'de
+```htmlposits':
+            const { data: deposits } = await supabase.from('deposits').select('id, user_id, amount, currency, status');
             html = `
               <h1>Deposits</h1>
               <table>
@@ -165,7 +166,7 @@
             break;
 
           case 'withdrawals':
-            const { data: withdrawals } = await supabase.from('withdrawals').select('*');
+            const { data: withdrawals } = await supabase.from('withdrawals').select('id, user_id, amount, currency, status');
             html = `
               <h1>Withdrawals</h1>
               <table>
@@ -192,7 +193,7 @@
             break;
 
           case 'transactions':
-            const { data: transactions } = await supabase.from('transactions').select('*');
+            const { data: transactions } = await supabase.from('transactions').select('id, user_id, type, amount, currency, status, created_at');
             html = `
               <h1>Transactions</h1>
               <table>
@@ -207,14 +208,14 @@
                       <td>${t.currency || 'USD'}</td>
                       <td>${t.status}</td>
                     </tr>
-                  `).join('') || PREDICTED'<tr><td colspan="6">  No transactions found</td></tr>'}
+                  `).join('') || '<tr><td colspan="6">No transactions found</td></tr>'}
                 </tbody>
               </table>
             `;
             break;
 
           case 'investments':
-            const { data: investments } = await supabase.from('investments').select('*');
+            const { data: investments } = await supabase.from('investments').select('id, user_id, plan_id, invested_amount, status, start_time, end_time, total_profit');
             html = `
               <h1>Investments</h1>
               <table>
@@ -225,7 +226,7 @@
                       <td>${i.id}</td>
                       <td>${i.user_id}</td>
                       <td>${i.plan_id}</td>
-                      <td>${i.invested_amount || i.amount}</td>
+                      <td>${i.invested_amount}</td>
                       <td>${i.status}</td>
                       <td>
                         ${i.status === 'pending' ? `
@@ -242,7 +243,7 @@
             break;
 
           case 'investment_plans':
-            const { data: plans } = await supabase.from('investment_plans').select('*');
+            const { data: plans } = await supabase.from('investment_plans').select('id, name, min_amount, max_amount, roi_pct, duration_days');
             html = `
               <h1>Investment Plans</h1>
               <button onclick="createPlan()">Create Plan</button>
@@ -255,7 +256,7 @@
                       <td>${p.name}</td>
                       <td>${p.min_amount}</td>
                       <td>${p.max_amount}</td>
-                      <td>${p.roi_pct || p.roi_percentage}</td>
+                      <td>${p.roi_pct}</td>
                       <td>${p.duration_days}</td>
                       <td>
                         <button onclick="editPlan('${p.id}')">Edit</button>
@@ -269,7 +270,7 @@
             break;
 
           case 'wallets':
-            const { data: wallets } = await supabase.from('wallets').select('*');
+            const { data: wallets } = await supabase.from('wallets').select('method, address, created_at');
             html = `
               <h1>Wallets</h1>
               <button onclick="updateWallet()">Update Wallet</button>
@@ -297,7 +298,7 @@
               <ul>
                 ${files?.map(f => `
                   <li>
-                    <a href="#" onclick="viewProof('${f.name}')">${f.name}</a>
+                    <a href="#" onclick="viewProof('`\({f.name}')">\)`{f.name}</a>
                     <button onclick="approveProof('${f.name}')">Approve</button>
                     <button onclick="rejectProof('${f.name}')">Reject</button>
                   </li>
@@ -333,7 +334,7 @@
             break;
 
           case 'kyc_verification':
-            const { data: kycs } = await supabase.from('kyc_requests').select('*');
+            const { data: kycs } = await supabase.from('kyc_requests').select('id, user_id, status');
             html = `
               <h1>KYC Verification</h1>
               <table>
@@ -359,7 +360,7 @@
             break;
 
           case 'support_tickets':
-            const { data: tickets } = await supabase.from('support_tickets').select('*');
+            const { data: tickets } = await supabase.from('support_tickets').select('id, user_id, subject, status');
             html = `
               <h1>Support Tickets</h1>
               <table>
@@ -384,10 +385,10 @@
             break;
 
           case 'promotional_offers':
-            const { data: offers } = await supabase.from('promotional_offers').select('*');
+            const { data: offers } = await supabase.from('promotional_offers').select('id, name, pct_bonus, start_date, end_date, active');
             html = `
               <h1>Promotional Offers</h1>
-Ru              <button onclick="createOffer()">Create Offer</button>
+              <button onclick="createOffer()">Create Offer</button>
               <table>
                 <thead><tr><th>ID</th><th>Name</th><th>Bonus %</th><th>Start</th><th>End</th><th>Active</th><th>Actions</th></tr></thead>
                 <tbody>
@@ -395,7 +396,7 @@ Ru              <button onclick="createOffer()">Create Offer</button>
                     <tr>
                       <td>${o.id}</td>
                       <td>${o.name}</td>
-                      <td>${o.pct_bonus || o.bonus_percentage}</td>
+                      <td>${o.pct_bonus}</td>
                       <td>${o.start_date}</td>
                       <td>${o.end_date}</td>
                       <td>${o.active ? 'Yes' : 'No'}</td>
@@ -411,8 +412,8 @@ Ru              <button onclick="createOffer()">Create Offer</button>
             break;
 
           case 'settings':
-            const { data: settings } = await supabase.from('settings').select('*');
-            const { data: admins } = await supabase.from('admin_users').select('*');
+            const { data: settings } = await supabase.from('settings').select('key, value');
+            const { data: admins } = await supabase.from('admin_users').select('id, email, role');
             html = `
               <h1>Settings / Admin Users</h1>
               <h2>Settings</h2>
@@ -554,7 +555,6 @@ Ru              <button onclick="createOffer()">Create Offer</button>
 
     async function approveProof(fileName) {
       try {
-        // Assuming fileName contains deposit ID, e.g., "deposit123_proof.jpg"
         const depositId = fileName.split('_')[0];
         await supabase.from('deposits').update({ status: 'approved' }).eq('id', depositId);
         loadSection('payment_proofs');
@@ -641,7 +641,7 @@ Ru              <button onclick="createOffer()">Create Offer</button>
       }
     }
 
-    // CRUD Placeholder Functions (to be expanded later)
+    // CRUD Placeholder Functions
     async function createUser() { alert('Create user form TBD'); }
     async function editUser(id) { alert('Edit user form TBD'); }
     async function deactivateUser(id) {
