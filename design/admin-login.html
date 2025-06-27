@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Admin Login • PrudentProExchange</title>
-  <!-- Updated Supabase script tag to version 2 -->
+  <!-- Load Supabase v2 from CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@^2"></script>
   <style>
     body {
@@ -104,6 +104,10 @@
       color: #ff0000;
       margin-top: 1rem;
       text-align: center;
+      background: rgba(255, 0, 0, 0.1);
+      padding: 0.5rem;
+      border-radius: 5px;
+      display: none;
     }
 
     @media (max-width: 400px) {
@@ -118,7 +122,7 @@
   </style>
 </head>
 <body>
-  <!-- Updated video tag with multiple sources -->
+  <!-- Background video with multiple sources for compatibility -->
   <video class="bg-video" autoplay muted loop playsinline preload="auto">
     <source src="assets/videos/background.webm" type="video/webm">
     <source src="assets/videos/background.mp4" type="video/mp4">
@@ -133,22 +137,22 @@
       <label for="password">Password</label>
       <input type="password" id="password" autocomplete="current-password" required />
       <button type="submit" id="loginBtn">Sign In</button>
-      <p class="error" id="errorMsg" style="display:none;"></p>
+      <p class="error" id="errorMsg"></p>
     </form>
   </div>
 
-  <!-- Script block moved before </body> -->
+  <!-- Script block placed before </body> -->
   <script>
-    // Initialize Supabase client without overwriting global supabase object
+    // Initialize Supabase client using the global Supabase object
     const SUPABASE_URL = 'https://iwkdznjqfbsfkscnbrkc.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU';
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const supabaseClient = Supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     // Form submission handler wrapped in DOMContentLoaded
     document.addEventListener('DOMContentLoaded', () => {
       const loginForm = document.getElementById('loginForm');
-      const loginBtn  = document.getElementById('loginBtn');
-      const errorMsg  = document.getElementById('errorMsg');
+      const loginBtn = document.getElementById('loginBtn');
+      const errorMsg = document.getElementById('errorMsg');
 
       loginForm.addEventListener('submit', async (e) => {
         e.preventDefault(); // Prevent default form reload
@@ -159,7 +163,7 @@
         const password = document.getElementById('password').value.trim();
 
         if (!email || !password) {
-          errorMsg.textContent = 'Enter both email and password.';
+          errorMsg.textContent = 'Please enter both email and password.';
           errorMsg.style.display = 'block';
           return;
         }
@@ -178,12 +182,12 @@
           return;
         }
 
-        // Check admin flag
+        // Safely check if the user is an admin using optional chaining
         const user = data.user;
-        const isAdmin = user.user_metadata?.is_admin === true;
+        const isAdmin = user?.user_metadata?.is_admin === true;
         if (!isAdmin) {
           await supabaseClient.auth.signOut();
-          errorMsg.textContent = 'Access denied: not an admin.';
+          errorMsg.textContent = 'Access denied: You are not an admin.';
           errorMsg.style.display = 'block';
           loginBtn.disabled = false;
           loginBtn.textContent = 'Sign In';
