@@ -103,6 +103,10 @@
       color: #ff0000;
       margin-top: 1rem;
       text-align: center;
+      background: rgba(255, 0, 0, 0.1);
+      padding: 0.5rem;
+      border-radius: 5px;
+      display: none;
     }
 
     @media (max-width: 400px) {
@@ -122,7 +126,7 @@
     Your browser does not support the video tag.
   </video>
   <div class="login-container">
-    <img src="path/to/your/logo.png" alt="Logo" class="logo">
+    <img src="assets/images/logo.svg" alt="Logo" class="logo">
     <h1>Admin Login</h1>
     <form id="loginForm">
       <label for="email">Email</label>
@@ -130,7 +134,7 @@
       <label for="password">Password</label>
       <input type="password" id="password" autocomplete="current-password" required />
       <button type="submit" id="loginBtn">Sign In</button>
-      <p class="error" id="errorMsg" style="display:none;"></p>
+      <p class="error" id="errorMsg"></p>
     </form>
   </div>
 
@@ -142,42 +146,58 @@
 
     // Handle Form Submission
     const loginForm = document.getElementById('loginForm');
-    const loginBtn  = document.getElementById('loginBtn');
-    const errorMsg  = document.getElementById('errorMsg');
+    const loginBtn = document.getElementById('loginBtn');
+    const errorMsg = document.getElementById('errorMsg');
+
+    function validateForm() {
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value.trim();
+      if (!email || !password) {
+        errorMsg.textContent = 'Please enter both email and password.';
+        errorMsg.style.display = 'block';
+        return false;
+      }
+      return true;
+    }
 
     loginForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       errorMsg.style.display = 'none';
+      
+      // Validate form inputs
+      if (!validateForm()) {
+        return;
+      }
+
       loginBtn.disabled = true;
       loginBtn.textContent = 'Signing in…';
 
-      const email    = document.getElementById('email').value;
+      const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
 
       // Sign in with Supabase Auth
       const { data, error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) {
-        errorMsg.textContent = error.message;
+        errorMsg.textContent = `Login failed: ${error.message}`;
         errorMsg.style.display = 'block';
         loginBtn.disabled = false;
         loginBtn.textContent = 'Sign In';
         return;
       }
 
-      // Optional: check for admin role/custom claim
+      // Check if the user is an admin
       const user = data.user;
-      // e.g. assume you flag admins in a metadata field 'is_admin'
       const isAdmin = user.user_metadata?.is_admin === true;
       if (!isAdmin) {
         await supabase.auth.signOut();
-        errorMsg.textContent = 'Access denied: not an admin.';
+        errorMsg.textContent = 'Access denied: You are not an admin.';
         errorMsg.style.display = 'block';
         loginBtn.disabled = false;
         loginBtn.textContent = 'Sign In';
         return;
       }
 
-      // Redirect to Admin Dashboard
+      // Redirect to Admin Dashboard on success
       window.location.href = 'admin-dashboard.html';
     });
   </script>
