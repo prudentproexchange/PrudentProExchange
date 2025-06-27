@@ -1,0 +1,95 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    overflow: hidden; /* Prevents scrollbars from video */
+}
+
+/* Background Video Styling */
+#background-video {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    min-width: 100%;
+    min-height: 100%;
+    z-index: -1;
+    object-fit: cover; /* Ensures video covers the background */
+}
+
+/* Login Box Styling */
+.login-box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.8); /* Semi-transparent black */
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
+    width: 300px;
+    text-align: center;
+}
+
+/* Logo Styling */
+.logo {
+    display: block;
+    margin: 0 auto 1rem;
+    width: 100px; /* Adjust based on your logo size */
+}
+
+/* Heading Styling */
+h1 {
+    color: #fff;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+}
+
+/* Label Styling */
+label {
+    color: #fff;
+    display: block;
+    margin-bottom: 0.5rem;
+    text-align: left;
+}
+
+/* Input Styling */
+input {
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    background: #333;
+    color: #fff;
+    border: 1px solid #ffd700; /* Gold border */
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+input:focus {
+    outline: none;
+    border-color: #e6c200; /* Darker gold on focus */
+}
+
+/* Button Styling */
+button {
+    width: 100%;
+    padding: 0.75rem;
+    background: #ffd700; /* Gold background */
+    color: #000;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.3s ease;
+}
+
+button:hover {
+    background: #e6c200; /* Darker gold on hover */
+}
+
+/* Responsive Design */
+@media (max-width: 400px) {
+    .login-box {
+        width: 90%;
+        padding: 1.5rem;
+    }
+}
