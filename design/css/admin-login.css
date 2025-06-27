@@ -1,95 +1,110 @@
+/* admin-login.css */
 body {
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
-    overflow: hidden; /* Prevents scrollbars from video */
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background: #000; /* Fallback if video fails */
 }
 
-/* Background Video Styling */
-#background-video {
-    position: fixed;
-    right: 0;
-    bottom: 0;
-    min-width: 100%;
-    min-height: 100%;
-    z-index: -1;
-    object-fit: cover; /* Ensures video covers the background */
+/* Video Background */
+.bg-video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: -1;
 }
 
-/* Login Box Styling */
+/* Login Box */
 .login-box {
-    position: absolute;
-    top: 50%;
-    left: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.9); /* Nearly solid black for readability */
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); /* Depth effect */
+  width: 300px;
+  text-align: center;
+  animation: fadeIn 0.5s ease-in-out; /* Smooth entrance */
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -70%);
+  }
+  to {
+    opacity: 1;
     transform: translate(-50%, -50%);
-    background: rgba(0, 0, 0, 0.8); /* Semi-transparent black */
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
-    width: 300px;
-    text-align: center;
+  }
 }
 
-/* Logo Styling */
+/* Logo */
 .logo {
-    display: block;
-    margin: 0 auto 1rem;
-    width: 100px; /* Adjust based on your logo size */
+  display: block;
+  margin: 0 auto 1rem;
+  width: 100px; /* Adjust as needed */
 }
 
-/* Heading Styling */
+/* Title */
 h1 {
-    color: #fff;
-    margin-bottom: 1.5rem;
-    font-size: 1.5rem;
+  color: #fff;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
 }
 
-/* Label Styling */
+/* Labels */
 label {
-    color: #fff;
-    display: block;
-    margin-bottom: 0.5rem;
-    text-align: left;
+  color: #fff;
+  display: block;
+  margin-bottom: 0.5rem;
+  text-align: left;
 }
 
-/* Input Styling */
+/* Inputs */
 input {
-    width: 100%;
-    padding: 0.5rem;
-    margin-bottom: 1rem;
-    background: #333;
-    color: #fff;
-    border: 1px solid #ffd700; /* Gold border */
-    border-radius: 5px;
-    box-sizing: border-box;
+  width: 100%;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  background: #222; /* Dark input background */
+  color: #fff;
+  border: 1px solid #444;
+  border-radius: 5px;
+  box-sizing: border-box;
 }
 
 input:focus {
-    outline: none;
-    border-color: #e6c200; /* Darker gold on focus */
+  border-color: #ffd700; /* Gold on focus */
+  outline: none;
 }
 
-/* Button Styling */
+/* Button */
 button {
-    width: 100%;
-    padding: 0.75rem;
-    background: #ffd700; /* Gold background */
-    color: #000;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: background 0.3s ease;
+  width: 100%;
+  padding: 0.75rem;
+  background: #ffd700; /* Gold button */
+  color: #000;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
 }
 
 button:hover {
-    background: #e6c200; /* Darker gold on hover */
+  background: #e6b800; /* Darker gold on hover */
 }
 
 /* Responsive Design */
-@media (max-width: 400px) {
-    .login-box {
-        width: 90%;
-        padding: 1.5rem;
-    }
+@media (max-width: 480px) {
+  .login-box {
+    width: 90%;
+    padding: 1.5rem;
+  }
+  h1 {
+    font-size: 1.5rem;
+  }
 }
