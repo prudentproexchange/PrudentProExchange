@@ -12,6 +12,7 @@
   <video class="bg-video" autoplay muted loop playsinline preload="auto">
     <source src="assets/videos/background.webm" type="video/webm">
     <source src="assets/videos/background.mp4" type="video/mp4">
+    Your browser does not support the video tag.
   </video>
 
   <!-- Login Box -->
@@ -27,7 +28,7 @@
     </form>
   </div>
 
-  <!-- JavaScript -->
+  <!-- JavaScript for Authentication -->
   <script>
     // Initialize Supabase
     const SUPABASE_URL = 'https://iwkdznjqfbsfkscnbrkc.supabase.co';
@@ -39,10 +40,12 @@
 
     loginForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-      loadingIndicator.style.display = 'inline';
+      loadingIndicator.style.display = 'inline'; // Show loading
+
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
 
+      // Sign in with Supabase
       const { data: signInData, error: signInError } = await supabaseClient.auth.signInWithPassword({
         email,
         password
@@ -50,10 +53,11 @@
 
       if (signInError) {
         alert('Login error: ' + signInError.message);
-        loadingIndicator.style.display = 'none';
+        loadingIndicator.style.display = 'none'; // Hide loading
         return;
       }
 
+      // Check admin role
       const userId = signInData.user.id;
       const { data: admins } = await supabaseClient
         .from('admins')
@@ -61,12 +65,14 @@
         .eq('user_id', userId);
 
       if (!admins.length) {
+        // Not an admin
         await supabaseClient.auth.signOut();
         alert('You are not authorized as an admin.');
-        loadingIndicator.style.display = 'none';
+        loadingIndicator.style.display = 'none'; // Hide loading
         return;
       }
 
+      // Redirect to admin dashboard
       window.location.href = '/admin-dashboard.html';
     });
   </script>
