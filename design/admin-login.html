@@ -2,70 +2,142 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin Login • PrudentProExchange</title>
-  <style>
-    body { font-family: sans-serif; max-width: 400px; margin: 4rem auto; }
-    label, button { display: block; width: 100%; margin: 1rem 0; }
-    button { padding: 0.75rem; font-size: 1rem; }
-  </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: sans-serif;
+      background: #000; /* Fallback if video fails */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .bg-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      z-index: -1;
+    }
+
+    .login-container {
+      background: rgba(255, 255, 255, 0.8); /* Semi-transparent white */
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+      width: 300px;
+      text-align: center;
+      animation: fadeIn 0.5s ease-in-out;
+      z-index: 1;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .logo {
+      display: block;
+      margin: 0 auto 1rem;
+      width: 100px;
+    }
+
+    h1 {
+      margin-bottom: 1.5rem;
+      font-size: 1.5rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      text-align: left;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.5rem;
+      margin-bottom: 1rem;
+      box-sizing: border-box;
+    }
+
+    button {
+      width: 100%;
+      padding: 0.75rem;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
-  <h1>Admin Login</h1>
-  <form id="loginForm">
-    <label>
-      Email
+  <!-- Background video with multiple sources for compatibility -->
+  <video class="bg-video" autoplay muted loop playsinline preload="auto">
+    <source src="assets/videos/background.webm" type="video/webm">
+    <source src="assets/videos/background.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+  <div class="login-container">
+    <img src="assets/images/logo.svg" alt="Logo" class="logo">
+    <h1>Admin Login</h1>
+    <form id="loginForm">
+      <label for="email">Email</label>
       <input type="email" id="email" required />
-    </label>
-    <label>
-      Password
+      <label for="password">Password</label>
       <input type="password" id="password" required />
-    </label>
-    <button type="submit">Sign In</button>
-  </form>
+      <button type="submit">Sign In</button>
+    </form>
+  </div>
 
   <script>
-    // 1️⃣ Initialize Supabase Client
-    const SUPABASE_URL = 'https://iwkdznjqfbsfkscnbrkc.supabase.co';
-    const SUPABASE_ANON_KEY = 'your-actual-anon-key-here'; // Replace with your actual anon key
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    document.addEventListener('DOMContentLoaded', () => {
+      // Initialize Supabase client with your URL and API key
+      const SUPABASE_URL = 'https://iwkdznjqfbsfkscnbrkc.supabase.co';
+      const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU';
+      const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    document.getElementById('loginForm').addEventListener('submit', async e => {
-      e.preventDefault();
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
+      document.getElementById('loginForm').addEventListener('submit', async e => {
+        e.preventDefault();
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
 
-      // 2️⃣ Sign in with Supabase Auth
-      const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
-        email, password
+        // Sign in with Supabase Auth
+        const { data: signInData, error: signInError } = await supabaseClient.auth.signInWithPassword({
+          email, password
+        });
+        if (signInError) {
+          console.error('Login error:', signInError);
+          return alert('Login error: ' + signInError.message);
+        }
+
+        // Check if the user is an admin
+        const userId = signInData.user.id;
+        console.log('User ID:', userId);
+        const { data: admins, error: adminErr } = await supabaseClient
+          .from('admins')
+          .select('user_id')
+          .eq('user_id', userId);
+
+        console.log('Admins query:', admins, adminErr);
+        if (adminErr) {
+          console.error('Admin check error:', adminErr);
+          await supabaseClient.auth.signOut();
+          return alert('Error checking admin status: ' + adminErr.message);
+        }
+        if (admins.length === 0) {
+          await supabaseClient.auth.signOut();
+          return alert('Access denied: not an admin.');
+        }
+
+        // Redirect to admin dashboard on success
+        window.location.href = 'admin-dashboard.html';
       });
-      if (signInError) {
-        console.error('Login error:', signInError);
-        return alert('Login error: ' + signInError.message);
-      }
-
-      // 3️⃣ Check if the user is an admin
-      const userId = signInData.user.id;
-      console.log('User ID:', userId); // For debugging
-      const { data: admins, error: adminErr } = await supabase
-        .from('admins')
-        .select('user_id')
-        .eq('user_id', userId);
-
-      console.log('Admins query:', admins, adminErr); // For debugging
-      if (adminErr) {
-        console.error('Admin check error:', adminErr);
-        await supabase.auth.signOut();
-        return alert('Error checking admin status: ' + adminErr.message);
-      }
-      if (admins.length === 0) {
-        await supabase.auth.signOut();
-        return alert('Access denied: not an admin.');
-      }
-
-      // 4️⃣ Redirect to admin dashboard on success
-      window.location.href = 'admin-dashboard.html';
     });
   </script>
 </body>
