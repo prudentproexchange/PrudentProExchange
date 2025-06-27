@@ -73,6 +73,7 @@
           <!-- Payment method cards will be dynamically inserted here -->
         </div>
       </section>
+      <section id="paymentSection" class="payment-section" data-aos="fade-up"></section>
     </main>
 
     <!-- Footer -->
@@ -107,14 +108,12 @@
 
     // Initialize Payment Page
     async function initPaymentPage() {
-      // Authentication Check
       const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
       if (!user || authError) {
         window.location.href = 'login.html';
         return;
       }
 
-      // Load User Profile
       const { data: profile, error: profileError } = await supabaseClient
         .from('profiles')
         .select('*')
@@ -136,26 +135,23 @@
         document.getElementById('defaultProfileIcon').style.display = 'none';
       }
 
-      // Retrieve Investment Amount from URL
       const urlParams = new URLSearchParams(window.location.search);
       const amount = urlParams.get('amount') || '0';
       document.getElementById('investmentAmount').textContent = parseFloat(amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-      // Define Payment Methods
       const paymentMethods = [
         { name: 'Bitcoin', symbol: 'BTC', logo: 'bitcoin.png' },
         { name: 'Ethereum', symbol: 'ETH', logo: 'ethereum.png' },
         { name: 'Tether (ERC-20)', symbol: 'USDT', logo: 'tether.png' },
-        { name: 'Binance Coin', symbol: 'BNB', logo: 'binance.png' },
+        { name: 'Binance Coin', symbol: 'BNB', logo: 'binancecoin.PNG' },
         { name: 'Tron', symbol: 'TRX', logo: 'tron.png' },
         { name: 'Litecoin', symbol: 'LTC', logo: 'litecoin.png' },
         { name: 'XRP (Ripple)', symbol: 'XRP', logo: 'xrp.png' },
-        { name: 'USD Coin (USDC)', symbol: 'USDC', logo: 'usdc.png' },
+        { name: 'USD Coin (USDC)', symbol: 'USDC', logo: 'usdcoin.PNG' },
         { name: 'Dogecoin', symbol: 'DOGE', logo: 'dogecoin.png' },
         { name: 'Solana', symbol: 'SOL', logo: 'solana.png' }
       ];
 
-      // Populate Payment Methods Grid
       const grid = document.getElementById('paymentMethodsGrid');
       paymentMethods.forEach(method => {
         const card = document.createElement('div');
@@ -169,7 +165,6 @@
         grid.appendChild(card);
       });
 
-      // Handle Payment Method Selection
       document.querySelectorAll('.select-payment-btn').forEach(btn => {
         btn.addEventListener('click', () => {
           const method = btn.getAttribute('data-method');
@@ -178,26 +173,53 @@
       });
     }
 
-    // Show Upload Form for Proof of Payment
-    function showUploadForm(method, userId) {
-      // Remove existing upload section if any
-      const existingUpload = document.querySelector('.upload-section');
-      if (existingUpload) existingUpload.remove();
+    async function showUploadForm(method, userId) {
+      const { data: wallet, error } = await supabaseClient
+        .from('wallets')
+        .select('address')
+        .eq('method', method)
+        .single();
 
-      const uploadSection = document.createElement('section');
-      uploadSection.classList.add('upload-section');
-      uploadSection.setAttribute('data-aos', 'fade-up');
-      uploadSection.innerHTML = `
-        <h3>Upload Proof of Payment for ${method}</h3>
-        <form id="uploadForm">
-          <input type="file" id="proofFile" accept="image/*,application/pdf" required/>
-          <button type="submit" class="btn upload-btn">Upload Proof</button>
-        </form>
+      if (error) {
+        console.error('Error fetching wallet address:', error);
+        alert('Failed to fetch wallet address. Please try again.');
+        return;
+      }
+
+      const address = wallet.address;
+      const paymentSection = document.getElementById('paymentSection');
+      paymentSection.innerHTML = `
+        <h3>Payment Details for ${method}</h3>
+        <p>Wallet Address: <span id="walletAddress">${address}</span> <button id="copyButton">Copy</button></p>
+        <button id="proceedButton" disabled>Proceed to Upload Proof of Payment</button>
+        <div id="uploadFormContainer" style="display:none;">
+          <form id="uploadForm">
+            <input type="file" id="proofFile" accept="image/*,application/pdf" required/>
+            <button type="submit" class="btn upload-btn">Upload Proof</button>
+          </form>
+        </div>
       `;
-      document.querySelector('main').appendChild(uploadSection);
-      AOS.refresh(); // Refresh AOS animations
 
-      // Handle Form Submission
+      paymentSection.scrollIntoView({ behavior: 'smooth' });
+
+      const copyButton = document.getElementById('copyButton');
+      copyButton.addEventListener('click', () => {
+        navigator.clipboard.writeText(address).then(() => {
+          alert('Wallet address copied to clipboard!');
+          const proceedButton = document.getElementById('proceedButton');
+          proceedButton.disabled = false;
+          proceedButton.classList.add('blink');
+        });
+      });
+
+      const proceedButton = document.getElementById('proceedButton');
+      proceedButton.addEventListener('click', () => {
+        const uploadFormContainer = document.getElementById('uploadFormContainer');
+        uploadFormContainer.style.display = 'block';
+        proceedButton.classList.remove('blink');
+        uploadFormContainer.scrollIntoView({ behavior: 'smooth' });
+      });
+
       const form = document.getElementById('uploadForm');
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -207,31 +229,25 @@
           alert('Please select a file to upload.');
           return;
         }
-
-        // Validate file size (e.g., max 5MB)
         if (file.size > 5 * 1024 * 1024) {
           alert('File size exceeds 5MB. Please upload a smaller file.');
           return;
         }
-
         const fileName = `${userId}_${method}_${Date.now()}_${file.name}`;
         const { data, error } = await supabaseClient.storage
           .from('payment-proofs')
           .upload(fileName, file);
-
         if (error) {
           console.error('Upload error:', error);
           alert('Failed to upload proof of payment. Please try again.');
         } else {
           alert(`Proof of payment for ${method} uploaded successfully!`);
-          // Optionally redirect or clear form
           form.reset();
-          uploadSection.remove();
+          document.getElementById('uploadFormContainer').style.display = 'none';
         }
       });
     }
 
-    // Hamburger Menu Toggle
     const hamburgerBtn = document.getElementById('hamburgerBtn');
     const navDrawer = document.getElementById('navDrawer');
     const overlay = document.querySelector('.overlay');
@@ -242,7 +258,6 @@
       if (navDrawer.classList.contains('open')) navDrawer.scrollTop = 0;
     });
 
-    // Close Navigation on Outside Click
     document.addEventListener('click', (event) => {
       const isClickInsideNav = navDrawer.contains(event.target);
       const isClickOnHamburger = hamburgerBtn.contains(event.target);
@@ -253,7 +268,6 @@
       }
     });
 
-    // Theme Toggle
     const themeToggle = document.getElementById('theme-toggle');
     themeToggle.addEventListener('click', () => {
       document.body.classList.toggle('light-theme');
@@ -262,7 +276,6 @@
       icon.classList.toggle('fa-sun');
     });
 
-    // Account Menu Toggle
     const accountToggle = document.getElementById('account-toggle');
     const submenu = accountToggle.nextElementSibling;
     accountToggle.addEventListener('click', (e) => {
@@ -270,12 +283,10 @@
       submenu.classList.toggle('open');
     });
 
-    // Back to Top Button
     document.getElementById('back-to-top').addEventListener('click', () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
-    // Real-Time Clock Updates
     function updateLocalTime() {
       const now = new Date();
       document.getElementById('localTime').textContent = now.toLocaleTimeString();
@@ -292,13 +303,11 @@
     setInterval(updateUTCTime, 1000);
     updateUTCTime();
 
-    // Ensure Video Playback
     const video = document.querySelector('.bg-video');
     video.addEventListener('canplay', () => {
       video.play().catch(error => console.error('Video playback error:', error));
     });
 
-    // Initialize the Page
     initPaymentPage();
   </script>
 </body>
