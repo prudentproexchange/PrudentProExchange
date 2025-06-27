@@ -272,7 +272,7 @@
             const { data: wallets } = await supabase.from('wallets').select('method, address, created_at');
             html = `
               <h1>Wallets</h1>
-              <button onclick="updateWallet()">Update Wallet</button>
+              <button onclick="updateWallet()">Add Wallet</button>
               <table>
                 <thead><tr><th>Method</th><th>Address</th><th>Actions</th></tr></thead>
                 <tbody>
@@ -281,7 +281,7 @@
                       <td>${w.method}</td>
                       <td>${w.address}</td>
                       <td>
-                        <button onclick="editWallet('${w.method}', '${w.address}')">Edit</button>
+                        <button onclick="editWallet('${w.method}')">Edit</button>
                       </td>
                     </tr>
                   `).join('') || '<tr><td colspan="3">No wallets found</td></tr>'}
@@ -291,22 +291,18 @@
             break;
 
           case 'payment_proofs':
-            const { data: files } = await supabase.storage.from('payment-proofs').list('', { limit: 1000 });
+            const { data: { user } } = await supabase.auth.getUser();
+            const { data: files } = await supabase.storage.from('payment-proofs').list(`${user.id}`, { limit: 100 });
             html = `
               <h1>Payment Proofs</h1>
               <ul>
-                ${files?.map(f => {
-                  const pathParts = f.name.split('/');
-                  const userId = pathParts[0];
-                  const fileName = pathParts[1];
-                  return `
-                    <li>
-                      <a href="#" onclick="viewProof('${f.name}')">${fileName} (User: ${userId})</a>
-                      <button onclick="approveProof('${f.name}')">Approve</button>
-                      <button onclick="rejectProof('${f.name}')">Reject</button>
-                    </li>
-                  `;
-                }).join('') || '<li>No payment proofs found</li>'}
+                ${files?.map(f => `
+                  <li>
+                    <a href="#" onclick="viewProof('${f.name}')">${f.name}</a>
+                    <button onclick="approveProof('${f.name}')">Approve</button>
+                    <button onclick="rejectProof('${f.name}')">Reject</button>
+                  </li>
+                `).join('') || '<li>No payment proofs found</li>'}
               </ul>
             `;
             break;
@@ -557,9 +553,8 @@
       }
     }
 
-    async function approveProof(filePath) {
+    async function approveProof(fileName) {
       try {
-        const fileName = filePath.split('/')[1];
         const depositId = fileName.split('_')[0];
         await supabase.from('deposits').update({ status: 'approved' }).eq('id', depositId);
         loadSection('payment_proofs');
@@ -569,9 +564,8 @@
       }
     }
 
-    async function rejectProof(filePath) {
+    async function rejectProof(fileName) {
       try {
-        const fileName = filePath.split('/')[1];
         const depositId = fileName.split('_')[0];
         await supabase.from('deposits').update({ status: 'rejected' }).eq('id', depositId);
         loadSection('payment_proofs');
@@ -581,9 +575,10 @@
       }
     }
 
-    async function viewProof(filePath) {
+    async function viewProof(fileName) {
       try {
-        const { data, error } = await supabase.storage.from('payment-proofs').download(filePath);
+        const { data: { user } } = await supabase.auth.getUser();
+        const { data, error } = await supabase.storage.from('payment-proofs').download(`${user.id}/${fileName}`);
         if (error) throw error;
         const url = URL.createObjectURL(data);
         window.open(url);
@@ -649,21 +644,19 @@
 
     // CRUD Functions
     async function createUser() {
-      const email = prompt('Enter user email:');
-      const password = prompt('Enter user password:');
-      const firstName = prompt('Enter first name:');
-      const lastName = prompt('Enter last name:');
-      const country = prompt('Enter country:');
-      if (email && password && firstName && lastName) {
+      const firstName = prompt('First Name:');
+      const lastName = prompt('Last Name:');
+      const email = prompt('Email:');
+      const country = prompt('Country:');
+      if (firstName && lastName && email && country) {
         try {
-          const { data, error } = await supabase.auth.signUp({ email, password });
-          if (error) throw error;
+          const userId = prompt('User ID (from auth):');
           await supabase.from('users').insert({
-            id: data.user.id,
+            id: userId,
             first_name: firstName,
             last_name: lastName,
-            email,
-            country,
+            email: email,
+            country: country,
             kyc_status: 'pending'
           });
           loadSection('users');
@@ -675,21 +668,20 @@
     }
 
     async function editUser(id) {
-      const { data: user } = await supabase.from('users').select('*').eq('id', id).single();
-      const firstName = prompt('Enter first name:', user.first_name);
-      const lastName = prompt('Enter last name:', user.last_name);
-      const country = prompt('Enter country:', user.country);
-      if (firstName && lastName) {
+      const firstName = prompt('New First Name:');
+      const lastName = prompt('New Last Name:');
+      const country = prompt('New Country:');
+      if (firstName || lastName || country) {
         try {
           await supabase.from('users').update({
             first_name: firstName,
             last_name: lastName,
-            country: country || null
+            country: country
           }).eq('id', id);
           loadSection('users');
         } catch (error) {
-          console.error('Error updating user:', error);
-          alert('Failed to update user: ' + error.message);
+          console.error('Error editing user:', error);
+          alert('Failed to edit user: ' + error.message);
         }
       }
     }
@@ -705,12 +697,12 @@
     }
 
     async function createPlan() {
-      const name = prompt('Enter plan name:');
-      const minAmount = parseFloat(prompt('Enter minimum amount:'));
-      const maxAmount = parseFloat(prompt('Enter maximum amount:'));
-      const roiPct = parseFloat(prompt('Enter ROI percentage:'));
-      const durationDays = parseInt(prompt('Enter duration in days:'));
-      if (name && !isNaN(minAmount) && !isNaN(maxAmount) && !isNaN(roiPct) && !isNaN(durationDays)) {
+      const name = prompt('Plan Name:');
+      const minAmount = parseFloat(prompt('Min Amount:'));
+      const maxAmount = parseFloat(prompt('Max Amount:'));
+      const roiPct = parseFloat(prompt('ROI %:'));
+      const durationDays = parseInt(prompt('Duration Days:'));
+      if (name && minAmount && maxAmount && roiPct && durationDays) {
         try {
           await supabase.from('investment_plans').insert({
             name,
@@ -728,13 +720,12 @@
     }
 
     async function editPlan(id) {
-      const { data: plan } = await supabase.from('investment_plans').select('*').eq('id', id).single();
-      const name = prompt('Enter plan name:', plan.name);
-      const minAmount = parseFloat(prompt('Enter minimum amount:', plan.min_amount));
-      const maxAmount = parseFloat(prompt('Enter maximum amount:', plan.max_amount));
-      const roiPct = parseFloat(prompt('Enter ROI percentage:', plan.roi_pct));
-      const durationDays = parseInt(prompt('Enter duration in days:', plan.duration_days));
-      if (name && !isNaN(minAmount) && !isNaN(maxAmount) && !isNaN(roiPct) && !isNaN(durationDays)) {
+      const name = prompt('New Plan Name:');
+      const minAmount = parseFloat(prompt('New Min Amount:'));
+      const maxAmount = parseFloat(prompt('New Max Amount:'));
+      const roiPct = parseFloat(prompt('New ROI %:'));
+      const durationDays = parseInt(prompt('New Duration Days:'));
+      if (name || minAmount || maxAmount || roiPct || durationDays) {
         try {
           await supabase.from('investment_plans').update({
             name,
@@ -745,8 +736,8 @@
           }).eq('id', id);
           loadSection('investment_plans');
         } catch (error) {
-          console.error('Error updating plan:', error);
-          alert('Failed to update plan: ' + error.message);
+          console.error('Error editing plan:', error);
+          alert('Failed to edit plan: ' + error.message);
         }
       }
     }
@@ -761,9 +752,9 @@
       }
     }
 
-    async function editWallet(method, currentAddress) {
-      const newAddress = prompt('Enter new wallet address:', currentAddress);
-      if (newAddress && newAddress !== currentAddress) {
+    async function editWallet(method) {
+      const newAddress = prompt('Enter new wallet address:');
+      if (newAddress) {
         try {
           await supabase.from('wallets').update({ address: newAddress }).eq('method', method);
           loadSection('wallets');
@@ -775,7 +766,17 @@
     }
 
     async function updateWallet() {
-      alert('Update wallet form TBD');
+      const method = prompt('Enter wallet method:');
+      const address = prompt('Enter wallet address:');
+      if (method && address) {
+        try {
+          await supabase.from('wallets').insert({ method, address });
+          loadSection('wallets');
+        } catch (error) {
+          console.error('Error adding wallet:', error);
+          alert('Failed to add wallet: ' + error.message);
+        }
+      }
     }
 
     async function approveReferralPayout(id) {
@@ -789,11 +790,49 @@
     }
 
     async function createOffer() {
-      alert('Create offer form TBD');
+      const name = prompt('Offer Name:');
+      const pctBonus = parseFloat(prompt('Bonus %:'));
+      const startDate = prompt('Start Date (YYYY-MM-DD):');
+      const endDate = prompt('End Date (YYYY-MM-DD):');
+      const active = confirm('Is active?');
+      if (name && pctBonus && startDate && endDate) {
+        try {
+          await supabase.from('promotional_offers').insert({
+            name,
+            pct_bonus: pctBonus,
+            start_date: startDate,
+            end_date: endDate,
+            active
+          });
+          loadSection('promotional_offers');
+        } catch (error) {
+          console.error('Error creating offer:', error);
+          alert('Failed to create offer: ' + error.message);
+        }
+      }
     }
 
     async function editOffer(id) {
-      alert('Edit offer form TBD');
+      const name = prompt('New Offer Name:');
+      const pctBonus = parseFloat(prompt('New Bonus %:'));
+      const startDate = prompt('New Start Date (YYYY-MM-DD):');
+      const endDate = prompt('New End Date (YYYY-MM-DD):');
+      const active = confirm('Is active?');
+      if (name || pctBonus || startDate || endDate || active !== null) {
+        try {
+          await supabase.from('promotional_offers').update({
+            name,
+            pct_bonus: pctBonus,
+            start_date: startDate,
+            end_date: endDate,
+            active
+          }).eq('id', id);
+          loadSection('promotional_offers');
+        } catch (error) {
+          console.error('Error editing offer:', error);
+          alert('Failed to edit offer: ' + error.message);
+        }
+      }
     }
 
     async function deleteOffer(id) {
@@ -807,11 +846,39 @@
     }
 
     async function editSetting(key) {
-      alert('Edit setting form TBD');
+      const newValue = prompt('New Value:');
+      if (newValue) {
+        try {
+          await supabase.from('settings').update({ value: newValue }).eq('key', key);
+          loadSection('settings');
+        } catch (error) {
+          console.error('Error editing setting:', error);
+          alert('Failed to edit setting: ' + error.message);
+        }
+      }
     }
 
     async function createAdmin() {
-      alert('Create admin form TBD');
+      const email = prompt('Admin Email:');
+      const role = prompt('Role:');
+      if (email && role) {
+        try {
+          const { data: user } = await supabase.from('users').select('id').eq('email', email).single();
+          if (user) {
+            await supabase.from('admin_users').insert({
+              user_id: user.id,
+              email: email,
+              role: role
+            });
+            loadSection('settings');
+          } else {
+            alert('User not found');
+          }
+        } catch (error) {
+          console.error('Error creating admin:', error);
+          alert('Failed to create admin: ' + error.message);
+        }
+      }
     }
 
     async function deleteAdmin(id) {
