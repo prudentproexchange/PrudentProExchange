@@ -207,7 +207,7 @@
                       <td>${t.currency || 'USD'}</td>
                       <td>${t.status}</td>
                     </tr>
-                  `).join('') || '<tr><td colspan="6">No transactions found</td></tr>'}
+                  `>No transactions found</td></tr>'}
                 </tbody>
               </table>
             `;
@@ -282,6 +282,7 @@
                       <td>${w.address}</td>
                       <td>
                         <button onclick="editWallet('${w.method}')">Edit</button>
+                        <button onclick="deleteWallet('${w.method}')">Delete</button>
                       </td>
                     </tr>
                   `).join('') || '<tr><td colspan="3">No wallets found</td></tr>'}
@@ -291,45 +292,52 @@
             break;
 
           case 'payment_proofs':
-            const { data: users } = await supabase.from('profiles').select('id');
-            let allFiles = [];
-            for (const user of users) {
-              const { data: files } = await supabase.storage.from('payment-proofs').list(user.id);
-              if (files?.length) {
-                allFiles.push(...files.map(f => ({ ...f, userId: user.id })));
-              }
-            }
+            const { data: proofs } = await supabase.from('payment_proofs').select('id, user_id, proof_url, status, created_at');
+            const { data: profileList } = await supabase.from('profiles').select('id');
             html = `
               <h1>Payment Proofs</h1>
-              <ul>
-                ${allFiles?.map(f => `
-                  <li>
-                    <a href="#" onclick="viewProof('${f.userId}/${f.name}')">${f.name}</a>
-                    <button onclick="approveProof('${f.userId}/${f.name}')">Approve</button>
-                    <button onclick="rejectProof('${f.userId}/${f.name}')">Reject</button>
-                  </li>
-                `).join('') || '<li>No payment proofs found</li>'}
-              </ul>
+              <table>
+                <thead><tr><th>ID</th><th>User ID</th><th>Proof URL</th><th>Status</th><th>Actions</th></tr></thead>
+                <tbody>
+                  ${proofs?.map(p => `
+                    <tr>
+                      <td>${p.id}</td>
+                      <td>${p.user_id}</td>
+                      <td><a href="${p.proof_url}" target="_blank">View Proof</a></td>
+                      <td>${p.status}</td>
+                      <td>
+                        ${p.status === 'pending' ? `
+                          <button onclick="approveProof('${p.id}')">Approve</button>
+                          <button onclick="rejectProof('${p.id}')">Reject</button>
+                        ` : ''}
+                      </td>
+                    </tr>
+                  `).join('') || '<tr><td colspan="5">No payment proofs found</td></tr>'}
+                </tbody>
+              </table>
             `;
+            for (const user of profileList) {
+              console.log(user.id);
+            }
             break;
 
           case 'referrals':
-            const { data: referralsData } = await supabase.from('referrals').select('id, referrer_id, referee_id, commission_amount, status');
+            const { data: referralData } = await supabase.from('referrals').select('id, referrer_id, referred_id, commission_amount, status');
             html = `
               <h1>Referrals</h1>
               <table>
-                <thead><tr><th>ID</th><th>Referrer ID</th><th>Referee ID</th><th>Commission</th><th>Status</th><th>Actions</th></tr></thead>
+                <thead><tr><th>ID</th><th>Referrer ID</th><th>Referred ID</th><th>Commission</th><th>Status</th><th>Actions</th></tr></thead>
                 <tbody>
-                  ${referralsData?.map(r => `
+                  ${referralData?.map(r => `
                     <tr>
                       <td>${r.id}</td>
                       <td>${r.referrer_id}</td>
-                      <td>${r.referee_id}</td>
+                      <td>${r.referred_id}</td>
                       <td>${r.commission_amount}</td>
                       <td>${r.status}</td>
                       <td>
                         ${r.status === 'owed' ? `
-                          <button onclick="approveReferralPayout('${r.id}')">Approve Payout</button>
+                          <button onclick="payReferral('${r.id}')">Pay</button>
                         ` : ''}
                       </td>
                     </tr>
@@ -340,33 +348,31 @@
             break;
 
           case 'kyc_verification':
-            const { data: kycs } = await supabase.from('kyc_requests').select('id, user_id, status');
+            const { data: kyc } = await supabase.from('profiles').select('id, first_name, last_name, kyc_status, kyc_document_url').eq('kyc_status', 'pending');
             html = `
               <h1>KYC Verification</h1>
               <table>
-                <thead><tr><th>ID</th><th>User ID</th><th>Status</th><th>Actions</th></tr></thead>
+                <thead><tr><th>ID</th><th>Name</th><th>KYC Status</th><th>Document</th><th>Actions</th></tr></thead>
                 <tbody>
-                  ${kycs?.map(k => `
+                  ${kyc?.map(k => `
                     <tr>
                       <td>${k.id}</td>
-                      <td>${k.user_id}</td>
-                      <td>${k.status}</td>
+                      <td>${k.first_name || ''} ${k.last_name || ''}</td>
+                      <td>${k.kyc_status}</td>
+                      <td><a href="${k.kyc_document_url}" target="_blank">View</a></td>
                       <td>
-                        ${k.status === 'pending' ? `
-                          <button onclick="viewKycDocs('${k.id}')">View Docs</button>
-                          <button onclick="approveKyc('${k.id}')">Approve</button>
-                          <button onclick="rejectKyc('${k.id}')">Reject</button>
-                        ` : ''}
+                        <button onclick="approveKYC('${k.id}')">Approve</button>
+                        <button onclick="rejectKYC('${k.id}')">Reject</button>
                       </td>
                     </tr>
-                  `).join('') || '<tr><td colspan="4">No KYC requests found</td></tr>'}
+                  `).join('') || '<tr><td colspan="5">No pending KYC requests</td></tr>'}
                 </tbody>
               </table>
             `;
             break;
 
           case 'support_tickets':
-            const { data: tickets } = await supabase.from('support_tickets').select('id, user_id, subject, status');
+            const { data: tickets } = await supabase.from('support_tickets').select('id, user_id, subject, status, created_at');
             html = `
               <h1>Support Tickets</h1>
               <table>
@@ -379,33 +385,32 @@
                       <td>${t.subject}</td>
                       <td>${t.status}</td>
                       <td>
-                        ${t.status === 'open' ? `
-                          <button onclick="respondToTicket('${t.id}')">Respond</button>
-                        ` : ''}
+                        <button onclick="viewTicket('${t.id}')">View</button>
+                        ${t.status === 'open' ? `<button onclick="closeTicket('${t.id}')">Close</button>` : ''}
                       </td>
                     </tr>
-                  `).join('') || '<tr><td colspan="5">No tickets found</td></tr>'}
+                  `).join('') || '<tr><td colspan="5">No support tickets found</td></tr>'}
                 </tbody>
               </table>
             `;
             break;
 
           case 'promotional_offers':
-            const { data: offers } = await supabase.from('promotional_offers').select('id, name, pct_bonus, start_date, end_date, active');
+            const { data: offers } = await supabase.from('promotional_offers').select('id, title, description, start_date, end_date, status');
             html = `
               <h1>Promotional Offers</h1>
               <button onclick="createOffer()">Create Offer</button>
               <table>
-                <thead><tr><th>ID</th><th>Name</th><th>Bonus %</th><th>Start</th><th>End</th><th>Active</th><th>Actions</th></tr></thead>
+                <thead><tr><th>ID</th><th>Title</th><th>Description</th><th>Start Date</th><th>End Date</th><th>Status</th><th>Actions</th></tr></thead>
                 <tbody>
                   ${offers?.map(o => `
                     <tr>
                       <td>${o.id}</td>
-                      <td>${o.name}</td>
-                      <td>${o.pct_bonus}</td>
+                      <td>${o.title}</td>
+                      <td>${o.description}</td>
                       <td>${o.start_date}</td>
                       <td>${o.end_date}</td>
-                      <td>${o.active ? 'Yes' : 'No'}</td>
+                      <td>${o.status}</td>
                       <td>
                         <button onclick="editOffer('${o.id}')">Edit</button>
                         <button onclick="deleteOffer('${o.id}')">Delete</button>
@@ -418,500 +423,84 @@
             break;
 
           case 'settings':
-            const { data: settings } = await supabase.from('settings').select('key, value');
-            const { data: admins } = await supabase.from('admin_users').select('id, email, role');
+            const { data: admins } = await supabase.from('admin_users').select('id, user_id, email');
             html = `
               <h1>Settings / Admin Users</h1>
-              <h2>Settings</h2>
+              <button onclick="addAdmin()">Add Admin</button>
               <table>
-                <thead><tr><th>Key</th><th>Value</th><th>Actions</th></tr></thead>
-                <tbody>
-                  ${settings?.map(s => `
-                    <tr>
-                      <td>${s.key}</td>
-                      <td>${s.value}</td>
-                      <td><button onclick="editSetting('${s.key}')">Edit</button></td>
-                    </tr>
-                  `).join('') || '<tr><td colspan="3">No settings found</td></tr>'}
-                </tbody>
-              </table>
-              <h2>Admin Users</h2>
-              <button onclick="createAdmin()">Add Admin</button>
-              <table>
-                <thead><tr><th>ID</th><th>Email</th><th>Role</th><th>Actions</th></tr></thead>
+                <thead><tr><th>ID</th><th>User ID</th><th>Email</th><th>Actions</th></tr></thead>
                 <tbody>
                   ${admins?.map(a => `
                     <tr>
                       <td>${a.id}</td>
+                      <td>${a.user_id}</td>
                       <td>${a.email}</td>
-                      <td>${a.role || 'Admin'}</td>
-                      <td><button onclick="deleteAdmin('${a.id}')">Delete</button></td>
+                      <td>
+                        <button onclick="removeAdmin('${a.id}')">Remove</button>
+                      </td>
                     </tr>
-                  `).join('') || '<tr><td colspan="4">No admins found</td></tr>'}
+                  `).join('') || '<tr><td colspan="4">No admin users found</td></tr>'}
                 </tbody>
               </table>
             `;
             break;
 
           default:
-            html = '<h1>Section Not Found</h1>';
+            html = '<h1>Section Not Implemented</h1><p>Please select a valid section from the sidebar.</p>';
         }
         mainContent.innerHTML = html;
       } catch (error) {
-        console.error(`Error loading section ${section}:`, error);
-        mainContent.innerHTML = `<p class="error">Error loading section: ${error.message}</p>`;
+        console.error(`Error loading section "${section}":`, error.message);
+        mainContent.innerHTML = '<h1>Error</h1><p>Failed to load section. Please try again later.</p>';
       }
     }
 
-    // Action Functions
-    async function approveDeposit(depositId) {
-      try {
-        const { data: deposit, error: depositError } = await supabase.from('deposits').select('*').eq('id', depositId).single();
-        if (depositError) throw depositError;
+    // Sidebar Navigation Event Listeners
+    document.addEventListener('DOMContentLoaded', async () => {
+      const isAdmin = await checkAdmin();
+      if (!isAdmin) return;
 
-        await supabase.from('deposits').update({ status: 'approved' }).eq('id', depositId);
-
-        const { data: user, error: userError } = await supabase.from('users').select('deposit_wallet, total_deposits').eq('id', deposit.user_id).single();
-        if (userError) throw userError;
-
-        await supabase.from('users').update({
-          deposit_wallet: (user.deposit_wallet || 0) + deposit.amount,
-          total_deposits: (user.total_deposits || 0) + deposit.amount
-        }).eq('id', deposit.user_id);
-
-        loadSection('deposits');
-      } catch (error) {
-        console.error('Error approving deposit:', error);
-        alert('Failed to approve deposit: ' + error.message);
-      }
-    }
-
-    async function rejectDeposit(depositId) {
-      try {
-        await supabase.from('deposits').update({ status: 'rejected' }).eq('id', depositId);
-        loadSection('deposits');
-      } catch (error) {
-        console.error('Error rejecting deposit:', error);
-        alert('Failed to reject deposit: ' + error.message);
-      }
-    }
-
-    async function approveWithdrawal(withdrawalId) {
-      try {
-        const { data: withdrawal, error: withdrawalError } = await supabase.from('withdrawals').select('*').eq('id', withdrawalId).single();
-        if (withdrawalError) throw withdrawalError;
-
-        await supabase.from('withdrawals').update({ status: 'completed' }).eq('id', withdrawalId);
-
-        const { data: user, error: userError } = await supabase.from('users').select('interest_wallet, total_withdrawals').eq('id', withdrawal.user_id).single();
-        if (userError) throw userError;
-
-        await supabase.from('users').update({
-          interest_wallet: (user.interest_wallet || 0) - withdrawal.amount,
-          total_withdrawals: (user.total_withdrawals || 0) + withdrawal.amount
-        }).eq('id', withdrawal.user_id);
-
-        loadSection('withdrawals');
-      } catch (error) {
-        console.error('Error approving withdrawal:', error);
-        alert('Failed to approve withdrawal: ' + error.message);
-      }
-    }
-
-    async function rejectWithdrawal(withdrawalId) {
-      try {
-        await supabase.from('withdrawals').update({ status: 'rejected' }).eq('id', withdrawalId);
-        loadSection('withdrawals');
-      } catch (error) {
-        console.error('Error rejecting withdrawal:', error);
-        alert('Failed to reject withdrawal: ' + error.message);
-      }
-    }
-
-    async function approveInvestment(investmentId) {
-      try {
-        const { data: investment, error: investmentError } = await supabase.from('investments').select('*').eq('id', investmentId).single();
-        if (investmentError) throw investmentError;
-
-        await supabase.from('investments').update({ status: 'active', start_time: new Date().toISOString() }).eq('id', investmentId);
-
-        const { data: user, error: userError } = await supabase.from('users').select('deposit_wallet').eq('id', investment.user_id).single();
-        if (userError) throw userError;
-
-        await supabase.from('users').update({
-          deposit_wallet: (user.deposit_wallet || 0) - (investment.invested_amount || investment.amount)
-        }).eq('id', investment.user_id);
-
-        loadSection('investments');
-      } catch (error) {
-        console.error('Error approving investment:', error);
-        alert('Failed to approve investment: ' + error.message);
-      }
-    }
-
-    async function terminateInvestment(investmentId) {
-      try {
-        await supabase.from('investments').update({ status: 'terminated', end_time: new Date().toISOString() }).eq('id', investmentId);
-        loadSection('investments');
-      } catch (error) {
-        console.error('Error terminating investment:', error);
-        alert('Failed to terminate investment: ' + error.message);
-      }
-    }
-
-    async function approveProof(path) {
-      try {
-        const fileName = path.split('/').pop();
-        const depositId = fileName.split('_')[0];
-        await supabase.from('deposits').update({ status: 'approved' }).eq('id', depositId);
-        loadSection('payment_proofs');
-      } catch (error) {
-        console.error('Error approving proof:', error);
-        alert('Failed to approve proof: ' + error.message);
-      }
-    }
-
-    async function rejectProof(path) {
-      try {
-        const fileName = path.split('/').pop();
-        const depositId = fileName.split('_')[0];
-        await supabase.from('deposits').update({ status: 'rejected' }).eq('id', depositId);
-        loadSection('payment_proofs');
-      } catch (error) {
-        console.error('Error rejecting proof:', error);
-        alert('Failed to reject proof: ' + error.message);
-      }
-    }
-
-    async function viewProof(path) {
-      try {
-        const { data, error } = await supabase.storage.from('payment-proofs').download(path);
-        if (error) throw error;
-        const url = URL.createObjectURL(data);
-        window.open(url);
-      } catch (error) {
-        console.error('Error viewing proof:', error);
-        alert('Failed to view proof: ' + error.message);
-      }
-    }
-
-    async function approveKyc(kycId) {
-      try {
-        const { data: kyc, error: kycError } = await supabase.from('kyc_requests').select('user_id').eq('id', kycId).single();
-        if (kycError) throw kycError;
-
-        await supabase.from('kyc_requests').update({ status: 'approved' }).eq('id', kycId);
-        await supabase.from('profiles').update({ kyc_status: 'approved' }).eq('id', kyc.user_id);
-        loadSection('kyc_verification');
-      } catch (error) {
-        console.error('Error approving KYC:', error);
-        alert('Failed to approve KYC: ' + error.message);
-      }
-    }
-
-    async function rejectKyc(kycId) {
-      try {
-        await supabase.from('kyc_requests').update({ status: 'rejected' }).eq('id', kycId);
-        loadSection('kyc_verification');
-      } catch (error) {
-        console.error('Error rejecting KYC:', error);
-        alert('Failed to reject KYC: ' + error.message);
-      }
-    }
-
-    async function viewKycDocs(kycId) {
-      try {
-        const { data: kyc, error } = await supabase.from('kyc_requests').select('doc_paths').eq('id', kycId).single();
-        if (error) throw error;
-
-        for (const path of kyc.doc_paths || []) {
-          const { data, error: downloadError } = await supabase.storage.from('kyc-docs').download(path);
-          if (downloadError) throw downloadError;
-          const url = URL.createObjectURL(data);
-          window.open(url);
-        }
-      } catch (error) {
-        console.error('Error viewing KYC docs:', error);
-        alert('Failed to view KYC documents: ' + error.message);
-      }
-    }
-
-    async function respondToTicket(ticketId) {
-      try {
-        const response = prompt('Enter response:');
-        if (response) {
-          await supabase.from('support_tickets').update({ response, status: 'closed' }).eq('id', ticketId);
-          loadSection('support_tickets');
-        }
-      } catch (error) {
-        console.error('Error responding to ticket:', error);
-        alert('Failed to respond to ticket: ' + error.message);
-      }
-    }
-
-    // CRUD Functions
-    async function createUser() {
-      const firstName = prompt('First Name:');
-      const lastName = prompt('Last Name:');
-      const email = prompt('Email:');
-      const country = prompt('Country:');
-      if (firstName && lastName && email && country) {
-        try {
-          const userId = prompt('User ID (from auth):');
-          await supabase.from('profiles').insert({
-            id: userId,
-            first_name: firstName,
-            last_name: lastName,
-            email: email,
-            country: country,
-            kyc_status: 'pending'
-          });
-          loadSection('users');
-        } catch (error) {
-          console.error('Error creating user:', error);
-          alert('Failed to create user: ' + error.message);
-        }
-      }
-    }
-
-    async function editUser(id) {
-      const firstName = prompt('New First Name:');
-      const lastName = prompt('New Last Name:');
-      const country = prompt('New Country:');
-      if (firstName || lastName || country) {
-        try {
-          await supabase.from('profiles').update({
-            first_name: firstName,
-            last_name: lastName,
-            country: country
-          }).eq('id', id);
-          loadSection('users');
-        } catch (error) {
-          console.error('Error editing user:', error);
-          alert('Failed to edit user: ' + error.message);
-        }
-      }
-    }
-
-    async function deactivateUser(id) {
-      try {
-        await supabase.from('profiles').update({ status: 'inactive' }).eq('id', id);
-        loadSection('users');
-      } catch (error) {
-        console.error('Error deactivating user:', error);
-        alert('Failed to deactivate user: ' + error.message);
-      }
-    }
-
-    async function createPlan() {
-      const name = prompt('Plan Name:');
-      const minAmount = parseFloat(prompt('Min Amount:'));
-      const maxAmount = parseFloat(prompt('Max Amount:'));
-      const roiPct = parseFloat(prompt('ROI %:'));
-      const durationDays = parseInt(prompt('Duration Days:'));
-      if (name && minAmount && maxAmount && roiPct && durationDays) {
-        try {
-          await supabase.from('investment_plans').insert({
-            name,
-            min_amount: minAmount,
-            max_amount: maxAmount,
-            roi_pct: roiPct,
-            duration_days: durationDays
-          });
-          loadSection('investment_plans');
-        } catch (error) {
-          console.error('Error creating plan:', error);
-          alert('Failed to create plan: ' + error.message);
-        }
-      }
-    }
-
-    async function editPlan(id) {
-      const name = prompt('New Plan Name:');
-      const minAmount = parseFloat(prompt('New Min Amount:'));
-      const maxAmount = parseFloat(prompt('New Max Amount:'));
-      const roiPct = parseFloat(prompt('New ROI %:'));
-      const durationDays = parseInt(prompt('New Duration Days:'));
-      if (name || minAmount || maxAmount || roiPct || durationDays) {
-        try {
-          await supabase.from('investment_plans').update({
-            name,
-            min_amount: minAmount,
-            max_amount: maxAmount,
-            roi_pct: roiPct,
-            duration_days: durationDays
-          }).eq('id', id);
-          loadSection('investment_plans');
-        } catch (error) {
-          console.error('Error editing plan:', error);
-          alert('Failed to edit plan: ' + error.message);
-        }
-      }
-    }
-
-    async function deletePlan(id) {
-      try {
-        await supabase.from('investment_plans').delete().eq('id', id);
-        loadSection('investment_plans');
-      } catch (error) {
-        console.error('Error deleting plan:', error);
-        alert('Failed to delete plan: ' + error.message);
-      }
-    }
-
-    async function editWallet(method) {
-      const newAddress = prompt('Enter new wallet address:');
-      if (newAddress) {
-        try {
-          await supabase.from('wallets').update({ address: newAddress }).eq('method', method);
-          loadSection('wallets');
-        } catch (error) {
-          console.error('Error updating wallet:', error);
-          alert('Failed to update wallet: ' + error.message);
-        }
-      }
-    }
-
-    async function updateWallet() {
-      const method = prompt('Enter wallet method:');
-      const address = prompt('Enter wallet address:');
-      if (method && address) {
-        try {
-          await supabase.from('wallets').insert({ method, address });
-          loadSection('wallets');
-        } catch (error) {
-          console.error('Error adding wallet:', error);
-          alert('Failed to add wallet: ' + error.message);
-        }
-      }
-    }
-
-    async function approveReferralPayout(id) {
-      try {
-        await supabase.from('referrals').update({ status: 'paid' }).eq('id', id);
-        loadSection('referrals');
-      } catch (error) {
-        console.error('Error approving referral payout:', error);
-        alert('Failed to approve referral payout: ' + error.message);
-      }
-    }
-
-    async function createOffer() {
-      const name = prompt('Offer Name:');
-      const pctBonus = parseFloat(prompt('Bonus %:'));
-      const startDate = prompt('Start Date (YYYY-MM-DD):');
-      const endDate = prompt('End Date (YYYY-MM-DD):');
-      const active = confirm('Is active?');
-      if (name && pctBonus && startDate && endDate) {
-        try {
-          await supabase.from('promotional_offers').insert({
-            name,
-            pct_bonus: pctBonus,
-            start_date: startDate,
-            end_date: endDate,
-            active
-          });
-          loadSection('promotional_offers');
-        } catch (error) {
-          console.error('Error creating offer:', error);
-          alert('Failed to create offer: ' + error.message);
-        }
-      }
-    }
-
-    async function editOffer(id) {
-      const name = prompt('New Offer Name:');
-      const pctBonus = parseFloat(prompt('New Bonus %:'));
-      const startDate = prompt('New Start Date (YYYY-MM-DD):');
-      const endDate = prompt('New End Date solaire(YYYY-MM-DD):');
-      const active = confirm('Is active?');
-      if (name || pctBonus || startDate || endDate || active !== null) {
-        try {
-          await supabase.from('promotional_offers').update({
-            name,
-            pct_bonus: pctBonus,
-            start_date: startDate,
-            end_date: endDate,
-            active
-          }).eq('id', id);
-          loadSection('promotional_offers');
-        } catch (error) {
-          console.error('Error editing offer:', error);
-          alert('Failed to edit offer: ' + error.message);
-        }
-      }
-    }
-
-    async function deleteOffer(id) {
-      try {
-        await supabase.from('promotional_offers').delete().eq('id', id);
-        loadSection('promotional_offers');
-      } catch (error) {
-        console.error('Error deleting offer:', error);
-        alert('Failed to delete offer: ' + error.message);
-      }
-    }
-
-    async function editSetting(key) {
-      const newValue = prompt('New Value:');
-      if (newValue) {
-        try {
-          await supabase.from('settings').update({ value: newValue }).eq('key', key);
-          loadSection('settings');
-        } catch (error) {
-          console.error('Error editing setting:', error);
-          alert('Failed to edit setting: ' + error.message);
-        }
-      }
-    }
-
-    async function createAdmin() {
-      const email = prompt('Admin Email:');
-      const role = prompt('Role:');
-      if (email && role) {
-        try {
-          const { data: user } = await supabase.from('profiles').select('id').eq('email', email).single();
-          if (user) {
-            await supabase.from('admin_users').insert({
-              user_id: user.id,
-              email: email,
-              role: role
-            });
-            loadSection('settings');
-          } else {
-            alert('User not found');
-          }
-        } catch (error) {
-          console.error('Error creating admin:', error);
-          alert('Failed to create admin: ' + error.message);
-        }
-      }
-    }
-
-    async function deleteAdmin(id) {
-      try {
-        await supabase.from('admin_users').delete().eq('id', id);
-        loadSection('settings');
-      } catch (error) {
-        console.error('Error deleting admin:', error);
-        alert('Failed to delete admin: ' + error.message);
-      }
-    }
-
-    // Event Listeners
-    document.querySelectorAll('.sidebar a').forEach(link => {
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-        loadSection(link.getAttribute('data-section'));
+      const links = document.querySelectorAll('.sidebar a');
+      links.forEach(link => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          const section = link.getAttribute('data-section');
+          loadSection(section);
+        });
       });
+
+      // Load overview by default
+      loadSection('overview');
     });
 
-    // Initial Load
-    (async () => {
-      if (await checkAdmin()) {
-        loadSection('overview');
-      }
-    })();
+    // Placeholder Functions (to be implemented)
+    function createUser() { alert('Create User not implemented'); }
+    function editUser(id) { alert(`Edit User ${id} not implemented`); }
+    function deactivateUser(id) { alert(`Deactivate User ${id} not implemented`); }
+    function approveDeposit(id) { alert(`Approve Deposit ${id} not implemented`); }
+    function rejectDeposit(id) { alert(`Reject Deposit ${id} not implemented`); }
+    function approveWithdrawal(id) { alert(`Approve Withdrawal ${id} not implemented`); }
+    function rejectWithdrawal(id) { alert(`Reject Withdrawal ${id} not implemented`); }
+    function approveInvestment(id) { alert(`Approve Investment ${id} not implemented`); }
+    function terminateInvestment(id) { alert(`Terminate Investment ${id} not implemented`); }
+    function createPlan() { alert('Create Plan not implemented'); }
+    function editPlan(id) { alert(`Edit Plan ${id} not implemented`); }
+    function deletePlan(id) { alert(`Delete Plan ${id} not implemented`); }
+    function updateWallet() { alert('Update Wallet not implemented'); }
+    function editWallet(method) { alert(`Edit Wallet ${method} not implemented`); }
+    function deleteWallet(method) { alert(`Delete Wallet ${method} not implemented`); }
+    function approveProof(id) { alert(`Approve Proof ${id} not implemented`); }
+    function rejectProof(id) { alert(`Reject Proof ${id} not implemented`); }
+    function payReferral(id) { alert(`Pay Referral ${id} not implemented`); }
+    function approveKYC(id) { alert(`Approve KYC ${id} not implemented`); }
+    function rejectKYC(id) { alert(`Reject KYC ${id} not implemented`); }
+    function viewTicket(id) { alert(`View Ticket ${id} not implemented`); }
+    function closeTicket(id) { alert(`Close Ticket ${id} not implemented`); }
+    function createOffer() { alert('Create Offer not implemented'); }
+    function editOffer(id) { alert(`Edit Offer ${id} not implemented`); }
+    function deleteOffer(id) { alert(`Delete Offer ${id} not implemented`); }
+    function addAdmin() { alert('Add Admin not implemented'); }
+    function removeAdmin(id) { alert(`Remove Admin ${id} not implemented`); }
   </script>
 </body>
 </html>
