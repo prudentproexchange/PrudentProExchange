@@ -54,7 +54,7 @@
         const { data: admin, error: adminError } = await supabase
           .from('admin_users')
           .select('id')
-          .eq('user_id', user.id)  // Changed from 'email' to 'user_id'
+          .eq('user_id', user.id)
           .single();
 
         if (adminError || !admin) {
@@ -90,7 +90,7 @@
               { count: completedInvestments },
               { data: referrals }
             ] = await Promise.all([
-              supabase.from('profiles').select('*', { count: 'exact', head: true }),
+              supabase.from('users').select('*', { count: 'exact', head: true }),
               supabase.from('deposits').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
               supabase.from('deposits').select('*', { count: 'exact', head: true }).eq('status', 'approved'),
               supabase.from('withdrawals').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
@@ -112,7 +112,7 @@
             break;
 
           case 'users':
-            const { data: users } = await supabase.from('profiles').select('id, first_name, last_name, email, country, kyc_status');
+            const { data: users } = await supabase.from('users').select('id, first_name, last_name, email, country, kyc_status');
             html = `
               <h1>Users Management</h1>
               <button onclick="createUser()">Create User</button>
@@ -281,7 +281,7 @@
                       <td>${w.method}</td>
                       <td>${w.address}</td>
                       <td>
-                        <button onclick="editWallet('${w.method}')">Edit</button>
+                        <button onclick="editWallet('${w.method}', '${w.address}')">Edit</button>
                       </td>
                     </tr>
                   `).join('') || '<tr><td colspan="3">No wallets found</td></tr>'}
@@ -291,17 +291,22 @@
             break;
 
           case 'payment_proofs':
-            const { data: files } = await supabase.storage.from('payment-proofs').list();
+            const { data: files } = await supabase.storage.from('payment-proofs').list('', { limit: 1000 });
             html = `
               <h1>Payment Proofs</h1>
               <ul>
-                ${files?.map(f => `
-                  <li>
-                    <a href="#" onclick="viewProof('${f.name}')">${f.name}</a>
-                    <button onclick="approveProof('${f.name}')">Approve</button>
-                    <button onclick="rejectProof('${f.name}')">Reject</button>
-                  </li>
-                `).join('') || '<li>No payment proofs found</li>'}
+                ${files?.map(f => {
+                  const pathParts = f.name.split('/');
+                  const userId = pathParts[0];
+                  const fileName = pathParts[1];
+                  return `
+                    <li>
+                      <a href="#" onclick="viewProof('${f.name}')">${fileName} (User: ${userId})</a>
+                      <button onclick="approveProof('${f.name}')">Approve</button>
+                      <button onclick="rejectProof('${f.name}')">Reject</button>
+                    </li>
+                  `;
+                }).join('') || '<li>No payment proofs found</li>'}
               </ul>
             `;
             break;
@@ -464,12 +469,12 @@
 
         await supabase.from('deposits').update({ status: 'approved' }).eq('id', depositId);
 
-        const { data: profile, error: profileError } = await supabase.from('profiles').select('deposit_wallet, total_deposits').eq('id', deposit.user_id).single();
-        if (profileError) throw profileError;
+        const { data: user, error: userError } = await supabase.from('users').select('deposit_wallet, total_deposits').eq('id', deposit.user_id).single();
+        if (userError) throw userError;
 
-        await supabase.from('profiles').update({
-          deposit_wallet: (profile.deposit_wallet || 0) + deposit.amount,
-          total_deposits: (profile.total_deposits || 0) + deposit.amount
+        await supabase.from('users').update({
+          deposit_wallet: (user.deposit_wallet || 0) + deposit.amount,
+          total_deposits: (user.total_deposits || 0) + deposit.amount
         }).eq('id', deposit.user_id);
 
         loadSection('deposits');
@@ -496,12 +501,12 @@
 
         await supabase.from('withdrawals').update({ status: 'completed' }).eq('id', withdrawalId);
 
-        const { data: profile, error: profileError } = await supabase.from('profiles').select('interest_wallet, total_withdrawals').eq('id', withdrawal.user_id).single();
-        if (profileError) throw profileError;
+        const { data: user, error: userError } = await supabase.from('users').select('interest_wallet, total_withdrawals').eq('id', withdrawal.user_id).single();
+        if (userError) throw userError;
 
-        await supabase.from('profiles').update({
-          interest_wallet: (profile.interest_wallet || 0) - withdrawal.amount,
-          total_withdrawals: (profile.total_withdrawals || 0) + withdrawal.amount
+        await supabase.from('users').update({
+          interest_wallet: (user.interest_wallet || 0) - withdrawal.amount,
+          total_withdrawals: (user.total_withdrawals || 0) + withdrawal.amount
         }).eq('id', withdrawal.user_id);
 
         loadSection('withdrawals');
@@ -528,11 +533,11 @@
 
         await supabase.from('investments').update({ status: 'active', start_time: new Date().toISOString() }).eq('id', investmentId);
 
-        const { data: profile, error: profileError } = await supabase.from('profiles').select('deposit_wallet').eq('id', investment.user_id).single();
-        if (profileError) throw profileError;
+        const { data: user, error: userError } = await supabase.from('users').select('deposit_wallet').eq('id', investment.user_id).single();
+        if (userError) throw userError;
 
-        await supabase.from('profiles').update({
-          deposit_wallet: (profile.deposit_wallet || 0) - (investment.invested_amount || investment.amount)
+        await supabase.from('users').update({
+          deposit_wallet: (user.deposit_wallet || 0) - (investment.invested_amount || investment.amount)
         }).eq('id', investment.user_id);
 
         loadSection('investments');
@@ -552,8 +557,9 @@
       }
     }
 
-    async function approveProof(fileName) {
+    async function approveProof(filePath) {
       try {
+        const fileName = filePath.split('/')[1];
         const depositId = fileName.split('_')[0];
         await supabase.from('deposits').update({ status: 'approved' }).eq('id', depositId);
         loadSection('payment_proofs');
@@ -563,8 +569,9 @@
       }
     }
 
-    async function rejectProof(fileName) {
+    async function rejectProof(filePath) {
       try {
+        const fileName = filePath.split('/')[1];
         const depositId = fileName.split('_')[0];
         await supabase.from('deposits').update({ status: 'rejected' }).eq('id', depositId);
         loadSection('payment_proofs');
@@ -574,9 +581,9 @@
       }
     }
 
-    async function viewProof(fileName) {
+    async function viewProof(filePath) {
       try {
-        const { data, error } = await supabase.storage.from('payment-proofs').download(fileName);
+        const { data, error } = await supabase.storage.from('payment-proofs').download(filePath);
         if (error) throw error;
         const url = URL.createObjectURL(data);
         window.open(url);
@@ -592,7 +599,7 @@
         if (kycError) throw kycError;
 
         await supabase.from('kyc_requests').update({ status: 'approved' }).eq('id', kycId);
-        await supabase.from('profiles').update({ kyc_status: 'approved' }).eq('id', kyc.user_id);
+        await supabase.from('users').update({ kyc_status: 'approved' }).eq('id', kyc.user_id);
         loadSection('kyc_verification');
       } catch (error) {
         console.error('Error approving KYC:', error);
@@ -640,20 +647,110 @@
       }
     }
 
-    // CRUD Placeholder Functions
-    async function createUser() { alert('Create user form TBD'); }
-    async function editUser(id) { alert('Edit user form TBD'); }
+    // CRUD Functions
+    async function createUser() {
+      const email = prompt('Enter user email:');
+      const password = prompt('Enter user password:');
+      const firstName = prompt('Enter first name:');
+      const lastName = prompt('Enter last name:');
+      const country = prompt('Enter country:');
+      if (email && password && firstName && lastName) {
+        try {
+          const { data, error } = await supabase.auth.signUp({ email, password });
+          if (error) throw error;
+          await supabase.from('users').insert({
+            id: data.user.id,
+            first_name: firstName,
+            last_name: lastName,
+            email,
+            country,
+            kyc_status: 'pending'
+          });
+          loadSection('users');
+        } catch (error) {
+          console.error('Error creating user:', error);
+          alert('Failed to create user: ' + error.message);
+        }
+      }
+    }
+
+    async function editUser(id) {
+      const { data: user } = await supabase.from('users').select('*').eq('id', id).single();
+      const firstName = prompt('Enter first name:', user.first_name);
+      const lastName = prompt('Enter last name:', user.last_name);
+      const country = prompt('Enter country:', user.country);
+      if (firstName && lastName) {
+        try {
+          await supabase.from('users').update({
+            first_name: firstName,
+            last_name: lastName,
+            country: country || null
+          }).eq('id', id);
+          loadSection('users');
+        } catch (error) {
+          console.error('Error updating user:', error);
+          alert('Failed to update user: ' + error.message);
+        }
+      }
+    }
+
     async function deactivateUser(id) {
       try {
-        await supabase.from('profiles').update({ status: 'inactive' }).eq('id', id);
+        await supabase.from('users').update({ status: 'inactive' }).eq('id', id);
         loadSection('users');
       } catch (error) {
         console.error('Error deactivating user:', error);
         alert('Failed to deactivate user: ' + error.message);
       }
     }
-    async function createPlan() { alert('Create plan form TBD'); }
-    async function editPlan(id) { alert('Edit plan form TBD'); }
+
+    async function createPlan() {
+      const name = prompt('Enter plan name:');
+      const minAmount = parseFloat(prompt('Enter minimum amount:'));
+      const maxAmount = parseFloat(prompt('Enter maximum amount:'));
+      const roiPct = parseFloat(prompt('Enter ROI percentage:'));
+      const durationDays = parseInt(prompt('Enter duration in days:'));
+      if (name && !isNaN(minAmount) && !isNaN(maxAmount) && !isNaN(roiPct) && !isNaN(durationDays)) {
+        try {
+          await supabase.from('investment_plans').insert({
+            name,
+            min_amount: minAmount,
+            max_amount: maxAmount,
+            roi_pct: roiPct,
+            duration_days: durationDays
+          });
+          loadSection('investment_plans');
+        } catch (error) {
+          console.error('Error creating plan:', error);
+          alert('Failed to create plan: ' + error.message);
+        }
+      }
+    }
+
+    async function editPlan(id) {
+      const { data: plan } = await supabase.from('investment_plans').select('*').eq('id', id).single();
+      const name = prompt('Enter plan name:', plan.name);
+      const minAmount = parseFloat(prompt('Enter minimum amount:', plan.min_amount));
+      const maxAmount = parseFloat(prompt('Enter maximum amount:', plan.max_amount));
+      const roiPct = parseFloat(prompt('Enter ROI percentage:', plan.roi_pct));
+      const durationDays = parseInt(prompt('Enter duration in days:', plan.duration_days));
+      if (name && !isNaN(minAmount) && !isNaN(maxAmount) && !isNaN(roiPct) && !isNaN(durationDays)) {
+        try {
+          await supabase.from('investment_plans').update({
+            name,
+            min_amount: minAmount,
+            max_amount: maxAmount,
+            roi_pct: roiPct,
+            duration_days: durationDays
+          }).eq('id', id);
+          loadSection('investment_plans');
+        } catch (error) {
+          console.error('Error updating plan:', error);
+          alert('Failed to update plan: ' + error.message);
+        }
+      }
+    }
+
     async function deletePlan(id) {
       try {
         await supabase.from('investment_plans').delete().eq('id', id);
@@ -663,8 +760,24 @@
         alert('Failed to delete plan: ' + error.message);
       }
     }
-    async function editWallet(method) { alert('Edit wallet form TBD'); }
-    async function updateWallet() { alert('Update wallet form TBD'); }
+
+    async function editWallet(method, currentAddress) {
+      const newAddress = prompt('Enter new wallet address:', currentAddress);
+      if (newAddress && newAddress !== currentAddress) {
+        try {
+          await supabase.from('wallets').update({ address: newAddress }).eq('method', method);
+          loadSection('wallets');
+        } catch (error) {
+          console.error('Error updating wallet:', error);
+          alert('Failed to update wallet: ' + error.message);
+        }
+      }
+    }
+
+    async function updateWallet() {
+      alert('Update wallet form TBD');
+    }
+
     async function approveReferralPayout(id) {
       try {
         await supabase.from('referrals').update({ status: 'paid' }).eq('id', id);
@@ -674,8 +787,15 @@
         alert('Failed to approve referral payout: ' + error.message);
       }
     }
-    async function createOffer() { alert('Create offer form TBD'); }
-    async function editOffer(id) { alert('Edit offer form TBD'); }
+
+    async function createOffer() {
+      alert('Create offer form TBD');
+    }
+
+    async function editOffer(id) {
+      alert('Edit offer form TBD');
+    }
+
     async function deleteOffer(id) {
       try {
         await supabase.from('promotional_offers').delete().eq('id', id);
@@ -685,8 +805,15 @@
         alert('Failed to delete offer: ' + error.message);
       }
     }
-    async function editSetting(key) { alert('Edit setting form TBD'); }
-    async function createAdmin() { alert('Create admin form TBD'); }
+
+    async function editSetting(key) {
+      alert('Edit setting form TBD');
+    }
+
+    async function createAdmin() {
+      alert('Create admin form TBD');
+    }
+
     async function deleteAdmin(id) {
       try {
         await supabase.from('admin_users').delete().eq('id', id);
