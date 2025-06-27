@@ -43,26 +43,32 @@
 
     // Admin Authentication Check
     async function checkAdmin() {
-      const { data: { user }, error: userError } = await supabase.auth.getUser();
-      if (userError || !user) {
-        console.error('No user logged in:', userError?.message);
-        window.location.href = 'login.html';
+      try {
+        const { data: { user }, error: userError } = await supabase.auth.getUser();
+        if (userError || !user) {
+          console.error('No user logged in:', userError?.message);
+          window.location.href = 'login.html'; // Redirect to login page
+          return false;
+        }
+
+        const { data: admin, error: adminError } = await supabase
+          .from('admin_users')
+          .select('id')
+          .eq('user_id', user.id)  // Changed from 'email' to 'user_id'
+          .single();
+
+        if (adminError || !admin) {
+          console.error('Admin check failed:', adminError?.message);
+          alert('Access denied: You are not an admin.');
+          window.location.href = 'login.html';
+          return false;
+        }
+        return true;
+      } catch (error) {
+        console.error('Error in checkAdmin:', error.message);
+        alert('An error occurred while verifying admin status.');
         return false;
       }
-
-      // match on user_id, not email
-      const { data: admin, error: adminError } = await supabase
-        .from('admin_users')
-        .select('id')
-        .eq('user_id', user.id)
-        .single();
-
-      if (adminError || !admin) {
-        alert('Access denied: You are not an admin.');
-        window.location.href = 'login.html';
-        return false;
-      }
-      return true;
     }
 
     // Load Section Content
@@ -74,55 +80,81 @@
         let html = '';
         switch (section) {
           case 'overview':
-            // fetch counts for each status
             const [
               { count: totalUsers },
               { count: pendingDeposits },
               { count: approvedDeposits },
+              { count: pendingWithdrawals },
+              { count: completedWithdrawals },
               { count: activeInvestments },
-              { data: owedReferrals }
+              { count: completedInvestments },
+              { data: referrals }
             ] = await Promise.all([
-              supabase.from('profiles').select('*',        { head: true, count: 'exact' }),
-              supabase.from('deposits').select('*',        { head: true, count: 'exact' }).eq('status', 'pending'),
-              supabase.from('deposits').select('*',        { head: true, count: 'exact' }).eq('status', 'approved'),
-              supabase.from('investments').select('*',     { head: true, count: 'exact' }).eq('status', 'active'),
+              supabase.from('profiles').select('*', { count: 'exact', head: true }),
+              supabase.from('deposits').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
+              supabase.from('deposits').select('*', { count: 'exact', head: true }).eq('status', 'approved'),
+              supabase.from('withdrawals').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
+              supabase.from('withdrawals').select('*', { count: 'exact', head: true }).eq('status', 'completed'),
+              supabase.from('investments').select('*', { count: 'exact', head: true }).eq('status', 'active'),
+              supabase.from('investments').select('*', { count: 'exact', head: true }).eq('status', 'completed'),
               supabase.from('referrals').select('commission_amount').eq('status', 'owed')
             ]);
+            const referralCommissionsOwed = referrals?.reduce((sum, r) => sum + (r.commission_amount || 0), 0) || 0;
 
-            // sum up how much is owed in referral commissions
-            const totalOwed = owedReferrals.reduce((s, r) => s + (r.commission_amount || 0), 0);
-
-            mainContent.innerHTML = `
+            html = `
               <h1>Overview</h1>
-              <p>Total Users: ${totalUsers}</p>
-              <p>Deposits — Pending: ${pendingDeposits} / Approved: ${approvedDeposits}</p>
-              <p>Active Investments: ${activeInvestments}</p>
-              <p>Referral Commissions Owed: $${totalOwed.toFixed(2)}</p>
+              <p>Total Users: ${totalUsers || 0}</p>
+              <p>Pending Deposits: ${pendingDeposits || 0} / Approved Deposits: ${approvedDeposits || 0}</p>
+              <p>Pending Withdrawals: ${pendingWithdrawals || 0} / Completed Withdrawals: ${completedWithdrawals || 0}</p>
+              <p>Active Investments: ${activeInvestments || 0} / Completed Investments: ${completedInvestments || 0}</p>
+              <p>Referral Commissions Owed: $${referralCommissionsOwed.toFixed(2)}</p>
             `;
             break;
 
           case 'users':
-            const { data: users, error: userErr } = await supabase
+            // 1️⃣ Fetch every profile row
+            const { data: users, error: usersErr } = await supabase
               .from('profiles')
-              .select('id, first_name, last_name, email, country, kyc_status');
-            if (userErr) throw userErr;
+              .select(`
+                id,
+                first_name,
+                last_name,
+                email,
+                country,
+                kyc_status,
+                created_at,
+                status
+              `)
+              .order('created_at', { ascending: false });
+            if (usersErr) throw usersErr;
 
+            // 2️⃣ Render them in a table with Edit/Deactivate
             mainContent.innerHTML = `
               <h1>Users Management</h1>
+              <button onclick="createUser()">Create User</button>
               <table>
                 <thead>
                   <tr>
-                    <th>ID</th><th>Name</th><th>Email</th><th>Country</th><th>KYC Status</th><th>Actions</th>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Country</th>
+                    <th>KYC Status</th>
+                    <th>Joined</th>
+                    <th>Status</th>
+                    <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   ${users.map(u => `
                     <tr>
                       <td>${u.id}</td>
-                      <td>${u.first_name || ''} ${u.last_name || ''}</td>
+                      <td>${(u.first_name || '') + ' ' + (u.last_name || '')}</td>
                       <td>${u.email}</td>
-                      <td>${u.country || '–'}</td>
+                      <td>${u.country || '—'}</td>
                       <td>${u.kyc_status || 'pending'}</td>
+                      <td>${new Date(u.created_at).toLocaleDateString()}</td>
+                      <td>${u.status || 'active'}</td>
                       <td>
                         <button onclick="editUser('${u.id}')">Edit</button>
                         <button onclick="deactivateUser('${u.id}')">Deactivate</button>
@@ -135,37 +167,27 @@
             break;
 
           case 'deposits':
-            const { data: deposits, error: depErr } = await supabase
-              .from('deposits')
-              .select('id, user_id, amount, currency, status, created_at');
-            if (depErr) throw depErr;
-
-            mainContent.innerHTML = `
+            const { data: deposits } = await supabase.from('deposits').select('id, user_id, amount, currency, status');
+            html = `
               <h1>Deposits</h1>
               <table>
-                <thead>
-                  <tr>
-                    <th>ID</th><th>User</th><th>Amount</th><th>Currency</th><th>Status</th><th>Date</th><th>Actions</th>
-                  </tr>
-                </thead>
+                <thead><tr><th>ID</th><th>User ID</th><th>Amount</th><th>Currency</th><th>Status</th><th>Actions</th></tr></thead>
                 <tbody>
-                  ${deposits.map(d => `
+                  ${deposits?.map(d => `
                     <tr>
                       <td>${d.id}</td>
                       <td>${d.user_id}</td>
-                      <td>$${d.amount.toFixed(2)}</td>
+                      <td>${d.amount}</td>
                       <td>${d.currency || 'USD'}</td>
                       <td>${d.status}</td>
-                      <td>${new Date(d.created_at).toLocaleString()}</td>
                       <td>
-                        ${d.status === 'pending'
-                          ? `<button onclick="approveDeposit('${d.id}')">Approve</button>
-                             <button onclick="rejectDeposit('${d.id}')">Reject</button>`
-                          : '–'
-                        }
+                        ${d.status === 'pending' ? `
+                          <button onclick="approveDeposit('${d.id}')">Approve</button>
+                          <button onclick="rejectDeposit('${d.id}')">Reject</button>
+                        ` : ''}
                       </td>
                     </tr>
-                  `).join('')}
+                  `).join('') || '<tr><td colspan="6">No deposits found</td></tr>'}
                 </tbody>
               </table>
             `;
@@ -221,39 +243,28 @@
             break;
 
           case 'investments':
-            const { data: investments, error: invErr } = await supabase
-              .from('investments')
-              .select('id, user_id, plan_id, invested_amount, status, start_time, end_time');
-            if (invErr) throw invErr;
-
-            mainContent.innerHTML = `
+            const { data: investments } = await supabase.from('investments').select('id, user_id, plan_id, invested_amount, status, start_time, end_time, total_profit');
+            html = `
               <h1>Investments</h1>
               <table>
-                <thead>
-                  <tr>
-                    <th>ID</th><th>User</th><th>Plan</th><th>Amount</th><th>Status</th><th>Start</th><th>End</th><th>Actions</th>
-                  </tr>
-                </thead>
+                <thead><tr><th>ID</th><th>User ID</th><th>Plan ID</th><th>Amount</th><th>Status</th><th>Actions</th></tr></thead>
                 <tbody>
-                  ${investments.map(i => `
+                  ${investments?.map(i => `
                     <tr>
                       <td>${i.id}</td>
                       <td>${i.user_id}</td>
                       <td>${i.plan_id}</td>
-                      <td>$${i.invested_amount.toFixed(2)}</td>
+                      <td>${i.invested_amount}</td>
                       <td>${i.status}</td>
-                      <td>${new Date(i.start_time).toLocaleDateString()}</td>
-                      <td>${new Date(i.end_time).toLocaleDateString()}</td>
                       <td>
-                        ${i.status === 'pending'
-                          ? `<button onclick="approveInvestment('${i.id}')">Approve</button>`
-                          : i.status === 'active'
-                            ? `<button onclick="terminateInvestment('${i.id}')">Terminate</button>`
-                            : '–'
-                        }
+                        ${i.status === 'pending' ? `
+                          <button onclick="approveInvestment('${i.id}')">Approve</button>
+                        ` : i.status === 'active' ? `
+                          <button onclick="terminateInvestment('${i.id}')">Terminate</button>
+                        ` : ''}
                       </td>
                     </tr>
-                  `).join('')}
+                  `).join('') || '<tr><td colspan="6">No investments found</td></tr>'}
                 </tbody>
               </table>
             `;
@@ -287,89 +298,91 @@
             break;
 
           case 'wallets':
-            const { data: wallets } = await supabase.from('wallets').select('method, address, created_at');
-            html = `
+            // 1️⃣ Fetch all rows from your `wallets` table:
+            const { data: wallets, error: walletErr } = await supabase
+              .from('wallets')
+              .select('method, address, created_at');
+            if (walletErr) throw walletErr;
+
+            // 2️⃣ Render a table with an “Edit” button that passes the method key:
+            mainContent.innerHTML = `
               <h1>Wallets</h1>
-              <button onclick="updateWallet()">Update Wallet</button>
               <table>
-                <thead><tr><th>Method</th><th>Address</th><th>Actions</th></tr></thead>
+                <thead>
+                  <tr>
+                    <th>Method</th>
+                    <th>Address</th>
+                    <th>Created</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
                 <tbody>
-                  ${wallets?.map(w => `
+                  ${wallets.map(w => `
                     <tr>
                       <td>${w.method}</td>
                       <td>${w.address}</td>
+                      <td>${new Date(w.created_at).toLocaleString()}</td>
                       <td>
                         <button onclick="editWallet('${w.method}')">Edit</button>
                       </td>
                     </tr>
-                  `).join('') || '<tr><td colspan="3">No wallets found</td></tr>'}
+                  `).join('')}
                 </tbody>
               </table>
             `;
             break;
 
           case 'payment_proofs':
-            const { data: files, error: listErr } = await supabase
+            // 1️⃣ List every file in your “payment-proofs” bucket:
+            const { data: proofs, error: proofsErr } = await supabase
               .storage
               .from('payment-proofs')
-              .list('', { limit: 100 });  // list top-level or specific folder
+              .list('', { limit: 100, offset: 0, sortBy: { column: 'name', order: 'asc' } });
+            if (proofsErr) throw proofsErr;
 
-            if (listErr) {
-              html = `<p>Error loading proofs: ${listErr.message}</p>`;
-            } else {
-              // generate a public URL for each
-              const items = await Promise.all(files.map(async f => {
-                const { publicUrl } = supabase
-                  .storage
-                  .from('payment-proofs')
-                  .getPublicUrl(f.name);
-                return `
-                  <li>
-                    <a href="${publicUrl}" target="_blank">${f.name}</a>
-                    <button onclick="approveProof('${f.name}')">Approve</button>
-                    <button onclick="rejectProof('${f.name}')">Reject</button>
-                  </li>
-                `;
-              }));
-              html = `
-                <h1>Payment Proofs</h1>
-                <ul>${items.join('') || '<li>No payment proofs found</li>'}</ul>
-              `;
-            }
+            // 2️⃣ Render a list with public URLs and Approve/Reject actions:
+            mainContent.innerHTML = `
+              <h1>Payment Proofs</h1>
+              <ul>
+                ${proofs.map(f => {
+                  // get a public URL for each file
+                  const { publicUrl } = supabase
+                    .storage
+                    .from('payment-proofs')
+                    .getPublicUrl(f.name);
+                  return `
+                    <li style="margin-bottom:0.5rem;">
+                      <a href="${publicUrl}" target="_blank">${f.name}</a>
+                      <button onclick="approveProof('${f.name}')">Approve</button>
+                      <button onclick="rejectProof('${f.name}')">Reject</button>
+                    </li>
+                  `;
+                }).join('')}
+              </ul>
+            `;
             break;
 
           case 'referrals':
-            const { data: refs, error: refErr } = await supabase
-              .from('referrals')
-              .select('id, referrer_id, referee_id, commission_amount, status, created_at');
-            if (refErr) throw refErr;
-
-            mainContent.innerHTML = `
+            const { data: referralsData } = await supabase.from('referrals').select('id, referrer_id, referee_id, commission_amount, status');
+            html = `
               <h1>Referrals</h1>
               <table>
-                <thead>
-                  <tr>
-                    <th>ID</th><th>Referrer</th><th>Referee</th>
-                    <th>Commission</th><th>Status</th><th>Date</th><th>Actions</th>
-                  </tr>
-                </thead>
+                <thead><tr><th>ID</th><th>Referrer ID</th><th>Referee ID</th><th>Commission</th><th>Status</th><th>Actions</th></tr></thead>
                 <tbody>
-                  ${refs.map(r => `
+                  ${referralsData?.map(r => `
                     <tr>
                       <td>${r.id}</td>
                       <td>${r.referrer_id}</td>
                       <td>${r.referee_id}</td>
-                      <td>$${r.commission_amount.toFixed(2)}</td>
+                      <td>${r.commission_amount}</td>
                       <td>${r.status}</td>
-                      <td>${new Date(r.created_at).toLocaleDateString()}</td>
                       <td>
-                        ${r.status === 'owed'
-                          ? `<button onclick="approveReferralPayout('${r.id}')">Mark Paid</button>`
-                          : '–'
-                        }
+                        ${r.status === 'owed' ? `
+                          <button onclick="approveReferralPayout('${r.id}')">Approve Payout</button>
+                        ` : ''}
                       </td>
                     </tr>
-                  `).join('')}
+                  `).join('') || '<tr><td colspan="6">No referrals found</td></tr>'}
                 </tbody>
               </table>
             `;
@@ -706,38 +719,7 @@
         alert('Failed to delete plan: ' + error.message);
       }
     }
-    async function editWallet(method) {
-      // 1) Fetch the existing wallet record
-      const { data: wallet, error: fetchErr } = await supabase
-        .from('wallets')
-        .select('address')
-        .eq('method', method)
-        .single();
-      if (fetchErr) {
-        return alert('Couldn’t load wallet: ' + fetchErr.message);
-      }
-
-      // 2) Prompt the admin for a new address
-      const newAddress = prompt(
-        `Update address for ${method}:`,
-        wallet.address
-      );
-      if (!newAddress || newAddress === wallet.address) {
-        return; // cancelled or no change
-      }
-
-      // 3) Persist the change
-      const { error: updateErr } = await supabase
-        .from('wallets')
-        .update({ address: newAddress })
-        .eq('method', method);
-      if (updateErr) {
-        return alert('Failed to update wallet: ' + updateErr.message);
-      }
-
-      alert('✅ Wallet updated');
-      loadSection('wallets');
-    }
+    async function editWallet(method) { alert('Edit wallet form TBD'); }
     async function updateWallet() { alert('Update wallet form TBD'); }
     async function approveReferralPayout(id) {
       try {
@@ -756,7 +738,7 @@
         loadSection('promotional_offers');
       } catch (error) {
         console.error('Error deleting offer:', error);
-        alert('Failed to delete offer: ' + error.message);
+        alert('Failed to delete offer: ' + error.message establish);
       }
     }
     async function editSetting(key) { alert('Edit setting form TBD'); }
