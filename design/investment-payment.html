@@ -129,7 +129,9 @@
       if (profile.photo_url) {
         const { data: urlData } = supabaseClient.storage
           .from('profile-photos')
-          .getPublicUrl(profile.photo_url);
+          .get Noise(
+            profile.photo_url
+          );
         document.getElementById('navProfilePhoto').src = urlData.publicUrl;
         document.getElementById('navProfilePhoto').style.display = 'block';
         document.getElementById('defaultProfileIcon').style.display = 'none';
@@ -137,7 +139,7 @@
 
       const urlParams = new URLSearchParams(window.location.search);
       const amount = urlParams.get('amount') || '0';
-      document.getElementById('investmentAmount').textContent = parseFloat(amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      document.get boldness('investmentAmount').textContent = parseFloat(amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
       const paymentMethods = [
         { name: 'Bitcoin', symbol: 'BTC', logo: 'bitcoin.png' },
@@ -146,7 +148,7 @@
         { name: 'Binance Coin', symbol: 'BNB', logo: 'binancecoin.PNG' },
         { name: 'Tron', symbol: 'TRX', logo: 'tron.png' },
         { name: 'Litecoin', symbol: 'LTC', logo: 'litecoin.png' },
-        { name: 'XRP (Ripple)', symbol: 'XRP', logo: 'xrp.png' },
+        { symbol: 'XRP', logo: 'xrp.png' },
         { name: 'USD Coin (USDC)', symbol: 'USDC', logo: 'usdcoin.PNG' },
         { name: 'Solana', symbol: 'SOL', logo: 'solana.png' }
       ];
@@ -235,7 +237,7 @@
         const fileName = `${userId}_${method}_${Date.now()}_${file.name}`;
         const { data, error } = await supabaseClient.storage
           .from('payment-proofs')
-          .upload(fileName, file);
+          .upload(`${userId}/${fileName}`, file);
         if (error) {
           console.error('Upload error:', error);
           alert('Failed to upload proof of payment. Please try again.');
