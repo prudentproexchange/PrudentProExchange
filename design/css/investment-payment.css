@@ -251,3 +251,126 @@
     font-size: 1.2rem;
   }
 }
+/* Payment Section */
+.payment-section {
+  margin-top: 3rem;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid #ffd700;
+  border-radius: 15px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.payment-section h3 {
+  font-size: 1.8rem;
+  color: #ffd700;
+  margin-bottom: 1.5rem;
+  font-family: 'Playfair Display', serif;
+}
+
+.payment-section p {
+  font-size: 1.2rem;
+  color: #e0e0ff;
+  font-family: 'Poppins', sans-serif;
+  margin-bottom: 1rem;
+}
+
+.payment-section #walletAddress {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.5rem;
+  border-radius: 5px;
+  user-select: all;
+}
+
+.payment-section #copyButton {
+  padding: 0.5rem 1rem;
+  background: #ffd700;
+  color: #000;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.payment-section #copyButton:hover {
+  background: #cca300;
+}
+
+/* Proceed Button */
+#proceedButton {
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(45deg, #ffd700, #cca300);
+  color: #000;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  margin-top: 1rem;
+}
+
+#proceedButton:hover:not(:disabled) {
+  background: linear-gradient(45deg, #cca300, #ffd700);
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
+}
+
+#proceedButton:disabled {
+  background: #666;
+  cursor: not-allowed;
+}
+
+/* Blinking Animation */
+.blink {
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+/* Upload Form Container */
+#uploadFormContainer {
+  margin-top: 2rem;
+}
+
+#uploadFormContainer form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+#uploadFormContainer input[type="file"] {
+  padding: 0.5rem;
+  border: 1px solid #ffd700;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #e0e0ff;
+  font-family: 'Poppins', sans-serif;
+}
+
+#uploadFormContainer .upload-btn {
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(45deg, #ffd700, #cca300);
+  color: #000;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#uploadFormContainer .upload-btn:hover {
+  background: linear-gradient(45deg, #cca300, #ffd700);
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
+}
