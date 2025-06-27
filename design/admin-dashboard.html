@@ -90,7 +90,7 @@
               { count: completedInvestments },
               { data: referrals }
             ] = await Promise.all([
-              supabase.from('users').select('*', { count: 'exact', head: true }),
+              supabase.from('profiles').select('*', { count: 'exact', head: true }),
               supabase.from('deposits').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
               supabase.from('deposits').select('*', { count: 'exact', head: true }).eq('status', 'approved'),
               supabase.from('withdrawals').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
@@ -304,9 +304,9 @@
               <ul>
                 ${allFiles?.map(f => `
                   <li>
-                    <a href="#" onclick="viewProof('${f.name}')">${f.name}</a>
-                    <button onclick="approveProof('${f.name}')">Approve</button>
-                    <button onclick="rejectProof('${f.name}')">Reject</button>
+                    <a href="#" onclick="viewProof('${f.userId}/${f.name}')">${f.name}</a>
+                    <button onclick="approveProof('${f.userId}/${f.name}')">Approve</button>
+                    <button onclick="rejectProof('${f.userId}/${f.name}')">Reject</button>
                   </li>
                 `).join('') || '<li>No payment proofs found</li>'}
               </ul>
@@ -559,8 +559,9 @@
       }
     }
 
-    async function approveProof(fileName) {
+    async function approveProof(path) {
       try {
+        const fileName = path.split('/').pop();
         const depositId = fileName.split('_')[0];
         await supabase.from('deposits').update({ status: 'approved' }).eq('id', depositId);
         loadSection('payment_proofs');
@@ -570,8 +571,9 @@
       }
     }
 
-    async function rejectProof(fileName) {
+    async function rejectProof(path) {
       try {
+        const fileName = path.split('/').pop();
         const depositId = fileName.split('_')[0];
         await supabase.from('deposits').update({ status: 'rejected' }).eq('id', depositId);
         loadSection('payment_proofs');
@@ -581,10 +583,9 @@
       }
     }
 
-    async function viewProof(fileName) {
+    async function viewProof(path) {
       try {
-        const { data: { user } } = await supabase.auth.getUser();
-        const { data, error } = await supabase.storage.from('payment-proofs').download(`${user.id}/${fileName}`);
+        const { data, error } = await supabase.storage.from('payment-proofs').download(path);
         if (error) throw error;
         const url = URL.createObjectURL(data);
         window.open(url);
@@ -600,7 +601,7 @@
         if (kycError) throw kycError;
 
         await supabase.from('kyc_requests').update({ status: 'approved' }).eq('id', kycId);
-        await supabase.from('users').update({ kyc_status: 'approved' }).eq('id', kyc.user_id);
+        await supabase.from('profiles').update({ kyc_status: 'approved' }).eq('id', kyc.user_id);
         loadSection('kyc_verification');
       } catch (error) {
         console.error('Error approving KYC:', error);
@@ -657,7 +658,7 @@
       if (firstName && lastName && email && country) {
         try {
           const userId = prompt('User ID (from auth):');
-          await supabase.from('users').insert({
+          await supabase.from('profiles').insert({
             id: userId,
             first_name: firstName,
             last_name: lastName,
@@ -679,7 +680,7 @@
       const country = prompt('New Country:');
       if (firstName || lastName || country) {
         try {
-          await supabase.from('users').update({
+          await supabase.from('profiles').update({
             first_name: firstName,
             last_name: lastName,
             country: country
@@ -694,7 +695,7 @@
 
     async function deactivateUser(id) {
       try {
-        await supabase.from('users').update({ status: 'inactive' }).eq('id', id);
+        await supabase.from('profiles').update({ status: 'inactive' }).eq('id', id);
         loadSection('users');
       } catch (error) {
         console.error('Error deactivating user:', error);
@@ -729,7 +730,7 @@
       const name = prompt('New Plan Name:');
       const minAmount = parseFloat(prompt('New Min Amount:'));
       const maxAmount = parseFloat(prompt('New Max Amount:'));
-      const roiPct = parseFloat(prompt('New Good %:'));
+      const roiPct = parseFloat(prompt('New ROI %:'));
       const durationDays = parseInt(prompt('New Duration Days:'));
       if (name || minAmount || maxAmount || roiPct || durationDays) {
         try {
@@ -822,7 +823,7 @@
       const name = prompt('New Offer Name:');
       const pctBonus = parseFloat(prompt('New Bonus %:'));
       const startDate = prompt('New Start Date (YYYY-MM-DD):');
-      const endDate = prompt('New End Date (YYYY-MM-DD):');
+      const endDate = prompt('New End Date solaire(YYYY-MM-DD):');
       const active = confirm('Is active?');
       if (name || pctBonus || startDate || endDate || active !== null) {
         try {
@@ -869,7 +870,7 @@
       const role = prompt('Role:');
       if (email && role) {
         try {
-          const { data: user } = await supabase.from('users').select('id').eq('email', email).single();
+          const { data: user } = await supabase.from('profiles').select('id').eq('email', email).single();
           if (user) {
             await supabase.from('admin_users').insert({
               user_id: user.id,
