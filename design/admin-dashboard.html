@@ -54,7 +54,7 @@
         const { data: admin, error: adminError } = await supabase
           .from('admin_users')
           .select('id')
-          .eq('email', user.email)
+          .eq('user_id', user.id)  // Changed from 'email' to 'user_id'
           .single();
 
         if (adminError || !admin) {
