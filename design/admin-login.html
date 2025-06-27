@@ -1,80 +1,113 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Admin Login • PrudentProExchange</title>
-  <link rel="stylesheet" href="admin-login.css" />
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-</head>
-<body>
-  <!-- Background Video -->
-  <video class="bg-video" autoplay muted loop playsinline preload="auto">
-    <source src="assets/videos/background.webm" type="video/webm">
-    <source src="assets/videos/background.mp4" type="video/mp4">
-    Your browser does not support the video tag.
-  </video>
+/* admin-login.css */
 
-  <!-- Login Box -->
-  <div class="login-box">
-    <img src="assets/images/logo.png" alt="PrudentProExchange Logo" class="logo">
-    <h1>Admin Login</h1>
-    <form id="loginForm">
-      <label for="email">Email</label>
-      <input type="email" id="email" required />
-      <label for="password">Password</label>
-      <input type="password" id="password" required />
-      <button type="submit">Sign In <span id="loading" style="display: none;">⏳</span></button>
-    </form>
-  </div>
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background: #000; /* Fallback in case video fails */
+  overflow: hidden; /* Prevents scrollbars */
+}
 
-  <!-- JavaScript for Authentication -->
-  <script>
-    // Initialize Supabase
-    const SUPABASE_URL = 'https://iwkdznjqfbsfkscnbrkc.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU';
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+/* Background Video */
+.bg-video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: -1; /* Ensures video stays behind the login box */
+}
 
-    const loginForm = document.getElementById('loginForm');
-    const loadingIndicator = document.getElementById('loading');
+/* Login Box */
+.login-box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.8); /* Semi-transparent black */
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  width: 300px;
+  text-align: center;
+  z-index: 1; /* Ensures login box is above the video */
+  animation: fadeIn 0.5s ease-in-out;
+}
 
-    loginForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      loadingIndicator.style.display = 'inline'; // Show loading
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -60%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
 
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
+/* Logo */
+.logo {
+  display: block;
+  margin: 0 auto 1rem;
+  width: 100px; /* Adjust based on your logo size */
+}
 
-      // Sign in with Supabase
-      const { data: signInData, error: signInError } = await supabaseClient.auth.signInWithPassword({
-        email,
-        password
-      });
+/* Title */
+h1 {
+  color: #fff;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+}
 
-      if (signInError) {
-        alert('Login error: ' + signInError.message);
-        loadingIndicator.style.display = 'none'; // Hide loading
-        return;
-      }
+/* Labels */
+label {
+  color: #fff;
+  display: block;
+  margin-bottom: 0.5rem;
+  text-align: left;
+}
 
-      // Check admin role
-      const userId = signInData.user.id;
-      const { data: admins } = await supabaseClient
-        .from('admins')
-        .select('user_id')
-        .eq('user_id', userId);
+/* Inputs */
+input {
+  width: 100%;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  background: #222; /* Dark input background */
+  color: #fff;
+  border: 1px solid #ffd700; /* Gold border */
+  border-radius: 5px;
+  box-sizing: border-box;
+}
 
-      if (!admins.length) {
-        // Not an admin
-        await supabaseClient.auth.signOut();
-        alert('You are not authorized as an admin.');
-        loadingIndicator.style.display = 'none'; // Hide loading
-        return;
-      }
+input:focus {
+  border-color: #e6b800; /* Darker gold on focus */
+  outline: none;
+}
 
-      // Redirect to admin dashboard
-      window.location.href = '/admin-dashboard.html';
-    });
-  </script>
-</body>
-</html>
+/* Button */
+button {
+  width: 100%;
+  padding: 0.75rem;
+  background: #ffd700; /* Gold background */
+  color: #000;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+button:hover {
+  background: #e6b800; /* Darker gold on hover */
+}
+
+/* Responsive Design */
+@media (max-width: 400px) {
+  .login-box {
+    width: 90%;
+    padding: 1.5rem;
+  }
+  h1 {
+    font-size: 1.5rem;
+  }
+}
