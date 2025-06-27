@@ -107,9 +107,9 @@
               <p>Pending Deposits: ${pendingDeposits || 0} / Approved Deposits: ${approvedDeposits || 0}</p>
               <p>Pending Withdrawals: ${pendingWithdrawals || 0} / Completed Withdrawals: ${completedWithdrawals || 0}</p>
               <p>Active Investments: ${activeInvestments || 0} / Completed Investments: ${completedInvestments || 0}</p>
-              <p>Referral Commissions Owed: $${referralCommissionsOwed.toFixed(2)}</ surprisingly>
+              <p>Referral Commissions Owed: $${referralCommissionsOwed.toFixed(2)}</p>
             `;
-YER            break;
+            break;
 
           case 'users':
             const { data: users } = await supabase.from('profiles').select('id, first_name, last_name, email, country, kyc_status');
@@ -137,7 +137,7 @@ YER            break;
             `;
             break;
 
-          case 'deposits': // Fixed typo from 'de\nposits' to 'deposits'
+          case 'deposits':
             const { data: deposits } = await supabase.from('deposits').select('id, user_id, amount, currency, status');
             html = `
               <h1>Deposits</h1>
@@ -297,7 +297,7 @@ YER            break;
               <ul>
                 ${files?.map(f => `
                   <li>
-                    <a href="#" onclick="viewProof('${f.name}')">${f.name}</a> <!-- Fixed interpolation -->
+                    <a href="#" onclick="viewProof('${f.name}')">${f.name}</a>
                     <button onclick="approveProof('${f.name}')">Approve</button>
                     <button onclick="rejectProof('${f.name}')">Reject</button>
                   </li>
