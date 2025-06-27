@@ -112,7 +112,7 @@
             break;
 
           case 'users':
-            const { data: users } = await supabase.from('users').select('id, first_name, last_name, email, country, kyc_status');
+            const { data: users } = await supabase.from('profiles').select('id, first_name, last_name, email, country, kyc_status');
             html = `
               <h1>Users Management</h1>
               <button onclick="createUser()">Create User</button>
@@ -291,12 +291,18 @@
             break;
 
           case 'payment_proofs':
-            const { data: { user } } = await supabase.auth.getUser();
-            const { data: files } = await supabase.storage.from('payment-proofs').list(`${user.id}`, { limit: 100 });
+            const { data: users } = await supabase.from('profiles').select('id');
+            let allFiles = [];
+            for (const user of users) {
+              const { data: files } = await supabase.storage.from('payment-proofs').list(user.id);
+              if (files?.length) {
+                allFiles.push(...files.map(f => ({ ...f, userId: user.id })));
+              }
+            }
             html = `
               <h1>Payment Proofs</h1>
               <ul>
-                ${files?.map(f => `
+                ${allFiles?.map(f => `
                   <li>
                     <a href="#" onclick="viewProof('${f.name}')">${f.name}</a>
                     <button onclick="approveProof('${f.name}')">Approve</button>
@@ -723,7 +729,7 @@
       const name = prompt('New Plan Name:');
       const minAmount = parseFloat(prompt('New Min Amount:'));
       const maxAmount = parseFloat(prompt('New Max Amount:'));
-      const roiPct = parseFloat(prompt('New ROI %:'));
+      const roiPct = parseFloat(prompt('New Good %:'));
       const durationDays = parseInt(prompt('New Duration Days:'));
       if (name || minAmount || maxAmount || roiPct || durationDays) {
         try {
