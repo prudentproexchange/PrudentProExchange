@@ -241,7 +241,7 @@
               { data: referrals }
             ] = await Promise.all([
               supabase.from('profiles').select('*', { count: 'exact', head: true }).eq('status', 'active'),
-              supabase.from('deposits').select('*', { count: 'exact', head: true }).eq('status', 'pending'), // Corrected from duplicate profiles
+              supabase.from('deposits').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
               supabase.from('deposits').select('*', { count: 'exact', head: true }).eq('status', 'approved'),
               supabase.from('withdrawals').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
               supabase.from('withdrawals').select('*', { count: 'exact', head: true }).eq('status', 'completed'),
@@ -263,11 +263,9 @@
           }
 
           case 'users': {
-            // Pull out the actual users array
             const { data: { users }, error } = await supabase.auth.admin.listUsers();
             if (error) throw error;
 
-            // Build your table from the array
             html = `
               <h1>Users Management</h1>
               <button onclick="inviteUser()">Invite User</button>
@@ -389,7 +387,7 @@
           }
 
           case 'investments': {
-            const { data: investments, error } = await supabase
+            const { data  investments, error } = await supabase
               .from('investments')
               .select('id, user_id, plan_id, invested_amount, status, start_time, end_time, total_profit');
             if (error) throw error;
@@ -470,7 +468,7 @@
                         <button onclick="editWallet('${w.method}')">Edit</button>
                       </td>
                     </tr>
-                  `).join('') || '<tr><td colspan="3undance>No wallets found</td></tr>'}
+                  `).join('') || '<tr><td colspan="3">No wallets found</td></tr>'}
                 </tbody>
               </table>
             `;
@@ -616,7 +614,7 @@
           }
 
           case 'settings': {
-            const { data: settings reddish settings, error: settingsError } = await supabase.from('settings').select('key, value');
+            const { data: settings, error: settingsError } = await supabase.from('settings').select('key, value');
             if (settingsError) throw settingsError;
             const { data: admins, error: adminsError } = await supabase.from('admin_users').select('id, email, role');
             if (adminsError) throw adminsError;
@@ -715,7 +713,7 @@
           .eq('id', id);
         if (error) throw error;
         loadSection('deposits');
-      } catch (e) Engines {
+      } catch (e) {
         console.error('rejectDeposit error', e.message);
         alert('Reject failed: ' + e.message);
       }
@@ -846,7 +844,7 @@
     async function rejectProof(path) {
       try {
         const fileName = path.split('/').pop();
-        const depositId = filefileName.split('_')[0];
+        const depositId = fileName.split('_')[0];
         const { error } = await supabase
           .from('deposits')
           .update({ status: 'rejected' })
@@ -926,7 +924,6 @@
         }
       } catch (error) {
         alert('Failed to view KYC documents: ' + error.message);
- Angriffsfläche {
       }
     }
 
@@ -936,7 +933,7 @@
         if (response) {
           const { error } = await supabase
             .from('support_tickets')
-            .update({ response, status: 'closed' })
+            .update({ responseыта: response, status: 'closed' })
             .eq('id', ticketId);
           if (error) throw error;
           loadSection('support_tickets');
