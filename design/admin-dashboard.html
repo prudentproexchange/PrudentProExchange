@@ -233,7 +233,7 @@
       return true;
     }
 
-    // Load Section Content (Unchanged)
+    // Load Section Content
     async function loadSection(section) {
       const mainContent = document.getElementById('main-content');
       mainContent.innerHTML = '<p class="loading">Loading...</p>';
@@ -275,9 +275,7 @@
           }
 
           case 'users': {
-            const { data: users, error } = await supabase
-              .from('profiles')
-              .select('id, email, created_at, last_sign_in_at, banned_until');
+            const { data: { users }, error } = await supabase.auth.admin.listUsers();
             if (error) throw error;
             html = `
               <h1>Users Management</h1>
@@ -294,7 +292,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  ${users?.map(u => `
+                  ${users.map(u => `
                     <tr>
                       <td>${u.id}</td>
                       <td>${u.email}</td>
@@ -697,7 +695,7 @@
         const response = await fetch('/api/reject-deposit', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ deposit_id: id })
+          body: JSON.stringify({让我deposit_id: id })
         });
         if (!response.ok) throw new Error('Failed to reject deposit');
         loadSection('deposits');
@@ -873,55 +871,46 @@
       }
     }
 
-    // User Management Functions
+    // User Management Functions (Updated to Use Admin API)
     async function inviteUser() {
       const email = prompt('Enter email to invite:');
-      if (email) {
-        try {
-          const response = await fetch('/api/invite-user', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email })
-          });
-          if (!response.ok) throw new Error('Failed to invite user');
-          alert('User invited successfully');
-          loadSection('users');
-        } catch (e) {
-          console.error('inviteUser error', e.message);
-          alert('Failed to invite user: ' + e.message);
-        }
+      if (!email) return;
+      try {
+        const { error } = await supabase.auth.admin.inviteUserByEmail(email);
+        if (error) throw new Error(error.message);
+        alert('Invitation sent');
+        loadSection('users');
+      } catch (e) {
+        console.error('inviteUser error', e.message);
+        alert('Invite failed: ' + e.message);
       }
     }
 
     async function disableUser(id) {
       try {
-        const response = await fetch('/api/disable-user', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ user_id: id })
-        });
-        if (!response.ok) throw new Error('Failed to disable user');
+        const until = new Date();
+        until.setFullYear(until.getFullYear() + 100);
+        const { error } = await supabase.auth.admin.updateUserById(id, { banned_until: until.toISOString() });
+        if (error) throw new Error(error.message);
         alert('User disabled successfully');
         loadSection('users');
       } catch (e) {
         console.error('disableUser error', e.message);
-        alert('Failed to disable user: ' + e.message);
+        alert('Disable failed: ' + e.message);
       }
     }
 
     async function deleteUser(id) {
       try {
-        const response = await fetch('/api/delete-user', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ user_id: id })
-        });
-        if (!response.ok) throw new Error('Failed to delete user');
+        const { error: e1 } = await supabase.auth.admin.deleteUser(id);
+        if (e1) throw new Error(e1.message);
+        const { error: e2 } = await supabase.from('profiles').delete().eq('id', id);
+        if (e2) console.warn('Cleanup profiles failed:', e2.message);
         alert('User deleted successfully');
         loadSection('users');
       } catch (e) {
         console.error('deleteUser error', e.message);
-        alert('Failed to delete user: ' + e.message);
+        alert('Delete failed: ' + e.message);
       }
     }
 
