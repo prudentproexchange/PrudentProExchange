@@ -275,8 +275,9 @@
           }
 
           case 'users': {
-            const { data: { users }, error } = await supabase.auth.admin.listUsers();
-            if (error) throw error;
+            const res = await fetch("/.netlify/functions/list-users");
+            if (!res.ok) throw new Error("Could not load users");
+            const users = await res.json();
             html = `
               <h1>Users Management</h1>
               <button onclick="inviteUser()">Invite User</button>
@@ -695,7 +696,7 @@
         const response = await fetch('/api/reject-deposit', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({让我deposit_id: id })
+          body: JSON.stringify({ deposit_id: id })
         });
         if (!response.ok) throw new Error('Failed to reject deposit');
         loadSection('deposits');
@@ -871,13 +872,17 @@
       }
     }
 
-    // User Management Functions (Updated to Use Admin API)
+    // User Management Functions (Updated to Use Netlify Functions)
     async function inviteUser() {
       const email = prompt('Enter email to invite:');
       if (!email) return;
       try {
-        const { error } = await supabase.auth.admin.inviteUserByEmail(email);
-        if (error) throw new Error(error.message);
+        const res = await fetch('/.netlify/functions/invite-user', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email })
+        });
+        if (!res.ok) throw new Error('Invite failed');
         alert('Invitation sent');
         loadSection('users');
       } catch (e) {
@@ -888,10 +893,12 @@
 
     async function disableUser(id) {
       try {
-        const until = new Date();
-        until.setFullYear(until.getFullYear() + 100);
-        const { error } = await supabase.auth.admin.updateUserById(id, { banned_until: until.toISOString() });
-        if (error) throw new Error(error.message);
+        const res = await fetch('/.netlify/functions/disable-user', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ user_id: id })
+        });
+        if (!res.ok) throw new Error('Disable failed');
         alert('User disabled successfully');
         loadSection('users');
       } catch (e) {
@@ -902,10 +909,12 @@
 
     async function deleteUser(id) {
       try {
-        const { error: e1 } = await supabase.auth.admin.deleteUser(id);
-        if (e1) throw new Error(e1.message);
-        const { error: e2 } = await supabase.from('profiles').delete().eq('id', id);
-        if (e2) console.warn('Cleanup profiles failed:', e2.message);
+        const res = await fetch('/.netlify/functions/delete-user', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ user_id: id })
+        });
+        if (!res.ok) throw new Error('Delete failed');
         alert('User deleted successfully');
         loadSection('users');
       } catch (e) {
