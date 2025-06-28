@@ -241,6 +241,7 @@
               { data: referrals }
             ] = await Promise.all([
               supabase.from('profiles').select('*', { count: 'exact', head: true }).eq('status', 'active'),
+  supabase.from('profiles').select('*', { count: 'exact', head: true }).eq('status', 'active'),
               supabase.from('deposits').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
               supabase.from('deposits').select('*', { count: 'exact', head: true }).eq('status', 'approved'),
               supabase.from('withdrawals').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
@@ -263,13 +264,25 @@
           }
 
           case 'users': {
-            const { data: users, error } = await supabase.auth.admin.listUsers();
+            // Pull out the actual users array
+            const { data: { users }, error } = await supabase.auth.admin.listUsers();
             if (error) throw error;
+
+            // Build your table from the array
             html = `
               <h1>Users Management</h1>
               <button onclick="inviteUser()">Invite User</button>
               <table>
-                <thead><tr><th>ID</th><th>Email</th><th>Created At</th><th>Last Sign In</th><th>Status</th><th>Actions</th></tr></thead>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Email</th>
+                    <th>Created At</th>
+                    <th>Last Sign In</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
                 <tbody>
                   ${users?.map(u => `
                     <tr>
