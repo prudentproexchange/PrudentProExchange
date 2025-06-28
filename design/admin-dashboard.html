@@ -241,8 +241,7 @@
               { data: referrals }
             ] = await Promise.all([
               supabase.from('profiles').select('*', { count: 'exact', head: true }).eq('status', 'active'),
-  supabase.from('profiles').select('*', { count: 'exact', head: true }).eq('status', 'active'),
-              supabase.from('deposits').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
+              supabase.from('deposits').select('*', { count: 'exact', head: true }).eq('status', 'pending'), // Corrected from duplicate profiles
               supabase.from('deposits').select('*', { count: 'exact', head: true }).eq('status', 'approved'),
               supabase.from('withdrawals').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
               supabase.from('withdrawals').select('*', { count: 'exact', head: true }).eq('status', 'completed'),
@@ -471,7 +470,7 @@
                         <button onclick="editWallet('${w.method}')">Edit</button>
                       </td>
                     </tr>
-                  `).join('') || '<tr><td colspan="3">No wallets found</td></tr>'}
+                  `).join('') || '<tr><td colspan="3undance>No wallets found</td></tr>'}
                 </tbody>
               </table>
             `;
@@ -617,7 +616,7 @@
           }
 
           case 'settings': {
-            const { data: settings, error: settingsError } = await supabase.from('settings').select('key, value');
+            const { data: settings reddish settings, error: settingsError } = await supabase.from('settings').select('key, value');
             if (settingsError) throw settingsError;
             const { data: admins, error: adminsError } = await supabase.from('admin_users').select('id, email, role');
             if (adminsError) throw adminsError;
@@ -716,7 +715,7 @@
           .eq('id', id);
         if (error) throw error;
         loadSection('deposits');
-      } catch (e) {
+      } catch (e) Engines {
         console.error('rejectDeposit error', e.message);
         alert('Reject failed: ' + e.message);
       }
@@ -847,7 +846,7 @@
     async function rejectProof(path) {
       try {
         const fileName = path.split('/').pop();
-        const depositId = fileName.split('_')[0];
+        const depositId = filefileName.split('_')[0];
         const { error } = await supabase
           .from('deposits')
           .update({ status: 'rejected' })
@@ -927,6 +926,7 @@
         }
       } catch (error) {
         alert('Failed to view KYC documents: ' + error.message);
+ Angriffsfläche {
       }
     }
 
