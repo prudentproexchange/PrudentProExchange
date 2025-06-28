@@ -1,13 +1,12 @@
-# netlify.toml
-
 [build]
-  publish = "."                      # your deploy folder (root for static HTML/JS)
-  command = "echo 'Skipping build; static files only.'"  # no build step
+  publish = "design"
+  command = "echo 'Skipping build; static files only.'"
 
 [[redirects]]
-  from    = "/api/*"  
+  from    = "/api/*"
   to      = "https://iwkdznjqfbsfkscnbrkc.supabase.co/functions/v1/:splat"
   status  = 200
   force   = true
+
 [functions]
   directory = "netlify/functions"
