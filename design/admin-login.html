@@ -34,7 +34,8 @@
       padding: 2.5rem;
       border-radius: 10px;
       box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
-      width: 350px;
+      width: 100%;
+      max-width: 350px;
       text-align: center;
       animation: fadeIn 0.5s ease-in-out;
       z-index: 1;
@@ -94,6 +95,22 @@
       color: #ffd700;
       border: 1px solid #ffd700;
     }
+
+    .error {
+      color: #c00;
+      margin-top: 1rem;
+      text-align: center;
+    }
+
+    /* Responsive design */
+    @media (max-width: 480px) {
+      .login-container {
+        padding: 1.5rem;
+      }
+      h1 {
+        font-size: 1.25rem;
+      }
+    }
   </style>
 </head>
 <body>
@@ -103,6 +120,7 @@
     <source src="assets/videos/background.mp4" type="video/mp4">
     Your browser does not support the video tag.
   </video>
+
   <div class="login-container">
     <img src="assets/images/logo.svg" alt="Logo" class="logo">
     <h1>Admin Login</h1>
@@ -111,6 +129,7 @@
       <input type="email" id="email" required />
       <label for="password">Password</label>
       <input type="password" id="password" required />
+      <div class="error" id="error"></div>
       <button type="submit">Sign In</button>
     </form>
   </div>
@@ -122,37 +141,58 @@
       const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU';
       const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+      const button = document.querySelector('button');
+      const originalButtonText = button.textContent;
+
       document.getElementById('loginForm').addEventListener('submit', async e => {
         e.preventDefault();
+
+        // Clear previous errors and disable button
+        document.getElementById('error').textContent = '';
+        button.disabled = true;
+        button.textContent = 'Signing in...';
+
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
 
         // Sign in with Supabase Auth
         const { data: signInData, error: signInError } = await supabaseClient.auth.signInWithPassword({
-          email, password
+          email,
+          password
         });
+
         if (signInError) {
           console.error('Login error:', signInError);
-          return alert('Login error: ' + signInError.message);
+          document.getElementById('error').textContent = 'Login error: ' + signInError.message;
+          button.disabled = false;
+          button.textContent = originalButtonText;
+          return;
         }
 
-        // Check if the user is an admin
+        // Check if the user is a superadmin
         const userId = signInData.user.id;
-        console.log('User ID:', userId);
-        const { data: admins, error: adminErr } = await supabaseClient
-          .from('admins')
-          .select('user_id')
-          .eq('user_id', userId);
+        const { data: admin, error: adminErr } = await supabaseClient
+          .from('admin_users')
+          .select('user_id, role')
+          .eq('user_id', userId)
+          .eq('role', 'superadmin')
+          .single();
 
-        console.log('Admins query:', admins, adminErr);
         if (adminErr) {
           console.error('Admin check error:', adminErr);
+          document.getElementById('error').textContent = 'Error checking admin status: ' + adminErr.message;
           await supabaseClient.auth.signOut();
-          return alert('Error checking admin status: ' + adminErr.message);
+          button.disabled = false;
+          button.textContent = originalButtonText;
+          return;
         }
-        if (admins.length === 0) {
+
+        if (!admin) {
+          document.getElementById('error').textContent = 'Access denied: You are not a superadmin.';
           await supabaseClient.auth.signOut();
-          return alert('Access denied: not an admin.');
+          button.disabled = false;
+          button.textContent = originalButtonText;
+          return;
         }
 
         // Redirect to admin dashboard on success
