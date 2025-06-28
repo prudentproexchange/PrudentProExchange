@@ -211,17 +211,29 @@
 
   <!-- JavaScript Logic -->
   <script>
-    // Supabase Client Initialization with Service Role Key
+    // Supabase Client Initialization with Anon Key
     const SUPABASE_URL = 'https://iwkdznjqfbsfkscnbrkc.supabase.co';
-    const SUPABASE_SERVICE_ROLE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1MDYyOTY4OCwiZXhwIjoyMDY2MjA1Njg4fQ.HPkLtB4-tf6R_4HtyhJVJ1iixIMAY_FVUDqjhHKymRw';
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU';
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // Admin Authentication Check (Simplified with Service Role)
+    // Admin Authentication Check
     async function checkAdmin() {
-      return true; // Always true under Service Role, bypassing RLS
+      const { data: { user }, error: authError } = await supabase.auth.getUser();
+      if (authError || !user) {
+        return false;
+      }
+      const { data: adminData, error: adminError } = await supabase
+        .from('admin_users')
+        .select('id')
+        .eq('user_id', user.id)
+        .single();
+      if (adminError || !adminData) {
+        return false;
+      }
+      return true;
     }
 
-    // Load Section Content
+    // Load Section Content (Unchanged)
     async function loadSection(section) {
       const mainContent = document.getElementById('main-content');
       mainContent.innerHTML = '<p class="loading">Loading...</p>';
@@ -263,11 +275,10 @@
           }
 
           case 'users': {
-            // Pull out the actual users array
-            const { data: { users }, error } = await supabase.auth.admin.listUsers();
+            const { data: users, error } = await supabase
+              .from('profiles')
+              .select('id, email, created_at, last_sign_in_at, banned_until');
             if (error) throw error;
-
-            // Build your table from the array
             html = `
               <h1>Users Management</h1>
               <button onclick="inviteUser()">Invite User</button>
@@ -665,41 +676,15 @@
       }
     }
 
-    // Action Functions
+    // Action Functions Updated to Use Edge Functions
     async function approveDeposit(id) {
       try {
-        const { error: updateError } = await supabase
-          .from('deposits')
-          .update({ status: 'approved' })
-          .eq('id', id);
-        if (updateError) throw updateError;
-
-        const { data: deposit, error: fetchDepositError } = await supabase
-          .from('deposits')
-          .select('user_id, amount')
-          .eq('id', id)
-          .single();
-        if (fetchDepositError) throw fetchDepositError;
-
-        const { data: user, error: fetchUserError } = await supabase
-          .from('profiles')
-          .select('deposit_wallet, total_deposits')
-          .eq('id', deposit.user_id)
-          .single();
-        if (fetchUserError) throw fetchUserError;
-
-        const newDepositWallet = (user.deposit_wallet || 0) + deposit.amount;
-        const newTotalDeposits = (user.total_deposits || 0) + deposit.amount;
-
-        const { error: updateUserError } = await supabase
-          .from('profiles')
-          .update({
-            deposit_wallet: newDepositWallet,
-            total_deposits: newTotalDeposits
-          })
-          .eq('id', deposit.user_id);
-        if (updateUserError) throw updateUserError;
-
+        const response = await fetch('/api/approve-deposit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ deposit_id: id })
+        });
+        if (!response.ok) throw new Error('Failed to approve deposit');
         loadSection('deposits');
       } catch (e) {
         console.error('approveDeposit error', e.message);
@@ -709,11 +694,12 @@
 
     async function rejectDeposit(id) {
       try {
-        const { error } = await supabase
-          .from('deposits')
-          .update({ status: 'rejected' })
-          .eq('id', id);
-        if (error) throw error;
+        const response = await fetch('/api/reject-deposit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ deposit_id: id })
+        });
+        if (!response.ok) throw new Error('Failed to reject deposit');
         loadSection('deposits');
       } catch (e) {
         console.error('rejectDeposit error', e.message);
@@ -723,38 +709,12 @@
 
     async function approveWithdrawal(id) {
       try {
-        const { data: w, error: fetchError } = await supabase
-          .from('withdrawals')
-          .select('user_id, amount')
-          .eq('id', id)
-          .single();
-        if (fetchError) throw fetchError;
-
-        const { error: updateError } = await supabase
-          .from('withdrawals')
-          .update({ status: 'completed' })
-          .eq('id', id);
-        if (updateError) throw updateError;
-
-        const { data: user, error: fetchUserError } = await supabase
-          .from('profiles')
-          .select('interest_wallet, total_withdrawals')
-          .eq('id', w.user_id)
-          .single();
-        if (fetchUserError) throw fetchUserError;
-
-        const newInterestWallet = (user.interest_wallet || 0) - w.amount;
-        const newTotalWithdrawals = (user.total_withdrawals || 0) + w.amount;
-
-        const { error: updateUserError } = await supabase
-          .from('profiles')
-          .update({
-            interest_wallet: newInterestWallet,
-            total_withdrawals: newTotalWithdrawals
-          })
-          .eq('id', w.user_id);
-        if (updateUserError) throw updateUserError;
-
+        const response = await fetch('/api/approve-withdrawal', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ withdrawal_id: id })
+        });
+        if (!response.ok) throw new Error('Failed to approve withdrawal');
         loadSection('withdrawals');
       } catch (e) {
         console.error('approveWithdrawal error', e.message);
@@ -764,11 +724,12 @@
 
     async function rejectWithdrawal(id) {
       try {
-        const { error } = await supabase
-          .from('withdrawals')
-          .update({ status: 'rejected' })
-          .eq('id', id);
-        if (error) throw error;
+        const response = await fetch('/api/reject-withdrawal', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ withdrawal_id: id })
+        });
+        if (!response.ok) throw new Error('Failed to reject withdrawal');
         loadSection('withdrawals');
       } catch (e) {
         console.error('rejectWithdrawal error', e.message);
@@ -778,34 +739,12 @@
 
     async function approveInvestment(id) {
       try {
-        const { data: inv, error: fetchError } = await supabase
-          .from('investments')
-          .select('user_id, invested_amount')
-          .eq('id', id)
-          .single();
-        if (fetchError) throw fetchError;
-
-        const { error: updateError } = await supabase
-          .from('investments')
-          .update({ status: 'active', start_time: new Date().toISOString() })
-          .eq('id', id);
-        if (updateError) throw updateError;
-
-        const { data: user, error: fetchUserError } = await supabase
-          .from('profiles')
-          .select('deposit_wallet')
-          .eq('id', inv.user_id)
-          .single();
-        if (fetchUserError) throw fetchUserError;
-
-        const newDepositWallet = (user.deposit_wallet || 0) - inv.invested_amount;
-
-        const { error: updateUserError } = await supabase
-          .from('profiles')
-          .update({ deposit_wallet: newDepositWallet })
-          .eq('id', inv.user_id);
-        if (updateUserError) throw updateUserError;
-
+        const response = await fetch('/api/approve-investment', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ investment_id: id })
+        });
+        if (!response.ok) throw new Error('Failed to approve investment');
         loadSection('investments');
       } catch (e) {
         console.error('approveInvestment error', e.message);
@@ -815,11 +754,12 @@
 
     async function terminateInvestment(id) {
       try {
-        const { error } = await supabase
-          .from('investments')
-          .update({ status: 'terminated', end_time: new Date().toISOString() })
-          .eq('id', id);
-        if (error) throw error;
+        const response = await fetch('/api/terminate-investment', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ investment_id: id })
+        });
+        if (!response.ok) throw new Error('Failed to terminate investment');
         loadSection('investments');
       } catch (e) {
         console.error('terminateInvestment error', e.message);
@@ -829,13 +769,12 @@
 
     async function approveProof(path) {
       try {
-        const fileName = path.split('/').pop();
-        const depositId = fileName.split('_')[0];
-        const { error } = await supabase
-          .from('deposits')
-          .update({ status: 'approved' })
-          .eq('id', depositId);
-        if (error) throw error;
+        const response = await fetch('/api/approve-proof', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ proof_path: path })
+        });
+        if (!response.ok) throw new Error('Failed to approve proof');
         loadSection('payment_proofs');
       } catch (e) {
         console.error('approveProof error', e.message);
@@ -845,13 +784,12 @@
 
     async function rejectProof(path) {
       try {
-        const fileName = path.split('/').pop();
-        const depositId = fileName.split('_')[0];
-        const { error } = await supabase
-          .from('deposits')
-          .update({ status: 'rejected' })
-          .eq('id', depositId);
-        if (error) throw error;
+        const response = await fetch('/api/reject-proof', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ proof_path: path })
+        });
+        if (!response.ok) throw new Error('Failed to reject proof');
         loadSection('payment_proofs');
       } catch (e) {
         console.error('rejectProof error', e.message);
@@ -871,25 +809,12 @@
 
     async function approveKyc(kycId) {
       try {
-        const { data: kyc, error: fetchError } = await supabase
-          .from('kyc_requests')
-          .select('user_id')
-          .eq('id', kycId)
-          .single();
-        if (fetchError) throw fetchError;
-
-        const { error: requestError } = await supabase
-          .from('kyc_requests')
-          .update({ status: 'approved' })
-          .eq('id', kycId);
-        if (requestError) throw requestError;
-
-        const { error: profileError } = await supabase
-          .from('profiles')
-          .update({ kyc_status: 'approved' })
-          .eq('id', kyc.user_id);
-        if (profileError) throw profileError;
-
+        const response = await fetch('/api/approve-kyc', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ kyc_id: kycId })
+        });
+        if (!response.ok) throw new Error('Failed to approve KYC');
         loadSection('kyc_verification');
       } catch (e) {
         console.error('approveKyc error', e.message);
@@ -899,11 +824,12 @@
 
     async function rejectKyc(kycId) {
       try {
-        const { error } = await supabase
-          .from('kyc_requests')
-          .update({ status: 'rejected' })
-          .eq('id', kycId);
-        if (error) throw error;
+        const response = await fetch('/api/reject-kyc', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ kyc_id: kycId })
+        });
+        if (!response.ok) throw new Error('Failed to reject KYC');
         loadSection('kyc_verification');
       } catch (e) {
         console.error('rejectKyc error', e.message);
@@ -931,13 +857,14 @@
 
     async function respondToTicket(ticketId) {
       try {
-        const response = prompt('Enter response:');
-        if (response) {
-          const { error: respError } = await supabase
-            .from('support_tickets')
-            .update({ response, status: 'closed' })
-            .eq('id', ticketId);
-          if (respError) throw respError;
+        const responseText = prompt('Enter response:');
+        if (responseText) {
+          const response = await fetch('/api/respond-to-ticket', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ticket_id: ticketId, response: responseText })
+          });
+          if (!response.ok) throw new Error('Failed to respond to ticket');
           loadSection('support_tickets');
         }
       } catch (e) {
@@ -951,8 +878,12 @@
       const email = prompt('Enter email to invite:');
       if (email) {
         try {
-          const { data, error } = await supabase.auth.admin.inviteUserByEmail(email);
-          if (error) throw error;
+          const response = await fetch('/api/invite-user', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email })
+          });
+          if (!response.ok) throw new Error('Failed to invite user');
           alert('User invited successfully');
           loadSection('users');
         } catch (e) {
@@ -964,10 +895,12 @@
 
     async function disableUser(id) {
       try {
-        const banUntil = new Date();
-        banUntil.setFullYear(banUntil.getFullYear() + 100); // Ban for 100 years
-        const { data, error } = await supabase.auth.admin.updateUserById(id, { banned_until: banUntil.toISOString() });
-        if (error) throw error;
+        const response = await fetch('/api/disable-user', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ user_id: id })
+        });
+        if (!response.ok) throw new Error('Failed to disable user');
         alert('User disabled successfully');
         loadSection('users');
       } catch (e) {
@@ -978,10 +911,12 @@
 
     async function deleteUser(id) {
       try {
-        const { error: authError } = await supabase.auth.admin.deleteUser(id);
-        if (authError) throw authError;
-        const { error: profileError } = await supabase.from('profiles').delete().eq('id', id);
-        if (profileError) throw profileError;
+        const response = await fetch('/api/delete-user', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ user_id: id })
+        });
+        if (!response.ok) throw new Error('Failed to delete user');
         alert('User deleted successfully');
         loadSection('users');
       } catch (e) {
@@ -999,14 +934,18 @@
       const durationDays = parseInt(prompt('Duration Days:'));
       if (name && minAmount && maxAmount && roiPct && durationDays) {
         try {
-          const { error } = await supabase.from('investment_plans').insert({
-            name,
-            min_amount: minAmount,
-            max_amount: maxAmount,
-            roi_pct: roiPct,
-            duration_days: durationDays
+          const response = await fetch('/api/create-plan', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              name,
+              min_amount: minAmount,
+              max_amount: maxAmount,
+              roi_pct: roiPct,
+              duration_days: durationDays
+            })
           });
-          if (error) throw error;
+          if (!response.ok) throw new Error('Failed to create plan');
           loadSection('investment_plans');
         } catch (e) {
           console.error('createPlan error', e.message);
@@ -1023,14 +962,19 @@
       const durationDays = parseInt(prompt('New Duration Days:'));
       if (name || minAmount || maxAmount || roiPct || durationDays) {
         try {
-          const { error } = await supabase.from('investment_plans').update({
-            name,
-            min_amount: minAmount,
-            max_amount: maxAmount,
-            roi_pct: roiPct,
-            duration_days: durationDays
-          }).eq('id', id);
-          if (error) throw error;
+          const response = await fetch('/api/edit-plan', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              plan_id: id,
+              name,
+              min_amount: minAmount,
+              max_amount: maxAmount,
+              roi_pct: roiPct,
+              duration_days: durationDays
+            })
+          });
+          if (!response.ok) throw new Error('Failed to edit plan');
           loadSection('investment_plans');
         } catch (e) {
           console.error('editPlan error', e.message);
@@ -1041,8 +985,12 @@
 
     async function deletePlan(id) {
       try {
-        const { error } = await supabase.from('investment_plans').delete().eq('id', id);
-        if (error) throw error;
+        const response = await fetch('/api/delete-plan', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ plan_id: id })
+        });
+        if (!response.ok) throw new Error('Failed to delete plan');
         loadSection('investment_plans');
       } catch (e) {
         console.error('deletePlan error', e.message);
@@ -1054,8 +1002,12 @@
       const newAddress = prompt('Enter new wallet address:');
       if (newAddress) {
         try {
-          const { error } = await supabase.from('wallets').update({ address: newAddress }).eq('method', method);
-          if (error) throw error;
+          const response = await fetch('/api/edit-wallet', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ method, address: newAddress })
+          });
+          if (!response.ok) throw new Error('Failed to edit wallet');
           loadSection('wallets');
         } catch (e) {
           console.error('editWallet error', e.message);
@@ -1069,8 +1021,12 @@
       const address = prompt('Enter wallet address:');
       if (method && address) {
         try {
-          const { error } = await supabase.from('wallets').insert({ method, address });
-          if (error) throw error;
+          const response = await fetch('/api/add-wallet', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ method, address })
+          });
+          if (!response.ok) throw new Error('Failed to add wallet');
           loadSection('wallets');
         } catch (e) {
           console.error('addWallet error', e.message);
@@ -1081,8 +1037,12 @@
 
     async function approveReferralPayout(id) {
       try {
-        const { error } = await supabase.from('referrals').update({ status: 'paid' }).eq('id', id);
-        if (error) throw error;
+        const response = await fetch('/api/approve-referral-payout', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ referral_id: id })
+        });
+        if (!response.ok) throw new Error('Failed to approve referral payout');
         loadSection('referrals');
       } catch (e) {
         console.error('approveReferralPayout error', e.message);
@@ -1098,14 +1058,18 @@
       const active = confirm('Is active?');
       if (name && pctBonus && startDate && endDate) {
         try {
-          const { error } = await supabase.from('promotional_offers').insert({
-            name,
-            pct_bonus: pctBonus,
-            start_date: startDate,
-            end_date: endDate,
-            active
+          const response = await fetch('/api/create-offer', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              name,
+              pct_bonus: pctBonus,
+              start_date: startDate,
+              end_date: endDate,
+              active
+            })
           });
-          if (error) throw error;
+          if (!response.ok) throw new Error('Failed to create offer');
           loadSection('promotional_offers');
         } catch (e) {
           console.error('createOffer error', e.message);
@@ -1122,14 +1086,19 @@
       const active = confirm('Is active?');
       if (name || pctBonus || startDate || endDate || active !== null) {
         try {
-          const { error } = await supabase.from('promotional_offers').update({
-            name,
-            pct_bonus: pctBonus,
-            start_date: startDate,
-            end_date: endDate,
-            active
-          }).eq('id', id);
-          if (error) throw error;
+          const response = await fetch('/api/edit-offer', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              offer_id: id,
+              name,
+              pct_bonus: pctBonus,
+              start_date: startDate,
+              end_date: endDate,
+              active
+            })
+          });
+          if (!response.ok) throw new Error('Failed to edit offer');
           loadSection('promotional_offers');
         } catch (e) {
           console.error('editOffer error', e.message);
@@ -1140,8 +1109,12 @@
 
     async function deleteOffer(id) {
       try {
-        const { error } = await supabase.from('promotional_offers').delete().eq('id', id);
-        if (error) throw error;
+        const response = await fetch('/api/delete-offer', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ offer_id: id })
+        });
+        if (!response.ok) throw new Error('Failed to delete offer');
         loadSection('promotional_offers');
       } catch (e) {
         console.error('deleteOffer error', e.message);
@@ -1153,8 +1126,12 @@
       const newValue = prompt('New Value:');
       if (newValue) {
         try {
-          const { error } = await supabase.from('settings').update({ value: newValue }).eq('key', key);
-          if (error) throw error;
+          const response = await fetch('/api/edit-setting', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ key, value: newValue })
+          });
+          if (!response.ok) throw new Error('Failed to edit setting');
           loadSection('settings');
         } catch (e) {
           console.error('editSetting error', e.message);
@@ -1168,19 +1145,13 @@
       const role = prompt('Role:');
       if (email && role) {
         try {
-          const { data: user, error: userError } = await supabase.auth.admin.getUserByEmail(email);
-          if (userError) throw userError;
-          if (user.user) {
-            const { error: insertError } = await supabase.from('admin_users').insert({
-              user_id: user.user.id,
-              email: email,
-              role: role
-            });
-            if (insertError) throw insertError;
-            loadSection('settings');
-          } else {
-            alert('User not found in auth');
-          }
+          const response = await fetch('/api/create-admin', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, role })
+          });
+          if (!response.ok) throw new Error('Failed to create admin');
+          loadSection('settings');
         } catch (e) {
           console.error('createAdmin error', e.message);
           alert('Failed to create admin: ' + e.message);
@@ -1190,8 +1161,12 @@
 
     async function deleteAdmin(id) {
       try {
-        const { error } = await supabase.from('admin_users').delete().eq('id', id);
-        if (error) throw error;
+        const response = await fetch('/api/delete-admin', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ admin_id: id })
+        });
+        if (!response.ok) throw new Error('Failed to delete admin');
         loadSection('settings');
       } catch (e) {
         console.error('deleteAdmin error', e.message);
@@ -1217,6 +1192,8 @@
     (async () => {
       if (await checkAdmin()) {
         loadSection('overview');
+      } else {
+        document.getElementById('main-content').innerHTML = '<p class="error">Access denied. You must be an admin to view this page.</p>';
       }
     })();
   </script>
