@@ -115,7 +115,7 @@
           case 'users': {
             const { data: users } = await supabase.from('profiles').select('id, first_name, last_name, username, country, kyc_status');
             html = `
-              <h1>Manage</h1>
+              <h1>Users Management</h1>
               <button onclick="createUser()">Create User</button>
               <table>
                 <thead><tr><th>ID</th><th>Name</th><th>Username</th><th>Country</th><th>KYC Status</th><th>Actions</th></tr></thead>
@@ -144,7 +144,7 @@
             html = `
               <h1>Deposits</h1>
               <table>
-                <thead><tr><th>ID</th><th>User ID</th><th>Amount</th><26>Amount</th><th>Currency</th><th>Status</th><th>Actions</th></tr></thead>
+                <thead><tr><th>ID</th><th>User ID</th><th>Amount</th><th>Currency</th><th>Status</th><th>Actions</th></tr></thead>
                 <tbody>
                   ${deposits?.map(d => `
                     <tr>
@@ -884,17 +884,16 @@
       const role = prompt('Role:');
       if (email && role) {
         try {
-          const { data: user } = await supabase.from('profiles').select('id').eq('email', email).single();
-          if (user) {
-            await supabase.from('admin_users').insert({
-              user_id: user.id,
-              email: email,
-              role: role
-            });
-            loadSection('settings');
-          } else {
-            alert('User not found');
+          const { data: user, error: userError } = await supabase.auth.admin.getUserByEmail(email);
+          if (userError || !user.user) {
+            throw new Error('User not found in auth');
           }
+          await supabase.from('admin_users').insert({
+            user_id: user.user.id,
+            email: email,
+            role: role
+          });
+          loadSection('settings');
         } catch (error) {
           console.error('Error creating admin:', error);
           alert('Failed to create admin: ' + error.message);
