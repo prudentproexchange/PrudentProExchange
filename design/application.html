@@ -173,7 +173,7 @@
                   <option value="MT">Malta</option>
                   <option value="MH">Marshall Islands</option>
                   <option value="MR">Mauritania</option>
-                  <option value="MU">Mauritius</option>
+                  <option value="MU'>(MU">Mauritius</option>
                   <option value="MX">Mexico</option>
                   <option value="FM">Micronesia</option>
                   <option value="MD">Moldova</option>
@@ -290,10 +290,7 @@
   <script>
     AOS.init({ duration: 800, once: true });
 
-    // ——————————————————————————————————————————
-    // 1️⃣ Catch any JS errors or unhandled rejections
-    //     and show them via alert() so you see them on iOS.
-    // ——————————————————————————————————————————
+    // Catch any JS errors or unhandled rejections and show them via alert()
     window.addEventListener('error', event => {
       alert(`Error: ${event.message}\nFile: ${event.filename}:${event.lineno}`);
     });
@@ -328,9 +325,7 @@
       return code;
     }
 
-    // ——————————————————————————————————————————
-    // 2️⃣ Correct Supabase client from CDN bundle
-    // ——————————————————————————————————————————
+    // Correct Supabase client from CDN bundle
     const { createClient } = supabase;
     const supabaseClient = createClient(
       'https://iwkdznjqfbsfkscnbrkc.supabase.co',
@@ -377,17 +372,11 @@
         });
         if (signUpError) {
           console.error('Sign-up error:', signUpError);
-          throw new Error(`Sign-up failed: ${signUpError.message}`);
-        }
-
-        // 1a. Immediately sign back in to obtain the JWT
-        const { data: sessionData, error: signInError } = await supabaseClient.auth.signInWithPassword({
-          email: form.email.value,
-          password: form.password.value,
-        });
-        if (signInError) {
-          console.error('Sign-in error:', signInError);
-          throw new Error(`Sign-in failed: ${signInError.message}`);
+          if (signUpError.message.includes('already')) {
+            throw new Error('A user with this email already exists. If you have previously registered, please log in or contact support.');
+          } else {
+            throw new Error(`Sign-up failed: ${signUpError.message}`);
+          }
         }
 
         const user = authData.user;
@@ -454,7 +443,11 @@
 
         if (profileError) {
           console.error('Profile insertion error:', profileError);
-          throw new Error(`Profile creation failed: ${profileError.message}`);
+          if (profileError.code === '23505') {
+            throw new Error('Username already taken. Please choose a different username.');
+          } else {
+            throw new Error(`Profile creation failed: ${profileError.message}`);
+          }
         }
 
         console.log('Profile inserted successfully:', insertData);
