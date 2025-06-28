@@ -1,18 +1,11 @@
 # netlify.toml
 
 [build]
-  # If you have no build step (pure HTML/JS), you can just publish the repo root
-  publish = "."
-  # Otherwise replace with your build command, e.g. "npm run build"
-  command = "echo 'Skipping build; static files only.'"
+  publish = "."                      # your deploy folder (root for static HTML/JS)
+  command = "echo 'Skipping build; static files only.'"  # no build step
 
-# Redirect any /api/* call to your Supabase function
 [[redirects]]
-  from     = "/api/*"
-  to       = "https://iwkdznjqfbsfkscnbrkc.supabase.co/functions/v1/:splat"
-  status   = 200
-  force    = true
-
-# (Optional) If you ever add Netlify Functions, point at your functions folder:
-# [functions]
-#   directory = "netlify/functions"
+  from    = "/api/*"  
+  to      = "https://iwkdznjqfbsfkscnbrkc.supabase.co/functions/v1/:splat"
+  status  = 200
+  force   = true
