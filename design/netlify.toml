@@ -9,3 +9,5 @@
   to      = "https://iwkdznjqfbsfkscnbrkc.supabase.co/functions/v1/:splat"
   status  = 200
   force   = true
+[functions]
+  directory = "netlify/functions"
