@@ -263,9 +263,11 @@
           }
 
           case 'users': {
+            // Pull out the actual users array
             const { data: { users }, error } = await supabase.auth.admin.listUsers();
             if (error) throw error;
 
+            // Build your table from the array
             html = `
               <h1>Users Management</h1>
               <button onclick="inviteUser()">Invite User</button>
@@ -361,10 +363,10 @@
           }
 
           case 'transactions': {
-            const { data: transactions, error } = await supabase
+            const { data: transactions, error: txError } = await supabase
               .from('transactions')
               .select('id, user_id, type, amount, currency, status, created_at');
-            if (error) throw error;
+            if (txError) throw txError;
             html = `
               <h1>Transactions</h1>
               <table>
@@ -387,10 +389,10 @@
           }
 
           case 'investments': {
-            const { data  investments, error } = await supabase
+            const { data: investments, error: invError } = await supabase
               .from('investments')
               .select('id, user_id, plan_id, invested_amount, status, start_time, end_time, total_profit');
-            if (error) throw error;
+            if (invError) throw invError;
             html = `
               <h1>Investments</h1>
               <table>
@@ -931,11 +933,11 @@
       try {
         const response = prompt('Enter response:');
         if (response) {
-          const { error } = await supabase
+          const { error: respError } = await supabase
             .from('support_tickets')
-            .update({ responseыта: response, status: 'closed' })
+            .update({ response, status: 'closed' })
             .eq('id', ticketId);
-          if (error) throw error;
+          if (respError) throw respError;
           loadSection('support_tickets');
         }
       } catch (e) {
