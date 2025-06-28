@@ -6,185 +6,8 @@
   <title>Admin Dashboard • PrudentProExchange</title>
   <!-- Supabase JavaScript Client -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <style>
-    /* Reset default margins and padding */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    /* Base styles for the body */
-    body {
-      font-family: Arial, sans-serif;
-      line-height: 1.6;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
-
-    /* Sidebar styles */
-    .sidebar {
-      background-color: #2c3e50;
-      color: white;
-      padding: 1rem;
-      width: 250px;
-      height: 100vh;
-      position: fixed;
-      top: 0;
-      left: 0;
-      overflow-y: auto;
-      transition: transform 0.3s ease-in-out;
-    }
-
-    .sidebar h2 {
-      margin-bottom: 1.5rem;
-      font-size: 1.5rem;
-    }
-
-    .sidebar ul {
-      list-style: none;
-    }
-
-    .sidebar ul li {
-      margin-bottom: 1rem;
-    }
-
-    .sidebar a {
-      color: white;
-      text-decoration: none;
-      font-size: 1.1rem;
-    }
-
-    .sidebar a:hover {
-      color: #3498db;
-    }
-
-    /* Main content styles */
-    .main-content {
-      margin-left: 250px;
-      padding: 2rem;
-      flex-grow: 1;
-      background-color: #ecf0f1;
-      min-height: 100vh;
-    }
-
-    /* Table styles for responsiveness */
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 1rem;
-    }
-
-    table th, table td {
-      padding: 0.75rem;
-      border: 1px solid #ddd;
-      text-align: left;
-    }
-
-    table th {
-      background-color: #34495e;
-      color: white;
-    }
-
-    table tbody tr:nth-child(even) {
-      background-color: #f9f9f9;
-    }
-
-    /* Button styles */
-    button {
-      padding: 0.5rem 1rem;
-      background-color: #3498db;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #2980b9;
-    }
-
-    /* Loading and error messages */
-    .loading, .error {
-      font-size: 1.2rem;
-      text-align: center;
-    }
-
-    /* Mobile-first: Hide sidebar by default on small screens */
-    @media (max-width: 768px) {
-      .sidebar {
-        transform: translateX(-100%);
-        width: 200px;
-      }
-
-      .main-content {
-        margin-left: 0;
-      }
-
-      table {
-        display: block;
-        overflow-x: auto;
-        white-space: nowrap;
-      }
-
-      .main-content {
-        padding: 1rem;
-      }
-    }
-
-    /* Show sidebar toggle button on mobile */
-    .sidebar-toggle {
-      display: none;
-      position: fixed;
-      top: 1rem;
-      left: 1rem;
- راستای
-
-      background-color: #3498db;
-      color: white;
-      border: none;
-      padding: 0.5rem 1rem;
-      border-radius: 4px;
-      cursor: pointer;
-      z-index: 1000;
-    }
-
-    @media (max-width: 768px) {
-      .sidebar-toggle {
-        display: block;
-      }
-
-      .sidebar.active {
-        transform: translateX(0);
-      }
-    }
-
-    /* Medium screens */
-    @media (min-width: 769px) and (max-width: 1024px) {
-      .sidebar {
-        width: 200px;
-      }
-
-      .main-content {
-        margin-left: 200px;
-      }
-    }
-
-    /* Large screens */
-    @media (min-width: 1025px) {
-      .sidebar {
-        width: 250px;
-      }
-
-      .main-content {
-        margin-left: 250px;
-      }
-    }
-  </style>
 </head>
 <body>
-  <button class="sidebar-toggle" onclick="toggleSidebar()">☰ Menu</button>
   <!-- Sidebar Navigation -->
   <div class="sidebar">
     <h2>Admin Dashboard</h2>
@@ -223,7 +46,8 @@
       try {
         const { data: { user }, error: userError } = await supabase.auth.getUser();
         if (userError || !user) {
-          window.location.href = 'login.html';
+          console.error('No user logged in:', userError?.message);
+          window.location.href = 'login.html'; // Redirect to login page
           return false;
         }
 
@@ -234,12 +58,14 @@
           .single();
 
         if (adminError || !admin) {
+          console.error('Admin check failed:', adminError?.message);
           alert('Access denied: You are not an admin.');
           window.location.href = 'login.html';
           return false;
         }
         return true;
       } catch (error) {
+        console.error('Error in checkAdmin:', error.message);
         alert('An error occurred while verifying admin status.');
         return false;
       }
@@ -255,7 +81,7 @@
         switch (section) {
           case 'overview': {
             const [
-              { count: totalUsers },
+              { count: totalUsers, error: usersError },
               { count: pendingDeposits },
               { count: approvedDeposits },
               { count: pendingWithdrawals },
@@ -273,6 +99,7 @@
               supabase.from('investments').select('*', { count: 'exact', head: true }).eq('status', 'completed'),
               supabase.from('referrals').select('commission_amount').eq('status', 'owed')
             ]);
+            if (usersError) throw usersError;
             const referralCommissionsOwed = referrals?.reduce((sum, r) => sum + (r.commission_amount || 0), 0) || 0;
 
             html = `
@@ -290,14 +117,26 @@
             const { data: users, error } = await supabase
               .from('profiles')
               .select('id, first_name, last_name, username, country, kyc_status');
-            if (error) throw error;
+            if (error) {
+              console.error('Error fetching users:', error.message);
+              throw error;
+            }
             html = `
               <h1>Users Management</h1>
               <button onclick="createUser()">Create User</button>
               <table>
-                <thead><tr><th>ID</th><th>Name</th><th>Username</th><th>Country</th><th>KYC Status</th><th>Actions</th></tr></thead>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Username</th>
+                    <th>Country</th>
+                    <th>KYC Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
                 <tbody>
-                  ${users?.map(u => `
+                  ${users?.length ? users.map(u => `
                     <tr>
                       <td>${u.id}</td>
                       <td>${u.first_name || ''} ${u.last_name || ''}</td>
@@ -309,7 +148,7 @@
                         <button onclick="deactivateUser('${u.id}')">Deactivate</button>
                       </td>
                     </tr>
-                  `).join('') || '<tr><td colspan="6">No users found</td></tr>'}
+                  `).join('') : '<tr><td colspan="6">No users found</td></tr>'}
                 </tbody>
               </table>
             `;
@@ -476,24 +315,40 @@
           }
 
           case 'payment_proofs': {
-            const { data: profiles } = await supabase.from('profiles').select('id');
+            const { data: profiles, error: profilesError } = await supabase.from('profiles').select('id');
+            if (profilesError) {
+              console.error('Error fetching profiles for payment proofs:', profilesError.message);
+              throw profilesError;
+            }
+
             let allFiles = [];
-            for (const p of profiles) {
-              const { data: files } = await supabase.storage.from('payment-proofs').list(p.id, { limit: 100 });
+            for (const p of profiles || []) {
+              const { data: files, error: filesError } = await supabase
+                .storage
+                .from('payment-proofs')
+                .list(p.id, { limit: 100 });
+              if (filesError) {
+                console.error(`Error listing files for user ${p.id}:`, filesError.message);
+                continue; // Skip this user, continue with others
+              }
               if (files?.length) {
-                allFiles.push(...files.map(f => ({ userId: p.id, name: f.name, fullPath: `${p.id}/${f.name}` })));
+                allFiles.push(...files.map(f => ({
+                  userId: p.id,
+                  name: f.name,
+                  fullPath: `${p.id}/${f.name}`
+                })));
               }
             }
             html = `
               <h1>Payment Proofs</h1>
               <ul>
-                ${allFiles.map(f => `
+                ${allFiles.length ? allFiles.map(f => `
                   <li>
                     <a href="#" onclick="viewProof('${f.fullPath}')">${f.userId} - ${f.name}</a>
                     <button onclick="approveProof('${f.fullPath}')">Approve</button>
                     <button onclick="rejectProof('${f.fullPath}')">Reject</button>
                   </li>
-                `).join('') || '<li>No payment proofs found</li>'}
+                `).join('') : '<li>No payment proofs found</li>'}
               </ul>
             `;
             break;
@@ -651,6 +506,7 @@
         }
         mainContent.innerHTML = html;
       } catch (error) {
+        console.error(`Error loading section ${section}:`, error.message);
         mainContent.innerHTML = `<p class="error">Error loading section: ${error.message}</p>`;
       }
     }
@@ -658,15 +514,22 @@
     // Action Functions
     async function approveDeposit(depositId) {
       try {
-        const { data: deposit } = await supabase.from('deposits').select('*').eq('id', depositId).single();
+        const { data: deposit, error: depositError } = await supabase.from('deposits').select('*').eq('id', depositId).single();
+        if (depositError) throw depositError;
+
         await supabase.from('deposits').update({ status: 'approved' }).eq('id', depositId);
-        const { data: user } = await supabase.from('profiles').select('deposit_wallet, total_deposits').eq('id', deposit.user_id).single();
+
+        const { data: user, error: userError } = await supabase.from('profiles').select('deposit_wallet, total_deposits').eq('id', deposit.user_id).single();
+        if (userError) throw userError;
+
         await supabase.from('profiles').update({
           deposit_wallet: (user.deposit_wallet || 0) + deposit.amount,
           total_deposits: (user.total_deposits || 0) + deposit.amount
         }).eq('id', deposit.user_id);
+
         loadSection('deposits');
       } catch (error) {
+        console.error('Error approving deposit:', error.message);
         alert('Failed to approve deposit: ' + error.message);
       }
     }
@@ -676,21 +539,29 @@
         await supabase.from('deposits').update({ status: 'rejected' }).eq('id', depositId);
         loadSection('deposits');
       } catch (error) {
+        console.error('Error rejecting deposit:', error.message);
         alert('Failed to reject deposit: ' + error.message);
       }
     }
 
     async function approveWithdrawal(withdrawalId) {
       try {
-        const { data: withdrawal } = await supabase.from('withdrawals').select('*').eq('id', withdrawalId).single();
+        const { data: withdrawal, error: withdrawalError } = await supabase.from('withdrawals').select('*').eq('id', withdrawalId).single();
+        if (withdrawalError) throw withdrawalError;
+
         await supabase.from('withdrawals').update({ status: 'completed' }).eq('id', withdrawalId);
-        const { data: user } = await supabase.from('profiles').select('interest_wallet, total_withdrawals').eq('id', withdrawal.user_id).single();
+
+        const { data: user, error: userError } = await supabase.from('profiles').select('interest_wallet, total_withdrawals').eq('id', withdrawal.user_id).single();
+        if (userError) throw userError;
+
         await supabase.from('profiles').update({
           interest_wallet: (user.interest_wallet || 0) - withdrawal.amount,
           total_withdrawals: (user.total_withdrawals || 0) + withdrawal.amount
         }).eq('id', withdrawal.user_id);
+
         loadSection('withdrawals');
       } catch (error) {
+        console.error('Error approving withdrawal:', error.message);
         alert('Failed to approve withdrawal: ' + error.message);
       }
     }
@@ -700,20 +571,28 @@
         await supabase.from('withdrawals').update({ status: 'rejected' }).eq('id', withdrawalId);
         loadSection('withdrawals');
       } catch (error) {
+        console.error('Error rejecting withdrawal:', error.message);
         alert('Failed to reject withdrawal: ' + error.message);
       }
     }
 
     async function approveInvestment(investmentId) {
       try {
-        const { data: investment } = await supabase.from('investments').select('*').eq('id', investmentId).single();
+        const { data: investment, error: investmentError } = await supabase.from('investments').select('*').eq('id', investmentId).single();
+        if (investmentError) throw investmentError;
+
         await supabase.from('investments').update({ status: 'active', start_time: new Date().toISOString() }).eq('id', investmentId);
-        const { data: user } = await supabase.from('profiles').select('deposit_wallet').eq('id', investment.user_id).single();
+
+        const { data: user, error: userError } = await supabase.from('profiles').select('deposit_wallet').eq('id', investment.user_id).single();
+        if (userError) throw userError;
+
         await supabase.from('profiles').update({
           deposit_wallet: (user.deposit_wallet || 0) - investment.invested_amount
         }).eq('id', investment.user_id);
+
         loadSection('investments');
       } catch (error) {
+        console.error('Error approving investment:', error.message);
         alert('Failed to approve investment: ' + error.message);
       }
     }
@@ -723,6 +602,7 @@
         await supabase.from('investments').update({ status: 'terminated', end_time: new Date().toISOString() }).eq('id', investmentId);
         loadSection('investments');
       } catch (error) {
+        console.error('Error terminating investment:', error.message);
         alert('Failed to terminate investment: ' + error.message);
       }
     }
@@ -731,9 +611,11 @@
       try {
         const fileName = path.split('/').pop();
         const depositId = fileName.split('_')[0];
+        if (!depositId) throw new Error('Invalid file name format: missing deposit ID');
         await supabase.from('deposits').update({ status: 'approved' }).eq('id', depositId);
         loadSection('payment_proofs');
       } catch (error) {
+        console.error('Error approving proof:', error.message);
         alert('Failed to approve proof: ' + error.message);
       }
     }
@@ -742,30 +624,37 @@
       try {
         const fileName = path.split('/').pop();
         const depositId = fileName.split('_')[0];
+        if (!depositId) throw new Error('Invalid file name format: missing deposit ID');
         await supabase.from('deposits').update({ status: 'rejected' }).eq('id', depositId);
         loadSection('payment_proofs');
       } catch (error) {
+        console.error('Error rejecting proof:', error.message);
         alert('Failed to reject proof: ' + error.message);
       }
     }
 
     async function viewProof(path) {
       try {
-        const { data } = await supabase.storage.from('payment-proofs').download(path);
+        const { data, error } = await supabase.storage.from('payment-proofs').download(path);
+        if (error) throw error;
         const url = URL.createObjectURL(data);
         window.open(url);
       } catch (error) {
+        console.error('Error viewing proof:', error.message);
         alert('Failed to view proof: ' + error.message);
       }
     }
 
     async function approveKyc(kycId) {
       try {
-        const { data: kyc } = await supabase.from('kyc_requests').select('user_id').eq('id', kycId).single();
+        const { data: kyc, error: kycError } = await supabase.from('kyc_requests').select('user_id').eq('id', kycId).single();
+        if (kycError) throw kycError;
+
         await supabase.from('kyc_requests').update({ status: 'approved' }).eq('id', kycId);
         await supabase.from('profiles').update({ kyc_status: 'approved' }).eq('id', kyc.user_id);
         loadSection('kyc_verification');
       } catch (error) {
+        console.error('Error approving KYC:', error.message);
         alert('Failed to approve KYC: ' + error.message);
       }
     }
@@ -775,19 +664,24 @@
         await supabase.from('kyc_requests').update({ status: 'rejected' }).eq('id', kycId);
         loadSection('kyc_verification');
       } catch (error) {
+        console.error('Error rejecting KYC:', error.message);
         alert('Failed to reject KYC: ' + error.message);
       }
     }
 
     async function viewKycDocs(kycId) {
       try {
-        const { data: kyc } = await supabase.from('kyc_requests').select('doc_paths').eq('id', kycId).single();
+        const { data: kyc, error } = await supabase.from('kyc_requests').select('doc_paths').eq('id', kycId).single();
+        if (error) throw error;
+
         for (const path of kyc.doc_paths || []) {
-          const { data } = await supabase.storage.from('kyc-docs').download(path);
+          const { data, error: downloadError } = await supabase.storage.from('kyc-docs').download(path);
+          if (downloadError) throw downloadError;
           const url = URL.createObjectURL(data);
           window.open(url);
         }
       } catch (error) {
+        console.error('Error viewing KYC docs:', error.message);
         alert('Failed to view KYC documents: ' + error.message);
       }
     }
@@ -800,6 +694,7 @@
           loadSection('support_tickets');
         }
       } catch (error) {
+        console.error('Error responding to ticket:', error.message);
         alert('Failed to respond to ticket: ' + error.message);
       }
     }
@@ -811,14 +706,19 @@
       const lastName = prompt('Last Name:');
       const country = prompt('Country:');
       if (userId && firstName && lastName && country) {
-        await supabase.from('profiles').insert({
-          id: userId,
-          first_name: firstName,
-          last_name: lastName,
-          country: country,
-          kyc_status: 'pending'
-        });
-        loadSection('users');
+        try {
+          await supabase.from('profiles').insert({
+            id: userId,
+            first_name: firstName,
+            last_name: lastName,
+            country: country,
+            kyc_status: 'pending'
+          });
+          loadSection('users');
+        } catch (error) {
+          console.error('Error creating user:', error.message);
+          alert('Failed to create user: ' + error.message);
+        }
       }
     }
 
@@ -827,18 +727,28 @@
       const lastName = prompt('New Last Name:');
       const country = prompt('New Country:');
       if (firstName || lastName || country) {
-        await supabase.from('profiles').update({
-          first_name: firstName,
-          last_name: lastName,
-          country: country
-        }).eq('id', id);
-        loadSection('users');
+        try {
+          await supabase.from('profiles').update({
+            first_name: firstName,
+            last_name: lastName,
+            country: country
+          }).eq('id', id);
+          loadSection('users');
+        } catch (error) {
+          console.error('Error editing user:', error.message);
+          alert('Failed to edit user: ' + error.message);
+        }
       }
     }
 
     async function deactivateUser(id) {
-      await supabase.from('profiles').update({ status: 'inactive' }).eq('id', id);
-      loadSection('users');
+      try {
+        await supabase.from('profiles').update({ status: 'inactive' }).eq('id', id);
+        loadSection('users');
+      } catch (error) {
+        console.error('Error deactivating user:', error.message);
+        alert('Failed to deactivate user: ' + error.message);
+      }
     }
 
     async function createPlan() {
@@ -848,14 +758,19 @@
       const roiPct = parseFloat(prompt('ROI %:'));
       const durationDays = parseInt(prompt('Duration Days:'));
       if (name && minAmount && maxAmount && roiPct && durationDays) {
-        await supabase.from('investment_plans').insert({
-          name,
-          min_amount: minAmount,
-          max_amount: maxAmount,
-          roi_pct: roiPct,
-          duration_days: durationDays
-        });
-        loadSection('investment_plans');
+        try {
+          await supabase.from('investment_plans').insert({
+            name,
+            min_amount: minAmount,
+            max_amount: maxAmount,
+            roi_pct: roiPct,
+            duration_days: durationDays
+          });
+          loadSection('investment_plans');
+        } catch (error) {
+          console.error('Error creating plan:', error.message);
+          alert('Failed to create plan: ' + error.message);
+        }
       }
     }
 
@@ -866,27 +781,42 @@
       const roiPct = parseFloat(prompt('New ROI %:'));
       const durationDays = parseInt(prompt('New Duration Days:'));
       if (name || minAmount || maxAmount || roiPct || durationDays) {
-        await supabase.from('investment_plans').update({
-          name,
-          min_amount: minAmount,
-          max_amount: maxAmount,
-          roi_pct: roiPct,
-          duration_days: durationDays
-        }).eq('id', id);
-        loadSection('investment_plans');
+        try {
+          await supabase.from('investment_plans').update({
+            name,
+            min_amount: minAmount,
+            max_amount: maxAmount,
+            roi_pct: roiPct,
+            duration_days: durationDays
+          }).eq('id', id);
+          loadSection('investment_plans');
+        } catch (error) {
+          console.error('Error editing plan:', error.message);
+          alert('Failed to edit plan: ' + error.message);
+        }
       }
     }
 
     async function deletePlan(id) {
-      await supabase.from('investment_plans').delete().eq('id', id);
-      loadSection('investment_plans');
+      try {
+        await supabase.from('investment_plans').delete().eq('id', id);
+        loadSection('investment_plans');
+      } catch (error) {
+        console.error('Error deleting plan:', error.message);
+        alert('Failed to delete plan: ' + error.message);
+      }
     }
 
     async function editWallet(method) {
       const newAddress = prompt('Enter new wallet address:');
       if (newAddress) {
-        await supabase.from('wallets').update({ address: newAddress }).eq('method', method);
-        loadSection('wallets');
+        try {
+          await supabase.from('wallets').update({ address: newAddress }).eq('method', method);
+          loadSection('wallets');
+        } catch (error) {
+          console.error('Error updating wallet:', error.message);
+          alert('Failed to update wallet: ' + error.message);
+        }
       }
     }
 
@@ -894,14 +824,24 @@
       const method = prompt('Enter wallet method:');
       const address = prompt('Enter wallet address:');
       if (method && address) {
-        await supabase.from('wallets').insert({ method, address });
-        loadSection('wallets');
+        try {
+          await supabase.from('wallets').insert({ method, address });
+          loadSection('wallets');
+        } catch (error) {
+          console.error('Error adding wallet:', error.message);
+          alert('Failed to add wallet: ' + error.message);
+        }
       }
     }
 
     async function approveReferralPayout(id) {
-      await supabase.from('referrals').update({ status: 'paid' }).eq('id', id);
-      loadSection('referrals');
+      try {
+        await supabase.from('referrals').update({ status: 'paid' }).eq('id', id);
+        loadSection('referrals');
+      } catch (error) {
+        console.error('Error approving referral payout:', error.message);
+        alert('Failed to approve referral payout: ' + error.message);
+      }
     }
 
     async function createOffer() {
@@ -911,14 +851,19 @@
       const endDate = prompt('End Date (YYYY-MM-DD):');
       const active = confirm('Is active?');
       if (name && pctBonus && startDate && endDate) {
-        await supabase.from('promotional_offers').insert({
-          name,
-          pct_bonus: pctBonus,
-          start_date: startDate,
-          end_date: endDate,
-          active
-        });
-        loadSection('promotional_offers');
+        try {
+          await supabase.from('promotional_offers').insert({
+            name,
+            pct_bonus: pctBonus,
+            start_date: startDate,
+            end_date: endDate,
+            active
+          });
+          loadSection('promotional_offers');
+        } catch (error) {
+          console.error('Error creating offer:', error.message);
+          alert('Failed to create offer: ' + error.message);
+        }
       }
     }
 
@@ -929,27 +874,42 @@
       const endDate = prompt('New End Date (YYYY-MM-DD):');
       const active = confirm('Is active?');
       if (name || pctBonus || startDate || endDate || active !== null) {
-        await supabase.from('promotional_offers').update({
-          name,
-          pct_bonus: pctBonus,
-          start_date: startDate,
-          end_date: endDate,
-          active
-        }).eq('id', id);
-        loadSection('promotional_offers');
+        try {
+          await supabase.from('promotional_offers').update({
+            name,
+            pct_bonus: pctBonus,
+            start_date: startDate,
+            end_date: endDate,
+            active
+          }).eq('id', id);
+          loadSection('promotional_offers');
+        } catch (error) {
+          console.error('Error editing offer:', error.message);
+          alert('Failed to edit offer: ' + error.message);
+        }
       }
     }
 
     async function deleteOffer(id) {
-      await supabase.from('promotional_offers').delete().eq('id', id);
-      loadSection('promotional_offers');
+      try {
+        await supabase.from('promotional_offers').delete().eq('id', id);
+        loadSection('promotional_offers');
+      } catch (error) {
+        console.error('Error deleting offer:', error.message);
+        alert('Failed to delete offer: ' + error.message);
+      }
     }
 
     async function editSetting(key) {
       const newValue = prompt('New Value:');
       if (newValue) {
-        await supabase.from('settings').update({ value: newValue }).eq('key', key);
-        loadSection('settings');
+        try {
+          await supabase.from('settings').update({ value: newValue }).eq('key', key);
+          loadSection('settings');
+        } catch (error) {
+          console.error('Error editing setting:', error.message);
+          alert('Failed to edit setting: ' + error.message);
+        }
       }
     }
 
@@ -957,23 +917,32 @@
       const email = prompt('Admin Email:');
       const role = prompt('Role:');
       if (email && role) {
-        const { data: user } = await supabase.auth.admin.getUserByEmail(email);
-        if (user.user) {
+        try {
+          const { data: user, error: userError } = await supabase.auth.admin.getUserByEmail(email);
+          if (userError || !user.user) {
+            throw new Error('User not found in auth');
+          }
           await supabase.from('admin_users').insert({
             user_id: user.user.id,
             email: email,
             role: role
           });
           loadSection('settings');
-        } else {
-          alert('User not found in auth');
+        } catch (error) {
+          console.error('Error creating admin:', error.message);
+          alert('Failed to create admin: ' + error.message);
         }
       }
     }
 
     async function deleteAdmin(id) {
-      await supabase.from('admin_users').delete().eq('id', id);
-      loadSection('settings');
+      try {
+        await supabase.from('admin_users').delete().eq('id', id);
+        loadSection('settings');
+      } catch (error) {
+        console.error('Error deleting admin:', error.message);
+        alert('Failed to delete admin: ' + error.message);
+      }
     }
 
     // Event Listeners
@@ -983,12 +952,6 @@
         loadSection(link.getAttribute('data-section'));
       });
     });
-
-    // Toggle Sidebar for Mobile
-    function toggleSidebar() {
-      const sidebar = document.querySelector('.sidebar');
-      sidebar.classList.toggle('active');
-    }
 
     // Initial Load
     (async () => {
