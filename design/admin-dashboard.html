@@ -678,7 +678,7 @@
     // Action Functions Updated to Use Edge Functions
     async function approveDeposit(id) {
       try {
-        const response = await fetch('/api/approve-deposit', {
+        const response = await fetch('/.netlify/functions/approve-deposit', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ deposit_id: id })
@@ -693,7 +693,7 @@
 
     async function rejectDeposit(id) {
       try {
-        const response = await fetch('/api/reject-deposit', {
+        const response = await fetch('/.netlify/functions/reject-deposit', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ deposit_id: id })
@@ -708,7 +708,7 @@
 
     async function approveWithdrawal(id) {
       try {
-        const response = await fetch('/api/approve-withdrawal', {
+        const response = await fetch('/.netlify/functions/approve-withdrawal', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ withdrawal_id: id })
@@ -723,7 +723,7 @@
 
     async function rejectWithdrawal(id) {
       try {
-        const response = await fetch('/api/reject-withdrawal', {
+        const response = await fetch('/.netlify/functions/reject-withdrawal', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ withdrawal_id: id })
@@ -738,7 +738,7 @@
 
     async function approveInvestment(id) {
       try {
-        const response = await fetch('/api/approve-investment', {
+        const response = await fetch('/.netlify/functions/approve-investment', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ investment_id: id })
@@ -753,7 +753,7 @@
 
     async function terminateInvestment(id) {
       try {
-        const response = await fetch('/api/terminate-investment', {
+        const response = await fetch('/.netlify/functions/terminate-investment', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ investment_id: id })
@@ -768,7 +768,7 @@
 
     async function approveProof(path) {
       try {
-        const response = await fetch('/api/approve-proof', {
+        const response = await fetch('/.netlify/functions/approve-proof', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ proof_path: path })
@@ -783,7 +783,7 @@
 
     async function rejectProof(path) {
       try {
-        const response = await fetch('/api/reject-proof', {
+        const response = await fetch('/.netlify/functions/reject-proof', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ proof_path: path })
@@ -808,7 +808,7 @@
 
     async function approveKyc(kycId) {
       try {
-        const response = await fetch('/api/approve-kyc', {
+        const response = await fetch('/.netlify/functions/approve-kyc', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ kyc_id: kycId })
@@ -823,7 +823,7 @@
 
     async function rejectKyc(kycId) {
       try {
-        const response = await fetch('/api/reject-kyc', {
+        const response = await fetch('/.netlify/functions/reject-kyc', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ kyc_id: kycId })
@@ -858,7 +858,7 @@
       try {
         const responseText = prompt('Enter response:');
         if (responseText) {
-          const response = await fetch('/api/respond-to-ticket', {
+          const response = await fetch('/.netlify/functions/respond-to-ticket', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ ticket_id: ticketId, response: responseText })
@@ -932,7 +932,7 @@
       const durationDays = parseInt(prompt('Duration Days:'));
       if (name && minAmount && maxAmount && roiPct && durationDays) {
         try {
-          const response = await fetch('/api/create-plan', {
+          const response = await fetch('/.netlify/functions/create-plan', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -960,7 +960,7 @@
       const durationDays = parseInt(prompt('New Duration Days:'));
       if (name || minAmount || maxAmount || roiPct || durationDays) {
         try {
-          const response = await fetch('/api/edit-plan', {
+          const response = await fetch('/.netlify/functions/edit-plan', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -983,7 +983,7 @@
 
     async function deletePlan(id) {
       try {
-        const response = await fetch('/api/delete-plan', {
+        const response = await fetch('/.netlify/functions/delete-plan', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ plan_id: id })
@@ -1000,7 +1000,7 @@
       const newAddress = prompt('Enter new wallet address:');
       if (newAddress) {
         try {
-          const response = await fetch('/api/edit-wallet', {
+          const response = await fetch('/.netlify/functions/edit-wallet', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ method, address: newAddress })
@@ -1019,7 +1019,7 @@
       const address = prompt('Enter wallet address:');
       if (method && address) {
         try {
-          const response = await fetch('/api/add-wallet', {
+          const response = await fetch('/.netlify/functions/add-wallet', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ method, address })
@@ -1035,7 +1035,7 @@
 
     async function approveReferralPayout(id) {
       try {
-        const response = await fetch('/api/approve-referral-payout', {
+        const response = await fetch('/.netlify/functions/approve-referral-payout', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ referral_id: id })
@@ -1056,7 +1056,7 @@
       const active = confirm('Is active?');
       if (name && pctBonus && startDate && endDate) {
         try {
-          const response = await fetch('/api/create-offer', {
+          const response = await fetch('/.netlify/functions/create-offer', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -1084,7 +1084,7 @@
       const active = confirm('Is active?');
       if (name || pctBonus || startDate || endDate || active !== null) {
         try {
-          const response = await fetch('/api/edit-offer', {
+          const response = await fetch('/.netlify/functions/edit-offer', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -1107,7 +1107,7 @@
 
     async function deleteOffer(id) {
       try {
-        const response = await fetch('/api/delete-offer', {
+        const response = await fetch('/.netlify/functions/delete-offer', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ offer_id: id })
@@ -1124,7 +1124,7 @@
       const newValue = prompt('New Value:');
       if (newValue) {
         try {
-          const response = await fetch('/api/edit-setting', {
+          const response = await fetch('/.netlify/functions/edit-setting', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ key, value: newValue })
@@ -1143,7 +1143,7 @@
       const role = prompt('Role:');
       if (email && role) {
         try {
-          const response = await fetch('/api/create-admin', {
+          const response = await fetch('/.netlify/functions/create-admin', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, role })
@@ -1159,7 +1159,7 @@
 
     async function deleteAdmin(id) {
       try {
-        const response = await fetch('/api/delete-admin', {
+        const response = await fetch('/.netlify/functions/delete-admin', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ admin_id: id })
