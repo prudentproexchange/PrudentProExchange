@@ -1,14 +1,14 @@
-# netlify.toml
+# /netlify.toml  ← must live at the project root
 
 [build]
-  publish = "design"                      # serve your dashboard from design/
-  command = "echo 'Skipping build; static files only.'"  # no build step
+  publish   = "design"                          # your static site lives in design/
+  command   = "echo 'Skipping build; static files only.'"  # no build step
+
+[functions]
+  directory = "design/netlify/functions"        # where your Netlify Functions live
 
 [[redirects]]
-  from    = "/api/*"  
+  from    = "/api/*"
   to      = "https://iwkdznjqfbsfkscnbrkc.supabase.co/functions/v1/:splat"
   status  = 200
   force   = true
-
-[functions]
-  directory = "design/netlify/functions"  # <-- point Netlify at your functions
