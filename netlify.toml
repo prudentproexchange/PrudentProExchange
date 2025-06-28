@@ -1,12 +1,14 @@
+# netlify.toml
+
 [build]
-  publish = "design"
-  command = "echo 'Skipping build; static files only.'"
+  publish = "design"                      # serve your dashboard from design/
+  command = "echo 'Skipping build; static files only.'"  # no build step
 
 [[redirects]]
-  from    = "/api/*"
+  from    = "/api/*"  
   to      = "https://iwkdznjqfbsfkscnbrkc.supabase.co/functions/v1/:splat"
   status  = 200
   force   = true
 
 [functions]
-  directory = "netlify/functions"
+  directory = "design/netlify/functions"  # <-- point Netlify at your functions
