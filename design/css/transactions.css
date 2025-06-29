@@ -1,0 +1,167 @@
+/* transactions.css */
+
+/* General Styling */
+.transactions-page {
+    position: relative;
+    min-height: 100vh;
+    background: #000;
+    color: #e0e0ff;
+    font-family: 'Poppins', sans-serif;
+    padding: 2rem;
+    overflow-x: hidden;
+}
+
+/* Header Styling */
+.transactions-page h1 {
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    color: #ffd700;
+    text-align: center;
+    margin: 2rem 0;
+    font-family: 'Playfair Display', serif;
+    text-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
+}
+
+/* Transactions List */
+.transactions-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    padding: 0;
+    list-style: none;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Transaction Card */
+.transaction-item {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid #ffd700;
+    border-radius: 15px;
+    padding: 1.5rem;
+    amica-box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    animation: fadeIn 0.5s ease forwards;
+}
+
+.transaction-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+}
+
+/* Transaction Details */
+.transaction-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.transaction-header,
+.transaction-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+/* Text Styling */
+.recipient {
+    font-weight: 500;
+    font-size: 1.1rem;
+}
+
+.amount {
+    font-weight: 600;
+    color: #ffd700;
+    font-size: 1.2rem;
+}
+
+.date {
+    font-size: 0.9rem;
+    color: #ccc;
+}
+
+/* Status Badges */
+.status {
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    transition: transform 0.2s ease;
+}
+
+.status i {
+    margin-right: 0.5rem;
+}
+
+.status.success {
+    background: #28a745;
+    color: #fff;
+}
+
+.status.pending {
+    background: #ffc107;
+    color: #000;
+    animation: pulse 2s infinite;
+}
+
+.status:hover {
+    transform: scale(1.05);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(255, 193, 7, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(255, 193, 7, 0);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .transactions-page {
+        padding: 1rem;
+    }
+
+    .transactions-list {
+        grid-template-columns: 1fr;
+    }
+
+    .transaction-item {
+        padding: 1rem;
+    }
+
+    .transactions-page h1 {
+        font-size: clamp(1.5rem, 5vw, 2.5rem);
+    }
+}
+
+@media (max-width: 480px) {
+    .transaction-header,
+    .transaction-footer {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .amount,
+    .status {
+        margin-top: 0.5rem;
+    }
+}
