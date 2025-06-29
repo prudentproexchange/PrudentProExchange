@@ -9,6 +9,19 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Added CSS for the loading spinner -->
+  <style>
+    .loading-spinner {
+      display: none;
+      text-align: center;
+      margin-top: 20px;
+    }
+    .loading-spinner i {
+      font-size: 24px;
+      color: #ffd700;
+      margin-right: 8px;
+    }
+  </style>
 </head>
 <body class="application-page">
   <video class="bg-video" autoplay muted loop playsinline preload="auto">
@@ -202,7 +215,7 @@
                   <option value="PL">Poland</option>
                   <option value="PT">Portugal</option>
                   <option value="QA">Qatar</option>
-                  <option value="RO">Romania</option>
+                  <option manage="RO">Romania</option>
                   <option value="RU">Russia</option>
                   <option value="RW">Rwanda</option>
                   <option value="KN">Saint Kitts and Nevis</option>
@@ -218,7 +231,7 @@
                   <option value="SL">Sierra Leone</option>
                   <option value="SG">Singapore</option>
                   <option value="SK">Slovakia</option>
-                  <option value="SI">Slovenia</option>
+                  <option value="SI">Sl>Select Country</option>
                   <option value="SB">Solomon Islands</option>
                   <option value="SO">Somalia</option>
                   <option value="ZA">South Africa</option>
@@ -277,8 +290,13 @@
               <input type="checkbox" name="terms" required aria-label="Terms Agreement"/>
               I agree with the <a href="privacy.html">Privacy Policy</a> and <a href="terms.html">Terms & Conditions</a>
             </label>
-            <button type="submit" class="cta primary">Create Account</button>
+            <!-- Added ID to the submit button for easier access -->
+            <button type="submit" class="cta primary" id="submitButton">Create Account</button>
             <p class="login-link">Already have an account? <a href="login.html">Login</a></p>
+            <!-- Added loading spinner element -->
+            <div class="loading-spinner" id="loadingSpinner">
+              <i class="fas fa-spinner fa-spin"></i> Processing your application...
+            </div>
           </form>
         </div>
       </section>
@@ -358,15 +376,23 @@
       event.preventDefault();
       event.stopPropagation();
       const form = event.target;
+      const submitButton = document.getElementById('submitButton');
+      const loadingSpinner = document.getElementById('loadingSpinner');
 
-      // Check HTML5 form validity (required fields, email format, etc.)
-      if (!form.checkValidity()) {
-        form.reportValidity();
-        return;
-      }
+      // Disable the submit button immediately
+      submitButton.disabled = true;
+      // Show the loading spinner
+      loadingSpinner.style.display = 'block';
 
       try {
-        // Client-side validations
+        // **Step 1: Robust Client-Side Validation**
+        // Check HTML5 form validity (required fields, email format, etc.)
+        if (!form.checkValidity()) {
+          form.reportValidity();
+          throw new Error('Please fill in all required fields correctly.');
+        }
+
+        // Additional custom validations
         if (form.password.value !== form.confirm_password.value) {
           throw new Error('Passwords do not match.');
         }
@@ -375,6 +401,11 @@
         }
         if (!form.country.value) {
           throw new Error('Please select a country.');
+        }
+
+        // Password strength validation (e.g., minimum 8 characters)
+        if (form.password.value.length < 8) {
+          throw new Error('Password must be at least 8 characters long.');
         }
 
         console.log('Form data:', {
@@ -389,6 +420,7 @@
         const referralCode = generateReferralCode();
         const referralLink = `https://prudentproexchange.net/referral/${referralCode}`;
 
+        // **Step 2: Perform All Operations Sequentially**
         // Sign up the user
         const { data: authData, error: signUpError } = await supabaseClient.auth.signUp({
           email: form.email.value,
@@ -413,7 +445,7 @@
 
         console.log('User signed up successfully:', user.id);
 
-        // Handle photo upload
+        // Handle photo upload (if provided)
         let photoUrl = null;
         if (form.photo.files[0]) {
           console.log('Uploading photo for user:', user.id);
@@ -431,7 +463,7 @@
           console.log('Photo uploaded successfully:', photoUrl);
         }
 
-        // Check referral code
+        // Check referral code (if provided)
         let referrerId = null;
         if (form.referral_code.value) {
           const { data: refProfile, error: refErr } = await supabaseClient
@@ -442,6 +474,7 @@
 
           if (refErr && refErr.code !== 'PGRST116') {
             console.warn('Referral code check error:', refErr.message);
+            throw new Error(`Referral code validation failed: ${refErr.message}`);
           } else if (refProfile) {
             referrerId = refProfile.id;
           }
@@ -470,7 +503,7 @@
           password: form.password.value // Plaintext password
         };
 
-        // Insert profile
+        // Insert profile using RPC
         const { error: profileError } = await supabaseClient
           .rpc('insert_profile_with_password', {
             p_id: profileData.id,
@@ -496,7 +529,7 @@
 
         if (profileError) {
           console.error('Profile insertion error:', JSON.stringify(profileError, null, 2));
-          // Roll back the user creation if profile insertion fails
+          // Roll back user creation if profile insertion fails
           await supabaseClient.auth.admin.deleteUser(user.id);
           if (profileError.code === '23505') {
             throw new Error('Username already taken. Please choose a different username.');
@@ -505,11 +538,17 @@
         }
 
         console.log('Profile inserted successfully');
+
+        // **Step 3: Success Handling**
         alert('Sign-up successful! Please check your email to confirm your account, then log in.');
         window.location.href = 'login.html';
       } catch (error) {
         console.error('Error during sign-up process:', error);
         alert(error.message || 'An unexpected error occurred. Please try again.');
+      } finally {
+        // Re-enable the submit button and hide the spinner
+        submitButton.disabled = false;
+        loadingSpinner.style.display = 'none';
       }
     });
   </script>
