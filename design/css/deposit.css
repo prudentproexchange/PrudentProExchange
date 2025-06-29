@@ -1,5 +1,4 @@
 /* Deposit Page Specific Styles */
-
 .deposit-page.container {
   max-width: 1200px;
   margin: 0 auto;
@@ -51,28 +50,16 @@
   font-family: 'Playfair Display', serif;
 }
 
-#depositHistory {
-  display: none; /* Initially hidden for collapsible functionality */
-  transition: opacity 0.3s ease; /* Smooth transition when toggled */
-}
-
-#depositHistory.active {
-  display: block; /* Shown when toggled via JavaScript */
-  opacity: 1;
-}
-
 #depositTable {
   width: 100%;
   border-collapse: collapse;
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
 }
 
 #depositTable th, #depositTable td {
   padding: 0.75rem;
-  border: 1px solid #ffd700; /* Gold */
-  color: #e0e0ff;
   text-align: left;
+  border-bottom: 1px solid #ffd700; /* Gold, only bottom border for new design */
+  color: #e0e0ff;
 }
 
 #depositTable th {
@@ -81,27 +68,25 @@
   font-weight: 600;
 }
 
-/* Toggle Button for Deposit History */
-.btn {
-  display: inline-block;
-  padding: 0.75rem 1.5rem;
+/* New styles for collapsible deposit history */
+.golden-btn {
+  background-color: gold;
+  color: black;
+  padding: 10px 20px;
   border: none;
-  border-radius: 5px;
-  font-weight: 600;
   cursor: pointer;
-  transition: transform 0.3s ease;
+  animation: pulse 2s infinite;
 }
 
-.blink-golden {
-  background: linear-gradient(45deg, #ffd700, #cca300); /* Gold gradient */
-  color: #000;
-  animation: blink 1.5s infinite;
+@keyframes pulse {
+  0% { background-color: gold; }
+  50% { background-color: #ffd700; }
+  100% { background-color: gold; }
 }
 
-@keyframes blink {
-  0% { opacity: 1; }
-  50% { opacity: 0.7; }
-  100% { opacity: 1; }
+.deposit-history #depositHistoryContent {
+  margin-top: 10px;
+  overflow-x: auto;
 }
 
 /* Crypto Cards Grid */
@@ -112,7 +97,7 @@
 }
 
 .crypto-card {
-  background: rgba(255, 255, 255, 0.1); /* Fixed syntax error */
+  background: rgba(255, 255, 255, 0.1);
   padding: 2rem;
   border: 1px solid #ffd700; /* Gold */
   border-radius: 15px;
