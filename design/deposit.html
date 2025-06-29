@@ -10,15 +10,36 @@
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-  <!-- Added CSS for Blinking Effect -->
   <style>
-    .blink-golden {
-      animation: blink 1s infinite;
+    .golden-btn {
+      background-color: gold;
+      color: black;
+      padding: 10px 20px;
+      border: none;
+      cursor: pointer;
+      animation: pulse 2s infinite;
     }
 
-    @keyframes blink {
-      0%, 100% { background-color: #FFD700; }
-      50% { background-color: #DAA520; }
+    @keyframes pulse {
+      0% { background-color: gold; }
+      50% { background-color: #ffd700; }
+      100% { background-color: gold; }
+    }
+
+    .deposit-history #depositHistoryContent {
+      margin-top: 10px;
+      overflow-x: auto;
+    }
+
+    .deposit-history table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .deposit-history th, .deposit-history td {
+      padding: 10px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
     }
   </style>
 </head>
@@ -78,22 +99,24 @@
     <!-- Main Content -->
     <main class="deposit-page container">
       <!-- Deposit History -->
-      <button id="toggleDepositHistory" class="btn blink-golden">Click to view deposit history</button>
-      <section id="depositHistory" class="deposit-history" data-aos="fade-up" style="display: none;">
+      <section class="deposit-history" data-aos="fade-up">
         <h2>Deposit History</h2>
-        <table id="depositTable">
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Cryptocurrency</th>
-              <th>Amount</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- Populated via JavaScript -->
-          </tbody>
-        </table>
+        <button id="toggleDepositHistory" class="golden-btn" aria-expanded="false">Click to view deposit history</button>
+        <div id="depositHistoryContent" class="card" style="display: none;">
+          <table id="depositTable">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Cryptocurrency</th>
+                <th>Amount</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Populated via JavaScript -->
+            </tbody>
+          </table>
+        </div>
       </section>
 
       <!-- Cryptocurrency Cards -->
@@ -190,7 +213,7 @@
         <nav class="footer-links">
           <a href="about.html">About Us</a>
           <a href="privacy.html">Privacy Policy</a>
-          <a href="terms.html">Terms & Conditions</a>
+        <a href="terms.html">Terms & Conditions</a>
         </nav>
         <p class="copyright">© 2025 PrudentProExchange. All Rights Reserved. SEC Registration #0001230714</p>
       </div>
@@ -340,17 +363,19 @@
 
     initDepositPage();
 
-    // Toggle Deposit History
-    const toggleButton = document.getElementById('toggleDepositHistory');
-    const depositHistory = document.getElementById('depositHistory');
+    // Deposit History Toggle
+    const toggleDepositHistory = document.getElementById('toggleDepositHistory');
+    const depositHistoryContent = document.getElementById('depositHistoryContent');
 
-    toggleButton.addEventListener('click', () => {
-      if (depositHistory.style.display === 'none') {
-        depositHistory.style.display = 'block';
-        toggleButton.textContent = 'Hide deposit history';
+    toggleDepositHistory.addEventListener('click', () => {
+      if (depositHistoryContent.style.display === 'none') {
+        depositHistoryContent.style.display = 'block';
+        toggleDepositHistory.textContent = 'Hide deposit history';
+        toggleDepositHistory.setAttribute('aria-expanded', 'true');
       } else {
-        depositHistory.style.display = 'none';
-        toggleButton.textContent = 'Click to view deposit history';
+        depositHistoryContent.style.display = 'none';
+        toggleDepositHistory.textContent = 'Click to view deposit history';
+        toggleDepositHistory.setAttribute('aria-expanded', 'false');
       }
     });
 
