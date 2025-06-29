@@ -1,23 +1,9 @@
-# /netlify.toml  ← must live at the project root
-
 [build]
-  publish   = "design"                          # your static site lives in design/
-  command   = "echo 'Skipping build; static files only.'"  # no build step
-
-[functions]
-  directory = "design/netlify/functions"        # where your Netlify Functions live
-
-[[redirects]]
-  from    = "/api/*"
-  to      = "https://iwkdznjqfbsfkscnbrkc.supabase.co/functions/v1/:splat"
-  status  = 200
-  force   = true
-[build]
-  # specify the Node version Netlify will use
-  node_version = "18"
-
-  # if you have a build command, put it here; for a static site you can use "npm run build"
-  command = "npm run build"
+  # No build command needed for static HTML/CSS/JS
+  command = "echo 'Skipping build—static site'"
+  # Publish the root of your repo (where your index.html lives)
   publish = "."
 
-# (Optional) If you need environment variables, secrets, etc.
+[build.environment]
+  # Pin to a Netlify-supported Node version (even if you don't run JS)
+  NODE_VERSION = "18"
