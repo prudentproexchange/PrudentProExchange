@@ -215,13 +215,15 @@
           return;
         }
 
-        // Lookup recipient
+        // Lookup recipient in auth.users
         const { data: recipient, error: recipientError } = await supabaseClient
-          .from('profiles')
+          .from('auth.users')
           .select('id, email')
           .eq('email', recipientEmail)
           .single();
+
         if (recipientError || !recipient) {
+          console.error('Recipient lookup error:', recipientError);
           alert('Recipient not found.');
           return;
         }
