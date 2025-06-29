@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Transfer • PrudentProExchange</title>
+  <title>Transactions • PrudentProExchange</title>
   <link rel="stylesheet" href="css/style.css"/>
-  <link rel="stylesheet" href="css/transfer.css"/>
+  <link rel="stylesheet" href="css/transactions.css"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-<body class="transfer-page">
+<body class="transactions-page">
   <!-- Video Background -->
   <video class="bg-video" autoplay muted loop playsinline preload="auto">
     <source src="assets/videos/background.webm" type="video/webm">
@@ -35,7 +35,7 @@
         <a href="dashboard.html">Dashboard</a>
         <a href="invest.html">Invest</a>
         <a href="withdraw.html">Withdraw</a>
-        <a href="transactions.html">Transactions</a>
+        <a href="transactions.html" class="active">Transactions</a>
         <a href="referrals.html">Referrals</a>
         <div class="account-menu">
           <a href="#" class="account-toggle" id="account-toggle">Account ▾</a>
@@ -50,30 +50,16 @@
           </ul>
         </div>
         <a href="kyc.html">KYC Verification</a>
-        <a href="transfer.html" class="active">Transfer</a>
+        <a href="transfer.html">Transfer</a>
       </nav>
     </header>
     <div class="nav-overlay"></div>
 
     <!-- Main Content -->
-    <main class="transfer-page container">
-      <section class="transfer-form" data-aos="fade-up">
-        <h2>Transfer Funds</h2>
-        <form id="transferForm">
-          <div class="form-group">
-            <label for="recipientEmail">Recipient Email</label>
-            <input type="email" id="recipientEmail" name="recipientEmail" placeholder="user@example.com" required/>
-          </div>
-          <div class="form-group">
-            <label for="transferAmount">Amount (USD)</label>
-            <input type="number" id="transferAmount" name="amount" min="0.01" max="1000000" step="0.01" required/>
-          </div>
-          <div class="form-group">
-            <label for="memo">Memo (Optional)</label>
-            <input type="text" id="memo" name="memo" maxlength="100" placeholder="e.g., For rent, gift"/>
-          </div>
-          <button type="submit" class="btn submit-btn">Submit Transfer</button>
-        </form>
+    <main class="transactions-page container">
+      <section class="transactions-container" data-aos="fade-up">
+        <h2>Transaction History</h2>
+        <div class="transaction-list"></div>
       </section>
     </main>
 
@@ -98,9 +84,10 @@
   <!-- Scripts -->
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
+    // Initialize AOS animations
     AOS.init({ duration: 800, once: true });
 
-    // Hamburger Toggle
+    // Hamburger Menu Toggle
     const hamburgerBtn = document.getElementById('hamburgerBtn');
     const navDrawer = document.getElementById('navDrawer');
     const overlay = document.querySelector('.nav-overlay');
@@ -108,12 +95,10 @@
       navDrawer.classList.toggle('open');
       hamburgerBtn.classList.toggle('active');
       overlay.classList.toggle('nav-open');
-      if (navDrawer.classList.contains('open')) {
-        navDrawer.scrollTop = 0;
-      }
+      if (navDrawer.classList.contains('open')) navDrawer.scrollTop = 0;
     });
 
-    // Close Nav When Clicking Outside
+    // Close Nav on Outside Click
     document.addEventListener('click', (event) => {
       const isClickInsideNav = navDrawer.contains(event.target);
       const isClickOnHamburger = hamburgerBtn.contains(event.target);
@@ -141,7 +126,7 @@
       submenu.classList.toggle('open');
     });
 
-    // Back to Top
+    // Back to Top Button
     document.getElementById('back-to-top').addEventListener('click', () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
@@ -163,135 +148,104 @@
     setInterval(updateUTCTime, 1000);
     updateUTCTime();
 
-    // Supabase Client
-    const { createClient } = supabase;
-    const supabaseClient = createClient(
+    // Supabase Client Initialization
+    const supabaseClient = supabase.createClient(
       'https://iwkdznjqfbsfkscnbrkc.supabase.co',
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU'
     );
 
-    // Initialize Transfer Page
-    async function initTransferPage() {
+    // Transactions Page Logic
+    async function initTransactionsPage() {
       // Check Authentication
       const { data: { session }, error: sessionError } = await supabaseClient.auth.getSession();
       if (sessionError || !session) {
-        console.error('Session error:', sessionError);
         window.location.href = 'login.html';
         return;
       }
       const user = session.user;
 
-      // Fetch user's profile
-      const { data: profile, error: profileError } = await supabaseClient
-        .from('profiles')
-        .select('id, email, deposit_wallet')
-        .eq('id', user.id)
-        .single();
+      // Show Loading State
+      const transactionList = document.querySelector('.transaction-list');
+      transactionList.innerHTML = '<p class="loading">Loading transactions...</p>';
 
-      if (profileError || !profile) {
-        console.error('Profile fetch error:', profileError);
-        alert('Error fetching your account details. Please try again or contact support.');
+      // Fetch Transfers with Recipient Details
+      const { data: transfers, error: transfersError } = await supabaseClient
+        .from('transfers')
+        .select(`
+          id,
+          created_at,
+          amount,
+          status,
+          memo,
+          recipient:recipient_id (full_name, email)
+        `)
+        .eq('sender_id', user.id)
+        .order('created_at', { ascending: false });
+
+      if (transfersError) {
+        console.error('Error fetching transfers:', transfersError);
+        transactionList.innerHTML = '<p>Error loading transactions. Please try again later.</p>';
         return;
       }
 
-      const depositWallet = profile.deposit_wallet || 0;
+      if (transfers.length === 0) {
+        transactionList.innerHTML = '<p>No transactions found.</p>';
+        return;
+      }
 
-      // Handle Form Submission
-      const transferForm = document.getElementById('transferForm');
-      transferForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const recipientEmail = document.getElementById('recipientEmail').value.trim().toLowerCase();
-        const amount = parseFloat(document.getElementById('transferAmount').value);
-        const memo = document.getElementById('memo').value.trim();
+      // Render Transaction Cards
+      transactionList.innerHTML = transfers.map(transfer => {
+        const recipientName = transfer.recipient.full_name || transfer.recipient.email;
+        const date = formatDate(transfer.created_at);
+        const statusClass = transfer.status.toLowerCase();
+        const statusIcon = statusIcons[transfer.status] || 'question';
+        const memo = transfer.memo ? `<span class="memo">${transfer.memo}</span>` : '';
+        return `
+          <div class="transaction-card" data-aos="fade-up">
+            <div class="transaction-header">
+              <span class="transaction-id">${transfer.id}</span>
+              <span class="transaction-date">${date}</span>
+            </div>
+            <div class="transaction-body">
+              <div class="transaction-amount">$${transfer.amount.toFixed(2)}</div>
+              <div class="transaction-recipient"><i class="fas fa-arrow-right"></i> To: ${recipientName}</div>
+            </div>
+            <div class="transaction-footer">
+              <span class="status ${statusClass}"><i class="fas fa-${statusIcon}"></i> ${transfer.status}</span>
+              ${memo}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
 
-        // Validate inputs
-        if (!recipientEmail || !amount) {
-          alert('Please enter both recipient email and amount.');
-          return;
-        }
-
-        if (amount <= 0) {
-          alert('Amount must be greater than 0.');
-          return;
-        }
-
-        if (amount > depositWallet) {
-          alert(`Insufficient balance. Your available balance is $${depositWallet.toFixed(2)}.`);
-          return;
-        }
-
-        if (recipientEmail === profile.email.toLowerCase()) {
-          alert('You cannot transfer funds to yourself.');
-          return;
-        }
-
-        // Lookup recipient in profiles (not auth.users)
-        console.log('Searching for recipient email:', recipientEmail);
-        const { data: recipient, error: recipientError } = await supabaseClient
-          .from('profiles')
-          .select('id, email')
-          .ilike('email', recipientEmail)
-          .single();
-
-        if (recipientError || !recipient) {
-          console.error('Recipient lookup error:', JSON.stringify(recipientError, null, 2));
-          alert('Recipient not found. Please ensure the recipient has a registered account.');
-          return;
-        }
-
-        // Insert transfer record
-        const { error: insertError } = await supabaseClient
-          .from('transfers')
-          .insert({
-            sender_id: user.id,
-            sender_email: profile.email,
-            recipient_id: recipient.id,
-            recipient_email: recipient.email,
-            amount: amount,
-            status: 'pending',
-            memo: memo || null,
-            created_at: new Date().toISOString()
-          });
-
-        if (insertError) {
-          console.error('Transfer insertion error:', JSON.stringify(insertError, null, 2));
-          alert('Error submitting transfer: ' + insertError.message);
-          return;
-        }
-
-        alert('Transfer submitted successfully! Awaiting approval.');
-        window.location.href = 'transactions.html';
+    // Date Formatting Function
+    function formatDate(dateString) {
+      return new Date(dateString).toLocaleString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true
       });
     }
 
-    // Logout
+    // Status Icons Mapping
+    const statusIcons = {
+      'successful': 'check',
+      'pending': 'clock'
+    };
+
+    // Logout Handler
     document.getElementById('logout-btn').addEventListener('click', async () => {
       const { error } = await supabaseClient.auth.signOut();
-      if (!error) {
-        window.location.href = 'login.html';
-      } else {
-        console.error('Logout error:', error);
-        alert('Error logging out: ' + error.message);
-      }
+      if (!error) window.location.href = 'login.html';
+      else alert('Error logging out: ' + error.message);
     });
 
-    // Video Playback
-    const video = document.querySelector('.bg-video');
-    video.addEventListener('canplay', () => {
-      video.play().catch(error => console.error('Video playback error:', error));
-    });
-
-    // Error Handling
-    window.addEventListener('error', event => {
-      console.error('Global error:', event);
-      alert(`Error: ${event.message}\nFile: ${event.filename}:${event.lineno}`);
-    });
-    window.addEventListener('unhandledrejection', event => {
-      console.error('Unhandled promise rejection:', event.reason);
-      alert(`Unhandled error: ${event.reason}`);
-    });
-
-    initTransferPage();
+    // Initialize the Page
+    initTransactionsPage();
   </script>
 </body>
 </html>
