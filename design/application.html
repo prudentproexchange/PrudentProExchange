@@ -326,12 +326,47 @@
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU'
     );
 
+    // Real-time username availability check
+    const usernameInput = document.querySelector('input[name="username"]');
+    usernameInput.addEventListener('blur', async () => {
+      const username = usernameInput.value.trim();
+      if (username) {
+        try {
+          const { data, error } = await supabaseClient
+            .from('profiles')
+            .select('username')
+            .eq('username', username)
+            .single();
+          if (error && error.code !== 'PGRST116') { // PGRST116 means no rows found, which is fine
+            throw error;
+          }
+          if (data) {
+            usernameInput.setCustomValidity('Username already taken.');
+            alert('Username already taken. Please choose another.');
+          } else {
+            usernameInput.setCustomValidity('');
+          }
+        } catch (error) {
+          console.error('Error checking username:', error);
+          usernameInput.setCustomValidity('Error checking username availability.');
+          alert('Error checking username availability. Please try again.');
+        }
+      }
+    });
+
     document.getElementById('applicationForm').addEventListener('submit', async (event) => {
       event.preventDefault();
       event.stopPropagation();
       const form = event.target;
 
+      // Check HTML5 form validity (required fields, email format, etc.)
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+
       try {
+        // Client-side validations
         if (form.password.value !== form.confirm_password.value) {
           throw new Error('Passwords do not match.');
         }
@@ -354,6 +389,7 @@
         const referralCode = generateReferralCode();
         const referralLink = `https://prudentproexchange.com/referral/${referralCode}`;
 
+        // Sign up the user
         const { data: authData, error: signUpError } = await supabaseClient.auth.signUp({
           email: form.email.value,
           password: form.password.value,
@@ -377,6 +413,7 @@
 
         console.log('User signed up successfully:', user.id);
 
+        // Handle photo upload
         let photoUrl = null;
         if (form.photo.files[0]) {
           console.log('Uploading photo for user:', user.id);
@@ -394,6 +431,7 @@
           console.log('Photo uploaded successfully:', photoUrl);
         }
 
+        // Check referral code
         let referrerId = null;
         if (form.referral_code.value) {
           const { data: refProfile, error: refErr } = await supabaseClient
@@ -402,14 +440,14 @@
             .eq('referral_code', form.referral_code.value)
             .single();
 
-          if (refErr) {
-            console.warn('No such referral code:', refErr.message);
-          } else {
+          if (refErr && refErr.code !== 'PGRST116') {
+            console.warn('Referral code check error:', refErr.message);
+          } else if (refProfile) {
             referrerId = refProfile.id;
           }
         }
 
-        console.log('Inserting profile for user:', user.id);
+        // Prepare profile data
         const profileData = {
           id: user.id,
           email: form.email.value.toLowerCase(),
@@ -432,6 +470,7 @@
           password: form.password.value // Plaintext password
         };
 
+        // Insert profile
         const { error: profileError } = await supabaseClient
           .rpc('insert_profile_with_password', {
             p_id: profileData.id,
@@ -457,6 +496,8 @@
 
         if (profileError) {
           console.error('Profile insertion error:', JSON.stringify(profileError, null, 2));
+          // Roll back the user creation if profile insertion fails
+          await supabaseClient.auth.admin.deleteUser(user.id);
           if (profileError.code === '23505') {
             throw new Error('Username already taken. Please choose a different username.');
           }
