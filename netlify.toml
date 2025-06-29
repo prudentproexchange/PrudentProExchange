@@ -12,3 +12,12 @@
   to      = "https://iwkdznjqfbsfkscnbrkc.supabase.co/functions/v1/:splat"
   status  = 200
   force   = true
+[build]
+  # specify the Node version Netlify will use
+  node_version = "18"
+
+  # if you have a build command, put it here; for a static site you can use "npm run build"
+  command = "npm run build"
+  publish = "."
+
+# (Optional) If you need environment variables, secrets, etc.
