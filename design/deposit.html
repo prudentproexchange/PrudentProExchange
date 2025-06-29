@@ -10,6 +10,17 @@
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <!-- Added CSS for Blinking Effect -->
+  <style>
+    .blink-golden {
+      animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { background-color: #FFD700; }
+      50% { background-color: #DAA520; }
+    }
+  </style>
 </head>
 <body class="deposit-page">
   <!-- Video Background -->
@@ -67,7 +78,8 @@
     <!-- Main Content -->
     <main class="deposit-page container">
       <!-- Deposit History -->
-      <section class="deposit-history" data-aos="fade-up">
+      <button id="toggleDepositHistory" class="btn blink-golden">Click to view deposit history</button>
+      <section id="depositHistory" class="deposit-history" data-aos="fade-up" style="display: none;">
         <h2>Deposit History</h2>
         <table id="depositTable">
           <thead>
@@ -327,6 +339,20 @@
     });
 
     initDepositPage();
+
+    // Toggle Deposit History
+    const toggleButton = document.getElementById('toggleDepositHistory');
+    const depositHistory = document.getElementById('depositHistory');
+
+    toggleButton.addEventListener('click', () => {
+      if (depositHistory.style.display === 'none') {
+        depositHistory.style.display = 'block';
+        toggleButton.textContent = 'Hide deposit history';
+      } else {
+        depositHistory.style.display = 'none';
+        toggleButton.textContent = 'Click to view deposit history';
+      }
+    });
 
     // Ensure Video Playback
     const video = document.querySelector('.bg-video');
