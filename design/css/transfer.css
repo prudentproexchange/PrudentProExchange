@@ -4,29 +4,31 @@
 .transfer-page {
   position: relative;
   min-height: 100vh;
-  background: #0a0a23;
-  color: #fff;
+  background: #000; /* Changed to black to match deposit page */
+  color: #e0e0ff; /* Light color for text, consistent with deposit page */
   font-family: 'Poppins', sans-serif;
 }
 
 /* Form Section */
 .transfer-form {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.05); /* Matches deposit page background */
+  backdrop-filter: blur(10px); /* Consistent with deposit page */
+  border: 1px solid #ffd700; /* Gold border to match deposit page */
+  border-radius: 15px; /* Slightly rounded to align with deposit page */
   padding: 2rem;
   max-width: 500px;
   margin: 2rem auto;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37); /* Matches deposit page shadow */
 }
 
+/* Form Header */
 .transfer-form h2 {
   font-size: clamp(1.75rem, 6vw, 2.5rem);
-  color: #FFD700;
+  color: #ffd700; /* Gold, already matching */
   text-align: center;
   margin-bottom: 1.5rem;
-  font-family: 'Playfair Display', serif;
-  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+  font-family: 'Playfair Display', serif; /* Matches deposit page font */
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5); /* Gold glow, already matching */
 }
 
 /* Form Groups */
@@ -37,7 +39,7 @@
 .transfer-form .form-group label {
   display: block;
   font-weight: 500;
-  color: #fff;
+  color: #ffd700; /* Changed to gold for consistency */
   margin-bottom: 0.5rem;
   font-size: 1.1rem;
 }
@@ -45,22 +47,22 @@
 .transfer-form .form-group input {
   width: 100%;
   padding: 0.9rem;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid #ffd700; /* Gold border to match deposit page */
   border-radius: 6px;
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
+  background: rgba(255, 255, 255, 0.1); /* Matches deposit page input background */
+  color: #e0e0ff; /* Light text color to match deposit page */
   font-size: 1rem;
-  transition: border-color 0.3s ease;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Added box-shadow transition */
 }
 
 .transfer-form .form-group input:focus {
   outline: none;
-  border-color: #FFD700;
-  box-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+  border-color: #ffd700; /* Gold, already matching */
+  box-shadow: 0 0 5px rgba(255, 215, 0, 0.5); /* Gold glow, already matching */
 }
 
 .transfer-form .form-group input::placeholder {
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(255, 215, 0, 0.6); /* Gold-tinted placeholder for consistency */
 }
 
 /* Submit Button */
@@ -69,22 +71,23 @@
   width: 100%;
   padding: 1rem;
   font-size: 1.2rem;
-  background: linear-gradient(135deg, #FFD700, #FFA500);
+  background: linear-gradient(45deg, #ffd700, #cca300); /* Gold gradient to match deposit page */
   border: none;
-  border-radius: 6px;
-  color: #0a0a23;
+  border-radius: 5px; /* Matches deposit page button */
+  color: #000; /* Black text to match deposit page button */
   font-weight: 600;
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease; /* Added box-shadow transition */
 }
 
 .btn.submit-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.5);
+  background: linear-gradient(45deg, #cca300, #ffd700); /* Reverse gold gradient to match deposit page */
+  transform: translateY(-2px) scale(1.05); /* Added scale to match deposit button hover */
+  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.5); /* Gold glow to match deposit page */
 }
 
 .btn.submit-btn:active {
-  transform: translateY(0);
+  transform: translateY(0); /* Already matching */
 }
 
 /* Responsive Design */
