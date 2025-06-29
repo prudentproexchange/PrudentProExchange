@@ -51,6 +51,16 @@
   font-family: 'Playfair Display', serif;
 }
 
+#depositHistory {
+  display: none; /* Initially hidden for collapsible functionality */
+  transition: opacity 0.3s ease; /* Smooth transition when toggled */
+}
+
+#depositHistory.active {
+  display: block; /* Shown when toggled via JavaScript */
+  opacity: 1;
+}
+
 #depositTable {
   width: 100%;
   border-collapse: collapse;
@@ -71,6 +81,29 @@
   font-weight: 600;
 }
 
+/* Toggle Button for Deposit History */
+.btn {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.blink-golden {
+  background: linear-gradient(45deg, #ffd700, #cca300); /* Gold gradient */
+  color: #000;
+  animation: blink 1.5s infinite;
+}
+
+@keyframes blink {
+  0% { opacity: 1; }
+  50% { opacity: 0.7; }
+  100% { opacity: 1; }
+}
+
 /* Crypto Cards Grid */
 .crypto-cards-grid {
   display: grid;
@@ -79,7 +112,7 @@
 }
 
 .crypto-card {
-  background: rgba  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.1); /* Fixed syntax error */
   padding: 2rem;
   border: 1px solid #ffd700; /* Gold */
   border-radius: 15px;
