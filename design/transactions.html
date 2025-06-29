@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transactions</title>
+    <link rel="stylesheet" href="transactions.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="transactions-page">
+        <h1>Transactions</h1>
+        <ul class="transactions-list">
+            <li class="transaction-item">
+                <div class="transaction-details">
+                    <div class="transaction-header">
+                        <p class="recipient">John Doe</p>
+                        <p class="amount">$100.00</p>
+                    </div>
+                    <div class="transaction-footer">
+                        <p class="date">2025-06-28 14:30</p>
+                        <span class="status success" title="Transaction completed successfully">
+                            <i class="fas fa-check"></i> Successful
+                        </span>
+                    </div>
+                </div>
+            </li>
+            <li class="transaction-item">
+                <div class="transaction-details">
+                    <div class="transaction-header">
+                        <p class="recipient">Jane Smith</p>
+                        <p class="amount">$50.00</p>
+                    </div>
+                    <div class="transaction-footer">
+                        <p class="date">2025-06-29 09:15</p>
+                        <span class="status pending" title="Transaction is still processing">
+                            <i class="fas fa-clock"></i> Pending
+                        </span>
+                    </div>
+                </div>
+            </li>
+            <li class="transaction-item">
+                <div class="transaction-details">
+                    <div class="transaction-header">
+                        <p class="recipient">Alex Johnson</p>
+                        <p class="amount">$250.00</p>
+                    </div>
+                    <div class="transaction-footer">
+                        <p class="date">2025-06-27 10:45</p>
+                        <span class="status success" title="Transaction completed successfully">
+                            <i class="fas fa-check"></i> Successful
+                        </span>
+                    </div>
+                </div>
+            </li>
+            <!-- Add more transactions as needed -->
+        </ul>
+    </div>
+</body>
+</html>
