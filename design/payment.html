@@ -1,127 +1,271 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Withdrawal • PrudentProExchange</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 20px;
-      background-color: #f4f4f4;
-    }
-    .container {
-      max-width: 600px;
-      margin: 0 auto;
-      background: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-    h1 {
-      text-align: center;
-      color: #333;
-    }
-    .form-group {
-      margin-bottom: 15px;
-    }
-    label {
-      display: block;
-      margin-bottom: 5px;
-      color: #555;
-    }
-    input {
-      width: 100%;
-      padding: 8px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      box-sizing: border-box;
-    }
-    button {
-      width: 100%;
-      padding: 10px;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #0056b3;
-    }
-  </style>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Payment • PrudentProExchange</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/payment.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 </head>
-<body>
-  <div class="container">
-    <h1>Make a Withdrawal</h1>
-    <form id="withdrawalForm">
-      <div class="form-group">
-        <label for="email">Email Address</label>
-        <input type="email" id="email" name="email" required/>
+<body class="payment-page">
+  <!-- Video Background -->
+  <video class="bg-video" autoplay muted loop playsinline preload="auto">
+    <source src="assets/videos/background.webm" type="video/webm">
+    <source src="assets/videos/background.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+
+  <div class="overlay">
+    <!-- Header (Matches Deposit Page) -->
+    <header class="site-header">
+      <a href="dashboard.html" class="logo-link">
+        <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo"/>
+      </a>
+      <div class="header-right">
+        <button id="theme-toggle" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
+        <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
       </div>
-      <div class="form-group">
-        <label for="amount">Amount (USD)</label>
-        <input type="number" id="amount" name="amount" step="0.01" min="1" required/>
+      <nav class="nav-drawer" id="navDrawer">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="invest.html">Invest</a>
+        <a href="withdraw.html">Withdraw</a>
+        <a href="transactions.html">Transactions</a>
+        <a href="referrals.html">Referrals</a>
+        <div class="account-menu">
+          <a href="#" class="account-toggle" id="account-toggle">Account ▾</a>
+          <ul class="submenu">
+            <li><a href="profile-settings.html">Profile Settings</a></li>
+            <li><a href="transfer.html">Transfer Balance</a></li>
+            <li><a href="change-password.html">Change Password</a></li>
+            <li><a href="support.html">Support Ticket</a></li>
+            <li><a href="promo-tools.html">Promotional Tools</a></li>
+            <li><a href="2fa.html">2FA Security</a></li>
+            <li><a href="#" id="logout-btn">Logout</a></li>
+          </ul>
+        </div>
+        <a href="kyc.html">KYC Verification</a>
+        <a href="transfer.html">Transfer</a>
+      </nav>
+    </header>
+    <div class="nav-overlay"></div>
+
+    <!-- Main Content -->
+    <main class="payment-page container">
+      <section class="payment-form" data-aos="fade-up">
+        <h2>Make a Deposit</h2>
+        <form id="paymentForm">
+          <div class="form-group">
+            <label for="cryptoSelect">Select Cryptocurrency</label>
+            <select id="cryptoSelect" name="crypto" required>
+              <option value="">-- Select --</option>
+              <option value="bitcoin">Bitcoin (BTC)</option>
+              <option value="ethereum">Ethereum (ETH)</option>
+              <option value="tether">Tether (USDT)</option>
+              <option value="usdc">USD Coin (USDC)</option>
+              <option value="binancecoin">Binance Coin (BNB)</option>
+              <option value="litecoin">Litecoin (LTC)</option>
+              <option value="tron">Tron (TRX)</option>
+              <option value="solana">Solana (SOL)</option>
+              <option value="xrp">XRP (Ripple)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" required/>
+          </div>
+          <div class="form-group">
+            <label for="amount">Amount (USD)</label>
+            <input type="number" id="amount" name="amount" min="20" max="100000000" step="0.01" required/>
+          </div>
+          <div class="form-group">
+            <label for="proof">Proof of Payment</label>
+            <input type="file" id="proof" name="proof" accept="image/*,application/pdf" required/>
+          </div>
+          <button type="submit" class="btn submit-btn">Submit Deposit</button>
+        </form>
+      </section>
+    </main>
+
+    <!-- Footer (Matches Deposit Page) -->
+    <footer class="section section-dark site-footer" data-aos="fade-up">
+      <div class="footer-content">
+        <p class="UTC-time">UTC Time: <span id="utcTime"></span></p>
+        <p class="local-time">Local Time: <span id="localTime"></span></p>
+        <p class="local-date">Local Date: <span id="localDate"></span></p>
+        <nav class="footer-links">
+          <a href="about.html">About Us</a>
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="terms.html">Terms & Conditions</a>
+        </nav>
+        <p class="copyright">© 2025 PrudentProExchange. All Rights Reserved. SEC Registration #0001230714</p>
       </div>
-      <div class="form-group">
-        <label for="crypto">Cryptocurrency</label>
-        <input type="text" id="crypto" name="crypto" placeholder="e.g., BTC, ETH" required/>
-      </div>
-      <button type="submit">Submit Withdrawal</button>
-    </form>
+    </footer>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <button id="back-to-top" aria-label="Back to top">🚀</button>
+
+  <!-- Scripts -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
-    // Initialize Supabase client (replace with your own URL and key)
-    const supabaseClient = Supabase.createClient(
-      'YOUR_SUPABASE_URL',
-      'YOUR_SUPABASE_ANON_KEY'
+    AOS.init({ duration: 800, once: true });
+
+    // Hamburger Toggle
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const navDrawer = document.getElementById('navDrawer');
+    const overlay = document.querySelector('.overlay');
+    hamburgerBtn.addEventListener('click', () => {
+      navDrawer.classList.toggle('open');
+      hamburgerBtn.classList.toggle('active');
+      overlay.classList.toggle('nav-open');
+      if (navDrawer.classList.contains('open')) {
+        navDrawer.scrollTop = 0;
+      }
+    });
+
+    // Close Nav When Clicking Outside
+    document.addEventListener('click', (event) => {
+      const isClickInsideNav = navDrawer.contains(event.target);
+      const isClickOnHamburger = hamburgerBtn.contains(event.target);
+      if (!isClickInsideNav && !isClickOnHamburger && navDrawer.classList.contains('open')) {
+        navDrawer.classList.remove('open');
+        hamburgerBtn.classList.remove('active');
+        overlay.classList.remove('nav-open');
+      }
+    });
+
+    // Theme Toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('light-theme');
+      const icon = themeToggle.querySelector('i');
+      icon.classList.toggle('fa-moon');
+      icon.classList.toggle('fa-sun');
+    });
+
+    // Account Menu Toggle
+    const accountToggle = document.getElementById('account-toggle');
+    const submenu = accountToggle.nextElementSibling;
+    accountToggle.addEventListener('click', (e) => {
+      e.preventDefault();
+      submenu.classList.toggle('open');
+    });
+
+    // Back to Top
+    document.getElementById('back-to-top').addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // Time Updates
+    function updateLocalTime() {
+      const now = new Date();
+      document.getElementById('localTime').textContent = now.toLocaleTimeString();
+      document.getElementById('localDate').textContent = now.toLocaleDateString('en-US', {
+        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+      });
+    }
+    setInterval(updateLocalTime, 1000);
+    updateLocalTime();
+
+    function updateUTCTime() {
+      document.getElementById('utcTime').textContent = new Date().toUTCString();
+    }
+    setInterval(updateUTCTime, 1000);
+    updateUTCTime();
+
+    // Supabase Client
+    const { createClient } = supabase;
+    const supabaseClient = createClient(
+      'https://iwkdznjqfbsfkscnbrkc.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU'
     );
 
-    // Initialize page and pre-fill email
-    async function initWithdrawalPage() {
-      const { data: { user }, error } = await supabaseClient.auth.getUser();
-      if (user) {
-        document.getElementById('email').value = user.email;
-      } else {
+    // Initialize Payment Page
+    async function initPaymentPage() {
+      // Check Authentication
+      const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
+      if (!user || authError) {
         window.location.href = 'login.html';
         return;
       }
-    }
 
-    // Handle form submission
-    const withdrawalForm = document.getElementById('withdrawalForm');
-    withdrawalForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-
-      const email = document.getElementById('email').value;
-      const amount = parseFloat(document.getElementById('amount').value);
-      const crypto = document.getElementById('crypto').value;
-
-      const { data, error } = await supabaseClient
-        .from('withdrawals')
-        .insert({
-          user_id: (await supabaseClient.auth.getUser()).data.user.id,
-          amount: amount,
-          email: email,
-          cryptocurrency: crypto,
-          status: 'pending'
-        });
-
-      if (error) {
-        console.error('Error submitting withdrawal:', error);
-        alert('Error submitting withdrawal.');
-        return;
+      // Preselect Cryptocurrency from URL (if provided)
+      const urlParams = new URLSearchParams(window.location.search);
+      const crypto = urlParams.get('crypto');
+      if (crypto) {
+        document.getElementById('cryptoSelect').value = crypto;
       }
 
-      alert('Withdrawal submitted successfully. Awaiting processing.');
-      window.location.href = 'withdraw.html';
+      // Handle Form Submission
+      const paymentForm = document.getElementById('paymentForm');
+      paymentForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const crypto = document.getElementById('cryptoSelect').value;
+        const email = document.getElementById('email').value;
+        const amount = parseFloat(document.getElementById('amount').value);
+        const proofFile = document.getElementById('proof').files[0];
+
+        if (!crypto || !email || !amount || !proofFile) {
+          alert('Please fill all fields and upload proof of payment.');
+          return;
+        }
+
+        // Upload Proof of Payment to Supabase Storage
+        const fileName = `${user.id}_${Date.now()}_${proofFile.name}`;
+        const { data: uploadData, error: uploadError } = await supabaseClient.storage
+          .from('proof-of-payments')
+          .upload(fileName, proofFile);
+
+        if (uploadError) {
+          console.error('Error uploading proof:', uploadError);
+          alert('Error uploading proof of payment.');
+          return;
+        }
+
+        // Insert Deposit Record into Supabase
+        const { data: insertData, error: insertError } = await supabaseClient
+          .from('deposits')
+          .insert({
+            user_id: user.id,
+            cryptocurrency: crypto,
+            email: email,
+            amount: amount,
+            status: 'pending',
+            proof_url: fileName
+          });
+
+        if (insertError) {
+          console.error('Error inserting deposit:', insertError);
+          alert('Error submitting deposit.');
+          return;
+        }
+
+        alert('Deposit submitted successfully. Awaiting verification.');
+        window.location.href = 'deposit.html';
+      });
+    }
+
+    // Logout
+    document.getElementById('logout-btn').addEventListener('click', async () => {
+      const { error } = await supabaseClient.auth.signOut();
+      if (!error) window.location.href = 'login.html';
+      else alert('Error logging out: ' + error.message);
     });
 
-    // Run initialization
-    initWithdrawalPage();
+    initPaymentPage();
+
+    // Ensure Video Playback
+    const video = document.querySelector('.bg-video');
+    video.addEventListener('canplay', () => {
+      video.play().catch(error => {
+        console.error('Error playing video:', error);
+      });
+    });
   </script>
 </body>
 </html>
