@@ -1,61 +1,118 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Transaction History</title>
-    <link rel="stylesheet" href="transactions.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Transactions • PrudentProExchange</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/transactions.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body class="transactions-page">
-    <div class="transactions-container">
-        <h2>Transaction History</h2>
-        <div class="transaction-list">
-            <!-- Transaction 1: Successful -->
-            <div class="transaction-card">
-                <div class="transaction-header">
-                    <span class="transaction-id">TXN123456789</span>
-                    <span class="transaction-date">June 29, 2025 • 09:28 PM</span>
-                </div>
-                <div class="transaction-body">
-                    <div class="transaction-amount">$500.00</div>
-                    <div class="transaction-recipient">To: John Doe (Acc: ****1234)</div>
-                </div>
-                <div class="transaction-footer">
-                    <span class="status success">Successful</span>
-                </div>
-            </div>
+  <!-- Video Background -->
+  <video class="bg-video" autoplay muted loop playsinline preload="auto">
+    <source src="assets/videos/background.webm" type="video/webm">
+    <source src="assets/videos/background.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
 
-            <!-- Transaction 2: Pending -->
-            <div class="transaction-card">
-                <div class="transaction-header">
-                    <span class="transaction-id">TXN987654321</span>
-                    <span class="transaction-date">June 28, 2025 • 03:15 PM</span>
-                </div>
-                <div class="transaction-body">
-                    <div class="transaction-amount">$250.00</div>
-                    <div class="transaction-recipient">To: Jane Smith (Acc: ****5678)</div>
-                </div>
-                <div class="transaction-footer">
-                    <span class="status pending">Pending</span>
-                </div>
-            </div>
-
-            <!-- Transaction 3: Successful -->
-            <div class="transaction-card">
-                <div class="transaction-header">
-                    <span class="transaction-id">TXN456789123</span>
-                    <span class="transaction-date">June 27, 2025 • 11:45 AM</span>
-                </div>
-                <div class="transaction-body">
-                    <div class="transaction-amount">$1000.00</div>
-                    <div class="transaction-recipient">To: Alex Brown (Acc: ****9012)</div>
-                </div>
-                <div class="transaction-footer">
-                    <span class="status success">Successful</span>
-                </div>
-            </div>
+  <div class="overlay">
+    <!-- Header -->
+    <header class="site-header">
+      <a href="dashboard.html" class="logo-link">
+        <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo"/>
+      </a>
+      <div class="header-right">
+        <button id="theme-toggle" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
+        <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+      <nav class="nav-drawer" id="navDrawer">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="invest.html">Invest</a>
+        <a href="withdraw.html">Withdraw</a>
+        <a href="transactions.html" class="active">Transactions</a>
+        <a href="referrals.html">Referrals</a>
+        <div class="account-menu">
+          <a href="#" class="account-toggle" id="account-toggle">Account ▾</a>
+          <ul class="submenu">
+            <li><a href="profile-settings.html">Profile Settings</a></li>
+            <li><a href="payment.html">Make a Deposit</a></li>
+            <li><a href="change-password.html">Change Password</a></li>
+            <li><a href="support.html">Support Ticket</a></li>
+            <li><a href="promo-tools.html">Promotional Tools</a></li>
+            <li><a href="2fa.html">2FA Security</a></li>
+            <li><a href="#" id="logout-btn">Logout</a></li>
+          </ul>
         </div>
+        <a href="kyc.html">KYC Verification</a>
+        <a href="transfer.html">Transfer</a>
+      </nav>
+    </header>
+    <div class="nav-overlay"></div>
+
+    <!-- Main Content -->
+    <main class="transactions-page container">
+      <section class="transactions-section" data-aos="fade-up">
+        <h2>Transaction History</h2>
+        <div class="transactions-controls">
+          <input type="text" id="searchInput" placeholder="Search by recipient, memo, or ID..." />
+          <select id="statusFilter">
+            <option value="">All Statuses</option>
+            <option value="pending">Pending</option>
+            <option value="success">Success</option>
+            <option value="failed">Failed</option>
+          </select>
+          <select id="sortSelect">
+            <option value="date-desc">Date (Newest First)</option>
+            <option value="date-asc">Date (Oldest First)</option>
+            <option value="amount-desc">Amount (High to Low)</option>
+            <option value="amount-asc">Amount (Low to High)</option>
+          </select>
+          <button id="exportBtn" class="btn">Export to CSV</button>
+        </div>
+        <div class="transaction-list"></div>
+        <div class="pagination">
+          <button id="prevPage" disabled>Previous</button>
+          <span id="pageInfo"></span>
+          <button id="nextPage">Next</button>
+        </div>
+      </section>
+    </main>
+
+    <!-- Transaction Modal -->
+    <div class="modal" id="transactionModal">
+      <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h3>Transaction Details</h3>
+        <div id="modalDetails"></div>
+      </div>
     </div>
+
+    <!-- Footer -->
+    <footer class="section section-dark site-footer" data-aos="fade-up">
+      <div class="footer-content">
+        <p class="UTC-time">UTC Time: <span id="utcTime"></span></p>
+        <p class="local-time">Local Time: <span id="localTime"></span></p>
+        <p class="local-date">Local Date: <span id="localDate"></span></p>
+        <nav class="footer-links">
+          <a href="about.html">About Us</a>
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="terms.html">Terms & Conditions</a>
+        </nav>
+        <p class="copyright">© 2025 PrudentProExchange. All Rights Reserved. SEC Registration #0001230714</p>
+      </div>
+    </footer>
+  </div>
+
+  <button id="back-to-top" aria-label="Back to top">🚀</button>
+
+  <!-- Scripts -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="js/transactions.js"></script>
 </body>
 </html>
