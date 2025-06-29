@@ -11,7 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 </head>
-<body class="payment-page">
+<body class="transfer-page">
   <!-- Video Background -->
   <video class="bg-video" autoplay muted loop playsinline preload="auto">
     <source src="assets/videos/background.webm" type="video/webm">
@@ -20,7 +20,7 @@
   </video>
 
   <div class="overlay">
-    <!-- Header -->
+    <!-- Header (Matches Payment Page) -->
     <header class="site-header">
       <a href="dashboard.html" class="logo-link">
         <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo"/>
@@ -41,7 +41,7 @@
           <a href="#" class="account-toggle" id="account-toggle">Account ▾</a>
           <ul class="submenu">
             <li><a href="profile-settings.html">Profile Settings</a></li>
-            <li><a href="deposit.html">Make a Deposit</a></li>
+            <li><a href="payment.html">Make a Deposit</a></li>
             <li><a href="change-password.html">Change Password</a></li>
             <li><a href="support.html">Support Ticket</a></li>
             <li><a href="promo-tools.html">Promotional Tools</a></li>
@@ -53,12 +53,11 @@
         <a href="transfer.html" class="active">Transfer</a>
       </nav>
     </header>
-
     <div class="nav-overlay"></div>
 
     <!-- Main Content -->
-    <main class="payment-page container">
-      <section class="payment-form" data-aos="fade-up">
+    <main class="transfer-page container">
+      <section class="transfer-form" data-aos="fade-up">
         <h2>Transfer Funds</h2>
         <form id="transferForm">
           <div class="form-group">
@@ -67,18 +66,18 @@
           </div>
           <div class="form-group">
             <label for="transferAmount">Amount (USD)</label>
-            <input type="number" id="transferAmount" name="amount" min="1" step="0.01" required/>
+            <input type="number" id="transferAmount" name="amount" min="1" max="1000000" step="0.01" required/>
           </div>
           <div class="form-group">
-            <label for="memo">Memo (optional)</label>
-            <input type="text" id="memo" name="memo" maxlength="100" placeholder="For rent, gift, etc."/>
+            <label for="memo">Memo (Optional)</label>
+            <input type="text" id="memo" name="memo" maxlength="100" placeholder="e.g., For rent, gift"/>
           </div>
           <button type="submit" class="btn submit-btn">Submit Transfer</button>
         </form>
       </section>
     </main>
 
-    <!-- Footer -->
+    <!-- Footer (Matches Payment Page) -->
     <footer class="section section-dark site-footer" data-aos="fade-up">
       <div class="footer-content">
         <p class="UTC-time">UTC Time: <span id="utcTime"></span></p>
@@ -89,7 +88,7 @@
           <a href="privacy.html">Privacy Policy</a>
           <a href="terms.html">Terms & Conditions</a>
         </nav>
-        <p class="copyright">© 2025 PrudentProExchange. All Rights Reserved.</p>
+        <p class="copyright">© 2025 PrudentProExchange. All Rights Reserved. SEC Registration #0001230714</p>
       </div>
     </footer>
   </div>
@@ -100,93 +99,166 @@
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
     AOS.init({ duration: 800, once: true });
-    // Hamburger, theme, nav-close, back-to-top, time scripts (same as payment page)…
-    // [You can copy these from your deposit/payment page verbatim]
+
+    // Hamburger Toggle
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const navDrawer = document.getElementById('navDrawer');
+    const overlay = document.querySelector('.overlay');
+    hamburgerBtn.addEventListener('click', () => {
+      navDrawer.classList.toggle('open');
+      hamburgerBtn.classList.toggle('active');
+      overlay.classList.toggle('nav-open');
+      if (navDrawer.classList.contains('open')) {
+        navDrawer.scrollTop = 0;
+      }
+    });
+
+    // Close Nav When Clicking Outside
+    document.addEventListener('click', (event) => {
+      const isClickInsideNav = navDrawer.contains(event.target);
+      const isClickOnHamburger = hamburgerBtn.contains(event.target);
+      if (!isClickInsideNav && !isClickOnHamburger && navDrawer.classList.contains('open')) {
+        navDrawer.classList.remove('open');
+        hamburgerBtn.classList.remove('active');
+        overlay.classList.remove('nav-open');
+      }
+    });
+
+    // Theme Toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('light-theme');
+      const icon = themeToggle.querySelector('i');
+      icon.classList.toggle('fa-moon');
+      icon.classList.toggle('fa-sun');
+    });
+
+    // Account Menu Toggle
+    const accountToggle = document.getElementById('account-toggle');
+    const submenu = accountToggle.nextElementSibling;
+    accountToggle.addEventListener('click', (e) => {
+      e.preventDefault();
+      submenu.classList.toggle('open');
+    });
+
+    // Back to Top
+    document.getElementById('back-to-top').addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // Time Updates
+    function updateLocalTime() {
+      const now = new Date();
+      document.getElementById('localTime').textContent = now.toLocaleTimeString();
+      document.getElementById('localDate').textContent = now.toLocaleDateString('en-US', {
+        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+      });
+    }
+    setInterval(updateLocalTime, 1000);
+    updateLocalTime();
+
+    function updateUTCTime() {
+      document.getElementById('utcTime').textContent = new Date().toUTCString();
+    }
+    setInterval(updateUTCTime, 1000);
+    updateUTCTime();
 
     // Supabase Client
     const { createClient } = supabase;
     const supabaseClient = createClient(
       'https://iwkdznjqfbsfkscnbrkc.supabase.co',
-      '<YOUR_SUPABASE_ANON_KEY>'
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU'
     );
 
+    // Initialize Transfer Page
     async function initTransferPage() {
-      // Auth check
-      const { data: { user }, error: authErr } = await supabaseClient.auth.getUser();
-      if (authErr || !user) {
+      // Check Authentication (Avoid Unnecessary Redirects)
+      const { data: { session }, error: sessionError } = await supabaseClient.auth.getSession();
+      if (sessionError || !session) {
         window.location.href = 'login.html';
         return;
       }
+      const user = session.user;
 
       // Handle Form Submission
-      document.getElementById('transferForm').addEventListener('submit', async (e) => {
+      const transferForm = document.getElementById('transferForm');
+      transferForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const recipientEmail = document.getElementById('recipientEmail').value.trim();
         const amount = parseFloat(document.getElementById('transferAmount').value);
         const memo = document.getElementById('memo').value.trim();
 
         if (!recipientEmail || !amount) {
-          return alert('Please enter recipient and amount.');
+          alert('Please enter both recipient email and amount.');
+          return;
         }
 
-        // Lookup recipient by email
-        const { data: recipient, error: recErr } = await supabaseClient
+        // Fetch User's Balance
+        const { data: userProfile, error: profileError } = await supabaseClient
+          .from('profiles')
+          .select('balance')
+          .eq('id', user.id)
+          .single();
+        if (profileError || !userProfile) {
+          alert('Error fetching your balance.');
+          return;
+        }
+        if (userProfile.balance < amount) {
+          alert('Insufficient balance for this transfer.');
+          return;
+        }
+
+        // Lookup Recipient
+        const { data: recipient, error: recipientError } = await supabaseClient
           .from('profiles')
           .select('id, email')
           .eq('email', recipientEmail)
           .single();
-        if (recErr || !recipient) {
-          return alert('Recipient not found.');
+        if (recipientError || !recipient) {
+          alert('Recipient not found.');
+          return;
         }
         if (recipient.id === user.id) {
-          return alert('Cannot transfer to yourself.');
+          alert('You cannot transfer funds to yourself.');
+          return;
         }
 
-        // Insert transfer transaction
-        const { error: txErr } = await supabaseClient
-          .from('transactions')
+        // Insert Transfer Record
+        const { error: insertError } = await supabaseClient
+          .from('transfers')
           .insert({
-            user_id:             user.id,
-            user_email:          user.email,
-            counterparty_id:     recipient.id,
-            counterparty_email:  recipient.email,
-            type:                'transfer',
-            amount:              amount,
-            currency:            'USD',
-            status:              'pending',
-            memo:                memo || null
+            sender_id: user.id,
+            sender_email: user.email,
+            recipient_id: recipient.id,
+            recipient_email: recipient.email,
+            amount: amount,
+            status: 'pending',
+            memo: memo || null,
+            created_at: new Date().toISOString()
           });
-        if (txErr) {
-          console.error('Transfer failed:', txErr);
-          return alert('Error submitting transfer.');
+
+        if (insertError) {
+          console.error('Error submitting transfer:', insertError);
+          alert('Error submitting transfer. Please try again.');
+          return;
         }
 
         alert('Transfer submitted successfully! Awaiting approval.');
         window.location.href = 'transactions.html';
       });
-
-      // Initialize times…
-      function updateLocalTime() {
-        const now = new Date();
-        document.getElementById('localTime').textContent = now.toLocaleTimeString();
-        document.getElementById('localDate').textContent = now.toLocaleDateString('en-US', {
-          weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
-        });
-      }
-      setInterval(updateLocalTime, 1000);
-      updateLocalTime();
-
-      function updateUTCTime() {
-        document.getElementById('utcTime').textContent = new Date().toUTCString();
-      }
-      setInterval(updateUTCTime, 1000);
-      updateUTCTime();
     }
 
-    // Logout handler
-    document.getElementById('logout-btn')?.addEventListener('click', async () => {
-      await supabaseClient.auth.signOut();
-      window.location.href = 'login.html';
+    // Logout (Only on Explicit Click)
+    document.getElementById('logout-btn').addEventListener('click', async () => {
+      const { error } = await supabaseClient.auth.signOut();
+      if (!error) window.location.href = 'login.html';
+      else alert('Error logging out: ' + error.message);
+    });
+
+    // Video Playback
+    const video = document.querySelector('.bg-video');
+    video.addEventListener('canplay', () => {
+      video.play().catch(error => console.error('Video playback error:', error));
     });
 
     initTransferPage();
