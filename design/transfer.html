@@ -55,6 +55,15 @@
     </header>
     <div class="nav-overlay"></div>
 
+    <!-- Profile Section -->
+    <div class="profile-section">
+      <div class="profile-container">
+        <img id="navProfilePhoto" src="" alt="Profile" class="avatar" style="display: none;"/>
+        <span id="defaultProfileIcon" class="avatar">👤</span>
+      </div>
+      <div class="welcome-message">Welcome to Your Transfer Page, <span id="welcomeName"></span>!</div>
+    </div>
+
     <!-- Main Content -->
     <main class="transfer-page container">
       <section class="transfer-form" data-aos="fade-up">
@@ -154,7 +163,7 @@
         weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
       });
     }
-    setInterval(updateLocalTime, 1000);
+によっては, setInterval(updateLocalTime, 1000);
     updateLocalTime();
 
     function updateUTCTime() {
@@ -181,10 +190,10 @@
       }
       const user = session.user;
 
-      // Fetch user's profile
+      // Fetch user's profile with additional fields
       const { data: profile, error: profileError } = await supabaseClient
         .from('profiles')
-        .select('id, email, deposit_wallet')
+        .select('id, email, deposit_wallet, first_name, photo_url')
         .eq('id', user.id)
         .single();
 
@@ -192,6 +201,17 @@
         console.error('Profile fetch error:', profileError);
         alert('Error fetching your account details. Please try again or contact support.');
         return;
+      }
+
+      // Set profile picture and welcome message
+      document.getElementById('welcomeName').textContent = profile.first_name || 'User';
+      if (profile.photo_url) {
+        const { data: urlData } = supabaseClient.storage
+          .from('profile-photos')
+          .getPublicUrl(profile.photo_url);
+        document.getElementById('navProfilePhoto').src = urlData.publicUrl;
+        document.getElementById('navProfilePhoto').style.display = 'block';
+        document.getElementById('defaultProfileIcon').style.display = 'none';
       }
 
       const depositWallet = profile.deposit_wallet || 0;
@@ -225,7 +245,7 @@
           return;
         }
 
-        // Lookup recipient in profiles (not auth.users)
+        // Lookup recipient in profiles
         console.log('Searching for recipient email:', recipientEmail);
         const { data: recipient, error: recipientError } = await supabaseClient
           .from('profiles')
