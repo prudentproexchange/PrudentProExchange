@@ -8,9 +8,6 @@ const supabaseClient = createClient(
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU'
 );
 
-// Function to escape HTML characters for security
-const escapeHtml = text => text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-
 // Common UI initialization (hamburger, theme toggle, clock, back-to-top)
 function initCommonUI() {
   const hamburgerBtn = document.getElementById('hamburgerBtn');
@@ -144,10 +141,10 @@ async function loadTransactions() {
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td>${dateStr}</td>
-      <td>${directionIcon} ${escapeHtml(counterEmail)}</td>
+      <td>${directionIcon} ${counterEmail}</td>
       <td>$${tx.amount.toFixed(2)}</td>
       <td><span class="badge ${tx.status}">${statusIcon[tx.status]} ${tx.status}</span></td>
-      <td>${tx.status === 'failed' ? 'Rejection reason: ' + escapeHtml(tx.memo) : escapeHtml(tx.memo || '')}</td>
+      <td>${tx.memo || ''}</td>
       <td>—</td>
     `;
     tbody.appendChild(tr);
