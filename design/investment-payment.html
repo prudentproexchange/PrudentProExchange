@@ -46,7 +46,7 @@
             <li><a href="support.html">Support Ticket</a></li>
             <li><a href="promo-tools.html">Promotional Tools</a></li>
             <li><a href="2fa.html">2FA Security</a></li>
-            <li><a href="#" id="logout-btn">Logout</a></li>
+            <li><a href="#" id="logout-btn">Logout</a></ casein>
           </ul>
         </div>
         <a href="kyc.html">KYC Verification</a>
@@ -137,6 +137,7 @@
 
       const urlParams = new URLSearchParams(window.location.search);
       const amount = urlParams.get('amount') || '0';
+      const planId = urlParams.get('plan_id');
       document.getElementById('investmentAmount').textContent = parseFloat(amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
       const paymentMethods = [
@@ -167,12 +168,12 @@
       document.querySelectorAll('.select-payment-btn').forEach(btn => {
         btn.addEventListener('click', () => {
           const method = btn.getAttribute('data-method');
-          showUploadForm(method, user.id);
+          showUploadForm(method, user.id, planId);
         });
       });
     }
 
-    async function showUploadForm(method, userId) {
+    async function showUploadForm(method, userId, planId) {
       const { data: wallet, error } = await supabaseClient
         .from('wallets')
         .select('address')
@@ -248,7 +249,7 @@
 
           const { error: insertError } = await supabaseClient.from('investments').insert({
             user_id: userId,
-            plan_id: null, // You can update this if you're passing a plan
+            plan_id: planId,
             principal: amountValue,
             roi_pct: null, // Optional or default on backend
             total_profit: 0,
@@ -264,8 +265,7 @@
           }
 
           alert(`Investment submitted successfully with proof of payment for ${method}. Awaiting approval.`);
-          form.reset();
-          document.getElementById('uploadFormContainer').style.display = 'none';
+          window.location.href = 'dashboard.html';
         }
       });
     }
