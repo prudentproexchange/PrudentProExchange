@@ -5,7 +5,7 @@
   padding: 1.5rem 2rem;
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+  border-bottom: 1px solid\(\*+\) solid rgba(255, 215, 0, 0.2);
 }
 
 .profile-container {
@@ -40,12 +40,12 @@
 /* Transactions Section */
 .transactions-section {
   background: rgba(255, 255, 255, 0.1);
-  padding: 2rem;
+  padding: 1.5rem; /* Reduced padding to make the card smaller */
   border-radius: 15px;
   backdrop-filter: blur(15px);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
   margin: 3rem auto;
-  max-width: 1000px;
+  max-width: 900px; /* Reduced from 1000px to better fit the page */
 }
 
 .transactions-section h2 {
@@ -79,18 +79,18 @@
 
 /* Transparent Card Design */
 .table-card {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.1); /* Increased transparency from 0.05 to 0.1 */
   border: 1px solid #ffd700; /* Gold */
-  border-radius: 10px;
-  padding: 1rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-  backdrop-filter: blur(10px);
-  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  border-radius: 15px; /* Increased from 10px for a modern look */
+  padding: 1rem; /* Reduced padding to make the card smaller */
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+  backdrop-filter: blur(15px); /* Enhanced blur for a powerful look */
+  transition: box-shadow 0.3s ease;
+  max-width: 100%; /* Ensures it fits within the section */
 }
 
 .table-card:hover {
-  box-shadow: 0 8px 30px rgba(255, 215, 0, 0.5); /* Gold glow */
-  transform: translateY(-5px);
+  box-shadow: 0 12px 40px rgba(255, 215, 0, 0.5); /* Enhanced hover effect, removed transform */
 }
 
 .table-wrapper {
@@ -105,10 +105,11 @@
 
 #transactionsTable th,
 #transactionsTable td {
-  padding: 1rem;
+  padding: 0.8rem; /* Slightly reduced padding for compactness */
   text-align: left;
   border-bottom: 1px solid rgba(255, 215, 0, 0.2);
   color: #e0e0ff;
+  word-break: break-word; /* Ensures text fits perfectly */
 }
 
 #transactionsTable th {
@@ -179,8 +180,18 @@
     font-size: 1.2rem;
   }
 
+  .transactions-section {
+    padding: 1rem;
+    max-width: 100%; /* Full width on smaller screens */
+  }
+
   .transactions-section h2 {
     font-size: 2rem;
+  }
+
+  #transactionsTable th,
+  #transactionsTable td {
+    padding: 0.6rem; /* Further reduced padding for mobile */
   }
 }
 
