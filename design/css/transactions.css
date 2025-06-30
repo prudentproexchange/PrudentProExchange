@@ -1,139 +1,57 @@
-/* Profile Section */
-.profile-section {
-  display: flex;
-  align-items: center;
-  padding: 1.5rem 2rem;
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid\(\*+\) solid rgba(255, 215, 0, 0.2);
-}
-
-.profile-container {
-  margin-right: 1rem;
-}
-
-.avatar {
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  border: 2px solid #ffd700; /* Gold */
-  background: #000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 120px;
-  color: #ffd700; /* Gold */
-  object-fit: cover;
-  transition: transform 0.3s ease;
-}
-
-.avatar:hover {
-  transform: scale(1.05);
-}
-
-.welcome-message {
-  font-size: 1.5rem;
-  color: #ffd700; /* Gold */
-  font-family: 'Playfair Display', serif;
-}
-
-/* Transactions Section */
+/* Glass‐style panel */
 .transactions-section {
-  background: rgba(255, 255, 255, 0.1);
-  padding: 1.5rem; /* Reduced padding to make the card smaller */
-  border-radius: 15px;
-  backdrop-filter: blur(15px);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+  background: rgba(255,255,255,0.2);
+  backdrop-filter: blur(8px);
+  padding: 2rem;
+  border-radius: 8px;
   margin: 3rem auto;
-  max-width: 900px; /* Reduced from 1000px to better fit the page */
+  max-width: 1000px;
 }
-
 .transactions-section h2 {
-  font-size: 2.5rem;
-  color: #ffd700; /* Gold */
-  margin-bottom: 1.5rem;
-  text-align: center;
-  font-family: 'Playfair Display', serif;
-  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+  margin-bottom: 1rem;
+  font-size: 2rem;
+  font-weight: 600;
 }
 
+/* Filter */
 .filter-bar {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   text-align: right;
 }
-
 .filter-bar select {
-  padding: 0.5rem 1rem;
-  border-radius: 5px;
-  border: 1px solid #ffd700; /* Gold */
-  background: rgba(255, 255, 255, 0.1);
-  color: #e0e0ff;
-  font-size: 1rem;
-  transition: border-color 0.3s ease;
+  padding: 0.4rem 0.6rem;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  background: rgba(255,255,255,0.8);
 }
 
-.filter-bar select:focus {
-  border-color: #cca300;
-  outline: none;
-}
-
-/* Transparent Card Design */
-.table-card {
-  background: rgba(255, 255, 255, 0.1); /* Increased transparency from 0.05 to 0.1 */
-  border: 1px solid #ffd700; /* Gold */
-  border-radius: 15px; /* Increased from 10px for a modern look */
-  padding: 1rem; /* Reduced padding to make the card smaller */
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
-  backdrop-filter: blur(15px); /* Enhanced blur for a powerful look */
-  transition: box-shadow 0.3s ease;
-  max-width: 100%; /* Ensures it fits within the section */
-}
-
-.table-card:hover {
-  box-shadow: 0 12px 40px rgba(255, 215, 0, 0.5); /* Enhanced hover effect, removed transform */
-}
-
+/* Table */
 .table-wrapper {
   overflow-x: auto;
 }
-
 #transactionsTable {
   width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
+  border-collapse: collapse;
 }
-
 #transactionsTable th,
 #transactionsTable td {
-  padding: 0.8rem; /* Slightly reduced padding for compactness */
+  padding: 0.75rem 1rem;
   text-align: left;
-  border-bottom: 1px solid rgba(255, 215, 0, 0.2);
-  color: #e0e0ff;
-  word-break: break-word; /* Ensures text fits perfectly */
+  border-bottom: 1px solid rgba(255,255,255,0.3);
+  background: transparent;
+  color: #fff;
 }
-
 #transactionsTable th {
-  background: linear-gradient(45deg, #ffd700, #cca300); /* Gold gradient */
-  color: #000;
-  font-weight: 600;
-  position: relative;
   cursor: pointer;
+  background: rgba(0,0,0,0.3);
 }
-
 #transactionsTable th i {
   margin-left: 0.5rem;
   font-size: 0.75rem;
-  color: #000;
+  color: #ddd;
 }
 
-#transactionsTable tbody tr {
-  transition: background 0.3s ease;
-}
-
-#transactionsTable tbody tr:hover {
-  background: rgba(255, 215, 0, 0.1);
-}
-
+/* Status badges */
 .badge {
   display: inline-block;
   padding: 0.3rem 0.6rem;
@@ -142,64 +60,14 @@
   font-weight: 500;
   text-transform: capitalize;
 }
-
-.badge.pending { background-color: #FFF3CD; color: #856404; }
+.badge.pending  { background-color: #FFF3CD; color: #856404; }
 .badge.approved { background-color: #D4EDDA; color: #155724; }
-.badge.failed { background-color: #F8D7DA; color: #721C24; }
+.badge.failed   { background-color: #F8D7DA; color: #721C24; }
 
-/* Error Banner */
-.error-banner {
-  background-color: #f8d7da;
-  color: #721c24;
-  padding: 1rem;
-  border-radius: 6px;
-  margin-bottom: 1rem;
-  font-weight: 500;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-  .profile-section {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 1rem;
-  }
-
-  .profile-container {
-    margin-right: 0;
-    margin-bottom: 0.5rem;
-  }
-
-  .avatar {
-    width: 120px;
-    height: 120px;
-    font-size: 72px;
-  }
-
-  .welcome-message {
-    font-size: 1.2rem;
-  }
-
-  .transactions-section {
-    padding: 1rem;
-    max-width: 100%; /* Full width on smaller screens */
-  }
-
-  .transactions-section h2 {
-    font-size: 2rem;
-  }
-
-  #transactionsTable th,
-  #transactionsTable td {
-    padding: 0.6rem; /* Further reduced padding for mobile */
-  }
-}
-
+/* Mobile: hide memo on very small */
 @media (max-width: 600px) {
   #transactionsTable th:nth-child(5),
-  #transactionsTable td:nth-child(5),
-  #transactionsTable th:nth-child(6),
-  #transactionsTable td:nth-child(6) {
-    display: none; /* Hide memo & reason on small screens */
+  #transactionsTable td:nth-child(5) {
+    display: none;
   }
 }
