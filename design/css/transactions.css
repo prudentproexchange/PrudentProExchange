@@ -66,3 +66,11 @@
     display: none; /* hide memo & reason on small screens */
   }
 }
+.error-banner {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 1rem;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
