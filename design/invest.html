@@ -5,113 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Invest • PrudentProExchange</title>
   <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/invest.css"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-  <style>
-    /* Additional CSS for Investment Plans */
-    .invest-page .investment-plans {
-      font-family: 'Poppins', sans-serif;
-      text-align: center;
-      padding: 2rem 0;
-    }
-
-    .invest-page .plans-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 2rem;
-      padding: 1rem;
-    }
-
-    .invest-page .plan-card {
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
-      padding: 2rem;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      cursor: pointer;
-      position: relative;
-      outline: none;
-    }
-
-    .invest-page .plan-card:hover,
-    .invest-page .plan-card:focus {
-      transform: translateY(-5px);
-      box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3);
-    }
-
-    .invest-page .plan-card h3 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.8rem;
-      margin: 1rem 0 0.5rem;
-      color: #fff;
-    }
-
-    .invest-page .plan-card p {
-      font-family: 'Poppins', sans-serif;
-      font-size: 1rem;
-      color: #ddd;
-      margin: 0.5rem 0;
-    }
-
-    .invest-page .plan-card input[type="number"] {
-      width: 100%;
-      padding: 0.75rem;
-      margin: 1rem 0 0.5rem;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-family: 'Poppins', sans-serif;
-      font-size: 1rem;
-      background: #fff;
-      outline: none;
-    }
-
-    .invest-page .plan-card input[type="number"]:focus {
-      border-color: #007bff;
-      box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-    }
-
-    .invest-page .plan-card .btn {
-      width: 100%;
-      padding: 0.75rem;
-      border: none;
-      border-radius: 8px;
-      background: #007bff;
-      color: #fff;
-      font-family: 'Poppins', sans-serif;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: background 0.3s ease, transform 0.2s ease;
-      margin-top: 0.5rem;
-    }
-
-    .invest-page .plan-card .btn:hover:not(:disabled) {
-      background: #0056b3;
-      transform: scale(1.02);
-    }
-
-    .invest-page .plan-card .btn:focus {
-      outline: 2px solid #0056b3;
-      outline-offset: 2px;
-    }
-
-    .invest-page .plan-card .btn:disabled {
-      background: #ccc;
-      cursor: not-allowed;
-    }
-
-    .invest-page .validation-message {
-      color: #ff4d4d;
-      font-size: 0.85rem;
-      margin-top: 0.5rem;
-      display: none;
-    }
-
-    .invest-page .plan-card.invalid .validation-message {
-      display: block;
-    }
-  </style>
 </head>
 <body class="invest-page">
   <!-- Video Background -->
@@ -171,50 +69,45 @@
       <section class="investment-plans" data-aos="fade-up">
         <h2>Choose Your Investment Plan</h2>
         <div class="plans-grid">
-          <div class="plan-card" data-min="200" data-max="4999" data-aos="zoom-in" tabindex="0">
+          <div class="plan-card" data-min="200" data-max="4999" data-aos="zoom-in">
             <div class="plan-icon"><i class="fas fa-star"></i></div>
             <h3>The Dawn Star (Basic)</h3>
             <p>5% weekly return</p>
             <p>Investment Range: $200 - $4,999</p>
-            <input type="number" placeholder="Enter amount (200 - 4999 USD)" min="200" max="4999" aria-label="Investment amount for Dawn Star plan">
-            <p class="validation-message"></p>
-            <button class="btn select-plan-btn" data-plan="dawn-star" disabled aria-label="Choose payment option for Dawn Star plan">Choose Payment Option</button>
+            <input type="number" placeholder="Enter amount (200 - 4999 USD)" min="200" max="4999">
+            <button class="btn select-plan-btn" data-plan="dawn-star" disabled>Choose Payment Option</button>
           </div>
-          <div class="plan-card" data-min="5000" data-max="14999" data-aos="zoom-in" tabindex="0">
+          <div class="plan-card" data-min="5000" data-max="14999" data-aos="zoom-in">
             <div class="plan-icon"><i class="fas fa-cloud"></i></div>
             <h3>The Nebula Glow (Standard)</h3>
             <p>6.5% weekly return</p>
             <p>Investment Range: $5,000 - $14,999</p>
-            <input type="number" placeholder="Enter amount (5000 - 14999 USD)" min="5000" max="14999" aria-label="Investment amount for Nebula Glow plan">
-            <p class="validation-message"></p>
-            <button class="btn select-plan-btn" data-plan="nebula-glow" disabled aria-label="Choose payment option for Nebula Glow plan">Choose Payment Option</button>
+            <input type="number" placeholder="Enter amount (5000 - 14999 USD)" min="5000" max="14999">
+            <button class="btn select-plan-btn" data-plan="nebula-glow" disabled>Choose Payment Option</button>
           </div>
-          <div class="plan-card" data-min="15000" data-max="49999" data-aos="zoom-in" tabindex="0">
+          <div class="plan-card" data-min="15000" data-max="49999" data-aos="zoom-in">
             <div class="plan-icon"><i class="fas fa-moon"></i></div>
             <h3>The Lunar Crest (Silver)</h3>
             <p>7.5% weekly return</p>
             <p>Investment Range: $15,000 - $49,999</p>
-            <input type="number" placeholder="Enter amount (15000 - 49999 USD)" min="15000" max="49999" aria-label="Investment amount for Lunar Crest plan">
-            <p class="validation-message"></p>
-            <button class="btn select-plan-btn" data-plan="lunar-crest" disabled aria-label="Choose payment option for Lunar Crest plan">Choose Payment Option</button>
+            <input type="number" placeholder="Enter amount (15000 - 49999 USD)" min="15000" max="49999">
+            <button class="btn select-plan-btn" data-plan="lunar-crest" disabled>Choose Payment Option</button>
           </div>
-          <div class="plan-card" data-min="50000" data-max="99999" data-aos="zoom-in" tabindex="0">
+          <div class="plan-card" data-min="50000" data-max="99999" data-aos="zoom-in">
             <div class="plan-icon"><i class="fas fa-sun"></i></div>
             <h3>The Solar Flare (Gold)</h3>
             <p>8.5% weekly return</p>
             <p>Investment Range: $50,000 - $99,999</p>
-            <input type="number" placeholder="Enter amount (50000 - 99999 USD)" min="50000" max="99999" aria-label="Investment amount for Solar Flare plan">
-            <p class="validation-message"></p>
-            <button class="btn select-plan-btn" data-plan="solar-flare" disabled aria-label="Choose payment option for Solar Flare plan">Choose Payment Option</button>
+            <input type="number" placeholder="Enter amount (50000 - 99999 USD)" min="50000" max="99999">
+            <button class="btn select-plan-btn" data-plan="solar-flare" disabled>Choose Payment Option</button>
           </div>
-          <div class="plan-card" data-min="100000" data-aos="zoom-in" tabindex="0">
+          <div class="plan-card" data-min="100000" data-aos="zoom-in">
             <div class="plan-icon"><i class="fas fa-crown"></i></div>
             <h3>The Galactic Crown (Diamond)</h3>
             <p>10% weekly return</p>
             <p>Investment Range: $100,000+</p>
-            <input type="number" placeholder="Enter amount (min 100000 USD)" min="100000" aria-label="Investment amount for Galactic Crown plan">
-            <p class="validation-message"></p>
-            <button class="btn select-plan-btn" data-plan="galactic-crown" disabled aria-label="Choose payment option for Galactic Crown plan">Choose Payment Option</button>
+            <input type="number" placeholder="Enter amount (min 100000 USD)" min="100000">
+            <button class="btn select-plan-btn" data-plan="galactic-crown" disabled>Choose Payment Option</button>
           </div>
         </div>
       </section>
@@ -241,7 +134,7 @@
   <!-- Scripts -->
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
-    AOS,init({ duration: 800, once: true });
+    AOS.init({ duration: 800, once: true });
 
     // Supabase Client
     const { createClient } = supabase;
@@ -280,69 +173,37 @@
         document.getElementById('navProfilePhoto').style.display = 'block';
         document.getElementById('defaultProfileIcon').style.display = 'none';
       }
-
-      // Plan Input and Button Logic
-      document.querySelectorAll('.plan-card').forEach(card => {
-        const input = card.querySelector('input[type="number"]');
-        const btn = card.querySelector('.select-plan-btn');
-        const validationMessage = card.querySelector('.validation-message');
-        const min = parseFloat(card.getAttribute('data-min'));
-        const max = card.hasAttribute('data-max') ? parseFloat(card.getAttribute('data-max')) : Infinity;
-
-        // Auto-fill and focus input on card click
-        card.addEventListener('click', (e) => {
-          if (e.target !== input && e.target !== btn) {
-            input.value = min;
-            input.focus();
-            const event = new Event('input');
-            input.dispatchEvent(event);
-          }
-        });
-
-        // Keyboard support for card
-        card.addEventListener('keydown', (e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            input.focus();
-            input.value = min;
-            const event = new Event('input');
-            input.dispatchEvent(event);
-          }
-        });
-
-        // Input validation
-        input.addEventListener('input', () => {
-          const value = parseFloat(input.value);
-          if (value >= min && (max === Infinity || value <= max) && !isNaN(value)) {
-            btn.disabled = false;
-            card.classList.remove('invalid');
-            input.setCustomValidity('');
-            validationMessage.textContent = '';
-          } else {
-            btn.disabled = true;
-            card.classList.add('invalid');
-            input.setCustomValidity(`Amount must be between $${min}${max === Infinity ? '+' : ` and $${max}`}`);
-            validationMessage.textContent = input.validationMessage;
-          }
-        });
-
-        // Button click with validation
-        btn.addEventListener('click', () => {
-          const amount = parseFloat(input.value);
-          if (amount >= min && (max === Infinity || amount <= max) && !isNaN(amount)) {
-            const plan = btn.getAttribute('data-plan');
-            window.location.href = `investment-payment.html?plan=${plan}&amount=${amount}`;
-          } else {
-            alert(`Please enter a valid amount between $${min}${max === Infinity ? ' or above' : ` and $${max}`}`);
-          }
-        });
-      });
     }
+
+    // Handle Input and Button States
+    document.querySelectorAll('.plan-card').forEach(card => {
+      const input = card.querySelector('input[type="number"]');
+      const btn = card.querySelector('.select-plan-btn');
+      const min = parseFloat(card.getAttribute('data-min'));
+      const max = card.hasAttribute('data-max') ? parseFloat(card.getAttribute('data-max')) : Infinity;
+
+      input.addEventListener('input', () => {
+        const value = parseFloat(input.value);
+        if (value >= min && value <= max && !isNaN(value)) {
+          btn.disabled = false;
+        } else {
+          btn.disabled = true;
+        }
+      });
+
+      btn.addEventListener('click', () => {
+        const plan = btn.getAttribute('data-plan');
+        const amount = input.value;
+        if (amount) {
+          window.location.href = `investment-payment.html?plan=${plan}&amount=${amount}`;
+        }
+      });
+    });
 
     // Hamburger Toggle
     const hamburgerBtn = document.getElementById('hamburgerBtn');
     const navDrawer = document.getElementById('navDrawer');
-    const overlay = document.querySelector('.nav-overlay');
+    const overlay = document.querySelector('.overlay');
     hamburgerBtn.addEventListener('click', () => {
       navDrawer.classList.toggle('open');
       hamburgerBtn.classList.toggle('active');
@@ -410,7 +271,6 @@
       });
     });
 
-    // Initialize page
     initInvestPage();
   </script>
 </body>
