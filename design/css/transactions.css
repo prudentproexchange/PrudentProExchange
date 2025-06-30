@@ -5,7 +5,7 @@
   padding: 1.5rem 2rem;
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(10px);
-  border-bottom: 1px solid\(\*+\) solid rgba(255, 215, 0, 0.2);
+  border-bottom: 1px solid rgba(255, 215, 0, 0.2);
 }
 
 .profile-container {
@@ -39,13 +39,18 @@
 
 /* Transactions Section */
 .transactions-section {
-  background: rgba(255, 255, 255, 0.1);
-  padding: 1.5rem; /* Reduced padding to make the card smaller */
-  border-radius: 15px;
-  backdrop-filter: blur(15px);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
-  margin: 3rem auto;
-  max-width: 900px; /* Reduced from 1000px to better fit the page */
+  background: rgba(255, 255, 255, 0.08); /* Slightly more transparent */
+  padding: 1rem; /* Reduced padding */
+  border-radius: 20px; /* Smoother corners */
+  backdrop-filter: blur(20px); /* Enhanced blur for beauty */
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5); /* Deeper shadow */
+  margin: 2rem auto;
+  max-width: 850px; /* Slightly smaller for better fit */
+  transition: all 0.3s ease;
+}
+
+.transactions-section:hover {
+  box-shadow: 0 15px 50px rgba(255, 215, 0, 0.3); /* Subtle gold glow on hover */
 }
 
 .transactions-section h2 {
@@ -54,93 +59,103 @@
   margin-bottom: 1.5rem;
   text-align: center;
   font-family: 'Playfair Display', serif;
-  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+  text-shadow: 0 0 15px rgba(255, 215, 0, 0.6); /* Enhanced glow */
 }
 
 .filter-bar {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   text-align: right;
 }
 
 .filter-bar select {
   padding: 0.5rem 1rem;
-  border-radius: 5px;
+  border-radius: 8px;
   border: 1px solid #ffd700; /* Gold */
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.15);
   color: #e0e0ff;
-  font-size: 1rem;
-  transition: border-color 0.3s ease;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
 }
 
 .filter-bar select:focus {
   border-color: #cca300;
+  background: rgba(255, 255, 255, 0.25);
   outline: none;
 }
 
 /* Transparent Card Design */
 .table-card {
-  background: rgba(255, 255, 255, 0.1); /* Increased transparency from 0.05 to 0.1 */
-  border: 1px solid #ffd700; /* Gold */
-  border-radius: 15px; /* Increased from 10px for a modern look */
-  padding: 1rem; /* Reduced padding to make the card smaller */
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
-  backdrop-filter: blur(15px); /* Enhanced blur for a powerful look */
-  transition: box-shadow 0.3s ease;
-  max-width: 100%; /* Ensures it fits within the section */
+  background: rgba(255, 255, 255, 0.12); /* More transparency */
+  border: 2px solid rgba(255, 215, 0, 0.7); /* Bolder gold border */
+  border-radius: 20px; /* Rounded corners */
+  padding: 0.8rem; /* Reduced padding */
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.4), inset 0 0 10px rgba(255, 215, 0, 0.2); /* Inner glow */
+  backdrop-filter: blur(25px); /* Stronger blur */
+  transition: all 0.3s ease;
+  max-width: 100%;
 }
 
 .table-card:hover {
-  box-shadow: 0 12px 40px rgba(255, 215, 0, 0.5); /* Enhanced hover effect, removed transform */
+  box-shadow: 0 10px 35px rgba(255, 215, 0, 0.5), inset 0 0 15px rgba(255, 215, 0, 0.3);
 }
 
 .table-wrapper {
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on mobile */
 }
 
 #transactionsTable {
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
+  font-size: 0.9rem; /* Slightly smaller text */
 }
 
 #transactionsTable th,
 #transactionsTable td {
-  padding: 0.8rem; /* Slightly reduced padding for compactness */
+  padding: 0.6rem 0.8rem; /* Smaller padding for compactness */
   text-align: left;
-  border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+  border-bottom: 1px solid rgba(255, 215, 0, 0.15);
   color: #e0e0ff;
-  word-break: break-word; /* Ensures text fits perfectly */
+  white-space: nowrap; /* Prevent text wrapping */
+  overflow: hidden;
+  text-overflow: ellipsis; /* Truncate long text */
+  max-width: 150px; /* Limit column width */
 }
 
 #transactionsTable th {
-  background: linear-gradient(45deg, #ffd700, #cca300); /* Gold gradient */
-  color: #000;
+  background: linear-gradient(135deg, #ffd700, #cca300); /* Vibrant gradient */
+  color: #1a1a1a; /* Darker text for contrast */
   font-weight: 600;
-  position: relative;
-  cursor: pointer;
+  position: sticky;
+  top: 0;
+  z-index: 1;
 }
 
 #transactionsTable th i {
-  margin-left: 0.5rem;
-  font-size: 0.75rem;
-  color: #000;
+  margin-left: 0.4rem;
+  font-size: 0.7rem;
+  color: #1a1a1a;
 }
 
 #transactionsTable tbody tr {
-  transition: background 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 #transactionsTable tbody tr:hover {
-  background: rgba(255, 215, 0, 0.1);
+  background: rgba(255, 215, 0, 0.15);
+  transform: scale(1.02); /* Subtle zoom on hover */
 }
 
 .badge {
-  display: inline-block;
-  padding: 0.3rem 0.6rem;
-  border-radius: 12px;
-  font-size: 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 0.7rem;
+  border-radius: 15px;
+  font-size: 0.8rem;
   font-weight: 500;
   text-transform: capitalize;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .badge.pending { background-color: #FFF3CD; color: #856404; }
@@ -155,6 +170,18 @@
   border-radius: 6px;
   margin-bottom: 1rem;
   font-weight: 500;
+}
+
+/* Background Video */
+.bg-video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+  filter: brightness(0.8); /* Slightly darkened for contrast */
 }
 
 /* Responsive Design */
@@ -181,8 +208,9 @@
   }
 
   .transactions-section {
-    padding: 1rem;
-    max-width: 100%; /* Full width on smaller screens */
+    padding: 0.8rem;
+    max-width: 100%;
+    margin: 1.5rem auto;
   }
 
   .transactions-section h2 {
@@ -191,7 +219,9 @@
 
   #transactionsTable th,
   #transactionsTable td {
-    padding: 0.6rem; /* Further reduced padding for mobile */
+    padding: 0.5rem 0.6rem;
+    font-size: 0.85rem;
+    max-width: 120px; /* Smaller columns */
   }
 }
 
@@ -200,6 +230,21 @@
   #transactionsTable td:nth-child(5),
   #transactionsTable th:nth-child(6),
   #transactionsTable td:nth-child(6) {
-    display: none; /* Hide memo & reason on small screens */
+    display: none; /* Hide Memo & Reason */
+  }
+
+  #transactionsTable th,
+  #transactionsTable td {
+    padding: 0.4rem 0.5rem;
+    max-width: 100px; /* Even smaller columns */
+  }
+}
+
+@media (max-width: 400px) {
+  #transactionsTable th,
+  #transactionsTable td {
+    padding: 0.3rem 0.4rem;
+    font-size: 0.8rem;
+    max-width: 80px; /* Smallest size for tiny screens */
   }
 }
