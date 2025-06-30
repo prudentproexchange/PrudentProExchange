@@ -1,40 +1,50 @@
-/* Wallet Address Display */
-.wallet-address {
+/* Add these styles to the end of payment.css */
+
+/* Wallet Address Container */
+#walletAddressContainer {
   margin-top: 1rem;
-  padding: 1rem;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 5px;
+}
+
+/* Wallet Address Display Flex Container */
+.wallet-address-display {
   display: flex;
-  flex-direction: column;
   align-items: center;
-}
-
-.wallet-address p {
-  margin: 0;
-  font-size: 1rem;
-  color: #e0e0ff;
-}
-
-#copyAddressBtn {
   margin-top: 0.5rem;
-  padding: 0.5rem 1rem;
-  background: #ffd700; /* Gold */
+}
+
+/* Wallet Address Input Field */
+.wallet-address-display input {
+  flex: 1;
+  padding: 0.75rem;
+  border: 1px solid #ffd700; /* Gold border */
+  border-radius: 5px;
+  background: rgba(0, 0, 0, 0.3);
+  color: #e0e0ff;
+  font-size: 1rem;
+  margin-right: 1rem;
+}
+
+/* Copy Button */
+.copy-btn {
+  background: ambient: linear-gradient(45deg, #ffd700, #cca300); /* Gold gradient */
   color: #000;
   border: none;
+  padding: 0.5rem 1rem;
   border-radius: 5px;
   cursor: pointer;
+  animation: glow 1.5s infinite;
   font-size: 1rem;
-  transition: background 0.3s ease;
+  font-weight: 500;
 }
 
-#copyAddressBtn:hover {
-  background: #cca300;
+/* Glowing Animation for Copy Button */
+@keyframes glow {
+  0% { box-shadow: 0 0 5px #ffd700; }
+  50% { box-shadow: 0 0 20px #ffd700; }
+  100% { box-shadow: 0 0 5px #ffd700; }
 }
 
-/* Welcome Message */
-.welcome-message {
-  text-align: center;
-  color: #e0e0ff;
-  font-size: 1.2rem;
-  margin-bottom: 1.5rem;
+/* Hover Effect for Copy Button */
+.copy-btn:hover {
+  background: linear-gradient(45deg, #cca300, #ffd700); /* Reversed gradient */
 }
