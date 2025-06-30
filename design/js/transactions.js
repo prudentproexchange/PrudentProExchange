@@ -70,10 +70,28 @@ async function loadTransactions() {
   if (!session) return window.location.href = 'login.html';
   const userId = session.user.id;
 
-  // (Optional) load profile for welcome name, etc.
-  // …your existing profile logic…
+  // Load profile for welcome name and photo (mirrors invest page)
+  const { data: profile, error: profileError } = await supabaseClient
+    .from('profiles')
+    .select('*')
+    .eq('id', userId)
+    .single();
+  if (profileError) {
+    console.error('Error loading profile:', profileError);
+    document.getElementById('welcomeName').textContent = 'User';
+  } else {
+    document.getElementById('welcomeName').textContent = profile.first_name || 'User';
+    if (profile.photo_url) {
+      const { data: urlData } = supabaseClient.storage
+        .from('profile-photos')
+        .getPublicUrl(profile.photo_url);
+      document.getElementById('navProfilePhoto').src = urlData.publicUrl;
+      document.getElementById('navProfilePhoto').style.display = 'block';
+      document.getElementById('defaultProfileIcon').style.display = 'none';
+    }
+  }
 
-  // Fetch transfers—note: no `reason` column
+  // Fetch transfers
   const { data: transfers, error } = await supabaseClient
     .from('transfers')
     .select(`
@@ -100,7 +118,7 @@ async function loadTransactions() {
   }
 
   const tbody = document.querySelector('#transactionsTable tbody');
-  tbody.innerHTML = ''; // clear out old rows
+  tbody.innerHTML = ''; // Clear out old rows
 
   const statusIcon = {
     pending: '<i class="fas fa-clock"></i>',
@@ -172,7 +190,7 @@ document.querySelectorAll('#transactionsTable th[data-sort]').forEach(th => {
           : B.localeCompare(A);
       })
       .forEach(row => tbody.appendChild(row));
-    table.querySelectorAll('th').forEach(h => h.classList.remove('asc','desc'));
+    table.querySelectorAll('th').forEach(h => h.classList.remove('asc', 'desc'));
     th.classList.add(asc ? 'asc' : 'desc');
   });
 });
