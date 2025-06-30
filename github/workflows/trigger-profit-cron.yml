@@ -1,0 +1,15 @@
+name: Daily Profit Transfer
+
+on:
+  schedule:
+    - cron: '0 3 * * *'  # Runs daily at 03:00 UTC
+  workflow_dispatch:
+
+jobs:
+  call-profit-function:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Trigger Profit Transfer
+        run: |
+          curl -s -X GET "https://ornate-rolypoly-7f74cc.netlify.app/.netlify/functions/transfer-profits"
