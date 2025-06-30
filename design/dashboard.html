@@ -10,6 +10,33 @@
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <style>
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .loading-spinner {
+      border: 4px solid rgba(255, 255, 255, 0.3);
+      border-top: 4px solid var(--primary);
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .error-message {
+      color: #ff4444;
+      background: rgba(255, 0, 0, 0.1);
+      padding: 10px;
+      border-radius: 5px;
+      margin: 10px 0;
+      display: none;
+    }
+  </style>
 </head>
 <body class="dashboard-page">
   <!-- Video Background -->
@@ -70,7 +97,7 @@
         <!-- Investments Dashboard -->
         <div class="card investment-card" data-aos="zoom-in">
           <h2>Investments Dashboard</h2>
-          <div id="investments-container"></div>
+          <div id="investments-container" aria-live="polite"></div>
           <div id="no-investments" style="display: none;">
             <p>No active investments currently.</p>
             <select id="invest-option" style="margin: 1rem 0; padding: 0.5rem; background: rgba(0, 0, 0, 0.5); border: 1px solid var(--primary); color: #fff; border-radius: 5px; font-size: 0.9rem;">
@@ -80,6 +107,8 @@
             </select>
             <a href="#" class="btn" id="invest-now-btn">Invest Now</a>
           </div>
+          <div class="loading-spinner" id="investments-loading" style="display: none;"></div>
+          <div class="error-message" id="investments-error"></div>
         </div>
 
         <div class="card how-it-works" data-aos="zoom-in">
@@ -103,32 +132,32 @@
             <input type="text" id="affiliateLink" readonly/>
             <button class="copy-btn" title="Copy referral link" aria-label="Copy referral link"><i class="fas fa-copy"></i> Copy</button>
           </div>
-          <p>Referral Earnings: $<span id="refEarnings">0.00</span></p>
+          <p>Referral Earnings: <span id="refEarnings">0.00</span></p>
         </div>
 
         <div class="card deposit-wallet" data-aos="zoom-in">
           <h2>Deposit Wallet</h2>
-          $<span id="depositWallet">0.00</span>
-          <p>Total Deposits: $<span id="totalDeposits">0.00</span></p>
+          <span id="depositWallet">0.00</span>
+          <p>Total Deposits: <span id="totalDeposits">0.00</span></p>
           <a href="deposit.html" class="btn">Add Funds</a>
         </div>
 
         <div class="card interest-wallet" data-aos="zoom-in">
           <h2>Interest Wallet</h2>
-          $<span id="interestWallet">0.00</span>
-          <p>Total Withdrawals: $<span id="totalWithdrawals">0.00</span></p>
+          <span id="interestWallet">0.00</span>
+          <p>Total Withdrawals: <span id="totalWithdrawals">0.00</span></p>
           <a href="withdraw.html" class="btn">Withdraw Funds</a>
         </div>
 
         <div class="card account-balance" data-aos="zoom-in">
           <h2>Account Balance</h2>
-          $<span id="accountBalance">0.00</span>
+          <span id="accountBalance">0.00</span>
           <a href="withdraw.html" class="btn">Withdraw Funds</a>
         </div>
 
         <div class="card investments" data-aos="zoom-in">
-          <h2>Total Invested: $<span id="totalInvested">0.00</span></h2>
-          <p>Promotional Offer: $<span id="promoOffer">0.00</span> (<span id="promoPct">0</span>%)</p>
+          <h2>Total Invested: <span id="totalInvested">0.00</span></h2>
+          <p>Promotional Offer: <span id="promoOffer">0.00</span> (<span id="promoPct">0</span>%)</p>
           <a href="promo.html" class="btn">Claim Offer</a>
         </div>
       </section>
@@ -145,10 +174,10 @@
               <th>Status</th>
             </tr>
           </thead>
-ására
-
           <tbody></tbody>
         </table>
+        <div class="loading-spinner" id="tx-loading" style="display: none;"></div>
+        <div class="error-message" id="tx-error"></div>
       </details>
     </main>
 
@@ -261,10 +290,28 @@
     let investmentIntervals = [];
     let isDashboardLoading = false;
 
+    // Utility functions
+    function formatCurrency(amount) {
+      return amount.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+    }
+
+    function showError(elementId, message) {
+      const errorDiv = document.getElementById(elementId);
+      errorDiv.textContent = message;
+      errorDiv.style.display = 'block';
+      setTimeout(() => errorDiv.style.display = 'none', 5000);
+    }
+
     // Initialize dashboard
     async function initDashboard() {
       if (isDashboardLoading) return;
       isDashboardLoading = true;
+
+      const investmentsLoading = document.getElementById('investments-loading');
+      const txLoading = document.getElementById('tx-loading');
+      investmentsLoading.style.display = 'block';
+      txLoading.style.display = 'block';
+
       try {
         clearAllInvestmentIntervals();
 
@@ -292,12 +339,12 @@
         }
 
         document.getElementById('affiliateLink').value = profile.referral_link || '';
-        document.getElementById('refEarnings').textContent = (profile.referral_earnings || 0).toFixed(2);
-        document.getElementById('depositWallet').textContent = (profile.deposit_wallet || 0).toFixed(2);
-        document.getElementById('totalDeposits').textContent = (profile.total_deposits || 0).toFixed(2);
-        document.getElementById('interestWallet').textContent = (profile.interest_wallet || 0).toFixed(2);
-        document.getElementById('totalWithdrawals').textContent = (profile.total_withdrawals || 0).toFixed(2);
-        document.getElementById('accountBalance').textContent = (profile.account_balance || 0).toFixed(2);
+        document.getElementById('refEarnings').textContent = formatCurrency(profile.referral_earnings || 0);
+        document.getElementById('depositWallet').textContent = formatCurrency(profile.deposit_wallet || 0);
+        document.getElementById('totalDeposits').textContent = formatCurrency(profile.total_deposits || 0);
+        document.getElementById('interestWallet').textContent = formatCurrency(profile.interest_wallet || 0);
+        document.getElementById('totalWithdrawals').textContent = formatCurrency(profile.total_withdrawals || 0);
+        document.getElementById('accountBalance').textContent = formatCurrency(profile.account_balance || 0);
 
         const { data: allInvestments, error: allInvError } = await supabaseClient
           .from('investments')
@@ -305,16 +352,16 @@
           .eq('user_id', user.id);
         if (allInvError) throw allInvError;
         const totalEverInvested = allInvestments.reduce((acc, inv) => acc + inv.principal, 0);
-        document.getElementById('totalInvested').textContent = totalEverInvested.toFixed(2);
+        document.getElementById('totalInvested').textContent = formatCurrency(totalEverInvested);
 
-        document.getElementById('promoOffer').textContent = (profile.promo_offer || 0).toFixed(2);
+        document.getElementById('promoOffer').textContent = formatCurrency(profile.promo_offer || 0);
         document.getElementById('promoPct').textContent = profile.promo_pct || 0;
 
         const { data: investments, error: invError } = await supabaseClient
           .from('investments')
           .select('*, plan:investment_plans(name)')
           .eq('user_id', user.id)
-          .gt('end_time', new Date().toISOString())
+          .in('status', ['active', 'profit_ready'])
           .order('start_time', { ascending: false });
         if (invError) throw invError;
 
@@ -328,21 +375,27 @@
           investments.forEach(investment => {
             const investmentDiv = document.createElement('div');
             investmentDiv.className = 'investment-item';
-            investmentDiv.innerHTML = `
-              <p>Plan: <span>${investment.plan ? investment.plan.name : 'Unknown'}</span></p>
-              <p>Invested Amount: $<span>${investment.principal.toFixed(2)}</span></p>
-              <p>Current Profit: $<span class="current-profit">0.00</span></p>
-              <p>Time Remaining: <span class="time-left"></span></p>
-            `;
 
             const now = new Date();
             const start = new Date(investment.start_time);
+            const end = new Date(investment.end_time);
             const msSinceStart = now - start;
             const daysSinceStart = msSinceStart / (1000 * 60 * 60 * 24);
-            const canWithdraw = daysSinceStart >= 14;
-            const canReinvest = daysSinceStart >= 7 && daysSinceStart <= 120;
+            const daysSinceEnd = (now - end) / (1000 * 60 * 60 * 24);
+            const canWithdraw = daysSinceStart >= 14 && investment.status === 'active';
+            const canReinvest = daysSinceStart >= 7 && daysSinceStart <= 120 && investment.status === 'active';
 
-            investmentDiv.innerHTML += `
+            let profitButtonHtml = '';
+            if (investment.status === 'profit_ready' && daysSinceEnd >= 14) {
+              profitButtonHtml = `<button class="claim-profit-btn">Claim Profit</button>`;
+            }
+
+            investmentDiv.innerHTML = `
+              <p>Plan: <span>${investment.plan ? investment.plan.name : 'Unknown'}</span></p>
+              <p>Invested Amount: <span>${formatCurrency(investment.principal)}</span></p>
+              <p>Current Profit: <span class="current-profit">${formatCurrency(0)}</span></p>
+              <p>Time Remaining: <span class="time-left"></span></p>
+              ${profitButtonHtml}
               <button class="withdraw-btn" ${canWithdraw ? '' : 'disabled'}>Withdraw Capital</button>
               <button class="reinvest-btn" ${canReinvest ? '' : 'disabled'}>Reinvest</button>
             `;
@@ -353,32 +406,72 @@
             const withdrawBtn = investmentDiv.querySelector('.withdraw-btn');
             withdrawBtn.addEventListener('click', async () => {
               if (!canWithdraw) return;
-              const principal = investment.principal;
-              const currentAccount = parseFloat(document.getElementById('accountBalance').textContent);
-              const newAccount = currentAccount + principal;
-              document.getElementById('accountBalance').textContent = newAccount.toFixed(2);
-              await supabaseClient
-                .from('profiles')
-                .update({ account_balance: newAccount })
-                .eq('id', user.id);
-              await supabaseClient
-                .from('investments')
-                .update({ status: 'withdrawn' })
-                .eq('id', investment.id);
-              investmentDiv.innerHTML += '<p>Capital withdrawn.</p>';
-              withdrawBtn.disabled = true;
+              if (!confirm('Are you sure you want to withdraw your capital?')) return;
+              try {
+                const { error } = await supabaseClient.rpc('transfer_profit_to_account', {
+                  user_uuid: user.id,
+                  invest_id: investment.id,
+                  profit_amount: investment.total_profit
+                });
+                if (error) throw error;
+
+                const currentAccount = parseFloat(document.getElementById('accountBalance').textContent.replace(/[^0-9.-]+/g, ''));
+                const newAccount = currentAccount + investment.principal;
+                document.getElementById('accountBalance').textContent = formatCurrency(newAccount);
+
+                await supabaseClient
+                  .from('investments')
+                  .update({ status: 'withdrawn' })
+                  .eq('id', investment.id);
+
+                investmentDiv.innerHTML += '<p>Capital withdrawn.</p>';
+                withdrawBtn.disabled = true;
+              } catch (err) {
+                showError('investments-error', 'Error withdrawing capital: ' + err.message);
+              }
             });
 
             const reinvestBtn = investmentDiv.querySelector('.reinvest-btn');
             reinvestBtn.addEventListener('click', async () => {
               if (!canReinvest) return;
-              console.log('Reinvesting investment:', investment.id);
-              // Placeholder: Add reinvestment logic here
+              if (!confirm('Do you want to reinvest your capital and profits into a new investment?')) return;
+              try {
+                const { data, error } = await supabaseClient.rpc('reinvest_investment', {
+                  user_uuid: user.id,
+                  old_investment_id: investment.id,
+                  reinvest_amount: investment.principal + investment.total_profit
+                });
+                if (error) throw error;
+                alert('Reinvestment successful!');
+                await initDashboard();
+              } catch (err) {
+                showError('investments-error', 'Error during reinvestment: ' + err.message);
+              }
             });
+
+            const claimProfitBtn = investmentDiv.querySelector('.claim-profit-btn');
+            if (claimProfitBtn) {
+              claimProfitBtn.addEventListener('click', async () => {
+                if (!confirm('Are you sure you want to claim your profit?')) return;
+                try {
+                  const { error } = await supabaseClient.rpc('transfer_profit_to_account', {
+                    user_uuid: user.id,
+                    invest_id: investment.id,
+                    profit_amount: investment.total_profit
+                  });
+                  if (error) throw error;
+                  claimProfitBtn.disabled = true;
+                  claimProfitBtn.textContent = 'Profit Claimed';
+                  await initDashboard();
+                } catch (err) {
+                  showError('investments-error', 'Error claiming profit: ' + err.message);
+                }
+              });
+            }
           });
           container.appendChild(fragment);
         } else {
-          noInvestmentsElement.style.display = 'block';
+          noInvestmentsDiv.style.display = 'block';
         }
 
         const { data: txns, error: txnsError } = await supabaseClient
@@ -395,16 +488,18 @@
             <tr>
               <td>${new Date(t.created_at).toLocaleString()}</td>
               <td>${t.type}</td>
-              <td>$${t.amount.toFixed(2)}</td>
+              <td>${formatCurrency(t.amount)}</td>
               <td>${t.status}</td>
             </tr>
           `);
         });
       } catch (error) {
         console.error('Dashboard initialization error:', error);
-        alert('An error occurred while loading the dashboard.');
+        showError('investments-error', 'An error occurred while loading the dashboard.');
       } finally {
         isDashboardLoading = false;
+        investmentsLoading.style.display = 'none';
+        txLoading.style.display = 'none';
       }
     }
 
@@ -420,44 +515,34 @@
 
       const updateInvestment = async () => {
         const now = new Date();
-        if (now >= endTime) {
-          currentProfitSpan.textContent = total_profit.toFixed(2);
+        if (now >= endTime && investment.status === 'active') {
+          currentProfitSpan.textContent = formatCurrency(total_profit);
           timeLeftSpan.textContent = '0d 0h 0m 0s';
           if (!investment.completed) {
             investment.completed = true;
             const message = document.createElement('p');
-            message.textContent = 'Investment cycle completed. Profits have been transferred to your Interest Wallet.';
+            message.textContent = 'Investment cycle completed. Profits are ready to be claimed after 14 days.';
             investmentDiv.appendChild(message);
 
-            const currentInterest = parseFloat(document.getElementById('interestWallet').textContent);
+            const currentInterest = parseFloat(document.getElementById('interestWallet').textContent.replace(/[^0-9.-]+/g, ''));
             const newInterest = currentInterest + total_profit;
-            document.getElementById('interestWallet').textContent = newInterest.toFixed(2);
+            document.getElementById('interestWallet').textContent = formatCurrency(newInterest);
 
             await supabaseClient
               .from('profiles')
               .update({ interest_wallet: newInterest })
               .eq('id', investment.user_id);
 
-            setTimeout(async () => {
-              const currentInterestAfter14d = parseFloat(document.getElementById('interestWallet').textContent);
-              const currentAccount = parseFloat(document.getElementById('accountBalance').textContent);
-              const updatedInterest = currentInterestAfter14d - total_profit;
-              const updatedAccount = currentAccount + total_profit;
-
-              document.getElementById('interestWallet').textContent = updatedInterest.toFixed(2);
-              document.getElementById('accountBalance').textContent = updatedAccount.toFixed(2);
-
-              await supabaseClient
-                .from('profiles')
-                .update({ interest_wallet: updatedInterest, account_balance: updatedAccount })
-                .eq('id', investment.user_id);
-            }, 14 * 24 * 60 * 60 * 1000);
+            await supabaseClient
+              .from('investments')
+              .update({ status: 'profit_ready' })
+              .eq('id', investment.id);
           }
           clearInterval(interval);
-        } else {
+        } else if (investment.status === 'active') {
           const elapsedSeconds = (now - startTime) / 1000;
           const currentProfit = Math.min(elapsedSeconds * profitPerSecond, total_profit);
-          currentProfitSpan.textContent = currentProfit.toFixed(2);
+          currentProfitSpan.textContent = formatCurrency(currentProfit);
           const timeLeftMs = endTime - now;
           timeLeftSpan.textContent = formatTimeLeft(timeLeftMs);
         }
@@ -482,27 +567,91 @@
       investmentIntervals = [];
     }
 
+    // Real-time subscriptions
+    async function setupRealtimeSubscriptions(userId) {
+      const investmentSubscription = supabaseClient
+        .channel(`investments:user_id=eq.${userId}`)
+        .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'investments', filter: `user_id=eq.${userId}` }, payload => {
+          console.log('Investment updated:', payload.new);
+          refreshSingleInvestment(payload.new);
+        })
+        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'investments', filter: `user_id=eq.${userId}` }, payload => {
+          console.log('New investment:', payload.new);
+          addNewInvestment(payload.new);
+        })
+        .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'investments', filter: `user_id=eq.${userId}` }, payload => {
+          console.log('Investment deleted:', payload.old);
+          removeInvestment(payload.old.id);
+        })
+        .subscribe();
+
+      window.addEventListener('beforeunload', () => {
+        supabaseClient.removeChannel(investmentSubscription);
+      });
+    }
+
+    function refreshSingleInvestment(investment) {
+      const investmentDiv = document.querySelector(`.investment-item[data-id="${investment.id}"]`);
+      if (investmentDiv) {
+        // Update existing investment UI
+        const currentProfitSpan = investmentDiv.querySelector('.current-profit');
+        const timeLeftSpan = investmentDiv.querySelector('.time-left');
+        currentProfitSpan.textContent = formatCurrency(investment.total_profit || 0);
+        timeLeftSpan.textContent = investment.status === 'profit_ready' ? 'Completed' : formatTimeLeft(new Date(investment.end_time) - new Date());
+      }
+    }
+
+    function addNewInvestment(investment) {
+      const container = document.getElementById('investments-container');
+      const noInvestmentsDiv = document.getElementById('no-investments');
+      if (noInvestmentsDiv.style.display !== 'none') {
+        noInvestmentsDiv.style.display = 'none';
+      }
+      const investmentDiv = document.createElement('div');
+      investmentDiv.className = 'investment-item';
+      investmentDiv.dataset.id = investment.id;
+      investmentDiv.innerHTML = `
+        <p>Plan: <span>${investment.plan ? investment.plan.name : 'Unknown'}</span></p>
+        <p>Invested Amount: <span>${formatCurrency(investment.principal)}</span></p>
+        <p>Current Profit: <span class="current-profit">${formatCurrency(0)}</span></p>
+        <p>Time Remaining: <span class="time-left"></span></p>
+      `;
+      container.appendChild(investmentDiv);
+      startInvestmentCalculator(investment, investmentDiv);
+    }
+
+    function removeInvestment(investmentId) {
+      const investmentDiv = document.querySelector(`.investment-item[data-id="${investmentId}"]`);
+      if (investmentDiv) investmentDiv.remove();
+      if (!document.querySelector('.investment-item')) {
+        document.getElementById('no-investments').style.display = 'block';
+      }
+    }
+
+    // Logout
     document.getElementById('logout-btn').addEventListener('click', async () => {
       const { error } = await supabaseClient.auth.signOut();
       if (!error) window.location.href = 'login.html';
-      else alert('Error logging out: ' + error.message);
+      else showError('investments-error', 'Error logging out: ' + error.message);
     });
 
+    // Invest now button
     document.getElementById('invest-now-btn').addEventListener('click', (e) => {
       e.preventDefault();
       const investOption = document.getElementById('invest-option').value;
       if (!investOption) {
-        alert('Please select an investment option.');
+        showError('investments-error', 'Please select an investment option.');
         return;
       }
       window.location.href = investOption === 'accountbalance' ? 'accountbalance.html' : 'invest.html';
     });
 
-    initDashboard();
-    setInterval(() => {
-      console.log('Refreshing investments list...');
-      initDashboard();
-    }, 60000);
+    // Initialize and setup subscriptions
+    (async () => {
+      await initDashboard();
+      const { data: { user } } = await supabaseClient.auth.getUser();
+      if (user) setupRealtimeSubscriptions(user.id);
+    })();
 
     const video = document.querySelector('.bg-video');
     video.addEventListener('canplay', () => {
