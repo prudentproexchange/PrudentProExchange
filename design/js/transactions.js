@@ -1,263 +1,230 @@
-/* Profile Section */
-.profile-section {
-  display: flex;
-  align-items: center;
-  padding: 1.5rem 2rem;
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+// Initialize AOS animations
+AOS.init({ duration: 800, once: true });
+
+// Supabase client
+const { createClient } = supabase;
+const supabaseClient = createClient(
+  'https://iwkdznjqfbsfkscnbrkc.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU'
+);
+
+// Common UI initialization (hamburger, theme toggle, clock, back-to-top)
+function initCommonUI() {
+  const hamburgerBtn = document.getElementById('hamburgerBtn');
+  const navDrawer = document.getElementById('navDrawer');
+  const overlay = document.querySelector('.nav-overlay');
+  hamburgerBtn.addEventListener('click', () => {
+    navDrawer.classList.toggle('open');
+    hamburgerBtn.classList.toggle('active');
+    overlay.classList.toggle('nav-open');
+    if (navDrawer.classList.contains('open')) navDrawer.scrollTop = 0;
+  });
+  document.addEventListener('click', event => {
+    if (!navDrawer.contains(event.target) && !hamburgerBtn.contains(event.target) && navDrawer.classList.contains('open')) {
+      navDrawer.classList.remove('open');
+      hamburgerBtn.classList.remove('active');
+      overlay.classList.remove('nav-open');
+    }
+  });
+
+  const themeToggle = document.getElementById('theme-toggle');
+  themeToggle.addEventListener('click', () => {
+    document.body.classList.toggle('light-theme');
+    const icon = themeToggle.querySelector('i');
+    icon.classList.toggle('fa-moon');
+    icon.classList.toggle('fa-sun');
+  });
+
+  const accountToggle = document.getElementById('account-toggle');
+  const submenu = accountToggle.nextElementSibling;
+  accountToggle.addEventListener('click', e => {
+    e.preventDefault();
+    submenu.classList.toggle('open');
+  });
+
+  document.getElementById('back-to-top').addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  function updateLocalTime() {
+    const now = new Date();
+    document.getElementById('localTime').textContent = now.toLocaleTimeString();
+    document.getElementById('localDate').textContent = now.toLocaleDateString('en-US', {
+      weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+    });
+  }
+  function updateUTCTime() {
+    document.getElementById('utcTime').textContent = new Date().toUTCString();
+  }
+  setInterval(updateLocalTime, 1000);
+  setInterval(updateUTCTime, 1000);
+  updateLocalTime();
+  updateUTCTime();
 }
+initCommonUI();
 
-.profile-container {
-  margin-right: 1rem;
-}
+// Fetch and render transactions
+async function loadTransactions() {
+  // Auth check
+  const { data: { session } } = await supabaseClient.auth.getSession();
+  if (!session) return window.location.href = 'login.html';
+  const userId = session.user.id;
 
-.avatar {
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  border: 2px solid #ffd700; /* Gold */
-  background: #000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 120px;
-  color: #ffd700; /* Gold */
-  object-fit: cover;
-  transition: transform 0.3s ease;
-}
-
-.avatar:hover {
-  transform: scale(1.05);
-}
-
-.welcome-message {
-  font-size: 1.5rem;
-  color: #ffd700; /* Gold */
-  font-family: 'Playfair Display', serif;
-}
-
-/* Transactions Section */
-.transactions-section {
-  background: rgba(255, 255, 255, 0.05); /* Increased transparency */
-  padding: 1rem; /* Reduced padding */
-  border-radius: 20px; /* Smoother corners */
-  backdrop-filter: blur(20px); /* Enhanced blur for beauty */
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5); /* Deeper shadow */
-  margin: 2rem auto;
-  max-width: 100%; /* Changed to match footer */
-  transition: all 0.3s ease;
-}
-
-.transactions-section:hover {
-  box-shadow: 0 15px 50px rgba(255, 215, 0, 0.3); /* Subtle gold glow on hover */
-}
-
-.transactions-section h2 {
-  font-size: 2.5rem;
-  color: #ffd700; /* Gold */
-  margin-bottom: 1.5rem;
-  text-align: center;
-  font-family: 'Playfair Display', serif;
-  text-shadow: 0 0 15px rgba(255, 215, 0, 0.6); /* Enhanced glow */
-}
-
-.filter-bar {
-  margin-bottom: 1rem;
-  text-align: right;
-}
-
-.filter-bar select {
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  border: 1px solid #ffd700; /* Gold */
-  background: rgba(255, 255, 255, 0.15);
-  color: #e0e0ff;
-  font-size: 0.95rem;
-  transition: all 0.3s ease;
-}
-
-.filter-bar select:focus {
-  border-color: #cca300;
-  background: rgba(255, 255, 255, 0.25);
-  outline: none;
-}
-
-/* Transparent Card Design */
-.table-card {
-  background: rgba(255, 255, 255, 0.05); /* More transparency */
-  border: 2px solid rgba(255, 215, 0, 0.7); /* Bolder gold border */
-  border-radius: 20px; /* Rounded corners */
-  padding: 0.8rem; /* Reduced padding */
-  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.4), inset 0 0 10px rgba(255, 215, 0, 0.2); /* Inner glow */
-  backdrop-filter: blur(25px); /* Stronger blur */
-  transition: all 0.3s ease;
-  max-width: 100%;
-}
-
-.table-card:hover {
-  box-shadow: 0 10px 35px rgba(255, 215, 0, 0.5), inset 0 0 15px rgba(255, 215, 0, 0.3);
-}
-
-.table-wrapper {
-  overflow-x: auto; /* Enables horizontal scrolling */
-  -webkit-overflow-scrolling: touch; /* Smooth scrolling on mobile */
-  position: relative; /* For positioning the arrow */
-}
-
-.table-wrapper::after {
-  content: '➡️'; /* Right arrow to indicate scrollability */
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 1.5rem;
-  color: #ffd700; /* Gold to match theme */
-  pointer-events: none; /* Ensures arrow doesn’t interfere with scrolling */
-}
-
-#transactionsTable {
-  width: 100%;
-  min-width: 1000px; /* Forces horizontal scrolling on smaller screens */
-  border-collapse: separate;
-  border-spacing: 0;
-  font-size: 0.9rem; /* Slightly smaller text */
-}
-
-#transactionsTable th,
-#transactionsTable td {
-  padding: 0.6rem 0.8rem; /* Smaller padding for compactness */
-  text-align: left;
-  border-bottom: 1px solid rgba(255, 215, 0, 0.15);
-  color: #e0e0ff;
-  white-space: nowrap; /* Prevent text wrapping */
-  overflow: hidden;
-  text-overflow: ellipsis; /* Truncate long text */
-  max-width: 150px; /* Limit column width */
-}
-
-#transactionsTable th {
-  background: linear-gradient(135deg, #ffd700, #cca300); /* Vibrant gradient */
-  color: #1a1a1a; /* Darker text for contrast */
-  font-weight: 600;
-  position: sticky;
-  top: 0;
-  z-index: 1;
-}
-
-#transactionsTable th i {
-  margin-left: 0.4rem;
-  font-size: 0.7rem;
-  color: #1a1a1a;
-}
-
-#transactionsTable tbody tr {
-  transition: all 0.3s ease;
-}
-
-#transactionsTable tbody tr:hover {
-  background: rgba(255, 215, 0, 0.15);
-  transform: scale(1.02); /* Subtle zoom on hover */
-}
-
-.badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.3rem 0.7rem;
-  border-radius: 15px;
-  font-size: 0.8rem;
-  font-weight: 500;
-  text-transform: capitalize;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-}
-
-.badge.pending { background-color: #FFF3CD; color: #856404; }
-.badge.approved { background-color: #D4EDDA; color: #155724; }
-.badge.failed { background-color: #F8D7DA; color: #721C24; }
-
-/* Error Banner */
-.error-banner {
-  background-color: #f8d7da;
-  color: #721c24;
-  padding: 1rem;
-  border-radius: 6px;
-  margin-bottom: 1rem;
-  font-weight: 500;
-}
-
-/* Background Video */
-.bg-video {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: -1;
-  filter: brightness(0.8); /* Slightly darkened for contrast */
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-  .profile-section {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 1rem;
+  // Load profile for welcome name and photo
+  const { data: profile, error: profileError } = await supabaseClient
+    .from('profiles')
+    .select('*')
+    .eq('id', userId)
+    .single();
+  if (profileError) {
+    console.error('Error loading profile:', profileError);
+    document.getElementById('welcomeName').textContent = 'User';
+  } else {
+    document.getElementById('welcomeName').textContent = profile.first_name || 'User';
+    if (profile.photo_url) {
+      const { data: urlData } = supabaseClient.storage
+        .from('profile-photos')
+        .getPublicUrl(profile.photo_url);
+      document.getElementById('navProfilePhoto').src = urlData.publicUrl;
+      document.getElementById('navProfilePhoto').style.display = 'block';
+      document.getElementById('defaultProfileIcon').style.display = 'none';
+    }
   }
 
-  .profile-container {
-    margin-right: 0;
-    margin-bottom: 0.5rem;
+  // Fetch transfers
+  const { data: transfers, error } = await supabaseClient
+    .from('transfers')
+    .select(`
+      id,
+      sender_id,
+      sender_email,
+      recipient_id,
+      recipient_email,
+      amount,
+      status,
+      memo,
+      created_at
+    `)
+    .or(`sender_id.eq.${userId},recipient_id.eq.${userId}`)
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error('Error fetching transactions:', error);
+    const banner = document.createElement('div');
+    banner.className = 'error-banner';
+    banner.textContent = `Error loading transactions: ${error.message}`;
+    document.querySelector('.transactions-section').prepend(banner);
+    return;
   }
 
-  .avatar {
-    width: 120px;
-    height: 120px;
-    font-size: 72px;
-  }
+  const tbody = document.querySelector('#transactionsTable tbody');
+  tbody.innerHTML = ''; // Clear out old rows
 
-  .welcome-message {
-    font-size: 1.2rem;
-  }
+  const statusIcon = {
+    pending: '<i class="fas fa-clock"></i>',
+    approved: '<i class="fas fa-check"></i>',
+    failed: '<i class="fas fa-times"></i>'
+  };
 
-  .transactions-section {
-    padding: 0.8rem;
-    max-width: 100%;
-    margin: 1.5rem auto;
-  }
+  transfers.forEach(tx => {
+    const isSender = tx.sender_id === userId;
+    const counterEmail = isSender ? tx.recipient_email : tx.sender_email;
+    const directionIcon = isSender
+      ? '<i class="fas fa-arrow-up"></i>'
+      : '<i class="fas fa-arrow-down"></i>';
+    const dt = new Date(tx.created_at);
+    const dateStr = dt.toLocaleDateString('en-US', {
+      year: 'numeric', month: 'short', day: 'numeric',
+      hour: '2-digit', minute: '2-digit'
+    });
 
-  .transactions-section h2 {
-    font-size: 2rem;
-  }
+    const tr = document.createElement('tr');
+    tr.setAttribute('data-id', tx.id); // Add data-id for real-time updates
+    tr.innerHTML = `
+      <td>${dateStr}</td>
+      <td>${directionIcon} ${counterEmail}</td>
+      <td>$${tx.amount.toFixed(2)}</td>
+      <td><span class="badge ${tx.status}">${statusIcon[tx.status]} ${tx.status}</span></td>
+      <td>${tx.memo || ''}</td>
+      <td>—</td>
+    `;
+    tbody.appendChild(tr);
+  });
 
-  #transactionsTable th,
-  #transactionsTable td {
-    padding: 0.5rem 0.6rem;
-    font-size: 0.85rem;
-    max-width: 120px; /* Smaller columns */
+  // Set up real-time subscription for updates
+  supabaseClient
+    .channel('transfers')
+    .on('postgres_changes', {
+      event: 'UPDATE',
+      schema: 'public',
+      table: 'transfers'
+    }, payload => {
+      const updatedTx = payload.new;
+      const isRelevant = updatedTx.sender_id === userId || updatedTx.recipient_id === userId;
+      if (isRelevant) {
+        updateTransactionRow(updatedTx);
+      }
+    })
+    .subscribe();
+}
+
+// Function to update a transaction row in real-time
+function updateTransactionRow(tx) {
+  const row = document.querySelector(`#transactionsTable tbody tr[data-id="${tx.id}"]`);
+  if (row) {
+    const statusCell = row.cells[3]; // 4th column: Status
+    const memoCell = row.cells[4]; // 5th column: Memo
+    const statusIcon = {
+      pending: '<i class="fas fa-clock"></i>',
+      approved: '<i class="fas fa-check"></i>',
+      failed: '<i class="fas fa-times"></i>'
+    };
+    statusCell.innerHTML = `<span class="badge ${tx.status}">${statusIcon[tx.status]} ${tx.status}</span>`;
+    memoCell.textContent = tx.memo || ''; // Update memo (e.g., rejection reason)
   }
 }
 
-@media (max-width: 600px) {
-  #transactionsTable th:nth-child(5),
-  #transactionsTable td:nth-child(5),
-  #transactionsTable th:nth-child(6),
-  #transactionsTable td:nth-child(6) {
-    display: none; /* Hide Memo & Reason */
-  }
+loadTransactions();
 
-  #transactionsTable th,
-  #transactionsTable td {
-    padding: 0.4rem 0.5rem;
-    max-width: 100px; /* Even smaller columns */
-  }
-}
+// Status filter
+document.getElementById('statusFilter').addEventListener('change', e => {
+  const val = e.target.value;
+  document.querySelectorAll('#transactionsTable tbody tr').forEach(tr => {
+    const status = tr.querySelector('.badge').textContent.split(' ').pop();
+    tr.style.display = (val === 'all' || status === val) ? '' : 'none';
+  });
+});
 
-@media (max-width: 400px) {
-  #transactionsTable th,
-  #transactionsTable td {
-    padding: 0.3rem 0.4rem;
-    font-size: 0.8rem;
-    max-width: 80px; /* Smallest size for tiny screens */
-  }
-}
+// Column sorting
+document.querySelectorAll('#transactionsTable th[data-sort]').forEach(th => {
+  th.addEventListener('click', () => {
+    const table = th.closest('table');
+    const tbody = table.querySelector('tbody');
+    const idx = Array.from(th.parentNode.children).indexOf(th);
+    const asc = !th.classList.contains('asc');
+    Array.from(tbody.rows)
+      .sort((a, b) => {
+        let A = a.cells[idx].textContent.trim();
+        let B = b.cells[idx].textContent.trim();
+        // Numeric?
+        if (!isNaN(A.replace(/[$,]/g, '')) && !isNaN(B.replace(/[$,]/g, ''))) {
+          return asc
+            ? parseFloat(A.replace(/[$,]/g, '')) - parseFloat(B.replace(/[$,]/g, ''))
+            : parseFloat(B.replace(/[$,]/g, '')) - parseFloat(A.replace(/[$,]/g, ''));
+        }
+        // Date?
+        if (Date.parse(A) && Date.parse(B)) {
+          return asc
+            ? new Date(A) - new Date(B)
+            : new Date(B) - new Date(A);
+        }
+        // Fallback string compare
+        return asc
+          ? A.localeCompare(B)
+          : B.localeCompare(A);
+      })
+      .forEach(row => tbody.appendChild(row));
+    table.querySelectorAll('th').forEach(h => h.classList.remove('asc', 'desc'));
+    th.classList.add(asc ? 'asc' : 'desc');
+  });
+});
