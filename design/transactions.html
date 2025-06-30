@@ -3,21 +3,22 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Transactions • PrudentProExchange</title>
+  <title>Transfer • PrudentProExchange</title>
   <link rel="stylesheet" href="css/style.css"/>
-  <link rel="stylesheet" href="css/transactions.css"/>
+  <link rel="stylesheet" href="css/transfer.css"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-<body class="transactions-page">
+<body class="transfer-page">
   <!-- Video Background -->
-  <video class="bg-video" autoplay muted loop playsinline>
+  <video class="bg-video" autoplay muted loop playsinline preload="auto">
     <source src="assets/videos/background.webm" type="video/webm">
     <source src="assets/videos/background.mp4" type="video/mp4">
+    Your browser does not support the video tag.
   </video>
-  
+
   <div class="overlay">
     <!-- Header -->
     <header class="site-header">
@@ -26,13 +27,15 @@
       </a>
       <div class="header-right">
         <button id="theme-toggle" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
-        <button class="hamburger" id="hamburgerBtn" aria-label="Menu"><span></span><span></span><span></span></button>
+        <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
       </div>
       <nav class="nav-drawer" id="navDrawer">
         <a href="dashboard.html">Dashboard</a>
         <a href="invest.html">Invest</a>
         <a href="withdraw.html">Withdraw</a>
-        <a href="transactions.html" class="active">Transactions</a>
+        <a href="transactions.html">Transactions</a>
         <a href="referrals.html">Referrals</a>
         <div class="account-menu">
           <a href="#" class="account-toggle" id="account-toggle">Account ▾</a>
@@ -47,50 +50,56 @@
           </ul>
         </div>
         <a href="kyc.html">KYC Verification</a>
-        <a href="transfer.html">Transfer</a>
+        <a href="transfer.html" class="active">Transfer</a>
       </nav>
-      <div class="nav-overlay"></div>
     </header>
-
-    <!-- Profile Section -->
-    <div class="profile-section">
-      <div class="profile-container">
-        <img id="navProfilePhoto" src="" alt="Profile" class="avatar" style="display: none;"/>
-        <span id="defaultProfileIcon" class="avatar">👤</span>
-      </div>
-      <div class="welcome-message">Welcome to Your Transaction History, <span id="welcomeName"></span>!</div>
-    </div>
+    <div class="nav-overlay"></div>
 
     <!-- Main Content -->
-    <main class="container" data-aos="fade-up">
-      <section class="transactions-section">
-        <h2>Your Transactions</h2>
+    <main class="transfer-page container">
+      <section class="transfer-form" data-aos="fade-up">
+        <h2>Transfer Funds</h2>
+        <form id="transferForm">
+          <div class="form-group">
+            <label for="recipientEmail">Recipient Email</label>
+            <input type="email" id="recipientEmail" name="recipientEmail" placeholder="user@example.com" required/>
+          </div>
+          <div class="form-group">
+            <label for="transferAmount">Amount (USD)</label>
+            <input type="number" id="transferAmount" name="amount" min="0.01" max="1000000" step="0.01" required/>
+          </div>
+          <div class="form-group">
+            <label for="memo">Memo (Optional)</label>
+            <input type="text" id="memo" name="memo" maxlength="100" placeholder="e.g., For rent, gift"/>
+          </div>
+          <button type="submit" class="btn submit-btn">Submit Transfer</button>
+        </form>
+      </section>
+      <section class="transactions-section" data-aos="fade-up">
+        <h2>Transfer History</h2>
         <div class="filter-bar">
-          <label>
-            Status:
-            <select id="statusFilter">
-              <option value="all">All</option>
-              <option value="pending">Pending</option>
-              <option value="approved">Approved</option>
-              <option value="failed">Failed</option>
-            </select>
-          </label>
+          <select id="statusFilter">
+            <option value="all">All Statuses</option>
+            <option value="pending">Pending</option>
+            <option value="approved">Approved</option>
+            <option value="failed">Failed</option>
+          </select>
         </div>
-        <div class="table-card" data-aos="fade-up" data-aos-delay="200">
+        <div class="table-card">
           <div class="table-wrapper">
             <table id="transactionsTable">
               <thead>
                 <tr>
-                  <th data-sort="created_at">Date & Time <i class="fas fa-sort"></i></th>
-                  <th data-sort="counterparty">Counterparty <i class="fas fa-sort"></i></th>
-                  <th data-sort="amount">Amount (USD) <i class="fas fa-sort"></i></th>
-                  <th data-sort="status">Status <i class="fas fa-sort"></i></th>
+                  <th>Date <i class="fas fa-sort"></i></th>
+                  <th>Recipient</th>
+                  <th>Amount</th>
+                  <th>Status</th>
                   <th>Memo</th>
                   <th>Reason</th>
                 </tr>
               </thead>
               <tbody>
-                <!-- Populated by JS -->
+                <!-- Populated by JavaScript -->
               </tbody>
             </table>
           </div>
@@ -99,7 +108,7 @@
     </main>
 
     <!-- Footer -->
-    <footer class="site-footer section section-dark" data-aos="fade-up">
+    <footer class="section section-dark site-footer" data-aos="fade-up">
       <div class="footer-content">
         <p class="UTC-time">UTC Time: <span id="utcTime"></span></p>
         <p class="local-time">Local Time: <span id="localTime"></span></p>
@@ -109,7 +118,7 @@
           <a href="privacy.html">Privacy Policy</a>
           <a href="terms.html">Terms & Conditions</a>
         </nav>
-        <p>© 2025 PrudentProExchange. All Rights Reserved.</p>
+        <p class="copyright">© 2025 PrudentProExchange. All Rights Reserved. SEC Registration #0001230714</p>
       </div>
     </footer>
   </div>
@@ -118,6 +127,6 @@
 
   <!-- Scripts -->
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-  <script src="js/transactions.js"></script>
+  <script src="js/transfer.js"></script>
 </body>
 </html>
