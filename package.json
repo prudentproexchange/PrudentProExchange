@@ -1,0 +1,11 @@
+{
+  "name": "prudentproexchange-functions",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "echo 'Skipping build—static site'"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.3"
+  }
+}
