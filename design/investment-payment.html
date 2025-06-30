@@ -240,7 +240,30 @@
           console.error('Upload error:', error);
           alert('Failed to upload proof of payment. Please try again.');
         } else {
-          alert(`Proof of payment for ${method} uploaded successfully!`);
+          const proofUrl = data?.path
+            ? supabaseClient.storage.from('payment-proofs').getPublicUrl(data.path).data.publicUrl
+            : null;
+
+          const amountValue = parseFloat(new URLSearchParams(window.location.search).get('amount')) || 0;
+
+          const { error: insertError } = await supabaseClient.from('investments').insert({
+            user_id: userId,
+            plan_id: null, // You can update this if you're passing a plan
+            principal: amountValue,
+            roi_pct: null, // Optional or default on backend
+            total_profit: 0,
+            completed: false,
+            payment_proof_url: proofUrl,
+            method: method,
+            status: 'pending',
+          });
+
+          if (insertError) {
+            alert('Failed to record investment: ' + insertError.message);
+            return;
+          }
+
+          alert(`Investment submitted successfully with proof of payment for ${method}. Awaiting approval.`);
           form.reset();
           document.getElementById('uploadFormContainer').style.display = 'none';
         }
