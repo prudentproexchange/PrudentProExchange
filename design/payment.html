@@ -55,52 +55,62 @@
     </header>
     <div class="nav-overlay"></div>
 
+    <!-- Profile Section -->
+    <div class="profile-section" data-aos="fade-down">
+      <div class="profile-container">
+        <img id="navProfilePhoto" src="" alt="Profile" class="avatar" style="display: none;"/>
+        <span id="defaultProfileIcon" class="avatar">👤</span>
+      </div>
+      <div class="welcome-message">Welcome to Your Payment Page, <span id="welcomeName"></span>!</div>
+    </div>
+
     <!-- Main Content -->
     <main class="payment-page container">
       <section class="payment-form" data-aos="fade-up">
-        <h2>Make a Deposit</h2>
-        <form id="paymentForm">
-          <div class="form-group">
-            <label for="cryptoSelect">Select Cryptocurrency</label>
-            <select id="cryptoSelect" name="crypto" required>
-              <option value="">-- Select --</option>
-              <option value="bitcoin">Bitcoin (BTC)</option>
-              <option value="ethereum">Ethereum (ETH)</option>
-              <option value="tether">Tether (USDT)</option>
-              <option value="usdc">USD Coin (USDC)</option>
-              <option value="binancecoin">Binance Coin (BNB)</option>
-              <option value="litecoin">Litecoin (LTC)</option>
-              <option value="tron">Tron (TRX)</option>
-              <option value="solana">Solana (SOL)</option>
-              <option value="xrp">XRP (Ripple)</option>
-            </select>
-          </div>
-          <!-- New Wallet Address Display Container -->
-          <div id="walletAddressContainer" style="display: none;">
-            <p>Send your payment to the following wallet address:</p>
-            <div class="wallet-address-display">
-              <input type="text" id="walletAddress" readonly>
-              <button id="copyButton" class="copy-btn">Copy</button>
+        <div class="card">
+          <h2>Make a Deposit</h2>
+          <form id="paymentForm">
+            <div class="form-group">
+              <label for="cryptoSelect">Select Cryptocurrency</label>
+              <select id="cryptoSelect" name="crypto" required>
+                <option value="">-- Select --</option>
+                <option value="bitcoin">Bitcoin (BTC)</option>
+                <option value="ethereum">Ethereum (ETH)</option>
+                <option value="tether">Tether (USDT)</option>
+                <option value="usdc">USD Coin (USDC)</option>
+                <option value="binancecoin">Binance Coin (BNB)</option>
+                <option value="litecoin">Litecoin (LTC)</option>
+                <option value="tron">Tron (TRX)</option>
+                <option value="solana">Solana (SOL)</option>
+                <option value="xrp">XRP (Ripple)</option>
+              </select>
             </div>
-          </div>
-          <div class="form-group">
-            <label for="email">Email Address</label>
-            <input type="email" id="email" name="email" required/>
-          </div>
-          <div class="form-group">
-            <label for="amount">Amount (USD)</label>
-            <input type="number" id="amount" name="amount" min="20" max="100000000" step="0.01" required/>
-          </div>
-          <div class="form-group">
-            <label for="proof">Proof of Payment</label>
-            <input type="file" id="proof" name="proof" accept="image/*,application/pdf" required/>
-          </div>
-          <button type="submit" class="btn submit-btn">Submit Deposit</button>
-        </form>
+            <div id="walletAddressContainer" style="display: none;">
+              <p>Send your payment to the following wallet address:</p>
+              <div class="wallet-address-display">
+                <input type="text" id="walletAddress" readonly>
+                <button id="copyButton" class="copy-btn">Copy</button>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="email">Email Address</label>
+              <input type="email" id="email" name="email" required/>
+            </div>
+            <div class="form-group">
+              <label for="amount">Amount (USD)</label>
+              <input type="number" id="amount" name="amount" min="20" max="100000000" step="0.01" required/>
+            </div>
+            <div class="form-group">
+              <label for="proof">Proof of Payment</label>
+              <input type="file" id="proof" name="proof" accept="image/*,application/pdf" required/>
+            </div>
+            <button type="submit" class="submit-btn">Submit Deposit</button>
+          </form>
+        </div>
       </section>
     </main>
 
-    <!-- Footer (Matches Deposit Page) -->
+    <!-- Footer -->
     <footer class="section section-dark site-footer" data-aos="fade-up">
       <div class="footer-content">
         <p class="UTC-time">UTC Time: <span id="utcTime"></span></p>
@@ -136,7 +146,6 @@
       }
     });
 
-    // Close Nav When Clicking Outside
     document.addEventListener('click', (event) => {
       const isClickInsideNav = navDrawer.contains(event.target);
       const isClickOnHamburger = hamburgerBtn.contains(event.target);
@@ -193,13 +202,12 @@
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU'
     );
 
-    // Fetch Wallet Address Function
+    // Fetch Wallet Address
     async function fetchWalletAddress() {
       const selectedCrypto = document.getElementById('cryptoSelect').value;
       const walletAddressContainer = document.getElementById('walletAddressContainer');
       const walletAddressInput = document.getElementById('walletAddress');
 
-      // Hide container if no cryptocurrency is selected
       if (!selectedCrypto) {
         walletAddressContainer.style.display = 'none';
         return;
@@ -229,32 +237,48 @@
 
     // Initialize Payment Page
     async function initPaymentPage() {
-      // Check Authentication
       const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
       if (!user || authError) {
         window.location.href = 'login.html';
         return;
       }
 
-      // Preselect Cryptocurrency from URL (if provided)
+      // Load Profile
+      const { data: profile, error: profileError } = await supabaseClient
+        .from('profiles')
+        .select('*')
+        .eq('id', user.id)
+        .single();
+      if (profileError) {
+        console.error('Error loading profile:', profileError);
+        alert('Error loading profile.');
+        return;
+      }
+
+      document.getElementById('welcomeName').textContent = profile.first_name || 'User';
+      if (profile.photo_url) {
+        const { data: urlData } = supabaseClient.storage
+          .from('profile-photos')
+          .getPublicUrl(profile.photo_url);
+        document.getElementById('navProfilePhoto').src = urlData.publicUrl;
+        document.getElementById('navProfilePhoto').style.display = 'block';
+        document.getElementById('defaultProfileIcon').style.display = 'none';
+      }
+
       const urlParams = new URLSearchParams(window.location.search);
       const crypto = urlParams.get('crypto');
       if (crypto) {
         document.getElementById('cryptoSelect').value = crypto;
       }
 
-      // Add event listener to fetch wallet address on cryptocurrency selection
       document.getElementById('cryptoSelect').addEventListener('change', fetchWalletAddress);
-
-      // Fetch wallet address initially if a cryptocurrency is preselected
       if (document.getElementById('cryptoSelect').value) {
         fetchWalletAddress();
       }
 
-      // Copy button functionality
       document.getElementById('copyButton').addEventListener('click', () => {
         const walletAddress = document.getElementById('walletAddress').value;
-        navigator.clipboard.writeText(walletAddress).then(() => {
+        navigator.clipboard.writeText walletAddress).then(() => {
           alert('Wallet address copied to clipboard!');
         }).catch(err => {
           console.error('Error copying to clipboard:', err);
@@ -262,7 +286,6 @@
         });
       });
 
-      // Handle Form Submission
       const paymentForm = document.getElementById('paymentForm');
       paymentForm.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -276,7 +299,6 @@
           return;
         }
 
-        // Upload Proof of Payment to Supabase Storage
         const fileName = `${user.id}_${Date.now()}_${proofFile.name}`;
         const { data: uploadData, error: uploadError } = await supabaseClient.storage
           .from('proof-of-payments')
@@ -288,7 +310,6 @@
           return;
         }
 
-        // Insert Deposit Record into Supabase
         const { data: insertData, error: insertError } = await supabaseClient
           .from('deposits')
           .insert({
@@ -311,7 +332,6 @@
       });
     }
 
-    // Logout
     document.getElementById('logout-btn').addEventListener('click', async () => {
       const { error } = await supabaseClient.auth.signOut();
       if (!error) window.location.href = 'login.html';
@@ -320,7 +340,6 @@
 
     initPaymentPage();
 
-    // Ensure Video Playback
     const video = document.querySelector('.bg-video');
     video.addEventListener('canplay', () => {
       video.play().catch(error => {
