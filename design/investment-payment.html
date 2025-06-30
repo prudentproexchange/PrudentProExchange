@@ -46,7 +46,7 @@
             <li><a href="support.html">Support Ticket</a></li>
             <li><a href="promo-tools.html">Promotional Tools</a></li>
             <li><a href="2fa.html">2FA Security</a></li>
-            <li><a href="#" id="logout-btn">Logout</a></ casein>
+            <li><a href="#" id="logout-btn">Logout</a></li>
           </ul>
         </div>
         <a href="kyc.html">KYC Verification</a>
@@ -108,8 +108,8 @@
 
     // Initialize Payment Page
     async function initPaymentPage() {
-      const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
-      if (!user || authError) {
+      const { data: { user }, error } = await supabaseClient.auth.getUser();
+      if (error || !user) {
         window.location.href = 'login.html';
         return;
       }
@@ -137,7 +137,22 @@
 
       const urlParams = new URLSearchParams(window.location.search);
       const amount = urlParams.get('amount') || '0';
-      const planId = urlParams.get('plan_id');
+      const planSlug = urlParams.get('plan');  // Get the plan slug instead of plan_id
+
+      // Fetch real plan ID from plans table using slug
+      const { data: plan, error: planError } = await supabaseClient
+        .from('plans')
+        .select('id')
+        .eq('slug', planSlug)
+        .single();
+
+      if (planError || !plan) {
+        alert('Selected investment plan is invalid or missing.');
+        return;
+      }
+
+      const planId = plan.id;  // Real UUID of the plan
+
       document.getElementById('investmentAmount').textContent = parseFloat(amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
       const paymentMethods = [
@@ -168,7 +183,7 @@
       document.querySelectorAll('.select-payment-btn').forEach(btn => {
         btn.addEventListener('click', () => {
           const method = btn.getAttribute('data-method');
-          showUploadForm(method, user.id, planId);
+          showUploadForm(method, user.id, planId);  // Use the fetched planId
         });
       });
     }
@@ -241,15 +256,14 @@
           console.error('Upload error:', error);
           alert('Failed to upload proof of payment. Please try again.');
         } else {
-          const proofUrl = data?.path
-            ? supabaseClient.storage.from('payment-proofs').getPublicUrl(data.path).data.publicUrl
-            : null;
+          const { data: publicUrlData } = supabaseClient.storage.from('payment-proofs').getPublicUrl(data.path);
+          const proofUrl = publicUrlData?.publicUrl || null;
 
           const amountValue = parseFloat(new URLSearchParams(window.location.search).get('amount')) || 0;
 
           const { error: insertError } = await supabaseClient.from('investments').insert({
             user_id: userId,
-            plan_id: planId,
+            plan_id: planId,  // Uses the fetched planId
             principal: amountValue,
             roi_pct: null, // Optional or default on backend
             total_profit: 0,
