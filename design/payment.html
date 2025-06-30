@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Deposit • PrudentProExchange</title>
+  <title>Payment • PrudentProExchange</title>
   <link rel="stylesheet" href="css/style.css"/>
-  <link rel="stylesheet" href="css/deposit.css"/>
+  <link rel="stylesheet" href="css/payment.css"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 </head>
-<body class="deposit-page">
+<body class="payment-page">
   <!-- Video Background -->
   <video class="bg-video" autoplay muted loop playsinline preload="auto">
     <source src="assets/videos/background.webm" type="video/webm">
@@ -20,7 +20,7 @@
   </video>
 
   <div class="overlay">
-    <!-- Header (Identical to Dashboard) -->
+    <!-- Header (Matches Deposit Page) -->
     <header class="site-header">
       <a href="dashboard.html" class="logo-link">
         <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo"/>
@@ -55,125 +55,45 @@
     </header>
     <div class="nav-overlay"></div>
 
-    <!-- Profile Section (Styled and Positioned at Top Right) -->
-    <div class="profile-section">
-      <div class="profile-container">
-        <img id="navProfilePhoto" src="" alt="Profile" class="avatar" style="display: none;"/>
-        <span id="defaultProfileIcon" class="avatar">👤</span>
-      </div>
-      <div class="welcome-message">Welcome to Your Deposit Page, <span id="welcomeName"></span>!</div>
-    </div>
-
     <!-- Main Content -->
-    <main class="deposit-page container">
-      <!-- Deposit History -->
-      <section class="deposit-history" data-aos="fade-up">
-        <h2>Deposit History</h2>
-        <button id="toggleDepositHistory" class="golden-btn" aria-expanded="false">Click to view deposit history</button>
-        <div id="depositHistoryContent" class="card" style="display: none;">
-          <table id="depositTable">
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Cryptocurrency</th>
-                <th>Amount</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              <!-- Populated via JavaScript -->
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      <!-- Cryptocurrency Cards -->
-      <section class="crypto-cards-grid" data-aos="fade-up">
-        <!-- Bitcoin -->
-        <div class="card crypto-card" data-crypto="bitcoin" data-aos="zoom-in">
-          <img src="assets/images/bitcoin.PNG" alt="Bitcoin" class="crypto-image"/>
-          <h3>Bitcoin (BTC)</h3>
-          <p>Limit: 20 - 100,000,000 USD</p>
-          <p>Charge: 0 USD + 0%</p>
-          <a href="payment.html?crypto=bitcoin" class="btn deposit-btn">Deposit</a>
-        </div>
-
-        <!-- Ethereum -->
-        <div class="card crypto-card" data-crypto="ethereum" data-aos="zoom-in">
-          <img src="assets/images/ethereum.PNG" alt="Ethereum" class="crypto-image"/>
-          <h3>Ethereum (ETH)</h3>
-          <p>Limit: 20 - 100,000,000 USD</p>
-          <p>Charge: 0 USD + 0%</p>
-          <a href="payment.html?crypto=ethereum" class="btn deposit-btn">Deposit</a>
-        </div>
-
-        <!-- Tether -->
-        <div class="card crypto-card" data-crypto="tether" data-aos="zoom-in">
-          <img src="assets/images/tether.PNG" alt="Tether" class="crypto-image"/>
-          <h3>Tether (USDT)</h3>
-          <p>Limit: 20 - 100,000,000 USD</p>
-          <p>Charge: 0 USD + 0%</p>
-          <a href="payment.html?crypto=tether" class="btn deposit-btn">Deposit</a>
-        </div>
-
-        <!-- USD Coin -->
-        <div class="card crypto-card" data-crypto="usdc" data-aos="zoom-in">
-          <img src="assets/images/usdcoin.PNG" alt="USD Coin" class="crypto-image"/>
-          <h3>USD Coin (USDC)</h3>
-          <p>Limit: 20 - 100,000,000 USD</p>
-          <p>Charge: 0 USD + 0%</p>
-          <a href="payment.html?crypto=usdc" class="btn deposit-btn">Deposit</a>
-        </div>
-
-        <!-- Binance Coin -->
-        <div class="card crypto-card" data-crypto="binancecoin" data-aos="zoom-in">
-          <img src="assets/images/binancecoin.PNG" alt="Binance Coin" class="crypto-image"/>
-          <h3>Binance Coin (BNB)</h3>
-          <p>Limit: 20 - 100,000,000 USD</p>
-          <p>Charge: 0 USD + 0%</p>
-          <a href="payment.html?crypto=binancecoin" class="btn deposit-btn">Deposit</a>
-        </div>
-
-        <!-- Litecoin -->
-        <div class="card crypto-card" data-crypto="litecoin" data-aos="zoom-in">
-          <img src="assets/images/litecoin.PNG" alt="Litecoin" class="crypto-image"/>
-          <h3>Litecoin (LTC)</h3>
-          <p>Limit: 20 - 100,000,000 USD</p>
-          <p>Charge: 0 USD + 0%</p>
-          <a href="payment.html?crypto=litecoin" class="btn deposit-btn">Deposit</a>
-        </div>
-
-        <!-- Tron -->
-        <div class="card crypto-card" data-crypto="tron" data-aos="zoom-in">
-          <img src="assets/images/tron.PNG" alt="Tron" class="crypto-image"/>
-          <h3>Tron (TRX)</h3>
-          <p>Limit: 20 - 100,000,000 USD</p>
-          <p>Charge: 0 USD + 0%</p>
-          <a href="payment.html?crypto=tron" class="btn deposit-btn">Deposit</a>
-        </div>
-
-        <!-- Solana -->
-        <div class="card crypto-card" data-crypto="solana" data-aos="zoom-in">
-          <img src="assets/images/solana.PNG" alt="Solana" class="crypto-image"/>
-          <h3>Solana (SOL)</h3>
-          <p>Limit: 20 - 100,000,000 USD</p>
-          <p>Charge: 0 USD + 0%</p>
-          <a href="payment.html?crypto=solana" class="btn deposit-btn">Deposit</a>
-        </div>
-
-        <!-- XRP -->
-        <div class="card crypto-card" data-crypto="xrp" data-aos="zoom-in">
-          <img src="assets/images/xrp.PNG" alt="XRP" class="crypto-image"/>
-          <h3>XRP (Ripple)</h3>
-          <p>Limit: 20 - 100,000,000 USD</p>
-          <p>Charge: 0 USD + 0%</p>
-          <a href="payment.html?crypto=xrp" class="btn deposit-btn">Deposit</a>
-        </div>
+    <main class="payment-page container">
+      <section class="payment-form" data-aos="fade-up">
+        <h2>Make a Deposit</h2>
+        <form id="paymentForm">
+          <div class="form-group">
+            <label for="cryptoSelect">Select Cryptocurrency</label>
+            <select id="cryptoSelect" name="crypto" required>
+              <option value="">-- Select --</option>
+              <option value="bitcoin">Bitcoin (BTC)</option>
+              <option value="ethereum">Ethereum (ETH)</option>
+              <option value="tether">Tether (USDT)</option>
+              <option value="usdc">USD Coin (USDC)</option>
+              <option value="binancecoin">Binance Coin (BNB)</option>
+              <option value="litecoin">Litecoin (LTC)</option>
+              <option value="tron">Tron (TRX)</option>
+              <option value="solana">Solana (SOL)</option>
+              <option value="xrp">XRP (Ripple)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" required/>
+          </div>
+          <div class="form-group">
+            <label for="amount">Amount (USD)</label>
+            <input type="number" id="amount" name="amount" min="20" max="100000000" step="0.01" required/>
+          </div>
+          <div class="form-group">
+            <label for="proof">Proof of Payment</label>
+            <input type="file" id="proof" name="proof" accept="image/*,application/pdf" required/>
+          </div>
+          <button type="submit" class="btn submit-btn">Submit Deposit</button>
+        </form>
       </section>
     </main>
 
-    <!-- Footer (Identical to Dashboard) -->
-    <footer class="shipssection section-dark site-footer" data-aos="fade-up">
+    <!-- Footer (Matches Deposit Page) -->
+    <footer class="section section-dark site-footer" data-aos="fade-up">
       <div class="footer-content">
         <p class="UTC-time">UTC Time: <span id="utcTime"></span></p>
         <p class="local-time">Local Time: <span id="localTime"></span></p>
@@ -186,7 +106,6 @@
         <p class="copyright">© 2025 PrudentProExchange. All Rights Reserved. SEC Registration #0001230714</p>
       </div>
     </footer>
-
   </div>
 
   <button id="back-to-top" aria-label="Back to top">🚀</button>
@@ -266,8 +185,8 @@
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU'
     );
 
-    // Initialize Deposit Page
-    async function initDepositPage() {
+    // Initialize Payment Page
+    async function initPaymentPage() {
       // Check Authentication
       const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
       if (!user || authError) {
@@ -275,122 +194,70 @@
         return;
       }
 
-      // Load Profile
-      const { data: profile, error: profileError } = await supabaseClient
-        .from('profiles')
-        .select('*')
-        .eq('id', user.id)
-        .single();
-      if (profileError) {
-        console.error('Error loading profile:', profileError);
-        alert('Error loading profile.');
-        return;
+      // Preselect Cryptocurrency from URL (if provided)
+      const urlParams = new URLSearchParams(window.location.search);
+      const crypto = urlParams.get('crypto');
+      if (crypto) {
+        document.getElementById('cryptoSelect').value = crypto;
       }
 
-      document.getElementById('welcomeName').textContent = profile.first_name || 'User';
-      if (profile.photo_url) {
-        const { data: urlData } = supabaseClient.storage
-          .from('profile-photos')
-          .getPublicUrl(profile.photo_url);
-        document.getElementById('navProfilePhoto').src = urlData.publicUrl;
-        document.getElementById('navProfilePhoto').style.display = 'block';
-        document.getElementById('defaultProfileIcon').style.display = 'none';
-      }
+      // Handle Form Submission
+      const paymentForm = document.getElementById('paymentForm');
+      paymentForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const crypto = document.getElementById('cryptoSelect').value;
+        const email = document.getElementById('email').value;
+        const amount = parseFloat(document.getElementById('amount').value);
+        const proofFile = document.getElementById('proof').files[0];
 
-      // Load Deposit History
-      const { data: deposits, error: depositsError } = await supabaseClient
-        .from('deposits')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false });
-      if (depositsError) {
-        console.error('Error loading deposits:', depositsError);
-        alert('Error retrieving deposit history.');
-        return;
-      }
-
-      const tbody = document.querySelector('#depositTable tbody');
-      tbody.innerHTML = '';
-      deposits.forEach(d => {
-        tbody.insertAdjacentHTML('beforeend', `
-          <tr>
-            <td>${new Date(d.created_at).toLocaleString()}</td>
-            <td>${d.cryptocurrency}</td>
-            <td>$${d.amount.toFixed(2)}</td>
-            <td>${d.status}</td>
-          </tr>
-        `);
-      });
-
-      // Fetch wallet addresses from Supabase
-      const { data: wallets, error: walletsError } = await supabaseClient
-        .from('crypto_wallets')
-        .select('crypto_id, wallet_address');
-
-      if (walletsError) {
-        console.error('Error fetching wallets:', walletsError);
-        alert('Error retrieving wallet addresses.');
-        return;
-      }
-
-      // Create a map of crypto_id to wallet_address
-      const walletMap = {};
-      wallets.forEach(w => {
-        walletMap[w.crypto_id] = w.wallet_address;
-      });
-
-      // Select all crypto cards and add wallet addresses
-      const cryptoCards = document.querySelectorAll('.crypto-card');
-      cryptoCards.forEach(card => {
-        const cryptoId = card.getAttribute('data-crypto');
-        const walletAddress = walletMap[cryptoId];
-        if (walletAddress) {
-          const aTag = card.querySelector('.deposit-btn');
-＞          const walletP = document.createElement('p');
-          walletP.innerHTML = `Wallet Address: <span class="wallet-address">${walletAddress}</span> <button class="copy-btn" data-address="${walletAddress}">Copy</button>`;
-          card.insertBefore(walletP, aTag);
+        if (!crypto || !email || !amount || !proofFile) {
+          alert('Please fill all fields and upload proof of payment.');
+          return;
         }
-      });
 
-      // Add event listeners for copy buttons
-      document.querySelectorAll('.copy-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const address = btn.getAttribute('data-address');
-          navigator.clipboard.writeText(address).then(() => {
-            alert('Address copied to clipboard');
-          }).catch(err => {
-            console.error('Error copying address:', err);
+        // Upload Proof of Payment to Supabase Storage
+        const fileName = `${user.id}_${Date.now()}_${proofFile.name}`;
+        const { data: uploadData, error: uploadError } = await supabaseClient.storage
+          .from('proof-of-payments')
+          .upload(fileName, proofFile);
+
+        if (uploadError) {
+          console.error('Error uploading proof:', uploadError);
+          alert('Error uploading proof of payment.');
+          return;
+        }
+
+        // Insert Deposit Record into Supabase
+        const { data: insertData, error: insertError } = await supabaseClient
+          .from('deposits')
+          .insert({
+            user_id: user.id,
+            cryptocurrency: crypto,
+            email: email,
+            amount: amount,
+            status: 'pending',
+            proof_url: fileName
           });
-        });
+
+        if (insertError) {
+          console.error('Error inserting deposit:', insertError);
+          alert('Error submitting deposit.');
+          return;
+        }
+
+        alert('Deposit submitted successfully. Awaiting verification.');
+        window.location.href = 'deposit.html';
       });
     }
 
     // Logout
-    document.getElementById('logout-btn').addEventListener('click', asyncವ
-
- async () => {
+    document.getElementById('logout-btn').addEventListener('click', async () => {
       const { error } = await supabaseClient.auth.signOut();
       if (!error) window.location.href = 'login.html';
       else alert('Error logging out: ' + error.message);
     });
 
-    initDepositPage();
-
-    // Deposit History Toggle
-    const toggleDepositHistory = document.getElementById('toggleDepositHistory');
-    const depositHistoryContent = document.getElementById('depositHistoryContent');
-
-    toggleDepositHistory.addEventListener('click', () => {
-      if (depositHistoryContent.style.display === 'none') {
-        depositHistoryContent.style.display = 'block';
-        toggleDepositHistory.textContent = 'Hide deposit history';
-        toggleDepositHistory.setAttribute('aria-expanded', 'true');
-      } else {
-        depositHistoryContent.style.display = 'none';
-        toggleDepositHistory.textContent = 'Click to view deposit history';
-        toggleDepositHistory.setAttribute('aria-expanded', 'false');
-      }
-    });
+    initPaymentPage();
 
     // Ensure Video Playback
     const video = document.querySelector('.bg-video');
