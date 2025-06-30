@@ -1,193 +1,196 @@
-// transactions.js
+// Initialize AOS animations
+AOS.init({ duration: 800, once: true });
 
-document.addEventListener('DOMContentLoaded', () => {
-  // Supabase Client
-  const supabaseClient = supabase.createClient(
-    'https://iwkdznjqfbsfkscnbrkc.supabase.co',
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU'
-  );
+// Supabase client
+const { createClient } = supabase;
+const supabaseClient = createClient(
+  'https://iwkdznjqfbsfkscnbrkc.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU'
+);
 
-  let transactions = [];
-  let currentPage = 1;
-  const perPage = 10;
-
-  // Initialize Page
-  async function initTransactionsPage() {
-    AOS.init({ duration: 800, once: true });
-
-    const { data: { session } } = await supabaseClient.auth.getSession();
-    if (!session) {
-      window.location.href = 'login.html';
-      return;
+// Common UI initialization (hamburger, theme toggle, clock, back-to-top)
+function initCommonUI() {
+  const hamburgerBtn = document.getElementById('hamburgerBtn');
+  const navDrawer = document.getElementById('navDrawer');
+  const overlay = document.querySelector('.nav-overlay');
+  hamburgerBtn.addEventListener('click', () => {
+    navDrawer.classList.toggle('open');
+    hamburgerBtn.classList.toggle('active');
+    overlay.classList.toggle('nav-open');
+    if (navDrawer.classList.contains('open')) navDrawer.scrollTop = 0;
+  });
+  document.addEventListener('click', event => {
+    if (!navDrawer.contains(event.target) && !hamburgerBtn.contains(event.target) && navDrawer.classList.contains('open')) {
+      navDrawer.classList.remove('open');
+      hamburgerBtn.classList.remove('active');
+      overlay.classList.remove('nav-open');
     }
-    const user = session.user;
+  });
 
-    // Fetch user profile for name
-    const { data: profile } = await supabaseClient
-      .from('profiles')
-      .select('first_name, last_name')
-      .eq('id', user.id)
-      .single();
+  const themeToggle = document.getElementById('theme-toggle');
+  themeToggle.addEventListener('click', () => {
+    document.body.classList.toggle('light-theme');
+    const icon = themeToggle.querySelector('i');
+    icon.classList.toggle('fa-moon');
+    icon.classList.toggle('fa-sun');
+  });
 
-    // Fetch transfers
-    await fetchTransactions(user.id);
+  const accountToggle = document.getElementById('account-toggle');
+  const submenu = accountToggle.nextElementSibling;
+  accountToggle.addEventListener('click', e => {
+    e.preventDefault();
+    submenu.classList.toggle('open');
+  });
 
-    // Real-time subscription
-    supabaseClient
-      .channel('transfers')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'transfers' }, () => fetchTransactions(user.id))
-      .subscribe();
+  document.getElementById('back-to-top').addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
 
-    // Event Listeners
-    document.getElementById('searchInput').addEventListener('input', filterTransactions);
-    document.getElementById('statusFilter').addEventListener('change', filterTransactions);
-    document.getElementById('sortSelect').addEventListener('change', sortTransactions);
-    document.getElementById('exportBtn').addEventListener('click', exportToCSV);
-    document.getElementById('prevPage').addEventListener('click', () => changePage(-1));
-    document.getElementById('nextPage').addEventListener('click', () => changePage(1));
-    document.getElementById('logout-btn').addEventListener('click', async () => {
-      await supabaseClient.auth.signOut();
-      window.location.href = 'login.html';
+  function updateLocalTime() {
+    const now = new Date();
+    document.getElementById('localTime').textContent = now.toLocaleTimeString();
+    document.getElementById('localDate').textContent = now.toLocaleDateString('en-US', {
+      weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
     });
   }
+  function updateUTCTime() {
+    document.getElementById('utcTime').textContent = new Date().toUTCString();
+  }
+  setInterval(updateLocalTime, 1000);
+  setInterval(updateUTCTime, 1000);
+  updateLocalTime();
+  updateUTCTime();
+}
+initCommonUI();
 
-  async function fetchTransactions(userId) {
-    const { data, error } = await supabaseClient
-      .from('transfers')
-      .select('id, created_at, amount, recipient_email, sender_email, status, memo')
-      .or(`sender_id.eq.${userId},recipient_id.eq.${userId}`)
-      .order('created_at', { ascending: false });
+// Fetch and render transactions
+async function loadTransactions() {
+  // Auth check
+  const { data: { session } } = await supabaseClient.auth.getSession();
+  if (!session) return window.location.href = 'login.html';
+  const userId = session.user.id;
 
-    if (error) {
-      alert('Error fetching transactions: ' + error.message);
-      return;
+  // Load profile for welcome name and photo (mirrors invest page)
+  const { data: profile, error: profileError } = await supabaseClient
+    .from('profiles')
+    .select('*')
+    .eq('id', userId)
+    .single();
+  if (profileError) {
+    console.error('Error loading profile:', profileError);
+    document.getElementById('welcomeName').textContent = 'User';
+  } else {
+    document.getElementById('welcomeName').textContent = profile.first_name || 'User';
+    if (profile.photo_url) {
+      const { data: urlData } = supabaseClient.storage
+        .from('profile-photos')
+        .getPublicUrl(profile.photo_url);
+      document.getElementById('navProfilePhoto').src = urlData.publicUrl;
+      document.getElementById('navProfilePhoto').style.display = 'block';
+      document.getElementById('defaultProfileIcon').style.display = 'none';
     }
-
-    // Fetch sender and recipient names
-    transactions = await Promise.all(data.map(async (t) => {
-      const [senderProfile, recipientProfile] = await Promise.all([
-        supabaseClient.from('profiles').select('first_name, last_name').eq('email', t.sender_email).single(),
-        supabaseClient.from('profiles').select('first_name, last_name').eq('email', t.recipient_email).single()
-      ]);
-      return {
-        ...t,
-        sender_name: `${senderProfile.data?.first_name || ''} ${senderProfile.data?.last_name || ''}`.trim(),
-        recipient_name: `${recipientProfile.data?.first_name || ''} ${recipientProfile.data?.last_name || ''}`.trim()
-      };
-    }));
-
-    renderTransactions();
   }
 
-  function renderTransactions(filtered = transactions) {
-    const transactionList = document.querySelector('.transaction-list');
-    transactionList.innerHTML = '';
+  // Fetch transfers
+  const { data: transfers, error } = await supabaseClient
+    .from('transfers')
+    .select(`
+      id,
+      sender_id,
+      sender_email,
+      recipient_id,
+      recipient_email,
+      amount,
+      status,
+      memo,
+      created_at
+    `)
+    .or(`sender_id.eq.${userId},recipient_id.eq.${userId}`)
+    .order('created_at', { ascending: false });
 
-    const start = (currentPage - 1) * perPage;
-    const end = start + perPage;
-    const paginated = filtered.slice(start, end);
+  if (error) {
+    console.error('Error fetching transactions:', error);
+    const banner = document.createElement('div');
+    banner.className = 'error-banner';
+    banner.textContent = `Error loading transactions: ${error.message}`;
+    document.querySelector('.transactions-section').prepend(banner);
+    return;
+  }
 
-    paginated.forEach(t => {
-      const card = document.createElement('div');
-      card.className = 'transaction-card';
-      card.innerHTML = `
-        <div class="transaction-header">
-          <span class="transaction-id">${t.id}</span>
-          <span class="transaction-date">${new Date(t.created_at).toLocaleString()}</span>
-        </div>
-        <div class="transaction-body">
-          <div class="transaction-amount">$${t.amount.toFixed(2)}</div>
-          <div class="transaction-sender">From: ${t.sender_name} (${t.sender_email})</div>
-          <div class="transaction-recipient">To: ${t.recipient_name} (${t.recipient_email})</div>
-        </div>
-        <div class="transaction-footer">
-          <span class="status ${t.status.toLowerCase()}">${t.status}</span>
-        </div>
-      `;
-      card.addEventListener('click', () => showTransactionDetails(t));
-      transactionList.appendChild(card);
+  const tbody = document.querySelector('#transactionsTable tbody');
+  tbody.innerHTML = ''; // Clear out old rows
+
+  const statusIcon = {
+    pending: '<i class="fas fa-clock"></i>',
+    approved: '<i class="fas fa-check"></i>',
+    failed: '<i class="fas fa-times"></i>'
+  };
+
+  transfers.forEach(tx => {
+    const isSender = tx.sender_id === userId;
+    const counterEmail = isSender ? tx.recipient_email : tx.sender_email;
+    const directionIcon = isSender
+      ? '<i class="fas fa-arrow-up"></i>'
+      : '<i class="fas fa-arrow-down"></i>';
+    const dt = new Date(tx.created_at);
+    const dateStr = dt.toLocaleDateString('en-US', {
+      year: 'numeric', month: 'short', day: 'numeric',
+      hour: '2-digit', minute: '2-digit'
     });
 
-    updatePagination(filtered.length);
-  }
-
-  function filterTransactions() {
-    const search = document.getElementById('searchInput').value.toLowerCase();
-    const status = document.getElementById('statusFilter').value;
-
-    const filtered = transactions.filter(t => {
-      const matchesSearch = (
-        t.recipient_email.toLowerCase().includes(search) ||
-        t.sender_email.toLowerCase().includes(search) ||
-        t.id.toString().includes(search) ||
-        (t.memo && t.memo.toLowerCase().includes(search))
-      );
-      const matchesStatus = !status || t.status.toLowerCase() === status;
-      return matchesSearch && matchesStatus;
-    });
-
-    currentPage = 1;
-    renderTransactions(filtered);
-  }
-
-  function sortTransactions() {
-    const sort = document.getElementById('sortSelect').value;
-    transactions.sort((a, b) => {
-      if (sort === 'date-desc') return new Date(b.created_at) - new Date(a.created_at);
-      if (sort === 'date-asc') return new Date(a.created_at) - new Date(b.created_at);
-      if (sort === 'amount-desc') return b.amount - a.amount;
-      if (sort === 'amount-asc') return a.amount - b.amount;
-    });
-    renderTransactions();
-  }
-
-  function updatePagination(total) {
-    const totalPages = Math.ceil(total / perPage);
-    document.getElementById('pageInfo').textContent = `Page ${currentPage} of ${totalPages}`;
-    document.getElementById('prevPage').disabled = currentPage === 1;
-    document.getElementById('nextPage').disabled = currentPage === totalPages;
-  }
-
-  function changePage(delta) {
-    currentPage += delta;
-    renderTransactions();
-  }
-
-  function showTransactionDetails(t) {
-    const modal = document.getElementById('transactionModal');
-    const details = document.getElementById('modalDetails');
-    details.innerHTML = `
-      <p><strong>ID:</strong> ${t.id}</p>
-      <p><strong>Date:</strong> ${new Date(t.created_at).toLocaleString()}</p>
-      <p><strong>Amount:</strong> $${t.amount.toFixed(2)}</p>
-      <p><strong>From:</strong> ${t.sender_name} (${t.sender_email})</p>
-      <p><strong>To:</strong> ${t.recipient_name} (${t.recipient_email})</p>
-      <p><strong>Status:</strong> ${t.status}</p>
-      <p><strong>Memo:</strong> ${t.memo || 'None'}</p>
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${dateStr}</td>
+      <td>${directionIcon} ${counterEmail}</td>
+      <td>$${tx.amount.toFixed(2)}</td>
+      <td><span class="badge ${tx.status}">${statusIcon[tx.status]} ${tx.status}</span></td>
+      <td>${tx.memo || ''}</td>
+      <td>—</td>
     `;
-    modal.style.display = 'block';
-    document.querySelector('.close-modal').onclick = () => modal.style.display = 'none';
-  }
+    tbody.appendChild(tr);
+  });
+}
+loadTransactions();
 
-  function exportToCSV() {
-    const csv = transactions.map(t => [
-      t.id,
-      new Date(t.created_at).toLocaleString(),
-      t.amount,
-      `"${t.sender_name} (${t.sender_email})"`,
-      `"${t.recipient_name} (${t.recipient_email})"`,
-      t.status,
-      `"${t.memo || ''}"`
-    ].join(',')).join('\n');
-    const header = 'ID,Date,Amount,Sender,Recipient,Status,Memo\n';
-    const blob = new Blob([header + csv], { type: 'text/csv' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'transactions.csv';
-    a.click();
-    URL.revokeObjectURL(url);
-  }
+// Status filter
+document.getElementById('statusFilter').addEventListener('change', e => {
+  const val = e.target.value;
+  document.querySelectorAll('#transactionsTable tbody tr').forEach(tr => {
+    const status = tr.querySelector('.badge').textContent.split(' ').pop();
+    tr.style.display = (val === 'all' || status === val) ? '' : 'none';
+  });
+});
 
-  initTransactionsPage();
+// Column sorting
+document.querySelectorAll('#transactionsTable th[data-sort]').forEach(th => {
+  th.addEventListener('click', () => {
+    const table = th.closest('table');
+    const tbody = table.querySelector('tbody');
+    const idx = Array.from(th.parentNode.children).indexOf(th);
+    const asc = !th.classList.contains('asc');
+    Array.from(tbody.rows)
+      .sort((a, b) => {
+        let A = a.cells[idx].textContent.trim();
+        let B = b.cells[idx].textContent.trim();
+        // Numeric?
+        if (!isNaN(A.replace(/[$,]/g, '')) && !isNaN(B.replace(/[$,]/g, ''))) {
+          return asc
+            ? parseFloat(A.replace(/[$,]/g, '')) - parseFloat(B.replace(/[$,]/g, ''))
+            : parseFloat(B.replace(/[$,]/g, '')) - parseFloat(A.replace(/[$,]/g, ''));
+        }
+        // Date?
+        if (Date.parse(A) && Date.parse(B)) {
+          return asc
+            ? new Date(A) - new Date(B)
+            : new Date(B) - new Date(A);
+        }
+        // Fallback string compare
+        return asc
+          ? A.localeCompare(B)
+          : B.localeCompare(A);
+      })
+      .forEach(row => tbody.appendChild(row));
+    table.querySelectorAll('th').forEach(h => h.classList.remove('asc', 'desc'));
+    th.classList.add(asc ? 'asc' : 'desc');
+  });
 });
