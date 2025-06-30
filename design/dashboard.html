@@ -117,7 +117,7 @@
           <h2>Interest Wallet</h2>
           $<span id="interestWallet">0.00</span>
           <p>Total Withdrawals: $<span id="totalWithdrawals">0.00</span></p>
-          <a href="withdraw.html" class="btn">Withdraw Funds</a>
+          <a href="withdraw.html" class="btn">撤回資金</a>
         </div>
 
         <div class="card investments" data-aos="zoom-in">
@@ -331,7 +331,7 @@
           investmentDiv.className = 'investment-item';
           investmentDiv.innerHTML = `
             <p>Plan: <span>${investment.plan ? investment.plan.name : 'Unknown'}</span></p>
-            <p>Invested Amount: $<span>${investment.invested_amount.toFixed(2)}</span></p>
+            <p>Invested Amount: $<span>${investment.principal.toFixed(2)}</span></p>
             <p>Current Profit: $<span class="current-profit">0.00</span></p>
             <p>Time Remaining: <span class="time-left"></span></p>
           `;
@@ -371,7 +371,7 @@
 
     // Investment calculator logic for multiple investments
     function startInvestmentCalculator(investment, investmentDiv) {
-      const { start_time, end_time, invested_amount, total_profit } = investment;
+      const { start_time, end_time, principal, total_profit } = investment;
       const startTime = new Date(start_time);
       const endTime = new Date(end_time);
       const totalSeconds = (endTime - startTime) / 1000;
@@ -382,6 +382,7 @@
 
       const updateInvestment = async () => {
         const now = new Date();
+        console.log('Now:', now.toISOString(), 'End Time:', investment.end_time); // Debug time sync
         if (now >= endTime) {
           currentProfitSpan.textContent = total_profit.toFixed(2);
           timeLeftSpan.textContent = '0d 0h 0m 0s';
@@ -402,7 +403,7 @@
         }
       };
 
-      const interval = setInterval(updateInvestment, 1000);
+      const interval = setInterval(updateInvestment, 500); // Changed to 500ms for smoother updates
       updateInvestment();
     }
 
@@ -438,31 +439,11 @@
 
     initDashboard();
 
-    // Event listener for the Invest button (remove if not used)
-    // document.querySelector('.invest-btn').addEventListener('click', async (e) => {
-    //   e.preventDefault();
-    //   const amountStr = prompt('Enter investment amount:');
-    //   if (amountStr) {
-    //     const amount = parseFloat(amountStr);
-    //     if (isNaN(amount) || amount <= 0) {
-    //       alert('Invalid amount');
-    //       return;
-    //     }
-    //     try {
-    //       const plan = await choosePlanForAmount(amount);
-    //       const { data: { user } } = await supabaseClient.auth.getUser();
-    //       await supabaseClient.rpc('start_investment', {
-    //         user_id: user.id,
-    //         plan_id: plan.id,
-    //         amount
-    //       });
-    //       alert('Investment started in the "' + plan.name + '" plan!');
-    //       location.reload();
-    //     } catch (err) {
-    //       alert('Error: ' + err.message);
-    //     }
-    //   }
-    // });
+    // Auto-refresh investment list every 60 seconds
+    setInterval(() => {
+      console.log('Refreshing investments list...');
+      initDashboard(); // Re-runs everything including fetching new investments
+    }, 60000);
 
     // Ensure background video plays
     const video = document.querySelector('.bg-video');
