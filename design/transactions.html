@@ -8,16 +8,16 @@
   <link rel="stylesheet" href="css/transactions.css"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body class="transactions-page">
   <!-- Video Background -->
-  <video class="bg-video" autoplay muted loop playsinline preload="auto">
+  <video class="bg-video" autoplay muted loop playsinline>
     <source src="assets/videos/background.webm" type="video/webm">
     <source src="assets/videos/background.mp4" type="video/mp4">
-    Your browser does not support the video tag.
   </video>
+  
   <div class="overlay">
     <!-- Header -->
     <header class="site-header">
@@ -52,12 +52,22 @@
       <div class="nav-overlay"></div>
     </header>
 
+    <!-- Profile Section -->
+    <div class="profile-section">
+      <div class="profile-container">
+        <img id="navProfilePhoto" src="" alt="Profile" class="avatar" style="display: none;"/>
+        <span id="defaultProfileIcon" class="avatar">👤</span>
+      </div>
+      <div class="welcome-message">Welcome to Your Transaction History, <span id="welcomeName"></span>!</div>
+    </div>
+
     <!-- Main Content -->
     <main class="container" data-aos="fade-up">
       <section class="transactions-section">
         <h2>Your Transactions</h2>
         <div class="filter-bar">
-          <label for="statusFilter">Status:
+          <label>
+            Status:
             <select id="statusFilter">
               <option value="all">All</option>
               <option value="pending">Pending</option>
@@ -66,27 +76,30 @@
             </select>
           </label>
         </div>
-        <div class="table-wrapper">
-          <table id="transactionsTable">
-            <thead>
-              <tr>
-                <th data-sort="created_at">Date & Time <i class="fas fa-sort"></i></th>
-                <th data-sort="counterparty">Counterparty <i class="fas fa-sort"></i></th>
-                <th data-sort="amount">Amount (USD) <i class="fas fa-sort"></i></th>
-                <th data-sort="status">Status <i class="fas fa-sort"></i></th>
-                <th>Memo</th>
-              </tr>
-            </thead>
-            <tbody>
-              <!-- Populated by JS -->
-            </tbody>
-          </table>
+        <div class="table-card" data-aos="fade-up" data-aos-delay="200">
+          <div class="table-wrapper">
+            <table id="transactionsTable">
+              <thead>
+                <tr>
+                  <th data-sort="created_at">Date & Time <i class="fas fa-sort"></i></th>
+                  <th data-sort="counterparty">Counterparty <i class="fas fa-sort"></i></th>
+                  <th data-sort="amount">Amount (USD) <i class="fas fa-sort"></i></th>
+                  <th data-sort="status">Status <i class="fas fa-sort"></i></th>
+                  <th>Memo</th>
+                  <th>Reason</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Populated by JS -->
+              </tbody>
+            </table>
+          </div>
         </div>
       </section>
     </main>
 
     <!-- Footer -->
-    <footer class="section section-dark site-footer" data-aos="fade-up">
+    <footer class="site-footer section section-dark" data-aos="fade-up">
       <div class="footer-content">
         <p class="UTC-time">UTC Time: <span id="utcTime"></span></p>
         <p class="local-time">Local Time: <span id="localTime"></span></p>
