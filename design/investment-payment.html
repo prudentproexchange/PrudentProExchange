@@ -10,6 +10,52 @@
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <style>
+    /* Spinner Styling */
+    .spinner {
+      display: none;
+      border: 4px solid rgba(0, 0, 0, 0.1);
+      border-left-color: #3498db;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Disabled Button Styling */
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    /* Loading Container */
+    .loading-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .loading-text {
+      font-size: 14px;
+      color: #555;
+    }
+
+    /* Smooth Transitions */
+    .btn {
+      transition: opacity 0.3s ease, background-color 0.3s ease;
+    }
+
+    .payment-section {
+      transition: opacity 0.3s ease;
+    }
+  </style>
 </head>
 <body class="payment-page">
   <!-- Video Background -->
@@ -137,7 +183,7 @@
 
       const urlParams = new URLSearchParams(window.location.search);
       const amount = urlParams.get('amount') || '0';
-      const planSlug = urlParams.get('plan');  // Get the plan slug instead of plan_id
+      const planSlug = urlParams.get('plan');
 
       // Fetch real plan ID from plans table using slug
       const { data: plan, error: planError } = await supabaseClient
@@ -151,7 +197,7 @@
         return;
       }
 
-      const planId = plan.id;  // Real UUID of the plan
+      const planId = plan.id;
 
       document.getElementById('investmentAmount').textContent = parseFloat(amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
@@ -183,7 +229,7 @@
       document.querySelectorAll('.select-payment-btn').forEach(btn => {
         btn.addEventListener('click', () => {
           const method = btn.getAttribute('data-method');
-          showUploadForm(method, user.id, planId);  // Use the fetched planId
+          showUploadForm(method, user.id, planId);
         });
       });
     }
@@ -205,12 +251,16 @@
       const paymentSection = document.getElementById('paymentSection');
       paymentSection.innerHTML = `
         <h3>Payment Details for ${method}</h3>
-        <p>Wallet Address: <span id="walletAddress">${address}</span> <button id="copyButton">Copy</button></p>
-        <button id="proceedButton" disabled>Proceed to Upload Proof of Payment</button>
+        <p>Wallet Address: <span id="walletAddress">${address}</span> <button id="copyButton" class="btn">Copy</button></p>
+        <button id="proceedButton" class="btn" disabled>Proceed to Upload Proof of Payment</button>
         <div id="uploadFormContainer" style="display:none;">
           <form id="uploadForm">
             <input type="file" id="proofFile" accept="image/*,application/pdf" required/>
-            <button type="submit" class="btn upload-btn">Upload Proof</button>
+            <button type="submit" class="btn upload-btn" id="uploadButton">Upload Proof</button>
+            <div class="loading-container" id="loadingContainer" style="display:none;">
+              <div class="spinner"></div>
+              <span class="loading-text">Uploading...</span>
+            </div>
           </form>
         </div>
       `;
@@ -236,6 +286,9 @@
       });
 
       const form = document.getElementById('uploadForm');
+      const uploadButton = document.getElementById('uploadButton');
+      const loadingContainer = document.getElementById('loadingContainer');
+
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
         const fileInput = document.getElementById('proofFile');
@@ -248,14 +301,22 @@
           alert('File size exceeds 5MB. Please upload a smaller file.');
           return;
         }
-        const fileName = `${userId}_${method}_${Date.now()}_${file.name}`;
-        const { data, error } = await supabaseClient.storage
-          .from('payment-proofs')
-          .upload(`${userId}/${fileName}`, file);
-        if (error) {
-          console.error('Upload error:', error);
-          alert('Failed to upload proof of payment. Please try again.');
-        } else {
+
+        // Disable upload button and show spinner
+        uploadButton.disabled = true;
+        loadingContainer.style.display = 'flex';
+        paymentSection.style.opacity = '0.7';
+
+        try {
+          const fileName = `${userId}_${method}_${Date.now()}_${file.name}`;
+          const { data, error: uploadError } = await supabaseClient.storage
+            .from('payment-proofs')
+            .upload(`${userId}/${fileName}`, file);
+
+          if (uploadError) {
+            throw new Error('Upload error: ' + uploadError.message);
+          }
+
           const { data: publicUrlData } = supabaseClient.storage.from('payment-proofs').getPublicUrl(data.path);
           const proofUrl = publicUrlData?.publicUrl || null;
 
@@ -263,9 +324,9 @@
 
           const { error: insertError } = await supabaseClient.from('investments').insert({
             user_id: userId,
-            plan_id: planId,  // Uses the fetched planId
+            plan_id: planId,
             principal: amountValue,
-            roi_pct: null, // Optional or default on backend
+            roi_pct: null,
             total_profit: 0,
             completed: false,
             payment_proof_url: proofUrl,
@@ -274,12 +335,19 @@
           });
 
           if (insertError) {
-            alert('Failed to record investment: ' + insertError.message);
-            return;
+            throw new Error('Insert error: ' + insertError.message);
           }
 
           alert(`Investment submitted successfully with proof of payment for ${method}. Awaiting approval.`);
           window.location.href = 'dashboard.html';
+        } catch (error) {
+          console.error('Error during upload or insert:', error);
+          alert('Failed to process your request: ' + error.message);
+        } finally {
+          // Re-enable button and hide spinner
+          uploadButton.disabled = false;
+          loadingContainer.style.display = 'none';
+          paymentSection.style.opacity = '1';
         }
       });
     }
