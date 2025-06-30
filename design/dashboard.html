@@ -117,7 +117,13 @@
           <h2>Interest Wallet</h2>
           $<span id="interestWallet">0.00</span>
           <p>Total Withdrawals: $<span id="totalWithdrawals">0.00</span></p>
-          <a href="withdraw.html" class="btn">撤回資金</a>
+          <a href="withdraw.html" class="btn">Withdraw Funds</a>
+        </div>
+
+        <div class="card account-balance" data-aos="zoom-in">
+          <h2>Account Balance</h2>
+          $<span id="accountBalance">0.00</span>
+          <a href="withdraw.html" class="btn">Withdraw Funds</a>
         </div>
 
         <div class="card investments" data-aos="zoom-in">
@@ -139,6 +145,8 @@
               <th>Status</th>
             </tr>
           </thead>
+ására
+
           <tbody></tbody>
         </table>
       </details>
@@ -176,7 +184,7 @@
       hamburgerBtn.classList.toggle('active');
       overlay.classList.toggle('nav-open');
       if (navDrawer.classList.contains('open')) {
-        navDrawer.scrollTop = 0; // Scroll to top when drawer opens
+        navDrawer.scrollTop = 0;
       }
     });
 
@@ -222,9 +230,7 @@
         document.execCommand('copy');
         const originalContent = copyBtn.innerHTML;
         copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
-        setTimeout(() => {
-          copyBtn.innerHTML = originalContent;
-        }, 2000);
+        setTimeout(() => copyBtn.innerHTML = originalContent, 2000);
       });
     }
 
@@ -252,124 +258,156 @@
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU'
     );
 
-    // Choose plan for amount function
-    async function choosePlanForAmount(amount) {
-      const { data: plans, error } = await supabaseClient
-        .from('investment_plans')
-        .select('id, name, duration_days, roi_pct, min_amount, max_amount');
-      if (error) throw error;
-      const plan = plans.find(p => amount >= p.min_amount && amount <= p.max_amount);
-      if (!plan) throw new Error('No plan matches that amount');
-      return plan;
-    }
+    let investmentIntervals = [];
+    let isDashboardLoading = false;
 
     // Initialize dashboard
     async function initDashboard() {
-      const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
-      if (!user || authError) {
-        window.location.href = 'login.html';
-        return;
-      }
+      if (isDashboardLoading) return;
+      isDashboardLoading = true;
+      try {
+        clearAllInvestmentIntervals();
 
-      const { data: profile, error: profileError } = await supabaseClient
-        .from('profiles')
-        .select('*')
-        .eq('id', user.id)
-        .single();
+        const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
+        if (!user || authError) {
+          window.location.href = 'login.html';
+          return;
+        }
 
-      if (profileError) {
-        console.error('Error loading profile:', profileError);
-        alert('Error loading profile.');
-        return;
-      }
+        const { data: profile, error: profileError } = await supabaseClient
+          .from('profiles')
+          .select('*')
+          .eq('id', user.id)
+          .single();
+        if (profileError) throw profileError;
 
-      document.getElementById('welcomeName').textContent = profile.first_name || 'User';
-      if (profile.photo_url) {
-        const { data: urlData } = supabaseClient.storage
-          .from('profile-photos')
-          .getPublicUrl(profile.photo_url);
-        document.getElementById('navProfilePhoto').src = urlData.publicUrl;
-        document.getElementById('navProfilePhoto').style.display = 'block';
-        document.getElementById('defaultProfileIcon').style.display = 'none';
-      }
+        document.getElementById('welcomeName').textContent = profile.first_name || 'User';
+        if (profile.photo_url) {
+          const { data: urlData } = supabaseClient.storage
+            .from('profile-photos')
+            .getPublicUrl(profile.photo_url);
+          document.getElementById('navProfilePhoto').src = urlData.publicUrl;
+          document.getElementById('navProfilePhoto').style.display = 'block';
+          document.getElementById('defaultProfileIcon').style.display = 'none';
+        }
 
-      document.getElementById('affiliateLink').value = profile.referral_link || '';
-      document.getElementById('refEarnings').textContent = (profile.referral_earnings || 0).toFixed(2);
-      document.getElementById('depositWallet').textContent = (profile.deposit_wallet || 0).toFixed(2);
-      document.getElementById('totalDeposits').textContent = (profile.total_deposits || 0).toFixed(2);
-      document.getElementById('interestWallet').textContent = (profile.interest_wallet || 0).toFixed(2);
-      document.getElementById('totalWithdrawals').textContent = (profile.total_withdrawals || 0).toFixed(2);
-      document.getElementById('totalInvested').textContent = (profile.total_invested || 0).toFixed(2);
-      document.getElementById('promoOffer').textContent = (profile.promo_offer || 0).toFixed(2);
-      document.getElementById('promoPct').textContent = profile.promo_pct || 0;
+        document.getElementById('affiliateLink').value = profile.referral_link || '';
+        document.getElementById('refEarnings').textContent = (profile.referral_earnings || 0).toFixed(2);
+        document.getElementById('depositWallet').textContent = (profile.deposit_wallet || 0).toFixed(2);
+        document.getElementById('totalDeposits').textContent = (profile.total_deposits || 0).toFixed(2);
+        document.getElementById('interestWallet').textContent = (profile.interest_wallet || 0).toFixed(2);
+        document.getElementById('totalWithdrawals').textContent = (profile.total_withdrawals || 0).toFixed(2);
+        document.getElementById('accountBalance').textContent = (profile.account_balance || 0).toFixed(2);
 
-      // Load all active investments with plan name joined from investment_plans
-      const { data: investments, error: invError } = await supabaseClient
-        .from('investments')
-        .select(`
-          *,
-          plan:investment_plans (
-            name
-          )
-        `)
-        .eq('user_id', user.id)
-        .gt('end_time', new Date().toISOString())
-        .order('start_time', { ascending: false });
+        const { data: allInvestments, error: allInvError } = await supabaseClient
+          .from('investments')
+          .select('principal')
+          .eq('user_id', user.id);
+        if (allInvError) throw allInvError;
+        const totalEverInvested = allInvestments.reduce((acc, inv) => acc + inv.principal, 0);
+        document.getElementById('totalInvested').textContent = totalEverInvested.toFixed(2);
 
-      if (invError) {
-        console.error('Error loading investments:', invError);
-        alert('Error retrieving investment data:\n' + invError.message);
-        return;
-      }
+        document.getElementById('promoOffer').textContent = (profile.promo_offer || 0).toFixed(2);
+        document.getElementById('promoPct').textContent = profile.promo_pct || 0;
 
-      const container = document.getElementById('investments-container');
-      const noInvestmentsDiv = document.getElementById('no-investments');
-      if (investments.length > 0) {
+        const { data: investments, error: invError } = await supabaseClient
+          .from('investments')
+          .select('*, plan:investment_plans(name)')
+          .eq('user_id', user.id)
+          .gt('end_time', new Date().toISOString())
+          .order('start_time', { ascending: false });
+        if (invError) throw invError;
+
+        const container = document.getElementById('investments-container');
+        const noInvestmentsDiv = document.getElementById('no-investments');
         container.innerHTML = '';
-        investments.forEach(investment => {
-          const investmentDiv = document.createElement('div');
-          investmentDiv.className = 'investment-item';
-          investmentDiv.innerHTML = `
-            <p>Plan: <span>${investment.plan ? investment.plan.name : 'Unknown'}</span></p>
-            <p>Invested Amount: $<span>${investment.principal.toFixed(2)}</span></p>
-            <p>Current Profit: $<span class="current-profit">0.00</span></p>
-            <p>Time Remaining: <span class="time-left"></span></p>
-          `;
-          container.appendChild(investmentDiv);
-          startInvestmentCalculator(investment, investmentDiv);
+        noInvestmentsDiv.style.display = 'none';
+
+        if (investments.length > 0) {
+          const fragment = document.createDocumentFragment();
+          investments.forEach(investment => {
+            const investmentDiv = document.createElement('div');
+            investmentDiv.className = 'investment-item';
+            investmentDiv.innerHTML = `
+              <p>Plan: <span>${investment.plan ? investment.plan.name : 'Unknown'}</span></p>
+              <p>Invested Amount: $<span>${investment.principal.toFixed(2)}</span></p>
+              <p>Current Profit: $<span class="current-profit">0.00</span></p>
+              <p>Time Remaining: <span class="time-left"></span></p>
+            `;
+
+            const now = new Date();
+            const start = new Date(investment.start_time);
+            const msSinceStart = now - start;
+            const daysSinceStart = msSinceStart / (1000 * 60 * 60 * 24);
+            const canWithdraw = daysSinceStart >= 14;
+            const canReinvest = daysSinceStart >= 7 && daysSinceStart <= 120;
+
+            investmentDiv.innerHTML += `
+              <button class="withdraw-btn" ${canWithdraw ? '' : 'disabled'}>Withdraw Capital</button>
+              <button class="reinvest-btn" ${canReinvest ? '' : 'disabled'}>Reinvest</button>
+            `;
+
+            fragment.appendChild(investmentDiv);
+            startInvestmentCalculator(investment, investmentDiv);
+
+            const withdrawBtn = investmentDiv.querySelector('.withdraw-btn');
+            withdrawBtn.addEventListener('click', async () => {
+              if (!canWithdraw) return;
+              const principal = investment.principal;
+              const currentAccount = parseFloat(document.getElementById('accountBalance').textContent);
+              const newAccount = currentAccount + principal;
+              document.getElementById('accountBalance').textContent = newAccount.toFixed(2);
+              await supabaseClient
+                .from('profiles')
+                .update({ account_balance: newAccount })
+                .eq('id', user.id);
+              await supabaseClient
+                .from('investments')
+                .update({ status: 'withdrawn' })
+                .eq('id', investment.id);
+              investmentDiv.innerHTML += '<p>Capital withdrawn.</p>';
+              withdrawBtn.disabled = true;
+            });
+
+            const reinvestBtn = investmentDiv.querySelector('.reinvest-btn');
+            reinvestBtn.addEventListener('click', async () => {
+              if (!canReinvest) return;
+              console.log('Reinvesting investment:', investment.id);
+              // Placeholder: Add reinvestment logic here
+            });
+          });
+          container.appendChild(fragment);
+        } else {
+          noInvestmentsElement.style.display = 'block';
+        }
+
+        const { data: txns, error: txnsError } = await supabaseClient
+          .from('transactions')
+          .select('*')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false });
+        if (txnsError) throw txnsError;
+
+        const tbody = document.querySelector('#txTable tbody');
+        tbody.innerHTML = '';
+        txns.forEach(t => {
+          tbody.insertAdjacentHTML('beforeend', `
+            <tr>
+              <td>${new Date(t.created_at).toLocaleString()}</td>
+              <td>${t.type}</td>
+              <td>$${t.amount.toFixed(2)}</td>
+              <td>${t.status}</td>
+            </tr>
+          `);
         });
-      } else {
-        noInvestmentsDiv.style.display = 'block';
+      } catch (error) {
+        console.error('Dashboard initialization error:', error);
+        alert('An error occurred while loading the dashboard.');
+      } finally {
+        isDashboardLoading = false;
       }
-
-      // Load transactions
-      const { data: txns, error: txnsError } = await supabaseClient
-        .from('transactions')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false });
-
-      if (txnsError) {
-        console.error('Error loading transactions:', txnsError);
-        alert('Error retrieving transaction history.');
-        return;
-      }
-
-      const tbody = document.querySelector('#txTable tbody');
-      tbody.innerHTML = '';
-      txns.forEach(t => {
-        tbody.insertAdjacentHTML('beforeend', `
-          <tr>
-            <td>${new Date(t.created_at).toLocaleString()}</td>
-            <td>${t.type}</td>
-            <td>$${t.amount.toFixed(2)}</td>
-            <td>${t.status}</td>
-          </tr>
-        `);
-      });
     }
 
-    // Investment calculator logic for multiple investments
     function startInvestmentCalculator(investment, investmentDiv) {
       const { start_time, end_time, principal, total_profit } = investment;
       const startTime = new Date(start_time);
@@ -382,18 +420,40 @@
 
       const updateInvestment = async () => {
         const now = new Date();
-        console.log('Now:', now.toISOString(), 'End Time:', investment.end_time); // Debug time sync
         if (now >= endTime) {
           currentProfitSpan.textContent = total_profit.toFixed(2);
           timeLeftSpan.textContent = '0d 0h 0m 0s';
-          const message = document.createElement('p');
-          message.textContent = 'Investment cycle completed. Profits have been transferred to your Interest Wallet.';
-          investmentDiv.appendChild(message);
-          clearInterval(interval);
+          if (!investment.completed) {
+            investment.completed = true;
+            const message = document.createElement('p');
+            message.textContent = 'Investment cycle completed. Profits have been transferred to your Interest Wallet.';
+            investmentDiv.appendChild(message);
 
-          // Update interest wallet (client-side for demo; server-side recommended)
-          const currentWallet = parseFloat(document.getElementById('interestWallet').textContent);
-          document.getElementById('interestWallet').textContent = (currentWallet + total_profit).toFixed(2);
+            const currentInterest = parseFloat(document.getElementById('interestWallet').textContent);
+            const newInterest = currentInterest + total_profit;
+            document.getElementById('interestWallet').textContent = newInterest.toFixed(2);
+
+            await supabaseClient
+              .from('profiles')
+              .update({ interest_wallet: newInterest })
+              .eq('id', investment.user_id);
+
+            setTimeout(async () => {
+              const currentInterestAfter14d = parseFloat(document.getElementById('interestWallet').textContent);
+              const currentAccount = parseFloat(document.getElementById('accountBalance').textContent);
+              const updatedInterest = currentInterestAfter14d - total_profit;
+              const updatedAccount = currentAccount + total_profit;
+
+              document.getElementById('interestWallet').textContent = updatedInterest.toFixed(2);
+              document.getElementById('accountBalance').textContent = updatedAccount.toFixed(2);
+
+              await supabaseClient
+                .from('profiles')
+                .update({ interest_wallet: updatedInterest, account_balance: updatedAccount })
+                .eq('id', investment.user_id);
+            }, 14 * 24 * 60 * 60 * 1000);
+          }
+          clearInterval(interval);
         } else {
           const elapsedSeconds = (now - startTime) / 1000;
           const currentProfit = Math.min(elapsedSeconds * profitPerSecond, total_profit);
@@ -403,7 +463,8 @@
         }
       };
 
-      const interval = setInterval(updateInvestment, 500); // Changed to 500ms for smoother updates
+      const interval = setInterval(updateInvestment, 500);
+      investmentIntervals.push(interval);
       updateInvestment();
     }
 
@@ -416,13 +477,17 @@
       return `${days}d ${hours}h ${minutes}m ${secs}s`;
     }
 
+    function clearAllInvestmentIntervals() {
+      investmentIntervals.forEach(id => clearInterval(id));
+      investmentIntervals = [];
+    }
+
     document.getElementById('logout-btn').addEventListener('click', async () => {
       const { error } = await supabaseClient.auth.signOut();
       if (!error) window.location.href = 'login.html';
       else alert('Error logging out: ' + error.message);
     });
 
-    // Invest Now button handler
     document.getElementById('invest-now-btn').addEventListener('click', (e) => {
       e.preventDefault();
       const investOption = document.getElementById('invest-option').value;
@@ -430,27 +495,18 @@
         alert('Please select an investment option.');
         return;
       }
-      if (investOption === 'accountbalance') {
-        window.location.href = 'accountbalance.html';
-      } else if (investOption === 'directly') {
-        window.location.href = 'invest.html';
-      }
+      window.location.href = investOption === 'accountbalance' ? 'accountbalance.html' : 'invest.html';
     });
 
     initDashboard();
-
-    // Auto-refresh investment list every 60 seconds
     setInterval(() => {
       console.log('Refreshing investments list...');
-      initDashboard(); // Re-runs everything including fetching new investments
+      initDashboard();
     }, 60000);
 
-    // Ensure background video plays
     const video = document.querySelector('.bg-video');
     video.addEventListener('canplay', () => {
-      video.play().catch(error => {
-        console.error('Error playing video:', error);
-      });
+      video.play().catch(error => console.error('Error playing video:', error));
     });
   </script>
 </body>
