@@ -1,103 +1,385 @@
-/* transfer.css */
-
-/* General Styling */
-.transfer-page {
-  position: relative;
-  min-height: 100vh;
-  background: #000; /* Changed to black to match deposit page */
-  color: #e0e0ff; /* Light color for text, consistent with deposit page */
-  font-family: 'Poppins', sans-serif;
+/* Profile Section */
+.profile-section {
+  display: flex;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  background: rgba(0, 0, 0, 0.4); /* Darker, more transparent */
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(255, 215, 0, 0.3);
 }
 
-/* Form Section */
-.transfer-form {
-  background: rgba(255, 255, 255, 0.05); /* Matches deposit page background */
-  backdrop-filter: blur(10px); /* Consistent with deposit page */
-  border: 1px solid #ffd700; /* Gold border to match deposit page */
-  border-radius: 15px; /* Slightly rounded to align with deposit page */
-  padding: 2rem;
-  max-width: 500px;
-  margin: 2rem auto;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37); /* Matches deposit page shadow */
+.profile-container {
+  margin-right: 1rem;
 }
 
-/* Form Header */
-.transfer-form h2 {
-  font-size: clamp(1.75rem, 6vw, 2.5rem);
-  color: #ffd700; /* Gold, already matching */
-  text-align: center;
-  margin-bottom: 1.5rem;
-  font-family: 'Playfair Display', serif; /* Matches deposit page font */
-  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5); /* Gold glow, already matching */
+.avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  background: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 80px;
+  color: #ffd700; /* Gold */
+  object-fit: cover;
+  transition: transform 0.3s ease;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.5); /* Subtle golden glow */
 }
 
-/* Form Groups */
-.transfer-form .form-group {
-  margin-bottom: 1.5rem;
+.avatar:hover {
+  transform: scale(1.05);
 }
 
-.transfer-form .form-group label {
-  display: block;
-  font-weight: 500;
-  color: #ffd700; /* Changed to gold for consistency */
-  margin-bottom: 0.5rem;
-  font-size: 1.1rem;
+.welcome-message {
+  font-size: 1.4rem;
+  color: #ffd700; /* Gold */
+  font-family: 'Playfair Display', serif;
+  text-shadow: 0 0 5px rgba(255, 215, 0, 0.6);
 }
 
-.transfer-form .form-group input {
-  width: 100%;
-  padding: 0.9rem;
-  border: 1px solid #ffd700; /* Gold border to match deposit page */
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.1); /* Matches deposit page input background */
-  color: #e0e0ff; /* Light text color to match deposit page */
-  font-size: 1rem;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Added box-shadow transition */
-}
-
-.transfer-form .form-group input:focus {
-  outline: none;
-  border-color: #ffd700; /* Gold, already matching */
-  box-shadow: 0 0 5px rgba(255, 215, 0, 0.5); /* Gold glow, already matching */
-}
-
-.transfer-form .form-group input::placeholder {
-  color: rgba(255, 215, 0, 0.6); /* Gold-tinted placeholder for consistency */
-}
-
-/* Submit Button */
-.btn.submit-btn {
-  display: block;
-  width: 100%;
+/* Transactions Section */
+.transactions-section {
+  background: rgba(0, 0, 0, 0.5); /* Dark, transparent background */
   padding: 1rem;
-  font-size: 1.2rem;
-  background: linear-gradient(45deg, #ffd700, #cca300); /* Gold gradient to match deposit page */
-  border: none;
-  border-radius: 5px; /* Matches deposit page button */
-  color: #000; /* Black text to match deposit page button */
+  border-radius: 15px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.3); /* Golden glow */
+  margin: 1.5rem auto;
+  max-width: 900px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.transactions-section::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, #ffd700, #cca300, #ffd700, #cca300);
+  background-size: 400%;
+  z-index: -1;
+  animation: glowing 20s linear infinite;
+}
+
+@keyframes glowing {
+  0% { background-position: 0 0; }
+  50% { background-position: 400% 0; }
+  100% { background-position: 0 0; }
+}
+
+.transactions-section:hover {
+  box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+}
+
+.transactions-section h2 {
+  font-size: 2.2rem;
+  color: #ffd700; /* Gold */
+  margin-bottom: 1rem;
+  text-align: center;
+  font-family: 'Playfair Display', serif;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
+}
+
+.filter-bar {
+  margin-bottom: 1rem;
+  text-align: right;
+}
+
+.filter-bar select {
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 215, 0, 0.7);
+  background: rgba(0, 0, 0, 0.5); /* Dark, transparent */
+  color: #e0e0ff;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.filter-bar select:focus {
+  border-color: #cca300;
+  background: rgba(0, 0, 0, 0.6);
+  outline: none;
+}
+
+/* Transparent Card Design with Horizontal Scroll */
+.table-card {
+  background: rgba(0, 0, 0, 0.6); /* Darker, transparent */
+  border: 2px solid transparent;
+  border-radius: 15px;
+  padding: 0.8rem;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.4), inset 0 0 8px rgba(255, 215, 0, 0.2);
+  backdrop-filter: blur(15px);
+  transition: all 0.3s ease;
+  max-width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.table-card::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, #ffd700, #cca300, #ffd700, #cca300);
+  background-size: 400%;
+  z-index: -1;
+  animation: glowing 15s linear infinite;
+}
+
+.table-card:hover {
+  box-shadow: 0 0 25px rgba(255, 215, 0, 0.6), inset 0 0 12px rgba(255, 215, 0, 0.3);
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on mobile */
+  scroll-behavior: smooth; /* Smooth scroll */
+  scrollbar-width: thin;
+  scrollbar-color: #ffd700 rgba(0, 0, 0, 0.5);
+}
+
+.table-wrapper::-webkit-scrollbar {
+  height: 8px;
+}
+
+.table-wrapper::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.table-wrapper::-webkit-scrollbar-thumb {
+  background: #ffd700;
+  border-radius: 4px;
+}
+
+#transactionsTable {
+  width: max-content; /* Allow table to expand horizontally */
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.85rem;
+}
+
+#transactionsTable th,
+#transactionsTable td {
+  padding: 0.5rem 0.7rem;
+  text-align: left;
+  border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+  color: #e0e0ff;
+  white-space: nowrap;
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#transactionsTable th {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.8), rgba(204, 163, 0, 0.8));
+  color: #1a1a1a;
   font-weight: 600;
-  cursor: pointer;
-  transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease; /* Added box-shadow transition */
+  position: sticky;
+  top: 0;
+  z-index: 1;
 }
 
-.btn.submit-btn:hover {
-  background: linear-gradient(45deg, #cca300, #ffd700); /* Reverse gold gradient to match deposit page */
-  transform: translateY(-2px) scale(1.05); /* Added scale to match deposit button hover */
-  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.5); /* Gold glow to match deposit page */
+#transactionsTable th i {
+  margin-left: 0.3rem;
+  font-size: 0.65rem;
+  color: #1a1a1a;
 }
 
-.btn.submit-btn:active {
-  transform: translateY(0); /* Already matching */
+#transactionsTable tbody tr {
+  transition: all 0.3s ease;
+}
+
+#transactionsTable tbody tr:hover {
+  background: rgba(255, 215, 0, 0.2);
+  transform: scale(1.01);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: capitalize;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.badge.pending { background-color: rgba(255, 243, 205, 0.8); color: #856404; }
+.badge.approved { background-color: rgba(212, 237, 218, 0.8); color: #155724; }
+.badge.failed { background-color: rgba(248, 215, 218, 0.8); color: #721c24; }
+
+/* Error Banner */
+.error-banner {
+  background: rgba(248, 215, 218, 0.8);
+  color: #721c24;
+  padding: 0.8rem;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+/* Background Video */
+.bg-video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+  filter: brightness(0.9); /* Slightly brighter for clarity */
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .transfer-form {
-    margin: 1rem;
-    padding: 1.5rem;
+  .profile-section {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0.8rem;
   }
 
-  .transfer-form h2 {
-    font-size: clamp(1.5rem, 5vw, 2rem);
+  .profile-container {
+    margin-right: 0;
+    margin-bottom: 0.5rem;
   }
+
+  .avatar {
+    width: 100px;
+    height: 100px;
+    font-size: 60px;
+  }
+
+  .welcome-message {
+    font-size: 1.2rem;
+  }
+
+  .transactions-section {
+    padding: 0.7rem;
+    max-width: 100%;
+    margin: 1rem auto;
+  }
+
+  .transactions-section h2 {
+    font-size: 1.8rem;
+  }
+
+  #transactionsTable th,
+  #transactionsTable td {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.8rem;
+    max-width: 120px;
+  }
+}
+
+@media (max-width: 600px) {
+  #transactionsTable th:nth-child(5),
+  #transactionsTable td:nth-child(5),
+  #transactionsTable th:nth-child(6),
+  #transactionsTable td:nth-child(6) {
+    display: none; /* Hide Memo & Reason */
+  }
+
+  #transactionsTable th,
+  #transactionsTable td {
+    padding: 0.3rem 0.5rem;
+    max-width: 100px;
+  }
+}
+
+@media (max-width: 400px) {
+  #transactionsTable th,
+  #transactionsTable td {
+    padding: 0.2rem 0.4rem;
+    font-size: 0.75rem;
+    max-width: 80px;
+  }
+}
+
+/* Transfer Form */
+.transfer-form {
+  background: rgba(0, 0, 0, 0.5); /* Dark, transparent */
+  padding: 1rem;
+  border-radius: 15px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+  margin: 1.5rem auto;
+  max-width: 600px;
+  position: relative;
+  overflow: hidden;
+}
+
+.transfer-form::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, #ffd700, #cca300, #ffd700, #cca300);
+  background-size: 400%;
+  z-index: -1;
+  animation: glowing 15s linear infinite;
+}
+
+.transfer-form h2 {
+  font-size: 2rem;
+  color: #ffd700;
+  margin-bottom: 1rem;
+  text-align: center;
+  font-family: 'Playfair Display', serif;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  color: #e0e0ff;
+  font-size: 0.9rem;
+  margin-bottom: 0.3rem;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 215, 0, 0.7);
+  background: rgba(0, 0, 0, 0.5);
+  color: #e0e0ff;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+  border-color: #cca300;
+  background: rgba(0, 0, 0, 0.6);
+  outline: none;
+}
+
+.submit-btn {
+  display: block;
+  width: 100%;
+  padding: 0.7rem;
+  background: linear-gradient(135deg, #ffd700, #cca300);
+  color: #1a1a1a;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.submit-btn:hover {
+  background: linear-gradient(135deg, #cca300, #ffd700);
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
 }
