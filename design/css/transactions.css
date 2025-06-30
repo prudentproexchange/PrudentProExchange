@@ -39,13 +39,13 @@
 
 /* Transactions Section */
 .transactions-section {
-  background: rgba(255, 255, 255, 0.08); /* Slightly more transparent */
+  background: rgba(255, 255, 255, 0.05); /* Increased transparency */
   padding: 1rem; /* Reduced padding */
   border-radius: 20px; /* Smoother corners */
   backdrop-filter: blur(20px); /* Enhanced blur for beauty */
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5); /* Deeper shadow */
   margin: 2rem auto;
-  max-width: 850px; /* Slightly smaller for better fit */
+  max-width: 100%; /* Changed to match footer */
   transition: all 0.3s ease;
 }
 
@@ -85,7 +85,7 @@
 
 /* Transparent Card Design */
 .table-card {
-  background: rgba(255, 255, 255, 0.12); /* More transparency */
+  background: rgba(255, 255, 255, 0.05); /* More transparency */
   border: 2px solid rgba(255, 215, 0, 0.7); /* Bolder gold border */
   border-radius: 20px; /* Rounded corners */
   padding: 0.8rem; /* Reduced padding */
@@ -100,12 +100,25 @@
 }
 
 .table-wrapper {
-  overflow-x: auto;
+  overflow-x: auto; /* Enables horizontal scrolling */
   -webkit-overflow-scrolling: touch; /* Smooth scrolling on mobile */
+  position: relative; /* For positioning the arrow */
+}
+
+.table-wrapper::after {
+  content: '➡️'; /* Right arrow to indicate scrollability */
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.5rem;
+  color: #ffd700; /* Gold to match theme */
+  pointer-events: none; /* Ensures arrow doesn’t interfere with scrolling */
 }
 
 #transactionsTable {
   width: 100%;
+  min-width: 1000px; /* Forces horizontal scrolling on smaller screens */
   border-collapse: separate;
   border-spacing: 0;
   font-size: 0.9rem; /* Slightly smaller text */
