@@ -256,16 +256,6 @@
 
         const planId = plan.id;
 
-        // Check for pending upload in localStorage
-        const pendingUpload = JSON.parse(localStorage.getItem(`pendingUpload_${user.id}_${planId}_${method}`));
-        if (pendingUpload) {
-          if (confirm('You have a pending upload. Would you like to resume?')) {
-            showUploadForm(pendingUpload.method, user.id, planId, pendingUpload.fileName);
-          } else {
-            localStorage.removeItem(`pendingUpload_${user.id}_${planId}_${method}`);
-          }
-        }
-
         const paymentMethods = [
           { name: 'Bitcoin', symbol: 'BTC', logo: 'bitcoin.png' },
           { name: 'Ethereum', symbol: 'ETH', logo: 'ethereum.png' },
@@ -277,6 +267,20 @@
           { name: 'USD Coin (USDC)', symbol: 'USDC', logo: 'usdcoin.PNG' },
           { name: 'Solana', symbol: 'SOL', logo: 'solana.png' }
         ];
+
+        // Check for any pending uploads across all methods
+        const pendingMethod = paymentMethods.find(method => {
+          return localStorage.getItem(`pendingUpload_${user.id}_${planId}_${method.symbol}`);
+        });
+
+        if (pendingMethod) {
+          const pendingUpload = JSON.parse(localStorage.getItem(`pendingUpload_${user.id}_${planId}_${pendingMethod.symbol}`));
+          if (pendingUpload && confirm(`You have a pending upload for ${pendingMethod.name}. Would you like to resume?`)) {
+            showUploadForm(pendingMethod.symbol, user.id, planId, pendingUpload.fileName);
+          } else {
+            localStorage.removeItem(`pendingUpload_${user.id}_${planId}_${pendingMethod.symbol}`);
+          }
+        }
 
         const grid = document.getElementById('paymentMethodsGrid');
         paymentMethods.forEach(method => {
