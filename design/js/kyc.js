@@ -77,11 +77,14 @@ async function loadKYC() {
 
   if (!session) {
     authSection.style.display = 'block';
+    kycStatus.style.display = 'none';
+    kycForm.style.display = 'none';
     handleAuth();
   } else {
     currentUserId = session.user.id;
     await loadProfile(currentUserId);
     await checkKYCStatus(currentUserId);
+    authSection.style.display = 'none';
     kycForm.style.display = 'block';
   }
 }
@@ -123,6 +126,7 @@ async function handleAuth() {
       authForm.style.display = 'none';
       document.getElementById('totp-section').style.display = 'block';
     } else {
+      await supabaseClient.auth.setSession(tempSession);
       await loadProfile(currentUserId);
       await checkKYCStatus(currentUserId);
       document.getElementById('auth-section').style.display = 'none';
@@ -281,7 +285,7 @@ function initForm() {
     if (validateAllSteps()) {
       try {
         const formData = new FormData(e.target);
-        const data = Object.fromEntries(formData);
+        const data |data| = Object.fromEntries(formData);
         const userId = (await supabaseClient.auth.getSession()).data.session.user.id;
 
         const documentFile = formData.get('document_scan');
