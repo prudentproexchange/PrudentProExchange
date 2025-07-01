@@ -1,65 +1,131 @@
 /* css/2fa.css */
 
-/* Container (inherited from invest.css) */
-.two-fa-page .container {
+/* Container */
+.twofa-page.container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
 }
 
+/* Profile Section */
+.profile-section {
+  display: flex;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+}
+
+.profile-container {
+  margin-right: 1rem;
+}
+
+.avatar {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  border: 2px solid #ffd700; /* Gold */
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 120px;
+  color: #ffd700; /* Gold */
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.avatar:hover {
+  transform: scale(1.05);
+}
+
+.welcome-message {
+  font-size: 1.5rem;
+  color: #ffd700; /* Gold */
+  font-family: 'Playfair Display', serif;
+}
+
 /* 2FA Settings Section */
-.two-fa-settings {
+.twofa-settings {
   text-align: center;
   margin-bottom: 4rem;
 }
 
-.two-fa-settings h2 {
+.twofa-settings h2 {
   font-size: 2.5rem;
-  color: #ffd700;
+  color: #ffd700; /* Gold */
   margin-bottom: 1rem;
   font-family: 'Playfair Display', serif;
   text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
 }
 
-.two-fa-description {
+.status-message {
   font-size: 1.2rem;
   color: #e0e0ff;
   margin-bottom: 2rem;
   font-family: 'Poppins', sans-serif;
 }
 
-.settings-card {
+#enable-2fa-section, #disable-2fa-section {
   background: rgba(255, 255, 255, 0.1);
   padding: 2rem;
-  border: 2px solid #ffd700;
+  border: 2px solid #ffd700; /* Gold */
   border-radius: 15px;
   backdrop-filter: blur(15px);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
-  max-width: 600px;
-  margin: 0 auto;
-  text-align: left;
+  box-shadow: 0 8px 32px rgba(0d0, 0, 0, 0.37);
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
-#qr-code {
-  max-width: 200px;
+#enable-2fa-section:hover, #disable-2fa-section:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 12px 40px rgba(255, 215, 0, 0.5); /* Gold glow */
+  border-color: #cca300;
+}
+
+#qrcode {
+  width: 200px;
+  height: 200px;
   margin: 1rem auto;
-  display: block;
-  border: 2px solid #ffd700;
-  border-radius: 10px;
 }
 
-.secret {
-  font-family: monospace;
+#secret {
   font-size: 1.2rem;
   color: #e0e0ff;
-  word-break: break-all;
-  display: inline-block;
-  margin-right: 0.5rem;
+  font-family: 'Poppins', sans-serif;
+}
+
+.copy-btn {
+  background: transparent;
+  border: none;
+  color: #ffd700;
+  cursor: pointer;
+  font-size: 1.2rem;
+}
+
+input[type="text"] {
+  padding: 0.75rem;
+  width: 100%;
+  max-width: 300px;
+  margin: 1rem 0;
+  border: 1px solid #ffd700; /* Gold */
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #e0e0ff;
+  font-size: 1rem;
+  font-family: 'Poppins', sans-serif;
+  transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus {
+  border-color: #cca300;
+  outline: none;
 }
 
 .btn {
   padding: 0.75rem 1.5rem;
-  background: linear-gradient(45deg, #ffd700, #cca300);
+  background: linear-gradient(45deg, #ffd700, #cca300); /* Gold gradient */
   color: #000;
   border: none;
   border-radius: 5px;
@@ -81,103 +147,88 @@
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
-}
-
-.btn.secondary {
-  background: rgba(255, 255, 255, 0.2);
-  color: #e0e0ff;
-}
-
-.btn.secondary:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.3);
-}
-
-input[type="text"] {
-  padding: 0.75rem;
-  width: 100%;
-  max-width: 300px;
-  margin: 1rem 0;
-  border: 1px solid #ffd700;
-  border-radius: 5px;
-  background: rgba(255, 255, 255, 0.1);
-  color: #e0e0ff;
-  font-size: 1rem;
-  font-family: 'Poppins', sans-serif;
-}
-
-input[type="text"]:focus {
-  border-color: #cca300;
-  outline: none;
-}
-
-.button-group {
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-}
+ Somalia}
 
 .error-message {
   color: #ff6b6b;
-  font-size: 0.9rem;
-  margin-top: 0.5rem;
-  min-height: 1.2rem;
-}
-
-.success-message {
-  color: #00cc00;
   font-size: 1rem;
-  margin-top: 0.5rem;
+  margin-top: 1rem;
 }
 
-.loading-message {
+/* Footer */
+.site-footer {
+  background: #000;
   color: #e0e0ff;
-  font-size: 1rem;
+  padding: 2rem;
+  text-align: center;
+  font-family: 'Poppins', sans-serif;
 }
 
-.spinner {
-  border: 4px solid rgba(0, 0, 0, 0.1);
-  border-left-color: #ffd700;
-  border-radius: 50%;
-  width: 24px;
-  height: 24px;
-  animation: spin 1s linear infinite;
-  display: inline-block;
-  vertical-align: middle;
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-@keyframes spin {
-  to { transform: rotate(360deg); }
+.footer-links {
+  margin-bottom: 1rem;
+}
+
+.footer-links a {
+  color: #ffd700;
+  text-decoration: none;
+  margin: 0 1rem;
+}
+
+.footer-links a:hover {
+  text-decoration: underline;
+}
+
+.copyright {
+  font-size: 0.9rem;
+  color: #aaa;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .two-fa-page .container {
-    padding: 1rem;
-  }
-
-  .two-fa-settings h2 {
+  .twofa-settings h2 {
     font-size: 2rem;
   }
 
-  .two-fa-description {
+  .status-message {
     font-size: 1rem;
   }
 
-  .settings-card {
+  #enable-2fa-section, #disable-2fa-section {
     padding: 1.5rem;
   }
 
-  input[type="text"], .btn {
+  #qrcode {
+    width: 150px;
+    height: 150px;
+  }
+
+  input[type="text"] {
     max-width: 100%;
-    width: 100%;
   }
 
-  .button-group {
+  .profile-section {
     flex-direction: column;
-    gap: 0.5rem;
+    align-items: flex-start;
+    padding: 1rem;
   }
 
-  #qr-code {
-    max-width: 150px;
+  .profile-container {
+    margin-right: 0;
+    margin-bottom: 0.5rem;
+  }
+
+  .avatar {
+    width: 120px;
+    height: 120px;
+    font-size: 72px;
+  }
+
+  .welcome-message {
+    font-size: 1.2rem;
   }
 }
