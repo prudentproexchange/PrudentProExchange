@@ -62,7 +62,11 @@ async function init2FAPage() {
 
 // Fetch TOTP secret and QR code
 async function fetchTotpSecret() {
-  const { data, error } = await supabaseClient.rpc('create_totp_secret', { user_id: userId });
+  // <-- here we send _user_id instead of user_id
+  const { data, error } = await supabaseClient.rpc(
+    'create_totp_secret',
+    { _user_id: userId }
+  );
   if (error) {
     showError('Error fetching TOTP secret: ' + error.message);
     return;
@@ -92,7 +96,10 @@ function setupEventListeners() {
       showError('Please enter a valid 6-digit code.');
       return;
     }
-    const { error } = await supabaseClient.rpc('verify_and_enable_totp', { user_id: userId, token });
+    const { error } = await supabaseClient.rpc('verify_and_enable_totp', {
+      user_id: userId,
+      token
+    });
     if (error) {
       showError('Invalid code: ' + error.message);
     } else {
@@ -108,7 +115,10 @@ function setupEventListeners() {
       showError('Please enter a valid 6-digit code.');
       return;
     }
-    const { error } = await supabaseClient.rpc('disable_totp', { user_id: userId, token });
+    const { error } = await supabaseClient.rpc('disable_totp', {
+      user_id: userId,
+      token
+    });
     if (error) {
       showError('Invalid code: ' + error.message);
     } else {
@@ -161,7 +171,7 @@ function setupEventListeners() {
 
   // Logout
   document.getElementById('logout-btn').addEventListener('click', async () => {
-    const { error } = await supabaseClient.auth.signOut() ;
+    const { error } = await supabaseClient.auth.signOut();
     if (!error) window.location.href = 'login.html';
     else showError('Error logging out: ' + error.message);
   });
@@ -182,7 +192,7 @@ function setupEventListeners() {
 // Show error message
 function showError(message) {
   const errorDiv = document.getElementById('error-message');
-  errorDiv.textContent = message 
+  errorDiv.textContent = message;
   errorDiv.style.display = 'block';
   setTimeout(() => errorDiv.style.display = 'none', 5000);
 }
