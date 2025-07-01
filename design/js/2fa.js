@@ -64,21 +64,26 @@ async function init2FAPage() {
 async function fetchTotpSecret() {
   const { data, error } = await supabaseClient.rpc(
     'create_totp_secret',
-    { _user_id: userId } // ← must be "_user_id" to match your SQL
+    { _user_id: userId }
   );
   if (error) {
     showError('Error fetching TOTP secret: ' + error.message);
     return;
   }
-  const { secret, qr_code_url } = data;
-  document.getElementById('qrcode').src = qr_code_url;
+
+  // Assuming your function returns: { secret: '...', otp_uri: '...' }
+  const { secret, otp_uri } = data;
+
+  // Create QR code using public QR server
+  const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(otp_uri)}&size=200x200`;
+
+  document.getElementById('qrcode').src = qrCodeUrl;
   document.getElementById('qrcode').style.display = 'block';
   document.getElementById('secret').textContent = secret;
 }
 
 // Setup event listeners
 function setupEventListeners() {
-  // Copy secret to clipboard
   document.getElementById('copy-secret-btn').addEventListener('click', () => {
     const secret = document.getElementById('secret').textContent;
     navigator.clipboard.writeText(secret).then(() => {
@@ -88,10 +93,9 @@ function setupEventListeners() {
     });
   });
 
-  // Verify and enable 2FA
   document.getElementById('verify-enable-btn').addEventListener('click', async () => {
     const token = document.getElementById('totp-code-enable').value.trim();
-    if (!token || token.length !== 6) {
+    if (!/^\d{6}$/.test(token)) {
       showError('Please enter a valid 6-digit code.');
       return;
     }
@@ -107,10 +111,9 @@ function setupEventListeners() {
     }
   });
 
-  // Verify and disable 2FA
   document.getElementById('verify-disable-btn').addEventListener('click', async () => {
     const token = document.getElementById('totp-code-disable').value.trim();
-    if (!token || token.length !== 6) {
+    if (!/^\d{6}$/.test(token)) {
       showError('Please enter a valid 6-digit code.');
       return;
     }
@@ -140,11 +143,7 @@ function setupEventListeners() {
   document.addEventListener('click', (event) => {
     const isClickInsideNav = navDrawer.contains(event.target);
     const isClickOnHamburger = hamburgerBtn.contains(event.target);
-    if (
-      !isClickInsideNav &&
-      !isClickOnHamburger &&
-      navDrawer.classList.contains('open')
-    ) {
+    if (!isClickInsideNav && !isClickOnHamburger && navDrawer.classList.contains('open')) {
       navDrawer.classList.remove('open');
       hamburgerBtn.classList.remove('active');
       overlay.classList.remove('nav-open');
