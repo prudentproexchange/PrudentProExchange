@@ -5,9 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Invest • PrudentProExchange</title>
   <link rel="stylesheet" href="css/style.css"/>
-  <!-- Load only required Font Awesome icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/fontawesome.min.css"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/solid.min.css"/>
+  <!-- Optimized Font Awesome loading with all.min.css -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
@@ -269,6 +268,23 @@
       return parsed.toFixed(2);
     }
 
+    // Cache DOM elements for time updates
+    const localTimeElem = document.getElementById('localTime');
+    const localDateElem = document.getElementById('localDate');
+    const utcTimeElem = document.getElementById('utcTime');
+
+    // Update all times in a single function
+    function updateTimes() {
+      const now = new Date();
+      localTimeElem.textContent = now.toLocaleTimeString();
+      localDateElem.textContent = now.toLocaleDateString('en-US', {
+        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+      });
+      utcTimeElem.textContent = now.toUTCString();
+    }
+    setInterval(updateTimes, 1000);
+    updateTimes();
+
     // Initialize Investment Page
     async function initInvestPage() {
       // Check Authentication
@@ -412,23 +428,6 @@
     document.getElementById('back-to-top').addEventListener('click', () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
-
-    // Time Updates
-    function updateLocalTime() {
-      const now = new Date();
-      document.getElementById('localTime').textContent = now.toLocaleTimeString();
-      document.getElementById('localDate').textContent = now.toLocaleDateString('en-US', {
-        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
-      });
-    }
-    setInterval(updateLocalTime, 1000);
-    updateLocalTime();
-
-    function updateUTCTime() {
-      document.getElementById('utcTime').textContent = new Date().toUTCString();
-    }
-    setInterval(updateUTCTime, 1000);
-    updateUTCTime();
 
     // Ensure Video Playback
     const video = document.querySelector('.bg-video');
