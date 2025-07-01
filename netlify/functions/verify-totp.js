@@ -9,12 +9,11 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
-// configure otplib for Base32/RFC defaults
+// configure otplib for TOTP defaults
 authenticator.options = {
-  encoding: 'base32',
   digits: 6,
   step: 30,
-  algorithm: 'sha1' // Changed from 'SHA1' to 'sha1'
+  algorithm: 'sha1'
 };
 
 exports.handler = async (event) => {
