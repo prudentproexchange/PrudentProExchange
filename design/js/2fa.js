@@ -1,6 +1,6 @@
 // js/2fa.js
 
-// 1. Init Supabase client
+// 1) Init Supabase client (anon key, for updating two_fa_enabled)
 const { createClient } = supabase;
 const supabaseClient = createClient(
   'https://iwkdznjqfbsfkscnbrkc.supabase.co',
@@ -9,28 +9,28 @@ const supabaseClient = createClient(
 
 let userId;
 
-// 2. Page init
+// 2) Page init
 async function init2FAPage() {
   AOS.init({ duration: 800, once: true });
 
-  // 2.1 Get user
-  const { data: authData, error: authError } = await supabaseClient.auth.getUser();
-  if (authError || !authData.user) {
+  // 2.1 get current user
+  const { data: authData, error: authErr } = await supabaseClient.auth.getUser();
+  if (authErr || !authData.user) {
     return void (window.location.href = 'login.html');
   }
   userId = authData.user.id;
 
-  // 2.2 Get profile
-  const { data: profile, error: profileError } = await supabaseClient
+  // 2.2 fetch profile
+  const { data: profile, error: profErr } = await supabaseClient
     .from('profiles')
-    .select('first_name, photo_url, two_fa_enabled')
+    .select('first_name,photo_url,two_fa_enabled')
     .eq('id', userId)
     .single();
-  if (profileError) {
-    return showError('Error loading profile: ' + profileError.message);
+  if (profErr) {
+    return showError('Error loading profile: ' + profErr.message);
   }
 
-  // 2.3 Update UI
+  // 2.3 update UI
   document.getElementById('welcomeName').textContent = profile.first_name || 'User';
   if (profile.photo_url) {
     const { data: urlData } = supabaseClient.storage
@@ -40,7 +40,6 @@ async function init2FAPage() {
     document.getElementById('navProfilePhoto').style.display = 'block';
     document.getElementById('defaultProfileIcon').style.display = 'none';
   }
-
   const enabled = profile.two_fa_enabled;
   document.getElementById('twofa-status').textContent = enabled
     ? '2FA is currently enabled.'
@@ -48,7 +47,7 @@ async function init2FAPage() {
   document.getElementById('enable-2fa-section').style.display = enabled ? 'none' : 'block';
   document.getElementById('disable-2fa-section').style.display = enabled ? 'block' : 'none';
 
-  // 2.4 If disabled, generate secret via Netlify function
+  // 2.4 if disabled, call our Netlify function to generate+store the secret
   if (!enabled) {
     await generateTotpSecret();
   }
@@ -56,55 +55,41 @@ async function init2FAPage() {
   setupEventListeners();
 }
 
-// 3. Generate TOTP secret via your Netlify function
+// 3) call create-totp Netlify function
 async function generateTotpSecret() {
   try {
-    const endpoint = `${window.location.origin}/.netlify/functions/create-totp`
-    console.log('▶️ Calling create-totp at', endpoint, 'with userId=', userId)
-
-    const res = await fetch(endpoint, {
+    const res = await fetch('/.netlify/functions/create-totp', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ user_id: userId })
-    })
-
-    if (!res.ok) {
-      // grab text so you see the function’s error body
-      const text = await res.text()
-      throw new Error(`HTTP ${res.status} — ${text}`)
-    }
-
-    const { secret, qr_code_url } = await res.json()
-    console.log('⬇️ Received TOTP secret+QR:', { secret, qr_code_url })
-
-    document.getElementById('qrcode').src = qr_code_url
-    document.getElementById('qrcode').style.display = 'block'
-    document.getElementById('secret').textContent = secret
-
-  } catch (err) {
-    console.error('Error generating TOTP secret:', err)
-    showError('Error generating TOTP secret: ' + err.message)
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const { secret, qr_code_url } = await res.json();
+    // inject into UI
+    document.getElementById('qrcode').src = qr_code_url;
+    document.getElementById('qrcode').style.display = 'block';
+    document.getElementById('secret').textContent = secret;
+  } catch (e) {
+    showError('Error generating TOTP secret: ' + e.message);
   }
 }
 
-// 4. Event listeners for copy / verify enable / verify disable
+// 4) wire up all buttons
 function setupEventListeners() {
-  // Copy secret
+  // copy secret
   document.getElementById('copy-secret-btn').addEventListener('click', () => {
     const secret = document.getElementById('secret').textContent;
     navigator.clipboard.writeText(secret).then(() => {
       const btn = document.getElementById('copy-secret-btn');
       btn.innerHTML = '<i class="fas fa-check"></i>';
-      setTimeout(() => (btn.innerHTML = '<i class="fas fa-copy"></i>'), 2000);
+      setTimeout(() => btn.innerHTML = '<i class="fas fa-copy"></i>', 2000);
     });
   });
 
-  // Verify + enable 2FA
+  // verify+enable
   document.getElementById('verify-enable-btn').addEventListener('click', async () => {
     const token = document.getElementById('totp-code-enable').value.trim();
-    if (!/^\d{6}$/.test(token)) {
-      return showError('Please enter a valid 6-digit code.');
-    }
+    if (!/^\d{6}$/.test(token)) return showError('Enter a valid 6-digit code.');
     try {
       const res = await fetch('/.netlify/functions/verify-totp', {
         method: 'POST',
@@ -114,25 +99,23 @@ function setupEventListeners() {
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const { ok } = await res.json();
       if (!ok) return showError('Invalid code');
-      // mark enabled in your DB
-      const { error } = await supabaseClient
+      // flip the flag in your profiles table
+      const { error: updErr } = await supabaseClient
         .from('profiles')
         .update({ two_fa_enabled: true })
         .eq('id', userId);
-      if (error) throw error;
+      if (updErr) throw updErr;
       alert('2FA enabled successfully!');
       window.location.reload();
-    } catch (err) {
-      showError('Error verifying TOTP: ' + err.message);
+    } catch (e) {
+      showError('Error verifying TOTP: ' + e.message);
     }
   });
 
-  // Verify + disable 2FA
+  // verify+disable
   document.getElementById('verify-disable-btn').addEventListener('click', async () => {
     const token = document.getElementById('totp-code-disable').value.trim();
-    if (!/^\d{6}$/.test(token)) {
-      return showError('Please enter a valid 6-digit code.');
-    }
+    if (!/^\d{6}$/.test(token)) return showError('Enter a valid 6-digit code.');
     try {
       const res = await fetch('/.netlify/functions/verify-totp', {
         method: 'POST',
@@ -142,41 +125,29 @@ function setupEventListeners() {
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const { ok } = await res.json();
       if (!ok) return showError('Invalid code');
-      // mark disabled in your DB
-      const { error } = await supabaseClient
+      const { error: updErr } = await supabaseClient
         .from('profiles')
         .update({ two_fa_enabled: false })
         .eq('id', userId);
-      if (error) throw error;
+      if (updErr) throw updErr;
       alert('2FA disabled successfully!');
       window.location.reload();
-    } catch (err) {
-      showError('Error verifying TOTP: ' + err.message);
+    } catch (e) {
+      showError('Error verifying TOTP: ' + e.message);
     }
   });
 
-  // … copy over your hamburger / theme toggle / back-to-top / logout / etc. …
-
-  // Live UTC & local time
-  function updateTime() {
-    const now = new Date();
-    document.getElementById('utcTime').textContent   = now.toUTCString();
-    document.getElementById('localTime').textContent = now.toLocaleTimeString();
-    document.getElementById('localDate').textContent = now.toLocaleDateString('en-GB', {
-      weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
-    });
-  }
-  setInterval(updateTime, 1000);
-  updateTime();
+  // ... your existing hamburger / theme-toggle / nav / logout / time code ...
+  // (copy from your earlier setupEventListeners)
 }
 
-// 5. Error helper
-function showError(message) {
-  const e = document.getElementById('error-message');
-  e.textContent = message;
-  e.style.display = 'block';
-  setTimeout(() => (e.style.display = 'none'), 5000);
+// helper
+function showError(msg) {
+  const el = document.getElementById('error-message');
+  el.textContent = msg;
+  el.style.display = 'block';
+  setTimeout(() => el.style.display = 'none', 5000);
 }
 
-// 6. Kick things off
+// kick it off
 init2FAPage();
