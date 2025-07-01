@@ -1,8 +1,7 @@
 // js/2fa.js
 
-// 1) Init Supabase client (anon key, for updating two_fa_enabled)
-const { createClient } = supabase;
-const supabaseClient = createClient(
+// 1) Init Supabase client (anon key)
+const supabaseClient = supabase.createClient(
   'https://iwkdznjqfbsfkscnbrkc.supabase.co',
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU'
 );
@@ -13,14 +12,14 @@ let userId;
 async function init2FAPage() {
   AOS.init({ duration: 800, once: true });
 
-  // 2.1 get current user
+  // 2.1 Get current user
   const { data: authData, error: authErr } = await supabaseClient.auth.getUser();
   if (authErr || !authData.user) {
-    return void (window.location.href = 'login.html');
+    return window.location.replace('login.html');
   }
   userId = authData.user.id;
 
-  // 2.2 fetch profile
+  // 2.2 Fetch profile
   const { data: profile, error: profErr } = await supabaseClient
     .from('profiles')
     .select('first_name,photo_url,two_fa_enabled')
@@ -30,16 +29,17 @@ async function init2FAPage() {
     return showError('Error loading profile: ' + profErr.message);
   }
 
-  // 2.3 update UI
+  // 2.3 Update UI
   document.getElementById('welcomeName').textContent = profile.first_name || 'User';
   if (profile.photo_url) {
-    const { data: urlData } = supabaseClient.storage
-      .from('profile-photos')
+    const { data: urlData } = supabaseClient
+      .storage.from('profile-photos')
       .getPublicUrl(profile.photo_url);
     document.getElementById('navProfilePhoto').src = urlData.publicUrl;
     document.getElementById('navProfilePhoto').style.display = 'block';
     document.getElementById('defaultProfileIcon').style.display = 'none';
   }
+
   const enabled = profile.two_fa_enabled;
   document.getElementById('twofa-status').textContent = enabled
     ? '2FA is currently enabled.'
@@ -47,7 +47,7 @@ async function init2FAPage() {
   document.getElementById('enable-2fa-section').style.display = enabled ? 'none' : 'block';
   document.getElementById('disable-2fa-section').style.display = enabled ? 'block' : 'none';
 
-  // 2.4 if disabled, call our Netlify function to generate+store the secret
+  // 2.4 If disabled, generate+store the secret via Netlify function
   if (!enabled) {
     await generateTotpSecret();
   }
@@ -55,7 +55,7 @@ async function init2FAPage() {
   setupEventListeners();
 }
 
-// 3) call create-totp Netlify function
+// 3) Call create-totp Netlify function
 async function generateTotpSecret() {
   try {
     const res = await fetch('/.netlify/functions/create-totp', {
@@ -65,18 +65,20 @@ async function generateTotpSecret() {
     });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const { secret, qr_code_url } = await res.json();
-    // inject into UI
-    document.getElementById('qrcode').src = qr_code_url;
-    document.getElementById('qrcode').style.display = 'block';
+
+    // Inject into UI
+    const img = document.getElementById('qrcode');
+    img.src = qr_code_url;
+    img.style.display = 'block';
     document.getElementById('secret').textContent = secret;
   } catch (e) {
     showError('Error generating TOTP secret: ' + e.message);
   }
 }
 
-// 4) wire up all buttons
+// 4) Wire up all buttons
 function setupEventListeners() {
-  // copy secret
+  // Copy secret
   document.getElementById('copy-secret-btn').addEventListener('click', () => {
     const secret = document.getElementById('secret').textContent;
     navigator.clipboard.writeText(secret).then(() => {
@@ -86,7 +88,7 @@ function setupEventListeners() {
     });
   });
 
-  // verify+enable
+  // Verify + enable
   document.getElementById('verify-enable-btn').addEventListener('click', async () => {
     const token = document.getElementById('totp-code-enable').value.trim();
     if (!/^\d{6}$/.test(token)) return showError('Enter a valid 6-digit code.');
@@ -99,7 +101,7 @@ function setupEventListeners() {
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const { ok } = await res.json();
       if (!ok) return showError('Invalid code');
-      // flip the flag in your profiles table
+      // Flip the flag in your profiles table
       const { error: updErr } = await supabaseClient
         .from('profiles')
         .update({ two_fa_enabled: true })
@@ -112,7 +114,7 @@ function setupEventListeners() {
     }
   });
 
-  // verify+disable
+  // Verify + disable
   document.getElementById('verify-disable-btn').addEventListener('click', async () => {
     const token = document.getElementById('totp-code-disable').value.trim();
     if (!/^\d{6}$/.test(token)) return showError('Enter a valid 6-digit code.');
@@ -137,11 +139,10 @@ function setupEventListeners() {
     }
   });
 
-  // ... your existing hamburger / theme-toggle / nav / logout / time code ...
-  // (copy from your earlier setupEventListeners)
+  // … copy over your hamburger / theme-toggle / nav / logout / time code here …
 }
 
-// helper
+// Helper
 function showError(msg) {
   const el = document.getElementById('error-message');
   el.textContent = msg;
@@ -149,5 +150,5 @@ function showError(msg) {
   setTimeout(() => el.style.display = 'none', 5000);
 }
 
-// kick it off
-init2FAPage();
+// Kick it off
+document.addEventListener('DOMContentLoaded', init2FAPage);
