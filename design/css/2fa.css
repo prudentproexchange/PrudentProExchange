@@ -1,10 +1,30 @@
 /* css/2fa.css */
 
+/* MAKE SURE BACKGROUND VIDEO IS BEHIND EVERYTHING */
+.bg-video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -2;
+}
+
+/* OVERLAY CONTAINER FLOATS ABOVE VIDEO */
+.overlay {
+  position: relative;
+  z-index: 1;
+}
+
 /* Container */
 .twofa-page.container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
+  /* ensure it sits above any backdrop */
+  position: relative;
+  z-index: 2;
 }
 
 /* Profile Section */
@@ -67,18 +87,22 @@
   font-family: 'Poppins', sans-serif;
 }
 
-#enable-2fa-section, #disable-2fa-section {
+/* ALWAYS VISIBLE ENABL/DISABLE SECTIONS */
+#enable-2fa-section,
+#disable-2fa-section {
+  display: block !important;
   background: rgba(255, 255, 255, 0.1);
   padding: 2rem;
   border: 2px solid #ffd700; /* Gold */
   border-radius: 15px;
   backdrop-filter: blur(15px);
-  box-shadow: 0 8px 32px rgba(0d0, 0, 0, 0.37);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
   text-align: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
-#enable-2fa-section:hover, #disable-2fa-section:hover {
+#enable-2fa-section:hover,
+#disable-2fa-section:hover {
   transform: translateY(-10px);
   box-shadow: 0 12px 40px rgba(255, 215, 0, 0.5); /* Gold glow */
   border-color: #cca300;
@@ -88,6 +112,7 @@
   width: 200px;
   height: 200px;
   margin: 1rem auto;
+  display: block; /* ensure visible */
 }
 
 #secret {
@@ -147,7 +172,7 @@ input[type="text"]:focus {
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
- Somalia}
+}
 
 .error-message {
   color: #ff6b6b;
@@ -183,7 +208,7 @@ input[type="text"]:focus {
   text-decoration: underline;
 }
 
-.copyright {
+copyright {
   font-size: 0.9rem;
   color: #aaa;
 }
@@ -198,7 +223,8 @@ input[type="text"]:focus {
     font-size: 1rem;
   }
 
-  #enable-2fa-section, #disable-2fa-section {
+  #enable-2fa-section,
+  #disable-2fa-section {
     padding: 1.5rem;
   }
 
