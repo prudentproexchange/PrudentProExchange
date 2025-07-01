@@ -20,42 +20,46 @@
   
   <div class="overlay">
     <!-- Header -->
-    <header class="site-header">
-      <a href="dashboard.html" class="logo-link">
+    <header class="site-header" role="banner">
+      <a href="dashboard.html" class="logo-link" aria-label="PrudentProExchange Home">
         <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo"/>
       </a>
       <div class="header-right">
-        <button id="theme-toggle" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
-        <button class="hamburger" id="hamburgerBtn" aria-label="Menu"><span></span><span></span><span></span></button>
+        <button id="theme-toggle" aria-label="Toggle light/dark theme">
+          <i class="fas fa-moon"></i>
+        </button>
+        <button class="hamburger" id="hamburgerBtn" aria-label="Toggle navigation menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
       </div>
-      <nav class="nav-drawer" id="navDrawer">
+      <nav class="nav-drawer" id="navDrawer" role="navigation" aria-label="Main navigation">
         <a href="dashboard.html">Dashboard</a>
         <a href="invest.html">Invest</a>
         <a href="withdraw.html">Withdraw</a>
         <a href="transactions.html">Transactions</a>
         <a href="referrals.html">Referrals</a>
         <div class="account-menu">
-          <a href="#" class="account-toggle" id="account-toggle">Account ▾</a>
-          <ul class="submenu">
-            <li><a href="profile-settings.html">Profile Settings</a></li>
-            <li><a href="payment.html">Make a Deposit</a></li>
-            <li><a href="change-password.html">Change Password</a></li>
-            <li><a href="support.html">Support Ticket</a></li>
-            <li><a href="promo-tools.html">Promotional Tools</a></li>
-            <li><a href="2fa.html">2FA Security</a></li>
-            <li><a href="#" id="logout-btn">Logout</a></li>
+          <a href="#" class="account-toggle" id="account-toggle" aria-haspopup="true" aria-expanded="false">Account ▾</a>
+          <ul class="submenu" role="menu">
+            <li><a href="profile-settings.html" role="menuitem">Profile Settings</a></li>
+            <li><a href="payment.html" role="menuitem">Make a Deposit</a></li>
+            <li><a href="change-password.html" role="menuitem">Change Password</a></li>
+            <li><a href="support.html" role="menuitem">Support Ticket</a></li>
+            <li><a href="promo-tools.html" role="menuitem">Promotional Tools</a></li>
+            <li><a href="2fa.html" role="menuitem">2FA Security</a></li>
+            <li><a href="#" id="logout-btn" role="menuitem">Logout</a></li>
           </ul>
         </div>
         <a href="kyc.html" class="active">KYC Verification</a>
         <a href="transfer.html">Transfer</a>
       </nav>
-      <div class="nav-overlay"></div>
+      <div class="nav-overlay" aria-hidden="true"></div>
     </header>
 
     <!-- Profile Section -->
     <div class="profile-section" role="region" aria-label="User profile">
       <div class="profile-container">
-        <img id="navProfilePhoto" src="" alt="Profile Photo" class="avatar" style="display: none;" loading="lazy"/>
+        <img id="navProfilePhoto" src="" alt="User profile photo" class="avatar" style="display: none;" loading="lazy"/>
         <span id="defaultProfileIcon" class="avatar" aria-hidden="true">👤</span>
       </div>
       <div class="welcome-message">Welcome, <span id="welcomeName"></span>!</div>
@@ -81,13 +85,15 @@
             </div>
             <button type="submit" class="cta primary">Log In</button>
           </form>
-          <div id="totp-section" style="display: none; margin-top: 1rem;">
-            <label>
-              Authenticator Code*
-              <input type="text" id="totp-code" maxlength="6" pattern="\d{6}" placeholder="123456" required aria-label="Authenticator Code"/>
-            </label>
-            <button id="totp-submit" class="cta primary">Verify Code</button>
-          </div>
+        </div>
+
+        <!-- TOTP Verification Section -->
+        <div id="totp-section" style="display: none; margin-top: 1rem;">
+          <label>
+            Authenticator Code*
+            <input type="text" id="totp-code" maxlength="6" pattern="\d{6}" placeholder="123456" required aria-label="Authenticator Code"/>
+          </label>
+          <button id="totp-submit" class="cta primary">Verify Code</button>
         </div>
 
         <!-- KYC Status -->
