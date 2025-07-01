@@ -9,14 +9,6 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
-  <!-- Updated Supabase JS to ESM module -->
-  <script type="module">
-    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/+esm';
-    // Replace with your actual Supabase URL and Anon Key
-    window.supabaseClient = createClient('YOUR_SUPABASE_URL', 'YOUR_SUPABASE_ANON_KEY');
-  </script>
-  <!-- QR Code generation library -->
-  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
 </head>
 <body class="twofa-page">
   <!-- Video Background -->
@@ -76,12 +68,12 @@
       <section class="twofa-settings" data-aos="fade-up">
         <h2>Two-Factor Authentication Settings</h2>
         <div id="twofa-status" class="status-message"></div>
-        <div id="enable-2fa-section" style="display: none;">
+        <div id="enable-2fa-section" style="display: block;">
           <h3>Enable Two-Factor Authentication</h3>
           <p>Secure your account by enabling 2FA. Scan the QR code below or manually enter the secret key into your authenticator app (e.g., Google Authenticator, Authy).</p>
           
           <div id="qrcode-wrapper" style="margin: 20px 0; text-align: center;">
-            <canvas id="qrcode" style="max-width: 200px;"></canvas>
+            <img id="qrcode" src="" alt="QR Code for 2FA" style="display: none; max-width: 200px;" loading="lazy"/>
           </div>
           
           <div id="secret-wrapper" style="margin: 15px 0; display: flex; align-items: center; gap: 10px;">
@@ -100,11 +92,11 @@
         </div>
         <div id="disable-2fa-section" style="display: none;">
           <h3>Disable 2FA</h3>
-          <p>Enter the current 6-digit code from your authenticator app to disable 2FA.</p>
-          <input type="text" id="totp-code-disable" placeholder="Enter 6-digit code" maxlength="6" style="padding: 10px; width: 200px; border: 1px solid #ccc; border-radius: 4px;"/>
-          <button id="verify-disable-btn" class="btn" style="padding: 10px 20px; background-color: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer; margin-left: 10px;">Verify and Disable 2FA</button>
+          <p>Enter the current 6-digit code from Google Authenticator to disable 2FA.</p>
+          <input type="text" id="totp-code-disable" placeholder="Enter 6-digit code" maxlength="6"/>
+          <button id="verify-disable-btn" class="btn">Verify and Disable 2FA</button>
         </div>
-        <div id="error-message" class="error-message" style="display: none; color: red; margin-top: 15px;"></div>
+        <div id="error-message" class="error-message" style="display: none;"></div>
       </section>
     </main>
 
@@ -128,6 +120,8 @@
 
   <!-- Scripts -->
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <!-- Supabase client (must come before js/2fa.js) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <script src="js/2fa.js"></script>
 </body>
 </html>
