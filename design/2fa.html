@@ -2,119 +2,132 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>2FA Settings • PrudentProExchange</title>
   <link rel="stylesheet" href="css/style.css"/>
   <link rel="stylesheet" href="css/2fa.css"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
+  <!-- Updated Supabase JS to ESM module -->
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/+esm';
+    // Replace with your actual Supabase URL and Anon Key
+    window.supabaseClient = createClient('YOUR_SUPABASE_URL', 'YOUR_SUPABASE_ANON_KEY');
+  </script>
+  <!-- QR Code generation library -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
 </head>
 <body class="twofa-page">
+  <!-- Video Background -->
+  <video class="bg-video" autoplay muted loop playsinline preload="auto">
+    <source src="assets/videos/background.webm" type="video/webm">
+    <source src="assets/videos/background.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+
   <div class="overlay">
-    <!-- ... your header/nav/profile markup ... -->
+    <!-- Header -->
+    <header class="site-header">
+      <a href="dashboard.html" class="logo-link">
+        <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo"/>
+      </a>
+      <div class="header-right">
+        <button id="theme-toggle" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
+        <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+      <nav class="nav-drawer" id="navDrawer">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="invest.html">Invest</a>
+        <a href="withdraw.html">Withdraw</a>
+        <a href="transactions.html">Transactions</a>
+        <a href="referrals.html">Referrals</a>
+        <div class="account-menu">
+          <a href="#" class="account-toggle" id="account-toggle">Account ▾</a>
+          <ul class="submenu">
+            <li><a href="profile-settings.html">Profile Settings</a></li>
+            <li><a href="transfer.html">Transfer Balance</a></li>
+            <li><a href="change-password.html">Change Password</a></li>
+            <li><a href="support.html">Support Ticket</a></li>
+            <li><a href="promo-tools.html">Promotional Tools</a></li>
+            <li><a href="2fa.html" class="active">2FA Security</a></li>
+            <li><a href="#" id="logout-btn">Logout</a></li>
+          </ul>
+        </div>
+        <a href="kyc.html">KYC Verification</a>
+        <a href="transfer.html">Transfer</a>
+      </nav>
+    </header>
+    <div class="nav-overlay"></div>
 
-    <main class="twofa-page container" data-aos="fade-up">
-      <h2>Two-Factor Authentication Settings</h2>
-      <p id="status" class="status-message"></p>
+    <!-- Profile Section -->
+    <div class="profile-section">
+      <div class="profile-container">
+        <img id="navProfilePhoto" src="" alt="Profile" class="avatar" style="display: none;"/>
+        <span id="defaultProfileIcon" class="avatar">👤</span>
+      </div>
+      <div class="welcome-message">Welcome to 2FA Settings, <span id="welcomeName"></span>!</div>
+    </div>
 
-      <section id="enable-section" style="display:none;">
-        <img id="qr" style="max-width:200px; display:block; margin:1rem auto;"/>
-        <p>Secret: <code id="secret"></code> <button id="copy-secret"><i class="fas fa-copy"></i></button></p>
-        <input type="text" id="token-enable" maxlength="6" placeholder="Enter 6-digit code"/>
-        <button id="btn-enable">Verify & Enable 2FA</button>
+    <!-- Main Content -->
+    <main class="twofa-page container">
+      <section class="twofa-settings" data-aos="fade-up">
+        <h2>Two-Factor Authentication Settings</h2>
+        <div id="twofa-status" class="status-message"></div>
+        <div id="enable-2fa-section" style="display: none;">
+          <h3>Enable Two-Factor Authentication</h3>
+          <p>Secure your account by enabling 2FA. Scan the QR code below or manually enter the secret key into your authenticator app (e.g., Google Authenticator, Authy).</p>
+          
+          <div id="qrcode-wrapper" style="margin: 20px 0; text-align: center;">
+            <canvas id="qrcode" style="max-width: 200px;"></canvas>
+          </div>
+          
+          <div id="secret-wrapper" style="margin: 15px 0; display: flex; align-items: center; gap: 10px;">
+            <p style="margin: 0;">Secret Key: 
+              <span id="secret" style="font-family: monospace; font-weight: 500; padding: 5px; background-color: #f5f5f5; border-radius: 4px;"></span>
+            </p>
+            <button id="copy-secret-btn" class="copy-btn" title="Copy Secret Key" style="padding: 8px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">
+              <i class="fas fa-copy"></i> Copy
+            </button>
+          </div>
+          
+          <div style="margin-top: 20px;">
+            <input type="text" id="totp-code-enable" placeholder="Enter 6-digit code" maxlength="6" style="padding: 10px; width: 200px; border: 1px solid #ccc; border-radius: 4px;"/>
+            <button id="verify-enable-btn" class="btn" style="padding: 10px 20px; background-color: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; margin-left: 10px;">Verify and Enable 2FA</button>
+          </div>
+        </div>
+        <div id="disable-2fa-section" style="display: none;">
+          <h3>Disable 2FA</h3>
+          <p>Enter the current 6-digit code from your authenticator app to disable 2FA.</p>
+          <input type="text" id="totp-code-disable" placeholder="Enter 6-digit code" maxlength="6" style="padding: 10px; width: 200px; border: 1px solid #ccc; border-radius: 4px;"/>
+          <button id="verify-disable-btn" class="btn" style="padding: 10px 20px; background-color: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer; margin-left: 10px;">Verify and Disable 2FA</button>
+        </div>
+        <div id="error-message" class="error-message" style="display: none; color: red; margin-top: 15px;"></div>
       </section>
-
-      <section id="disable-section" style="display:none;">
-        <input type="text" id="token-disable" maxlength="6" placeholder="Enter 6-digit code"/>
-        <button id="btn-disable">Verify & Disable 2FA</button>
-      </section>
-
-      <p id="error" style="color:#f66; display:none;"></p>
     </main>
 
-    <!-- ... your footer ... -->
+    <!-- Footer -->
+    <footer class="section section-dark site-footer" data-aos="fade-up">
+      <div class="footer-content">
+        <p class="UTC-time">UTC Time: <span id="utcTime"></span></p>
+        <p class="local-time">Local Time: <span id="localTime"></span></p>
+        <p class="local-date">Local Date: <span id="localDate"></span></p>
+        <nav class="footer-links">
+          <a href="about.html">About Us</a>
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="terms.html">Terms & Conditions</a>
+        </nav>
+        <p class="copyright">© 2025 PrudentProExchange. All Rights Reserved. SEC Registration #0001230714</p>
+      </div>
+    </footer>
   </div>
 
-  <script>
-    AOS.init({ duration:800, once:true });
-    const { createClient } = supabase;
-    const supabase = createClient(
-      'https://iwkdznjqfbsfkscnbrkc.supabase.co',
-      'YOUR_ANON_KEY'
-    );
+  <button id="back-to-top" aria-label="Back to top">🚀</button>
 
-    async function init() {
-      const { data: { user }, error: authErr } = await supabase.auth.getUser();
-      if (authErr || !user) return location.replace('login.html');
-
-      // Check current enrollment
-      const { data: mfaState, error: stateErr } = await supabase.auth.mfa.getEnrollment();
-      if (stateErr) return showError(stateErr.message);
-
-      document.getElementById('status').textContent = 
-        mfaState.enabled 
-          ? '2FA is currently ENABLED.' 
-          : '2FA is currently DISABLED.';
-
-      if (mfaState.enabled) {
-        document.getElementById('disable-section').style.display = 'block';
-      } else {
-        document.getElementById('enable-section').style.display = 'block';
-        await generateTOTP();
-      }
-
-      document.getElementById('btn-enable').onclick  = enableTOTP;
-      document.getElementById('btn-disable').onclick = disableTOTP;
-      document.getElementById('copy-secret').onclick = () => {
-        navigator.clipboard.writeText(document.getElementById('secret').textContent);
-      };
-    }
-
-    async function generateTOTP() {
-      const { data, error } = await supabase.auth.mfa.generateTOTP();
-      if (error) return showError('Error generating 2FA secret: ' + error.message);
-
-      document.getElementById('qr').src     = data.totp_url;
-      document.getElementById('secret').textContent = data.secret;
-    }
-
-    async function enableTOTP() {
-      const token = document.getElementById('token-enable').value.trim();
-      if (!/^\d{6}$/.test(token)) return showError('Enter a valid 6-digit code.');
-
-      const { error: verifyErr } = await supabase.auth.mfa.verifyTOTP({ token });
-      if (verifyErr) return showError('Invalid code: ' + verifyErr.message);
-
-      const { error: toggleErr } = await supabase.auth.mfa.toggleTOTPEnrollment({ enable: true });
-      if (toggleErr) return showError('Failed to enable 2FA: ' + toggleErr.message);
-
-      alert('2FA enabled!');
-      location.reload();
-    }
-
-    async function disableTOTP() {
-      const token = document.getElementById('token-disable').value.trim();
-      if (!/^\d{6}$/.test(token)) return showError('Enter a valid 6-digit code.');
-
-      const { data, error: verifyErr } = await supabase.auth.mfa.verifyTOTP({ token });
-      if (verifyErr) return showError('Invalid code: ' + verifyErr.message);
-
-      const { error: toggleErr } = await supabase.auth.mfa.toggleTOTPEnrollment({ enable: false });
-      if (toggleErr) return showError('Failed to disable 2FA: ' + toggleErr.message);
-
-      alert('2FA disabled!');
-      location.reload();
-    }
-
-    function showError(msg) {
-      const e = document.getElementById('error');
-      e.textContent = msg;
-      e.style.display = 'block';
-      setTimeout(() => e.style.display = 'none', 5000);
-    }
-
-    init();
-  </script>
+  <!-- Scripts -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="js/2fa.js"></script>
 </body>
 </html>
