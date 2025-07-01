@@ -3,21 +3,24 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Invest in PrudentProExchange plans with weekly returns up to 10%. Start with as little as $200. Secure. Fast. Verified."/>
   <title>Invest • PrudentProExchange</title>
   <link rel="stylesheet" href="css/style.css"/>
-  <!-- Optimized Font Awesome loading with all.min.css -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <style>
-    /* Animation performance optimizations */
     html {
       scroll-behavior: smooth;
     }
 
     * {
       will-change: transform;
+    }
+
+    :focus-visible {
+      outline: 2px solid #007bff;
+      outline-offset: 2px;
     }
 
     /* Additional CSS for Investment Plans */
@@ -65,6 +68,18 @@
       margin: 0.5rem 0;
     }
 
+    .invest-page .plan-icon {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      color: #f0f0f0;
+      transition: color 0.3s ease;
+    }
+
+    .invest-page .plan-card:hover .plan-icon,
+    .invest-page .plan-card:focus .plan-icon {
+      color: #ffd700;
+    }
+
     .invest-page .plan-card input[type="number"] {
       width: 100%;
       padding: 0.75rem;
@@ -75,6 +90,7 @@
       font-size: 1rem;
       background: #fff;
       outline: none;
+      min-height: 48px; /* Mobile-friendly */
     }
 
     .invest-page .plan-card input[type="number"]:focus {
@@ -94,6 +110,7 @@
       cursor: pointer;
       transition: background 0.3s ease, transform 0.2s ease;
       margin-top: 0.5rem;
+      min-height: 48px; /* Mobile-friendly */
     }
 
     .invest-page .plan-card .btn:hover:not(:disabled) {
@@ -121,18 +138,29 @@
     .invest-page .plan-card.invalid .validation-message {
       display: block;
     }
+
+    /* Loading and Error States */
+    .loading-message,
+    .error-message {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1rem;
+      color: #ddd;
+      text-align: center;
+    }
+
+    .error-message {
+      color: #ff4d4d;
+    }
   </style>
 </head>
 <body class="invest-page">
-  <!-- Video Background -->
-  <video class="bg-video" autoplay muted loop playsinline preload="auto">
+  <video class="bg-video" autoplay muted loop playsinline preload="auto" poster="assets/images/bg-fallback.jpg">
     <source src="assets/videos/background.webm" type="video/webm">
     <source src="assets/videos/background.mp4" type="video/mp4">
     Your browser does not support the video tag.
   </video>
 
   <div class="overlay">
-    <!-- Header -->
     <header class="site-header">
       <a href="dashboard.html" class="logo-link">
         <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo"/>
@@ -149,88 +177,71 @@
         <a href="withdraw.html">Withdraw</a>
         <a href="transactions.html">Transactions</a>
         <a href="referrals.html">Referrals</a>
-        <div class="account-menu">
-          <a href="#" class="account-toggle" id="account-toggle">Account ▾</a>
-          <ul class="submenu">
-            <li><a href="profile-settings.html">Profile Settings</a></li>
-            <li><a href="transfer.html">Transfer Balance</a></li>
-            <li><a href="change-password.html">Change Password</a></li>
-            <li><a href="support.html">Support Ticket</a></li>
-            <li><a href="promo-tools.html">Promotional Tools</a></li>
-            <li><a href="2fa.html">2FA Security</a></li>
-            <li><a href="#" id="logout-btn">Logout</a></li>
-          </ul>
-        </div>
-        <a href="kyc.html">KYC Verification</a>
-        <a href="transfer.html">Transfer</a>
       </nav>
     </header>
     <div class="nav-overlay"></div>
 
-    <!-- Profile Section -->
     <div class="profile-section">
       <div class="profile-container">
-        <img id="navProfilePhoto" src="" alt="Profile" class="avatar" style="display: none;"/>
+        <img id="navProfilePhoto" src="" alt="Your profile photo" class="avatar" style="display: none;"/>
         <span id="defaultProfileIcon" class="avatar">👤</span>
       </div>
-      <div class="welcome-message">Welcome to Your Investment Journey, <span id="welcomeName"></span>!</div>
+      <div class="welcome-message" aria-live="polite">Loading profile...</div>
     </div>
 
-    <!-- Main Content -->
     <main class="invest-page container">
       <section class="investment-plans" data-aos="fade-up">
         <h2>Choose Your Investment Plan</h2>
         <div class="plans-grid">
-          <div class="plan-card" data-min="200" data-max="4999" data-aos="zoom-in" tabindex="0" data-plan-name="The Dawn Star (Basic)">
+          <form class="plan-card" data-min="200" data-max="4999" data-aos="zoom-in" tabindex="0" data-plan-name="The Dawn Star (Basic)">
             <div class="plan-icon"><i class="fas fa-star"></i></div>
             <h3>The Dawn Star (Basic)</h3>
             <p>5% weekly return</p>
             <p>Investment Range: $200 - $4,999</p>
-            <input type="number" placeholder="Enter amount (200 - 4999 USD)" min="200" max="4999" aria-label="Investment amount for Dawn Star plan">
+            <input type="number" placeholder="Enter amount (200 - 4999 USD)" min="200" max="4999" aria-label="Investment amount for Dawn Star plan" required>
             <p class="validation-message"></p>
-            <button class="btn select-plan-btn" data-plan="dawn-star" disabled aria-label="Choose payment option for Dawn Star plan">Choose Payment Option</button>
-          </div>
-          <div class="plan-card" data-min="5000" data-max="14999" data-aos="zoom-in" tabindex="0" data-plan-name="The Nebula Glow (Standard)">
+            <button type="submit" class="btn select-plan-btn" data-plan="dawn-star" disabled aria-label="Choose payment option for Dawn Star plan">Choose Payment Option</button>
+          </form>
+          <form class="plan-card" data-min="5000" data-max="14999" data-aos="zoom-in" tabindex="0" data-plan-name="The Nebula Glow (Standard)">
             <div class="plan-icon"><i class="fas fa-cloud"></i></div>
             <h3>The Nebula Glow (Standard)</h3>
             <p>6.5% weekly return</p>
             <p>Investment Range: $5,000 - $14,999</p>
-            <input type="number" placeholder="Enter amount (5000 - 14999 USD)" min="5000" max="14999" aria-label="Investment amount for Nebula Glow plan">
+            <input type="number" placeholder="Enter amount (5000 - 14999 USD)" min="5000" max="14999" aria-label="Investment amount for Nebula Glow plan" required>
             <p class="validation-message"></p>
-            <button class="btn select-plan-btn" data-plan="nebula-glow" disabled aria-label="Choose payment option for Nebula Glow plan">Choose Payment Option</button>
-          </div>
-          <div class="plan-card" data-min="15000" data-max="49999" data-aos="zoom-in" tabindex="0" data-plan-name="The Lunar Crest (Silver)">
+            <button type="submit" class="btn select-plan-btn" data-plan="nebula-glow" disabled aria-label="Choose payment option for Nebula Glow plan">Choose Payment Option</button>
+          </form>
+          <form class="plan-card" data-min="15000" data-max="49999" data-aos="zoom-in" tabindex="0" data-plan-name="The Lunar Crest (Silver)">
             <div class="plan-icon"><i class="fas fa-moon"></i></div>
             <h3>The Lunar Crest (Silver)</h3>
             <p>7.5% weekly return</p>
             <p>Investment Range: $15,000 - $49,999</p>
-            <input type="number" placeholder="Enter amount (15000 - 49999 USD)" min="15000" max="49999" aria-label="Investment amount for Lunar Crest plan">
+            <input type="number" placeholder="Enter amount (15000 - 49999 USD)" min="15000" max="49999" aria-label="Investment amount for Lunar Crest plan" required>
             <p class="validation-message"></p>
-            <button class="btn select-plan-btn" data-plan="lunar-crest" disabled aria-label="Choose payment option for Lunar Crest plan">Choose Payment Option</button>
-          </div>
-          <div class="plan-card" data-min="50000" data-max="99999" data-aos="zoom-in" tabindex="0" data-plan-name="The Solar Flare (Gold)">
+            <button type="submit" class="btn select-plan-btn" data-plan="lunar-crest" disabled aria-label="Choose payment option for Lunar Crest plan">Choose Payment Option</button>
+          </form>
+          <form class="plan-card" data-min="50000" data-max="99999" data-aos="zoom-in" tabindex="0" data-plan-name="The Solar Flare (Gold)">
             <div class="plan-icon"><i class="fas fa-sun"></i></div>
             <h3>The Solar Flare (Gold)</h3>
             <p>8.5% weekly return</p>
             <p>Investment Range: $50,000 - $99,999</p>
-            <input type="number" placeholder="Enter amount (50000 - 99999 USD)" min="50000" max="99999" aria-label="Investment amount for Solar Flare plan">
+            <input type="number" placeholder="Enter amount (50000 - 99999 USD)" min="50000" max="99999" aria-label="Investment amount for Solar Flare plan" required>
             <p class="validation-message"></p>
-            <button class="btn select-plan-btn" data-plan="solar-flare" disabled aria-label="Choose payment option for Solar Flare plan">Choose Payment Option</button>
-          </div>
-          <div class="plan-card" data-min="100000" data-aos="zoom-in" tabindex="0" data-plan-name="The Galactic Crown (Diamond)">
+            <button type="submit" class="btn select-plan-btn" data-plan="solar-flare" disabled aria-label="Choose payment option for Solar Flare plan">Choose Payment Option</button>
+          </form>
+          <form class="plan-card" data-min="100000" data-aos="zoom-in" tabindex="0" data-plan-name="The Galactic Crown (Diamond)">
             <div class="plan-icon"><i class="fas fa-crown"></i></div>
             <h3>The Galactic Crown (Diamond)</h3>
             <p>10% weekly return</p>
             <p>Investment Range: $100,000+</p>
-            <input type="number" placeholder="Enter amount (min 100000 USD)" min="100000" aria-label="Investment amount for Galactic Crown plan">
+            <input type="number" placeholder="Enter amount (min 100000 USD)" min="100000" aria-label="Investment amount for Galactic Crown plan" required>
             <p class="validation-message"></p>
-            <button class="btn select-plan-btn" data-plan="galactic-crown" disabled aria-label="Choose payment option for Galactic Crown plan">Choose Payment Option</button>
-          </div>
+            <button type="submit" class="btn select-plan-btn" data-plan="galactic-crown" disabled aria-label="Choose payment option for Galactic Crown plan">Choose Payment Option</button>
+          </form>
         </div>
       </section>
     </main>
 
-    <!-- Footer -->
     <footer class="section section-dark site-footer" data-aos="fade-up">
       <div class="footer-content">
         <p class="UTC-time">UTC Time: <span id="utcTime"></span></p>
@@ -248,197 +259,219 @@
 
   <button id="back-to-top" aria-label="Back to top">🚀</button>
 
-  <!-- Scripts -->
-  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js" defer></script>
   <script>
-    // Initialize AOS
-    AOS.init({ duration: 800, once: true });
+    // Initialize AOS after DOM is loaded
+    window.addEventListener('DOMContentLoaded', () => {
+      AOS.init({ duration: 800, once: true });
 
-    // Supabase Client
-    const { createClient } = supabase;
-    const supabaseClient = createClient(
-      'https://iwkdznjqfbsfkscnbrkc.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU'
-    );
+      // Supabase Client
+      const supabaseClient = supabase.createClient(
+        'https://iwkdznjqfbsfkscnbrkc.supabase.co',
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU'
+      );
 
-    // Sanitize input
-    function sanitizeAmount(amount) {
-      const parsed = parseFloat(amount);
-      if (isNaN(parsed)) return null;
-      return parsed.toFixed(2);
-    }
-
-    // Cache DOM elements for time updates
-    const localTimeElem = document.getElementById('localTime');
-    const localDateElem = document.getElementById('localDate');
-    const utcTimeElem = document.getElementById('utcTime');
-
-    // Update all times in a single function
-    function updateTimes() {
-      const now = new Date();
-      localTimeElem.textContent = now.toLocaleTimeString();
-      localDateElem.textContent = now.toLocaleDateString('en-US', {
-        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
-      });
-      utcTimeElem.textContent = now.toUTCString();
-    }
-    setInterval(updateTimes, 1000);
-    updateTimes();
-
-    // Initialize Investment Page
-    async function initInvestPage() {
-      // Check Authentication
-      const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
-      if (!user || authError) {
-        window.location.href = 'login.html';
-        return;
+      // Sanitize input
+      function sanitizeAmount(amount) {
+        const parsed = parseFloat(amount);
+        if (isNaN(parsed) || parsed < 0) return null;
+        return parsed.toFixed(2);
       }
 
-      // Load Profile
-      const { data: profile, error: profileError } = await supabaseClient
-        .from('profiles')
-        .select('*')
-        .eq('id', user.id)
-        .single();
-      if (profileError) {
-        console.error('Error loading profile:', profileError);
-        alert('Error loading profile.');
-        return;
-      }
+      // Cache DOM elements for time updates
+      const localTimeElem = document.getElementById('localTime');
+      const localDateElem = document.getElementById('localDate');
+      const utcTimeElem = document.getElementById('utcTime');
+      const welcomeMessage = document.querySelector('.welcome-message');
 
-      document.getElementById('welcomeName').textContent = profile.first_name || 'User';
-      if (profile.photo_url) {
-        const { data: urlData } = supabaseClient.storage
-          .from('profile-photos')
-          .getPublicUrl(profile.photo_url);
-        document.getElementById('navProfilePhoto').src = urlData.publicUrl;
-        document.getElementById('navProfilePhoto').style.display = 'block';
-        document.getElementById('defaultProfileIcon').style.display = 'none';
-      }
-
-      // Plan Input and Button Logic
-      document.querySelectorAll('.plan-card').forEach(card => {
-        const input = card.querySelector('input[type="number"]');
-        const btn = card.querySelector('.select-plan-btn');
-        const validationMessage = card.querySelector('.validation-message');
-        const min = parseFloat(card.getAttribute('data-min'));
-        const max = card.hasAttribute('data-max') ? parseFloat(card.getAttribute('data-max')) : Infinity;
-        const planName = card.getAttribute('data-plan-name');
-
-        // Auto-fill and focus input on card click
-        card.addEventListener('click', (e) => {
-          if (!e.target.closest('input') && !e.target.closest('button')) {
-            input.value = min;
-            input.focus();
-            const event = new Event('input');
-            input.dispatchEvent(event);
-          }
+      // Update all times
+      function updateTimes() {
+        const now = new Date();
+        localTimeElem.textContent = now.toLocaleTimeString();
+        localDateElem.textContent = now.toLocaleDateString('en-US', {
+          weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
         });
+        utcTimeElem.textContent = now.toUTCString();
+      }
+      setInterval(updateTimes, 1000);
+      updateTimes();
 
-        // Keyboard support for card
-        card.addEventListener('keydown', (e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
+      // Initialize Investment Page
+      async function initInvestPage() {
+        // Check Authentication
+        const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
+        if (!user || authError) {
+          welcomeMessage.textContent = 'Error: Please log in.';
+          welcomeMessage.classList.add('error-message');
+          setTimeout(() => {
+            window.location.href = 'login.html';
+          }, 2000);
+          return;
+        }
+
+        // Load Profile
+        welcomeMessage.textContent = 'Loading profile...';
+        const { data: profile, error: profileError } = await supabaseClient
+          .from('profiles')
+          .select('*')
+          .eq('id', user.id)
+          .single();
+        if (profileError) {
+          console.error('Error loading profile:', profileError);
+          welcomeMessage.textContent = 'Error loading profile.';
+          welcomeMessage.classList.add('error-message');
+          return;
+        }
+
+        welcomeMessage.textContent = `Welcome to Your Investment Journey, ${profile.first_name || 'User'}!`;
+        if (profile.photo_url) {
+          const { data: urlData } = supabaseClient.storage
+            .from('profile-photos')
+            .getPublicUrl(profile.photo_url);
+          const navProfilePhoto = document.getElementById('navProfilePhoto');
+          navProfilePhoto.src = urlData.publicUrl;
+          navProfilePhoto.style.display = 'block';
+          document.getElementById('defaultProfileIcon').style.display = 'none';
+        }
+
+        // Define valid plans for validation
+        const validPlans = {
+          'dawn-star': { min: 200, max: 4999, name: 'The Dawn Star (Basic)' },
+          'nebula-glow': { min: 5000, max: 14999, name: 'The Nebula Glow (Standard)' },
+          'lunar-crest': { min: 15000, max: 49999, name: 'The Lunar Crest (Silver)' },
+          'solar-flare': { min: 50000, max: 99999, name: 'The Solar Flare (Gold)' },
+          'galactic-crown': { min: 100000, max: Infinity, name: 'The Galactic Crown (Diamond)' }
+        };
+
+        // Plan Input and Button Logic
+        document.querySelectorAll('.plan-card').forEach(form => {
+          const input = form.querySelector('input[type="number"]');
+          const btn
+
+ = form.querySelector('.select-plan-btn');
+          const validationMessage = form.querySelector('.validation-message');
+          const min = parseFloat(form.getAttribute('data-min'));
+          const max = form.hasAttribute('data-max') ? parseFloat(form.getAttribute('data-max')) : Infinity;
+          const planName = form.getAttribute('data-plan-name');
+          const plan = btn.getAttribute('data-plan');
+
+          // Auto-fill and focus input on card click
+          form.addEventListener('click', (e) => {
+            if (!e.target.closest('input') && !e.target.closest('button')) {
+              form.focus();
+              input.value = min;
+              input.dispatchEvent(new Event('input'));
+            }
+          });
+
+          // Keyboard support for card
+          form.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              input.focus();
+              input.value = min;
+              input.dispatchEvent(new Event('input'));
+            }
+          });
+
+          // Input validation
+          input.addEventListener('input', () => {
+            const value = parseFloat(input.value);
+            if (value >= min && (max === Infinity || value <= max) && !isNaN(value)) {
+              btn.disabled = false;
+              form.classList.remove('invalid');
+              input.setCustomValidity('');
+              validationMessage.textContent = '';
+            } else {
+              btn.disabled = true;
+              form.classList.add('invalid');
+              input.setCustomValidity(`Amount must be between $${min}${max === Infinity ? '+' : ` and $${max}`}`);
+              validationMessage.textContent = input.validationMessage;
+            }
+          });
+
+          // Form submission
+          form.addEventListener('submit', (e) => {
             e.preventDefault();
-            input.focus();
-            input.value = min;
-            const event = new Event('input');
-            input.dispatchEvent(event);
-          }
-        });
-
-        // Input validation
-        input.addEventListener('input', () => {
-          const value = parseFloat(input.value);
-          if (value >= min && (max === Infinity || value <= max) && !isNaN(value)) {
-            btn.disabled = false;
-            card.classList.remove('invalid');
-            input.setCustomValidity('');
-            validationMessage.textContent = '';
-          } else {
-            btn.disabled = true;
-            card.classList.add('invalid');
-            input.setCustomValidity(`Amount must be between $${min}${max === Infinity ? '+' : ` and $${max}`}`);
-            validationMessage.textContent = input.validationMessage;
-          }
-        });
-
-        // Form submission fallback for Enter key
-        input.addEventListener('keypress', (e) => {
-          if (e.key === 'Enter') {
-            e.preventDefault();
-            btn.click();
-          }
-        });
-
-        // Button click with validation
-        btn.addEventListener('click', () => {
-          const amount = sanitizeAmount(input.value);
-          if (amount && parseFloat(amount) >= min && (max === Infinity || parseFloat(amount) <= max)) {
-            const plan = btn.getAttribute('data-plan');
+            const amount = sanitizeAmount(input.value);
+            if (!plan || !amount || isNaN(parseFloat(amount)) || parseFloat(amount) < min || (max !== Infinity && parseFloat(amount) > max)) {
+              validationMessage.textContent = `Please enter a valid amount between $${min}${max === Infinity ? ' or above' : ` and $${max}`}`;
+              form.classList.add('invalid');
+              return;
+            }
             window.location.href = `investment-payment.html?plan=${plan}&amount=${amount}&planName=${encodeURIComponent(planName)}`;
-          } else {
-            alert(`Please enter a valid amount between $${min}${max === Infinity ? ' or above' : ` and $${max}`}`);
-          }
+          });
         });
-      });
-    }
 
-    // Hamburger Toggle
-    const hamburgerBtn = document.getElementById('hamburgerBtn');
-    const navDrawer = document.getElementById('navDrawer');
-    const overlay = document.querySelector('.nav-overlay');
-    hamburgerBtn.addEventListener('click', () => {
-      navDrawer.classList.toggle('open');
-      hamburgerBtn.classList.toggle('active');
-      overlay.classList.toggle('nav-open');
-      if (navDrawer.classList.contains('open')) {
-        navDrawer.scrollTop = 0;
+        // Validate URL parameters on investment-payment.html (if applicable)
+        if (window.location.pathname.includes('investment-payment.html')) {
+          const urlParams = new URLSearchParams(window.location.search);
+          const plan = urlParams.get('plan');
+          const amount = parseFloat(urlParams.get('amount'));
+          const planName = decodeURIComponent(urlParams.get('planName') || '');
+
+          if (!validPlans[plan] || isNaN(amount) || amount < validPlans[plan].min || (validPlans[plan].max !== Infinity && amount > validPlans[plan].max) || planName !== validPlans[plan].name) {
+            alert('Invalid investment parameters. Redirecting to investment page.');
+            setTimeout(() => {
+              window.location.href = 'invest.html';
+            }, 2000);
+          }
+        }
       }
-    });
 
-    // Close Nav When Clicking Outside
-    document.addEventListener('click', (event) => {
-      const isClickInsideNav = navDrawer.contains(event.target);
-      const isClickOnHamburger = hamburgerBtn.contains(event.target);
-      if (!isClickInsideNav && !isClickOnHamburger && navDrawer.classList.contains('open')) {
-        navDrawer.classList.remove('open');
-        hamburgerBtn.classList.remove('active');
-        overlay.classList.remove('nav-open');
-      }
-    });
+      // Hamburger Toggle
+      const hamburgerBtn = document.getElementById('hamburgerBtn');
+      const navDrawer = document.getElementById('navDrawer');
+      const overlay = document.querySelector('.nav-overlay');
+      hamburgerBtn.addEventListener('click', () => {
+        navDrawer.classList.toggle('open');
+        hamburgerBtn.classList.toggle('active');
+        overlay.classList.toggle('nav-open');
+        if (navDrawer.classList.contains('open')) {
+          navDrawer.scrollTop = 0;
+        }
+      });
 
-    // Theme Toggle
-    const themeToggle = document.getElementById('theme-toggle');
-    themeToggle.addEventListener('click', () => {
-      document.body.classList.toggle('light-theme');
-      const icon = themeToggle.querySelector('i');
-      icon.classList.toggle('fa-moon');
-      icon.classList.toggle('fa-sun');
-    });
+      // Close Nav When Clicking Outside
+      document.addEventListener('click', (event) => {
+        const isClickInsideNav = navDrawer.contains(event.target);
+        const isClickOnHamburger = hamburgerBtn.contains(event.target);
+        if (!isClickInsideNav && !isClickOnHamburger && navDrawer.classList.contains('open')) {
+          navDrawer.classList.remove('open');
+          hamburgerBtn.classList.remove('active');
+          overlay.classList.remove('nav-open');
+        }
+      });
 
-    // Account Menu Toggle
-    const accountToggle = document.getElementById('account-toggle');
-    const submenu = accountToggle.nextElementSibling;
-    accountToggle.addEventListener('click', (e) => {
-      e.preventDefault();
-      submenu.classList.toggle('open');
-    });
+      // Theme Toggle
+      const themeToggle = document.getElementById('theme-toggle');
+      themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('light-theme');
+        const icon = themeToggle.querySelector('i');
+        icon.classList.toggle('fa-moon');
+        icon.classList.toggle('fa-sun');
+      });
 
-    // Back to Top
-    document.getElementById('back-to-top').addEventListener('click', () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
+      // Back to Top
+      document.getElementById('back-to-top').addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
 
-    // Ensure Video Playback
-    const video = document.querySelector('.bg-video');
-    video.addEventListener('canplay', () => {
-      video.play().catch(error => {
-        console.error('Error playing video:', error);
+      // Ensure Video Playback
+      const video = document.querySelector('.bg-video');
+      video.addEventListener('error', (error) => {
+        console.error('Error loading video:', error);
+        video.poster = 'assets/images/bg-fallback.jpg';
+      });
+
+      // Initialize page
+      initInvestPage().catch(error => {
+        console.error('Initialization error:', error);
+        welcomeMessage.textContent = 'An unexpected error occurred.';
+        welcomeMessage.classList.add('error-message');
       });
     });
-
-    // Initialize page
-    initInvestPage();
   </script>
 </body>
 </html>
