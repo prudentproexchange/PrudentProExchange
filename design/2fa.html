@@ -4,18 +4,18 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>2FA Settings • PrudentProExchange</title>
+  
+  <!-- Your Styles -->
   <link rel="stylesheet" href="css/style.css"/>
   <link rel="stylesheet" href="css/2fa.css"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 </head>
 <body class="twofa-page">
   <!-- Video Background -->
   <video class="bg-video" autoplay muted loop playsinline preload="auto">
-    <source src="assets/videos/background.webm" type="video/webm">
-    <source src="assets/videos/background.mp4" type="video/mp4">
+    <source src="assets/videos/background.webm" type="video/webm"/>
+    <source src="assets/videos/background.mp4" type="video/mp4"/>
     Your browser does not support the video tag.
   </video>
 
@@ -27,9 +27,7 @@
       </a>
       <div class="header-right">
         <button id="theme-toggle" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
-        <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
-          <span></span><span></span><span></span>
-        </button>
+        <button class="hamburger" id="hamburgerBtn" aria-label="Menu"><span></span><span></span><span></span></button>
       </div>
       <nav class="nav-drawer" id="navDrawer">
         <a href="dashboard.html">Dashboard</a>
@@ -38,7 +36,7 @@
         <a href="transactions.html">Transactions</a>
         <a href="referrals.html">Referrals</a>
         <div class="account-menu">
-          <a href="#" class="account-toggle" id="account-toggle">Account ▾</a>
+          <a href="#" id="account-toggle">Account ▾</a>
           <ul class="submenu">
             <li><a href="profile-settings.html">Profile Settings</a></li>
             <li><a href="transfer.html">Transfer Balance</a></li>
@@ -53,15 +51,16 @@
         <a href="transfer.html">Transfer</a>
       </nav>
     </header>
-    <div class="nav-overlay"></div>
 
     <!-- Profile Section -->
     <div class="profile-section">
       <div class="profile-container">
-        <img id="navProfilePhoto" src="" alt="Profile" class="avatar" style="display: none;"/>
+        <img id="navProfilePhoto" src="" alt="Profile" class="avatar" style="display:none;"/>
         <span id="defaultProfileIcon" class="avatar">👤</span>
       </div>
-      <div class="welcome-message">Welcome to 2FA Settings, <span id="welcomeName"></span>!</div>
+      <div class="welcome-message">
+        Welcome to 2FA Settings, <span id="welcomeName"></span>!
+      </div>
     </div>
 
     <!-- Main Content -->
@@ -69,44 +68,53 @@
       <section class="twofa-settings" data-aos="fade-up">
         <h2>Two-Factor Authentication Settings</h2>
         <div id="twofa-status" class="status-message"></div>
-        <div id="enable-2fa-section" style="display: none;">
+
+        <div id="enable-2fa-section" style="display:none;">
           <h3>Enable 2FA</h3>
-          <p>Scan the QR code or enter the secret manually in Google Authenticator.</p>
-          <img id="qrcode" src="" alt="QR Code" style="display: none;"/>
-          <p>Secret: <span id="secret"></span> <button id="copy-secret-btn" class="copy-btn" title="Copy secret"><i class="fas fa-copy"></i></button></p>
+          <p>Scan the QR code or enter the secret manually in your authenticator app.</p>
+          <img id="qrcode" src="" alt="QR Code" style="display:none; max-width:200px; margin-bottom:1rem;"/>
+          <p>
+            Secret: <span id="secret" style="font-family:monospace;"></span>
+            <button id="copy-secret-btn" title="Copy secret"><i class="fas fa-copy"></i></button>
+          </p>
           <input type="text" id="totp-code-enable" placeholder="Enter 6-digit code" maxlength="6"/>
-          <button id="verify-enable-btn" class="btn">Verify and Enable 2FA</button>
+          <button id="verify-enable-btn">Verify & Enable 2FA</button>
         </div>
-        <div id="disable-2fa-section" style="display: none;">
+
+        <div id="disable-2fa-section" style="display:none;">
           <h3>Disable 2FA</h3>
-          <p>Enter the current 6-digit code from Google Authenticator to disable 2FA.</p>
+          <p>Enter the current 6-digit code to disable 2FA.</p>
           <input type="text" id="totp-code-disable" placeholder="Enter 6-digit code" maxlength="6"/>
-          <button id="verify-disable-btn" class="btn">Verify and Disable 2FA</button>
+          <button id="verify-disable-btn">Verify & Disable 2FA</button>
         </div>
-        <div id="error-message" class="error-message" style="display: none;"></div>
+
+        <div id="error-message" class="error-message" style="display:none;"></div>
       </section>
     </main>
 
     <!-- Footer -->
-    <footer class="section section-dark site-footer" data-aos="fade-up">
+    <footer class="site-footer" data-aos="fade-up">
       <div class="footer-content">
-        <p class="UTC-time">UTC Time: <span id="utcTime"></span></p>
-        <p class="local-time">Local Time: <span id="localTime"></span></p>
-        <p class="local-date">Local Date: <span id="localDate"></span></p>
+        <p>UTC Time: <span id="utcTime"></span></p>
+        <p>Local Time: <span id="localTime"></span> | Date: <span id="localDate"></span></p>
         <nav class="footer-links">
           <a href="about.html">About Us</a>
           <a href="privacy.html">Privacy Policy</a>
           <a href="terms.html">Terms & Conditions</a>
         </nav>
-        <p class="copyright">© 2025 PrudentProExchange. All Rights Reserved. SEC Registration #0001230714</p>
+        <p>© 2025 PrudentProExchange. All Rights Reserved.</p>
       </div>
     </footer>
   </div>
 
   <button id="back-to-top" aria-label="Back to top">🚀</button>
 
-  <!-- Scripts -->
+  <!-- Scripts (at the end, so HTML always renders) -->
+  <!-- 1) Supabase JS v2 (with auth.mfa) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script>
+  <!-- 2) AOS JS -->
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <!-- 3) Your 2FA logic -->
   <script src="js/2fa.js"></script>
 </body>
 </html>
