@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>KYC Verification • PrudentProExchange</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/kyc.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="kyc-page">
+  <!-- Video Background -->
+  <video class="bg-video" autoplay muted loop playsinline>
+    <source src="assets/videos/background.webm" type="video/webm">
+    <source src="assets/videos/background.mp4" type="video/mp4">
+  </video>
+  
+  <div class="overlay">
+    <!-- Header -->
+    <header class="site-header">
+      <a href="dashboard.html" class="logo-link">
+        <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo"/>
+      </a>
+      <div class="header-right">
+        <button id="theme-toggle" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
+        <button class="hamburger" id="hamburgerBtn" aria-label="Menu"><span></span><span></span><span></span></button>
+      </div>
+      <nav class="nav-drawer" id="navDrawer">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="invest.html">Invest</a>
+        <a href="withdraw.html">Withdraw</a>
+        <a href="transactions.html">Transactions</a>
+        <a href="referrals.html">Referrals</a>
+        <div class="account-menu">
+          <a href="#" class="account-toggle" id="account-toggle">Account ▾</a>
+          <ul class="submenu">
+            <li><a href="profile-settings.html">Profile Settings</a></li>
+            <li><a href="payment.html">Make a Deposit</a></li>
+            <li><a href="change-password.html">Change Password</a></li>
+            <li><a href="support.html">Support Ticket</a></li>
+            <li><a href="promo-tools.html">Promotional Tools</a></li>
+            <li><a href="2fa.html">2FA Security</a></li>
+            <li><a href="#" id="logout-btn">Logout</a></li>
+          </ul>
+        </div>
+        <a href="kyc.html" class="active">KYC Verification</a>
+        <a href="transfer.html">Transfer</a>
+      </nav>
+      <div class="nav-overlay"></div>
+    </header>
+
+    <!-- Profile Section -->
+    <div class="profile-section">
+      <div class="profile-container">
+        <img id="navProfilePhoto" src="" alt="Profile" class="avatar" style="display: none;"/>
+        <span id="defaultProfileIcon" class="avatar">👤</span>
+      </div>
+      <div class="welcome-message">Welcome to KYC Verification, <span id="welcomeName"></span>!</div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="container" data-aos="fade-up">
+      <section class="kyc-section">
+        <h2>KYC Verification</h2>
+        <div id="auth-section" style="display:none;">
+          <form id="authForm" class="form-container">
+            <div class="form-grid">
+              <label>
+                Email Address*
+                <input type="email" name="email" required aria-label="Email Address"/>
+              </label>
+              <label>
+                Password*
+                <input type="password" name="password" required aria-label="Password"/>
+              </label>
+            </div>
+            <button type="submit" class="cta primary">Log In</button>
+          </form>
+          <div id="totp-section" style="display:none; margin-top:1rem;">
+            <label>
+              Authenticator Code*
+              <input type="text" id="totp-code" maxlength="6" pattern="\d{6}" placeholder="123456" aria-label="Authenticator Code"/>
+            </label>
+            <button id="totp-submit" class="cta primary"><span class="spinner"></span>Verify Code</button>
+          </div>
+        </div>
+        <div id="kyc-status" style="display:none;">
+          <p id="status-message"></p>
+        </div>
+        <div id="kyc-form" style="display:none;">
+          <div class="progress-bar">
+            <div class="step-indicator active" data-step="1">1. Personal Details</div>
+            <div class="step-indicator" data-step="2">2. ID Document</div>
+            <div class="step-indicator" data-step="3">3. Payment Card</div>
+            <div class="step-indicator" data-step="4">4. Supplementary Info</div>
+            <div class="step-indicator" data-step="5">5. Review & Submit</div>
+          </div>
+          <form id="kycForm">
+            <!-- Step 1: Personal Details -->
+            <section id="step1" class="step">
+              <h3>Personal Details</h3>
+              <label>
+                First Name*
+                <input type="text" name="first_name" required/>
+              </label>
+              <label>
+                Last Name*
+                <input type="text" name="last_name" required/>
+              </label>
+              <label>
+                Date of Birth (DD/MM/YYYY)*
+                <input type="text" name="date_of_birth" placeholder="DD/MM/YYYY" required/>
+              </label>
+              <label>
+                Nationality*
+                <select name="nationality" required>
+                  <option value="">Select Nationality</option>
+                  <!-- Populated via JS -->
+                </select>
+              </label>
+              <button type="button" class="next-btn">Next</button>
+            </section>
+            <!-- Step 2: ID Document Upload -->
+            <section id="step2" class="step" style="display:none;">
+              <h3>ID Document Upload</h3>
+              <label>
+                Document Type*
+                <input type="radio" name="document_type" value="driver_license" required> Driver's License
+                <input type="radio" name="document_type" value="passport"> Passport
+              </label>
+              <label>
+                Document Number*
+                <input type="text" name="document_number" required/>
+              </label>
+              <label>
+                Document Scan (JPEG/PNG/PDF, max 10MB)*
+                <input type="file" name="document_scan" accept="image/jpeg,image/png,application/pdf" required/>
+                <div class="drop-zone">Drag & Drop or Click to Upload</div>
+                <img id="document-preview" class="preview" style="display:none;"/>
+              </label>
+              <button type="button" class="prev-btn">Previous</button>
+              <button type="button" class="next-btn">Next</button>
+            </section>
+            <!-- Step 3: Payment Card Info -->
+            <section id="step3" class="step" style="display:none;">
+              <h3>Payment Card Info</h3>
+              <label>
+                Card Number*
+                <input type="text" name="card_number" required maxlength="19"/>
+              </label>
+              <label>
+                Expiry Date (MM/YY)*
+                <input type="text" name="card_expiry" placeholder="MM/YY" required maxlength="5"/>
+              </label>
+              <label>
+                CVV*
+                <input type="text" name="card_cvv" required maxlength="4"/>
+              </label>
+              <button type="button" class="prev-btn">Previous</button>
+              <button type="button" class="next-btn">Next</button>
+            </section>
+            <!-- Step 4: Supplementary Info -->
+            <section id="step4" class="step" style="display:none;">
+              <h3>Supplementary Info</h3>
+              <label>
+                Mother's Maiden Name*
+                <input type="text" name="mothers_maiden_name" required/>
+              </label>
+              <label>
+                Proof of Address (JPEG/PNG/PDF, max 10MB)*
+                <input type="file" name="proof_of_address" accept="image/jpeg,image/png,application/pdf" required/>
+                <div class="drop-zone">Drag & Drop or Click to Upload</div>
+                <img id="address-preview" class="preview" style="display:none;"/>
+              </label>
+              <button type="button" class="prev-btn">Previous</button>
+              <button type="button" class="next-btn">Next</button>
+            </section>
+            <!-- Step 5: Review & Submit -->
+            <section id="step5" class="step" style="display:none;">
+              <h3>Review & Submit</h3>
+              <div id="review-content"></div>
+              <button type="button" class="prev-btn">Previous</button>
+              <button type="submit" class="cta primary">Submit</button>
+            </section>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer section section-dark" data-aos="fade-up">
+      <div class="footer-content">
+        <p class="UTC-time">UTC Time: <span id="utcTime"></span></p>
+        <p class="local-time">Local Time: <span id="localTime"></span></p>
+        <p class="local-date">Local Date: <span id="localDate"></span></p>
+        <nav class="footer-links">
+          <a href="about.html">About Us</a>
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="terms.html">Terms & Conditions</a>
+        </nav>
+        <p>© 2025 PrudentProExchange. All Rights Reserved.</p>
+      </div>
+    </footer>
+  </div>
+
+  <button id="back-to-top" aria-label="Back to top">🚀</button>
+
+  <!-- Scripts -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="js/kyc.js"></script>
+</body>
+</html>
