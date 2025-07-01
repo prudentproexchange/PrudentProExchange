@@ -4,7 +4,7 @@
 const { createClient } = supabase;
 const supabaseClient = createClient(
   'https://iwkdznjqfbsfkscnbrkc.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmZzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU'
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU'
 );
 
 let userId;
@@ -64,6 +64,7 @@ async function init2FAPage() {
 async function fetchTotpSecret() {
   const res = await fetch('/.netlify/functions/create-totp', {
     method: 'POST',
+    credentials: 'same-origin',      // <<— include your Supabase session cookie
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ user_id: userId }),
   });
