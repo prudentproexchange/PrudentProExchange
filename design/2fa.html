@@ -3,87 +3,97 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <meta name="description" content="Manage Two-Factor Authentication (2FA) settings for your PrudentProExchange account with Google Authenticator."/>
   <title>2FA Settings • PrudentProExchange</title>
   <link rel="stylesheet" href="css/style.css"/>
   <link rel="stylesheet" href="css/2fa.css"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 </head>
-<body class="two-fa-page">
-  <noscript>
-    <div class="error-message" style="text-align:center; color:white; padding:1rem;">
-      JavaScript is required for this page to function. Please enable it.
-    </div>
-  </noscript>
-  <video class="bg-video" autoplay muted loop playsinline preload="auto" poster="assets/images/bg-fallback.jpg" aria-hidden="true">
+<body class="twofa-page">
+  <!-- Video Background -->
+  <video class="bg-video" autoplay muted loop playsinline preload="auto">
     <source src="assets/videos/background.webm" type="video/webm">
     <source src="assets/videos/background.mp4" type="video/mp4">
     Your browser does not support the video tag.
   </video>
 
   <div class="overlay">
-    <header class="site-header" role="banner">
-      <a href="dashboard.html" class="logo-link" aria-label="PrudentProExchange Home">
-        <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo" loading="lazy"/>
+    <!-- Header -->
+    <header class="site-header">
+      <a href="dashboard.html" class="logo-link">
+        <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo"/>
       </a>
       <div class="header-right">
-        <button id="theme-toggle" aria-label="Toggle light/dark theme">
-          <i class="fas fa-moon"></i>
-        </button>
-        <button class="hamburger" id="hamburgerBtn" aria-label="Toggle navigation menu" aria-expanded="false">
+        <button id="theme-toggle" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
+        <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
           <span></span><span></span><span></span>
         </button>
       </div>
-      <nav class="nav-drawer" id="navDrawer" role="navigation" aria-label="Main navigation">
+      <nav class="nav-drawer" id="navDrawer">
         <a href="dashboard.html">Dashboard</a>
         <a href="invest.html">Invest</a>
         <a href="withdraw.html">Withdraw</a>
         <a href="transactions.html">Transactions</a>
         <a href="referrals.html">Referrals</a>
         <div class="account-menu">
-          <a href="#" class="account-toggle" id="account-toggle" aria-haspopup="true" aria-expanded="false">Account ▾</a>
-          <ul class="submenu" role="menu">
-            <li><a href="profile-settings.html" role="menuitem">Profile Settings</a></li>
-            <li><a href="transfer.html" role="menuitem">Transfer Balance</a></li>
-            <li><a href="change-password.html" role="menuitem">Change Password</a></li>
-            <li><a href="support.html" role="menuitem">Support Ticket</a></li>
-            <li><a href="promo-tools.html" role="menuitem">Promotional Tools</a></li>
-            <li><a href="2fa.html" class="active" role="menuitem">2FA Security</a></li>
-            <li><a href="#" id="logout-btn" role="menuitem">Logout</a></li>
+          <a href="#" class="account-toggle" id="account-toggle">Account ▾</a>
+          <ul class="submenu">
+            <li><a href="profile-settings.html">Profile Settings</a></li>
+            <li><a href="transfer.html">Transfer Balance</a></li>
+            <li><a href="change-password.html">Change Password</a></li>
+            <li><a href="support.html">Support Ticket</a></li>
+            <li><a href="promo-tools.html">Promotional Tools</a></li>
+            <li><a href="2fa.html" class="active">2FA Security</a></li>
+            <li><a href="#" id="logout-btn">Logout</a></li>
           </ul>
         </div>
         <a href="kyc.html">KYC Verification</a>
         <a href="transfer.html">Transfer</a>
       </nav>
     </header>
-    <div class="nav-overlay" aria-hidden="true"></div>
+    <div class="nav-overlay"></div>
 
-    <div class="profile-section" role="region" aria-label="User profile">
+    <!-- Profile Section -->
+    <div class="profile-section">
       <div class="profile-container">
-        <img id="navProfilePhoto" src="" alt="User profile photo" class="avatar" style="display: none;" loading="lazy"/>
-        <span id="defaultProfileIcon" class="avatar" aria-hidden="true">👤</span>
+        <img id="navProfilePhoto" src="" alt="Profile" class="avatar" style="display: none;"/>
+        <span id="defaultProfileIcon" class="avatar">👤</span>
       </div>
-      <div class="welcome-message" aria-live="polite">Loading profile...</div>
+      <div class="welcome-message">Welcome to 2FA Settings, <span id="welcomeName"></span>!</div>
     </div>
 
-    <main class="container" role="main">
-      <section class="two-fa-settings" data-aos="fade-up" aria-labelledby="two-fa-heading">
-        <h2 id="two-fa-heading">Two-Factor Authentication</h2>
-        <p class="two-fa-description">Enhance your account security with Two-Factor Authentication (2FA) using Google Authenticator or similar apps.</p>
-        <div id="two-fa-content" class="settings-card">
-          <p class="loading-message">Loading 2FA settings...</p>
+    <!-- Main Content -->
+    <main class="twofa-page container">
+      <section class="twofa-settings" data-aos="fade-up">
+        <h2>Two-Factor Authentication Settings</h2>
+        <div id="twofa-status" class="status-message"></div>
+        <div id="enable-2fa-section" style="display: none;">
+          <h3>Enable 2FA</h3>
+          <p>Scan the QR code or enter the secret manually in Google Authenticator.</p>
+          <img id="qrcode" src="" alt="QR Code" style="display: none;"/>
+          <p>Secret: <span id="secret"></span> <button id="copy-secret-btn" class="copy-btn" title="Copy secret"><i class="fas fa-copy"></i></button></p>
+          <input type="text" id="totp-code-enable" placeholder="Enter 6-digit code" maxlength="6"/>
+          <button id="verify-enable-btn" class="btn">Verify and Enable 2FA</button>
         </div>
+        <div id="disable-2fa-section" style="display: none;">
+          <h3>Disable 2FA</h3>
+          <p>Enter the current 6-digit code from Google Authenticator to disable 2FA.</p>
+          <input type="text" id="totp-code-disable" placeholder="Enter 6-digit code" maxlength="6"/>
+          <button id="verify-disable-btn" class="btn">Verify and Disable 2FA</button>
+        </div>
+        <div id="error-message" class="error-message" style="display: none;"></div>
       </section>
     </main>
 
-    <footer class="site-footer" data-aos="fade-up" role="contentinfo">
+    <!-- Footer -->
+    <footer class="section section-dark site-footer" data-aos="fade-up">
       <div class="footer-content">
         <p class="UTC-time">UTC Time: <span id="utcTime"></span></p>
         <p class="local-time">Local Time: <span id="localTime"></span></p>
         <p class="local-date">Local Date: <span id="localDate"></span></p>
-        <nav class="footer-links" aria-label="Footer navigation">
+        <nav class="footer-links">
           <a href="about.html">About Us</a>
           <a href="privacy.html">Privacy Policy</a>
           <a href="terms.html">Terms & Conditions</a>
@@ -93,234 +103,10 @@
     </footer>
   </div>
 
-  <button id="back-to-top" aria-label="Scroll back to top">🚀</button>
+  <button id="back-to-top" aria-label="Back to top">🚀</button>
 
-  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js" defer></script>
-  <script>
-    // Supabase Client Initialization
-    const supabaseClient = supabase.createClient(
-      'https://iwkdznjqfbsfkscnbrkc.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU'
-    );
-
-    // Sanitize input
-    function sanitizeInput(input) {
-      return input.replace(/[^0-9]/g, '').slice(0, 6);
-    }
-
-    // Update times in footer
-    function updateTimes() {
-      const now = new Date();
-      document.getElementById('localTime').textContent = now.toLocaleTimeString('en-US', { hour12: true });
-      document.getElementById('localDate').textContent = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-      document.getElementById('utcTime').textContent = now.toUTCString();
-    }
-    setInterval(updateTimes, 1000);
-    updateTimes();
-
-    // Initialize 2FA Page
-    async function initTwoFAPage() {
-      try {
-        // Check authentication
-        const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
-        if (!user || authError) {
-          throw new Error(authError?.message || 'Please log in to access this page.');
-        }
-
-        // Load profile with retry mechanism
-        let profile = null;
-        for (let attempt = 1; attempt <= 3; attempt++) {
-          try {
-            const { data, error } = await supabaseClient
-              .from('profiles')
-              .select('two_fa_enabled, first_name, photo_url')
-              .eq('id', user.id)
-              .single();
-            if (error) throw error;
-            profile = data;
-            break;
-          } catch (error) {
-            console.warn(`Profile fetch attempt ${attempt} failed:`, error.message);
-            if (attempt === 3) throw new Error('Failed to load profile after multiple attempts.');
-            await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1s before retry
-          }
-        }
-
-        // Update profile UI
-        const welcomeMessage = document.querySelector('.welcome-message');
-        welcomeMessage.textContent = `Welcome, ${profile.first_name || 'User'}!`;
-        if (profile.photo_url) {
-          try {
-            const { data: urlData } = supabaseClient.storage
-              .from('profile-photos')
-              .getPublicUrl(profile.photo_url);
-            const navProfilePhoto = document.getElementById('navProfilePhoto');
-            navProfilePhoto.src = urlData.publicUrl;
-            navProfilePhoto.style.display = 'block';
-            document.getElementById('defaultProfileIcon').style.display = 'none';
-          } catch (error) {
-            console.warn('Error loading profile photo:', error.message);
-          }
-        }
-
-        // Render 2FA settings
-        const twoFaContent = document.getElementById('two-fa-content');
-        if (profile.two_fa_enabled) {
-          twoFaContent.innerHTML = `
-            <p>Two-Factor Authentication is currently enabled.</p>
-            <button id="disable-2fa-btn" class="btn">Disable 2FA</button>
-            <p class="error-message" id="disable-error"></p>
-          `;
-          document.getElementById('disable-2fa-btn').addEventListener('click', () => {
-            twoFaContent.innerHTML = `
-              <p>Enter the 6-digit code from your authenticator app to disable 2FA:</p>
-              <input type="text" id="disable-totp-code" placeholder="Enter 6-digit code" aria-label="Enter the 6-digit code from your authenticator app">
-              <div class="button-group">
-                <button id="verify-disable-btn" class="btn">Verify and Disable</button>
-                <button id="cancel-disable-btn" class="btn secondary">Cancel</button>
-              </div>
-              <p class="error-message" id="disable-error"></p>
-            `;
-            document.getElementById('verify-disable-btn').addEventListener('click', async () => {
-              const code = sanitizeInput(document.getElementById('disable-totp-code').value);
-              const disableBtn = document.getElementById('verify-disable-btn');
-              disableBtn.disabled = true;
-              disableBtn.innerHTML = '<span class="spinner"></span> Verifying...';
-              try {
-                const { error } = await supabaseClient.rpc('disable_totp', { user_id: user.id, token: code });
-                if (error) throw new Error(error.message || 'Invalid code or server error.');
-                twoFaContent.innerHTML = '<p class="success-message">2FA has been disabled successfully.</p>';
-                setTimeout(() => location.reload(), 2000);
-              } catch (error) {
-                document.getElementById('disable-error').textContent = error.message || 'Failed to disable 2FA. Please try again.';
-                disableBtn.disabled = false;
-                disableBtn.innerHTML = 'Verify and Disable';
-              }
-            });
-            document.getElementById('cancel-disable-btn').addEventListener('click', () => location.reload());
-          });
-        } else {
-          twoFaContent.innerHTML = `
-            <p>Enable Two-Factor Authentication to secure your account.</p>
-            <button id="enable-2fa-btn" class="btn">Enable 2FA</button>
-            <p class="error-message" id="enable-error"></p>
-          `;
-          document.getElementById('enable-2fa-btn').addEventListener('click', async () => {
-            const enableBtn = document.getElementById('enable-2fa-btn');
-            enableBtn.disabled = true;
-            enableBtn.innerHTML = '<span class="spinner"></span> Generating...';
-            try {
-              const { data, error } = await supabaseClient.rpc('create_totp_secret', { user_id: user.id });
-              if (error) throw new Error(error.message || 'Failed to generate 2FA secret.');
-              const { secret, qr_code_url } = data;
-              twoFaContent.innerHTML = `
-                <p>Scan this QR code with Google Authenticator or enter the secret manually:</p>
-                <img id="qr-code" src="${qr_code_url}" alt="QR Code for 2FA setup">
-                <p>Secret: <span id="secret" class="secret">${secret}</span> <button id="copy-secret" class="btn secondary">Copy</button></p>
-                <input type="text" id="enable-totp-code" placeholder="Enter 6-digit code" aria-label="Enter the 6-digit code from your authenticator app">
-                <div class="button-group">
-                  <button id="verify-enable-btn" class="btn">Verify and Enable</button>
-                  <button id="cancel-enable-btn" class="btn secondary">Cancel</button>
-                </div>
-                <p class="error-message" id="enable-error"></p>
-              `;
-              document.getElementById('copy-secret').addEventListener('click', () => {
-                navigator.clipboard.writeText(secret).then(() => {
-                  alert('Secret copied to clipboard!');
-                }).catch(() => {
-                  alert('Failed to copy secret.');
-                });
-              });
-              document.getElementById('verify-enable-btn').addEventListener('click', async () => {
-                const code = sanitizeInput(document.getElementById('enable-totp-code').value);
-                const verifyBtn = document.getElementById('verify-enable-btn');
-                verifyBtn.disabled = true;
-                verifyBtn.innerHTML = '<span class="spinner"></span> Verifying...';
-                try {
-                  const { error } = await supabaseClient.rpc('verify_and_enable_totp', { user_id: user.id, token: code });
-                  if (error) throw new Error(error.message || 'Invalid code or server error.');
-                  twoFaContent.innerHTML = '<p class="success-message">2FA has been enabled successfully!</p>';
-                  setTimeout(() => location.reload(), 2000);
-                } catch (error) {
-                  document.getElementById('enable-error').textContent = error.message || 'Failed to enable 2FA. Please try again.';
-                  verifyBtn.disabled = false;
-                  verifyBtn.innerHTML = 'Verify and Enable';
-                }
-              });
-              document.getElementById('cancel-enable-btn').addEventListener('click', () => location.reload());
-            } catch (error) {
-              document.getElementById('enable-error').textContent = error.message || 'Failed to generate 2FA setup. Please try again.';
-              enableBtn.disabled = false;
-              enableBtn.innerHTML = 'Enable 2FA';
-            }
-          });
-        }
-      } catch (error) {
-        console.error('Initialization error:', error);
-        const welcomeMessage = document.querySelector('.welcome-message');
-        welcomeMessage.textContent = 'Error: Unable to load profile or 2FA settings.';
-        welcomeMessage.classList.add('error-message');
-        document.getElementById('two-fa-content').innerHTML = `
-          <p class="error-message">Unable to load 2FA settings. Please try again later or contact support.</p>
-          <a href="support.html" class="btn">Contact Support</a>
-        `;
-      }
-    }
-
-    // Navigation and UI Handlers
-    window.addEventListener('DOMContentLoaded', () => {
-      AOS.init({ duration: 800, once: true });
-
-      // Hamburger Toggle
-      const hamburgerBtn = document.getElementById('hamburgerBtn');
-      const navDrawer = document.getElementById('navDrawer');
-      const overlay = document.querySelector('.nav-overlay');
-      hamburgerBtn.addEventListener('click', () => {
-        const isOpen = navDrawer.classList.toggle('open');
-        hamburgerBtn.classList.toggle('active');
-        hamburgerBtn.setAttribute('aria-expanded', isOpen);
-        overlay.classList.toggle('nav-open');
-        if (isOpen) navDrawer.querySelector('a').focus();
-      });
-
-      // Close Nav on Outside Click
-      document.addEventListener('click', (event) => {
-        if (!navDrawer.contains(event.target) && !hamburgerBtn.contains(event.target) && navDrawer.classList.contains('open')) {
-          navDrawer.classList.remove('open');
-          hamburgerBtn.classList.remove('active');
-          hamburgerBtn.setAttribute('aria-expanded', 'false');
-          overlay.classList.remove('nav-open');
-        }
-      });
-
-      // Account Menu Toggle
-      const accountToggle = document.getElementById('account-toggle');
-      const submenu = accountToggle.nextElementSibling;
-      accountToggle.addEventListener('click', (e) => {
-        e.preventDefault();
-        const isOpen = submenu.classList.toggle('open');
-        accountToggle.setAttribute('aria-expanded', isOpen);
-      });
-
-      // Theme Toggle
-      const themeToggle = document.getElementById('theme-toggle');
-      themeToggle.addEventListener('click', () => {
-        document.body.classList.toggle('light-theme');
-        const icon = themeToggle.querySelector('i');
-        icon.classList.toggle('fa-moon');
-        icon.classList.toggle('fa-sun');
-        themeToggle.setAttribute('aria-label', document.body.classList.contains('light-theme') ? 'Switch to dark theme' : 'Switch to light theme');
-      });
-
-      // Back to Top
-      document.getElementById('back-to-top').addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      });
-
-      // Initialize page
-      initTwoFAPage();
-    });
-  </script>
+  <!-- Scripts -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="js/2fa.js"></script>
 </body>
 </html>
