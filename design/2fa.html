@@ -4,20 +4,19 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>2FA Settings • PrudentProExchange</title>
-
-  <!-- Styles -->
   <link rel="stylesheet" href="css/style.css"/>
   <link rel="stylesheet" href="css/2fa.css"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 </head>
-
 <body class="twofa-page">
   <!-- Video Background -->
   <video class="bg-video" autoplay muted loop playsinline preload="auto">
-    <source src="assets/videos/background.webm" type="video/webm"/>
-    <source src="assets/videos/background.mp4" type="video/mp4"/>
+    <source src="assets/videos/background.webm" type="video/webm">
+    <source src="assets/videos/background.mp4" type="video/mp4">
+    Your browser does not support the video tag.
   </video>
 
   <div class="overlay">
@@ -33,9 +32,28 @@
         </button>
       </div>
       <nav class="nav-drawer" id="navDrawer">
-        <!-- ... nav links ... -->
+        <a href="dashboard.html">Dashboard</a>
+        <a href="invest.html">Invest</a>
+        <a href="withdraw.html">Withdraw</a>
+        <a href="transactions.html">Transactions</a>
+        <a href="referrals.html">Referrals</a>
+        <div class="account-menu">
+          <a href="#" class="account-toggle" id="account-toggle">Account ▾</a>
+          <ul class="submenu">
+            <li><a href="profile-settings.html">Profile Settings</a></li>
+            <li><a href="transfer.html">Transfer Balance</a></li>
+            <li><a href="change-password.html">Change Password</a></li>
+            <li><a href="support.html">Support Ticket</a></li>
+            <li><a href="promo-tools.html">Promotional Tools</a></li>
+            <li><a href="2fa.html" class="active">2FA Security</a></li>
+            <li><a href="#" id="logout-btn">Logout</a></li>
+          </ul>
+        </div>
+        <a href="kyc.html">KYC Verification</a>
+        <a href="transfer.html">Transfer</a>
       </nav>
     </header>
+    <div class="nav-overlay"></div>
 
     <!-- Profile Section -->
     <div class="profile-section">
@@ -43,9 +61,7 @@
         <img id="navProfilePhoto" src="" alt="Profile" class="avatar" style="display: none;"/>
         <span id="defaultProfileIcon" class="avatar">👤</span>
       </div>
-      <div class="welcome-message">
-        Welcome to 2FA Settings, <span id="welcomeName"></span>!
-      </div>
+      <div class="welcome-message">Welcome to 2FA Settings, <span id="welcomeName"></span>!</div>
     </div>
 
     <!-- Main Content -->
@@ -53,61 +69,44 @@
       <section class="twofa-settings" data-aos="fade-up">
         <h2>Two-Factor Authentication Settings</h2>
         <div id="twofa-status" class="status-message"></div>
-
         <div id="enable-2fa-section" style="display: none;">
-          <h3>Enable Two-Factor Authentication</h3>
-          <p>Secure your account by enabling 2FA. Scan the QR code below or enter the secret key in your authenticator app.</p>
-          <div id="qrcode-wrapper" style="margin: 20px 0; text-align: center;">
-            <img id="qrcode" src="" alt="QR Code for 2FA" style="display: none; max-width: 200px;"/>
-          </div>
-          <div id="secret-wrapper" style="margin:15px 0; display:flex; align-items:center; gap:10px;">
-            <p style="margin:0;">Secret Key:
-              <span id="secret" style="font-family:monospace; padding:5px; background:#f5f5f5; border-radius:4px;"></span>
-            </p>
-            <button id="copy-secret-btn" title="Copy Secret Key" style="padding:8px;cursor:pointer;">
-              <i class="fas fa-copy"></i> Copy
-            </button>
-          </div>
-          <div style="margin-top:20px;">
-            <input type="text" id="totp-code-enable" placeholder="Enter 6-digit code" maxlength="6"/>
-            <button id="verify-enable-btn">Verify & Enable 2FA</button>
-          </div>
+          <h3>Enable 2FA</h3>
+          <p>Scan the QR code or enter the secret manually in Google Authenticator.</p>
+          <img id="qrcode" src="" alt="QR Code" style="display: none;"/>
+          <p>Secret: <span id="secret"></span> <button id="copy-secret-btn" class="copy-btn" title="Copy secret"><i class="fas fa-copy"></i></button></p>
+          <input type="text" id="totp-code-enable" placeholder="Enter 6-digit code" maxlength="6"/>
+          <button id="verify-enable-btn" class="btn">Verify and Enable 2FA</button>
         </div>
-
         <div id="disable-2fa-section" style="display: none;">
           <h3>Disable 2FA</h3>
-          <p>Enter the current 6-digit code to disable 2FA.</p>
+          <p>Enter the current 6-digit code from Google Authenticator to disable 2FA.</p>
           <input type="text" id="totp-code-disable" placeholder="Enter 6-digit code" maxlength="6"/>
-          <button id="verify-disable-btn">Verify & Disable 2FA</button>
+          <button id="verify-disable-btn" class="btn">Verify and Disable 2FA</button>
         </div>
-
         <div id="error-message" class="error-message" style="display: none;"></div>
       </section>
     </main>
 
     <!-- Footer -->
-    <footer class="site-footer" data-aos="fade-up">
+    <footer class="section section-dark site-footer" data-aos="fade-up">
       <div class="footer-content">
-        <p>UTC Time: <span id="utcTime"></span></p>
-        <p>Local Time: <span id="localTime"></span> | Date: <span id="localDate"></span></p>
+        <p class="UTC-time">UTC Time: <span id="utcTime"></span></p>
+        <p class="local-time">Local Time: <span id="localTime"></span></p>
+        <p class="local-date">Local Date: <span id="localDate"></span></p>
         <nav class="footer-links">
           <a href="about.html">About Us</a>
           <a href="privacy.html">Privacy Policy</a>
           <a href="terms.html">Terms & Conditions</a>
         </nav>
-        <p>© 2025 PrudentProExchange. All Rights Reserved.</p>
+        <p class="copyright">© 2025 PrudentProExchange. All Rights Reserved. SEC Registration #0001230714</p>
       </div>
     </footer>
   </div>
 
-  <button id="back-to-top">🚀</button>
+  <button id="back-to-top" aria-label="Back to top">🚀</button>
 
-  <!-- Scripts at end to avoid blocking -->
-  <!-- 1) Supabase JS v2 (with auth.mfa) -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script>
-  <!-- 2) AOS -->
+  <!-- Scripts -->
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-  <!-- 3) Your 2FA logic -->
   <script src="js/2fa.js"></script>
 </body>
 </html>
