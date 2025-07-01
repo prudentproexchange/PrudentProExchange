@@ -114,47 +114,55 @@
             <!-- Step 1: Personal Details -->
             <section id="step1" class="step">
               <h3>Personal Details</h3>
-              <label>
-                First Name*
-                <input type="text" name="first_name" required/>
-              </label>
-              <label>
-                Last Name*
-                <input type="text" name="last_name" required/>
-              </label>
-              <label>
-                Date of Birth (DD/MM/YYYY)*
-                <input type="text" name="date_of_birth" placeholder="DD/MM/YYYY" pattern="\d{2}/\d{2}/\d{4}" required/>
-              </label>
-              <label>
-                Nationality*
-                <select name="nationality" required>
-                  <option value="">Select Nationality</option>
-                </select>
-              </label>
+              <div class="form-grid">
+                <label>
+                  First Name*
+                  <input type="text" name="first_name" required/>
+                </label>
+                <label>
+                  Last Name*
+                  <input type="text" name="last_name" required/>
+                </label>
+                <label>
+                  Date of Birth (DD/MM/YYYY)*
+                  <input type="text" name="date_of_birth" placeholder="DD/MM/YYYY" pattern="\d{2}/\d{2}/\d{4}" required/>
+                </label>
+                <label>
+                  Nationality*
+                  <select name="nationality" required>
+                    <option value="">Select Nationality</option>
+                  </select>
+                </label>
+              </div>
               <button type="button" class="next-btn cta">Next</button>
             </section>
 
             <!-- Step 2: ID Document Upload -->
             <section id="step2" class="step" style="display: none;">
               <h3>ID Document Upload</h3>
-              <label>
-                Document Type*
-                <div class="radio-group">
-                  <input type="radio" name="document_type" value="driver_license" required> Driver's License
-                  <input type="radio" name="document_type" value="passport"> Passport
-                </div>
-              </label>
-              <label>
-                Document Number*
-                <input type="text" name="document_number" required/>
-              </label>
-              <label>
-                Document Scan (JPEG/PNG/PDF, max 10MB)*
-                <input type="file" name="document_scan" accept="image/jpeg,image/png,application/pdf" required/>
-                <div class="drop-zone">Drag & Drop or Click to Upload</div>
-                <img id="document-preview" class="preview" style="display: none;"/>
-              </label>
+              <div class="form-grid">
+                <label class="document-type-label">
+                  Document Type*
+                  <div class="radio-group">
+                    <label class="radio-label">
+                      <input type="radio" name="document_type" value="driver_license" required> Driver's License
+                    </label>
+                    <label class="radio-label">
+                      <input type="radio" name="document_type" value="passport"> Passport
+                    </label>
+                  </div>
+                </label>
+                <label>
+                  Document Number*
+                  <input type="text" name="document_number" required/>
+                </label>
+                <label>
+                  Document Scan (JPEG/PNG/PDF, max 10MB)*
+                  <input type="file" name="document_scan" accept="image/jpeg,image/png,application/pdf" required/>
+                  <div class="drop-zone">Drag & Drop or Click to Upload</div>
+                  <img id="document-preview" class="preview" style="display: none;"/>
+                </label>
+              </div>
               <div class="form-buttons">
                 <button type="button" class="prev-btn">Previous</button>
                 <button type="button" class="next-btn cta">Next</button>
@@ -164,18 +172,20 @@
             <!-- Step 3: Payment Card Info -->
             <section id="step3" class="step" style="display: none;">
               <h3>Payment Card Info</h3>
-              <label>
-                Card Number*
-                <input type="text" name="card_number" required maxlength="19"/>
-              </label>
-              <label>
-                Expiry Date (MM/YY)*
-                <input type="text" name="card_expiry" placeholder="MM/YY" required maxlength="5"/>
-              </label>
-              <label>
-                CVV*
-                <input type="text" name="card_cvv" required maxlength="4"/>
-              </label>
+              <div class="form-grid">
+                <label>
+                  Card Number*
+                  <input type="text" name="card_number" required maxlength="19"/>
+                </label>
+                <label>
+                  Expiry Date (MM/YY)*
+                  <input type="text" name="card_expiry" placeholder="MM/YY" required maxlength="5"/>
+                </label>
+                <label>
+                  CVV*
+                  <input type="text" name="card_cvv" required maxlength="4"/>
+                </label>
+              </div>
               <div class="form-buttons">
                 <button type="button" class="prev-btn">Previous</button>
                 <button type="button" class="next-btn cta">Next</button>
@@ -185,16 +195,18 @@
             <!-- Step 4: Supplementary Info -->
             <section id="step4" class="step" style="display: none;">
               <h3>Supplementary Info</h3>
-              <label>
-                Mother's Maiden Name*
-                <input type="text" name="mothers_maiden_name" required/>
-              </label>
-              <label>
-                Proof of Address (JPEG/PNG/PDF, max 10MB)*
-                <input type="file" name="proof_of_address" accept="image/jpeg,image/png,application/pdf" required/>
-                <div class="drop-zone">Drag & Drop or Click to Upload</div>
-                <img id="address-preview" class="preview" style="display: none;"/>
-              </label>
+              <div class="form-grid">
+                <label>
+                  Mother's Maiden Name*
+                  <input type="text" name="mothers_maiden_name" required/>
+                </label>
+                <label>
+                  Proof of Address (JPEG/PNG/PDF, max 10MB)*
+                  <input type="file" name="proof_of_address" accept="image/jpeg,image/png,application/pdf" required/>
+                  <div class="drop-zone">Drag & Drop or Click to Upload</div>
+                  <img id="address-preview" class="preview" style="display: none;"/>
+                </label>
+              </div>
               <div class="form-buttons">
                 <button type="button" class="prev-btn">Previous</button>
                 <button type="button" class="next-btn cta">Next</button>
