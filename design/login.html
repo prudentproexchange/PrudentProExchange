@@ -9,6 +9,23 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <style>
+    .message {
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border-radius: 4px;
+      text-align: center;
+      display: none;
+    }
+    .message.error {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+    .message.success {
+      background-color: #d4edda;
+      color: #155724;
+    }
+  </style>
 </head>
 <body class="login-page">
   <!-- Video Background -->
@@ -16,7 +33,7 @@
     <source src="assets/videos/background.webm" type="video/webm">
     <source src="assets/videos/background.mp4" type="video/mp4">
   </video>
-  <div class="overlay">
+  <div class="overlaypackaging">
     <header class="site-header">
       <button id="theme-toggle" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
       <a href="/" class="logo-link">
@@ -42,6 +59,7 @@
           Log in to access your dashboard and manage your investments with PrudentProExchange.
         </p>
         <div class="form-wrapper">
+          <div id="message" class="message"></div>
           <form id="loginForm" class="form-container">
             <div class="form-grid">
               <label>
@@ -89,12 +107,13 @@
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU'
     );
 
-    // Redirect to dashboard if already logged in
-    supabaseClient.auth.onAuthStateChange((event, session) => {
+    // Check for existing session and redirect if present
+    (async () => {
+      const { data: { session } } = await supabaseClient.auth.getSession();
       if (session) {
         window.location.href = 'dashboard.html';
       }
-    });
+    })();
 
     // Hamburger menu toggle
     const btnApp = document.getElementById('hamburgerApp'),
@@ -113,48 +132,30 @@
       icon.classList.toggle('fa-sun');
     });
 
-    // Prompt for TOTP
-    async function promptFor2FA(userId) {
+    // Function to show modern messages
+    function showMessage(text, isError = true) {
+      const msgDiv = document.getElementById('message');
+      msgDiv.textContent = text;
+      msgDiv.className = isError ? 'message error' : 'message success';
+      msgDiv.style.display = 'block';
+    }
+
+    // Variable to store current user ID for TOTP verification
+    let currentUserId = null;
+
+    // Function to prompt for 2FA
+    function promptFor2FA(userId) {
+      currentUserId = userId;
       document.getElementById('loginForm').style.display = 'none';
       const totpSection = document.getElementById('totp-section');
       totpSection.style.display = 'block';
-
-      const btn = document.getElementById('totp-submit');
-      let working = false;
-      btn.addEventListener('click', async () => {
-        if (working) return;
-        working = true;
-        btn.disabled = true;
-
-        const code = document.getElementById('totp-code').value.trim();
-        if (!/^\d{6}$/.test(code)) {
-          alert('Enter a valid 6-digit code.');
-          working = false;
-          btn.disabled = false;
-          return;
-        }
-
-        // Correct RPC call
-        const { data: ok, error } = await supabaseClient
-          .rpc('verify_totp', { user_id: userId, token: code });
-
-        if (error || !ok) {
-          document.getElementById('totp-code').value = '';
-          alert('Invalid code, please try again.');
-          working = false;
-          btn.disabled = false;
-          return;
-        }
-
-        // Success
-        alert('2FA verification successful! Redirecting to your dashboard.');
-        window.location.href = 'dashboard.html';
-      });
+      document.getElementById('totp-code').value = '';
     }
 
     // Hook up login form
     document.getElementById('loginForm').addEventListener('submit', async e => {
       e.preventDefault();
+      document.getElementById('message').style.display = 'none';
       const f = e.target;
 
       // 1) Sign in
@@ -165,7 +166,8 @@
         });
 
       if (authError || !authData.session) {
-        return alert('Login error: ' + (authError?.message || 'unknown'));
+        showMessage('Login error: ' + (authError?.message || 'unknown'));
+        return;
       }
 
       // 2) Check 2FA flag
@@ -178,16 +180,45 @@
 
       if (profErr) {
         console.error(profErr);
-        return window.location.href = 'dashboard.html';
+        showMessage('Error checking 2FA status. Please try again.');
+        return;
       }
 
       if (profile.two_fa_enabled) {
         // Ask for TOTP
-        return promptFor2FA(user.id);
+        promptFor2FA(user.id);
+      } else {
+        // Go straight to dashboard
+        window.location.href = 'dashboard.html';
+      }
+    });
+
+    // Hook up TOTP submit button
+    document.getElementById('totp-submit').addEventListener('click', async () => {
+      if (!currentUserId) return;
+      document.getElementById('message').style.display = 'none';
+      const code = document.getElementById('totp-code').value.trim();
+      if (!/^\d{6}$/.test(code)) {
+        showMessage('Please enter a valid 6-digit code.');
+        return;
       }
 
-      // Otherwise go straight to dashboard
-      alert('Login successful! Redirecting to your dashboard.');
+      const btn = document.getElementById('totp-submit');
+      btn.disabled = true;
+
+      // Call RPC to verify TOTP
+      const { data: ok, error } = await supabaseClient
+        .rpc('verify_totp', { user_id: currentUserId, token: code });
+
+      btn.disabled = false;
+
+      if (error || !ok) {
+        showMessage('Invalid code, please try again.');
+        document.getElementById('totp-code').value = '';
+        return;
+      }
+
+      // Success
       window.location.href = 'dashboard.html';
     });
   </script>
