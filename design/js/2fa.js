@@ -59,18 +59,31 @@ async function init2FAPage() {
 // 3. Generate TOTP secret via your Netlify function
 async function generateTotpSecret() {
   try {
-    const res = await fetch('/.netlify/functions/create-totp', {
+    const endpoint = `${window.location.origin}/.netlify/functions/create-totp`
+    console.log('▶️ Calling create-totp at', endpoint, 'with userId=', userId)
+
+    const res = await fetch(endpoint, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ user_id: userId })
-    });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const { secret, qr_code_url } = await res.json();
-    document.getElementById('qrcode').src = qr_code_url;
-    document.getElementById('qrcode').style.display = 'block';
-    document.getElementById('secret').textContent = secret;
+    })
+
+    if (!res.ok) {
+      // grab text so you see the function’s error body
+      const text = await res.text()
+      throw new Error(`HTTP ${res.status} — ${text}`)
+    }
+
+    const { secret, qr_code_url } = await res.json()
+    console.log('⬇️ Received TOTP secret+QR:', { secret, qr_code_url })
+
+    document.getElementById('qrcode').src = qr_code_url
+    document.getElementById('qrcode').style.display = 'block'
+    document.getElementById('secret').textContent = secret
+
   } catch (err) {
-    showError('Error generating TOTP secret: ' + err.message);
+    console.error('Error generating TOTP secret:', err)
+    showError('Error generating TOTP secret: ' + err.message)
   }
 }
 
