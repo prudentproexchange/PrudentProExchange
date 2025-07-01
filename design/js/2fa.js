@@ -4,7 +4,7 @@
 const { createClient } = supabase;
 const supabaseClient = createClient(
   'https://iwkdznjqfbsfkscnbrkc.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU'
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmZzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU'
 );
 
 let userId;
@@ -60,17 +60,23 @@ async function init2FAPage() {
   setupEventListeners();
 }
 
-// Fetch TOTP secret and QR code
+// Fetch TOTP secret and QR code via Netlify function
 async function fetchTotpSecret() {
-  const { data, error } = await supabaseClient.rpc(
-    'create_totp_secret',
-    { _user_id: userId } // ← must be "_user_id" to match your SQL
-  );
-  if (error) {
-    showError('Error fetching TOTP secret: ' + error.message);
-    return;
+  const res = await fetch('/.netlify/functions/create-totp', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ user_id: userId }),
+  });
+  if (!res.ok) {
+    let errMsg = res.statusText;
+    try {
+      const errData = await res.json();
+      errMsg = errData.error || errMsg;
+    } catch {}
+    return showError('Error fetching TOTP secret: ' + errMsg);
   }
-  const { secret, qr_code_url } = data;
+  const { secret, qr_code_url } = await res.json();
+
   document.getElementById('qrcode').src = qr_code_url;
   document.getElementById('qrcode').style.display = 'block';
   document.getElementById('secret').textContent = secret;
