@@ -113,52 +113,51 @@
       icon.classList.toggle('fa-sun');
     });
 
-    // 2FA Prompt Function with debounce and button disabling
+    // Prompt for TOTP
     async function promptFor2FA(userId) {
       document.getElementById('loginForm').style.display = 'none';
       const totpSection = document.getElementById('totp-section');
       totpSection.style.display = 'block';
 
-      const totpSubmitBtn = document.getElementById('totp-submit');
-      let isVerifying = false; // Debounce flag
-
-      totpSubmitBtn.addEventListener('click', async () => {
-        if (isVerifying) return; // Prevent multiple clicks
-        isVerifying = true;
-        totpSubmitBtn.disabled = true; // Disable button during verification
+      const btn = document.getElementById('totp-submit');
+      let working = false;
+      btn.addEventListener('click', async () => {
+        if (working) return;
+        working = true;
+        btn.disabled = true;
 
         const code = document.getElementById('totp-code').value.trim();
         if (!/^\d{6}$/.test(code)) {
           alert('Enter a valid 6-digit code.');
-          isVerifying = false;
-          totpSubmitBtn.disabled = false;
+          working = false;
+          btn.disabled = false;
           return;
         }
 
-        // Call Supabase RPC to verify TOTP
+        // Correct RPC call
         const { data: ok, error } = await supabaseClient
-         ชี.rpc('verify_totp', { user_id: userId, token: code });
+          .rpc('verify_totp', { user_id: userId, token: code });
 
         if (error || !ok) {
-          document.getElementById('totp-code').value = ''; // Clear input on failure
+          document.getElementById('totp-code').value = '';
           alert('Invalid code, please try again.');
-          isVerifying = false;
-          totpSubmitBtn.disabled = false;
+          working = false;
+          btn.disabled = false;
           return;
         }
 
-        // Success! Go to dashboard
+        // Success
         alert('2FA verification successful! Redirecting to your dashboard.');
         window.location.href = 'dashboard.html';
       });
     }
 
-    // Handle login form submission
-    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+    // Hook up login form
+    document.getElementById('loginForm').addEventListener('submit', async e => {
       e.preventDefault();
       const f = e.target;
 
-      // 1) Sign in with Supabase Auth
+      // 1) Sign in
       const { data: authData, error: authError } = await supabaseClient
         .auth.signInWithPassword({
           email: f.email.value,
@@ -169,8 +168,8 @@
         return alert('Login error: ' + (authError?.message || 'unknown'));
       }
 
+      // 2) Check 2FA flag
       const user = authData.user;
-      // 2) Check if 2FA is enabled
       const { data: profile, error: profErr } = await supabaseClient
         .from('profiles')
         .select('two_fa_enabled')
@@ -179,17 +178,15 @@
 
       if (profErr) {
         console.error(profErr);
-        // In case of error, proceed to dashboard
-        alert('Error checking 2FA status. Redirecting to dashboard.');
         return window.location.href = 'dashboard.html';
       }
 
       if (profile.two_fa_enabled) {
-        // 3) Prompt for TOTP if 2FA is enabled
+        // Ask for TOTP
         return promptFor2FA(user.id);
       }
 
-      // No 2FA enabled, go to dashboard
+      // Otherwise go straight to dashboard
       alert('Login successful! Redirecting to your dashboard.');
       window.location.href = 'dashboard.html';
     });
