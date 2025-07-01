@@ -14,7 +14,7 @@ authenticator.options = {
   encoding: 'base32',
   digits: 6,
   step: 30,
-  algorithm: 'SHA1'
+  algorithm: 'sha1' // Changed from 'SHA1' to 'sha1'
 };
 
 exports.handler = async (event) => {
