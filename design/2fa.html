@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
 
-  <!-- Supabase JS v2 (must come before 2fa.js) -->
+  <!-- Supabase JS v2 (for auth.mfa, but you can still call rpc()) -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script>
 </head>
 
@@ -117,7 +117,9 @@
   <button id="back-to-top" aria-label="Back to top">🚀</button>
 
   <!-- Scripts -->
+  <!-- 1) AOS JS -->
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <!-- 2) Your 2FA logic (make sure js/2fa.js is updated as per our last snippet) -->
   <script src="js/2fa.js"></script>
 </body>
 </html>
