@@ -1,6 +1,6 @@
 // js/2fa.js
 
-// 1. Init Supabase client
+// 1. Init Supabase client (v1 or v2 both work for RPC)
 const { createClient } = supabase;
 const supabaseClient = createClient(
   'https://iwkdznjqfbsfkscnbrkc.supabase.co',
@@ -12,32 +12,24 @@ let userId;
 // 2. Page init
 async function init2FAPage() {
   console.log('▶️ init2FAPage');
-
   AOS.init({ duration: 800, once: true });
 
-  // 2.1 Get user
-  const { data: authData, error: authError } = await supabaseClient.auth.getUser();
-  console.log('getUser →', authData, authError);
-  if (authError || !authData.user) {
-    console.warn('Not logged in, redirecting');
-    return void (window.location.href = 'login.html');
-  }
-  userId = authData.user.id;
-  console.log('User ID:', userId);
+  // 2.1 get current user
+  const { data: { user }, error: authErr } = await supabaseClient.auth.getUser();
+  console.log('getUser →', user, authErr);
+  if (authErr || !user) return window.location.href = 'login.html';
+  userId = user.id;
 
-  // 2.2 Get profile
-  const { data: profile, error: profileError } = await supabaseClient
+  // 2.2 fetch profile
+  const { data: profile, error: profileErr } = await supabaseClient
     .from('profiles')
     .select('first_name, photo_url, two_fa_enabled')
     .eq('id', userId)
     .single();
-  console.log('profile →', profile, profileError);
-  if (profileError) {
-    console.error('Error fetching profile', profileError);
-    return showError('Error loading profile: ' + profileError.message);
-  }
+  console.log('profile →', profile, profileErr);
+  if (profileErr) return showError('Error loading profile: ' + profileErr.message);
 
-  // 2.3 Update UI with profile
+  // 2.3 update UI
   document.getElementById('welcomeName').textContent = profile.first_name || 'User';
   if (profile.photo_url) {
     const { data: urlData } = supabaseClient.storage
@@ -49,113 +41,85 @@ async function init2FAPage() {
   }
 
   const enabled = profile.two_fa_enabled;
-  console.log('two_fa_enabled flag:', enabled);
   document.getElementById('twofa-status').textContent = enabled
     ? '2FA is currently enabled.'
     : '2FA is currently disabled.';
   document.getElementById('enable-2fa-section').style.display = enabled ? 'none' : 'block';
   document.getElementById('disable-2fa-section').style.display = enabled ? 'block' : 'none';
 
-  // 2.4 If disabled, generate secret
-  if (!enabled) {
-    await generateTotpSecret();
-  }
+  // 2.4 if disabled, fetch secret via RPC
+  if (!enabled) await fetchTotpSecret();
 
   setupEventListeners();
 }
 
-// 3. Generate TOTP secret
-async function generateTotpSecret() {
-  console.log('▶️ generateTotpSecret');
-  // sanity-check auth.mfa
-  if (!supabaseClient.auth.mfa || typeof supabaseClient.auth.mfa.generateTOTP !== 'function') {
-    console.error('auth.mfa.generateTOTP is not available!', supabaseClient.auth.mfa);
-    return showError('Your Supabase client doesn’t support auth.mfa.generateTOTP().');
+// 3. Fetch TOTP secret via your SQL function
+async function fetchTotpSecret() {
+  console.log('▶️ fetchTotpSecret');
+  const { data, error } = await supabaseClient.rpc('create_totp_secret', {
+    _user_id: userId       // match your PG signature
+  });
+  console.log('create_totp_secret →', data, error);
+  if (error) return showError('Error fetching secret: ' + error.message);
+  if (!data?.secret || !data?.qr_code_url) {
+    return showError('Unexpected server response—see console.');
   }
 
-  const { data, error } = await supabaseClient.auth.mfa.generateTOTP();
-  console.log('generateTOTP →', data, error);
-
-  if (error) {
-    return showError('Error generating TOTP: ' + error.message);
-  }
-  if (!data || !data.secret || !data.totp_url) {
-    console.warn('generateTOTP returned no secret/url', data);
-    return showError('Unexpected response from generateTOTP()—check console.');
-  }
-
-  document.getElementById('qrcode').src = data.totp_url;
+  document.getElementById('qrcode').src = data.qr_code_url;
   document.getElementById('qrcode').style.display = 'block';
   document.getElementById('secret').textContent = data.secret;
 }
 
-// 4. Event listeners
+// 4. Wire up buttons
 function setupEventListeners() {
-  console.log('▶️ setupEventListeners');
-
+  // copy secret
   document.getElementById('copy-secret-btn').addEventListener('click', () => {
-    console.log('copy-secret-btn clicked');
     const secret = document.getElementById('secret').textContent;
     navigator.clipboard.writeText(secret).then(() => {
       const btn = document.getElementById('copy-secret-btn');
       btn.innerHTML = '<i class="fas fa-check"></i>';
-      setTimeout(() => (btn.innerHTML = '<i class="fas fa-copy"></i>'), 2000);
+      setTimeout(() => btn.innerHTML = '<i class="fas fa-copy"></i>', 2000);
     });
   });
 
+  // verify + enable
   document.getElementById('verify-enable-btn').addEventListener('click', async () => {
-    console.log('verify-enable-btn clicked');
     const token = document.getElementById('totp-code-enable').value.trim();
-    if (!/^\d{6}$/.test(token)) {
-      return showError('Please enter a valid 6-digit code.');
-    }
-    const { data, error } = await supabaseClient.auth.mfa.verifyTOTP({ token });
-    console.log('verifyTOTP →', data, error);
-    if (error) {
-      return showError('Invalid code: ' + error.message);
-    }
-    alert('2FA enabled successfully!');
-    window.location.reload();
-  });
-
-  document.getElementById('verify-disable-btn').addEventListener('click', async () => {
-    console.log('verify-disable-btn clicked');
-    const token = document.getElementById('totp-code-disable').value.trim();
-    if (!/^\d{6}$/.test(token)) {
-      return showError('Please enter a valid 6-digit code.');
-    }
-    const { data, error } = await supabaseClient.auth.mfa.deleteTOTP({ token });
-    console.log('deleteTOTP →', data, error);
-    if (error) {
-      return showError('Invalid code: ' + error.message);
-    }
-    alert('2FA disabled successfully!');
-    window.location.reload();
-  });
-
-  // … copy over your hamburger, theme toggle, account menu, back-to-top, logout …
-
-  // Time updates
-  function updateTime() {
-    const now = new Date();
-    document.getElementById('utcTime').textContent   = now.toUTCString();
-    document.getElementById('localTime').textContent = now.toLocaleTimeString();
-    document.getElementById('localDate').textContent = now.toLocaleDateString('en-GB', {
-      weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+    if (!/^\d{6}$/.test(token)) return showError('Enter a valid 6-digit code.');
+    const { data, error } = await supabaseClient.rpc('verify_and_enable_totp', {
+      user_id: userId,     // your PG signature uses “user_id” here
+      token
     });
-  }
-  setInterval(updateTime, 1000);
-  updateTime();
+    console.log('verify_and_enable_totp →', data, error);
+    if (error) return showError('Invalid code: ' + error.message);
+    alert('2FA enabled!');
+    window.location.reload();
+  });
+
+  // verify + disable
+  document.getElementById('verify-disable-btn').addEventListener('click', async () => {
+    const token = document.getElementById('totp-code-disable').value.trim();
+    if (!/^\d{6}$/.test(token)) return showError('Enter a valid 6-digit code.');
+    const { data, error } = await supabaseClient.rpc('disable_totp', {
+      user_id: userId,
+      token
+    });
+    console.log('disable_totp →', data, error);
+    if (error) return showError('Invalid code: ' + error.message);
+    alert('2FA disabled!');
+    window.location.reload();
+  });
+
+  // …hamburger, theme, logout, back-to-top, time updates (copy from your old script)…
 }
 
-// 5. Error helper
-function showError(message) {
-  console.log('showError:', message);
+// show error
+function showError(msg) {
   const e = document.getElementById('error-message');
-  e.textContent = message;
+  e.textContent = msg;
   e.style.display = 'block';
-  setTimeout(() => (e.style.display = 'none'), 5000);
+  setTimeout(() => e.style.display = 'none', 5000);
 }
 
-// 6. Start
+// kickoff
 init2FAPage();
