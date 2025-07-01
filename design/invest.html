@@ -6,9 +6,62 @@
   <meta name="description" content="Invest in PrudentProExchange plans with weekly returns up to 10%. Start with as little as $200. Secure. Fast. Verified."/>
   <title>Invest • PrudentProExchange</title>
   <link rel="stylesheet" href="css/invest.css"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
+  <style>
+    /* Inline styles for consistency with payment page */
+    .spinner {
+      display: none;
+      border: 4px solid rgba(0, 0, 0, 0.1);
+      border-left-color: #3498db;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+    .loading-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .loading-text {
+      font-size: 14px;
+      color: #555;
+    }
+    .btn {
+      transition: opacity 0.3s ease, background-color 0.3s ease, transform 0.3s ease;
+    }
+    .plan-card {
+      cursor: pointer;
+      outline: none;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .plan-card:hover, .plan-card:focus {
+      transform: translateY(-5px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      border: 0;
+    }
+  </style>
 </head>
 <body class="invest-page">
   <noscript>
@@ -16,100 +69,122 @@
       JavaScript is required for this page to function. Please enable it.
     </div>
   </noscript>
-  <video class="bg-video" autoplay muted loop playsinline preload="auto" poster="assets/images/bg-fallback.jpg">
+  <video class="bg-video" autoplay muted loop playsinline preload="auto" poster="assets/images/bg-fallback.jpg" aria-hidden="true">
     <source src="assets/videos/background.webm" type="video/webm">
     <source src="assets/videos/background.mp4" type="video/mp4">
     Your browser does not support the video tag.
   </video>
 
   <div class="overlay">
-    <header class="site-header">
-      <a href="dashboard.html" class="logo-link">
-        <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo"/>
+    <header class="site-header" role="banner">
+      <a href="dashboard.html" class="logo-link" aria-label="PrudentProExchange Home">
+        <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo" loading="lazy"/>
       </a>
       <div class="header-right">
-        <button id="theme-toggle" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
-        <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
+        <button id="theme-toggle" aria-label="Toggle light/dark theme">
+          <i class="fas fa-moon"></i>
+        </button>
+        <button class="hamburger" id="hamburgerBtn" aria-label="Toggle navigation menu" aria-expanded="false">
           <span></span><span></span><span></span>
         </button>
       </div>
-      <nav class="nav-drawer" id="navDrawer">
+      <nav class="nav-drawer" id="navDrawer" role="navigation" aria-label="Main navigation">
         <a href="dashboard.html">Dashboard</a>
         <a href="invest.html">Invest</a>
         <a href="withdraw.html">Withdraw</a>
         <a href="transactions.html">Transactions</a>
         <a href="referrals.html">Referrals</a>
+        <div class="account-menu">
+          <a href="#" class="account-toggle" id="account-toggle" aria-haspopup="true" aria-expanded="false">Account ▾</a>
+          <ul class="submenu" role="menu">
+            <li><a href="profile-settings.html" role="menuitem">Profile Settings</a></li>
+            <li><a href="transfer.html" role="menuitem">Transfer Balance</a></li>
+            <li><a href="change-password.html" role="menuitem">Change Password</a></li>
+            <li><a href="support.html" role="menuitem">Support Ticket</a></li>
+            <li><a href="promo-tools.html" role="menuitem">Promotional Tools</a></li>
+            <li><a href="2fa.html" role="menuitem">2FA Security</a></li>
+            <li><a href="#" id="logout-btn" role="menuitem">Logout</a></li>
+          </ul>
+        </div>
+        <a href="kyc.html">KYC Verification</a>
+        <a href="transfer.html">Transfer</a>
       </nav>
     </header>
-    <div class="nav-overlay"></div>
+    <div class="nav-overlay" aria-hidden="true"></div>
 
-    <div class="profile-section">
+    <div class="profile-section" role="region" aria-label="User profile">
       <div class="profile-container">
-        <img id="navProfilePhoto" src="" alt="Your profile photo" class="avatar" style="display: none;"/>
-        <span id="defaultProfileIcon" class="avatar">👤</span>
+        <img id="navProfilePhoto" src="" alt="User profile photo" class="avatar" style="display: none;" loading="lazy"/>
+        <span id="defaultProfileIcon" class="avatar" aria-hidden="true">👤</span>
       </div>
       <div class="welcome-message" aria-live="polite">Loading profile...</div>
     </div>
 
-    <main class="invest-page container">
-      <section class="investment-plans" data-aos="fade-up">
-        <h1>Choose Your Investment Plan</h1>
-        <div class="plans-grid">
-          <form class="plan-card" data-min="200" data-max="4999" data-aos="zoom-in" role="button" tabindex="0" data-plan-name="The Dawn Star (Basic)">
+    <main class="invest-page container" role="main">
+      <section class="investment-plans" data-aos="fade-up" aria-labelledby="investment-plans-heading">
+        <h2 id="investment-plans-heading">Choose Your Investment Plan</h2>
+        <p class="investment-description">Select a plan that suits your financial goals and start your investment journey with us.</p>
+        <div class="plans-grid" role="grid" aria-label="Investment plans">
+          <form class="plan-card" data-min="200" data-max="4999" data-aos="zoom-in" role="form" tabindex="0" data-plan-name="The Dawn Star (Basic)">
             <div class="plan-icon"><i class="fas fa-star"></i></div>
             <h3>The Dawn Star (Basic)</h3>
             <p>5% weekly return</p>
             <p>Investment Range: $200 - $4,999</p>
-            <input type="number" placeholder="Enter amount (200 - 4999 USD)" min="200" max="4999" aria-label="Investment amount for Dawn Star plan" required>
-            <p class="validation-message"></p>
+            <label for="dawn-star-amount" class="sr-only">Investment amount for Dawn Star plan</label>
+            <input type="number" id="dawn-star-amount" placeholder="Enter amount (200 - 4999 USD)" min="200" max="4999" aria-label="Investment amount for Dawn Star plan" required>
+            <p class="validation-message" aria-live="assertive"></p>
             <button type="submit" class="btn select-plan-btn" data-plan="dawn-star" disabled aria-label="Choose payment option for Dawn Star plan">Choose Payment Option</button>
           </form>
-          <form class="plan-card" data-min="5000" data-max="14999" data-aos="zoom-in" role="button" tabindex="0" data-plan-name="The Nebula Glow (Standard)">
+          <form class="plan-card" data-min="5000" data-max="14999" data-aos="zoom-in" role="form" tabindex="0" data-plan-name="The Nebula Glow (Standard)">
             <div class="plan-icon"><i class="fas fa-cloud"></i></div>
             <h3>The Nebula Glow (Standard)</h3>
             <p>6.5% weekly return</p>
             <p>Investment Range: $5,000 - $14,999</p>
-            <input type="number" placeholder="Enter amount (5000 - 14999 USD)" min="5000" max="14999" aria-label="Investment amount for Nebula Glow plan" required>
-            <p class="validation-message"></p>
+            <label for="nebula-glow-amount" class="sr-only">Investment amount for Nebula Glow plan</label>
+            <input type="number" id="nebula-glow-amount" placeholder="Enter amount (5000 - 14999 USD)" min="5000" max="14999" aria-label="Investment amount for Nebula Glow plan" required>
+            <p class="validation-message" aria-live="assertive"></p>
             <button type="submit" class="btn select-plan-btn" data-plan="nebula-glow" disabled aria-label="Choose payment option for Nebula Glow plan">Choose Payment Option</button>
           </form>
-          <form class="plan-card" data-min="15000" data-max="49999" data-aos="zoom-in" role="button" tabindex="0" data-plan-name="The Lunar Crest (Silver)">
+          <form class="plan-card" data-min="15000" data-max="49999" data-aos="zoom-in" role="form" tabindex="0" data-plan-name="The Lunar Crest (Silver)">
             <div class="plan-icon"><i class="fas fa-moon"></i></div>
             <h3>The Lunar Crest (Silver)</h3>
             <p>7.5% weekly return</p>
             <p>Investment Range: $15,000 - $49,999</p>
-            <input type="number" placeholder="Enter amount (15000 - 49999 USD)" min="15000" max="49999" aria-label="Investment amount for Lunar Crest plan" required>
-            <p class="validation-message"></p>
+            <label for="lunar-crest-amount" class="sr-only">Investment amount for Lunar Crest plan</label>
+            <input type="number" id="lunar-crest-amount" placeholder="Enter amount (15000 - 49999 USD)" min="15000" max="49999" aria-label="Investment amount for Lunar Crest plan" required>
+            <p class="validation-message" aria-live="assertive"></p>
             <button type="submit" class="btn select-plan-btn" data-plan="lunar-crest" disabled aria-label="Choose payment option for Lunar Crest plan">Choose Payment Option</button>
           </form>
-          <form class="plan-card" data-min="50000" data-max="99999" data-aos="zoom-in" role="button" tabindex="0" data-plan-name="The Solar Flare (Gold)">
+          <form class="plan-card" data-min="50000" data-max="99999" data-aos="zoom-in" role="form" tabindex="0" data-plan-name="The Solar Flare (Gold)">
             <div class="plan-icon"><i class="fas fa-sun"></i></div>
             <h3>The Solar Flare (Gold)</h3>
             <p>8.5% weekly return</p>
             <p>Investment Range: $50,000 - $99,999</p>
-            <input type="number" placeholder="Enter amount (50000 - 99999 USD)" min="50000" max="99999" aria-label="Investment amount for Solar Flare plan" required>
-            <p class="validation-message"></p>
+            <label for="solar-flare-amount" class="sr-only">Investment amount for Solar Flare plan</label>
+            <input type="number" id="solar-flare-amount" placeholder="Enter amount (50000 - 99999 USD)" min="50000" max="99999" aria-label="Investment amount for Solar Flare plan" required>
+            <p class="validation-message" aria-live="assertive"></p>
             <button type="submit" class="btn select-plan-btn" data-plan="solar-flare" disabled aria-label="Choose payment option for Solar Flare plan">Choose Payment Option</button>
           </form>
-          <form class="plan-card" data-min="100000" data-aos="zoom-in" role="button" tabindex="0" data-plan-name="The Galactic Crown (Diamond)">
+          <form class="plan-card" data-min="100000" data-aos="zoom-in" role="form" tabindex="0" data-plan-name="The Galactic Crown (Diamond)">
             <div class="plan-icon"><i class="fas fa-crown"></i></div>
             <h3>The Galactic Crown (Diamond)</h3>
             <p>10% weekly return</p>
             <p>Investment Range: $100,000+</p>
-            <input type="number" placeholder="Enter amount (min 100000 USD)" min="100000" aria-label="Investment amount for Galactic Crown plan" required>
-            <p class="validation-message"></p>
+            <label for="galactic-crown-amount" class="sr-only">Investment amount for Galactic Crown plan</label>
+            <input type="number" id="galactic-crown-amount" placeholder="Enter amount (min 100000 USD)" min="100000" aria-label="Investment amount for Galactic Crown plan" required>
+            <p class="validation-message" aria-live="assertive"></p>
             <button type="submit" class="btn select-plan-btn" data-plan="galactic-crown" disabled aria-label="Choose payment option for Galactic Crown plan">Choose Payment Option</button>
           </form>
         </div>
       </section>
     </main>
 
-    <footer class="section section-dark site-footer" data-aos="fade-up">
+    <footer class="section section-dark site-footer" data-aos="fade-up" role="contentinfo">
       <div class="footer-content">
         <p class="UTC-time">UTC Time: <span id="utcTime"></span></p>
         <p class="local-time">Local Time: <span id="localTime"></span></p>
         <p class="local-date">Local Date: <span id="localDate"></span></p>
-        <nav class="footer-links">
+        <nav class="footer-links" aria-label="Footer navigation">
           <a href="about.html">About Us</a>
           <a href="privacy.html">Privacy Policy</a>
           <a href="terms.html">Terms & Conditions</a>
@@ -119,7 +194,7 @@
     </footer>
   </div>
 
-  <button id="back-to-top" aria-label="Back to top">🚀</button>
+  <button id="back-to-top" aria-label="Scroll back to top">🚀</button>
 
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js" defer></script>
@@ -150,7 +225,7 @@
       // Update all times
       function updateTimes() {
         const now = new Date();
-        localTimeElem.textContent = now.toLocaleTimeString();
+        localTimeElem.textContent = now.toLocaleTimeString('en-US', { hour12: true });
         localDateElem.textContent = now.toLocaleDateString('en-US', {
           weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
         });
@@ -290,11 +365,13 @@
       const navDrawer = document.getElementById('navDrawer');
       const overlay = document.querySelector('.nav-overlay');
       hamburgerBtn.addEventListener('click', () => {
-        navDrawer.classList.toggle('open');
+        const isOpen = navDrawer.classList.toggle('open');
         hamburgerBtn.classList.toggle('active');
+        hamburgerBtn.setAttribute('aria-expanded', isOpen);
         overlay.classList.toggle('nav-open');
-        if (navDrawer.classList.contains('open')) {
+        if (isOpen) {
           navDrawer.scrollTop = 0;
+          navDrawer.querySelector('a').focus();
         }
       });
 
@@ -305,8 +382,18 @@
         if (!isClickInsideNav && !isClickOnHamburger && navDrawer.classList.contains('open')) {
           navDrawer.classList.remove('open');
           hamburgerBtn.classList.remove('active');
+          hamburgerBtn.setAttribute('aria-expanded', 'false');
           overlay.classList.remove('nav-open');
         }
+      });
+
+      // Account Menu Toggle
+      const accountToggle = document.getElementById('account-toggle');
+      const submenu = accountToggle.nextElementSibling;
+      accountToggle.addEventListener('click', (e) => {
+        e.preventDefault();
+        const isOpen = submenu.classList.toggle('open');
+        accountToggle.setAttribute('aria-expanded', isOpen);
       });
 
       // Theme Toggle
@@ -316,6 +403,7 @@
         const icon = themeToggle.querySelector('i');
         icon.classList.toggle('fa-moon');
         icon.classList.toggle('fa-sun');
+        themeToggle.setAttribute('aria-label', document.body.classList.contains('light-theme') ? 'Switch to dark theme' : 'Switch to light theme');
       });
 
       // Back to Top
