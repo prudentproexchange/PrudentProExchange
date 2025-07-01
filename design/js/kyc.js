@@ -18,9 +18,10 @@ function initCommonUI() {
   const overlay = document.querySelector('.nav-overlay');
 
   hamburgerBtn.addEventListener('click', () => {
-    navDrawer.classList.toggle('open');
+    const isOpen = navDrawer.classList.toggle('open');
     hamburgerBtn.classList.toggle('active');
     overlay.classList.toggle('nav-open');
+    hamburgerBtn.setAttribute('aria-expanded', isOpen);
   });
 
   document.addEventListener('click', (e) => {
@@ -28,6 +29,7 @@ function initCommonUI() {
       navDrawer.classList.remove('open');
       hamburgerBtn.classList.remove('active');
       overlay.classList.remove('nav-open');
+      hamburgerBtn.setAttribute('aria-expanded', 'false');
     }
   });
 
@@ -37,13 +39,15 @@ function initCommonUI() {
     const icon = themeToggle.querySelector('i');
     icon.classList.toggle('fa-moon');
     icon.classList.toggle('fa-sun');
+    themeToggle.setAttribute('aria-label', document.body.classList.contains('light-theme') ? 'Switch to dark theme' : 'Switch to light theme');
   });
 
   const accountToggle = document.getElementById('account-toggle');
   const submenu = accountToggle.nextElementSibling;
   accountToggle.addEventListener('click', (e) => {
     e.preventDefault();
-    submenu.classList.toggle('open');
+    const isOpen = submenu.classList.toggle('open');
+    accountToggle.setAttribute('aria-expanded', isOpen);
   });
 
   document.getElementById('logout-btn').addEventListener('click', async () => {
@@ -72,6 +76,7 @@ initCommonUI();
 async function loadKYC() {
   const { data: { session } } = await supabaseClient.auth.getSession();
   const authSection = document.getElementById('auth-section');
+  const totpSection = document.getElementById('totp-section');
   const kycStatus = document.getElementById('kyc-status');
   const kycForm = document.getElementById('kyc-form');
 
@@ -80,9 +85,70 @@ async function loadKYC() {
     handleAuth();
   } else {
     currentUserId = session.user.id;
-    await loadProfile(currentUserId);
-    await checkKYCStatus(currentUserId);
-    kycForm.style.display = 'block';
+    const { data: profile, error } = await supabaseClient
+      .from('profiles')
+      .select('two_fa_enabled')
+      .eq('id', currentUserId)
+      .single();
+    if (error) {
+      showMessage('Error loading profile.', true);
+      return;
+    }
+    if (profile.two_fa_enabled) {
+      totpSection.style.display = 'block';
+      handleTOTPVerificationForKYC();
+    } else {
+      await loadProfile(currentUserId);
+      await checkKYCStatus(currentUserId);
+      kycForm.style.display = 'block';
+    }
+  }
+}
+
+function handleTOTPVerificationForKYC() {
+  const totpSubmit = document.getElementById('totp-submit');
+  // Remove any existing listeners to prevent duplicates
+  totpSubmit.removeEventListener('click', handleTOTPClick);
+  totpSubmit.addEventListener('click', handleTOTPClick);
+}
+
+async function handleTOTPClick() {
+  const code = document.getElementById('totp-code').value;
+  if (!/^\d{6}$/.test(code)) {
+    showMessage('Enter a valid 6-digit code.', true);
+    return;
+  }
+
+  const btn = document.getElementById('totp-submit');
+  btn.classList.add('loading');
+  btn.disabled = true;
+  btn.textContent = 'Verifying...';
+
+  try {
+    const response = await fetch('/.netlify/functions/verify-totp', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ user_id: currentUserId, token: code })
+    });
+    const result = await response.json();
+
+    btn.classList.remove('loading');
+    btn.disabled = false;
+    btn.textContent = 'Verify Code';
+
+    if (result.ok) {
+      document.getElementById('totp-section').style.display = 'none';
+      await loadProfile(currentUserId);
+      await checkKYCStatus(currentUserId);
+      document.getElementById('kyc-form').style.display = 'block';
+    } else {
+      showMessage('Invalid 2FA code.', true);
+    }
+  } catch (err) {
+    btn.classList.remove('loading');
+    btn.disabled = false;
+    btn.textContent = 'Verify Code';
+    showMessage('Error verifying 2FA code.', true);
   }
 }
 
@@ -112,7 +178,11 @@ async function handleAuth() {
 
     tempSession = authData.session;
     currentUserId = authData.user.id;
-    const { data: profile, error: profErr } = await supabaseClient.from('profiles').select('two_fa_enabled').eq('id', currentUserId).single();
+    const { data: profile, error: profErr } = await supabaseClient
+      .from('profiles')
+      .select('two_fa_enabled')
+      .eq('id', currentUserId)
+      .single();
 
     if (profErr) {
       showMessage('Error checking 2FA status.', true);
@@ -123,6 +193,7 @@ async function handleAuth() {
       authForm.style.display = 'none';
       document.getElementById('totp-section').style.display = 'block';
     } else {
+      await supabaseClient.auth.setSession(tempSession);
       await loadProfile(currentUserId);
       await checkKYCStatus(currentUserId);
       document.getElementById('auth-section').style.display = 'none';
@@ -130,6 +201,7 @@ async function handleAuth() {
     }
   });
 
+  // TOTP for login
   document.getElementById('totp-submit').addEventListener('click', async () => {
     const code = document.getElementById('totp-code').value;
     if (!/^\d{6}$/.test(code)) {
