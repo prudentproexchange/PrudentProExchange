@@ -62,10 +62,9 @@ async function init2FAPage() {
 
 // Fetch TOTP secret and QR code
 async function fetchTotpSecret() {
-  // <-- here we send _user_id instead of user_id
   const { data, error } = await supabaseClient.rpc(
     'create_totp_secret',
-    { _user_id: userId }
+    { _user_id: userId } // must match the SQL function signature
   );
   if (error) {
     showError('Error fetching TOTP secret: ' + error.message);
@@ -98,7 +97,7 @@ function setupEventListeners() {
     }
     const { error } = await supabaseClient.rpc('verify_and_enable_totp', {
       user_id: userId,
-      token
+      token,
     });
     if (error) {
       showError('Invalid code: ' + error.message);
@@ -117,7 +116,7 @@ function setupEventListeners() {
     }
     const { error } = await supabaseClient.rpc('disable_totp', {
       user_id: userId,
-      token
+      token,
     });
     if (error) {
       showError('Invalid code: ' + error.message);
@@ -141,7 +140,11 @@ function setupEventListeners() {
   document.addEventListener('click', (event) => {
     const isClickInsideNav = navDrawer.contains(event.target);
     const isClickOnHamburger = hamburgerBtn.contains(event.target);
-    if (!isClickInsideNav && !isClickOnHamburger && navDrawer.classList.contains('open')) {
+    if (
+      !isClickInsideNav &&
+      !isClickOnHamburger &&
+      navDrawer.classList.contains('open')
+    ) {
       navDrawer.classList.remove('open');
       hamburgerBtn.classList.remove('active');
       overlay.classList.remove('nav-open');
@@ -182,7 +185,10 @@ function setupEventListeners() {
     document.getElementById('utcTime').textContent = now.toUTCString();
     document.getElementById('localTime').textContent = now.toLocaleTimeString();
     document.getElementById('localDate').textContent = now.toLocaleDateString('en-US', {
-      weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
     });
   }
   setInterval(updateTime, 1000);
@@ -194,7 +200,7 @@ function showError(message) {
   const errorDiv = document.getElementById('error-message');
   errorDiv.textContent = message;
   errorDiv.style.display = 'block';
-  setTimeout(() => errorDiv.style.display = 'none', 5000);
+  setTimeout(() => (errorDiv.style.display = 'none'), 5000);
 }
 
 // Start the page
