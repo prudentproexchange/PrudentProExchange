@@ -1,0 +1,59 @@
+// netlify/functions/create-totp.js
+
+const { createClient } = require('@supabase/supabase-js')
+const { authenticator } = require('otplib')
+
+// initialize Supabase with service-role key
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_ROLE_KEY
+)
+
+// configure otplib for Base32/RFC defaults
+authenticator.options = {
+  encoding: 'base32',
+  digits: 6,
+  step: 30,
+  algorithm: 'SHA1'
+}
+
+exports.handler = async (event) => {
+  try {
+    const { user_id } = JSON.parse(event.body)
+    if (!user_id) {
+      return { statusCode: 400, body: JSON.stringify({ error: 'user_id required' }) }
+    }
+
+    // 1) generate a NEW Base32 secret
+    const secret = authenticator.generateSecret()
+
+    // 2) build the OTPAuth URI
+    const otpAuth = authenticator.keyuri(
+      user_id,              // account name
+      'YourAppName',        // issuer (replace with your app’s name)
+      secret
+    )
+
+    // 3) store it in your profiles table
+    const { error: updErr } = await supabase
+      .from('profiles')
+      .update({ two_fa_secret: secret, two_fa_enabled: false })
+      .eq('id', user_id)
+
+    if (updErr) {
+      console.error('Supabase update error:', updErr)
+      return { statusCode: 500, body: JSON.stringify({ error: 'db error' }) }
+    }
+
+    // 4) return secret + QR-code URL to your front end
+    const qr_code_url = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(otpAuth)}&size=200x200`
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ secret, qr_code_url })
+    }
+
+  } catch (err) {
+    console.error(err)
+    return { statusCode: 500, body: JSON.stringify({ error: 'internal error' }) }
+  }
+}
