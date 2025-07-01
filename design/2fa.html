@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>2FA Settings • PrudentProExchange</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/2fa.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
+</head>
+<body class="two-fa-page">
+  <video class="bg-video" autoplay muted loop playsinline preload="auto" poster="assets/images/bg-fallback.jpg" aria-hidden="true">
+    <source src="assets/videos/background.webm" type="video/webm">
+    <source src="assets/videos/background.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+
+  <div class="overlay">
+    <header class="site-header" role="banner">
+      <a href="dashboard.html" class="logo-link" aria-label="PrudentProExchange Home">
+        <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo" loading="lazy"/>
+      </a>
+      <div class="header-right">
+        <button id="theme-toggle" aria-label="Toggle light/dark theme">
+          <i class="fas fa-moon"></i>
+        </button>
+        <button class="hamburger" id="hamburgerBtn" aria-label="Toggle navigation menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+      <nav class="nav-drawer" id="navDrawer" role="navigation" aria-label="Main navigation">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="invest.html">Invest</a>
+        <a href="withdraw.html">Withdraw</a>
+        <a href="transactions.html">Transactions</a>
+        <a href="referrals.html">Referrals</a>
+        <div class="account-menu">
+          <a href="#" class="account-toggle" id="account-toggle" aria-haspopup="true" aria-expanded="false">Account ▾</a>
+          <ul class="submenu" role="menu">
+            <li><a href="profile-settings.html" role="menuitem">Profile Settings</a></li>
+            <li><a href="transfer.html" role="menuitem">Transfer Balance</a></li>
+            <li><a href="change-password.html" role="menuitem">Change Password</a></li>
+            <li><a href="support.html" role="menuitem">Support Ticket</a></li>
+            <li><a href="promo-tools.html" role="menuitem">Promotional Tools</a></li>
+            <li><a href="2fa.html" role="menuitem">2FA Security</a></li>
+            <li><a href="#" id="logout-btn" role="menuitem">Logout</a></li>
+          </ul>
+        </div>
+        <a href="kyc.html">KYC Verification</a>
+        <a href="transfer.html">Transfer</a>
+      </nav>
+    </header>
+    <div class="nav-overlay" aria-hidden="true"></div>
+
+    <div class="profile-section" role="region" aria-label="User profile">
+      <div class="profile-container">
+        <img id="navProfilePhoto" src="" alt="User profile photo" class="avatar" style="display: none;" loading="lazy"/>
+        <span id="defaultProfileIcon" class="avatar" aria-hidden="true">👤</span>
+      </div>
+      <div class="welcome-message" aria-live="polite">Loading profile...</div>
+    </div>
+
+    <main class="container" role="main">
+      <section class="two-fa-settings" data-aos="fade-up" aria-labelledby="two-fa-heading">
+        <h2 id="two-fa-heading">Two-Factor Authentication</h2>
+        <div id="two-fa-content">
+          <!-- Dynamic content will be inserted here -->
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer" data-aos="fade-up" role="contentinfo">
+      <div class="footer-content">
+        <p class="UTC-time">UTC Time: <span id="utcTime"></span></p>
+        <p class="local-time">Local Time: <span id="localTime"></span></p>
+        <p class="local-date">Local Date: <span id="localDate"></span></p>
+        <nav class="footer-links" aria-label="Footer navigation">
+          <a href="about.html">About Us</a>
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="terms.html">Terms & Conditions</a>
+        </nav>
+        <p class="copyright">© 2025 PrudentProExchange. All Rights Reserved. SEC Registration #0001230714</p>
+      </div>
+    </footer>
+  </div>
+
+  <button id="back-to-top" aria-label="Scroll back to top">🚀</button>
+
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js" defer></script>
+  <script>
+    // Supabase Client Initialization
+    const supabaseClient = supabase.createClient(
+      'https://iwkdznjqfbsfkscnbrkc.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU'
+    );
+
+    // Update times in footer
+    function updateTimes() {
+      const now = new Date();
+      document.getElementById('localTime').textContent = now.toLocaleTimeString('en-US', { hour12: true });
+      document.getElementById('localDate').textContent = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+      document.getElementById('utcTime').textContent = now.toUTCString();
+    }
+    setInterval(updateTimes, 1000);
+    updateTimes();
+
+    // Initialize 2FA Page
+    async function initTwoFAPage() {
+      // Check authentication
+      const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
+      if (!user || authError) {
+        document.querySelector('.welcome-message').textContent = 'Please log in to access this page.';
+        setTimeout(() => { window.location.href = 'login.html'; }, 2000);
+        return;
+      }
+
+      // Load profile to check 2FA status
+      const { data: profile, error: profileError } = await supabaseClient
+        .from('profiles')
+        .select('two_fa_enabled, first_name') // Assuming first_name for welcome message
+        .eq('id', user.id)
+        .single();
+      if (profileError) {
+        console.error('Error loading profile:', profileError);
+        document.querySelector('.welcome-message').textContent = 'Error loading profile.';
+        return;
+      }
+
+      // Update welcome message
+      document.querySelector('.welcome-message').textContent = `Welcome, ${profile.first_name || 'User'}!`;
+
+      const twoFaEnabled = profile.two_fa_enabled;
+      const twoFaContent = document.getElementById('two-fa-content');
+
+      if (twoFaEnabled) {
+        // 2FA is enabled: show disable option
+        twoFaContent.innerHTML = `
+          <p>Two-Factor Authentication is currently enabled. You can disable it if needed.</p>
+          <button id="disable-2fa-btn">Disable 2FA</button>
+        `;
+        document.getElementById('disable-2fa-btn').addEventListener('click', () => {
+          twoFaContent.innerHTML = `
+            <p>Enter the 6-digit code from your authenticator app to disable 2FA:</p>
+            <input type="text" id="disable-totp-code" placeholder="Enter 6-digit code" aria-label="Enter the 6-digit code from your authenticator app">
+            <button id="verify-disable-btn">Verify and Disable</button>
+            <button id="cancel-disable-btn">Cancel</button>
+            <p class="error-message" id="disable-error"></p>
+          `;
+          document.getElementById('verify-disable-btn').addEventListener('click', async () => {
+            const code = document.getElementById('disable-totp-code').value;
+            document.getElementById('verify-disable-btn').disabled = true;
+            const { error } = await supabaseClient.rpc('disable_totp', { user_id: user.id, token: code });
+            if (error) {
+              document.getElementById('disable-error').textContent = 'Invalid code or error occurred. Please try again.';
+              document.getElementById('verify-disable-btn').disabled = false;
+            } else {
+              twoFaContent.innerHTML = '<p class="success-message">2FA has been disabled successfully.</p>';
+              setTimeout(() => location.reload(), 2000);
+            }
+          });
+          document.getElementById('cancel-disable-btn').addEventListener('click', () => {
+            location.reload();
+          });
+        });
+      } else {
+        // 2FA is not enabled: show enable option
+        twoFaContent.innerHTML = `
+          <p>Enhance your account security by enabling Two-Factor Authentication with Google Authenticator.</p>
+          <button id="enable-2fa-btn">Enable 2FA</button>
+        `;
+        document.getElementById('enable-2fa-btn').addEventListener('click', async () => {
+          document.getElementById('enable-2fa-btn').disabled = true;
+          const { data, error } = await supabaseClient.rpc('create_totp_secret', { user_id: user.id });
+          if (error) {
+            console.error('Error creating TOTP secret:', error);
+            twoFaContent.innerHTML += '<p class="error-message">Error generating 2FA setup. Please try again.</p>';
+            document.getElementById('enable-2fa-btn').disabled = false;
+          } else {
+            const { secret, qr_code_url } = data;
+            twoFaContent.innerHTML = `
+              <p>Scan this QR code with Google Authenticator, or enter the secret manually:</p>
+              <img id="qr-code" src="${qr_code_url}" alt="QR Code for 2FA setup">
+              <p>Secret: <span id="secret">${secret}</span> <button id="copy-secret">Copy</button></p>
+              <input type="text" id="enable-totp-code" placeholder="Enter 6-digit code" aria-label="Enter the 6-digit code from your authenticator app">
+              <button id="verify-enable-btn">Verify and Enable</button>
+              <button id="cancel-enable-btn">Cancel</button>
+              <p class="error-message" id="enable-error"></p>
+            `;
+            document.getElementById('copy-secret').addEventListener('click', () => {
+              navigator.clipboard.writeText(secret).then(() => {
+                alert('Secret copied to clipboard!');
+              }).catch(() => {
+                alert('Failed to copy secret.');
+              });
+            });
+            document.getElementById('verify-enable-btn').addEventListener('click', async () => {
+              const code = document.getElementById('enable-totp-code').value;
+              document.getElementById('verify-enable-btn').disabled = true;
+              const { error } = await supabaseClient.rpc('verify_and_enable_totp', { user_id: user.id, token: code });
+              if (error) {
+                document.getElementById('enable-error').textContent = 'Invalid code or error occurred. Please try again.';
+                document.getElementById('verify-enable-btn').disabled = false;
+              } else {
+                twoFaContent.innerHTML = '<p class="success-message">2FA has been enabled successfully!</p>';
+                setTimeout(() => location.reload(), 2000);
+              }
+            });
+            document.getElementById('cancel-enable-btn').addEventListener('click', () => {
+              location.reload();
+            });
+          }
+        });
+      }
+    }
+
+    // DOMContentLoaded event
+    window.addEventListener('DOMContentLoaded', () => {
+      AOS.init({ duration: 800, once: true });
+      initTwoFAPage();
+    });
+  </script>
+</body>
+</html>
