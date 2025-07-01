@@ -1,6 +1,6 @@
 // js/2fa.js
 
-// Initialize Supabase client
+// 1. Initialize Supabase client (v2+)
 const { createClient } = supabase;
 const supabaseClient = createClient(
   'https://iwkdznjqfbsfkscnbrkc.supabase.co',
@@ -9,10 +9,11 @@ const supabaseClient = createClient(
 
 let userId;
 
-// Initialize the 2FA settings page
+// 2. Page init
 async function init2FAPage() {
   AOS.init({ duration: 800, once: true });
 
+  // get user
   const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
   if (authError || !user) {
     window.location.href = 'login.html';
@@ -20,13 +21,14 @@ async function init2FAPage() {
   }
   userId = user.id;
 
+  // get profile
   const { data: profile, error: profileError } = await supabaseClient
     .from('profiles')
     .select('first_name, photo_url, two_fa_enabled')
     .eq('id', userId)
     .single();
   if (profileError) {
-    console.error('Error fetching profile:', profileError);
+    console.error('Profile error:', profileError);
     showError('Error loading profile: ' + profileError.message);
     return;
   }
@@ -41,51 +43,37 @@ async function init2FAPage() {
     document.getElementById('defaultProfileIcon').style.display = 'none';
   }
 
-  const twoFaEnabled = profile.two_fa_enabled;
-  document.getElementById('twofa-status').textContent =
-    twoFaEnabled ? '2FA is currently enabled.' : '2FA is currently disabled.';
+  const enabled = profile.two_fa_enabled;
+  document.getElementById('twofa-status').textContent = enabled
+    ? '2FA is currently enabled.'
+    : '2FA is currently disabled.';
+  document.getElementById('enable-2fa-section').style.display = enabled ? 'none' : 'block';
+  document.getElementById('disable-2fa-section').style.display = enabled ? 'block' : 'none';
 
-  document.getElementById('enable-2fa-section').style.display = twoFaEnabled ? 'none' : 'block';
-  document.getElementById('disable-2fa-section').style.display = twoFaEnabled ? 'block' : 'none';
-
-  if (!twoFaEnabled) {
-    await fetchTotpSecret();
+  if (!enabled) {
+    await generateTotpSecret();
   }
-
   setupEventListeners();
 }
 
-// FIXED: Fetch TOTP secret and log response; ensure param name matches your SQL function
-async function fetchTotpSecret() {
-  // If your Postgres function is defined as create_totp_secret(_user_id uuid),
-  // keep _user_id. If it’s create_totp_secret(user_id uuid), change below to { user_id: userId }.
-  const { data, error } = await supabaseClient.rpc('create_totp_secret', {
-    _user_id: userId
-    // ← or: user_id: userId
-  });
-
-  // 1) Log exactly what Supabase returns:
-  console.log('TOTP RPC →', { data, error });
+// 3. Generate TOTP secret (no RPC, uses client API)
+async function generateTotpSecret() {
+  const { data, error } = await supabaseClient.auth.mfa.generateTOTP();
+  console.log('generateTOTP →', { data, error });
 
   if (error) {
-    showError('Error fetching TOTP secret: ' + error.message);
+    showError('Error generating TOTP: ' + error.message);
     return;
   }
-  if (!data || !data.secret || !data.qr_code_url) {
-    showError('Unexpected response from server. Check console for details.');
-    return;
-  }
-
-  const { secret, qr_code_url } = data;
-  const qrcodeEl = document.getElementById('qrcode');
-  qrcodeEl.src = qr_code_url;
-  qrcodeEl.style.display = 'block';
-
-  document.getElementById('secret').textContent = secret;
+  // data: { secret: string, totp_url: string }
+  document.getElementById('qrcode').src = data.totp_url;
+  document.getElementById('qrcode').style.display = 'block';
+  document.getElementById('secret').textContent = data.secret;
 }
 
-// Setup event listeners (unchanged)
+// 4. Setup all your buttons & menu / time logic
 function setupEventListeners() {
+  // copy secret
   document.getElementById('copy-secret-btn').addEventListener('click', () => {
     const secret = document.getElementById('secret').textContent;
     navigator.clipboard.writeText(secret).then(() => {
@@ -95,16 +83,15 @@ function setupEventListeners() {
     });
   });
 
+  // verify + enable
   document.getElementById('verify-enable-btn').addEventListener('click', async () => {
     const token = document.getElementById('totp-code-enable').value.trim();
     if (!/^\d{6}$/.test(token)) {
-      showError('Please enter a valid 6-digit code.');
-      return;
+      return showError('Please enter a valid 6-digit code.');
     }
-    const { error } = await supabaseClient.rpc('verify_and_enable_totp', {
-      user_id: userId,  // ensure this matches your SQL function signature too
-      token,
-    });
+    const { data, error } = await supabaseClient.auth.mfa.verifyTOTP({ token });
+    console.log('verifyTOTP →', { data, error });
+
     if (error) {
       showError('Invalid code: ' + error.message);
     } else {
@@ -113,16 +100,15 @@ function setupEventListeners() {
     }
   });
 
+  // verify + disable
   document.getElementById('verify-disable-btn').addEventListener('click', async () => {
     const token = document.getElementById('totp-code-disable').value.trim();
     if (!/^\d{6}$/.test(token)) {
-      showError('Please enter a valid 6-digit code.');
-      return;
+      return showError('Please enter a valid 6-digit code.');
     }
-    const { error } = await supabaseClient.rpc('disable_totp', {
-      user_id: userId,
-      token,
-    });
+    const { data, error } = await supabaseClient.auth.mfa.deleteTOTP({ token });
+    console.log('deleteTOTP →', { data, error });
+
     if (error) {
       showError('Invalid code: ' + error.message);
     } else {
@@ -131,16 +117,29 @@ function setupEventListeners() {
     }
   });
 
-  // … rest of your menu, theme toggle, logout, time updates, etc., unchanged …
+  // hamburger, theme, account menu, back-to-top, logout, time updates...
+  // — copy these handlers from your original script unchanged —
+
+  // Time updates
+  function updateTime() {
+    const now = new Date();
+    document.getElementById('utcTime').textContent   = now.toUTCString();
+    document.getElementById('localTime').textContent = now.toLocaleTimeString();
+    document.getElementById('localDate').textContent = now.toLocaleDateString('en-GB', {
+      weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+    });
+  }
+  setInterval(updateTime, 1000);
+  updateTime();
 }
 
-// Show error message
+// 5. showError helper
 function showError(message) {
-  const errorDiv = document.getElementById('error-message');
-  errorDiv.textContent = message;
-  errorDiv.style.display = 'block';
-  setTimeout(() => (errorDiv.style.display = 'none'), 5000);
+  const e = document.getElementById('error-message');
+  e.textContent = message;
+  e.style.display = 'block';
+  setTimeout(() => (e.style.display = 'none'), 5000);
 }
 
-// Start the page
+// 6. Kick things off
 init2FAPage();
