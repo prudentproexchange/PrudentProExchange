@@ -64,7 +64,7 @@ async function init2FAPage() {
 async function fetchTotpSecret() {
   const { data, error } = await supabaseClient.rpc(
     'create_totp_secret',
-    { _user_id: userId } // must match the SQL function signature
+    { _user_id: userId } // ← must be "_user_id" to match your SQL
   );
   if (error) {
     showError('Error fetching TOTP secret: ' + error.message);
