@@ -11,17 +11,19 @@ const supabaseClient = createClient(
 let currentUserId = null;
 let tempSession = null;
 
-// Common UI initialization
+// Common UI Initialization
 function initCommonUI() {
   const hamburgerBtn = document.getElementById('hamburgerBtn');
   const navDrawer = document.getElementById('navDrawer');
   const overlay = document.querySelector('.nav-overlay');
+
   hamburgerBtn.addEventListener('click', () => {
     navDrawer.classList.toggle('open');
     hamburgerBtn.classList.toggle('active');
     overlay.classList.toggle('nav-open');
   });
-  document.addEventListener('click', e => {
+
+  document.addEventListener('click', (e) => {
     if (!navDrawer.contains(e.target) && !hamburgerBtn.contains(e.target) && navDrawer.classList.contains('open')) {
       navDrawer.classList.remove('open');
       hamburgerBtn.classList.remove('active');
@@ -39,7 +41,7 @@ function initCommonUI() {
 
   const accountToggle = document.getElementById('account-toggle');
   const submenu = accountToggle.nextElementSibling;
-  accountToggle.addEventListener('click', e => {
+  accountToggle.addEventListener('click', (e) => {
     e.preventDefault();
     submenu.classList.toggle('open');
   });
@@ -86,35 +88,45 @@ async function loadKYC() {
 
 async function handleAuth() {
   const authForm = document.getElementById('authForm');
-  authForm.addEventListener('submit', async e => {
+  authForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const form = e.target;
     const btn = form.querySelector('button');
     btn.classList.add('loading');
+    btn.disabled = true;
+    btn.textContent = 'Logging in...';
+
     const { data: authData, error } = await supabaseClient.auth.signInWithPassword({
       email: form.email.value,
       password: form.password.value,
     });
+
     btn.classList.remove('loading');
+    btn.disabled = false;
+    btn.textContent = 'Log In';
+
     if (error) {
       showMessage('Login error: ' + error.message, true);
       return;
     }
+
     tempSession = authData.session;
     currentUserId = authData.user.id;
     const { data: profile, error: profErr } = await supabaseClient.from('profiles').select('two_fa_enabled').eq('id', currentUserId).single();
+
     if (profErr) {
       showMessage('Error checking 2FA status.', true);
       return;
     }
+
     if (profile.two_fa_enabled) {
       authForm.style.display = 'none';
       document.getElementById('totp-section').style.display = 'block';
     } else {
       await loadProfile(currentUserId);
       await checkKYCStatus(currentUserId);
-      authSection.style.display = 'none';
-      kycForm.style.display = 'block';
+      document.getElementById('auth-section').style.display = 'none';
+      document.getElementById('kyc-form').style.display = 'block';
     }
   });
 
@@ -124,8 +136,12 @@ async function handleAuth() {
       showMessage('Enter a valid 6-digit code.', true);
       return;
     }
+
     const btn = document.getElementById('totp-submit');
     btn.classList.add('loading');
+    btn.disabled = true;
+    btn.textContent = 'Verifying...';
+
     try {
       const response = await fetch('/.netlify/functions/verify-totp', {
         method: 'POST',
@@ -133,7 +149,11 @@ async function handleAuth() {
         body: JSON.stringify({ user_id: currentUserId, token: code })
       });
       const result = await response.json();
+
       btn.classList.remove('loading');
+      btn.disabled = false;
+      btn.textContent = 'Verify Code';
+
       if (result.ok) {
         await supabaseClient.auth.setSession(tempSession);
         await loadProfile(currentUserId);
@@ -145,6 +165,8 @@ async function handleAuth() {
       }
     } catch (err) {
       btn.classList.remove('loading');
+      btn.disabled = false;
+      btn.textContent = 'Verify Code';
       showMessage('Error verifying 2FA code.', true);
     }
   });
@@ -172,10 +194,12 @@ async function checkKYCStatus(userId) {
     .eq('user_id', userId)
     .order('created_at', { ascending: false })
     .limit(1);
+
   if (error) {
     showMessage('Error checking KYC status.', true);
     return;
   }
+
   const statusMessage = document.getElementById('status-message');
   if (kycRequests.length > 0) {
     const latest = kycRequests[0];
@@ -197,7 +221,6 @@ function initForm() {
     { code: 'US', name: 'United States' },
     { code: 'CA', name: 'Canada' },
     { code: 'GB', name: 'United Kingdom' },
-    // Add more ISO 3166-1 alpha-2 codes as needed
   ];
   const nationalitySelect = document.querySelector('select[name="nationality"]');
   countries.forEach(c => {
@@ -210,6 +233,7 @@ function initForm() {
   let currentStep = 1;
   const steps = document.querySelectorAll('.step');
   const indicators = document.querySelectorAll('.step-indicator');
+
   function showStep(step) {
     steps.forEach(s => s.style.display = 'none');
     document.getElementById(`step${step}`).style.display = 'block';
@@ -247,17 +271,19 @@ function initForm() {
     input.addEventListener('change', () => previewFile(input));
   });
 
-  document.getElementById('kycForm').addEventListener('submit', async e => {
+  document.getElementById('kycForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const submitBtn = e.target.querySelector('button[type="submit"]');
     submitBtn.classList.add('loading');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Submitting...';
+
     if (validateAllSteps()) {
       try {
         const formData = new FormData(e.target);
         const data = Object.fromEntries(formData);
         const userId = (await supabaseClient.auth.getSession()).data.session.user.id;
-        
-        // Upload files to kyc-documents bucket
+
         const documentFile = formData.get('document_scan');
         const addressFile = formData.get('proof_of_address');
         if (documentFile && documentFile.size > 0) {
@@ -284,10 +310,16 @@ function initForm() {
         showMessage('KYC submitted successfully.', false);
         setTimeout(() => window.location.href = 'kyc-confirmation.html', 2000);
       } catch (err) {
+        submitBtn.classList.remove('loading');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit';
         showMessage(err.message, true);
       }
+    } else {
+      submitBtn.classList.remove('loading');
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Submit';
     }
-    submitBtn.classList.remove('loading');
   });
 }
 
@@ -316,9 +348,7 @@ async function uploadFile(file, path) {
   }
   const { data, error } = await supabaseClient.storage
     .from('kyc-documents')
-    .upload(path, file, {
-      contentType: file.type,
-    });
+    .upload(path, file, { contentType: file.type });
   if (error) {
     throw new Error('Error uploading file: ' + error.message);
   }
@@ -335,15 +365,19 @@ function validateStep(step) {
       showMessage(`${f.name.replace('_', ' ')} is required.`, true);
     } else if (f.name === 'date_of_birth' && !isOver18(f.value)) {
       valid = false;
+      f.classList.add('invalid');
       showMessage('You must be at least 18 years old.', true);
     } else if (f.name === 'card_number' && !luhnCheck(f.value.replace(/\s/g, ''))) {
       valid = false;
+      f.classList.add('invalid');
       showMessage('Invalid card number.', true);
     } else if (f.name === 'card_expiry' && !isFutureDate(f.value)) {
       valid = false;
+      f.classList.add('invalid');
       showMessage('Expiry date must be in the future.', true);
     } else if (f.name === 'card_cvv' && !/^\d{3,4}$/.test(f.value)) {
       valid = false;
+      f.classList.add('invalid');
       showMessage('CVV must be 3-4 digits.', true);
     } else if (f.name === 'document_scan' && !f.files[0]) {
       valid = false;
