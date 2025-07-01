@@ -139,6 +139,10 @@
       display: block;
     }
 
+    .invest-page .plan-card.invalid input {
+      border-color: #ff4d4d;
+    }
+
     /* Loading and Error States */
     .loading-message,
     .error-message {
@@ -154,6 +158,11 @@
   </style>
 </head>
 <body class="invest-page">
+  <noscript>
+    <div class="error-message" style="text-align:center; color:white; padding:1rem;">
+      JavaScript is required for this page to function. Please enable it.
+    </div>
+  </noscript>
   <video class="bg-video" autoplay muted loop playsinline preload="auto" poster="assets/images/bg-fallback.jpg">
     <source src="assets/videos/background.webm" type="video/webm">
     <source src="assets/videos/background.mp4" type="video/mp4">
@@ -191,9 +200,9 @@
 
     <main class="invest-page container">
       <section class="investment-plans" data-aos="fade-up">
-        <h2>Choose Your Investment Plan</h2>
+        <h1>Choose Your Investment Plan</h1>
         <div class="plans-grid">
-          <form class="plan-card" data-min="200" data-max="4999" data-aos="zoom-in" tabindex="0" data-plan-name="The Dawn Star (Basic)">
+          <form class="plan-card" data-min="200" data-max="4999" data-aos="zoom-in" role="button" tabindex="0" data-plan-name="The Dawn Star (Basic)">
             <div class="plan-icon"><i class="fas fa-star"></i></div>
             <h3>The Dawn Star (Basic)</h3>
             <p>5% weekly return</p>
@@ -202,7 +211,7 @@
             <p class="validation-message"></p>
             <button type="submit" class="btn select-plan-btn" data-plan="dawn-star" disabled aria-label="Choose payment option for Dawn Star plan">Choose Payment Option</button>
           </form>
-          <form class="plan-card" data-min="5000" data-max="14999" data-aos="zoom-in" tabindex="0" data-plan-name="The Nebula Glow (Standard)">
+          <form class="plan-card" data-min="5000" data-max="14999" data-aos="zoom-in" role="button" tabindex="0" data-plan-name="The Nebula Glow (Standard)">
             <div class="plan-icon"><i class="fas fa-cloud"></i></div>
             <h3>The Nebula Glow (Standard)</h3>
             <p>6.5% weekly return</p>
@@ -211,7 +220,7 @@
             <p class="validation-message"></p>
             <button type="submit" class="btn select-plan-btn" data-plan="nebula-glow" disabled aria-label="Choose payment option for Nebula Glow plan">Choose Payment Option</button>
           </form>
-          <form class="plan-card" data-min="15000" data-max="49999" data-aos="zoom-in" tabindex="0" data-plan-name="The Lunar Crest (Silver)">
+          <form class="plan-card" data-min="15000" data-max="49999" data-aos="zoom-in" role="button" tabindex="0" data-plan-name="The Lunar Crest (Silver)">
             <div class="plan-icon"><i class="fas fa-moon"></i></div>
             <h3>The Lunar Crest (Silver)</h3>
             <p>7.5% weekly return</p>
@@ -220,7 +229,7 @@
             <p class="validation-message"></p>
             <button type="submit" class="btn select-plan-btn" data-plan="lunar-crest" disabled aria-label="Choose payment option for Lunar Crest plan">Choose Payment Option</button>
           </form>
-          <form class="plan-card" data-min="50000" data-max="99999" data-aos="zoom-in" tabindex="0" data-plan-name="The Solar Flare (Gold)">
+          <form class="plan-card" data-min="50000" data-max="99999" data-aos="zoom-in" role="button" tabindex="0" data-plan-name="The Solar Flare (Gold)">
             <div class="plan-icon"><i class="fas fa-sun"></i></div>
             <h3>The Solar Flare (Gold)</h3>
             <p>8.5% weekly return</p>
@@ -229,7 +238,7 @@
             <p class="validation-message"></p>
             <button type="submit" class="btn select-plan-btn" data-plan="solar-flare" disabled aria-label="Choose payment option for Solar Flare plan">Choose Payment Option</button>
           </form>
-          <form class="plan-card" data-min="100000" data-aos="zoom-in" tabindex="0" data-plan-name="The Galactic Crown (Diamond)">
+          <form class="plan-card" data-min="100000" data-aos="zoom-in" role="button" tabindex="0" data-plan-name="The Galactic Crown (Diamond)">
             <div class="plan-icon"><i class="fas fa-crown"></i></div>
             <h3>The Galactic Crown (Diamond)</h3>
             <p>10% weekly return</p>
@@ -347,14 +356,17 @@
         // Plan Input and Button Logic
         document.querySelectorAll('.plan-card').forEach(form => {
           const input = form.querySelector('input[type="number"]');
-          const btn
-
- = form.querySelector('.select-plan-btn');
+          const btn = form.querySelector('.select-plan-btn');
           const validationMessage = form.querySelector('.validation-message');
           const min = parseFloat(form.getAttribute('data-min'));
           const max = form.hasAttribute('data-max') ? parseFloat(form.getAttribute('data-max')) : Infinity;
           const planName = form.getAttribute('data-plan-name');
           const plan = btn.getAttribute('data-plan');
+
+          // Prevent form submission on Enter key in input
+          input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') e.preventDefault();
+          });
 
           // Auto-fill and focus input on card click
           form.addEventListener('click', (e) => {
