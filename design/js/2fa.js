@@ -60,7 +60,7 @@ async function init2FAPage() {
   setupEventListeners();
 }
 
-// Fetch TOTP secret and QR code
+// ✅ FIXED: Fetch TOTP secret and QR code using correct keys
 async function fetchTotpSecret() {
   const { data, error } = await supabaseClient.rpc(
     'create_totp_secret',
@@ -71,13 +71,9 @@ async function fetchTotpSecret() {
     return;
   }
 
-  // Assuming your function returns: { secret: '...', otp_uri: '...' }
-  const { secret, otp_uri } = data;
+  const { secret, qr_code_url } = data;
 
-  // Create QR code using public QR server
-  const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(otp_uri)}&size=200x200`;
-
-  document.getElementById('qrcode').src = qrCodeUrl;
+  document.getElementById('qrcode').src = qr_code_url;
   document.getElementById('qrcode').style.display = 'block';
   document.getElementById('secret').textContent = secret;
 }
@@ -139,7 +135,6 @@ function setupEventListeners() {
     overlay.classList.toggle('nav-open');
   });
 
-  // Close nav when clicking outside
   document.addEventListener('click', (event) => {
     const isClickInsideNav = navDrawer.contains(event.target);
     const isClickOnHamburger = hamburgerBtn.contains(event.target);
