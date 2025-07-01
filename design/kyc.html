@@ -53,13 +53,13 @@
     </header>
 
     <!-- Profile Section -->
-    <section class="profile-section" data-aos="fade-down">
+    <div class="profile-section" role="region" aria-label="User profile">
       <div class="profile-container">
-        <img id="navProfilePhoto" src="" alt="Profile Photo" class="avatar" style="display: none;"/>
-        <span id="defaultProfileIcon" class="avatar">👤</span>
-        <span class="welcome-message">Welcome, <span id="welcomeName"></span>!</span>
+        <img id="navProfilePhoto" src="" alt="Profile Photo" class="avatar" style="display: none;" loading="lazy"/>
+        <span id="defaultProfileIcon" class="avatar" aria-hidden="true">👤</span>
       </div>
-    </section>
+      <div class="welcome-message">Welcome, <span id="welcomeName"></span>!</div>
+    </div>
 
     <!-- Main Content -->
     <main class="container" data-aos="fade-up">
