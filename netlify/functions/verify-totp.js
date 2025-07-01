@@ -6,12 +6,12 @@ const { authenticator } = require('otplib')
 // initialize Supabase
 const supabase = createClient(
   process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY  // use your service role key
+  process.env.SUPABASE_SERVICE_ROLE_KEY
 )
 
-// tell otplib to use Base32
+// configure otplib for Base32/RFC defaults
 authenticator.options = {
-  encoding: 'base32',   // 🤖 default for TOTP RFC—Google Authenticator…
+  encoding: 'base32',
   digits: 6,
   step: 30,
   algorithm: 'SHA1'
@@ -35,7 +35,7 @@ exports.handler = async (event) => {
       return { statusCode: 200, body: JSON.stringify({ ok: false }) }
     }
 
-    // verify the 6-digit TOTP
+    // verify the code
     const valid = authenticator.check(profile.two_fa_secret, token)
     return {
       statusCode: 200,
