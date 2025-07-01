@@ -5,63 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="description" content="Invest in PrudentProExchange plans with weekly returns up to 10%. Start with as little as $200. Secure. Fast. Verified."/>
   <title>Invest • PrudentProExchange</title>
+  <link rel="stylesheet" href="css/style.css"/> <!-- Assuming global styles -->
   <link rel="stylesheet" href="css/invest.css"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
-  <style>
-    /* Inline styles for consistency with payment page */
-    .spinner {
-      display: none;
-      border: 4px solid rgba(0, 0, 0, 0.1);
-      border-left-color: #3498db;
-      border-radius: 50%;
-      width: 24px;
-      height: 24px;
-      animation: spin 1s linear infinite;
-      margin: 0 auto;
-    }
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-    .btn:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-      pointer-events: none;
-    }
-    .loading-container {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-top: 10px;
-    }
-    .loading-text {
-      font-size: 14px;
-      color: #555;
-    }
-    .btn {
-      transition: opacity 0.3s ease, background-color 0.3s ease, transform 0.3s ease;
-    }
-    .plan-card {
-      cursor: pointer;
-      outline: none;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    .plan-card:hover, .plan-card:focus {
-      transform: translateY(-5px);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-    .sr-only {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      border: 0;
-    }
-  </style>
 </head>
 <body class="invest-page">
   <noscript>
@@ -90,7 +38,7 @@
       </div>
       <nav class="nav-drawer" id="navDrawer" role="navigation" aria-label="Main navigation">
         <a href="dashboard.html">Dashboard</a>
-        <a href="invest.html">Invest</a>
+        <a href="invest.html" class="active">Invest</a>
         <a href="withdraw.html">Withdraw</a>
         <a href="transactions.html">Transactions</a>
         <a href="referrals.html">Referrals</a>
@@ -120,7 +68,7 @@
       <div class="welcome-message" aria-live="polite">Loading profile...</div>
     </div>
 
-    <main class="invest-page container" role="main">
+    <main class="container" role="main">
       <section class="investment-plans" data-aos="fade-up" aria-labelledby="investment-plans-heading">
         <h2 id="investment-plans-heading">Choose Your Investment Plan</h2>
         <p class="investment-description">Select a plan that suits your financial goals and start your investment journey with us.</p>
@@ -153,6 +101,8 @@
             <label for="lunar-crest-amount" class="sr-only">Investment amount for Lunar Crest plan</label>
             <input type="number" id="lunar-crest-amount" placeholder="Enter amount (15000 - 49999 USD)" min="15000" max="49999" aria-label="Investment amount for Lunar Crest plan" required>
             <p class="validation-message" aria-live="assertive"></p>
+            <button type="submit" class="btn select-plan-btn" data-plan="lunar-crest.Skip to Main Content
+
             <button type="submit" class="btn select-plan-btn" data-plan="lunar-crest" disabled aria-label="Choose payment option for Lunar Crest plan">Choose Payment Option</button>
           </form>
           <form class="plan-card" data-min="50000" data-max="99999" data-aos="zoom-in" role="form" tabindex="0" data-plan-name="The Solar Flare (Gold)">
