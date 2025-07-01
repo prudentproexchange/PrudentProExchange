@@ -1,0 +1,99 @@
+/* css/2fa.css */
+
+.two-fa-settings {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.two-fa-settings h2 {
+  font-size: 2.5rem;
+  color: #ffd700;
+  margin-bottom: 1rem;
+  font-family: 'Playfair Display', serif;
+}
+
+#two-fa-content {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 2rem;
+  border: 2px solid #ffd700;
+  border-radius: 15px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+#qr-code {
+  max-width: 200px;
+  margin: 1rem auto;
+  display: block;
+}
+
+#secret {
+  font-family: monospace;
+  font-size: 1.2rem;
+  color: #e0e0ff;
+  word-break: break-all;
+}
+
+button {
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(45deg, #ffd700, #cca300);
+  color: #000;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin: 0.5rem;
+  transition: background 0.3s ease;
+}
+
+button:hover:not(:disabled) {
+  background: linear-gradient(45deg, #cca300, #ffd700);
+}
+
+button:disabled {
+  background: #666;
+  cursor: not-allowed;
+}
+
+input[type="text"] {
+  padding: 0.75rem;
+  width: 100%;
+  max-width: 300px;
+  margin: 1rem 0;
+  border: 1px solid #ffd700;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #e0e0ff;
+  font-size: 1rem;
+}
+
+.error-message {
+  color: #ff6b6b;
+  margin-top: 0.5rem;
+}
+
+.success-message {
+  color: #00cc00;
+  margin-top: 0.5rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .two-fa-settings {
+    padding: 1rem;
+  }
+
+  #two-fa-content {
+    padding: 1.5rem;
+  }
+
+  input[type="text"] {
+    max-width: 100%;
+  }
+
+  button {
+    width: 100%;
+    max-width: 300px;
+  }
+}
