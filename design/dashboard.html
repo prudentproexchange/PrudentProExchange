@@ -361,7 +361,7 @@
           .from('investments')
           .select(`
             *,
-            plan:plans (
+            plan:investment_plans (
               name
             )
           `)
@@ -386,7 +386,7 @@
             const start = new Date(investment.start_time);
             const end = new Date(investment.end_time);
             const msSinceStart = now - start;
-            const daysSinceStart = msSinceStart / (1000 * 6060 * 24);
+            const daysSinceStart = msSinceStart / (1000 * 60 * 60 * 24);
             const daysSinceEnd = (now - end) / (1000 * 60 * 60 * 24);
             const canWithdraw = daysSinceStart >= 14 && investment.status === 'active';
             const canReinvest = daysSinceStart >= 7 && daysSinceStart <= 120 && investment.status === 'active';
