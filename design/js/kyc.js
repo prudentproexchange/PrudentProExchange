@@ -77,8 +77,9 @@ async function loadKYC() {
     authSection.style.display = 'block';
     handleAuth();
   } else {
-    await loadProfile(session.user.id);
-    await checkKYCStatus(session.user.id);
+    currentUserId = session.user.id;
+    await loadProfile(currentUserId);
+    await checkKYCStatus(currentUserId);
     kycForm.style.display = 'block';
   }
 }
@@ -88,25 +89,32 @@ async function handleAuth() {
   authForm.addEventListener('submit', async e => {
     e.preventDefault();
     const form = e.target;
+    const btn = form.querySelector('button');
+    btn.classList.add('loading');
     const { data: authData, error } = await supabaseClient.auth.signInWithPassword({
       email: form.email.value,
       password: form.password.value,
     });
+    btn.classList.remove('loading');
     if (error) {
       showMessage('Login error: ' + error.message, true);
       return;
     }
     tempSession = authData.session;
     currentUserId = authData.user.id;
-    const { data: profile } = await supabaseClient.from('profiles').select('two_fa_enabled').eq('id', currentUserId).single();
+    const { data: profile, error: profErr } = await supabaseClient.from('profiles').select('two_fa_enabled').eq('id', currentUserId).single();
+    if (profErr) {
+      showMessage('Error checking 2FA status.', true);
+      return;
+    }
     if (profile.two_fa_enabled) {
       authForm.style.display = 'none';
       document.getElementById('totp-section').style.display = 'block';
     } else {
       await loadProfile(currentUserId);
       await checkKYCStatus(currentUserId);
-      document.getElementById('auth-section').style.display = 'none';
-      document.getElementById('kyc-form').style.display = 'block';
+      authSection.style.display = 'none';
+      kycForm.style.display = 'block';
     }
   });
 
@@ -116,26 +124,38 @@ async function handleAuth() {
       showMessage('Enter a valid 6-digit code.', true);
       return;
     }
-    const response = await fetch('/.netlify/functions/verify-totp', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ user_id: currentUserId, token: code })
-    });
-    const result = await response.json();
-    if (result.ok) {
-      await supabaseClient.auth.setSession(tempSession);
-      await loadProfile(currentUserId);
-      await checkKYCStatus(currentUserId);
-      document.getElementById('auth-section').style.display = 'none';
-      document.getElementById('kyc-form').style.display = 'block';
-    } else {
-      showMessage('Invalid code.', true);
+    const btn = document.getElementById('totp-submit');
+    btn.classList.add('loading');
+    try {
+      const response = await fetch('/.netlify/functions/verify-totp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user_id: currentUserId, token: code })
+      });
+      const result = await response.json();
+      btn.classList.remove('loading');
+      if (result.ok) {
+        await supabaseClient.auth.setSession(tempSession);
+        await loadProfile(currentUserId);
+        await checkKYCStatus(currentUserId);
+        document.getElementById('auth-section').style.display = 'none';
+        document.getElementById('kyc-form').style.display = 'block';
+      } else {
+        showMessage('Invalid 2FA code.', true);
+      }
+    } catch (err) {
+      btn.classList.remove('loading');
+      showMessage('Error verifying 2FA code.', true);
     }
   });
 }
 
 async function loadProfile(userId) {
-  const { data: profile } = await supabaseClient.from('profiles').select('*').eq('id', userId).single();
+  const { data: profile, error } = await supabaseClient.from('profiles').select('*').eq('id', userId).single();
+  if (error) {
+    showMessage('Error loading profile.', true);
+    return;
+  }
   document.getElementById('welcomeName').textContent = profile.first_name || 'User';
   if (profile.photo_url) {
     const { data: urlData } = supabaseClient.storage.from('profile-photos').getPublicUrl(profile.photo_url);
@@ -146,12 +166,16 @@ async function loadProfile(userId) {
 }
 
 async function checkKYCStatus(userId) {
-  const { data: kycRequests } = await supabaseClient
+  const { data: kycRequests, error } = await supabaseClient
     .from('kyc_requests')
     .select('*')
     .eq('user_id', userId)
     .order('created_at', { ascending: false })
     .limit(1);
+  if (error) {
+    showMessage('Error checking KYC status.', true);
+    return;
+  }
   const statusMessage = document.getElementById('status-message');
   if (kycRequests.length > 0) {
     const latest = kycRequests[0];
@@ -173,7 +197,7 @@ function initForm() {
     { code: 'US', name: 'United States' },
     { code: 'CA', name: 'Canada' },
     { code: 'GB', name: 'United Kingdom' },
-    // Add more ISO 3166-1 alpha-2 codes
+    // Add more ISO 3166-1 alpha-2 codes as needed
   ];
   const nationalitySelect = document.querySelector('select[name="nationality"]');
   countries.forEach(c => {
@@ -225,25 +249,45 @@ function initForm() {
 
   document.getElementById('kycForm').addEventListener('submit', async e => {
     e.preventDefault();
+    const submitBtn = e.target.querySelector('button[type="submit"]');
+    submitBtn.classList.add('loading');
     if (validateAllSteps()) {
-      const formData = new FormData(e.target);
-      const data = Object.fromEntries(formData);
-      data.document_scan = await uploadFile(formData.get('document_scan'), 'documents');
-      data.proof_of_address = await uploadFile(formData.get('proof_of_address'), 'proofs');
-      const { error } = await supabaseClient.from('kyc_requests').insert({
-        user_id: (await supabaseClient.auth.getSession()).data.session.user.id,
-        ...data,
-        date_of_birth: convertToUTC(data.date_of_birth),
-        status: 'pending',
-        created_at: new Date().toISOString(),
-      });
-      if (error) {
-        showMessage('Error submitting KYC.', true);
-      } else {
+      try {
+        const formData = new FormData(e.target);
+        const data = Object.fromEntries(formData);
+        const userId = (await supabaseClient.auth.getSession()).data.session.user.id;
+        
+        // Upload files to kyc-documents bucket
+        const documentFile = formData.get('document_scan');
+        const addressFile = formData.get('proof_of_address');
+        if (documentFile && documentFile.size > 0) {
+          data.document_scan = await uploadFile(documentFile, `documents/${userId}_${Date.now()}_${documentFile.name}`);
+        } else {
+          throw new Error('Document scan is required.');
+        }
+        if (addressFile && addressFile.size > 0) {
+          data.proof_of_address = await uploadFile(addressFile, `proofs/${userId}_${Date.now()}_${addressFile.name}`);
+        } else {
+          throw new Error('Proof of address is required.');
+        }
+
+        const { error } = await supabaseClient.from('kyc_requests').insert({
+          user_id: userId,
+          ...data,
+          date_of_birth: convertToUTC(data.date_of_birth),
+          status: 'pending',
+          created_at: new Date().toISOString(),
+        });
+
+        if (error) throw new Error('Error submitting KYC: ' + error.message);
+
         showMessage('KYC submitted successfully.', false);
         setTimeout(() => window.location.href = 'kyc-confirmation.html', 2000);
+      } catch (err) {
+        showMessage(err.message, true);
       }
     }
+    submitBtn.classList.remove('loading');
   });
 }
 
@@ -255,16 +299,29 @@ function previewFile(input) {
     const reader = new FileReader();
     reader.onload = e => {
       preview.src = e.target.result;
-      preview.style.display = 'block';
+      preview.style.display = file.type.includes('pdf') ? 'none' : 'block';
     };
     reader.readAsDataURL(file);
+  } else {
+    showMessage('File must be JPEG, PNG, or PDF and under 10MB.', true);
   }
 }
 
-async function uploadFile(file, folder) {
-  if (!file || file.size > 10 * 1024 * 1024) return null;
-  const { data, error } = await supabaseClient.storage.from('kyc-documents').upload(`${folder}/${Date.now()}_${file.name}`, file);
-  if (error) throw error;
+async function uploadFile(file, path) {
+  if (!file || file.size > 10 * 1024 * 1024) {
+    throw new Error('File must be under 10MB.');
+  }
+  if (!['image/jpeg', 'image/png', 'application/pdf'].includes(file.type)) {
+    throw new Error('File must be JPEG, PNG, or PDF.');
+  }
+  const { data, error } = await supabaseClient.storage
+    .from('kyc-documents')
+    .upload(path, file, {
+      contentType: file.type,
+    });
+  if (error) {
+    throw new Error('Error uploading file: ' + error.message);
+  }
   return data.path;
 }
 
@@ -275,6 +332,7 @@ function validateStep(step) {
     if (!f.value.trim()) {
       valid = false;
       f.classList.add('invalid');
+      showMessage(`${f.name.replace('_', ' ')} is required.`, true);
     } else if (f.name === 'date_of_birth' && !isOver18(f.value)) {
       valid = false;
       showMessage('You must be at least 18 years old.', true);
@@ -287,6 +345,12 @@ function validateStep(step) {
     } else if (f.name === 'card_cvv' && !/^\d{3,4}$/.test(f.value)) {
       valid = false;
       showMessage('CVV must be 3-4 digits.', true);
+    } else if (f.name === 'document_scan' && !f.files[0]) {
+      valid = false;
+      showMessage('Document scan is required.', true);
+    } else if (f.name === 'proof_of_address' && !f.files[0]) {
+      valid = false;
+      showMessage('Proof of address is required.', true);
     } else {
       f.classList.remove('invalid');
     }
@@ -347,6 +411,8 @@ function populateReview() {
 }
 
 function showMessage(text, isError) {
+  const existing = document.querySelector('.message');
+  if (existing) existing.remove();
   const msg = document.createElement('div');
   msg.className = `message ${isError ? 'error' : 'success'}`;
   msg.textContent = text;
