@@ -64,29 +64,29 @@ async function init2FAPage() {
   setupEventListeners();
 }
 
-// 3. Generate TOTP secret
+// 3. Generate TOTP secret using Netlify function
 async function generateTotpSecret() {
   console.log('▶️ generateTotpSecret');
-  // sanity-check auth.mfa
-  if (!supabaseClient.auth.mfa || typeof supabaseClient.auth.mfa.generateTOTP !== 'function') {
-    console.error('auth.mfa.generateTOTP is not available!', supabaseClient.auth.mfa);
-    return showError('Your Supabase client doesn’t support auth.mfa.generateTOTP().');
+  try {
+    const response = await fetch('/.netlify/functions/create-totp', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ user_id: userId })
+    });
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    const data = await response.json();
+    if (data.error) {
+      throw new Error(data.error);
+    }
+    document.getElementById('qrcode').src = data.qr_code_url;
+    document.getElementById('qrcode').style.display = 'block';
+    document.getElementById('secret').textContent = data.secret;
+  } catch (error) {
+    console.error('Error generating TOTP secret:', error);
+    showError('Error generating TOTP secret: ' + error.message);
   }
-
-  const { data, error } = await supabaseClient.auth.mfa.generateTOTP();
-  console.log('generateTOTP →', data, error);
-
-  if (error) {
-    return showError('Error generating TOTP: ' + error.message);
-  }
-  if (!data || !data.secret || !data.totp_url) {
-    console.warn('generateTOTP returned no secret/url', data);
-    return showError('Unexpected response from generateTOTP()—check console.');
-  }
-
-  document.getElementById('qrcode').src = data.totp_url;
-  document.getElementById('qrcode').style.display = 'block';
-  document.getElementById('secret').textContent = data.secret;
 }
 
 // 4. Event listeners
@@ -109,13 +109,31 @@ function setupEventListeners() {
     if (!/^\d{6}$/.test(token)) {
       return showError('Please enter a valid 6-digit code.');
     }
-    const { data, error } = await supabaseClient.auth.mfa.verifyTOTP({ token });
-    console.log('verifyTOTP →', data, error);
-    if (error) {
-      return showError('Invalid code: ' + error.message);
+    try {
+      const response = await fetch('/.netlify/functions/verify-totp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user_id: userId, token })
+      });
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+      if (data.ok) {
+        const { error } = await supabaseClient
+          .from('profiles')
+          .update({ two_fa_enabled: true })
+          .eq('id', userId);
+        if (error) throw error;
+        alert('2FA enabled successfully!');
+        window.location.reload();
+      } else {
+        showError('Invalid code');
+      }
+    } catch (error) {
+      console.error('Error verifying TOTP:', error);
+      showError('Error verifying TOTP: ' + error.message);
     }
-    alert('2FA enabled successfully!');
-    window.location.reload();
   });
 
   document.getElementById('verify-disable-btn').addEventListener('click', async () => {
@@ -124,16 +142,32 @@ function setupEventListeners() {
     if (!/^\d{6}$/.test(token)) {
       return showError('Please enter a valid 6-digit code.');
     }
-    const { data, error } = await supabaseClient.auth.mfa.deleteTOTP({ token });
-    console.log('deleteTOTP →', data, error);
-    if (error) {
-      return showError('Invalid code: ' + error.message);
+    try {
+      const response = await fetch('/.netlify/functions/verify-totp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user_id: userId, token })
+      });
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+      if (data.ok) {
+        const { error } = await supabaseClient
+          .from('profiles')
+          .update({ two_fa_enabled: false })
+          .eq('id', userId);
+        if (error) throw error;
+        alert('2FA disabled successfully!');
+        window.location.reload();
+      } else {
+        showError('Invalid code');
+      }
+    } catch (error) {
+      console.error('Error verifying TOTP:', error);
+      showError('Error verifying TOTP: ' + error.message);
     }
-    alert('2FA disabled successfully!');
-    window.location.reload();
   });
-
-  // … copy over your hamburger, theme toggle, account menu, back-to-top, logout …
 
   // Time updates
   function updateTime() {
