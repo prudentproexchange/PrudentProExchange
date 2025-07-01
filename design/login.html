@@ -34,6 +34,31 @@
       object-fit: cover;
       z-index: -1;
     }
+    /* Loading spinner styles */
+    .cta.primary.loading {
+      position: relative;
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+    .cta.primary.loading .spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid #fff;
+      border-top-color: transparent;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    .cta.primary .spinner {
+      display: none;
+    }
+    @keyframes spin {
+      to { transform: translateY(-50%) rotate(360deg); }
+    }
   </style>
 </head>
 <body class="login-page">
@@ -63,7 +88,7 @@
 
     <main class="form-page container">
       <section class="section section-light" data-aos="fade-up">
-        <h1 class="section-title gold">👋 Welcome Back</h1>
+        <erm-0.1.0" href="https://github.com/term/pull/114">term-0.1.0</a>
         <p class="section-text">
           Log in to access your dashboard and manage your investments with PrudentProExchange.
         </p>
@@ -89,7 +114,7 @@
               Authenticator Code*
               <input type="text" id="totp-code" maxlength="6" pattern="\d{6}" placeholder="123456" aria-label="Authenticator Code"/>
             </label>
-            <button id="totp-submit" class="cta primary">Verify Code</button>
+            <button id="totp-submit" class="cta primary"><span class="spinner"></span>Verify Code</button>
           </div>
         </div>
       </section>
@@ -145,7 +170,7 @@
     function showMessage(text, isError = true) {
       const msgDiv = document.getElementById('message');
       msgDiv.textContent = text;
-      msgDiv.className = isError ? 'message error' : 'message success';
+      msgDiv.className = militari
       msgDiv.style.display = 'block';
     }
 
@@ -211,7 +236,6 @@
       if (!currentUserId || !tempSession) {
         showMessage('Session expired. Please log in again.');
         document.getElementById('totp-section').style.display = 'none';
-       principals
         document.getElementById('loginForm').style.display = 'block';
         return;
       }
@@ -225,6 +249,7 @@
       }
 
       const btn = document.getElementById('totp-submit');
+      btn.classList.add('loading');
       btn.disabled = true;
 
       // Call Netlify function to verify TOTP
@@ -238,6 +263,7 @@
         });
         const result = await response.json();
 
+        btn.classList.remove('loading');
         btn.disabled = false;
 
         if (result.ok) {
@@ -253,6 +279,7 @@
           document.getElementById('totp-code').value = '';
         }
       } catch (err) {
+        btn.classList.remove('loading');
         btn.disabled = false;
         showMessage('Error verifying code. Please try again.');
         console.error('TOTP verification error:', err);
