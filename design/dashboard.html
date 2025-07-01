@@ -359,7 +359,12 @@
 
         const { data: investments, error: invError } = await supabaseClient
           .from('investments')
-          .select('*, plan:investment_plans(name)')
+          .select(`
+            *,
+            plan:plans (
+              name
+            )
+          `)
           .eq('user_id', user.id)
           .in('status', ['active', 'profit_ready'])
           .order('start_time', { ascending: false });
@@ -375,12 +380,13 @@
           investments.forEach(investment => {
             const investmentDiv = document.createElement('div');
             investmentDiv.className = 'investment-item';
+            investmentDiv.dataset.id = investment.id;
 
             const now = new Date();
             const start = new Date(investment.start_time);
             const end = new Date(investment.end_time);
             const msSinceStart = now - start;
-            const daysSinceStart = msSinceStart / (1000 * 60 * 60 * 24);
+            const daysSinceStart = msSinceStart / (1000 * 6060 * 24);
             const daysSinceEnd = (now - end) / (1000 * 60 * 60 * 24);
             const canWithdraw = daysSinceStart >= 14 && investment.status === 'active';
             const canReinvest = daysSinceStart >= 7 && daysSinceStart <= 120 && investment.status === 'active';
@@ -391,7 +397,7 @@
             }
 
             investmentDiv.innerHTML = `
-              <p>Plan: <span>${investment.plan ? investment.plan.name : 'Unknown'}</span></p>
+              <p>Plan: <span>${investment.plan?.name ?? 'Unknown'}</span></p>
               <p>Invested Amount: <span>${formatCurrency(investment.principal)}</span></p>
               <p>Current Profit: <span class="current-profit">${formatCurrency(0)}</span></p>
               <p>Time Remaining: <span class="time-left"></span></p>
@@ -611,7 +617,7 @@
       investmentDiv.className = 'investment-item';
       investmentDiv.dataset.id = investment.id;
       investmentDiv.innerHTML = `
-        <p>Plan: <span>${investment.plan ? investment.plan.name : 'Unknown'}</span></p>
+        <p>Plan: <span>${investment.plan?.name ?? 'Unknown'}</span></p>
         <p>Invested Amount: <span>${formatCurrency(investment.principal)}</span></p>
         <p>Current Profit: <span class="current-profit">${formatCurrency(0)}</span></p>
         <p>Time Remaining: <span class="time-left"></span></p>
