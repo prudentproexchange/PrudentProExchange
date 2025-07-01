@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="css/login.css"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4"></script>
   <style>
     .message {
       padding: 1rem;
@@ -25,11 +25,20 @@
       background-color: #d4edda;
       color: #155724;
     }
+    .bg-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+    }
   </style>
 </head>
 <body class="login-page">
   <!-- Video Background -->
-  <video class="bg-video" autoplay muted loop playsinline preload="auto">
+  <video class="bg-video" autoplay muted loop playsinline preload="auto" poster="assets/images/video-poster.jpg">
     <source src="assets/videos/background.webm" type="video/webm">
     <source src="assets/videos/background.mp4" type="video/mp4">
   </video>
@@ -142,7 +151,7 @@
 
     // Variables to store current user ID and temporary session
     let currentUserId = null;
-    let tempSession = null; // Added to store the session temporarily
+    let tempSession = null;
 
     // Function to prompt for 2FA
     function promptFor2FA(userId) {
@@ -199,7 +208,13 @@
 
     // Hook up TOTP submit button
     document.getElementById('totp-submit').addEventListener('click', async () => {
-      if (!currentUserId) return;
+      if (!currentUserId || !tempSession) {
+        showMessage('Session expired. Please log in again.');
+        document.getElementById('totp-section').style.display = 'none';
+       principals
+        document.getElementById('loginForm').style.display = 'block';
+        return;
+      }
       document.getElementById('message').style.display = 'none';
       const code = document.getElementById('totp-code').value.trim();
 
@@ -212,23 +227,42 @@
       const btn = document.getElementById('totp-submit');
       btn.disabled = true;
 
-      // Call RPC to verify TOTP
-      const { data: ok, error } = await supabaseClient
-        .rpc('verify_totp', { user_id: currentUserId, token: code });
+      // Call Netlify function to verify TOTP
+      try {
+        const response = await fetch('/.netlify/functions/verify-totp', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ user_id: currentUserId, token: code })
+        });
+        const result = await response.json();
 
-      btn.disabled = false;
+        btn.disabled = false;
 
-      if (error || !ok) {
-        showMessage('Invalid code, please try again.');
-        document.getElementById('totp-code').value = '';
-        return;
+        if (result.ok) {
+          // Restore the session after successful TOTP verification
+          await supabaseClient.auth.setSession(tempSession);
+          // Clear temporary session
+          tempSession = null;
+          currentUserId = null;
+          // Redirect to dashboard
+          window.location.href = 'dashboard.html';
+        } else {
+          showMessage(result.error || 'Invalid code');
+          document.getElementById('totp-code').value = '';
+        }
+      } catch (err) {
+        btn.disabled = false;
+        showMessage('Error verifying code. Please try again.');
+        console.error('TOTP verification error:', err);
       }
+    });
 
-      // Restore the session after successful TOTP verification
-      await supabaseClient.auth.setSession(tempSession);
-
-      // Redirect to dashboard
-      window.location.href = 'dashboard.html';
+    // Handle video load errors
+    document.querySelector('.bg-video').addEventListener('error', () => {
+      console.error('Failed to load background video');
+      showMessage('Failed to load background video. Please refresh the page.', true);
     });
   </script>
 </body>
