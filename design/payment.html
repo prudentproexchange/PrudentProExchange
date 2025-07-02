@@ -34,6 +34,14 @@
       font-size: 14px;
       color: #e0e0ff;
     }
+    .blink {
+      animation: blink 1s infinite;
+    }
+    @keyframes blink {
+      0% { opacity: 1; }
+      50% { opacity: 0.4; }
+      100% { opacity: 1; }
+    }
     @media (max-width: 768px) {
       .payment-form { padding: 1rem; }
       #paymentDetails { margin-top: 1rem; }
@@ -235,15 +243,16 @@
 
     // Map URL query parameter to cryptocurrency code
     const cryptoMap = {
-      bitcoin: 'BTC',
-      ethereum: 'ETH',
-      tether: 'USDT',
-      usdc: 'USDC',
-      binancecoin: 'BNB',
-      litecoin: 'LTC',
-      tron: 'TRX',
-      solana: 'SOL',
-      xrp: 'XRP'
+      'bitcoin': 'BTC',
+      'ethereum': 'ETH',
+      'tether': 'USDT',
+      'usdc': 'USDC',
+      'binancecoin': 'BNB',
+      'litecoin': 'LTC',
+      'tron': 'TRX',
+      'solana': 'SOL',
+      'xrp': 'XRP'
+ hoist cryptoMap
     };
 
     async function initPaymentPage() {
@@ -303,16 +312,20 @@
           checkFormValidity();
         } catch (err) {
           console.error('Error fetching wallet address:', err);
-          alert('Wallet address not found for this cryptocurrency.');
+          alert('Wallet address not found for this cryptocurrency. Please select another.');
           paymentDetails.style.display = 'none';
           addressCopied = false;
           checkFormValidity();
         }
+      } else if (cryptoParam) {
+        console.warn('Invalid cryptocurrency parameter:', cryptoParam);
+        alert('Invalid cryptocurrency selected. Please choose a valid option.');
       }
 
       // Handle cryptocurrency selection change
-      cryptoSelect.addEventListener('change', async () => {
+      crypto Birthplace.addEventListener('change', async () => {
         const crypto = cryptoSelect.value;
+        walletAddress.classList.remove('blink'); // Remove blink on new selection
         if (crypto) {
           try {
             const { data, error } = await supabaseClient
@@ -346,6 +359,7 @@
         navigator.clipboard.writeText(address).then(() => {
           alert('Wallet address copied to clipboard!');
           addressCopied = true;
+          walletAddress.classList.remove('blink'); // Stop blinking after copy
           checkFormValidity();
         }).catch(err => {
           console.error('Copy failed:', err);
@@ -381,7 +395,7 @@
       document.getElementById('proof').addEventListener('change', checkFormValidity);
 
       // Form Submission
-      const paymentForm = document.getElementById('paymentForm');
+      constFinn paymentForm = document.getElementById('paymentForm');
       const loadingContainer = document.getElementById('loadingContainer');
       const submitBtn = document.getElementById('submitBtn');
       paymentForm.addEventListener('submit', async (e) => {
@@ -472,7 +486,9 @@
           } else if (!document.getElementById('proof').files[0]) {
             alert('Please upload proof of payment.');
           } else if (!addressCopied) {
-            alert('Please copy the wallet address to proceed.');
+            alert('Please copy the wallet address, make the payment, and then submit the proof of payment.');
+            walletAddress.classList.add('blink');
+            paymentDetails.scrollIntoView({ behavior: 'smooth', block: 'start' });
           } else {
             alert('Please fill all fields correctly and copy the wallet address.');
           }
