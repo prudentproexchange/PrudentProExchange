@@ -180,21 +180,17 @@
       }
     );
 
-    (async () => {
-      // 1) If you landed with a magic-link or OAuth redirect in your URL,
-      //    pull the `access_token` out and persist it now:
-      await supabaseClient.auth
-        .getSessionFromUrl({ storeSession: true })
-        .catch(console.error);
-
-      // 2) Now that session is in localStorage, kick off your page:
-      initPaymentPage();
-
-      // 3) In case the user logs in *after* load (e.g. popup), redraw:
-      supabaseClient.auth.onAuthStateChange((event, session) => {
-        if (event === 'SIGNED_IN') initPaymentPage();
-      });
-    })();
+    document.addEventListener('DOMContentLoaded', () => {
+      (async () => {
+        await supabaseClient.auth
+          .getSessionFromUrl({ storeSession: true })
+          .catch(console.error);
+        initPaymentPage();
+        supabaseClient.auth.onAuthStateChange((event, session) => {
+          if (event === 'SIGNED_IN') initPaymentPage();
+        });
+      })();
+    });
 
     function debounce(func, wait) {
       let timeout;
@@ -277,14 +273,18 @@
         if (pendingMethod) {
           const pendingUpload = JSON.parse(localStorage.getItem(`pendingUpload_${user.id}_${planId}_${pendingMethod.symbol}`));
           if (pendingUpload && confirm(`You have a pending upload for ${pendingMethod.name}. Resume?`)) {
-            showUploadForm(pendingMethod.symbol, user.id, pendingMethod.planId, pendingUpload.fileName);
+            showUploadForm(pendingMethod.symbol, user.id, planId, pendingUpload.fileName);
           } else {
             localStorage.removeItem(`pendingUpload_${user.id}_${planId}_${pendingMethod.symbol}`);
           }
         }
 
         const grid = document.getElementById('paymentMethodsGrid');
-        grid.innerHTML = ''; // Clear existing content
+        if (!grid) {
+          console.error('Payment methods grid not found');
+          return;
+        }
+        grid.innerHTML = '';
         paymentMethods.forEach(method => {
           const card = document.createElement('div');
           card.classList.add('payment-method-card');
