@@ -153,42 +153,29 @@
         <!-- Celestial Location Portal -->
         <section class="section map-section" data-aos="fade-up" id="location-portal">
           <h2 class="section-title gold">Our Celestial Nexus</h2>
-          <div class="map-portal-container">
-            <div class="map-orb">
-              <a href="https://maps.google.com/?q=32.7878921,-96.7992963" target="_blank" class="map-orb-link" aria-label="Explore Our Location">
-                <img src="assets/images/map-preview.JPG" alt="Celestial Map of Dallas, Texas" class="map-orb-image">
-                <div class="map-orb-overlay"></div>
-                <svg class="map-orb-ring" viewBox="0 0 100 100">
-                  <circle cx="50" cy="50" r="45" />
-                </svg>
-                <div class="map-orb-pulse"></div>
-              </a>
-            </div>
-            <div class="map-info-panel">
-              <p class="map-description">
-                Behold our sacred sanctum, nestled in the pulsating heart of Dallas, Texas—a cosmic convergence where innovation meets destiny. At <span class="gold-text">32.7878921, -96.7992963</span>, we’ve forged a beacon of financial transcendence, a hallowed ground where dreams ascend into empires. Step into this radiant nexus and witness the dawn of a new era, where every visit ignites the spark of limitless possibility.
-              </p>
-              <div class="map-button-container">
-                <a href="https://maps.google.com/?q=32.7878921,-96.7992963" target="_blank" class="map-button">
-                  <i class="fas fa-map-marker-alt"></i> Traverse the Cosmos
-                </a>
-              </div>
-            </div>
+          <div class="map-container" id="mapContainer">
+            <img
+              src="https://maps.googleapis.com/maps/api/staticmap?center=32.7878921,-96.7992963&zoom=15&size=600x400&markers=color:gold%7C32.7878921,-96.7992963&key=YOUR_API_KEY"
+              alt="Static map of our Dallas location"
+              class="map-static"
+              loading="lazy"
+              id="mapStatic"
+            />
+            <button class="map-overlay-btn" id="mapOverlayBtn">
+              <i class="fas fa-map-marker-alt"></i> View Interactive Map
+            </button>
+            <iframe
+              src=""
+              class="map-iframe"
+              id="mapIframe"
+              allowfullscreen
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+            ></iframe>
           </div>
-          <div class="map-features">
-            <div class="feature-item" data-aos="fade-right">
-              <i class="fas fa-star"></i>
-              <p><strong>Galactic Precision:</strong> Pinpoint our exact coordinates with stellar accuracy.</p>
-            </div>
-            <div class="feature-item" data-aos="fade-left">
-              <i class="fas fa-globe"></i>
-              <p><strong>Universal Access:</strong> A portal that opens across all devices, from earthly mobiles to celestial desktops.</p>
-            </div>
-            <div class="feature-item" data-aos="fade-right">
-              <i class="fas fa-rocket"></i>
-              <p><strong>Hyper-Interactive:</strong> Engage with a living map that breathes with cosmic energy.</p>
-            </div>
-          </div>
+          <p class="map-description">
+            Nestled at <strong>32.7878921, -96.7992963</strong> in Victory Park, Dallas—our beacon of innovation and cosmic finance awaits your arrival.
+          </p>
         </section>
 
         <!-- Final CTA -->
@@ -269,63 +256,40 @@
       const video = document.querySelector('.bg-video');
       let retryCount = 0;
       const maxRetries = 3;
-      const retryDelay = 1000; // 1 second
+      const retryDelay = 1000;
 
       if (video) {
-        // Attempt to play video
         const playVideo = () => {
           video.play()
-            .then(() => {
-              console.log('Background video is playing successfully');
-              retryCount = 0; // Reset retry count on success
-            })
+            .then(() => { retryCount = 0; })
             .catch(error => {
-              console.error(`Background video play failed (attempt ${retryCount + 1}):`, error);
               if (retryCount < maxRetries) {
                 retryCount++;
                 setTimeout(playVideo, retryDelay);
-              } else {
-                console.error('Max retries reached. Video playback failed.');
               }
             });
         };
-
-        // Initial play attempt
         playVideo();
-
-        // Event listeners for monitoring
-        video.addEventListener('canplay', () => console.log('Background video can play'));
-        video.addEventListener('playing', () => console.log('Background video is actively playing'));
-        video.addEventListener('error', (e) => console.error('Background video error:', e));
-        video.addEventListener('stalled', () => console.warn('Background video stalled'));
-        video.addEventListener('loadeddata', () => console.log('Background video data loaded'));
-
-        // Handle page visibility to optimize performance
         document.addEventListener('visibilitychange', () => {
-          if (document.visibilityState === 'visible') {
-            if (video.paused) {
-              playVideo();
-            }
-          } else {
-            video.pause();
-            console.log('Background video paused due to tab inactivity');
-          }
+          if (document.visibilityState === 'visible' && video.paused) playVideo();
+          if (document.visibilityState !== 'visible') video.pause();
         });
-
-        // Force playback on user interaction if autoplay fails
-        const forcePlayOnInteraction = () => {
-          if (video.paused) {
-            playVideo();
-            console.log('Attempting to play background video on user interaction');
-          }
-        };
-
-        // Add interaction listeners (scroll or click)
+        const forcePlayOnInteraction = () => { if (video.paused) playVideo(); };
         window.addEventListener('scroll', forcePlayOnInteraction, { once: true });
         window.addEventListener('click', forcePlayOnInteraction, { once: true });
-      } else {
-        console.error('Background video element not found');
       }
+    });
+
+    // Map swap logic
+    document.getElementById('mapOverlayBtn').addEventListener('click', function() {
+      const iframe = document.getElementById('mapIframe');
+      const staticImg = document.getElementById('mapStatic');
+      if (!iframe.src) {
+        iframe.src = 'https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d3349.2283!2d-96.7992963!3d32.7878921!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0';
+      }
+      staticImg.style.display = 'none';
+      this.style.display = 'none';
+      iframe.style.display = 'block';
     });
   </script>
 </body>
