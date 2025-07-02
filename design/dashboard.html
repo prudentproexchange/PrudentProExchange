@@ -95,20 +95,23 @@
     <main class="dashboard-page container">
       <section class="cards-grid" data-aos="fade-up">
         <!-- Investments Dashboard -->
-        <div class="card investment-card" data-aos="zoom-in">
+        <div class="card investment-card folded" data-aos="zoom-in">
           <h2>Investments Dashboard</h2>
-          <div id="investments-container" aria-live="polite"></div>
-          <div id="no-investments" style="display: none;">
-            <p>No active investments currently.</p>
-            <select id="invest-option" style="margin: 1rem 0; padding: 0.5rem; background: rgba(0, 0, 0, 0.5); border: 1px solid var(--primary); color: #fff; border-radius: 5px; font-size: 0.9rem;">
-              <option value="" disabled selected>Select Investment Option</option>
-              <option value="accountbalance">Invest through Account Balance</option>
-              <option value="directly">Invest Directly</option>
-            </select>
-            <a href="#" class="btn" id="invest-now-btn">Invest Now</a>
+          <div class="investment-prompt">Click to view your investments</div>
+          <div class="investment-content">
+            <div id="investments-container" aria-live="polite"></div>
+            <div id="no-investments" style="display: none;">
+              <p>No active investments currently.</p>
+              <select id="invest-option" style="margin: 1rem 0; padding: 0.5rem; background: rgba(0, 0, 0, 0.5); border: 1px solid var(--primary); color: #fff; border-radius: 5px; font-size: 0.9rem;">
+                <option value="" disabled selected>Select Investment Option</option>
+                <option value="accountbalance">Invest through Account Balance</option>
+                <option value="directly">Invest Directly</option>
+              </select>
+              <a href="#" class="btn" id="invest-now-btn">Invest Now</a>
+            </div>
+            <div class="loading-spinner" id="investments-loading" style="display: none;"></div>
+            <div class="error-message" id="investments-error"></div>
           </div>
-          <div class="loading-spinner" id="investments-loading" style="display: none;"></div>
-          <div class="error-message" id="investments-error"></div>
         </div>
 
         <div class="card how-it-works" data-aos="zoom-in">
@@ -316,7 +319,7 @@
         clearAllInvestmentIntervals();
 
         const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
-        if (!user || authError) {
+        if (!user ||tokenError) {
           window.location.href = 'login.html';
           return;
         }
@@ -417,7 +420,8 @@
             startInvestmentCalculator(investment, investmentDiv);
 
             const withdrawBtn = investmentDiv.querySelector('.withdraw-btn');
-            withdrawBtn.addEventListener('click', async () => {
+            withdrawBtn.addEventListener('click', async (e) => {
+              e.stopPropagation();
               if (!canWithdraw) return;
               if (!confirm('Are you sure you want to withdraw your capital?')) return;
               try {
@@ -445,7 +449,8 @@
             });
 
             const reinvestBtn = investmentDiv.querySelector('.reinvest-btn');
-            reinvestBtn.addEventListener('click', async () => {
+            reinvestBtn.addEventListener('click', async (e) => {
+              e.stopPropagation();
               if (!canReinvest) return;
               if (!confirm('Do you want to reinvest your capital and profits into a new investment?')) return;
               try {
@@ -464,7 +469,8 @@
 
             const claimProfitBtn = investmentDiv.querySelector('.claim-profit-btn');
             if (claimProfitBtn) {
-              claimProfitBtn.addEventListener('click', async () => {
+              claimProfitBtn.addEventListener('click', async (e) => {
+                e.stopPropagation();
                 if (!confirm('Are you sure you want to claim your profit?')) return;
                 try {
                   const { error } = await supabaseClient.rpc('transfer_profit_to_account', {
@@ -651,12 +657,20 @@
     // Invest now button
     document.getElementById('invest-now-btn').addEventListener('click', (e) => {
       e.preventDefault();
+      e.stopPropagation();
       const investOption = document.getElementById('invest-option').value;
       if (!investOption) {
         showError('investments-error', 'Please select an investment option.');
         return;
       }
       window.location.href = investOption === 'accountbalance' ? 'accountbalance.html' : 'invest.html';
+    });
+
+    // Toggle investment card
+    const investmentCard = document.querySelector('.investment-card');
+    investmentCard.addEventListener('click', () => {
+      investmentCard.classList.toggle('folded');
+      investmentCard.classList.toggle('expanded');
     });
 
     // Initialize and setup subscriptions
