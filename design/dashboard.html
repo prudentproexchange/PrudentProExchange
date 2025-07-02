@@ -36,6 +36,58 @@
       margin: 10px 0;
       display: none;
     }
+
+    /* New Styles for Investment Card */
+    .blink {
+      animation: blink 2s infinite;
+    }
+    @keyframes blink {
+      0% { opacity: 1; }
+      50% { opacity: 0.5; }
+      100% { opacity: 1; }
+    }
+    .investment-content {
+      overflow: hidden;
+      transition: max-height 0.5s ease, opacity 0.5s ease;
+      max-height: 0;
+      opacity: 0;
+    }
+    details[open] .investment-content {
+      max-height: 1000px; /* Large enough to accommodate content */
+      opacity: 1;
+    }
+    details[open] .blink {
+      display: none;
+    }
+    summary {
+      cursor: pointer;
+      font-size: 1.8rem;
+      color: var(--primary);
+      font-family: 'Playfair Display', serif;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      list-style: none;
+    }
+    summary::before {
+      content: '▶';
+      color: var(--primary);
+      transition: transform 0.3s ease;
+    }
+    details[open] summary::before {
+      transform: rotate(90deg);
+    }
+
+    /* Updated .card Style for Spherical Look */
+    .card {
+      background: var(--glass-bg);
+      padding: 2rem;
+      border: 1px solid var(--primary);
+      border-radius: 20px; /* Increased for spherical effect */
+      backdrop-filter: blur(10px);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 4px 8px var(--shadow); /* Added default shadow */
+    }
   </style>
 </head>
 <body class="dashboard-page">
@@ -94,24 +146,28 @@
     <!-- Main Content -->
     <main class="dashboard-page container">
       <section class="cards-grid" data-aos="fade-up">
-        <!-- Investments Dashboard -->
-        <div class="card investment-card folded" data-aos="zoom-in">
-          <h2>Investments Dashboard</h2>
-          <div class="investment-prompt">Click to view your investments</div>
-          <div class="investment-content">
-            <div id="investments-container" aria-live="polite"></div>
-            <div id="no-investments" style="display: none;">
-              <p>No active investments currently.</p>
-              <select id="invest-option" style="margin: 1rem 0; padding: 0.5rem; background: rgba(0, 0, 0, 0.5); border: 1px solid var(--primary); color: #fff; border-radius: 5px; font-size: 0.9rem;">
-                <option value="" disabled selected>Select Investment Option</option>
-                <option value="accountbalance">Invest through Account Balance</option>
-                <option value="directly">Invest Directly</option>
-              </select>
-              <a href="#" class="btn" id="invest-now-btn">Invest Now</a>
+        <!-- Updated Investments Dashboard -->
+        <div class="card investment-card" data-aos="zoom-in">
+          <details>
+            <summary>
+              Investments Dashboard
+              <span class="blink">Click to view your investments</span>
+            </summary>
+            <div class="investment-content">
+              <div id="investments-container" aria-live="polite"></div>
+              <div id="no-investments" style="display: none;">
+                <p>No active investments currently.</p>
+                <select id="invest-option" style="margin: 1rem 0; padding: 0.5rem; background: rgba(0, 0, 0, 0.5); border: 1px solid var(--primary); color: #fff; border-radius: 5px; font-size: 0.9rem;">
+                  <option value="" disabled selected>Select Investment Option</option>
+                  <option value="accountbalance">Invest through Account Balance</option>
+                  <option value="directly">Invest Directly</option>
+                </select>
+                <a href="#" class="btn" id="invest-now-btn">Invest hNow</a>
+              </div>
+              <div class="loading-spinner" id="investments-loading" style="display: none;"></div>
+              <div class="error-message" id="investments-error"></div>
             </div>
-            <div class="loading-spinner" id="investments-loading" style="display: none;"></div>
-            <div class="error-message" id="investments-error"></div>
-          </div>
+          </details>
         </div>
 
         <div class="card how-it-works" data-aos="zoom-in">
@@ -133,7 +189,7 @@
           <p>Share your unique referral link and earn a 10% commission on every deposit:</p>
           <div class="referral-link-container">
             <input type="text" id="affiliateLink" readonly/>
-            <button class="copy-btn" title="Copy referral link" aria-label="Copy referral link"><i class="fas fa-copy"></i> Copy</button>
+            <button class="copy-btn" titlecommands="Copy referral link" aria-label="Copy referral link"><i class="fas fa-copy"></i> Copy</button>
           </div>
           <p>Referral Earnings: <span id="refEarnings">0.00</span></p>
         </div>
@@ -319,7 +375,7 @@
         clearAllInvestmentIntervals();
 
         const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
-        if (!user ||tokenError) {
+        if (!user || authError) {
           window.location.href = 'login.html';
           return;
         }
@@ -420,8 +476,7 @@
             startInvestmentCalculator(investment, investmentDiv);
 
             const withdrawBtn = investmentDiv.querySelector('.withdraw-btn');
-            withdrawBtn.addEventListener('click', async (e) => {
-              e.stopPropagation();
+            withdrawBtn.addEventListener('click', async () => {
               if (!canWithdraw) return;
               if (!confirm('Are you sure you want to withdraw your capital?')) return;
               try {
@@ -449,8 +504,7 @@
             });
 
             const reinvestBtn = investmentDiv.querySelector('.reinvest-btn');
-            reinvestBtn.addEventListener('click', async (e) => {
-              e.stopPropagation();
+            reinvestBtn.addEventListener('click', async () => {
               if (!canReinvest) return;
               if (!confirm('Do you want to reinvest your capital and profits into a new investment?')) return;
               try {
@@ -469,8 +523,7 @@
 
             const claimProfitBtn = investmentDiv.querySelector('.claim-profit-btn');
             if (claimProfitBtn) {
-              claimProfitBtn.addEventListener('click', async (e) => {
-                e.stopPropagation();
+              claimProfitBtn.addEventListener('click', async () => {
                 if (!confirm('Are you sure you want to claim your profit?')) return;
                 try {
                   const { error } = await supabaseClient.rpc('transfer_profit_to_account', {
@@ -657,20 +710,12 @@
     // Invest now button
     document.getElementById('invest-now-btn').addEventListener('click', (e) => {
       e.preventDefault();
-      e.stopPropagation();
       const investOption = document.getElementById('invest-option').value;
       if (!investOption) {
         showError('investments-error', 'Please select an investment option.');
         return;
       }
       window.location.href = investOption === 'accountbalance' ? 'accountbalance.html' : 'invest.html';
-    });
-
-    // Toggle investment card
-    const investmentCard = document.querySelector('.investment-card');
-    investmentCard.addEventListener('click', () => {
-      investmentCard.classList.toggle('folded');
-      investmentCard.classList.toggle('expanded');
     });
 
     // Initialize and setup subscriptions
