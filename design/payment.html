@@ -3,481 +3,43 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Deposit • PrudentProExchange</title>
+  <title>Payment • PrudentProExchange</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/payment.css"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <style>
-    /* Global Reset and Base Styles */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Inter', sans-serif;
-      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-      color: #e0e0ff;
-      line-height: 1.6;
-      overflow-x: hidden;
-      position: relative;
-      min-height: 100vh;
-    }
-
-    .bg-video {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      z-index: -1;
-      opacity: 0.2;
-    }
-
-    .overlay {
-      position: relative;
-      z-index: 1;
-      background: rgba(0, 0, 0, 0.5);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-
-    /* Header Styles */
-    .site-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem 2rem;
-      background: rgba(0, 0, 0, 0.7);
-      backdrop-filter: blur(10px);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-
-    .logo-link img {
-      height: 40px;
-    }
-
-    .header-right {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    #theme-toggle, .hamburger {
-      background: none;
-      border: none;
-      color: #ffd700;
-      font-size: 1.2rem;
-      cursor: pointer;
-      padding: 0.5rem;
-      transition: color 0.3s;
-    }
-
-    #theme-toggle:hover, .hamburger:hover {
-      color: #fff;
-    }
-
-    .hamburger span {
-      display: block;
-      width: 24px;
-      height: 3px;
-      background: #ffd700;
-      margin: 5px 0;
-      transition: all 0.3s;
-    }
-
-    .hamburger.active span:nth-child(1) {
-      transform: rotate(45deg) translate(5px, 5px);
-    }
-
-    .hamburger.active span:nth-child(2) {
-      opacity: 0;
-    }
-
-    .hamburger.active span:nth-child(3) {
-      transform: rotate(-45deg) translate(7px, -7px);
-    }
-
-    .nav-drawer {
-      display: none;
-      position: fixed;
-      top: 0;
-      right: 0;
-      height: 100%;
-      width: 250px;
-      background: #0f0f1a;
-      padding: 2rem;
-      flex-direction: column;
-      gap: 1rem;
-      box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5);
-      z-index: 101;
-    }
-
-    .nav-drawer.open {
-      display: flex;
-    }
-
-    .nav-drawer a {
-      color: #e0e0ff;
-      text-decoration: none;
-      font-size: 1rem;
-      transition: color 0.3s;
-    }
-
-    .nav-drawer a:hover {
-      color: #ffd700;
-    }
-
-    .account-menu {
-      position: relative;
-    }
-
-    .account-toggle {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .submenu {
-      display: none;
-      list-style: none;
-      padding-left: 1rem;
-      margin-top: 0.5rem;
-    }
-
-    .submenu.open {
-      display: block;
-    }
-
-    .submenu li a {
-      font-size: 0.9rem;
-      color: #b0b0cc;
-    }
-
-    .submenu li a:hover {
-      color: #ffd700;
-    }
-
-    .nav-overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.7);
-      z-index: 100;
-    }
-
-    .nav-overlay.nav-open {
-      display: block;
-    }
-
-    /* Profile Section (Unchanged) */
-    .profile-section {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      padding: 1rem 2rem;
-      background: rgba(0, 0, 0, 0.3);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .profile-container {
-      display: flex;
-      align-items: center;
-    }
-
-    .avatar {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 2px solid #ffd700;
-    }
-
-    .welcome-message {
-      font-size: 1rem;
-      color: #e0e0ff;
-    }
-
-    /* Main Content */
-    main.payment-page {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 2rem;
-    }
-
-    .payment-form {
-      background: #0f0f1a;
-      border-radius: 12px;
-      padding: 2rem;
-      width: 100%;
-      max-width: 500px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-      backdrop-filter: blur(5px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .payment-form h2 {
-      font-size: 1.8rem;
-      margin-bottom: 1.5rem;
-      color: #ffd700;
-      text-align: center;
-    }
-
-    .form-group {
-      margin-bottom: 1.5rem;
-    }
-
-    .form-group label {
-      display: block;
-      font-size: 0.9rem;
-      color: #e0e0ff;
-      margin-bottom: 0.5rem;
-    }
-
-    .form-group input,
-    .form-group select {
-      width: 100%;
-      padding: 0.75rem;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      background: #1a1a2e;
-      color: #e0e0ff;
-      border-radius: 8px;
-      font-size: 1rem;
-      transition: border-color 0.3s;
-    }
-
-    .form-group input:focus,
-    .form-group select:focus {
-      outline: none;
-      border-color: #ffd700;
-    }
-
-    .form-group input[type="file"] {
-      padding: 0.5rem;
-    }
-
-    .btn {
-      display: block;
-      width: 100%;
-      padding: 0.75rem;
-      background: #ffd700;
-      color: #0f0f1a;
-      border: none;
-      border-radius: 8px;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.3s, transform 0.2s;
-    }
-
-    .btn:hover {
-      background: #e6c200;
-      transform: translateY(-2px);
-    }
-
-    .btn:disabled {
-      background: #666;
-      cursor: not-allowed;
-    }
-
-    .loading-container {
-      display: none;
-      align-items: center;
-      gap: 0.5rem;
-      margin-top: 1rem;
-      justify-content: center;
-    }
-
     .spinner {
-      border: 4px solid rgba(255, 255, 255, 0.2);
+      display: none;
+      border: 4px solid rgba(0, 0, 0, 0.1);
       border-left-color: #ffd700;
       border-radius: 50%;
       width: 24px;
       height: 24px;
       animation: spin 1s linear infinite;
+      margin: 0 auto;
     }
-
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
-
+    .loading-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
     .loading-text {
-      font-size: 0.9rem;
+      font-size: 14px;
       color: #e0e0ff;
     }
-
-    #paymentDetails {
-      margin-top: 1.5rem;
-      padding: 1rem;
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 8px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    #paymentDetails h3 {
-      font-size: 1.2rem;
-      color: #ffd700;
-      margin-bottom: 1rem;
-    }
-
-    #paymentDetails p {
-      font-size: 0.9rem;
-      color: #e0e0ff;
-      margin-bottom: 0.5rem;
-    }
-
-    #walletAddress {
-      word-break: break-all;
-      font-family: monospace;
-    }
-
-    /* Footer (Unchanged) */
-    .site-footer {
-      background: #0f0f1a;
-      padding: 2rem;
-      text-align: center;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .footer-content {
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .footer-links {
-      margin: 1rem 0;
-    }
-
-    .footer-links a {
-      color: #e0e0ff;
-      text-decoration: none;
-      margin: 0 1rem;
-      font-size: 0.9rem;
-    }
-
-    .footer-links a:hover {
-      color: #ffd700;
-    }
-
-    .copyright {
-      font-size: 0.8rem;
-      color: #b0b0cc;
-    }
-
-    /* Back to Top Button */
-    #back-to-top {
-      position: fixed;
-      bottom: 2rem;
-      right: 2rem;
-      background: #ffd700;
-      color: #0f0f1a;
-      border: none;
-      border-radius: 50%;
-      width: 48px;
-      height: 48px;
-      font-size: 1.2rem;
-      cursor: pointer;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-      transition: background 0.3s, transform 0.2s;
-    }
-
-    #back-to-top:hover {
-      background: #e6c200;
-      transform: scale(1.1);
-    }
-
-    /* Light Theme */
-    .light-theme {
-      background: linear-gradient(135deg, #f0f0ff 0%, #e0e0ff 100%);
-      color: #0f0f1a;
-    }
-
-    .light-theme .overlay {
-      background: rgba(255, 255, 255, 0.8);
-    }
-
-    .light-theme .site-header {
-      background: rgba(255, 255, 255, 0.9);
-    }
-
-    .light-theme .nav-drawer {
-      background: #fff;
-    }
-
-    .light-theme .nav-drawer a,
-    .light-theme .welcome-message,
-    .light-theme .payment-form,
-    .light-theme #paymentDetails p {
-      color: #0f0f1a;
-    }
-
-    .light-theme .payment-form {
-      background: #fff;
-      border: 1px solid rgba(0, 0, 0, 0.1);
-    }
-
-    .light-theme .form-group input,
-    .light-theme .form-group select {
-      background: #f0f0ff;
-      border-color: rgba(0, 0, 0, 0.2);
-      color: #0f0f1a;
-    }
-
-    .light-theme .site-footer {
-      background: #fff;
-      border-top: 1px solid rgba(0, 0, 0, 0.1);
-    }
-
-    .light-theme .footer-links a,
-    .light-theme .copyright {
-      color: #0f0f1a;
-    }
-
-    /* Responsive Design */
     @media (max-width: 768px) {
-      .payment-form {
-        padding: 1.5rem;
-      }
-
-      .payment-form h2 {
-        font-size: 1.5rem;
-      }
-
-      .form-group label {
-        font-size: 0.85rem;
-      }
-
-      .btn, #copyAddressBtn {
-        padding: 0.75rem;
-        font-size: 0.9rem;
-      }
-
-      #paymentDetails h3 {
-        font-size: 1.1rem;
-      }
-
-      #paymentDetails p {
-        font-size: 0.85rem;
-      }
-
-      .site-header {
-        padding: 1rem;
-      }
-
-      .logo-link img {
-        height: 32px;
-      }
+      .payment-form { padding: 1rem; }
+      #paymentDetails { margin-top: 1rem; }
+      #paymentDetails h3 { font-size: 1.5rem; }
+      #paymentDetails p { font-size: 1rem; }
+      #copyAddressBtn, .submit-btn { width: 100%; padding: 1rem; }
     }
   </style>
 </head>
@@ -523,7 +85,7 @@
     </header>
     <div class="nav-overlay"></div>
 
-    <!-- Profile Section (Unchanged) -->
+    <!-- Profile Section -->
     <div class="profile-section" role="region" aria-label="User profile">
       <div class="profile-container">
         <img id="navProfilePhoto" src="" alt="User profile photo" class="avatar" style="display: none;" loading="lazy"/>
@@ -539,7 +101,7 @@
           <div class="form-group">
             <label for="cryptoSelect">Select Cryptocurrency</label>
             <select id="cryptoSelect" name="crypto" required>
-              <option value="">-- Select Cryptocurrency --</option>
+              <option value="">-- Select --</option>
               <option value="BTC">Bitcoin (BTC)</option>
               <option value="ETH">Ethereum (ETH)</option>
               <option value="USDT">Tether (USDT)</option>
@@ -553,20 +115,20 @@
           </div>
           <div class="form-group">
             <label for="email">Email Address</label>
-            <input type="email" id="email" name="email" required placeholder="Enter your email"/>
+            <input type="email" id="email" name="email" required/>
           </div>
           <div class="form-group">
             <label for="amount">Amount (USD)</label>
-            <input type="number" id="amount" name="amount" min="20" max="100000000" step="0.01" required placeholder="Enter amount"/>
+            <input type="number" id="amount" name="amount" min="20" max="100000000" step="0.01" required/>
           </div>
           <div class="form-group">
             <label for="proof">Proof of Payment</label>
-            <input type="file" id="proof" name="proof" accept="image/png,image/jpeg,application/pdf" required/>
+            <input type="file" id="proof" name="proof" accept="image/*,application/pdf" required/>
           </div>
           <button type="submit" class="btn submit-btn" id="submitBtn" disabled>Submit Deposit</button>
-          <div class="loading-container" id="loadingContainer">
+          <div class="loading-container" id="loadingContainer" style="display: none;">
             <div class="spinner"></div>
-            <span class="loading-text">Processing...</span>
+            <span class="loading-text">Uploading...</span>
           </div>
         </form>
         <div id="paymentDetails" style="display: none;">
@@ -574,12 +136,11 @@
           <p>Selected Cryptocurrency: <span id="selectedCrypto"></span></p>
           <p>Wallet Address: <span id="walletAddress"></span></p>
           <button id="copyAddressBtn" class="btn">Copy Address</button>
-          <p>Send the exact amount to the provided wallet address and upload the proof of payment.</p>
+          <p>Please send the exact amount to the provided wallet address and upload the proof of payment.</p>
         </div>
       </section>
     </main>
 
-    <!-- Footer (Unchanged) -->
     <footer class="section section-dark site-footer" data-aos="fade-up">
       <div class="footer-content">
         <p class="UTC-time">UTC Time: <span id="utcTime"></span></p>
@@ -601,11 +162,9 @@
   <script>
     AOS.init({ duration: 800, once: true });
 
-    // Navigation
     const hamburgerBtn = document.getElementById('hamburgerBtn');
     const navDrawer = document.getElementById('navDrawer');
     const overlay = document.querySelector('.nav-overlay');
-
     hamburgerBtn.addEventListener('click', () => {
       const isOpen = navDrawer.classList.toggle('open');
       hamburgerBtn.classList.toggle('active');
@@ -625,7 +184,6 @@
       }
     });
 
-    // Theme Toggle
     const themeToggle = document.getElementById('theme-toggle');
     themeToggle.addEventListener('click', () => {
       document.body.classList.toggle('light-theme');
@@ -634,7 +192,6 @@
       icon.classList.toggle('fa-sun');
     });
 
-    // Account Menu
     const accountToggle = document.getElementById('account-toggle');
     const submenu = accountToggle.nextElementSibling;
     accountToggle.addEventListener('click', (e) => {
@@ -642,12 +199,10 @@
       submenu.classList.toggle('open');
     });
 
-    // Back to Top
     document.getElementById('back-to-top').addEventListener('click', () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
-    // Time Updates
     function updateLocalTime() {
       const now = new Date();
       document.getElementById('localTime').textContent = now.toLocaleTimeString();
@@ -664,7 +219,6 @@
     setInterval(updateUTCTime, 1000);
     updateUTCTime();
 
-    // Supabase Client
     const { createClient } = supabase;
     const supabaseClient = createClient(
       'https://iwkdznjqfbsfkscnbrkc.supabase.co',
@@ -674,47 +228,35 @@
     let addressCopied = false;
 
     async function initPaymentPage() {
-      // Check Authentication
       const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
       if (!user || authError) {
         window.location.href = 'login.html';
         return;
       }
 
-      // Load Profile
-      const { data: profile, error: profileError } = await supabaseClient
-        .from('profiles')
-        .select('first_name, photo_url')
-        .eq('id', user.id)
-        .single();
-      if (profileError) {
-        console.error('Error loading profile:', profileError);
-        alert('Failed to load your profile.');
-        return;
-      }
-      document.getElementById('welcomeName').textContent = profile.first_name || 'User';
-      if (profile.photo_url) {
-        const { data: urlData } = supabaseClient.storage
-          .from('profile-photos')
-          .getPublicUrl(profile.photo_url);
-        const profilePhoto = document.getElementById('navProfilePhoto');
-        profilePhoto.src = urlData.publicUrl;
-        profilePhoto.style.display = 'block';
-        document.getElementById('defaultProfileIcon').style.display = 'none';
+      try {
+        const { data: profile, error: profileError } = await supabaseClient
+          .from('profiles')
+          .select('first_name, photo_url')
+          .eq('id', user.id)
+          .single();
+        if (profileError) throw profileError;
+        document.getElementById('welcomeName').textContent = profile.first_name || 'User';
+        if (profile.photo_url) {
+          const { data: urlData } = supabaseClient.storage
+            .from('profile-photos')
+            .getPublicUrl(profile.photo_url);
+          const profilePhoto = document.getElementById('navProfilePhoto');
+          profilePhoto.src = urlData.publicUrl;
+          profilePhoto.style.display = 'block';
+          document.getElementById('defaultProfileIcon').style.display = 'none';
+        }
+      } catch (err) {
+        console.error('Error loading profile:', err);
+        alert('Failed to load profile. You can still make a deposit.');
       }
 
       const cryptoSelect = document.getElementById('cryptoSelect');
-      const emailInput = document.getElementById('email');
-      const amountInput = document.getElementById('amount');
-      const proofInput = document.getElementById('proof');
-      const submitBtn = document.getElementById('submitBtn');
-      const loadingContainer = document.getElementById('loadingContainer');
-      const paymentDetails = document.getElementById('paymentDetails');
-
-      // Auto-fill email
-      emailInput.value = user.email || '';
-
-      // Cryptocurrency Selection
       cryptoSelect.addEventListener('change', async () => {
         const crypto = cryptoSelect.value;
         if (crypto) {
@@ -727,24 +269,23 @@
             if (error || !data) throw new Error('Wallet address not found');
             document.getElementById('selectedCrypto').textContent = cryptoSelect.options[cryptoSelect.selectedIndex].text;
             document.getElementById('walletAddress').textContent = data.address;
-            paymentDetails.style.display = 'block';
+            document.getElementById('paymentDetails').style.display = 'block';
             addressCopied = false;
             checkFormValidity();
           } catch (err) {
             console.error('Error fetching wallet address:', err);
             alert('Wallet address not found for this cryptocurrency.');
-            paymentDetails.style.display = 'none';
+            document.getElementById('paymentDetails').style.display = 'none';
             addressCopied = false;
             checkFormValidity();
           }
         } else {
-          paymentDetails.style.display = 'none';
+          document.getElementById('paymentDetails').style.display = 'none';
           addressCopied = false;
           checkFormValidity();
         }
       });
 
-      // Copy Address
       document.getElementById('copyAddressBtn').addEventListener('click', () => {
         const address = document.getElementById('walletAddress').textContent;
         navigator.clipboard.writeText(address).then(() => {
@@ -757,58 +298,58 @@
         });
       });
 
-      // Form Validation
       function checkFormValidity() {
-        if (cryptoSelect.value && emailInput.value && amountInput.value && proofInput.files.length && addressCopied) {
-          submitBtn.disabled = false;
-        } else {
-          submitBtn.disabled = true;
-        }
+        const form = document.getElementById('paymentForm');
+        const submitBtn = document.getElementById('submitBtn');
+        submitBtn.disabled = !(form.checkValidity() && addressCopied);
       }
 
-      cryptoSelect.addEventListener('change', checkFormValidity);
-      emailInput.addEventListener('input', checkFormValidity);
-      amountInput.addEventListener('input', checkFormValidity);
-      proofInput.addEventListener('change', checkFormValidity);
+      document.getElementById('cryptoSelect').addEventListener('change', checkFormValidity);
+      document.getElementById('email').addEventListener('input', checkFormValidity);
+      document.getElementById('amount').addEventListener('input', checkFormValidity);
+      document.getElementById('proof').addEventListener('change', checkFormValidity);
 
-      // Form Submission
-      document.getElementById('paymentForm').addEventListener('submit', “‘async” (e) => {
+      const paymentForm = document.getElementById('paymentForm');
+      const loadingContainer = document.getElementById('loadingContainer');
+      paymentForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const crypto = cryptoSelect.value;
-        const email = emailInput.value;
-        const amount = parseFloat(amountInput.value);
-        const proofFile = proofInput.files[0];
+        const submitBtn = document.getElementById('submitBtn');
+        submitBtn.disabled = true;
+        loadingContainer.style.display = 'flex';
+
+        const crypto = document.getElementById('cryptoSelect').value;
+        const email = document.getElementById('email').value;
+        const amount = parseFloat(document.getElementById('amount').value);
+        const proofFile = document.getElementById('proof').files[0];
 
         if (!crypto || !email || !amount || !proofFile) {
-          alert('Please complete all fields and upload proof of payment.');
-          return;
-        }
-
-        if (amount < 20 || amount > 100000000) {
-          alert('Amount must be between $20 and $100,000,000.');
+          alert('Please fill all fields and upload proof.');
+          submitBtn.disabled = false;
+          loadingContainer.style.display = 'none';
           return;
         }
 
         if (proofFile.size > 5 * 1024 * 1024) {
           alert('File size exceeds 5MB.');
+          submitBtn.disabled = false;
+          loadingContainer.style.display = 'none';
           return;
         }
-
-        const allowedTypes = ['image/png', 'image/jpeg', 'application/pdf'];
+        const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg', 'application/pdf'];
         if (!allowedTypes.includes(proofFile.type)) {
           alert('Invalid file type. Use PNG, JPEG, or PDF.');
+          submitBtn.disabled = false;
+          checkFormValidity();
+          loadingContainer.style.display = 'none';
           return;
         }
 
-        loadingContainer.style.display = 'flex';
-        submitBtn.disabled = true;
-
+        const fileName = `${user.id}_${Date.now()}_${proofFile.name}`;
         try {
-          const fileName = `${user.id}_${Date.now()}_${proofFile.name}`;
           const { error: uploadError } = await supabaseClient.storage
             .from('proof-of-payments')
-            .upload(fileName, proofFile, { upsert: true });
-          if (uploadError) throw new Error(`Upload failed: ${uploadError.message}`);
+            .upload(fileName, proofFile);
+          if (uploadError) throw new Error('Upload failed: ' + uploadError.message);
 
           const { error: insertError } = await supabaseClient
             .from('deposits')
@@ -818,37 +359,34 @@
               email: email,
               amount: amount,
               status: 'pending',
-              proof_url: fileName,
-              created_at: new Date().toISOString()
+              proof_url: fileName
             });
-          if (insertError) throw new Error(`Database error: ${insertError.message}`);
+          if (insertError) throw new Error('Database error: ' + insertError.message);
 
-          alert('Deposit submitted successfully! Awaiting verification.');
-          window.location.href = 'deposit.html';
+          alert('Deposit submitted successfully. Awaiting verification.');
+          window.location.href = 'dashboard.html'; // Changed to dashboard.html
         } catch (err) {
           console.error('Submission error:', err);
-          alert(`Failed to submit deposit: ${err.message}`);
+          alert('Failed to submit deposit: ' + err.message);
         } finally {
           loadingContainer.style.display = 'none';
           submitBtn.disabled = false;
         }
       });
-
-      // Logout
-      document.getElementById('logout-btn').addEventListener('click', async () => {
-        const { error } = await supabaseClient.auth.signOut();
-        if (!error) window.location.href = 'login.html';
-        else alert('Error logging out: ' + error.message);
-      });
     }
 
-    // Video Playback
+    document.getElementById('logout-btn').addEventListener('click', async () => {
+      const { error } = await supabaseClient.auth.signOut();
+      if (!error) window.location.href = 'login.html';
+      else alert('Error logging out: ' + error.message);
+    });
+
+    initPaymentPage();
+
     const video = document.querySelector('.bg-video');
     video.addEventListener('canplay', () => {
       video.play().catch(error => console.error('Video error:', error));
     });
-
-    initPaymentPage();
   </script>
 </body>
 </html>
