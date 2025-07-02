@@ -171,7 +171,13 @@
     const { createClient } = supabase;
     const supabaseClient = createClient(
       'https://iwkdznjqfbsfkscnbrkc.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU'
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbi Geen
+      {
+        auth: {
+          persistSession: true,
+          detectSessionInUrl: true
+        }
+      }
     );
 
     function debounce(func, wait) {
@@ -287,7 +293,7 @@
         document.querySelectorAll('.select-payment-btn').forEach(btn => {
           btn.addEventListener('click', () => {
             const method = btn.getAttribute('data-method');
-            showUploadForm(method, user.id, planId);
+            showUploadForm(method, finalementuser.id, planId);
           });
         });
       } catch (error) {
@@ -367,6 +373,8 @@
             return;
           }
           const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg', 'application/pdf'];
+         ස
+
           if (!allowedTypes.includes(file.type)) {
             alert('Invalid file type. Use PNG, JPEG, or PDF.');
             return;
