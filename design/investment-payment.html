@@ -3,15 +3,14 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Payment • PrudentProExchange</title>
+  <title>Payment Options • PrudentProExchange</title>
   <link rel="stylesheet" href="css/style.css"/>
-  <link rel="stylesheet" href="css/payment.css"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/investment-payment.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
-    /* Spinner Styling */
     .spinner {
       display: none;
       border: 4px solid rgba(0, 0, 0, 0.1);
@@ -25,6 +24,11 @@
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
     .loading-container {
       display: flex;
       align-items: center;
@@ -35,21 +39,46 @@
       font-size: 14px;
       color: #e0e0ff;
     }
-    /* Mobile Styles */
+    .btn, .payment-section {
+      transition: opacity 0.3s ease, background-color 0.3s ease;
+    }
+    .payment-method-card {
+      cursor: pointer;
+      outline: none;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .payment-method-card:focus, .payment-method-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .payment-method-card:focus .btn {
+      outline: 2px solid #ffd700;
+      outline-offset: 2px;
+    }
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      border: 0;
+    }
     @media (max-width: 768px) {
-      .payment-form {
+      .payment-section {
         padding: 1rem;
       }
-      #paymentDetails {
-        margin-top: 1rem;
-      }
-      #paymentDetails h3 {
+      .payment-section h3 {
         font-size: 1.5rem;
       }
-      #paymentDetails p {
+      .payment-section p {
         font-size: 1rem;
       }
-      #copyAddressBtn, .submit-btn {
+      #uploadFormContainer input[type="file"] {
+        width: 100%;
+      }
+      .upload-btn {
         width: 100%;
         padding: 1rem;
       }
@@ -57,48 +86,49 @@
   </style>
 </head>
 <body class="payment-page">
-  <video class="bg-video" autoplay muted loop playsinline preload="auto">
+  <video class="bg-video" autoplay muted loop playsinline preload="auto" aria-hidden="true">
     <source src="assets/videos/background.webm" type="video/webm">
     <source src="assets/videos/background.mp4" type="video/mp4">
     Your browser does not support the video tag.
   </video>
 
   <div class="overlay">
-    <header class="site-header">
-      <a href="dashboard.html" class="logo-link">
+    <header class="site-header" role="banner">
+      <a href="dashboard.html" class="logo-link" aria-label="PrudentProExchange Home">
         <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo"/>
       </a>
       <div class="header-right">
-        <button id="theme-toggle" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
-        <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
+        <button id="theme-toggle" aria-label="Toggle light/dark theme">
+          <i class="fas fa-moon"></i>
+        </button>
+        <button class="hamburger" id="hamburgerBtn" aria-label="Toggle navigation menu" aria-expanded="false">
           <span></span><span></span><span></span>
         </button>
       </div>
-      <nav class="nav-drawer" id="navDrawer">
+      <nav class="nav-drawer" id="navDrawer" role="navigation" aria-label="Main navigation">
         <a href="dashboard.html">Dashboard</a>
         <a href="invest.html">Invest</a>
         <a href="withdraw.html">Withdraw</a>
         <a href="transactions.html">Transactions</a>
         <a href="referrals.html">Referrals</a>
         <div class="account-menu">
-          <a href="#" class="account-toggle" id="account-toggle">Account ▾</a>
-          <ul class="submenu">
-            <li><a href="profile-settings.html">Profile Settings</a></li>
-            <li><a href="transfer.html">Transfer Balance</a></li>
-            <li><a href="change-password.html">Change Password</a></li>
-            <li><a href="support.html">Support Ticket</a></li>
-            <li><a href="promo-tools.html">Promotional Tools</a></li>
-            <li><a href="2fa.html">2FA Security</a></li>
-            <li><a href="#" id="logout-btn">Logout</a></li>
+          <a href="#" class="account-toggle" id="account-toggle" aria-haspopup="true" aria-expanded="false">Account ▾</a>
+          <ul class="submenu" role="menu">
+            <li><a href="profile-settings.html" role="menuitem">Profile Settings</a></li>
+            <li><a href="transfer.html" role="menuitem">Transfer Balance</a></li>
+            <li><a href="change-password.html" role="menuitem">Change Password</a></li>
+            <li><a href="support.html" role="menuitem">Support Ticket</a></li>
+            <li><a href="promo-tools.html" role="menuitem">Promotional Tools</a></li>
+            <li><a href="2fa.html" role="menuitem">2FA Security</a></li>
+            <li><a href="#" id="logout-btn" role="menuitem">Logout</a></li>
           </ul>
         </div>
         <a href="kyc.html">KYC Verification</a>
         <a href="transfer.html">Transfer</a>
       </nav>
     </header>
-    <div class="nav-overlay"></div>
+    <div class="nav-overlay" aria-hidden="true"></div>
 
-    <!-- Profile Section -->
     <div class="profile-section" role="region" aria-label="User profile">
       <div class="profile-container">
         <img id="navProfilePhoto" src="" alt="User profile photo" class="avatar" style="display: none;" loading="lazy"/>
@@ -107,59 +137,22 @@
       <div class="welcome-message">Welcome, <span id="welcomeName"></span>!</div>
     </div>
 
-    <main class="payment-page container">
-      <section class="payment-form" data-aos="fade-up">
-        <h2>Make a Deposit</h2>
-        <form id="paymentForm">
-          <div class="form-group">
-            <label for="cryptoSelect">Select Cryptocurrency</label>
-            <select id="cryptoSelect" name="crypto" required>
-              <option value="">-- Select --</option>
-              <option value="bitcoin">Bitcoin (BTC)</option>
-              <option value="ethereum">Ethereum (ETH)</option>
-              <option value="tether">Tether (USDT)</option>
-              <option value="usdc">USD Coin (USDC)</option>
-              <option value="binancecoin">Binance Coin (BNB)</option>
-              <option value="litecoin">Litecoin (LTC)</option>
-              <option value="tron">Tron (TRX)</option>
-              <option value="solana">Solana (SOL)</option>
-              <option value="xrp">XRP (Ripple)</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="email">Email Address</label>
-            <input type="email" id="email" name="email" required/>
-          </div>
-          <div class="form-group">
-            <label for="amount">Amount (USD)</label>
-            <input type="number" id="amount" name="amount" min="20" max="100000000" step="0.01" required/>
-          </div>
-          <div class="form-group">
-            <label for="proof">Proof of Payment</label>
-            <input type="file" id="proof" name="proof" accept="image/*,application/pdf" required/>
-          </div>
-          <button type="submit" class="btn submit-btn" id="submitBtn" disabled>Submit: Submit Deposit</button>
-          <div class="loading-container" id="loadingContainer" style="display: none;">
-            <div class="spinner"></div>
-            <span class="loading-text">Uploading...</span>
-          </div>
-        </form>
-        <div id="paymentDetails" style="display: none;">
-          <h3>Payment Details</h3>
-          <p>Selected Cryptocurrency: <span id="selectedCrypto"></span></p>
-          <p>Wallet Address: <span id="walletAddress"></span></p>
-          <button id="copyAddressBtn" class="btn">Copy Address</button>
-          <p>Please send the exact amount to the provided wallet address and upload the proof of payment.</p>
+    <main class="payment-page container" role="main">
+      <section class="payment-options" data-aos="fade-up" aria-labelledby="payment-options-heading">
+        <h2 id="payment-options-heading">Choose Your Payment Method</h2>
+        <p class="investment-amount">Investment Amount: <span id="investmentAmount"></span> USD</p>
+        <div class="payment-methods-grid" id="paymentMethodsGrid" role="grid" aria-label="Payment methods">
         </div>
       </section>
+      <section id="paymentSection" class="payment-section" data-aos="fade-up" aria-live="polite"></section>
     </main>
 
-    <footer class="section section-dark site-footer" data-aos="fade-up">
+    <footer class="section section-dark site-footer" data-aos="fade-up" role="contentinfo">
       <div class="footer-content">
         <p class="UTC-time">UTC Time: <span id="utcTime"></span></p>
         <p class="local-time">Local Time: <span id="localTime"></span></p>
         <p class="local-date">Local Date: <span id="localDate"></span></p>
-        <nav class="footer-links">
+        <nav class="footer-links" aria-label="Footer navigation">
           <a href="about.html">About Us</a>
           <a href="privacy.html">Privacy Policy</a>
           <a href="terms.html">Terms & Conditions</a>
@@ -169,11 +162,269 @@
     </footer>
   </div>
 
-  <button id="back-to-top" aria-label="Back to top">🚀</button>
+  <button id="back-to-top" aria-label="Scroll back to top">🚀</button>
 
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
     AOS.init({ duration: 800, once: true });
+
+    const { createClient } = supabase;
+    const supabaseClient = createClient(
+      'https://iwkdznjqfbsfkscnbrkc.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU'
+    );
+
+    function debounce(func, wait) {
+      let timeout;
+      return function executedFunction(...args) {
+        const later = () => {
+          clearTimeout(timeout);
+          func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+      };
+    }
+
+    async function initPaymentPage() {
+      try {
+        const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
+        if (authError || !user) {
+          window.location.href = 'login.html';
+          return;
+        }
+
+        const { data: profile, error: profileError } = await supabaseClient
+          .from('profiles')
+          .select('first_name, photo_url')
+          .eq('id', user.id)
+          .single();
+        if (profileError) {
+          console.error('Error loading profile:', profileError);
+          alert('Failed to load your profile.');
+          return;
+        }
+        document.getElementById('welcomeName').textContent = profile.first_name || 'User';
+        if (profile.photo_url) {
+          const { data: urlData } = supabaseClient.storage
+            .from('profile-photos')
+            .getPublicUrl(profile.photo_url);
+          const profilePhoto = document.getElementById('navProfilePhoto');
+          profilePhoto.src = urlData.publicUrl;
+          profilePhoto.style.display = 'block';
+          document.getElementById('defaultProfileIcon').style.display = 'none';
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const amount = urlParams.get('amount');
+        const planSlug = urlParams.get('plan');
+
+        if (!amount || isNaN(amount) || parseFloat(amount) <= 0) {
+          alert('Invalid investment amount.');
+          window.location.href = 'invest.html';
+          return;
+        }
+        const parsedAmount = parseFloat(amount);
+        document.getElementById('investmentAmount').textContent = parsedAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+        const { data: plan, error: planError } = await supabaseClient
+          .from('plans')
+          .select('id')
+          .eq('slug', planSlug)
+          .single();
+        if (planError || !plan) {
+          alert('Invalid investment plan.');
+          window.location.href = 'invest.html';
+          return;
+        }
+        const planId = plan.id;
+
+        const paymentMethods = [
+          { name: 'Bitcoin', symbol: 'BTC', logo: 'bitcoin.png' },
+          { name: 'Ethereum', symbol: 'ETH', logo: 'ethereum.png' },
+          { name: 'Tether (ERC-20)', symbol: 'USDT', logo: 'tether.png' },
+          { name: 'Binance Coin', symbol: 'BNB', logo: 'binancecoin.PNG' },
+          { name: 'Tron', symbol: 'TRX', logo: 'tron.png' },
+          { name: 'Litecoin', symbol: 'LTC', logo: 'litecoin.png' },
+          { name: 'XRP (Ripple)', symbol: 'XRP', logo: 'xrp.png' },
+          { name: 'USD Coin (USDC)', symbol: 'USDC', logo: 'usdcoin.PNG' },
+          { name: 'Solana', symbol: 'SOL', logo: 'solana.png' }
+        ];
+
+        const pendingMethod = paymentMethods.find(method => localStorage.getItem(`pendingUpload_${user.id}_${planId}_${method.symbol}`));
+        if (pendingMethod) {
+          const pendingUpload = JSON.parse(localStorage.getItem(`pendingUpload_${user.id}_${planId}_${pendingMethod.symbol}`));
+          if (pendingUpload && confirm(`You have a pending upload for ${pendingMethod.name}. Resume?`)) {
+            showUploadForm(pendingMethod.symbol, user.id, planId, pendingUpload.fileName);
+          } else {
+            localStorage.removeItem(`pendingUpload_${user.id}_${planId}_${pendingMethod.symbol}`);
+          }
+        }
+
+        const grid = document.getElementById('paymentMethodsGrid');
+        paymentMethods.forEach(method => {
+          const card = document.createElement('div');
+          card.classList.add('payment-method-card');
+          card.tabIndex = 0;
+          card.setAttribute('role', 'button');
+          card.setAttribute('aria-label', `Select ${method.name} as payment method`);
+          card.innerHTML = `
+            <img src="assets/images/${method.logo}" alt="${method.name} logo" class="payment-logo" loading="lazy"/>
+            <h3>${method.name}</h3>
+            <p>${method.symbol}</p>
+            <button class="btn select-payment-btn" data-method="${method.symbol}" aria-label="Select ${method.name}">Select</button>
+          `;
+          grid.appendChild(card);
+
+          card.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              showUploadForm(method.symbol, user.id, planId);
+            }
+          });
+        });
+
+        document.querySelectorAll('.select-payment-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const method = btn.getAttribute('data-method');
+            showUploadForm(method, user.id, planId);
+          });
+        });
+      } catch (error) {
+        console.error('Initialization error:', error);
+        alert('An unexpected error occurred.');
+      }
+    }
+
+    async function showUploadForm(method, userId, planId, resumeFileName = null) {
+      try {
+        const { data: wallet, error } = await supabaseClient
+          .from('wallets')
+          .select('address')
+          .eq('method', method)
+          .single();
+        if (error) throw new Error('Failed to fetch wallet address: ' + error.message);
+
+        const address = wallet.address;
+        const paymentSection = document.getElementById('paymentSection');
+        paymentSection.innerHTML = `
+          <h3>Payment Details for ${method}</h3>
+          <p>Wallet Address: <span id="walletAddress">${address}</span> <button id="copyButton" class="btn" aria-label="Copy wallet address">Copy</button></p>
+          <button id="proceedButton" class="btn" disabled aria-disabled="true">Proceed to Upload Proof</button>
+          <div id="uploadFormContainer" style="display:${resumeFileName ? 'block' : 'none'};">
+            <form id="uploadForm" role="form" aria-label="Upload payment proof">
+              <label for="proofFile" class="sr-only">Upload proof of payment</label>
+              <input type="file" id="proofFile" accept="image/*,application/pdf" required aria-required="true"/>
+              <button type="submit" class="btn upload-btn" id="uploadButton">Upload Proof</button>
+              <div class="loading-container" id="loadingContainer" style="display:none;" aria-hidden="true">
+                <div class="spinner"></div>
+                <span class="loading-text">Uploading...</span>
+              </div>
+            </form>
+          </div>
+        `;
+        paymentSection.scrollIntoView({ behavior: 'smooth' });
+
+        const copyButton = document.getElementById('copyButton');
+        const debouncedCopy = debounce(() => {
+          navigator.clipboard.writeText(address).then(() => {
+            alert('Wallet address copied!');
+            const proceedButton = document.getElementById('proceedButton');
+            proceedButton.disabled = false;
+            proceedButton.removeAttribute('aria-disabled');
+            proceedButton.classList.add('blink');
+          }).catch(err => {
+            console.error('Copy failed:', err);
+            alert('Failed to copy address.');
+          });
+        }, 500);
+        copyButton.addEventListener('click', debouncedCopy);
+
+        const proceedButton = document.getElementById('proceedButton');
+        proceedButton.addEventListener('click', () => {
+          const uploadFormContainer = document.getElementById('uploadFormContainer');
+          uploadFormContainer.style.display = 'block';
+          proceedButton.classList.remove('blink');
+          uploadFormContainer.scrollIntoView({ behavior: 'smooth' });
+        });
+
+        const form = document.getElementById('uploadForm');
+        const uploadButton = document.getElementById('uploadButton');
+        const loadingContainer = document.getElementById('loadingContainer');
+        const fileInput = document.getElementById('proofFile');
+
+        if (resumeFileName) fileInput.value = '';
+
+        form.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const file = fileInput.files[0];
+          if (!file) {
+            alert('Please select a file.');
+            return;
+          }
+          if (file.size > 5 * 1024 * 1024) {
+            alert('File size exceeds 5MB.');
+            return;
+          }
+          const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg', 'application/pdf'];
+          if (!allowedTypes.includes(file.type)) {
+            alert('Invalid file type. Use PNG, JPEG, or PDF.');
+            return;
+          }
+
+          const fileName = resumeFileName || `${userId}_${method}_${Date.now()}_${file.name}`;
+          localStorage.setItem(`pendingUpload_${userId}_${planId}_${method}`, JSON.stringify({
+            method,
+            fileName,
+            timestamp: Date.now()
+          }));
+
+          uploadButton.disabled = true;
+          uploadButton.setAttribute('aria-disabled', 'true');
+          loadingContainer.style.display = 'flex';
+          paymentSection.style.opacity = '0.7';
+
+          try {
+            const { error: uploadError } = await supabaseClient.storage
+              .from('payment-proofs')
+              .upload(`${userId}/${fileName}`, file, { upsert: true });
+            if (uploadError) throw new Error('Upload error: ' + uploadError.message);
+
+            const { data: publicUrlData } = supabaseClient.storage.from('payment-proofs').getPublicUrl(`${userId}/${fileName}`);
+            const proofUrl = publicUrlData?.publicUrl || null;
+
+            const amountValue = parseFloat(new URLSearchParams(window.location.search).get('amount')) || 0;
+            const { error: insertError } = await supabaseClient.from('investments').insert({
+              user_id: userId,
+              plan_id: planId,
+              principal: amountValue,
+              roi_pct: null,
+              total_profit: 0,
+              completed: false,
+              payment_proof_url: proofUrl,
+              method: method,
+              status: 'pending',
+            });
+            if (insertError) throw new Error('Insert error: ' + insertError.message);
+
+            localStorage.removeItem(`pendingUpload_${userId}_${planId}_${method}`);
+            alert(`Investment submitted successfully with proof for ${method}. Awaiting approval.`);
+            window.location.href = 'dashboard.html';
+          } catch (error) {
+            console.error('Error during upload or insert:', error);
+            alert('Failed to process request: ' + error.message);
+          } finally {
+            uploadButton.disabled = false;
+            uploadButton.removeAttribute('aria-disabled');
+            loadingContainer.style.display = 'none';
+            paymentSection.style.opacity = '1';
+          }
+        });
+      } catch (error) {
+        console.error('Error showing upload form:', error);
+        alert('Error preparing payment form.');
+      }
+    }
 
     const hamburgerBtn = document.getElementById('hamburgerBtn');
     const navDrawer = document.getElementById('navDrawer');
@@ -183,7 +434,10 @@
       hamburgerBtn.classList.toggle('active');
       hamburgerBtn.setAttribute('aria-expanded', isOpen);
       overlay.classList.toggle('nav-open');
-      if (isOpen) navDrawer.scrollTop = 0;
+      if (isOpen) {
+        navDrawer.scrollTop = 0;
+        navDrawer.querySelector('a').focus();
+      }
     });
 
     document.addEventListener('click', (event) => {
@@ -203,13 +457,15 @@
       const icon = themeToggle.querySelector('i');
       icon.classList.toggle('fa-moon');
       icon.classList.toggle('fa-sun');
+      themeToggle.setAttribute('aria-label', document.body.classList.contains('light-theme') ? 'Switch to dark theme' : 'Switch to light theme');
     });
 
     const accountToggle = document.getElementById('account-toggle');
     const submenu = accountToggle.nextElementSibling;
     accountToggle.addEventListener('click', (e) => {
       e.preventDefault();
-      submenu.classList.toggle('open');
+      const isOpen = submenu.classList.toggle('open');
+      accountToggle.setAttribute('aria-expanded', isOpen);
     });
 
     document.getElementById('back-to-top').addEventListener('click', () => {
@@ -218,7 +474,7 @@
 
     function updateLocalTime() {
       const now = new Date();
-      document.getElementById('localTime').textContent = now.toLocaleTimeString();
+      document.getElementById('localTime').textContent = now.toLocaleTimeString('en-US', { hour12: true });
       document.getElementById('localDate').textContent = now.toLocaleDateString('en-US', {
         weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
       });
@@ -232,169 +488,26 @@
     setInterval(updateUTCTime, 1000);
     updateUTCTime();
 
-    const { createClient } = supabase;
-    const supabaseClient = createClient(
-      'https://iwkdznjqfbsfkscnbrkc.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU'
-    );
+    const video = document.querySelector('.bg-video');
+    video.addEventListener('canplay', () => {
+      video.play().catch(error => console.error('Video playback error:', error));
+    });
 
-    let addressCopied = false;
-
-    async function initPaymentPage() {
-      const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
-      if (!user || authError) {
-        window.location.href = 'login.html';
-        return;
-      }
-
-      // Load Profile
-      const { data: profile, error: profileError } = await supabaseClient
-        .from('profiles')
-        .select('first_name, photo_url')
-        .eq('id', user.id)
-        .single();
-      if (profileError) {
-        console.error('Error loading profile:', profileError);
-        alert('Failed to load your profile.');
-        return;
-      }
-      document.getElementById('welcomeName').textContent = profile.first_name || 'User';
-      if (profile.photo_url) {
-        const { data: urlData } = supabaseClient.storage
-          .from('profile-photos')
-          .getPublicUrl(profile.photo_url);
-        const profilePhoto = document.getElementById('navProfilePhoto');
-        profilePhoto.src = urlData.publicUrl;
-        profilePhoto.style.display = 'block';
-        document.getElementById('defaultProfileIcon').style.display = 'none';
-      }
-
-      const cryptoSelect = document.getElementById('cryptoSelect');
-      cryptoSelect.addEventListener('change', async () => {
-        const crypto = cryptoSelect.value;
-        if (crypto) {
-          try {
-            const { data, error } = await supabaseClient
-              .from('walnets') // Fixed typo: Changed 'wallets' to 'walnets' (assuming this was the issue)
-              .select('address')
-              .eq('crypto', crypto)
-              .single();
-            if (error || !data) throw new Error('Wallet address not found');
-            document.getElementById('selectedCrypto').textContent = cryptoSelect.options[cryptoSelect.selectedIndex].text;
-            document.getElementById('walletAddress').textContent = data.address;
-            document.getElementById('paymentDetails').style.display = 'block';
-            addressCopied = false; // Reset copy flag when crypto changes
-            checkFormValidity();
-          } catch (err) {
-            console.error('Error fetching wallet address:', err);
-            alert('Wallet address not found for this cryptocurrency.');
-            document.getElementById('paymentDetails').style.display = 'none';
-            addressCopied = false;
-            checkFormValidity();
+    function clearStaleUploads() {
+      const keys = Object.keys(localStorage);
+      const now = Date.now();
+      keys.forEach(key => {
+        if (key.startsWith('pendingUpload_')) {
+          const data = JSON.parse(localStorage.getItem(key));
+          if (data && now - data.timestamp > 24 * 60 * 60 * 1000) {
+            localStorage.removeItem(key);
           }
-        } else {
-          document.getElementById('paymentDetails').style.display = 'none';
-          addressCopied = false;
-          checkFormValidity();
-        }
-      });
-
-      document.getElementById('copyAddressBtn').addEventListener('click', () => {
-        const address = document.getElementById('walletAddress').textContent;
-        navigator.clipboard.writeText(address).then(() => {
-          alert('Wallet address copied to clipboard!');
-          addressCopied = true;
-          checkFormValidity();
-        }).catch(err => {
-          console.error('Copy failed:', err);
-          alert('Failed to copy address.');
-        });
-      });
-
-      // Form validity check
-      function checkFormValidity() {
-        const form = document.getElementById('paymentForm');
-        const submitBtn = document.getElementById('submitBtn');
-        if (form.checkValidity() && addressCopied) {
-          submitBtn.disabled = false;
-        } else {
-          submitBtn.disabled = true;
-        }
-      }
-
-      // Add event listeners to form fields
-      document.getElementById('cryptoSelect').addEventListener('change', checkFormValidity);
-      document.getElementById('email').addEventListener('input', checkFormValidity);
-      document.getElementById('amount').addEventListener('input', checkFormValidity);
-      document.getElementById('proof').addEventListener('change', checkFormValidity);
-
-      const paymentForm = document.getElementById('paymentForm');
-      const loadingContainer = document.getElementById('loadingContainer');
-      paymentForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const crypto = document.getElementById('cryptoSelect').value;
-        const email = document.getElementById('email').value;
-        const amount = parseFloat(document.getElementById('amount').value);
-        const proofFile = document.getElementById('proof').files[0];
-
-        if (!crypto || !email || !amount || !proofFile) {
-          alert('Please fill all fields and upload proof.');
-          return;
-        }
-
-        if (proofFile.size > 5 * 1024 * 1024) {
-          alert('File size exceeds 5MB.');
-          return;
-        }
-        const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg', 'application/pdf'];
-        if (!allowedTypes.includes(proofFile.type)) {
-          alert('Invalid file type. Use PNG, JPEG, or PDF.');
-          return;
-        }
-
-        loadingContainer.style.display = 'flex';
-        const fileName = `${user.id}_${Date.now()}_${proofFile.name}`;
-        try {
-          const { error: uploadError } = await supabaseClient.storage
-            .from('proof-of-payments')
-            .upload(fileName, proofFile);
-          if (uploadError) throw new Error(uploadError.message);
-
-          const { error: insertError } = await supabaseClient
-            .from('deposits') // Ensure submission goes to 'deposits' table
-            .insert({
-              user_id: user.id,
-              cryptocurrency: crypto,
-              email: email,
-              amount: amount,
-              status: 'pending',
-              proof_url: fileName
-            });
-          if (insertError) throw new Error(insertError.message);
-
-          alert('Deposit submitted successfully. Awaiting verification.');
-          window.location.href = 'deposit.html';
-        } catch (err) {
-          console.error('Submission error:', err);
-          alert('Failed to submit deposit: ' + err.message);
-        } finally {
-          loadingContainer.style.display = 'none';
         }
       });
     }
 
-    document.getElementById('logout-btn').addEventListener('click', async () => {
-      const { error } = await supabaseClient.auth.signOut();
-      if (!error) window.location.href = 'login.html';
-      else alert('Error logging out: ' + error.message);
-    });
-
+    clearStaleUploads();
     initPaymentPage();
-
-    const video = document.querySelector('.bg-video');
-    video.addEventListener('canplay', () => {
-      video.play().catch(error => console.error('Video error:', error));
-    });
   </script>
 </body>
 </html>
