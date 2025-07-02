@@ -16,7 +16,13 @@ function initCommonUI() {
   const hamburgerBtn = document.getElementById('hamburgerBtn');
   const navDrawer = document.getElementById('navDrawer');
   const overlay = document.querySelector('.nav-overlay');
+  const themeToggle = document.getElementById('theme-toggle');
+  const accountToggle = document.getElementById('account-toggle');
+  const submenu = accountToggle.nextElementSibling;
+  const logoutBtn = document.getElementById('logout-btn');
+  const backToTop = document.getElementById('back-to-top');
 
+  // Hamburger menu toggle
   hamburgerBtn.addEventListener('click', () => {
     const isOpen = navDrawer.classList.toggle('open');
     hamburgerBtn.classList.toggle('active');
@@ -24,6 +30,7 @@ function initCommonUI() {
     hamburgerBtn.setAttribute('aria-expanded', isOpen);
   });
 
+  // Close nav drawer when clicking outside
   document.addEventListener('click', (e) => {
     if (!navDrawer.contains(e.target) && !hamburgerBtn.contains(e.target) && navDrawer.classList.contains('open')) {
       navDrawer.classList.remove('open');
@@ -33,7 +40,7 @@ function initCommonUI() {
     }
   });
 
-  const themeToggle = document.getElementById('theme-toggle');
+  // Theme toggle
   themeToggle.addEventListener('click', () => {
     document.body.classList.toggle('light-theme');
     const icon = themeToggle.querySelector('i');
@@ -42,23 +49,25 @@ function initCommonUI() {
     themeToggle.setAttribute('aria-label', document.body.classList.contains('light-theme') ? 'Switch to dark theme' : 'Switch to light theme');
   });
 
-  const accountToggle = document.getElementById('account-toggle');
-  const submenu = accountToggle.nextElementSibling;
+  // Account menu toggle
   accountToggle.addEventListener('click', (e) => {
     e.preventDefault();
     const isOpen = submenu.classList.toggle('open');
     accountToggle.setAttribute('aria-expanded', isOpen);
   });
 
-  document.getElementById('logout-btn').addEventListener('click', async () => {
+  // Logout
+  logoutBtn.addEventListener('click', async () => {
     await supabaseClient.auth.signOut();
     window.location.href = 'login.html';
   });
 
-  document.getElementById('back-to-top').addEventListener('click', () => {
+  // Back to top
+  backToTop.addEventListener('click', () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 
+  // Update times
   function updateTimes() {
     const now = new Date();
     document.getElementById('utcTime').textContent = now.toUTCString();
@@ -70,7 +79,6 @@ function initCommonUI() {
   setInterval(updateTimes, 1000);
   updateTimes();
 }
-initCommonUI();
 
 // KYC Logic
 async function loadKYC() {
@@ -107,8 +115,7 @@ async function loadKYC() {
 
 function handleTOTPVerificationForKYC() {
   const totpSubmit = document.getElementById('totp-submit');
-  // Remove any existing listeners to prevent duplicates
-  totpSubmit.removeEventListener('click', handleTOTPClick);
+  totpSubmit.removeEventListener('click', handleTOTPClick); // Prevent duplicate listeners
   totpSubmit.addEventListener('click', handleTOTPClick);
 }
 
@@ -288,20 +295,20 @@ async function checkKYCStatus(userId) {
   }
 }
 
-function initForm() {
-  const countries = [
-    { code: 'US', name: 'United States' },
-    { code: 'CA', name: 'Canada' },
-    { code: 'GB', name: 'United Kingdom' },
-  ];
-  const nationalitySelect = document.querySelector('select[name="nationality"]');
-  countries.forEach(c => {
-    const option = document.createElement('option');
-    option.value = c.code;
-    option.textContent = c.name;
-    nationalitySelect.appendChild(option);
-  });
+function validateCardType(cardNumber, selectedType) {
+  const cleanedNumber = cardNumber.replace(/\D/g, '');
+  const cardPatterns = {
+    mastercard: /^5[1-5][0-9]{14}$/,
+    visa: /^4[0-9]{12}(?:[0-9]{3})?$/,
+    amex: /^3[47][0-9]{13}$/,
+    unionpay: /^(62|81)[0-9]{14,17}$/,
+    alipay: /^9[0-9]{15}$/ // Simplified Alipay pattern (adjust as needed)
+  };
 
+  return cardPatterns[selectedType]?.test(cleanedNumber);
+}
+
+function initForm() {
   let currentStep = 1;
   const steps = document.querySelectorAll('.step');
   const indicators = document.querySelectorAll('.step-indicator');
@@ -312,6 +319,35 @@ function initForm() {
     indicators.forEach((i, idx) => i.classList.toggle('active', idx + 1 === step));
   }
   showStep(currentStep);
+
+  // Real-time card number validation
+  const cardNumberInput = document.querySelector('input[name="card_number"]');
+  const cardTypeSelect = document.querySelector('select[name="card_type"]');
+  const cardError = document.querySelector('.card-error');
+
+  cardNumberInput.addEventListener('input', () => {
+    const cardNumber = cardNumberInput.value;
+    const selectedType = cardTypeSelect.value;
+    if (selectedType && cardNumber) {
+      if (!validateCardType(cardNumber, selectedType)) {
+        cardNumberInput.classList.add('invalid');
+        cardError.style.display = 'block';
+        cardError.textContent = 'Invalid card number for selected card type. Only Mastercard, Visa, American Express, UnionPay, or Alipay are accepted.';
+      } else {
+        cardNumberInput.classList.remove('invalid');
+        cardError.style.display = 'none';
+      }
+    } else {
+      cardNumberInput.classList.remove('invalid');
+      cardError.style.display = 'none';
+    }
+  });
+
+  cardTypeSelect.addEventListener('change', () => {
+    if (cardNumberInput.value) {
+      cardNumberInput.dispatchEvent(new Event('input'));
+    }
+  });
 
   document.querySelectorAll('.next-btn').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -439,10 +475,14 @@ function validateStep(step) {
       valid = false;
       f.classList.add('invalid');
       showMessage('You must be at least 18 years old.', true);
-    } else if (f.name === 'card_number' && !luhnCheck(f.value.replace(/\s/g, ''))) {
+    } else if (f.name === 'card_number' && !luhnCheck(f.value.replace(/\D/g, ''))) {
       valid = false;
       f.classList.add('invalid');
       showMessage('Invalid card number.', true);
+    } else if (f.name === 'card_number' && !validateCardType(f.value, document.querySelector('select[name="card_type"]').value)) {
+      valid = false;
+      f.classList.add('invalid');
+      showMessage('Invalid card number for selected card type. Only Mastercard, Visa, American Express, UnionPay, or Alipay are accepted.', true);
     } else if (f.name === 'card_expiry' && !isFutureDate(f.value)) {
       valid = false;
       f.classList.add('invalid');
@@ -526,5 +566,7 @@ function showMessage(text, isError) {
   setTimeout(() => msg.remove(), 3000);
 }
 
+// Initialize
+initCommonUI();
 loadKYC();
 initForm();
