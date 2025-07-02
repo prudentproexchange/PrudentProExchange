@@ -13,11 +13,11 @@
   <style>
     .spinner {
       display: none;
-      border: 4px solid rgba(0, 0, 0, 0.1);
+      border: 6px solid rgba(0, 0, 0, 0.1);
       border-left-color: #ffd700;
       border-radius: 50%;
-      width: 24px;
-      height: 24px;
+      width: 32px;
+      height: 32px;
       animation: spin 1s linear infinite;
       margin: 0 auto;
     }
@@ -99,7 +99,7 @@
         <h2>Make a Deposit</h2>
         <form id="paymentForm">
           <div class="form-group">
-            <label for="cryptoSelect">Select Cryptocurrency</label>
+            <label for="cryptoSelect"><i class="fas fa-coins"></i> Select Cryptocurrency</label>
             <select id="cryptoSelect" name="crypto" required>
               <option value="">-- Select --</option>
               <option value="BTC">Bitcoin (BTC)</option>
@@ -114,28 +114,28 @@
             </select>
           </div>
           <div class="form-group">
-            <label for="email">Email Address</label>
+            <label for="email"><i class="fas fa-envelope"></i> Email Address</label>
             <input type="email" id="email" name="email" required/>
           </div>
           <div class="form-group">
-            <label for="amount">Amount (USD)</label>
+            <label for="amount"><i class="fas fa-dollar-sign"></i> Amount (USD)</label>
             <input type="number" id="amount" name="amount" min="20" max="100000000" step="0.01" required/>
           </div>
           <div class="form-group">
-            <label for="proof">Proof of Payment</label>
+            <label for="proof"><i class="fas fa-upload"></i> Proof of Payment</label>
             <input type="file" id="proof" name="proof" accept="image/*,application/pdf" required/>
           </div>
-          <button type="submit" class="btn submit-btn" id="submitBtn" disabled>Submit Deposit</button>
+          <button type="submit" class="submit-btn" id="submitBtn" disabled>Submit Deposit</button>
           <div class="loading-container" id="loadingContainer" style="display: none;">
             <div class="spinner"></div>
-            <span class="loading-text">Uploading...</span>
+            <span class="loading-text">Uploading proof of payment...</span>
           </div>
         </form>
         <div id="paymentDetails" style="display: none;">
           <h3>Payment Details</h3>
           <p>Selected Cryptocurrency: <span id="selectedCrypto"></span></p>
           <p>Wallet Address: <span id="walletAddress"></span></p>
-          <button id="copyAddressBtn" class="btn">Copy Address</button>
+          <button id="copyAddressBtn" class="copy-btn"><i class="fas fa-copy"></i> Copy Address</button>
           <p>Please send the exact amount to the provided wallet address and upload the proof of payment.</p>
         </div>
       </section>
@@ -301,7 +301,13 @@
       function checkFormValidity() {
         const form = document.getElementById('paymentForm');
         const submitBtn = document.getElementById('submitBtn');
-        submitBtn.disabled = !(form.checkValidity() && addressCopied);
+        if (form.checkValidity() && addressCopied) {
+          submitBtn.disabled = false;
+          submitBtn.title = '';
+        } else {
+          submitBtn.disabled = true;
+          submitBtn.title = 'Please fill all fields and copy the wallet address';
+        }
       }
 
       document.getElementById('cryptoSelect').addEventListener('change', checkFormValidity);
@@ -311,9 +317,9 @@
 
       const paymentForm = document.getElementById('paymentForm');
       const loadingContainer = document.getElementById('loadingContainer');
+      const submitBtn = document.getElementById('submitBtn');
       paymentForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const submitBtn = document.getElementById('submitBtn');
         submitBtn.disabled = true;
         loadingContainer.style.display = 'flex';
 
@@ -364,13 +370,19 @@
           if (insertError) throw new Error('Database error: ' + insertError.message);
 
           alert('Deposit submitted successfully. Awaiting verification.');
-          window.location.href = 'dashboard.html'; // Changed to dashboard.html
+          window.location.href = 'dashboard.html';
         } catch (err) {
           console.error('Submission error:', err);
           alert('Failed to submit deposit: ' + err.message);
         } finally {
           loadingContainer.style.display = 'none';
           submitBtn.disabled = false;
+        }
+      });
+
+      submitBtn.addEventListener('click', (e) => {
+        if (submitBtn.disabled) {
+          alert('Please fill all fields and copy the wallet address to enable submission.');
         }
       });
     }
