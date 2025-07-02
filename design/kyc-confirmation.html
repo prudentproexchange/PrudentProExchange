@@ -10,26 +10,42 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Inter', sans-serif;
-      background: linear-gradient(135deg, #f0fcff 0%, #cce7ff 100%);
-      color: #333;
+      background: #1a1a1a;
+      color: #ffd700;
       display: flex;
       align-items: center;
       justify-content: center;
       min-height: 100vh;
       padding: 1rem;
+      position: relative;
+      overflow: hidden;
     }
     a { text-decoration: none; }
 
+    /* Background video */
+    .bg-video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+      opacity: 0.5;
+    }
+
     /* Card container */
     .card {
-      background: white;
+      background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
       border-radius: 1rem;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
       max-width: 480px;
       width: 100%;
       padding: 2rem;
       text-align: center;
       animation: slideUp 0.6s ease-out;
+      position: relative;
+      z-index: 1;
     }
     @keyframes slideUp {
       from { transform: translateY(20px); opacity: 0; }
@@ -40,7 +56,7 @@
     .icon {
       font-size: 4rem;
       margin-bottom: 1rem;
-      color: #28a745;
+      color: #ffd700;
       animation: pulse 2s infinite;
     }
     @keyframes pulse {
@@ -53,17 +69,17 @@
       font-size: 2rem;
       font-weight: 700;
       margin-bottom: 0.5rem;
-      color: #0f3d67;
+      color: #ffd700;
     }
     p {
       font-size: 1rem;
       margin-bottom: 1.5rem;
       line-height: 1.6;
-      color: #555;
+      color: #ffd700;
     }
     p.lead {
       font-weight: 600;
-      color: #333;
+      color: #ffd700;
     }
 
     /* Buttons */
@@ -81,21 +97,22 @@
       cursor: pointer;
     }
     .btn-primary {
-      background: #0f76ba;
-      color: white;
+      background: #ffd700;
+      color: #1a1a1a;
       border: none;
     }
     .btn-primary:hover {
-      background: #095a8b;
+      background: #e6c200;
       transform: translateY(-2px);
     }
     .btn-secondary {
       background: transparent;
-      color: #0f76ba;
-      border: 2px solid #0f76ba;
+      color: #ffd700;
+      border: 2px solid #ffd700;
     }
     .btn-secondary:hover {
-      background: #e6f2ff;
+      background: #ffd700;
+      color: #1a1a1a;
       transform: translateY(-2px);
     }
 
@@ -103,20 +120,67 @@
     .footer-note {
       margin-top: 1.5rem;
       font-size: 0.875rem;
-      color: #888;
+      color: #ffd700;
+    }
+
+    /* Progress bar */
+    .progress-bar {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+    }
+    .progress-step {
+      font-size: 0.875rem;
+      color: #ffd700;
+      opacity: 0.6;
+    }
+    .progress-step.active {
+      opacity: 1;
+      font-weight: 600;
+    }
+
+    /* Security highlights */
+    .security-highlights {
+      margin-top: 1rem;
+      font-size: 0.875rem;
+      color: #ffd700;
+      opacity: 0.8;
+    }
+    .security-highlights ul {
+      list-style: none;
+      padding: 0;
+    }
+    .security-highlights li {
+      margin-bottom: 0.5rem;
     }
   </style>
 </head>
 <body>
 
+  <video class="bg-video" autoplay muted loop>
+    <source src="path/to/your/video.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+
   <div class="card">
     <div class="icon">🎉</div>
     <h1>Congratulations!</h1>
-    <p class="lead">Your KYC is now complete.</p>
+    <p class="lead">Your KYC verification is complete.</p>
+    <div class="progress-bar">
+      <span class="progress-step">Submit Documents</span>
+      <span class="progress-step">Verification</span>
+      <span class="progress-step active">Complete</span>
+    </div>
     <p>
-      Welcome to PrudentProExchange – your funds and data are fully protected and in expert hands.  
-      Take a moment to relax; we’ve got everything covered so you can feel right at home.
+      Welcome to PrudentProExchange, where your security is our top priority. Your funds and data are protected by advanced encryption, and our dedicated team is here to support you 24/7.
     </p>
+    <div class="security-highlights">
+      <ul>
+        <li>🔒 State-of-the-art encryption</li>
+        <li>🌐 Global compliance standards</li>
+        <li>🛡️ 24/7 monitoring and support</li>
+      </ul>
+    </div>
     <div class="btn-container">
       <a href="/dashboard" class="btn btn-primary">Go to Dashboard</a>
       <a href="mailto:supports@prudentproexchange.net" class="btn btn-secondary">Contact Support</a>
