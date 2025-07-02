@@ -239,7 +239,7 @@ body {
 /* Cards Grid */
 .cards-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, 280px);
+  grid-template-columns: repeat(auto-fit, 250px);
   justify-content: center;
   gap: 2rem;
   margin-bottom: 4rem;
