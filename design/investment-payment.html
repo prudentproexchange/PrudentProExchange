@@ -127,41 +127,40 @@
         <a href="transfer.html">Transfer</a>
       </nav>
     </header>
-  </div>
+    <div class="nav-overlay" aria-hidden="true"></div>
 
-  <div class="nav-overlay" aria-hidden="true"></div>
-
-  <div class="profile-section" role="region" aria-label="User profile">
-    <div class="profile-container">
-      <img id="navProfilePhoto" src="" alt="User profile photo" class="avatar" style="display: none;" loading="lazy"/>
-      <span id="defaultProfileIcon" class="avatar" aria-hidden="true">👤</span>
-    </div>
-    <div class="welcome-message">Welcome, <span id="welcomeName"></span>!</div>
-  </div>
-
-  <main class="payment-page container" role="main">
-    <section class="payment-options" data-aos="fade-up" aria-labelledby="payment-options-heading">
-      <h2 id="payment-options-heading">Choose Your Payment Method</h2>
-      <p class="amount">Investment Amount: <span id="investmentAmount"></span> USD</p>
-      <div class="payment-methods-grid" id="paymentMethodsGrid" role="grid" aria-label="Payment methods">
+    <div class="profile-section" role="region" aria-label="User profile">
+      <div class="profile-container">
+        <img id="navProfilePhoto" src="" alt="User profile photo" class="avatar" style="display: none;" loading="lazy"/>
+        <span id="defaultProfileIcon" class="avatar" aria-hidden="true">👤</span>
       </div>
-    </section>
-    <section id="paymentSection" class="payment-options" data-aos="fade-up" aria-live="polite"></section>
-  </main>
-
-  <footer class="section section-dark site-footer" data-aos="fade-up" role="contentinfo">
-    <div class="footer-content">
-      <p class="UTC-time">UTC Time: <span id="utcTime"></span></p>
-      <p class="local-time">Local Time: <span id="localTime"></span></p>
-      <p class="local-date">Local Date: <span id="localDate"></span></p>
-      <nav class="footer-links" aria-label="Footer navigation">
-        <a href="about.html">About Us</a>
-        <a href="privacy.html">Privacy Policy</a>
-        <a href="terms.html">Terms & Conditions</a>
-      </nav>
-      <p class="copyright">© 2025 PrudentProExchange. All Rights Reserved. SEC Registration #0001230714</p>
+      <div class="welcome-message">Welcome, <span id="welcomeName"></span>!</div>
     </div>
-  </footer>
+
+    <main class="payment-page container" role="main">
+      <section class="payment-options" data-aos="fade-up" aria-labelledby="payment-options-heading">
+        <h2 id="payment-options-heading">Choose Your Payment Method</h2>
+        <p class="amount">Investment Amount: <span id="investmentAmount"></span> USD</p>
+        <div class="payment-methods-grid" id="paymentMethodsGrid" role="grid" aria-label="Payment methods">
+        </div>
+      </section>
+      <section id="paymentSection" class="payment-section" data-aos="fade-up" aria-live="polite"></section>
+    </main>
+
+    <footer class="section section-dark site-footer" data-aos="fade-up" role="contentinfo">
+      <div class="footer-content">
+        <p class="UTC-time">UTC Time: <span id="utcTime"></span></p>
+        <p class="local-time">Local Time: <span id="localTime"></span></p>
+        <p class="local-date">Local Date: <span id="localDate"></span></p>
+        <nav class="footer-links" aria-label="Footer navigation">
+          <a href="about.html">About Us</a>
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="terms.html">Terms & Conditions</a>
+        </nav>
+        <p class="copyright">© 2025 PrudentProExchange. All Rights Reserved. SEC Registration #0001230714</p>
+      </div>
+    </footer>
+  </div>
 
   <button id="back-to-top" aria-label="Scroll back to top">🚀</button>
 
@@ -181,17 +180,21 @@
       }
     );
 
-    // Grab any session from the URL fragment (e.g., magic link / OAuth)
-    supabaseClient.auth
-      .getSessionFromUrl({ storeSession: true })
-      .catch(console.error);
+    (async () => {
+      // 1) If you landed with a magic-link or OAuth redirect in your URL,
+      //    pull the `access_token` out and persist it now:
+      await supabaseClient.auth
+        .getSessionFromUrl({ storeSession: true })
+        .catch(console.error);
 
-    // Re-run initPaymentPage whenever the user signs in
-    supabaseClient.auth.onAuthStateChange((event, session) => {
-      if (event === 'SIGNED_IN') {
-        initPaymentPage();
-      }
-    });
+      // 2) Now that session is in localStorage, kick off your page:
+      initPaymentPage();
+
+      // 3) In case the user logs in *after* load (e.g. popup), redraw:
+      supabaseClient.auth.onAuthStateChange((event, session) => {
+        if (event === 'SIGNED_IN') initPaymentPage();
+      });
+    })();
 
     function debounce(func, wait) {
       let timeout;
@@ -274,13 +277,14 @@
         if (pendingMethod) {
           const pendingUpload = JSON.parse(localStorage.getItem(`pendingUpload_${user.id}_${planId}_${pendingMethod.symbol}`));
           if (pendingUpload && confirm(`You have a pending upload for ${pendingMethod.name}. Resume?`)) {
-            showUploadForm(pendingMethod.symbol, user.id, planId, pendingUpload.fileName);
+            showUploadForm(pendingMethod.symbol, user.id, pendingMethod.planId, pendingUpload.fileName);
           } else {
             localStorage.removeItem(`pendingUpload_${user.id}_${planId}_${pendingMethod.symbol}`);
           }
         }
 
         const grid = document.getElementById('paymentMethodsGrid');
+        grid.innerHTML = ''; // Clear existing content
         paymentMethods.forEach(method => {
           const card = document.createElement('div');
           card.classList.add('payment-method-card');
@@ -409,21 +413,25 @@
               .upload(`${userId}/${fileName}`, file, { upsert: true });
             if (uploadError) throw new Error('Upload error: ' + uploadError.message);
 
-            const { data: publicUrlData } = supabaseClient.storage.from('payment-proofs').getPublicUrl(`${userId}/${fileName}`);
+            const { data: publicUrlData } = supabaseClient.storage
+              .from('payment-proofs')
+              .getPublicUrl(`${userId}/${fileName}`);
             const proofUrl = publicUrlData?.publicUrl || null;
 
             const amountValue = parseFloat(new URLSearchParams(window.location.search).get('amount')) || 0;
-            const { error: insertError } = await supabaseClient.from('investments').insert({
-              user_id: userId,
-              plan_id: planId,
-              principal: amountValue,
-              roi_pct: null,
-              total_profit: 0,
-              completed: false,
-              payment_proof_url: proofUrl,
-              method: method,
-              status: 'pending',
-            });
+            const { error: insertError } = await supabaseClient
+              .from('investments')
+              .insert({
+                user_id: userId,
+                plan_id: planId,
+                principal: amountValue,
+                roi_pct: null,
+                total_profit: 0,
+                completed: false,
+                payment_proof_url: proofUrl,
+                method: method,
+                status: 'pending',
+              });
             if (insertError) throw new Error('Insert error: ' + insertError.message);
 
             localStorage.removeItem(`pendingUpload_${userId}_${planId}_${method}`);
@@ -524,9 +532,7 @@
         }
       });
     }
-
     clearStaleUploads();
-    initPaymentPage();
   </script>
 </body>
 </html>
