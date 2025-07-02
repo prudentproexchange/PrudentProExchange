@@ -346,22 +346,29 @@
         document.getElementById('totalWithdrawals').textContent = formatCurrency(profile.total_withdrawals || 0);
         document.getElementById('accountBalance').textContent = formatCurrency(profile.account_balance || 0);
 
+        // Calculate total invested
         const { data: allInvestments, error: allInvError } = await supabaseClient
           .from('investments')
           .select('principal')
           .eq('user_id', user.id);
         if (allInvError) throw allInvError;
-        const totalEverInvested = allInvestments.reduce((acc, inv) => acc + inv.principal, 0);
+
+        // Ensure numeric sum
+        const totalEverInvested = allInvestments.reduce(
+          (acc, inv) => acc + parseFloat(inv.principal),
+          0
+        );
         document.getElementById('totalInvested').textContent = formatCurrency(totalEverInvested);
 
         document.getElementById('promoOffer').textContent = formatCurrency(profile.promo_offer || 0);
         document.getElementById('promoPct').textContent = profile.promo_pct || 0;
 
+        // Fetch active investments with plan names
         const { data: investments, error: invError } = await supabaseClient
           .from('investments')
           .select(`
             *,
-            plan:investment_plans (
+            plan:plans (
               name
             )
           `)
