@@ -115,15 +115,15 @@
             <label for="cryptoSelect">Select Cryptocurrency</label>
             <select id="cryptoSelect" name="crypto" required>
               <option value="">-- Select --</option>
-              <option value="bitcoin">Bitcoin (BTC)</option>
-              <option value="ethereum">Ethereum (ETH)</option>
-              <option value="tether">Tether (USDT)</option>
-              <option value="usdc">USD Coin (USDC)</option>
-              <option value="binancecoin">Binance Coin (BNB)</option>
-              <option value="litecoin">Litecoin (LTC)</option>
-              <option value="tron">Tron (TRX)</option>
-              <option value="solana">Solana (SOL)</option>
-              <option value="xrp">XRP (Ripple)</option>
+              <option value="BTC">Bitcoin (BTC)</option>
+              <option value="ETH">Ethereum (ETH)</option>
+              <option value="USDT">Tether (USDT)</option>
+              <option value="USDC">USD Coin (USDC)</option>
+              <option value="BNB">Binance Coin (BNB)</option>
+              <option value="LTC">Litecoin (LTC)</option>
+              <option value="TRX">Tron (TRX)</option>
+              <option value="SOL">Solana (SOL)</option>
+              <option value="XRP">XRP (Ripple)</option>
             </select>
           </div>
           <div class="form-group">
@@ -138,10 +138,10 @@
             <label for="proof">Proof of Payment</label>
             <input type="file" id="proof" name="proof" accept="image/*,application/pdf" required/>
           </div>
-          <button type="submit" class="btn submit-btn" id="submitBtn">Submit Deposit</button>
+          <button type="submit" class="btn submit-btn" id="submitBtn" disabled>Submit Deposit</button>
           <div class="loading-container" id="loadingContainer" style="display: none;">
             <div class="spinner"></div>
-            <span class="loading-text">Processing...</span>
+            <span class="loading-text">Uploading...</span>
           </div>
         </form>
         <div id="paymentDetails" style="display: none;">
@@ -162,221 +162,239 @@
         <nav class="footer-links">
           <a href="about.html">About Us</a>
           <a href="privacy.html">Privacy Policy</a>
-            <a href="terms.html">Terms & Conditions</a>
-          </nav>
-          <p class="copyright">© 2025 PrudentProExchange. All Rights Reserved. SEC Registration #0001230714</p>
-        </div>
-      </footer>
-    </div>
+          <a href="terms.html">Terms & Conditions</a>
+        </nav>
+        <p class="copyright">© 2025 PrudentProExchange. All Rights Reserved. SEC Registration #0001230714</p>
+      </div>
+    </footer>
+  </div>
 
-    <button id="back-to-top" aria-label="Back to top">🚀</button>
+  <button id="back-to-top" aria-label="Back to top">🚀</button>
 
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script>
-      AOS.init({ duration: 800, once: true });
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    AOS.init({ duration: 800, once: true });
 
-      const hamburgerBtn = document.getElementById('hamburgerBtn');
-      const navDrawer = document.getElementById('navDrawer');
-      const overlay = document.querySelector('.nav-overlay');
-      hamburgerBtn.addEventListener('click', () => {
-        const isOpen = navDrawer.classList.toggle('open');
-        hamburgerBtn.classList.toggle('active');
-        hamburgerBtn.setAttribute('aria-expanded', isOpen);
-        overlay.classList.toggle('nav-open');
-        if (isOpen) navDrawer.scrollTop = 0;
-      });
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const navDrawer = document.getElementById('navDrawer');
+    const overlay = document.querySelector('.nav-overlay');
+    hamburgerBtn.addEventListener('click', () => {
+      const isOpen = navDrawer.classList.toggle('open');
+      hamburgerBtn.classList.toggle('active');
+      hamburgerBtn.setAttribute('aria-expanded', isOpen);
+      overlay.classList.toggle('nav-open');
+      if (isOpen) navDrawer.scrollTop = 0;
+    });
 
-      document.addEventListener('click', (event) => {
-        const isClickInsideNav = navDrawer.contains(event.target);
-        const isClickOnHamburger = hamburgerBtn.contains(event.target);
-        if (!isClickInsideNav && !isClickOnHamburger && navDrawer.classList.contains('open')) {
-          navDrawer.classList.remove('open');
-          hamburgerBtn.classList.remove('active');
-          hamburgerBtn.setAttribute('aria-expanded', 'false');
-          overlay.classList.remove('nav-open');
-        }
-      });
-
-      const themeToggle = document.getElementById('theme-toggle');
-      themeToggle.addEventListener('click', () => {
-        document.body.classList.toggle('light-theme');
-        const icon = themeToggle.querySelector('i');
-        icon.classList.toggle('fa-moon');
-        icon.classList.toggle('fa-sun');
-      });
-
-      const accountToggle = document.getElementById('account-toggle');
-      const submenu = accountToggle.nextElementSibling;
-      accountToggle.addEventListener('click', (e) => {
-        e.preventDefault();
-        submenu.classList.toggle('open');
-      });
-
-      document.getElementById('back-to-top').addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      });
-
-      function updateLocalTime() {
-        const now = new Date();
-        document.getElementById('localTime').textContent = now.toLocaleTimeString();
-        document.getElementById('localDate').textContent = now.toLocaleDateString('en-US', {
-          weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
-        });
+    document.addEventListener('click', (event) => {
+      const isClickInsideNav = navDrawer.contains(event.target);
+      const isClickOnHamburger = hamburgerBtn.contains(event.target);
+      if (!isClickInsideNav && !isClickOnHamburger && navDrawer.classList.contains('open')) {
+        navDrawer.classList.remove('open');
+        hamburgerBtn.classList.remove('active');
+        hamburgerBtn.setAttribute('aria-expanded', 'false');
+        overlay.classList.remove('nav-open');
       }
-      setInterval(updateLocalTime, 1000);
-      updateLocalTime();
+    });
 
-      function updateUTCTime() {
-        document.getElementById('utcTime').textContent = new Date().toUTCString();
+    const themeToggle = document.getElementById('theme-toggle');
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('light-theme');
+      const icon = themeToggle.querySelector('i');
+      icon.classList.toggle('fa-moon');
+      icon.classList.toggle('fa-sun');
+    });
+
+    const accountToggle = document.getElementById('account-toggle');
+    const submenu = accountToggle.nextElementSibling;
+    accountToggle.addEventListener('click', (e) => {
+      e.preventDefault();
+      submenu.classList.toggle('open');
+    });
+
+    document.getElementById('back-to-top').addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    function updateLocalTime() {
+      const now = new Date();
+      document.getElementById('localTime').textContent = now.toLocaleTimeString();
+      document.getElementById('localDate').textContent = now.toLocaleDateString('en-US', {
+        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+      });
+    }
+    setInterval(updateLocalTime, 1000);
+    updateLocalTime();
+
+    function updateUTCTime() {
+      document.getElementById('utcTime').textContent = new Date().toUTCString();
+    }
+    setInterval(updateUTCTime, 1000);
+    updateUTCTime();
+
+    const { createClient } = supabase;
+    const supabaseClient = createClient(
+      'https://iwkdznjqfbsfkscnbrkc.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU'
+    );
+
+    let addressCopied = false;
+
+    async function initPaymentPage() {
+      const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
+      if (!user || authError) {
+        window.location.href = 'login.html';
+        return;
       }
-      setInterval(updateUTCTime, 1000);
-      updateUTCTime();
 
-      const { createClient } = supabase;
-      const supabaseClient = createClient(
-        'https://iwkdznjqfbsfkscnbrkc.supabase.co',
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU'
-      );
+      // Load Profile
+      const { data: profile, error: profileError } = await supabaseClient
+        .from('profiles')
+        .select('first_name, photo_url')
+        .eq('id', user.id)
+        .single();
+      if (profileError) {
+        console.error('Error loading profile:', profileError);
+        alert('Failed to load your profile.');
+        return;
+      }
+      document.getElementById('welcomeName').textContent = profile.first_name || 'User';
+      if (profile.photo_url) {
+        const { data: urlData } = supabaseClient.storage
+          .from('profile-photos')
+          .getPublicUrl(profile.photo_url);
+        const profilePhoto = document.getElementById('navProfilePhoto');
+        profilePhoto.src = urlData.publicUrl;
+        profilePhoto.style.display = 'block';
+        document.getElementById('defaultProfileIcon').style.display = 'none';
+      }
 
-      async function initPaymentPage() {
-        const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
-        if (!user || authError) {
-          window.location.href = 'login.html';
-          return;
-        }
-
-        // Load Profile
-        const { data: profile, error: profileError } = await supabaseClient
-          .from('profiles')
-          .select('first_name, photo_url')
-          .eq('id', user.id)
-          .single();
-        if (profileError) {
-          console.error('Error loading profile:', profileError);
-          alert('Failed to load your profile.');
-          return;
-        }
-        document.getElementById('welcomeName').textContent = profile.first_name || 'User';
-        if (profile.photo_url) {
-          const { data: urlData } = supabaseClient.storage
-            .from('profile-photos')
-            .getPublicUrl(profile.photo_url);
-          const profilePhoto = document.getElementById('navProfilePhoto');
-          profilePhoto.src = urlData.publicUrl;
-          profilePhoto.style.display = 'block';
-          document.getElementById('defaultProfileIcon').style.display = 'none';
-        }
-
-        const urlParams = new URLSearchParams(window.location.search);
-        const crypto = urlParams.get('crypto');
+      const cryptoSelect = document.getElementById('cryptoSelect');
+      cryptoSelect.addEventListener('change', async () => {
+        const crypto = cryptoSelect.value;
         if (crypto) {
-          document.getElementById('cryptoSelect').value = crypto;
-          document.getElementById('cryptoSelect').dispatchEvent(new Event('change'));
-        }
-
-        const cryptoSelect = document.getElementById('cryptoSelect');
-        cryptoSelect.addEventListener('change', async () => {
-          const crypto = cryptoSelect.value;
-          if (crypto) {
-            try {
-              const { data: wallet, error } = await supabaseClient
-                .from('wallets')
-                .select('address')
-                .eq('method', crypto)
-                .single();
-              if (error) throw error;
-              document.getElementById('selectedCrypto').textContent = cryptoSelect.options[cryptoSelect.selectedIndex].text;
-              document.getElementById('walletAddress').textContent = wallet.address;
-              document.getElementById('paymentDetails').style.display = 'block';
-            } catch (err) {
-              console.error('Error fetching wallet address:', err);
-              alert('Failed to fetch wallet address.');
-            }
-          } else {
-            document.getElementById('paymentDetails').style.display = 'none';
-          }
-        });
-
-        document.getElementById('copyAddressBtn').addEventListener('click', () => {
-          const address = document.getElementById('walletAddress').textContent;
-          navigator.clipboard.writeText(address).then(() => {
-            alert('Wallet address copied to clipboard!');
-          }).catch(err => {
-            console.error('Copy failed:', err);
-            alert('Failed to copy address.');
-          });
-        });
-
-        const paymentForm = document.getElementById('paymentForm');
-        const submitBtn = document.getElementById('submitBtn');
-        const loadingContainer = document.getElementById('loadingContainer');
-        paymentForm.addEventListener('submit', async (e) => {
-          e.preventDefault();
-          const crypto = document.getElementById('cryptoSelect').value;
-          const email = document.getElementById('email').value;
-          const amount = parseFloat(document.getElementById('amount').value);
-          const proofFile = document.getElementById('proof').files[0];
-
-          if (!crypto || !email || !amount || !proofFile) {
-            alert('Please fill all fields and upload proof.');
-            return;
-          }
-
-          if (proofFile.size > 5 * 1024 * 1024) {
-            alert('File size exceeds 5MB.');
-            return;
-          }
-          const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg', 'application/pdf'];
-          if (!allowedTypes.includes(proofFile.type)) {
-            alert('Invalid file type. Use PNG, JPEG, or PDF.');
-            return;
-          }
-
-          submitBtn.disabled = true;
-          loadingContainer.style.display = 'flex';
-          const fileName = `${user.id}_${Date.now()}_${proofFile.name}`;
           try {
-            const { error: uploadError } = await supabaseClient.storage
-              .from('proof-of-payments')
-              .upload(fileName, proofFile);
-            if (uploadError) throw new Error(uploadError.message);
-
-            const { error: insertError } = await supabaseClient
-              .from('deposits')
-              .insert({
-                user_id: user.id,
-                cryptocurrency: crypto,
-                email: email,
-                amount: amount,
-                status: 'pending',
-                proof_url: fileName
-              });
-            if (insertError) throw new Error(insertError.message);
-
-            alert('Deposit submitted successfully. Awaiting verification.');
-            window.location.href = 'deposit.html';
+            const { data, error } = await supabaseClient
+              .from('wallets')
+              .select('address')
+              .eq('method', crypto)
+              .single();
+            if (error || !data) throw new Error('Wallet address not found');
+            document.getElementById('selectedCrypto').textContent = cryptoSelect.options[cryptoSelect.selectedIndex].text;
+            document.getElementById('walletAddress').textContent = data.address;
+            document.getElementById('paymentDetails').style.display = 'block';
+            addressCopied = false; // Reset copy flag when crypto changes
+            checkFormValidity();
           } catch (err) {
-            console.error('Submission error:', err);
-            alert('Failed to submit deposit: ' + err.message);
-          } finally {
-            submitBtn.disabled = false;
-            loadingContainer.style.display = 'none';
+            console.error('Error fetching wallet address:', err);
+            alert('Wallet address not found for this cryptocurrency.');
+            document.getElementById('paymentDetails').style.display = 'none';
+            addressCopied = false;
+            checkFormValidity();
           }
+        } else {
+          document.getElementById('paymentDetails').style.display = 'none';
+          addressCopied = false;
+          checkFormValidity();
+        }
+      });
+
+      document.getElementById('copyAddressBtn').addEventListener('click', () => {
+        const address = document.getElementById('walletAddress').textContent;
+        navigator.clipboard.writeText(address).then(() => {
+          alert('Wallet address copied to clipboard!');
+          addressCopied = true;
+          checkFormValidity();
+        }).catch(err => {
+          console.error('Copy failed:', err);
+          alert('Failed to copy address.');
         });
+      });
+
+      // Form validity check
+      function checkFormValidity() {
+        const form = document.getElementById('paymentForm');
+        const submitBtn = document.getElementById('submitBtn');
+        if (form.checkValidity() && addressCopied) {
+          submitBtn.disabled = false;
+        } else {
+          submitBtn.disabled = true;
+        }
       }
 
-      document.getElementById('logout-btn').addEventListener('click', async () => {
-        const { error } = await supabaseClient.auth.signOut();
-        if (!error) window.location.href = 'login.html';
-        else alert('Error logging out: ' + error.message);
-      });
+      // Add event listeners to form fields
+      document.getElementById('cryptoSelect').addEventListener('change', checkFormValidity);
+      document.getElementById('email').addEventListener('input', checkFormValidity);
+      document.getElementById('amount').addEventListener('input', checkFormValidity);
+      document.getElementById('proof').addEventListener('change', checkFormValidity);
 
-      initPaymentPage();
+      const paymentForm = document.getElementById('paymentForm');
+      const loadingContainer = document.getElementById('loadingContainer');
+      paymentForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const crypto = document.getElementById('cryptoSelect').value;
+        const email = document.getElementById('email').value;
+        const amount = parseFloat(document.getElementById('amount').value);
+        const proofFile = document.getElementById('proof').files[0];
 
-      const video = document.querySelector('.bg-video');
-      video.addEventListener('canplay', () => {
-        video.play().catch(error => console.error('Video error:', error));
+        if (!crypto || !email || !amount || !proofFile) {
+          alert('Please fill all fields and upload proof.');
+          return;
+        }
+
+        if (proofFile.size > 5 * 1024 * 1024) {
+          alert('File size exceeds 5MB.');
+          return;
+        }
+        const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg', 'application/pdf'];
+        if (!allowedTypes.includes(proofFile.type)) {
+          alert('Invalid file type. Use PNG, JPEG, or PDF.');
+          return;
+        }
+
+        loadingContainer.style.display = 'flex';
+        const fileName = `${user.id}_${Date.now()}_${proofFile.name}`;
+        try {
+          const { error: uploadError } = await supabaseClient.storage
+            .from('proof-of-payments')
+            .upload(fileName, proofFile);
+          if (uploadError) throw new Error(uploadError.message);
+
+          const { error: insertError } = await supabaseClient
+            .from('deposits')
+            .insert({
+              user_id: user.id,
+              cryptocurrency: crypto,
+              email: email,
+              amount: amount,
+              status: 'pending',
+              proof_url: fileName
+            });
+          if (insertError) throw new Error(insertError.message);
+
+          alert('Deposit submitted successfully. Awaiting verification.');
+          window.location.href = 'deposit.html';
+        } catch (err) {
+          console.error('Submission error:', err);
+          alert('Failed to submit deposit: ' + err.message);
+        } finally {
+          loadingContainer.style.display = 'none';
+        }
       });
-    </script>
-  </body>
+    }
+
+    document.getElementById('logout-btn').addEventListener('click', async () => {
+      const { error } = await supabaseClient.auth.signOut();
+      if (!error) window.location.href = 'login.html';
+      else alert('Error logging out: ' + error.message);
+    });
+
+    initPaymentPage();
+
+    const video = document.querySelector('.bg-video');
+    video.addEventListener('canplay', () => {
+      video.play().catch(error => console.error('Video error:', error));
+    });
+  </script>
+</body>
 </html>
