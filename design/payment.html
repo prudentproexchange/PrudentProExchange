@@ -58,7 +58,6 @@
     <!-- Main Content -->
     <main class="payment-page container">
       <section class="payment-form" data-aos="fade-up">
-        <div class="welcome-message">Welcome, <span id="welcomeName"></span>! Please make your deposit below.</div>
         <h2>Make a Deposit</h2>
         <form id="paymentForm">
           <div class="form-group">
@@ -76,13 +75,9 @@
               <option value="xrp">XRP (Ripple)</option>
             </select>
           </div>
-          <div id="walletAddressDisplay" class="wallet-address" style="display: none;">
-            <p>Please send your payment to: <span id="addressText"></span></p>
-            <button type="button" id="copyAddressBtn">Copy Address</button>
-          </div>
           <div class="form-group">
             <label for="email">Email Address</label>
-            <input type="email" id="email" name="email" readonly required/>
+            <input type="email" id="email" name="email" required/>
           </div>
           <div class="form-group">
             <label for="amount">Amount (USD)</label>
@@ -199,53 +194,12 @@
         return;
       }
 
-      // Load Profile for Welcome Message
-      const { data: profile, error: profileError } = await supabaseClient
-        .from('profiles')
-        .select('first_name')
-        .eq('id', user.id)
-        .single();
-      if (profileError) {
-        console.error('Error loading profile:', profileError);
-        document.getElementById('welcomeName').textContent = 'User';
-      } else {
-        document.getElementById('welcomeName').textContent = profile.first_name || 'User';
+      // Preselect Cryptocurrency from URL (if provided)
+      const urlParams = new URLSearchParams(window.location.search);
+      const crypto = urlParams.get('crypto');
+      if (crypto) {
+        document.getElementById('cryptoSelect').value = crypto;
       }
-
-      // Pre-fill Email
-      document.getElementById('email').value = user.email;
-
-      // Handle Cryptocurrency Selection
-      const cryptoSelect = document.getElementById('cryptoSelect');
-      const addressDisplay = document.getElementById('walletAddressDisplay');
-      cryptoSelect.addEventListener('change', async () => {
-        const selectedCrypto = cryptoSelect.value;
-        if (selectedCrypto) {
-          const { data, error } = await supabaseClient
-            .from('wallet_addresses')
-            .select('address')
-            .eq('cryptocurrency', selectedCrypto)
-            .single();
-          if (error || !data) {
-            console.error('Error fetching wallet address:', error);
-            alert('Unable to fetch wallet address. Please try again.');
-            addressDisplay.style.display = 'none';
-          } else {
-            document.getElementById('addressText').textContent = data.address;
-            addressDisplay.style.display = 'block';
-          }
-        } else {
-          addressDisplay.style.display = 'none';
-        }
-      });
-
-      // Copy Address Functionality
-      document.getElementById('copyAddressBtn').addEventListener('click', () => {
-        const address = document.getElementById('addressText').textContent;
-        navigator.clipboard.writeText(address)
-          .then(() => alert('Wallet address copied to clipboard!'))
-          .catch(err => console.error('Error copying address:', err));
-      });
 
       // Handle Form Submission
       const paymentForm = document.getElementById('paymentForm');
@@ -261,32 +215,20 @@
           return;
         }
 
-        // Fetch Wallet Address
-        const { data: walletData, error: walletError } = await supabaseClient
-          .from('wallet_addresses')
-          .select('address')
-          .eq('cryptocurrency', crypto)
-          .single();
-        if (walletError || !walletData) {
-          console.error('Error fetching wallet address:', walletError);
-          alert('Error fetching wallet address. Please try again.');
-          return;
-        }
-        const walletAddress = walletData.address;
-
-        // Upload Proof of Payment
+        // Upload Proof of Payment to Supabase Storage
         const fileName = `${user.id}_${Date.now()}_${proofFile.name}`;
-        const { error: uploadError } = await supabaseClient.storage
+        const { data: uploadData, error: uploadError } = await supabaseClient.storage
           .from('proof-of-payments')
           .upload(fileName, proofFile);
+
         if (uploadError) {
           console.error('Error uploading proof:', uploadError);
           alert('Error uploading proof of payment.');
           return;
         }
 
-        // Insert Deposit Record
-        const { error: insertError } = await supabaseClient
+        // Insert Deposit Record into Supabase
+        const { data: insertData, error: insertError } = await supabaseClient
           .from('deposits')
           .insert({
             user_id: user.id,
@@ -294,9 +236,9 @@
             email: email,
             amount: amount,
             status: 'pending',
-            proof_url: fileName,
-            wallet_address: walletAddress
+            proof_url: fileName
           });
+
         if (insertError) {
           console.error('Error inserting deposit:', insertError);
           alert('Error submitting deposit.');
@@ -320,7 +262,9 @@
     // Ensure Video Playback
     const video = document.querySelector('.bg-video');
     video.addEventListener('canplay', () => {
-      video.play().catch(error => console.error('Error playing video:', error));
+      video.play().catch(error => {
+        console.error('Error playing video:', error);
+      });
     });
   </script>
 </body>
