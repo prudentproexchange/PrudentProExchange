@@ -9,7 +9,7 @@
 }
 
 html {
-  overflow-x: hidden;
+  overflow-x: hidden; /* Prevent double scrollbars */
   overflow-y: auto;
 }
 
@@ -23,8 +23,8 @@ body {
   font-family: 'Poppins', sans-serif;
   background: #000;
   color: var(--text-color);
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow-x: auto; /* Enable horizontal scrolling */
+  overflow-y: auto; /* Ensure vertical scrolling */
   line-height: 1.5;
 }
 
@@ -42,6 +42,7 @@ body {
   position: relative;
   background: rgba(0, 0, 0, 0.7);
   min-height: 100vh;
+  overflow-y: auto; /* Ensure vertical scrolling */
 }
 
 /* Header */
@@ -49,10 +50,10 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1.5rem 2rem; /* Match invest.css profile-section padding */
-  background: rgba(255, 255, 255, 0.05); /* Match invest.css profile-section */
-  backdrop-filter: blur(10px); /* Match invest.css profile-section */
-  border-bottom: 1px solid rgba(255, 215, 0, 0.2); /* Match invest.css */
+  padding: 1.5rem 2rem;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 215, 0, 0.2);
   position: sticky;
   top: 0;
   z-index: 10;
@@ -97,20 +98,20 @@ body {
   border: none;
   cursor: pointer;
   padding: 0.5rem;
-  transition: transform 0.3s ease, background 0.3s ease; /* Match invest.css button transitions */
+  transition: transform 0.3s ease, background 0.3s ease;
 }
 
 .hamburger span {
   display: block;
   width: 22px;
   height: 2px;
-  background: var(--primary); /* Gold, matching invest.css */
+  background: var(--primary);
   margin: 4px 0;
   transition: all 0.3s ease;
 }
 
 .hamburger:hover {
-  background: linear-gradient(45deg, #ffd700, #cca300); /* Match invest.css select-plan-btn */
+  background: linear-gradient(45deg, #ffd700, #cca300);
 }
 
 .hamburger.active span:nth-child(1) {
@@ -131,8 +132,8 @@ body {
   right: -100%;
   width: 100%;
   height: 100vh;
-  background: #1a1a1a; /* Solid dark background, no glass effect */
-  border-left: 1px solid rgba(255, 215, 0, 0.2); /* Match invest.css border */
+  background: #1a1a1a;
+  border-left: 1px solid rgba(255, 215, 0, 0.2);
   transition: right 0.3s ease;
   z-index: 20;
   padding: 1rem;
@@ -162,16 +163,16 @@ body {
 
 .nav-drawer a {
   padding: 0.5rem 1rem;
-  color: #e0e0ff; /* Match invest.css text color */
+  color: #e0e0ff;
   text-decoration: none;
-  font-size: 1rem; /* Match invest.css font sizes */
-  font-family: 'Poppins', sans-serif; /* Match invest.css */
+  font-size: 1rem;
+  font-family: 'Poppins', sans-serif;
   transition: color 0.3s ease;
 }
 
 .nav-drawer a:hover, .nav-drawer a.active {
-  color: var(--primary); /* Gold, matching invest.css footer-links */
-  text-decoration: underline; /* Match invest.css footer-links hover */
+  color: var(--primary);
+  text-decoration: underline;
 }
 
 .account-menu {
@@ -180,9 +181,9 @@ body {
 
 .account-toggle {
   padding: 0.5rem 1rem;
-  color: #e0e0ff; /* Match invest.css */
-  font-size: 1rem; /* Match invest.css */
-  font-family: 'Poppins', sans-serif; /* Match invest.css */
+  color: #e0e0ff;
+  font-size: 1rem;
+  font-family: 'Poppins', sans-serif;
   cursor: pointer;
 }
 
@@ -203,14 +204,14 @@ body {
 }
 
 .nav-drawer .submenu a {
-  color: #e0e0ff; /* Match invest.css */
-  font-size: 0.9rem; /* Match invest.css */
-  font-family: 'Poppins', sans-serif; /* Match invest.css */
+  color: #e0e0ff;
+  font-size: 0.9rem;
+  font-family: 'Poppins', sans-serif;
 }
 
 .nav-drawer .submenu a:hover {
-  color: var(--primary); /* Gold, matching invest.css */
-  text-decoration: underline; /* Match invest.css footer-links */
+  color: var(--primary);
+  text-decoration: underline;
 }
 
 /* Profile Section */
@@ -258,6 +259,7 @@ body {
   max-width: 1200px;
   margin: 0 auto;
   padding: 1.5rem;
+  min-height: 100vh; /* Ensure enough height for scrolling */
 }
 
 /* Cards Grid */
@@ -373,7 +375,7 @@ body {
 .transaction-history {
   margin-top: 1.5rem;
   max-width: 100%;
-  overflow-x: auto;
+  overflow-x: auto; /* Retain for table */
 }
 
 #txTable {
@@ -445,7 +447,7 @@ body {
 
 /* Referral link container */
 .referral-link-container {
-  display: flex !important; /* Enforce visibility on all screen sizes */
+  display: flex !important;
   gap: 0.5rem;
   align-items: center;
 }
@@ -550,7 +552,7 @@ body {
   }
   .referral-link-container {
     flex-direction: column;
-    display: flex !important; /* Enforce visibility on mobile */
+    display: flex !important;
   }
   .referral-link-container input,
   .referral-link-container button {
