@@ -43,74 +43,47 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1.5rem 2rem; /* Matches invest.css .profile-section padding */
-  background: rgba(255, 255, 255, 0.05); /* Matches invest.css glass-bg */
-  backdrop-filter: blur(10px); /* Matches invest.css */
-  border-bottom: 1px solid rgba(255, 215, 0, 0.2); /* Matches invest.css */
+  padding: 1rem 1.5rem;
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 215, 0, 0.2);
   position: sticky;
   top: 0;
   z-index: 10;
-  max-width: 1200px; /* Matches invest.css container */
-  margin: 0 auto;
+  /* Removed max-width: 1200px; and margin: 0 auto; to make it full screen */
 }
 
 .header-right {
   display: flex;
   align-items: center;
-  gap: 1rem; /* Slightly adjusted for better spacing, consistent with invest.css */
-}
-
-.header-right .profile-container {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.header-right .avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: 2px solid #ffd700; /* Gold */
-  object-fit: cover;
-  transition: transform 0.3s ease;
-}
-
-.header-right .avatar:hover {
-  transform: scale(1.05); /* Matches invest.css .avatar:hover */
-}
-
-.header-right .welcome-message {
-  font-size: 1rem;
-  color: #ffd700; /* Gold */
-  font-family: 'Playfair Display', serif;
+  gap: 0.75rem;
 }
 
 #theme-toggle {
   background: none;
   border: none;
-  color: #ffd700; /* Matches invest.css gold */
+  color: var(--primary);
   font-size: 1.25rem;
   cursor: pointer;
   transition: transform 0.3s ease;
-  /* Matches invest.css */
 }
 
 #theme-toggle:hover {
-  transform: rotate(180deg); /* Retained from original */
+  transform: rotate(180deg);
 }
 
 .logo-link {
-  margin-left: 1rem; /* Matches invest.css spacing proportionality */
+  margin-left: 0.75rem;
 }
 
 .logo-link img {
-  height: 60px; /* Adjusted to be more consistent with invest.css proportionality */
+  height: 80px;
   width: auto;
   transition: transform 0.3s ease;
 }
 
 .logo-link img:hover {
-  transform: scale(1.05); /* Matches invest.css .avatar:hover */
+  transform: scale(1.05);
 }
 
 .hamburger {
@@ -125,7 +98,7 @@ body {
   display: block;
   width: 22px;
   height: 2px;
-  background: #ffd700; /* Matches invest.css gold */
+  background: var(--primary);
   margin: 4px 0;
   transition: all 0.3s ease;
 }
@@ -146,15 +119,14 @@ body {
   position: fixed;
   top: 0;
   right: -100%;
-  width: 80%;
-  max-width: 280px;
+  width: 100%; /* Changed from width: 80%; max-width: 280px; to make it full screen */
   height: 100vh;
-  background: rgba(255, 255, 255, 0.05); /* Matches invest.css glass-bg */
-  backdrop-filter: blur(10px); /* Matches invest.css */
-  border-left: 1px solid rgba(255, 215, 0, 0.2); /* Matches invest.css */
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  border-left: 1px solid rgba(255, 215, 0, 0.2);
   transition: right 0.3s ease;
   z-index: 20;
-  padding: 1.5rem; /* Matches invest.css .profile-section padding */
+  padding: 1rem;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
@@ -170,7 +142,7 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5); /* Matches invest.css shadow */
+  background: rgba(0, 0, 0, 0.5);
   z-index: 19;
   display: none;
 }
@@ -179,45 +151,16 @@ body {
   display: block;
 }
 
-.nav-drawer .profile-section {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-}
-
-.nav-drawer .avatar {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  border: 2px solid #ffd700; /* Gold */
-  object-fit: cover;
-  transition: transform 0.3s ease;
-}
-
-.nav-drawer .avatar:hover {
-  transform: scale(1.05); /* Matches invest.css .avatar:hover */
-}
-
-.nav-drawer .welcome-message {
-  font-size: 1.2rem;
-  color: #ffd700; /* Gold */
-  font-family: 'Playfair Display', serif;
-}
-
 .nav-drawer a {
-  padding: 0.75rem 1rem; /* Matches invest.css .select-plan-btn padding */
-  color: #e0e0ff; /* Matches invest.css text color */
+  padding: 0.5rem 1rem;
+  color: var(--text-color);
   text-decoration: none;
-  font-size: 1rem; /* Matches invest.css .select-plan-btn */
-  font-family: 'Poppins', sans-serif; /* Matches invest.css */
-  transition: color 0.3s ease, background 0.3s ease; /* Added background transition for clickability */
-  display: block; /* Ensures full clickability */
+  font-size: 0.95rem;
+  transition: color 0.3s ease;
 }
 
 .nav-drawer a:hover, .nav-drawer a.active {
-  color: #ffd700; /* Matches invest.css gold */
-  background: rgba(255, 215, 0, 0.1); /* Added for visual feedback on hover */
+  color: var(--primary);
 }
 
 .account-menu {
@@ -225,25 +168,18 @@ body {
 }
 
 .account-toggle {
-  padding: 0.75rem 1rem; /* Matches invest.css .select-plan-btn padding */
-  color: #e0e0ff; /* Matches invest.css text color */
-  font-size: 1rem; /* Matches invest.css .select-plan-btn */
+  padding: 0.5rem 1rem;
+  color: var(--text-color);
+  font-size: 0.95rem;
   cursor: pointer;
-  font-family: 'Poppins', sans-serif; /* Matches invest.css */
-  transition: color 0.3s ease, background 0.3s ease; /* Added for clickability */
-}
-
-.account-toggle:hover {
-  color: #ffd700; /* Matches invest.css gold */
-  background: rgba(255, 215, 0, 0.1); /* Added for visual feedback */
 }
 
 .nav-drawer .submenu {
   display: none;
   list-style: none;
   padding: 0.5rem 0 0.5rem 1rem;
-  background: rgba(0, 0, 0, 0.8); /* Matches invest.css shadow */
-  border-radius: 5px; /* Matches invest.css */
+  background: rgba(0, 0, 0, 0.8);
+  border-radius: 5px;
 }
 
 .nav-drawer .submenu.open {
@@ -255,15 +191,12 @@ body {
 }
 
 .nav-drawer .submenu a {
-  color: #e0e0ff; /* Matches invest.css text color */
-  font-size: 0.9rem; /* Slightly smaller for hierarchy, consistent with invest.css */
-  font-family: 'Poppins', sans-serif; /* Matches invest.css */
-  transition: color 0.3s ease, background 0.3s ease; /* Added for clickability */
+  color: var(--text-color);
+  font-size: 0.85rem;
 }
 
 .nav-drawer .submenu a:hover {
-  color: #ffd700; /* Matches invest.css gold */
-  background: rgba(255, 215, 0, 0.1); /* Added for visual feedback */
+  color: var(--primary);
 }
 
 /* Profile Section */
@@ -536,7 +469,7 @@ body {
 
 @media (max-width: 1024px) {
   .site-header {
-    padding: 1rem; /* Matches invest.css responsive adjustment */
+    padding: 0.75rem 1rem;
   }
   .profile-section {
     padding: 1rem;
@@ -548,13 +481,10 @@ body {
 
 @media (max-width: 768px) {
   .hamburger {
-    display: block; /* Enable hamburger menu for mobile */
-  }
-  .header-right .welcome-message {
-    display: none; /* Matches invest.css responsive adjustment */
+    display: block;
   }
   .logo-link img {
-    height: 50px; /* Matches invest.css responsive proportionality */
+    height: 60px;
   }
   .profile-section {
     flex-direction: column;
@@ -586,10 +516,10 @@ body {
 
 @media (max-width: 480px) {
   .site-header {
-    padding: 0.75rem; /* Matches invest.css responsive adjustment */
+    padding: 0.5rem;
   }
   .logo-link img {
-    height: 40px; /* Matches invest.css responsive proportionality */
+    height: 50px;
   }
   .avatar {
     width: 80px;
