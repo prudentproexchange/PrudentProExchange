@@ -222,7 +222,6 @@ img, video, table, .card {
 .profile-container {
   margin-right: 1rem;
 }
-
 .avatar {
   width: 120px;
   height: 120px;
@@ -258,7 +257,7 @@ img, video, table, .card {
 /* Cards Grid */
 .cards-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* Reduced from 200px */
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); /* Reduced from 180px */
   gap: 2rem;
   justify-content: center;
   margin-bottom: 1.5rem;
@@ -266,7 +265,7 @@ img, video, table, .card {
 
 .card {
   background: rgba(255, 255, 255, 0.1);
-  padding: 2rem;
+  padding: 1.5rem; /* Reduced from 2rem */
   border: 2px solid var(--primary);
   border-radius: 15px;
   backdrop-filter: blur(15px);
@@ -281,14 +280,14 @@ img, video, table, .card {
   border-color: var(--primary-dark);
 }
 .card h2 {
-  font-size: 1.5rem;
+  font-size: 1.3rem; /* Reduced from 1.5rem */
   color: var(--primary);
   margin-bottom: 0.75rem;
   font-family: 'Playfair Display', serif;
 }
 .card p, .card ul {
-  font-size: 0.95rem;
-  color: #e0eff;
+  font-size: 0.85rem; /* Reduced from 0.95rem */
+  color: #e0e0ff;
 }
 .card ul {
   list-style: none;
@@ -306,19 +305,20 @@ img, video, table, .card {
   left: 0;
 }
 .card .brand {
-  font-size: 0.85rem;
+  font-size: 0.75rem; /* Reduced from 0.85rem */
   color: var(--primary);
   margin-top: 0.75rem;
   font-style: italic;
 }
 .card .btn {
   display: inline-block;
-  padding: 0.6rem 1.2rem;
+  padding: 0.5rem 1rem; /* Reduced from 0.6rem 1.2rem */
   background: linear-gradient(45deg, var(--primary), var(--primary-dark));
   color: #000;
   text-decoration: none;
   border-radius: 5px;
   font-weight: 600;
+  font-size: 0.85rem; /* Added to match smaller card size */
   transition: background 0.3s ease, transform 0.3s ease;
 }
 .card .btn:hover {
@@ -332,13 +332,13 @@ img, video, table, .card {
 }
 .card input[readonly] {
   width: 100%;
-  padding: 0.5rem;
+  padding: 0.4rem; /* Reduced from 0.5rem */
   margin: 0.75rem 0;
   background: rgba(0, 0, 0, 0.5);
   border: 1px solid var(--primary);
   color: #fff;
   border-radius: 5px;
-  font-size: 0.85rem;
+  font-size: 0.8rem; /* Reduced from 0.85rem */
 }
 
 /* Investment Card Styles */
@@ -351,6 +351,7 @@ img, video, table, .card {
 }
 .investment-item p {
   margin: 0.4rem 0;
+  font-size: 0.85rem; /* Added to match card text size */
 }
 
 /* Transaction History */
@@ -372,6 +373,7 @@ img, video, table, .card {
   font-size: 0.9rem;
 }
 #txTable th {
+ HS
   background: var(--primary);
   color: #000;
   font-weight: 600;
@@ -445,7 +447,7 @@ img, video, table, .card {
 /* Responsive Design */
 @media (min-width: 1200px) {
   .cards-grid {
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Reduced from 220px */
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* Reduced from 200px */
   }
 }
 
@@ -489,10 +491,10 @@ img, video, table, .card {
     grid-template-columns: 1fr; /* Single column for small screens */
   }
   .card {
-    padding: 1.5rem;
+    padding: 1.2rem; /* Reduced from 1.5rem for smaller screens */
   }
   .card h2 {
-    font-size: 1.3rem;
+    font-size: 1.2rem; /* Reduced from 1.3rem */
   }
   .referral-link-container {
     flex-direction: column;
@@ -524,14 +526,14 @@ img, video, table, .card {
     font-size: 1rem;
   }
   .card {
-    padding: 1.5rem;
+    padding: 1rem; /* Further reduced for smallest screens */
   }
   .card h2 {
-    font-size: 1.2rem;
+    font-size: 1.1rem; /* Reduced from 1.2rem */
   }
   .card .btn {
-    padding: 0.5rem 0.75rem;
-    font-size: 0.85rem;
+    padding: 0.4rem 0.8rem; /* Reduced from 0.5rem 1rem */
+    font-size: 0.8rem; /* Reduced from 0.85rem */
   }
   .referral-link-container {
     flex-direction: column;
