@@ -1,105 +1,194 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Settings - Company Dashboard</title>
-    <link rel="stylesheet" href="css/profile-settings.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profile Settings • PrudentProExchange</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/profile-settings.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 </head>
-<body>
-    <div class="dashboard-container">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <nav>
-                <ul>
-                    <li><a href="dashboard.html">Dashboard</a></li>
-                    <li><a href="profile.html">Profile</a></li>
-                    <li><a href="settings.html" class="active">Settings</a></li>
-                </ul>
-            </nav>
-        </aside>
+<body class="dashboard-page">
+  <!-- Video Background -->
+  <video class="bg-video" autoplay muted loop playsinline preload="auto">
+    <source src="assets/videos/background.webm" type="video/webm" />
+    <source src="assets/videos/background.mp4" type="video/mp4" />
+    Your browser does not support the video tag.
+  </video>
 
-        <!-- Main Content -->
-        <main class="main-content">
-            <header>
-                <h1>Settings</h1>
-            </header>
+  <div class="overlay">
+    <!-- Header -->
+    <header class="site-header">
+      <a href="dashboard.html" class="logo-link">
+        <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo" />
+      </a>
+      <div class="header-right">
+        <button id="theme-toggle" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
+        <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+      <nav class="nav-drawer" id="navDrawer">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="invest.html">Invest</a>
+        <a href="withdraw.html">Withdraw</a>
+        <a href="transactions.html">Transactions</a>
+        <a href="referrals.html">Referrals</a>
+        <div class="account-menu">
+          <a href="#" class="account-toggle" id="account-toggle">Account ▾</a>
+          <ul class="submenu">
+            <li><a href="profile-settings.html" class="active">Profile Settings</a></li>
+            <li><a href="transfer.html">Transfer Balance</a></li>
+            <li><a href="change-password.html">Change Password</a></li>
+            <li><a href="support.html">Support Ticket</a></li>
+            <li><a href="promo-tools.html">Promotional Tools</a></li>
+            <li><a href="2fa.html">2FA Security</a></li>
+            <li><a href="#" id="logout-btn">Logout</a></li>
+          </ul>
+        </div>
+        <a href="kyc.html">KYC Verification</a>
+        <a href="transfer.html">Transfer</a>
+      </nav>
+    </header>
+    <div class="nav-overlay"></div>
 
-            <!-- User Settings -->
-            <section id="user-settings">
-                <h2>User Settings</h2>
-                <form id="user-settings-form">
-                    <label for="display-name">Display Name:</label>
-                    <input type="text" id="display-name" name="display_name">
-
-                    <label for="avatar-url">Avatar URL:</label>
-                    <input type="text" id="avatar-url" name="avatar_url">
-
-                    <label for="timezone">Timezone:</label>
-                    <select id="timezone" name="timezone"></select>
-
-                    <label for="locale">Locale:</label>
-                    <select id="locale" name="locale"></select>
-
-                    <fieldset>
-                        <legend>Theme Mode:</legend>
-                        <label><input type="radio" name="theme_mode" value="light"> Light</label>
-                        <label><input type="radio" name="theme_mode" value="dark"> Dark</label>
-                    </fieldset>
-
-                    <label for="accent-color">Accent Color:</label>
-                    <input type="color" id="accent-color" name="accent_color">
-
-                    <fieldset>
-                        <legend>Font Size:</legend>
-                        <label><input type="radio" name="font_size" value="small"> Small</label>
-                        <label><input type="radio" name="font_size" value="medium"> Medium</label>
-                        <label><input type="radio" name="font_size" value="large"> Large</label>
-                    </fieldset>
-
-                    <fieldset>
-                        <legend>Notifications:</legend>
-                        <label><input type="checkbox" name="notify_email"> Email</label>
-                        <label><input type="checkbox" name="notify_sms"> SMS</label>
-                        <label><input type="checkbox" name="notify_push"> Push</label>
-                    </fieldset>
-
-                    <fieldset>
-                        <legend>Digest Frequency:</legend>
-                        <label><input type="radio" name="digest_frequency" value="instant"> Instant</label>
-                        <label><input type="radio" name="digest_frequency" value="daily"> Daily</label>
-                        <label><input type="radio" name="digest_frequency" value="weekly"> Weekly</label>
-                    </fieldset>
-
-                    <label for="two-factor">Two-Factor Authentication:</label>
-                    <input type="checkbox" id="two-factor" name="two_factor_enabled">
-
-                    <button type="submit">Save Settings</button>
-                </form>
-            </section>
-
-            <!-- API Keys -->
-            <section id="api-keys">
-                <h2>API Keys</h2>
-                <button id="add-api-key">Add New API Key</button>
-                <ul id="api-keys-list"></ul>
-            </section>
-
-            <!-- Webhooks -->
-            <section id="webhooks">
-                <h2>Webhooks</h2>
-                <button id="add-webhook">Add New Webhook</button>
-                <ul id="webhooks-list"></ul>
-            </section>
-
-            <!-- Connected Services -->
-            <section id="connected-services">
-                <h2>Connected Services</h2>
-                <button id="connect-service">Connect New Service</button>
-                <ul id="services-list"></ul>
-            </section>
-        </main>
+    <!-- Profile Section -->
+    <div class="profile-section">
+      <div class="profile-container">
+        <img id="navProfilePhoto" src="" alt="Profile" class="avatar" style="display: none;" />
+        <span id="defaultProfileIcon" class="avatar">👤</span>
+      </div>
+      <div class="welcome-message">Profile Settings <span id="welcomeName"></span></div>
     </div>
-    <script src="js/profile-settings.js"></script>
+
+    <!-- Main Content -->
+    <main class="dashboard-page container">
+      <section class="cards-grid" data-aos="fade-up">
+        <!-- Profile Information -->
+        <div class="card profile-info" data-aos="zoom-in">
+          <h2>Profile Information</h2>
+          <form id="profile-form">
+            <label for="display-name">Display Name</label>
+            <input type="text" id="display-name" name="display_name" placeholder="Enter your display name" />
+            <label for="avatar-upload">Profile Picture</label>
+            <input type="file" id="avatar-upload" name="avatar_url" accept="image/*" />
+            <div class="error-message" id="profile-error"></div>
+            <button type="submit" class="btn" id="save-profile-btn">Save Profile</button>
+          </form>
+        </div>
+
+        <!-- Appearance Settings -->
+        <div class="card appearance-settings" data-aos="zoom-in">
+          <h2>Appearance Settings</h2>
+          <form id="appearance-form">
+            <label for="timezone">Timezone</label>
+            <select id="timezone" name="timezone"></select>
+            <label for="locale">Language</label>
+            <select id="locale" name="locale">
+              <option value="en-US">English (US)</option>
+              <option value="es-ES">Spanish</option>
+              <option value="fr-FR">French</option>
+              <!-- Add more languages as needed -->
+            </select>
+            <label for="theme-mode">Theme Mode</label>
+            <select id="theme-mode" name="theme_mode">
+              <option value="light">Light</option>
+              <option value="dark">Dark</option>
+            </select>
+            <label for="accent-color">Accent Color</label>
+            <input type="color" id="accent-color" name="accent_color" value="#ffd700" />
+            <label for="font-size">Font Size</label>
+            <select id="font-size" name="font_size">
+              <option value="small">Small</option>
+              <option value="medium">Medium</option>
+              <option value="large">Large</option>
+            </select>
+            <div class="error-message" id="appearance-error"></div>
+            <button type="submit" class="btn" id="save-appearance-btn">Save Appearance</button>
+          </form>
+        </div>
+
+        <!-- Notification Preferences -->
+        <div class="card notifications" data-aos="zoom-in">
+          <h2>Notification Preferences</h2>
+          <form id="notifications-form">
+            <label><input type="checkbox" id="notify-email" name="notify_email" /> Email Notifications</label>
+            <label><input type="checkbox" id="notify-sms" name="notify_sms" /> SMS Notifications</label>
+            <label><input type="checkbox" id="notify-push" name="notify_push" /> Push Notifications</label>
+            <label for="digest-frequency">Digest Frequency</label>
+            <select id="digest-frequency" name="digest_frequency">
+              <option value="instant">Instant</option>
+              <option value="daily">Daily</option>
+              <option value="weekly">Weekly</option>
+            </select>
+            <div class="error-message" id="notifications-error"></div>
+            <button type="submit" class="btn" id="save-notifications-btn">Save Notifications</button>
+          </form>
+        </div>
+
+        <!-- Two-Factor Authentication -->
+        <div class="card two-factor" data-aos="zoom-in">
+          <h2>Two-Factor Authentication</h2>
+          <label><input type="checkbox" id="two-factor-enabled" name="two_factor_enabled" /> Enable 2FA</label>
+          <div class="error-message" id="two-factor-error"></div>
+          <button class="btn" id="save-two-factor-btn">Save 2FA Settings</button>
+        </div>
+
+        <!-- API Keys -->
+        <div class="card api-keys" data-aos="zoom-in">
+          <h2>API Keys</h2>
+          <button class="btn" id="generate-api-key-btn">Generate New API Key</button>
+          <div id="api-keys-container"></div>
+          <div class="loading-spinner" id="api-keys-loading" style="display: none;"></div>
+          <div class="error-message" id="api-keys-error"></div>
+        </div>
+
+        <!-- Webhooks -->
+        <div class="card webhooks" data-aos="zoom-in">
+          <h2>Webhooks</h2>
+          <form id="webhook-form">
+            <label for="webhook-url">Webhook URL</label>
+            <input type="url" id="webhook-url" name="url" placeholder="Enter webhook URL" />
+            <div class="error-message" id="webhook-error"></div>
+            <button type="submit" class="btn" id="add-webhook-btn">Add Webhook</button>
+          </form>
+          <div id="webhooks-container"></div>
+          <div class="loading-spinner" id="webhooks-loading" style="display: none;"></div>
+        </div>
+
+        <!-- Connected Services -->
+        <div class="card connected-services" data-aos="zoom-in">
+          <h2>Connected Services</h2>
+          <div id="connected-services-container"></div>
+          <div class="loading-spinner" id="connected-services-loading" style="display: none;"></div>
+          <div class="error-message" id="connected-services-error"></div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="section section-dark site-footer" data-aos="fade-up">
+      <div class="footer-content">
+        <p class="UTC-time">UTC Time: <span id="utcTime"></span></p>
+        <p class="local-time">Local Time: <span id="localTime"></span></p>
+        <p class="local-date">Local Date: <span id="localDate"></span></p>
+        <nav class="footer-links">
+          <a href="about.html">About Us</a>
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="terms.html">Terms & Conditions</a>
+        </nav>
+        <p class="copyright">© 2025 PrudentProExchange. All Rights Reserved. SEC Registration #0001230714</p>
+      </div>
+    </footer>
+  </div>
+
+  <button id="back-to-top" aria-label="Back to top">🚀</button>
+
+  <!-- Scripts -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="profile-settings.js"></script>
 </body>
 </html>
