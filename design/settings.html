@@ -1,0 +1,141 @@
+<!-- settings.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings</title>
+  <link rel="stylesheet" href="css/settings.css">
+</head>
+<body>
+  <section class="settings-page container">
+    <header class="settings-header">
+      <h1>Settings</h1>
+    </header>
+
+    <nav class="tab-navigation">
+      <button class="tab-button active" data-tab="profile">Profile Preferences</button>
+      <button class="tab-button" data-tab="theme">Theme &amp; Appearance</button>
+      <button class="tab-button" data-tab="notifications">Notification Settings</button>
+      <button class="tab-button" data-tab="privacy">Privacy &amp; Data</button>
+      <button class="tab-button" data-tab="integrations">Integrations</button>
+    </nav>
+
+    <div class="tab-content">
+      <article id="profile" class="tab-pane active">
+        <h2>Profile Preferences</h2>
+        <form>
+          <div class="form-group">
+            <label for="display-name">Display Name</label>
+            <input type="text" id="display-name" name="display-name" placeholder="Enter your display name">
+          </div>
+          <div class="form-group">
+            <label for="avatar">Avatar</label>
+            <div class="avatar-upload">
+              <img id="avatar-preview" src="default-avatar.png" alt="Avatar preview">
+              <input type="file" id="avatar" name="avatar" accept="image/*">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="timezone">Timezone</label>
+            <select id="timezone" name="timezone">
+              <option value="UTC">UTC</option>
+              <option value="America/New_York">America/New_York</option>
+              <!-- more options… -->
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="locale">Locale</label>
+            <select id="locale" name="locale">
+              <option value="en-US">English (US)</option>
+              <option value="en-GB">English (UK)</option>
+              <!-- more options… -->
+            </select>
+          </div>
+          <button type="submit" class="submit-btn">Save Changes</button>
+        </form>
+      </article>
+
+      <article id="theme" class="tab-pane">
+        <h2>Theme &amp; Appearance</h2>
+        <form>
+          <div class="form-group">
+            <label>Theme Mode</label>
+            <div class="theme-mode">
+              <label><input type="radio" name="theme-mode" value="light" checked> Light</label>
+              <label><input type="radio" name="theme-mode" value="dark"> Dark</label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="accent-color">Accent Color</label>
+            <input type="color" id="accent-color" name="accent-color" value="#ffd700">
+          </div>
+          <div class="form-group">
+            <label for="font-size">Font Size</label>
+            <select id="font-size" name="font-size">
+              <option value="small">Small</option>
+              <option value="medium" selected>Medium</option>
+              <option value="large">Large</option>
+            </select>
+          </div>
+          <button type="submit" class="submit-btn">Apply Changes</button>
+        </form>
+      </article>
+
+      <article id="notifications" class="tab-pane">
+        <h2>Notification Settings</h2>
+        <form>
+          <div class="form-group">
+            <label>Notification Types</label>
+            <div class="notification-types">
+              <label><input type="checkbox" name="email" checked> Email</label>
+              <label><input type="checkbox" name="sms"> SMS</label>
+              <label><input type="checkbox" name="push"> Push Notifications</label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Digest Frequency</label>
+            <div class="digest-frequency">
+              <label><input type="radio" name="digest" value="instant" checked> Instant</label>
+              <label><input type="radio" name="digest" value="daily"> Daily Summary</label>
+              <label><input type="radio" name="digest" value="weekly"> Weekly Summary</label>
+            </div>
+          </div>
+          <button type="submit" class="submit-btn">Save Preferences</button>
+        </form>
+      </article>
+
+      <article id="privacy" class="tab-pane">
+        <h2>Privacy &amp; Data</h2>
+        <div class="privacy-actions">
+          <button id="export-data" class="copy-btn">Export My Data</button>
+          <button id="delete-account" class="copy-btn">Delete My Account</button>
+        </div>
+      </article>
+
+      <article id="integrations" class="tab-pane">
+        <h2>Integrations</h2>
+        <div class="integrations-section">
+          <h3>API Keys</h3>
+          <button id="generate-api-key" class="copy-btn">Generate New API Key</button>
+          <ul id="api-keys-list"></ul>
+        </div>
+        <div class="integrations-section">
+          <h3>Webhooks</h3>
+          <form id="webhook-form" class="form-inline">
+            <input type="url" name="webhook-url" placeholder="Enter webhook URL">
+            <button type="submit" class="submit-btn">Add Webhook</button>
+          </form>
+          <ul id="webhooks-list"></ul>
+        </div>
+        <div class="integrations-section">
+          <h3>Connected Services</h3>
+          <ul id="connected-services"></ul>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <script src="scripts.js"></script>
+</body>
+</html>
