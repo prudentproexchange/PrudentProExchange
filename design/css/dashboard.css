@@ -9,7 +9,7 @@
 }
 
 html {
-  overflow-x: hidden; /* Prevent double scrollbars */
+  overflow-x: hidden;
   overflow-y: auto;
 }
 
@@ -23,7 +23,7 @@ body {
   font-family: 'Poppins', sans-serif;
   background: #000;
   color: var(--text-color);
-  overflow-x: auto; /* Enable horizontal scrolling */
+  overflow-x: hidden; /* Disable horizontal scrolling */
   overflow-y: auto; /* Ensure vertical scrolling */
   line-height: 1.5;
 }
@@ -269,23 +269,24 @@ body {
   gap: 2rem;
   justify-content: center;
   margin-bottom: 1.5rem;
+  overflow-y: visible; /* Ensure vertical scrolling */
 }
 
+/* Updated Card Styles for Spherical Look */
 .card {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--glass-bg); /* From inline styles */
   padding: 2rem;
-  border: 2px solid var(--primary);
-  border-radius: 15px;
-  backdrop-filter: blur(15px);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
-  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  border: 1px solid var(--primary); /* From inline styles */
+  border-radius: 20px; /* Increased for spherical effect */
+  backdrop-filter: blur(10px); /* From inline styles */
+  box-shadow: 0 4px 8px var(--shadow); /* From inline styles */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   max-width: 100%;
 }
 
 .card:hover {
   transform: translateY(-10px);
   box-shadow: 0 12px 40px rgba(255, 215, 0, 0.5);
-  border-color: var(--primary-dark);
 }
 
 .card h2 {
@@ -341,6 +342,11 @@ body {
   transform: translateY(-2px);
 }
 
+.card .btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .card .invest-btn {
   display: block;
   margin: 0.75rem auto 0;
@@ -371,11 +377,86 @@ body {
   margin: 0.4rem 0;
 }
 
+/* New Styles for Investment Card */
+.blink {
+  animation: blink 2s infinite;
+}
+
+@keyframes blink {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+.investment-content {
+  overflow: hidden;
+  transition: max-height 0.5s ease, opacity 0.5s ease;
+  max-height: 0;
+  opacity: 0;
+}
+
+details[open] .investment-content {
+  max-height: 1000px; /* Large enough to accommodate content */
+  opacity: 1;
+}
+
+details[open] .blink {
+  display: none;
+}
+
+summary {
+  cursor: pointer;
+  font-size: 1.8rem;
+  color: var(--primary);
+  font-family: 'Playfair Display', serif;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  list-style: none;
+}
+
+summary::before {
+  content: '▶';
+  color: var(--primary);
+  transition: transform 0.3s ease;
+}
+
+details[open] summary::before {
+  transform: rotate(90deg);
+}
+
+/* Loading Spinner */
+.loading-spinner {
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-top: 4px solid var(--primary);
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Error Message */
+.error-message {
+  color: #ff4444;
+  background: rgba(255, 0, 0, 0.1);
+  padding: 10px;
+  border-radius: 5px;
+  margin: 10px 0;
+  display: none;
+}
+
 /* Transaction History */
 .transaction-history {
   margin-top: 1.5rem;
   max-width: 100%;
-  overflow-x: auto; /* Retain for table */
+  overflow-x: auto;
+  overflow-y: visible; /* Ensure vertical scrolling */
 }
 
 #txTable {
