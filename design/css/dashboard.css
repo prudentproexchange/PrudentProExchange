@@ -258,7 +258,7 @@ img, video, table, .card {
 /* Cards Grid */
 .cards-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Reduced from 250px */
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* Reduced from 200px */
   gap: 2rem;
   justify-content: center;
   margin-bottom: 1.5rem;
@@ -445,7 +445,7 @@ img, video, table, .card {
 /* Responsive Design */
 @media (min-width: 1200px) {
   .cards-grid {
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); /* Reduced from 280px */
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Reduced from 220px */
   }
 }
 
