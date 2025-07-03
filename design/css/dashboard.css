@@ -313,7 +313,7 @@ img, video, table, .card {
   margin-top: 0.75rem;
   font-style: italic;
 }
-el.card .btn {
+.card .btn {
   display: inline-block;
   padding: 0.6rem 1.2rem;
   background: linear-gradient(45deg, var(--primary), var(--primary-dark));
@@ -353,11 +353,6 @@ el.card .btn {
 }
 .investment-item p {
   margin: 0.4rem 0;
-}
-
-/* Make investment card span full width of the grid */
-.investment-card {
-  grid-column: 1 / -1;
 }
 
 /* Transaction History */
