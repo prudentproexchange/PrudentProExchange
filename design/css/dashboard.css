@@ -8,10 +8,13 @@
   --shadow: rgba(0, 0, 0, 0.5);
 }
 
-html {
-  overflow-x: hidden;
-  overflow-y: auto;
-  touch-action: pan-y; /* Allow vertical touch scrolling, prevent horizontal */
+/* === Global overflow lock & viewport width clamp === */
+html, body {
+  overflow-x: hidden;      /* never allow horizontal scroll */
+  overflow-y: auto;        /* only vertical scroll */
+  width: 100%;             /* prevent 100vw quirks */
+  max-width: 100vw;        /* safeguard against overflow */
+  touch-action: pan-y;     /* touch scrolling only vertically */
 }
 
 * {
@@ -24,12 +27,15 @@ body {
   font-family: 'Poppins', sans-serif;
   background: #000;
   color: var(--text-color);
-  overflow-x: hidden;
-  overflow-y: auto;
   line-height: 1.5;
-  touch-action: pan-y; /* Ensure vertical touch scrolling */
 }
 
+/* Clamp any wide media or cards so they never exceed viewport */
+img, video, table, .card {
+  max-width: 100%;
+}
+
+/* Background video and overlay */
 .bg-video {
   position: fixed;
   top: 0;
@@ -43,21 +49,12 @@ body {
 .overlay {
   position: relative;
   background: rgba(0, 0, 0, 0.7);
-  min-height: 100vh;
-  overflow-x: hidden; /* Explicitly prevent horizontal scrolling */
-  overflow-y: auto; /* Ensure vertical scrolling */
-  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
-}
-
-/* Ensure details and summary don't block scrolling */
-.investment-card details {
-  touch-action: pan-y; /* Allow vertical scrolling through details */
-}
-
-.investment-card summary {
-  touch-action: pan-y; /* Prevent summary from capturing touch events */
-  user-select: none; /* Prevent text selection from interfering */
-  -webkit-user-select: none; /* For Safari */
+  /* allow body to scroll—no trapped scroll here */
+  overflow-y: visible;
+  overflow-x: hidden;
+  /* let height grow naturally */
+  min-height: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Header */
@@ -65,10 +62,10 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1.5rem 2rem; /* Match invest.css profile-section padding */
-  background: rgba(255, 255, 255, 0.05); /* Match invest.css profile-section */
-  backdrop-filter: blur(10px); /* Match invest.css profile-section */
-  border-bottom: 1px solid rgba(255, 215, 0, 0.2); /* Match invest.css */
+  padding: 1.5rem 2rem;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 215, 0, 0.2);
   position: sticky;
   top: 0;
   z-index: 10;
@@ -88,7 +85,6 @@ body {
   cursor: pointer;
   transition: transform 0.3s ease;
 }
-
 #theme-toggle:hover {
   transform: rotate(180deg);
 }
@@ -96,13 +92,11 @@ body {
 .logo-link {
   margin-left: 0.75rem;
 }
-
 .logo-link img {
   height: 80px;
   width: auto;
   transition: transform 0.3s ease;
 }
-
 .logo-link img:hover {
   transform: scale(1.05);
 }
@@ -113,52 +107,45 @@ body {
   border: none;
   cursor: pointer;
   padding: 0.5rem;
-  transition: transform 0.3s ease, background 0.3s ease; /* Match invest.css button transitions */
+  transition: transform 0.3s ease, background 0.3s ease;
 }
-
 .hamburger span {
   display: block;
   width: 22px;
   height: 2px;
-  background: var(--primary); /* Gold, matching invest.css */
+  background: var(--primary);
   margin: 4px 0;
   transition: all 0.3s ease;
 }
-
 .hamburger:hover {
-  background: linear-gradient(45deg, #ffd700, #cca300); /* Match invest.css select-plan-btn */
+  background: linear-gradient(45deg, #ffd700, #cca300);
 }
-
 .hamburger.active span:nth-child(1) {
   transform: rotate(45deg) translate(4px, 4px);
 }
-
 .hamburger.active span:nth-child(2) {
   opacity: 0;
 }
-
 .hamburger.active span:nth-child(3) {
   transform: rotate(-45deg) translate(6px, -6px);
 }
 
+/* Full-screen drawer without scrollbar creep */
 .nav-drawer {
   position: fixed;
   top: 0;
-  right: -100%;
-  width: 100%;
+  right: -100vw;           /* slide off exactly one viewport width */
+  width: 100vw;            /* fill exactly the viewport */
   height: 100vh;
-  background: #1a1a1a; /* Solid dark background, no glass effect */
-  border-left: 1px solid rgba(255, 215, 0, 0.2); /* Match invest.css border */
-  transition: right СР
-
-System: 0.3s ease;
+  background: #1a1a1a;
+  border-left: 1px solid rgba(255, 215, 0, 0.2);
+  transition: right 0.3s ease;
   z-index: 20;
   padding: 1rem;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
 }
-
 .nav-drawer.open {
   right: 0;
 }
@@ -173,37 +160,34 @@ System: 0.3s ease;
   z-index: 19;
   display: none;
 }
-
 .nav-drawer.open ~ .nav-overlay {
   display: block;
 }
 
 .nav-drawer a {
   padding: 0.5rem 1rem;
-  color: #e0e0ff; /* Match invest.css text color */
+  color: #e0e0ff;
   text-decoration: none;
-  font-size: 1rem; /* Match invest.css font sizes */
-  font-family: 'Poppins', sans-serif; /* Match invest.css */
+  font-size: 1rem;
+  font-family: 'Poppins', sans-serif;
   transition: color 0.3s ease;
 }
-
-.nav-drawer a:hover, .nav-drawer a.active {
-  color: var(--primary); /* Gold, matching invest.css footer-links */
-  text-decoration: underline; /* Match invest.css footer-links hover */
+.nav-drawer a:hover,
+.nav-drawer a.active {
+  color: var(--primary);
+  text-decoration: underline;
 }
 
 .account-menu {
   position: relative;
 }
-
 .account-toggle {
   padding: 0.5rem 1rem;
-  color: #e0e0ff; /* Match invest.css */
-  font-size: 1rem; /* Match invest.css */
-  font-family: 'Poppins', sans-serif; /* Match invest.css */
+  color: #e0e0ff;
+  font-size: 1rem;
+  font-family: 'Poppins', sans-serif;
   cursor: pointer;
 }
-
 .nav-drawer .submenu {
   display: none;
   list-style: none;
@@ -211,24 +195,20 @@ System: 0.3s ease;
   background: rgba(0, 0, 0, 0.8);
   border-radius: 5px;
 }
-
 .nav-drawer .submenu.open {
   display: block;
 }
-
 .nav-drawer .submenu li {
   padding: 0.4rem 1rem;
 }
-
 .nav-drawer .submenu a {
-  color: #e0e0ff; /* Match invest.css */
-  font-size: 0.9rem; /* Match invest.css */
-  font-family: 'Poppins', sans-serif; /* Match invest.css */
+  color: #e0e0ff;
+  font-size: 0.9rem;
+  font-family: 'Poppins', sans-serif;
 }
-
 .nav-drawer .submenu a:hover {
-  color: var(--primary); /* Gold, matching invest.css */
-  text-decoration: underline; /* Match invest.css footer-links */
+  color: var(--primary);
+  text-decoration: underline;
 }
 
 /* Profile Section */
@@ -259,7 +239,6 @@ System: 0.3s ease;
   object-fit: cover;
   transition: transform 0.3s ease;
 }
-
 .avatar:hover {
   transform: scale(1.05);
 }
@@ -295,52 +274,43 @@ System: 0.3s ease;
   backdrop-filter: blur(15px);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
   transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-  max-width: 100%;
 }
-
 .card:hover {
   transform: translateY(-10px);
   box-shadow: 0 12px 40px rgba(255, 215, 0, 0.5);
   border-color: var(--primary-dark);
 }
-
 .card h2 {
   font-size: 1.5rem;
   color: var(--primary);
   margin-bottom: 0.75rem;
   font-family: 'Playfair Display', serif;
 }
-
 .card p, .card ul {
   font-size: 0.95rem;
-  color: #e0e0ff;
+  color: #e0eff;
 }
-
 .card ul {
   list-style: none;
   padding: 0;
 }
-
 .card ul li {
   margin-bottom: 0.4rem;
   padding-left: 1.2rem;
   position: relative;
 }
-
 .card ul li:before {
   content: '•';
   color: var(--primary);
   position: absolute;
   left: 0;
 }
-
 .card .brand {
   font-size: 0.85rem;
   color: var(--primary);
   margin-top: 0.75rem;
   font-style: italic;
 }
-
 .card .btn {
   display: inline-block;
   padding: 0.6rem 1.2rem;
@@ -351,18 +321,15 @@ System: 0.3s ease;
   font-weight: 600;
   transition: background 0.3s ease, transform 0.3s ease;
 }
-
 .card .btn:hover {
   background: linear-gradient(45deg, var(--primary-dark), var(--primary));
   transform: translateY(-2px);
 }
-
 .card .invest-btn {
   display: block;
   margin: 0.75rem auto 0;
   text-align: center;
 }
-
 .card input[readonly] {
   width: 100%;
   padding: 0.5rem;
@@ -382,7 +349,6 @@ System: 0.3s ease;
   border-radius: 5px;
   background: rgba(0, 0, 0, 0.5);
 }
-
 .investment-item p {
   margin: 0.4rem 0;
 }
@@ -390,17 +356,14 @@ System: 0.3s ease;
 /* Transaction History */
 .transaction-history {
   margin-top: 1.5rem;
-  max-width: 100%;
   overflow-x: auto;
 }
-
 #txTable {
   width: 100%;
   border-collapse: collapse;
   background: var(--glass-bg);
   backdrop-filter: blur(10px);
 }
-
 #txTable th, #txTable td {
   padding: 0.6rem;
   border: 1px solid var(--primary);
@@ -408,7 +371,6 @@ System: 0.3s ease;
   text-align: left;
   font-size: 0.9rem;
 }
-
 #txTable th {
   background: var(--primary);
   color: #000;
@@ -425,19 +387,16 @@ System: 0.3s ease;
   max-width: 1200px;
   margin: 0 auto;
 }
-
 .footer-content p, .footer-links a {
   color: #e0e0ff;
   margin: 0.4rem 0;
   font-size: 0.9rem;
 }
-
 .footer-links a {
   margin: 0 0.75rem;
   text-decoration: none;
   transition: color 0.3s ease;
 }
-
 .footer-links a:hover {
   color: var(--primary);
 }
@@ -456,19 +415,16 @@ System: 0.3s ease;
   font-size: 1rem;
   transition: transform 0.3s ease;
 }
-
 #back-to-top:hover {
   transform: scale(1.1);
 }
 
 /* Referral link container */
 .referral-link-container {
-  display: flex !important; /* Enforce visibility on all screen sizes */
+  display: flex !important;
   gap: 0.5rem;
   align-items: center;
 }
-
-/* Copy button */
 .copy-btn {
   background: var(--primary);
   color: #000;
@@ -482,7 +438,6 @@ System: 0.3s ease;
   font-size: 0.85rem;
   transition: background 0.3s ease;
 }
-
 .copy-btn:hover {
   background: var(--primary-dark);
 }
@@ -539,6 +494,18 @@ System: 0.3s ease;
   .card h2 {
     font-size: 1.3rem;
   }
+  .referral-link-container {
+    flex-direction: column;
+    display: flex !important;
+  }
+  .referral-link-container input,
+  .referral-link-container button {
+    width: 100%;
+  }
+  #txTable th, #txTable td {
+    font-size: 0.8rem;
+    padding: 0.5rem;
+  }
 }
 
 @media (max-width: 480px) {
@@ -568,7 +535,7 @@ System: 0.3s ease;
   }
   .referral-link-container {
     flex-direction: column;
-    display: flex !important; /* Enforce visibility on mobile */
+    display: flex !important;
   }
   .referral-link-container input,
   .referral-link-container button {
