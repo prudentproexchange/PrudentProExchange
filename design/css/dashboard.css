@@ -49,10 +49,8 @@ img, video, table, .card {
 .overlay {
   position: relative;
   background: rgba(0, 0, 0, 0.7);
-  /* allow body to scroll—no trapped scroll here */
-  overflow-y: visible;
+  overflow-y: auto;          /* Changed from visible to auto */
   overflow-x: hidden;
-  /* let height grow naturally */
   min-height: auto;
   -webkit-overflow-scrolling: touch;
 }
