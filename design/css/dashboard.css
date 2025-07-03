@@ -48,16 +48,14 @@ body {
   position: sticky;
   top: 0;
   z-index: 10;
-  max-width: 1200px; /* Match main content and footer width */
-  width: 100%; /* Ensure header fills container */
-  margin: 0 auto; /* Center the header */
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .header-right {
   display: flex;
   align-items: center;
   gap: 1rem;
-  flex-shrink: 0; /* Prevent theme toggle and hamburger from shrinking */
 }
 
 #theme-toggle {
@@ -74,11 +72,11 @@ body {
 }
 
 .logo-link {
-  margin-left: 1rem; /* Space between toggle & logo */
+  margin-left: 1rem;
 }
 
 .logo-link img {
-  height: 150px; /* Reduced from 210px to fit better in 1200px width */
+  height: 210px;
   width: auto;
   transition: transform 0.3s ease;
 }
@@ -88,7 +86,7 @@ body {
 }
 
 .hamburger {
-  display: none; /* Hidden by default on desktop */
+  display: none;
   background: none;
   border: none;
   cursor: pointer;
@@ -161,7 +159,8 @@ body {
   transition: color 0.3s ease;
 }
 
-.nav-drawer a:hover, .nav-drawer a.active {
+.nav-drawer a:hover,
+.nav-drawer a.active {
   color: var(--primary);
 }
 
@@ -211,8 +210,8 @@ body {
   padding: 1.5rem 2rem;
   background: var(--glass-bg);
   backdrop-filter: blur(10px);
-  max-width: 1200px; /* Match main content and footer width */
-  margin: 0 auto; /* Center the profile section */
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .profile-container {
@@ -249,7 +248,7 @@ body {
 /* Cards Grid */
 .cards-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, 266px);
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Adjusted for flexibility */
   justify-content: center;
   gap: 2rem;
   margin-bottom: 2rem;
@@ -259,10 +258,9 @@ body {
   background: var(--glass-bg);
   padding: 2rem;
   border: 1px solid var(--primary);
-  border-radius: 20px; /* Aligned with inline HTML <style> */
+  border-radius: 10px;
   backdrop-filter: blur(10px);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  box-shadow: 0 4px 8px var(--shadow); /* Aligned with inline HTML <style> */
 }
 
 .card:hover {
@@ -277,9 +275,11 @@ body {
   font-family: 'Playfair Display', serif;
 }
 
-.card p, .card ul {
+.card p,
+.card ul {
   font-size: 1rem;
   color: #e0e0ff;
+  word-break: break-word; /* Prevent text overflow */
 }
 
 .card ul {
@@ -367,7 +367,8 @@ body {
   backdrop-filter: blur(10px);
 }
 
-#txTable th, #txTable td {
+#txTable th,
+#txTable td {
   padding: 0.75rem;
   border: 1px solid var(--primary);
   color: #e0e0ff;
@@ -391,7 +392,8 @@ body {
   margin: 0 auto;
 }
 
-.footer-content p, .footer-links a {
+.footer-content p,
+.footer-links a {
   color: #e0e0ff;
   margin: 0.5rem 0;
 }
@@ -456,18 +458,6 @@ body {
 }
 
 /* Responsive Design */
-@media (min-width: 769px) {
-  .hamburger {
-    display: none; /* Explicitly hide hamburger on desktop */
-  }
-  .nav-drawer {
-    display: none; /* Hide nav drawer on desktop */
-  }
-  .nav-overlay {
-    display: none; /* Hide overlay on desktop */
-  }
-}
-
 @media (max-width: 1024px) {
   .site-header {
     padding: 1rem;
@@ -475,14 +465,11 @@ body {
   .profile-section {
     padding: 1rem;
   }
-  .logo-link img {
-    height: 120px; /* Adjusted for smaller desktop screens */
-  }
 }
 
 @media (max-width: 768px) {
   .hamburger {
-    display: block; /* Show hamburger on mobile */
+    display: block;
   }
   .site-header {
     padding: 0.75rem 1rem;
@@ -502,17 +489,18 @@ body {
     font-size: 72px;
   }
   .dashboard-page.container {
-    padding: 1rem;
+    padding: 1rem; /* Adjusted padding */
   }
   .cards-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr; /* Single column for simplicity */
+  }
+  .card {
+    padding: 1.5rem; /* Reduced padding */
   }
 }
 
 @media (max-width: 600px) {
-  .cards-grid {
-    grid-template-columns: 1fr;
-  }
+  /* No additional changes needed here; covered by 768px and 480px */
 }
 
 @media (max-width: 480px) {
@@ -539,8 +527,11 @@ body {
   .welcome-message {
     font-size: 1rem;
   }
+  .dashboard-page.container {
+    padding: 0.5rem; /* Further reduced padding */
+  }
   .card {
-    padding: 1.5rem;
+    padding: 1rem; /* Further reduced padding */
   }
   .card h2 {
     font-size: 1.5rem;
