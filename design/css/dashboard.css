@@ -11,6 +11,7 @@
 html {
   overflow-x: hidden;
   overflow-y: auto;
+  touch-action: pan-y; /* Allow vertical touch scrolling, prevent horizontal */
 }
 
 * {
@@ -23,9 +24,10 @@ body {
   font-family: 'Poppins', sans-serif;
   background: #000;
   color: var(--text-color);
-  overflow-x: hidden; /* Disable horizontal scrolling */
-  overflow-y: auto; /* Ensure vertical scrolling */
+  overflow-x: hidden;
+  overflow-y: auto;
   line-height: 1.5;
+  touch-action: pan-y; /* Ensure vertical touch scrolling */
 }
 
 .bg-video {
@@ -42,7 +44,9 @@ body {
   position: relative;
   background: rgba(0, 0, 0, 0.7);
   min-height: 100vh;
+  overflow-x: hidden; /* Explicitly prevent horizontal scrolling */
   overflow-y: auto; /* Ensure vertical scrolling */
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
 }
 
 /* Header */
@@ -50,10 +54,10 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1.5rem 2rem;
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+  padding: 1.5rem 2rem; /* Match invest.css profile-section padding */
+  background: rgba(255, 255, 255, 0.05); /* Match invest.css profile-section */
+  backdrop-filter: blur(10px); /* Match invest.css profile-section */
+  border-bottom: 1px solid rgba(255, 215, 0, 0.2); /* Match invest.css */
   position: sticky;
   top: 0;
   z-index: 10;
@@ -98,20 +102,20 @@ body {
   border: none;
   cursor: pointer;
   padding: 0.5rem;
-  transition: transform 0.3s ease, background 0.3s ease;
+  transition: transform 0.3s ease, background 0.3s ease; /* Match invest.css button transitions */
 }
 
 .hamburger span {
   display: block;
   width: 22px;
   height: 2px;
-  background: var(--primary);
+  background: var(--primary); /* Gold, matching invest.css */
   margin: 4px 0;
   transition: all 0.3s ease;
 }
 
 .hamburger:hover {
-  background: linear-gradient(45deg, #ffd700, #cca300);
+  background: linear-gradient(45deg, #ffd700, #cca300); /* Match invest.css select-plan-btn */
 }
 
 .hamburger.active span:nth-child(1) {
@@ -132,8 +136,8 @@ body {
   right: -100%;
   width: 100%;
   height: 100vh;
-  background: #1a1a1a;
-  border-left: 1px solid rgba(255, 215, 0, 0.2);
+  background: #1a1a1a; /* Solid dark background, no glass effect */
+  border-left: 1px solid rgba(255, 215, 0, 0.2); /* Match invest.css border */
   transition: right 0.3s ease;
   z-index: 20;
   padding: 1rem;
@@ -163,16 +167,16 @@ body {
 
 .nav-drawer a {
   padding: 0.5rem 1rem;
-  color: #e0e0ff;
+  color: #e0e0ff; /* Match invest.css text color */
   text-decoration: none;
-  font-size: 1rem;
-  font-family: 'Poppins', sans-serif;
+  font-size: 1rem; /* Match invest.css font sizes */
+  font-family: 'Poppins', sans-serif; /* Match invest.css */
   transition: color 0.3s ease;
 }
 
 .nav-drawer a:hover, .nav-drawer a.active {
-  color: var(--primary);
-  text-decoration: underline;
+  color: var(--primary); /* Gold, matching invest.css footer-links */
+  text-decoration: underline; /* Match invest.css footer-links hover */
 }
 
 .account-menu {
@@ -181,9 +185,9 @@ body {
 
 .account-toggle {
   padding: 0.5rem 1rem;
-  color: #e0e0ff;
-  font-size: 1rem;
-  font-family: 'Poppins', sans-serif;
+  color: #e0e0ff; /* Match invest.css */
+  font-size: 1rem; /* Match invest.css */
+  font-family: 'Poppins', sans-serif; /* Match invest.css */
   cursor: pointer;
 }
 
@@ -204,14 +208,14 @@ body {
 }
 
 .nav-drawer .submenu a {
-  color: #e0e0ff;
-  font-size: 0.9rem;
-  font-family: 'Poppins', sans-serif;
+  color: #e0e0ff; /* Match invest.css */
+  font-size: 0.9rem; /* Match invest.css */
+  font-family: 'Poppins', sans-serif; /* Match invest.css */
 }
 
 .nav-drawer .submenu a:hover {
-  color: var(--primary);
-  text-decoration: underline;
+  color: var(--primary); /* Gold, matching invest.css */
+  text-decoration: underline; /* Match invest.css footer-links */
 }
 
 /* Profile Section */
@@ -259,7 +263,6 @@ body {
   max-width: 1200px;
   margin: 0 auto;
   padding: 1.5rem;
-  min-height: 100vh; /* Ensure enough height for scrolling */
 }
 
 /* Cards Grid */
@@ -269,24 +272,23 @@ body {
   gap: 2rem;
   justify-content: center;
   margin-bottom: 1.5rem;
-  overflow-y: visible; /* Ensure vertical scrolling */
 }
 
-/* Updated Card Styles for Spherical Look */
 .card {
-  background: var(--glass-bg); /* From inline styles */
+  background: rgba(255, 255, 255, 0.1);
   padding: 2rem;
-  border: 1px solid var(--primary); /* From inline styles */
-  border-radius: 20px; /* Increased for spherical effect */
-  backdrop-filter: blur(10px); /* From inline styles */
-  box-shadow: 0 4px 8px var(--shadow); /* From inline styles */
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 2px solid var(--primary);
+  border-radius: 15px;
+  backdrop-filter: blur(15px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
   max-width: 100%;
 }
 
 .card:hover {
   transform: translateY(-10px);
   box-shadow: 0 12px 40px rgba(255, 215, 0, 0.5);
+  border-color: var(--primary-dark);
 }
 
 .card h2 {
@@ -342,11 +344,6 @@ body {
   transform: translateY(-2px);
 }
 
-.card .btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
 .card .invest-btn {
   display: block;
   margin: 0.75rem auto 0;
@@ -377,86 +374,11 @@ body {
   margin: 0.4rem 0;
 }
 
-/* New Styles for Investment Card */
-.blink {
-  animation: blink 2s infinite;
-}
-
-@keyframes blink {
-  0% { opacity: 1; }
-  50% { opacity: 0.5; }
-  100% { opacity: 1; }
-}
-
-.investment-content {
-  overflow: hidden;
-  transition: max-height 0.5s ease, opacity 0.5s ease;
-  max-height: 0;
-  opacity: 0;
-}
-
-details[open] .investment-content {
-  max-height: 1000px; /* Large enough to accommodate content */
-  opacity: 1;
-}
-
-details[open] .blink {
-  display: none;
-}
-
-summary {
-  cursor: pointer;
-  font-size: 1.8rem;
-  color: var(--primary);
-  font-family: 'Playfair Display', serif;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  list-style: none;
-}
-
-summary::before {
-  content: '▶';
-  color: var(--primary);
-  transition: transform 0.3s ease;
-}
-
-details[open] summary::before {
-  transform: rotate(90deg);
-}
-
-/* Loading Spinner */
-.loading-spinner {
-  border: 4px solid rgba(255, 255, 255, 0.3);
-  border-top: 4px solid var(--primary);
-  border-radius: 50%;
-  width: 24px;
-  height: 24px;
-  animation: spin 1s linear infinite;
-  margin: 0 auto;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-/* Error Message */
-.error-message {
-  color: #ff4444;
-  background: rgba(255, 0, 0, 0.1);
-  padding: 10px;
-  border-radius: 5px;
-  margin: 10px 0;
-  display: none;
-}
-
 /* Transaction History */
 .transaction-history {
   margin-top: 1.5rem;
   max-width: 100%;
   overflow-x: auto;
-  overflow-y: visible; /* Ensure vertical scrolling */
 }
 
 #txTable {
@@ -528,7 +450,7 @@ details[open] summary::before {
 
 /* Referral link container */
 .referral-link-container {
-  display: flex !important;
+  display: flex !important; /* Enforce visibility on all screen sizes */
   gap: 0.5rem;
   align-items: center;
 }
@@ -633,7 +555,7 @@ details[open] summary::before {
   }
   .referral-link-container {
     flex-direction: column;
-    display: flex !important;
+    display: flex !important; /* Enforce visibility on mobile */
   }
   .referral-link-container input,
   .referral-link-container button {
