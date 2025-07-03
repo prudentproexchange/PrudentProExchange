@@ -43,10 +43,10 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem 2rem; /* Matches invest.css container padding */
+  padding: 2rem; /* Matches invest.css .invest-page.container */
   background: var(--glass-bg);
   backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+  border-bottom: 1px solid rgba(255, 215, 0, 0.2); /* Matches invest.css */
   position: sticky;
   top: 0;
   z-index: 10;
@@ -78,7 +78,7 @@ body {
 }
 
 .logo-link img {
-  height: 80px;
+  height: 80px; /* Matches invest.css proportionality */
   width: auto;
   transition: transform 0.3s ease;
 }
@@ -244,53 +244,57 @@ body {
 
 /* Main Content */
 .dashboard-page.container {
-  max-width: 1200px;
+  max-width: 1200px; /* Matches invest.css */
   margin: 0 auto;
-  padding: 2rem; /* Matches invest.css container */
+  padding: 2rem; /* Matches invest.css .invest-page.container */
 }
 
 /* Cards Grid */
 .cards-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Matches invest.css plans-grid */
-  gap: 2rem; /* Matches invest.css */
-  margin-bottom: 3rem; /* Matches invest.css */
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem; /* Matches invest.css .plans-grid */
+  justify-content: center;
+  margin-bottom: 3rem; /* Matches invest.css .plans-grid */
 }
 
 .card {
-  background: rgba(255, 255, 255, 0.1); /* Matches invest.css plan-card */
-  padding: 2rem; /* Matches invest.css */
-  border: 2px solid var(--primary); /* Matches invest.css */
-  border-radius: 15px; /* Matches invest.css */
-  backdrop-filter: blur(15px); /* Matches invest.css */
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37); /* Matches invest.css */
-  text-align: center; /* Matches invest.css */
-  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease; /* Matches invest.css */
+  background: var(--glass-bg);
+  padding: 2rem; /* Matches invest.css .plan-card */
+  border: 2px solid var(--primary); /* Matches invest.css .plan-card */
+  border-radius: 15px; /* Matches invest.css .plan-card */
+  backdrop-filter: blur(15px); /* Matches invest.css .plan-card */
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37); /* Matches invest.css .plan-card */
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease; /* Matches invest.css .plan-card */
+  max-width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  max-width: 100%;
+  align-items: center; /* Matches invest.css .plan-card */
+  cursor: pointer; /* Matches invest.css .plan-card */
+  outline: none; /* Matches invest.css .plan-card */
 }
 
-.card:hover {
-  transform: translateY(-10px); /* Matches invest.css */
-  box-shadow: 0 12px 40px rgba(255, 215, 0, 0.5); /* Matches invest.css */
-  border-color: var(--primary-dark); /* Matches invest.css */
+.card:hover,
+.card:focus {
+  transform: translateY(-10px); /* Matches invest.css .plan-card */
+  box-shadow: 0 12px 40px rgba(255, 215, 0, 0.5); /* Matches invest.css .plan-card */
+  border-color: var(--primary-dark); /* Matches invest.css .plan-card */
 }
 
 .card h2 {
-  font-size: 1.75rem; /* Matches invest.css plan-card h3 */
+  font-size: 1.75rem; /* Matches invest.css .plan-card h3 */
   color: var(--primary);
-  font-weight: 700;
-  margin-bottom: 0.5rem; /* Matches invest.css */
-  font-family: 'Playfair Display', serif;
+  margin-bottom: 0.5rem; /* Matches invest.css .plan-card h3 */
+  font-family: 'Playfair Display', serif; /* Matches invest.css .plan-card h3 */
+  font-weight: 700; /* Matches invest.css .plan-card h3 */
 }
 
 .card p, .card ul {
-  font-size: 1.25rem; /* Matches invest.css plan-card p */
+  font-size: 1.25rem; /* Matches invest.css .plan-card p */
   color: #e0e0ff;
-  font-weight: 500; /* Matches invest.css */
-  margin-bottom: 1rem;
+  font-weight: 500; /* Matches invest.css .plan-card p */
+  margin-bottom: 1rem; /* Matches invest.css .plan-card p */
+  font-family: 'Poppins', sans-serif; /* Matches invest.css .plan-card p */
 }
 
 .card ul {
@@ -312,36 +316,29 @@ body {
 }
 
 .card .brand {
-  font-size: 0.9rem; /* Slightly larger for readability */
+  font-size: 0.85rem;
   color: var(--primary);
   margin-top: 0.75rem;
   font-style: italic;
 }
 
 .card .btn {
-  padding: 0.75rem 1.5rem; /* Matches invest.css select-plan-btn */
-  background: linear-gradient(45deg, var(--primary), var(--primary-dark));
+  display: inline-block;
+  padding: 0.75rem 1.5rem; /* Matches invest.css .select-plan-btn */
+  background: linear-gradient(45deg, var(--primary), var(--primary-dark)); /* Matches invest.css .select-plan-btn */
   color: #000;
-  border: none; /* Matches invest.css */
+  text-decoration: none;
   border-radius: 5px;
-  font-size: 1rem; /* Matches invest.css */
-  font-weight: 600;
-  font-family: 'Poppins', sans-serif;
-  cursor: pointer;
-  transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease; /* Matches invest.css */
+  font-size: 1rem; /* Matches invest.css .select-plan-btn */
+  font-weight: 600; /* Matches invest.css .select-plan-btn */
+  font-family: 'Poppins', sans-serif; /* Matches invest.css .select-plan-btn */
+  transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease; /* Matches invest.css .select-plan-btn */
 }
 
-.card .btn:hover:not(:disabled) {
-  background: linear-gradient(45deg, var(--primary-dark), var(--primary));
-  transform: scale(1.05); /* Matches invest.css */
-  box-shadow: 0 0 15px rgba(255, 215, 0, 0.7); /* Matches invest.css */
-}
-
-.card .btn:disabled {
-  background: #666; /* Matches invest.css */
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
+.card .btn:hover {
+  background: linear-gradient(45deg, var(--primary-dark), var(--primary)); /* Matches invest.css .select-plan-btn */
+  transform: scale(1.05); /* Matches invest.css .select-plan-btn */
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.7); /* Matches invest.css .select-plan-btn */
 }
 
 .card .invest-btn {
@@ -351,22 +348,15 @@ body {
 }
 
 .card input[readonly] {
-  padding: 0.75rem; /* Matches invest.css input */
   width: 100%;
-  max-width: 300px; /* Matches invest.css */
-  margin: 1rem 0;
-  border: 1px solid var(--primary);
+  padding: 0.75rem; /* Matches invest.css .plan-card input[type="number"] */
+  margin: 1rem 0; /* Matches invest.css .plan-card input[type="number"] */
+  background: rgba(255, 255, 255, 0.1); /* Matches invest.css .plan-card input[type="number"] */
+  border: 1px solid var(--primary); /* Matches invest.css .plan-card input[type="number"] */
+  color: #e0e0ff; /* Matches invest.css .plan-card input[type="number"] */
   border-radius: 5px;
-  background: rgba(255, 255, 255, 0.1); /* Matches invest.css */
-  color: #e0e0ff;
-  font-size: 1rem; /* Matches invest.css */
-  font-family: 'Poppins', sans-serif;
-  transition: border-color 0.3s ease;
-}
-
-.card input[readonly]:focus {
-  border-color: var(--primary-dark); /* Matches invest.css */
-  outline: none;
+  font-size: 1rem; /* Matches invest.css .plan-card input[type="number"] */
+  font-family: 'Poppins', sans-serif; /* Matches invest.css .plan-card input[type="number"] */
 }
 
 /* Investment Card Styles */
@@ -413,7 +403,7 @@ body {
 /* Footer */
 .site-footer {
   background: var(--glass-bg);
-  padding: 2rem; /* Matches invest.css */
+  padding: 2rem; /* Matches invest.css .site-footer */
   border-top: 1px solid var(--primary);
   backdrop-filter: blur(10px);
   text-align: center;
@@ -489,19 +479,19 @@ body {
 /* Responsive Design */
 @media (min-width: 1200px) {
   .cards-grid {
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Slightly larger for large screens */
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   }
 }
 
 @media (max-width: 1024px) {
   .site-header {
-    padding: 0.75rem 1rem;
+    padding: 1rem; /* Matches invest.css adjustment */
   }
   .profile-section {
     padding: 1rem;
   }
   .dashboard-page.container {
-    padding: 1rem;
+    padding: 1rem; /* Matches invest.css adjustment */
   }
 }
 
@@ -515,61 +505,58 @@ body {
   .profile-section {
     flex-direction: column;
     align-items: flex-start;
-    padding: 1rem;
+    padding: 1rem; /* Matches invest.css */
   }
   .profile-container {
     margin-right: 0;
     margin-bottom: 0.5rem;
   }
   .avatar {
-    width: 100px;
-    height: 100px;
-    font-size: 60px;
+    width: 120px; /* Matches invest.css */
+    height: 120px;
+    font-size: 72px;
   }
   .welcome-message {
-    font-size: 1.2rem;
+    font-size: 1.2rem; /* Matches invest.css */
   }
   .cards-grid {
-    grid-template-columns: 1fr; /* Matches invest.css plans-grid */
+    grid-template-columns: 1fr; /* Matches invest.css .plans-grid */
   }
   .card {
-    padding: 1.5rem; /* Matches invest.css plan-card */
+    padding: 1.5rem; /* Matches invest.css .plan-card */
   }
   .card h2 {
-    font-size: 1.5rem; /* Matches invest.css plan-card h3 */
+    font-size: 1.5rem; /* Matches invest.css .plan-card h3 */
   }
-  .card p, .card ul {
-    font-size: 1rem; /* Matches invest.css plan-card p */
-  }
-  .card input[readonly] {
-    max-width: 100%; /* Matches invest.css */
+  .card p {
+    font-size: 1rem; /* Matches invest.css .plan-card p */
   }
 }
 
 @media (max-width: 480px) {
   .site-header {
-    padding: 0.5rem 1rem;
+    padding: 0.5rem;
   }
   .logo-link img {
-    height: 50px;
+    height: 50px; /* Matches invest.css proportionality */
   }
   .avatar {
-    width: 80px;
-    height: 80px;
-    font-size: 48px;
+    width: 120px; /* Matches invest.css */
+    height: 120px;
+    font-size: 72px;
   }
   .welcome-message {
-    font-size: 1rem;
+    font-size: 1rem; /* Matches invest.css */
   }
   .card {
-    padding: 1.5rem;
+    padding: 1.5rem; /* Matches invest.css .plan-card */
   }
   .card h2 {
-    font-size: 1.5rem;
+    font-size: 1.5rem; /* Matches invest.css .plan-card h3 */
   }
   .card .btn {
-    padding: 0.5rem 0.75rem;
-    font-size: 0.85rem;
+    padding: 0.75rem 1.5rem; /* Matches invest.css .select-plan-btn */
+    font-size: 1rem; /* Matches invest.css .select-plan-btn */
   }
   .referral-link-container {
     flex-direction: column;
