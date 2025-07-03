@@ -1,282 +1,459 @@
-document.addEventListener('DOMContentLoaded', () => {
-    // Predefined options for select elements
-    const timezones = ['UTC', 'America/New_York', 'Europe/London', 'Asia/Tokyo'];
-    const locales = ['en-US', 'fr-FR', 'es-ES', 'de-DE'];
+// Initialize AOS
+AOS.init({ duration: 800, once: true });
 
-    // Helper function to populate select elements
-    function populateSelect(id, options, selected) {
-        const select = document.getElementById(id);
-        select.innerHTML = ''; // Clear existing options
-        options.forEach(option => {
-            const opt = document.createElement('option');
-            opt.value = option;
-            opt.textContent = option;
-            if (option === selected) opt.selected = true;
-            select.appendChild(opt);
-        });
-    }
+// Supabase client
+const { createClient } = supabase;
+const supabaseClient = createClient(
+  'https://iwkdznjqfbsfkscnbrkc.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU'
+);
 
-    // Fetch and populate user settings
-    async function fetchUserSettings() {
-        try {
-            const response = await fetch('/api/user-settings', {
-                headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') } // Adjust based on your auth
-            });
-            if (!response.ok) throw new Error('Failed to fetch user settings');
-            const data = await response.json();
-            document.getElementById('display-name').value = data.display_name || '';
-            document.getElementById('avatar-url').value = data.avatar_url || '';
-            populateSelect('timezone', timezones, data.timezone || 'UTC');
-            populateSelect('locale', locales, data.locale || 'en-US');
-            document.querySelector(`input[name="theme_mode"][value="${data.theme_mode || 'light'}"]`).checked = true;
-            document.getElementById('accent-color').value = data.accent_color || '#ffd700';
-            document.querySelector(`input[name="font_size"][value="${data.font_size || 'medium'}"]`).checked = true;
-            document.querySelector('input[name="notify_email"]').checked = data.notify_email || false;
-            document.querySelector('input[name="notify_sms"]').checked = data.notify_sms || false;
-            document.querySelector('input[name="notify_push"]').checked = data.notify_push || false;
-            document.querySelector(`input[name="digest_frequency"][value="${data.digest_frequency || 'instant'}"]`).checked = true;
-            document.getElementById('two-factor').checked = data.two_factor_enabled || false;
-        } catch (error) {
-            console.error('Error fetching user settings:', error);
-            alert('Unable to load user settings');
-        }
-    }
+// Utility functions
+function showError(elementId, message) {
+  const errorDiv = document.getElementById(elementId);
+  errorDiv.textContent = message;
+  errorDiv.style.display = 'block';
+  setTimeout(() => (errorDiv.style.display = 'none'), 5000);
+}
 
-    // Handle user settings form submission
-    async function handleUserSettingsSubmit(event) {
-        event.preventDefault();
-        const formData = new FormData(event.target);
-        const data = Object.fromEntries(formData.entries());
-        data.notify_email = formData.has('notify_email');
-        data.notify_sms = formData.has('notify_sms');
-        data.notify_push = formData.has('notify_push');
-        data.two_factor_enabled = formData.has('two_factor_enabled');
-        try {
-            const response = await fetch('/api/user-settings', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + localStorage.getItem('token') // Adjust based on your auth
-                },
-                body: JSON.stringify(data)
-            });
-            if (response.ok) {
-                alert('Settings updated successfully');
-            } else {
-                throw new Error('Failed to update settings');
-            }
-        } catch (error) {
-            console.error('Error updating settings:', error);
-            alert('Failed to update settings');
-        }
-ere    }
+function formatDateTime(timestamp) {
+  return new Date(timestamp).toLocaleString();
+}
 
-    // Fetch and display API keys
-    async function fetchApiKeys() {
-        try {
-            const response = await fetch('/api/api-keys', {
-                headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
-            });
-            if (!response.ok) throw new Error('Failed to fetch API keys');
-            const keys = await response.json();
-            const list = document.getElementById('api-keys-list');
-            list.innerHTML = '';
-            keys.forEach(key => {
-                const li = document.createElement('li');
-                li.textContent = `API Key: ${key.key} `;
-                const deleteBtn = document.createElement('button');
-                deleteBtn.textContent = 'Delete';
-                deleteBtn.onclick = () => deleteApiKey(key.id);
-                li.appendChild(deleteBtn);
-                list.appendChild(li);
-            });
-        } catch (error) {
-            console.error('Error fetching API keys:', error);
-            alert('Unable to load API keys');
-        }
-    }
-
-    // Add new API key
-    async function addApiKey() {
-        try {
-            const response = await fetch('/api/api-keys', {
-                method: 'POST',
-                headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
-            });
-            if (response.ok) {
-                fetchApiKeys(); // Refresh the list
-            } else {
-                throw new Error('Failed to add API key');
-            }
-        } catch (error) {
-            console.error('Error adding API key:', error);
-            alert('Failed to add API key');
-        }
-    }
-
-    // Delete API key
-    async function deleteApiKey(id) {
-        try {
-            const response = await fetch(`/api/api-keys/${id}`, {
-                method: 'DELETE',
-                headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
-            });
-            if (response.ok) {
-                fetchApiKeys(); // Refresh the list
-            } else {
-                throw new Error('Failed to delete API key');
-            }
-        } catch (error
-
-) {
-            console.error('Error deleting API key:', error);
-            alert('Failed to delete API key');
-        }
-    }
-
-    // Fetch and display webhooks
-    async function fetchWebhooks() {
-        try {
-            const response = await fetch('/api/webhooks', {
-                headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
-            });
-            if (!response.ok) throw new Error('Failed to fetch webhooks');
-            const webhooks = await response.json();
-            const list = document.getElementById('webhooks-list');
-            list.innerHTML = '';
-            webhooks.forEach(hook => {
-                const li = document.createElement('li');
-                li.textContent = `Webhook: ${hook.url} `;
-                const deleteBtn = document.createElement('button');
-                deleteBtn.textContent = 'Delete';
-                deleteBtn.onclick = () => deleteWebhook(hook.id);
-                li.appendChild(deleteBtn);
-                list.appendChild(li);
-            });
-        } catch (error) {
-            console.error('Error fetching webhooks:', error);
-            alert('Unable to load webhooks');
-        }
-    }
-
-    // Add new webhook (placeholder - requires URL input in a real scenario)
-    async function addWebhook() {
-        try {
-            const url = prompt('Enter Webhook URL:');
-            if (!url) return;
-            const response = await fetch('/api/webhooks', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + localStorage.getItem('token')
-                },
-                body: JSON.stringify({ url })
-            });
-            if (response.ok) {
-                fetchWebhooks();
-            } else {
-                throw new Error('Failed to add webhook');
-            }
-        } catch (error) {
-            console.error('Error adding webhook:', error);
-            alert('Failed to add webhook');
-        }
-    }
-
-    // Delete webhook
-    async function deleteWebhook(id) {
-        try {
-            const response = await fetch(`/api/webhooks/${ Repair id}`, {
-                method: 'DELETE',
-                headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
-            });
-            if (response.ok) {
-                fetchWebhooks();
-            } else {
-                throw new Error('Failed to delete webhook');
-            }
-        } catch (error) {
-            console.error('Error deleting webhook:', error);
-            alert('Failed to delete webhook');
-        }
-    }
-
-    // Fetch and display connected services
-    async function fetchConnectedServices() {
-        try {
-            const response = await fetch('/api/connected-services', {
-                headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
-            });
-            if (!response.ok) throw new Error('Failed to fetch connected services');
-            const services = await response.json();
-            const list = document.getElementById('services-list');
-            list.innerHTML = '';
-            services.forEach(service => {
-                const li = document.createElement('li');
-                li.textContent = `Service: ${service.service_name} `;
-                const deleteBtn = document.createElement('button');
-                deleteBtn.textContent = 'Disconnect';
-                deleteBtn.onclick = () => disconnectService(service.id);
-                li.appendChild(deleteBtn);
-                list.appendChild(li);
-            });
-        } catch (error) {
-            console.error('Error fetching connected services:', error);
-            alert('Unable to load connected services');
-        }
-    }
-
-    // Connect new service (placeholder - requires service selection in a real scenario)
-    async function connectService() {
-        try {
-            const serviceName = prompt('Enter Service Name (e.g., GitHub):');
-            if (!serviceName) return;
-            const response = await fetch('/api/connected-services', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + localStorage.getItem('token')
-                },
-                body: JSON.stringify({ service_name: serviceName })
-            });
-            if (response.ok) {
-                fetchConnectedServices();
-            } else {
-                throw new Error('Failed to connect service');
-            }
-        } catch (error) {
-            console.error('Error connecting service:', error);
-            alert('Failed to connect service');
-        }
-    }
-
-    // Disconnect service
-    async function disconnectService(id) {
-        try {
-            const response = await fetch(`/api/connected-services/${id}`, {
-                method: 'DELETE',
-                headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
-            });
-            if (response.ok) {
-                fetchConnectedServices();
-            } else {
-                throw new Error('Failed to disconnect service');
-            }
-        } catch (error) {
-            console.error('Error disconnecting service:', error);
-            alert('Failed to disconnect service');
-        }
-    }
-
-    // Initialize the page
-    fetchUserSettings();
-    fetchApiKeys();
-    fetchWebhooks();
-    fetchConnectedServices();
-
-    // Add event listeners
-    document.getElementById('user-settings-form').addEventListener('submit', handleUserSettingsSubmit);
-    document.getElementById('add-api-key').addEventListener('click', addApiKey);
-    document.getElementById('add-webhook').addEventListener('click', addWebhook);
-    document.getElementById('connect-service').addEventListener('click', connectService);
+// Hamburger menu toggle
+const hamburgerBtn = document.getElementById('hamburgerBtn');
+const navDrawer = document.getElementById('navDrawer');
+const overlay = document.querySelector('.nav-overlay');
+hamburgerBtn.addEventListener('click', () => {
+  navDrawer.classList.toggle('open');
+  hamburgerBtn.classList.toggle('active');
+  overlay.classList.toggle('nav-open');
+  if (navDrawer.classList.contains('open')) {
+    navDrawer.scrollTop = 0;
+  }
 });
+
+// Close nav when clicking outside
+document.addEventListener('click', (event) => {
+  const isClickInsideNav = navDrawer.contains(event.target);
+  const isClickOnHamburger = hamburgerBtn.contains(event.target);
+  if (!isClickInsideNav && !isClickOnHamburger && navDrawer.classList.contains('open')) {
+    navDrawer.classList.remove('open');
+    hamburgerBtn.classList.remove('active');
+    overlay.classList.remove('nav-open');
+  }
+});
+
+// Theme toggle
+const themeToggle = document.getElementById('theme-toggle');
+themeToggle.addEventListener('click', () => {
+  document.body.classList.toggle('light-theme');
+  const icon = themeToggle.querySelector('i');
+  icon.classList.toggle('fa-moon');
+  icon.classList.toggle('fa-sun');
+});
+
+// Account menu toggle
+const accountToggle = document.getElementById('account-toggle');
+const submenu = accountToggle.nextElementSibling;
+accountToggle.addEventListener('click', (e) => {
+  e.preventDefault();
+  submenu.classList.toggle('open');
+});
+
+// Back to top
+document.getElementById('back-to-top').addEventListener('click', () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+// Time updates
+function updateLocalTime() {
+  const now = new Date();
+  document.getElementById('localTime').textContent = now.toLocaleTimeString();
+  document.getElementById('localDate').textContent = now.toLocaleDateString('en-US', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+}
+setInterval(updateLocalTime, 1000);
+updateLocalTime();
+
+function updateUTCTime() {
+  document.getElementById('utcTime').textContent = new Date().toUTCString();
+}
+setInterval(updateUTCTime, 1000);
+updateUTCTime();
+
+// Populate timezone dropdown
+function populateTimezones() {
+  const timezoneSelect = document.getElementById('timezone');
+  const timezones = Intl.supportedValuesOf('timeZone');
+  timezones.forEach((tz) => {
+    const option = document.createElement('option');
+    option.value = tz;
+    option.textContent = tz;
+    timezoneSelect.appendChild(option);
+  });
+}
+
+// Initialize settings page
+async function initSettingsPage() {
+  try {
+    const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
+    if (!user || authError) {
+      window.location.href = 'login.html';
+      return;
+    }
+
+    // Load profile
+    const { data: profile, error: profileError } = await supabaseClient
+      .from('profiles')
+      .select('*')
+      .eq('id', user.id)
+      .single();
+    if (profileError) throw profileError;
+
+    document.getElementById('welcomeName').textContent = profile.first_name || 'User';
+    if (profile.photo_url) {
+      const { data: urlData } = supabaseClient.storage
+        .from('profile-photos')
+        .getPublicUrl(profile.photo_url);
+      document.getElementById('navProfilePhoto').src = urlData.publicUrl;
+      document.getElementById('navProfilePhoto').style.display = 'block';
+      document.getElementById('defaultProfileIcon').style.display = 'none';
+    }
+
+    // Load user settings
+    const { data: settings, error: settingsError } = await supabaseClient
+      .from('user_settings')
+      .select('*')
+      .eq('user_id', user.id)
+      .single();
+    if (settingsError && settingsError.code !== 'PGRST116') throw settingsError;
+
+    if (settings) {
+      document.getElementById('display-name').value = settings.display_name || '';
+      document.getElementById('timezone').value = settings.timezone || 'UTC';
+      document.getElementById('locale').value = settings.locale || 'en-US';
+      document.getElementById('theme-mode').value = settings.theme_mode || 'light';
+      document.getElementById('accent-color').value = settings.accent_color || '#ffd700';
+      document.getElementById('font-size').value = settings.font_size || 'medium';
+      document.getElementById('notify-email').checked = settings.notify_email || false;
+      document.getElementById('notify-sms').checked = settings.notify_sms || false;
+      document.getElementById('notify-push').checked = settings.notify_push || false;
+      document.getElementById('digest-frequency').value = settings.digest_frequency || 'instant';
+      document.getElementById('two-factor-enabled').checked = settings.two_factor_enabled || false;
+    }
+
+    // Load API keys
+    await loadApiKeys(user.id);
+
+    // Load webhooks
+    await loadWebhooks(user.id);
+
+    // Load connected services
+    await loadConnectedServices(user.id);
+  } catch (error) {
+    console.error('Settings page initialization error:', error);
+    showError('profile-error', 'An error occurred while loading settings.');
+  }
+}
+
+// Load API keys
+async function loadApiKeys(userId) {
+  const apiKeysLoading = document.getElementById('api-keys-loading');
+  apiKeysLoading.style.display = 'block';
+  try {
+    const { data: apiKeys, error } = await supabaseClient
+      .from('api_keys')
+      .select('*')
+      .eq('owner_id', userId);
+    if (error) throw error;
+
+    const container = document.getElementById('api-keys-container');
+    container.innerHTML = '';
+    apiKeys.forEach((key) => {
+      const keyDiv = document.createElement('div');
+      keyDiv.className = 'api-key-item';
+      keyDiv.dataset.id = key.id;
+      keyDiv.innerHTML = `
+        <p>Key: ${key.key} (Created: ${formatDateTime(key.created_at)})</p>
+        <button class="delete-api-key-btn">Delete</button>
+      `;
+      container.appendChild(keyDiv);
+
+      keyDiv.querySelector('.delete-api-key-btn').addEventListener('click', async () => {
+        if (!confirm('Are you sure you want to delete this API key?')) return;
+        try {
+          const { error } = await supabaseClient.from('api_keys').delete().eq('id', key.id);
+          if (error) throw error;
+          keyDiv.remove();
+        } catch (err) {
+          showError('api-keys-error', 'Error deleting API key: ' + err.message);
+        }
+      });
+    });
+  } catch (error) {
+    showError('api-keys-error', 'Error loading API keys: ' + error.message);
+  } finally {
+    apiKeysLoading.style.display = 'none';
+  }
+}
+
+// Load webhooks
+async function loadWebhooks(userId) {
+  const webhooksLoading = document.getElementById('webhooks-loading');
+  webhooksLoading.style.display = 'block';
+  try {
+    const { data: webhooks, error } = await supabaseClient
+      .from('webhooks')
+      .select('*')
+      .eq('owner_id', userId);
+    if (error) throw error;
+
+    const container = document.getElementById('webhooks-container');
+    container.innerHTML = '';
+    webhooks.forEach((webhook) => {
+      const webhookDiv = document.createElement('div');
+      webhookDiv.className = 'webhook-item';
+      webhookDiv.dataset.id = webhook.id;
+      webhookDiv.innerHTML = `
+        <p>URL: ${webhook.url} (Created: ${formatDateTime(webhook.created_at)})</p>
+        <button class="delete-webhook-btn">Delete</button>
+      `;
+      container.appendChild(webhookDiv);
+
+      webhookDiv.querySelector('.delete-webhook-btn').addEventListener('click', async () => {
+        if (!confirm('Are you sure you want to delete this webhook?')) return;
+        try {
+          const { error } = await supabaseClient.from('webhooks').delete().eq('id', webhook.id);
+          if (error) throw error;
+          webhookDiv.remove();
+        } catch (err) {
+          showError('webhook-error', 'Error deleting webhook: ' + err.message);
+        }
+      });
+    });
+  } catch (error) {
+    showError('webhook-error', 'Error loading webhooks: ' + error.message);
+  } finally {
+    webhooksLoading.style.display = 'none';
+  }
+}
+
+// Load connected services
+async function loadConnectedServices(userId) {
+  const servicesLoading = document.getElementById('connected-services-loading');
+  servicesLoading.style.display = 'block';
+  try {
+    const { data: services, error } = await supabaseClient
+      .from('connected_services')
+      .select('*')
+      .eq('owner_id', userId);
+    if (error) throw error;
+
+    const container = document.getElementById('connected-services-container');
+    container.innerHTML = '';
+    services.forEach((service) => {
+      const serviceDiv = document.createElement('div');
+      serviceDiv.className = 'connected-service-item';
+      serviceDiv.dataset.id = service.id;
+      serviceDiv.innerHTML = `
+        <p>Service: ${service.service_name} (Connected: ${formatDateTime(service.connected_at)})</p>
+        <button class="disconnect-service-btn">Disconnect</button>
+      `;
+      container.appendChild(serviceDiv);
+
+      serviceDiv.querySelector('.disconnect-service-btn').addEventListener('click', async () => {
+        if (!confirm(`Are you sure you want to disconnect ${service.service_name}?`)) return;
+        try {
+          const { error } = await supabaseClient.from('connected_services').delete().eq('id', service.id);
+          if (error) throw error;
+          serviceDiv.remove();
+        } catch (err) {
+          showError('connected-services-error', 'Error disconnecting service: ' + err.message);
+        }
+      });
+    });
+  } catch (error) {
+    showError('connected-services-error', 'Error loading connected services: ' + error.message);
+  } finally {
+    servicesLoading.style.display = 'none';
+  }
+}
+
+// Form submissions
+document.getElementById('profile-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const displayName = document.getElementById('display-name').value;
+  const avatarFile = document.getElementById('avatar-upload').files[0];
+
+  try {
+    const { data: { user } } = await supabaseClient.auth.getUser();
+    if (!user) throw new Error('Not authenticated');
+
+    let avatarUrl = null;
+    if (avatarFile) {
+      const fileName = `${user.id}/${Date.now()}_${avatarFile.name}`;
+      const { error: uploadError } = await supabaseClient.storage
+        .from('profile-photos')
+        .upload(fileName, avatarFile);
+      if (uploadError) throw uploadError;
+      avatarUrl = fileName;
+    }
+
+    const updates = {
+      user_id: user.id,
+      display_name: displayName,
+      ...(avatarUrl && { avatar_url: avatarUrl }),
+      updated_at: new Date().toISOString(),
+    };
+
+    const { error } = await supabaseClient.from('user_settings').upsert(updates);
+    if (error) throw error;
+
+    if (avatarUrl) {
+      const { data: urlData } = supabaseClient.storage.from('profile-photos').getPublicUrl(avatarUrl);
+      document.getElementById('navProfilePhoto').src = urlData.publicUrl;
+      document.getElementById('navProfilePhoto').style.display = 'block';
+      document.getElementById('defaultProfileIcon').style.display = 'none';
+    }
+
+    alert('Profile updated successfully.');
+  } catch (error) {
+    showError('profile-error', 'Error updating profile: ' + error.message);
+  }
+});
+
+document.getElementById('appearance-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  try {
+    const { data: { user } } = await supabaseClient.auth.getUser();
+    if (!user) throw new Error('Not authenticated');
+
+    const updates = {
+      user_id: user.id,
+      timezone: document.getElementById('timezone').value,
+      locale: document.getElementById('locale').value,
+      theme_mode: document.getElementById('theme-mode').value,
+      accent_color: document.getElementById('accent-color').value,
+      font_size: document.getElementById('font-size').value,
+      updated_at: new Date().toISOString(),
+    };
+
+    const { error } = await supabaseClient.from('user_settings').upsert(updates);
+    if (error) throw error;
+
+    // Apply theme and font size dynamically
+    document.body.classList.remove('light-theme');
+    if (updates.theme_mode === 'light') document.body.classList.add('light-theme');
+    document.body.style.fontSize = updates.font_size === 'small' ? '14px' : updates.font_size === 'large' ? '18px' : '16px';
+    document.documentElement.style.setProperty('--primary', updates.accent_color);
+
+    alert('Appearance settings updated successfully.');
+  } catch (error) {
+    showError('appearance-error', 'Error updating appearance settings: ' + error.message);
+  }
+});
+
+document.getElementById('notifications-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  try {
+    const { data: { user } } = await supabaseClient.auth.getUser();
+    if (!user) throw new Error('Not authenticated');
+
+    const updates = {
+      user_id: user.id,
+      notify_email: document.getElementById('notify-email').checked,
+      notify_sms: document.getElementById('notify-sms').checked,
+      notify_push: document.getElementById('notify-push').checked,
+      digest_frequency: document.getElementById('digest-frequency').value,
+      updated_at: new Date().toISOString(),
+    };
+
+    const { error } = await supabaseClient.from('user_settings').upsert(updates);
+    if (error) throw error;
+
+    alert('Notification preferences updated successfully.');
+  } catch (error) {
+    showError('notifications-error', 'Error updating notification preferences: ' + error.message);
+  }
+});
+
+document.getElementById('save-two-factor-btn').addEventListener('click', async () => {
+  try {
+    const { data: { user } } = await supabaseClient.auth.getUser();
+    if (!user) throw new Error('Not authenticated');
+
+    const updates = {
+      user_id: user.id,
+      two_factor_enabled: document.getElementById('two-factor-enabled').checked,
+      updated_at: new Date().toISOString(),
+    };
+
+    const { error } = await supabaseClient.from('user_settings').upsert(updates);
+    if (error) throw error;
+
+    alert('2FA settings updated successfully.');
+  } catch (error) {
+    showError('two-factor-error', 'Error updating 2FA settings: ' + error.message);
+  }
+});
+
+document.getElementById('generate-api-key-btn').addEventListener('click', async () => {
+  try {
+    const { data: { user } } = await supabaseClient.auth.getUser();
+    if (!user) throw new Error('Not authenticated');
+
+    const newKey = crypto.randomUUID();
+    const { error } = await supabaseClient.from('api_keys').insert({
+      owner_id: user.id,
+      key: newKey,
+      created_at: new Date().toISOString(),
+    });
+    if (error) throw error;
+
+    await loadApiKeys(user.id);
+    alert('API key generated successfully.');
+  } catch (error) {
+    showError('api-keys-error', 'Error generating API key: ' + error.message);
+  }
+});
+
+document.getElementById('webhook-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const url = document.getElementById('webhook-url').value;
+
+  try {
+    const { data: { user } } = await supabaseClient.auth.getUser();
+    if (!user) throw new Error('Not authenticated');
+
+    const { error } = await supabaseClient.from('webhooks').insert({
+      owner_id: user.id,
+      url,
+      created_at: new Date().toISOString(),
+    });
+    if (error) throw error;
+
+    document.getElementById('webhook-form').reset();
+    await loadWebhooks(user.id);
+    alert('Webhook added successfully.');
+  } catch (error) {
+    showError('webhook-error', 'Error adding webhook: ' + error.message);
+  }
+});
+
+// Logout
+document.getElementById('logout-btn').addEventListener('click', async () => {
+  const { error } = await supabaseClient.auth.signOut();
+  if (!error) window.location.href = 'login.html';
+  else showError('profile-error', 'Error logging out: ' + error.message);
+});
+
+// Initialize page
+(async () => {
+  populateTimezones();
+  await initSettingsPage();
+})();
