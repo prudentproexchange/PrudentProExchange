@@ -49,6 +49,7 @@ body {
   top: 0;
   z-index: 10;
   max-width: 1200px; /* Match main content and footer width */
+  width: 100%; /* Ensure header fills container */
   margin: 0 auto; /* Center the header */
 }
 
@@ -56,6 +57,7 @@ body {
   display: flex;
   align-items: center;
   gap: 1rem;
+  flex-shrink: 0; /* Prevent theme toggle and hamburger from shrinking */
 }
 
 #theme-toggle {
@@ -72,11 +74,11 @@ body {
 }
 
 .logo-link {
-  margin-left: 1rem; /* space between toggle & logo */
+  margin-left: 1rem; /* Space between toggle & logo */
 }
 
 .logo-link img {
-  height: 210px; /* Exactly 3 times the original 70px */
+  height: 150px; /* Reduced from 210px to fit better in 1200px width */
   width: auto;
   transition: transform 0.3s ease;
 }
@@ -86,7 +88,7 @@ body {
 }
 
 .hamburger {
-  display: none;
+  display: none; /* Hidden by default on desktop */
   background: none;
   border: none;
   cursor: pointer;
@@ -120,12 +122,12 @@ body {
   right: -100%;
   width: 80%;
   max-width: 300px;
-  height: 100vh; /* Changed to 100vh to match full viewport height */
+  height: 100vh;
   background: rgba(0, 0, 0, 0.9);
   backdrop-filter: blur(10px);
   transition: right 0.3s ease;
   z-index: 20;
-  padding: 0 1rem; /* Remove top/bottom padding */
+  padding: 0 1rem;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
@@ -250,16 +252,17 @@ body {
   grid-template-columns: repeat(auto-fit, 266px);
   justify-content: center;
   gap: 2rem;
-  margin-bottom: 2rem; /* Reduced to minimize vertical scrolling */
+  margin-bottom: 2rem;
 }
 
 .card {
   background: var(--glass-bg);
   padding: 2rem;
   border: 1px solid var(--primary);
-  border-radius: 10px;
+  border-radius: 20px; /* Aligned with inline HTML <style> */
   backdrop-filter: blur(10px);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 8px var(--shadow); /* Aligned with inline HTML <style> */
 }
 
 .card:hover {
@@ -352,9 +355,9 @@ body {
 
 /* Transaction History */
 .transaction-history {
-  margin-top: 2rem; /* Reduced to minimize vertical scrolling */
-  max-width: 100%; /* Ensure table fits within container */
-  overflow-x: auto; /* Allow horizontal scrolling for table if needed */
+  margin-top: 2rem;
+  max-width: 100%;
+  overflow-x: auto;
 }
 
 #txTable {
@@ -384,7 +387,7 @@ body {
   border-top: 1px solid var(--primary);
   backdrop-filter: blur(10px);
   text-align: center;
-  max-width: 1200px; /* Align with container for consistency */
+  max-width: 1200px;
   margin: 0 auto;
 }
 
@@ -453,6 +456,18 @@ body {
 }
 
 /* Responsive Design */
+@media (min-width: 769px) {
+  .hamburger {
+    display: none; /* Explicitly hide hamburger on desktop */
+  }
+  .nav-drawer {
+    display: none; /* Hide nav drawer on desktop */
+  }
+  .nav-overlay {
+    display: none; /* Hide overlay on desktop */
+  }
+}
+
 @media (max-width: 1024px) {
   .site-header {
     padding: 1rem;
@@ -460,17 +475,20 @@ body {
   .profile-section {
     padding: 1rem;
   }
+  .logo-link img {
+    height: 120px; /* Adjusted for smaller desktop screens */
+  }
 }
 
 @media (max-width: 768px) {
   .hamburger {
-    display: block;
+    display: block; /* Show hamburger on mobile */
   }
   .site-header {
     padding: 0.75rem 1rem;
   }
   .logo-link img {
-    height: 120px; /* Adjusted proportionally for smaller screens */
+    height: 120px;
   }
   .profile-section {
     padding: 1rem;
@@ -502,7 +520,7 @@ body {
     padding: 0.5rem;
   }
   .logo-link img {
-    height: 90px; /* Adjusted for smaller screens */
+    height: 90px;
   }
   .profile-section {
     padding: 0.75rem;
