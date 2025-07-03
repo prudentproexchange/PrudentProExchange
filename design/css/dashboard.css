@@ -44,12 +44,13 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: 1rem 1.5rem;
-  background: rgba(0, 0, 0, 0.8);
+  background: var(--glass-bg);
   backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 215, 0, 0.2); /* Aligned with invest.css */
   position: sticky;
   top: 0;
   z-index: 10;
-  max-width: 1400px; /* Increased slightly for larger screens */
+  max-width: 1200px; /* Matches invest.css container */
   margin: 0 auto;
 }
 
@@ -77,7 +78,7 @@ body {
 }
 
 .logo-link img {
-  height: 100px; /* Reduced for better proportionality */
+  height: 80px; /* Reduced to match invest.css proportionality */
   width: auto;
   transition: transform 0.3s ease;
 }
@@ -122,8 +123,9 @@ body {
   width: 80%;
   max-width: 280px;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.9);
+  background: var(--glass-bg);
   backdrop-filter: blur(10px);
+  border-left: 1px solid rgba(255, 215, 0, 0.2); /* Aligned with invest.css */
   transition: right 0.3s ease;
   z-index: 20;
   padding: 1rem;
@@ -203,10 +205,11 @@ body {
 .profile-section {
   display: flex;
   align-items: center;
-  padding: 1rem 1.5rem;
+  padding: 1.5rem 2rem;
   background: var(--glass-bg);
   backdrop-filter: blur(10px);
-  max-width: 1400px;
+  border-bottom: 1px solid rgba(255, 215, 0, 0.2); /* Matches invest.css */
+  max-width: 1200px; /* Matches invest.css container */
   margin: 0 auto;
 }
 
@@ -215,28 +218,33 @@ body {
 }
 
 .avatar {
-  width: 100px; /* Reduced for better mobile fit */
-  height: 100px;
+  width: 120px; /* Slightly smaller than invest.css for dashboard context */
+  height: 120px;
   border-radius: 50%;
   border: 2px solid var(--primary);
   background: #000;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 60px;
+  font-size: 72px; /* Proportional to avatar size */
   color: var(--primary);
   object-fit: cover;
+  transition: transform 0.3s ease; /* Matches invest.css */
+}
+
+.avatar:hover {
+  transform: scale(1.05); /* Matches invest.css */
 }
 
 .welcome-message {
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   color: var(--primary);
-  font-family: 'Playfair Display', serif;
+  font-family: 'Playfair Display', serif; /* Matches invest.css */
 }
 
 /* Main Content */
 .dashboard-page.container {
-  max-width: 1400px;
+  max-width: 1200px; /* Matches invest.css */
   margin: 0 auto;
   padding: 1.5rem;
 }
@@ -244,7 +252,7 @@ body {
 /* Cards Grid */
 .cards-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Flexible card widths */
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 1.5rem;
   justify-content: center;
   margin-bottom: 1.5rem;
@@ -257,7 +265,7 @@ body {
   border-radius: 8px;
   backdrop-filter: blur(10px);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  max-width: 100%; /* Prevent cards from overflowing */
+  max-width: 100%;
 }
 
 .card:hover {
@@ -383,7 +391,7 @@ body {
   border-top: 1px solid var(--primary);
   backdrop-filter: blur(10px);
   text-align: center;
-  max-width: 1400px;
+  max-width: 1200px; /* Matches invest.css */
   margin: 0 auto;
 }
 
@@ -455,7 +463,7 @@ body {
 /* Responsive Design */
 @media (min-width: 1200px) {
   .cards-grid {
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Slightly larger cards on large screens */
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   }
 }
 
@@ -464,7 +472,7 @@ body {
     padding: 0.75rem 1rem;
   }
   .profile-section {
-    padding: 0.75rem 1rem;
+    padding: 1rem;
   }
   .dashboard-page.container {
     padding: 1rem;
@@ -476,27 +484,27 @@ body {
     display: block;
   }
   .logo-link img {
-    height: 80px; /* Adjusted for tablets */
+    height: 60px; /* Adjusted to match invest.css proportionality */
   }
   .profile-section {
-    flex-direction: column;
+    flex-direction: column; /* Matches invest.css */
     align-items: flex-start;
-    padding: 0.75rem;
+    padding: 1rem;
   }
   .profile-container {
     margin-right: 0;
     margin-bottom: 0.5rem;
   }
   .avatar {
-    width: 80px;
-    height: 80px;
-    font-size: 48px;
+    width: 100px; /* Slightly smaller than invest.css for dashboard */
+    height: 100px;
+    font-size: 60px;
   }
   .welcome-message {
-    font-size: 1.1rem;
+    font-size: 1.2rem; /* Matches invest.css */
   }
   .cards-grid {
-    grid-template-columns: 1fr; /* Single column for smaller screens */
+    grid-template-columns: 1fr;
   }
   .card {
     padding: 1.2rem;
@@ -511,15 +519,15 @@ body {
     padding: 0.5rem;
   }
   .logo-link img {
-    height: 60px; /* Further reduced for small screens */
+    height: 50px; /* Further reduced for small screens */
   }
   .avatar {
-    width: 60px;
-    height: 60px;
-    font-size: 36px;
+    width: 80px;
+    height: 80px;
+    font-size: 48px;
   }
   .welcome-message {
-    font-size: 0.95rem;
+    font-size: 1rem;
   }
   .card {
     padding: 1rem;
