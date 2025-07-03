@@ -267,7 +267,7 @@ img, video, table, .card {
 }
 
 .card {
-  background: rgba(255, 255, 255, 0წ
+  background: rgba(255, 255, 255, 0.1);
   padding: 2rem;
   border: 2px solid var(--primary);
   border-radius: 15px;
@@ -313,7 +313,7 @@ img, video, table, .card {
   margin-top: 0.75rem;
   font-style: italic;
 }
-.card .btn {
+el.card .btn {
   display: inline-block;
   padding: 0.6rem 1.2rem;
   background: linear-gradient(45deg, var(--primary), var(--primary-dark));
@@ -353,6 +353,11 @@ img, video, table, .card {
 }
 .investment-item p {
   margin: 0.4rem 0;
+}
+
+/* Make investment card span full width of the grid */
+.investment-card {
+  grid-column: 1 / -1;
 }
 
 /* Transaction History */
