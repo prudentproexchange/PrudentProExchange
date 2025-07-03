@@ -126,8 +126,7 @@ body {
   right: -100%;
   width: 100%;
   height: 100vh;
-  background: var(--glass-bg);
-  backdrop-filter: blur(10px);
+  background: #1a1a1a; /* Solid dark background, no glass effect */
   border-left: 1px solid rgba(255, 215, 0, 0.2);
   transition: right 0.3s ease;
   z-index: 20;
@@ -436,13 +435,9 @@ body {
 
 /* Referral link container */
 .referral-link-container {
-  display: flex;
+  display: flex !important; /* Enforce visibility on all screen sizes */
   gap: 0.5rem;
   align-items: center;
-}
-
-.referral-link-container input {
-  flex: 1;
 }
 
 /* Copy button */
@@ -462,7 +457,7 @@ body {
 
 .copy-btn:hover {
   background: var(--primary-dark);
-}
+购
 
 /* Responsive Design */
 @media (min-width: 1200px) {
@@ -543,9 +538,9 @@ body {
     padding: 0.5rem 0.75rem;
     font-size: 0.85rem;
   }
-informal
   .referral-link-container {
     flex-direction: column;
+    display: flex !important; /* Enforce visibility on mobile */
   }
   .referral-link-container input,
   .referral-link-container button {
