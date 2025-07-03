@@ -43,14 +43,14 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 2rem; /* Matches invest.css .invest-page.container */
+  padding: 1rem 1.5rem;
   background: var(--glass-bg);
   backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(255, 215, 0, 0.2); /* Matches invest.css */
+  border-bottom: 1px solid rgba(255, 215, 0, 0.2);
   position: sticky;
   top: 0;
   z-index: 10;
-  max-width: 1200px; /* Matches invest.css container */
+  max-width: 1200px;
   margin: 0 auto;
 }
 
@@ -78,7 +78,7 @@ body {
 }
 
 .logo-link img {
-  height: 80px; /* Matches invest.css proportionality */
+  height: 80px;
   width: auto;
   transition: transform 0.3s ease;
 }
@@ -244,57 +244,47 @@ body {
 
 /* Main Content */
 .dashboard-page.container {
-  max-width: 1200px; /* Matches invest.css */
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 2rem; /* Matches invest.css .invest-page.container */
+  padding: 1.5rem;
 }
 
 /* Cards Grid */
 .cards-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 2rem; /* Matches invest.css .plans-grid */
+  gap: 2rem; /* Updated to match invest.css */
   justify-content: center;
-  margin-bottom: 3rem; /* Matches invest.css .plans-grid */
+  margin-bottom: 1.5rem;
 }
 
 .card {
-  background: var(--glass-bg);
-  padding: 2rem; /* Matches invest.css .plan-card */
-  border: 2px solid var(--primary); /* Matches invest.css .plan-card */
-  border-radius: 15px; /* Matches invest.css .plan-card */
-  backdrop-filter: blur(15px); /* Matches invest.css .plan-card */
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37); /* Matches invest.css .plan-card */
-  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease; /* Matches invest.css .plan-card */
+  background: rgba(255, 255, 255, 0.1); /* Matches invest.css */
+  padding: 2rem; /* Matches invest.css */
+  border: 2px solid var(--primary); /* Matches invest.css */
+  border-radius: 15px; /* Matches invest.css */
+  backdrop-filter: blur(15px); /* Matches invest.css */
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37); /* Matches invest.css */
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease; /* Matches invest.css */
   max-width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* Matches invest.css .plan-card */
-  cursor: pointer; /* Matches invest.css .plan-card */
-  outline: none; /* Matches invest.css .plan-card */
 }
 
-.card:hover,
-.card:focus {
-  transform: translateY(-10px); /* Matches invest.css .plan-card */
-  box-shadow: 0 12px 40px rgba(255, 215, 0, 0.5); /* Matches invest.css .plan-card */
-  border-color: var(--primary-dark); /* Matches invest.css .plan-card */
+.card:hover {
+  transform: translateY(-10px); /* Matches invest.css */
+  box-shadow: 0 12px 40px rgba(255, 215, 0, 0.5); /* Matches invest.css */
+  border-color: var(--primary-dark); /* Matches invest.css */
 }
 
 .card h2 {
-  font-size: 1.75rem; /* Matches invest.css .plan-card h3 */
+  font-size: 1.5rem;
   color: var(--primary);
-  margin-bottom: 0.5rem; /* Matches invest.css .plan-card h3 */
-  font-family: 'Playfair Display', serif; /* Matches invest.css .plan-card h3 */
-  font-weight: 700; /* Matches invest.css .plan-card h3 */
+  margin-bottom: 0.75rem;
+  font-family: 'Playfair Display', serif;
 }
 
 .card p, .card ul {
-  font-size: 1.25rem; /* Matches invest.css .plan-card p */
+  font-size: 0.95rem;
   color: #e0e0ff;
-  font-weight: 500; /* Matches invest.css .plan-card p */
-  margin-bottom: 1rem; /* Matches invest.css .plan-card p */
-  font-family: 'Poppins', sans-serif; /* Matches invest.css .plan-card p */
 }
 
 .card ul {
@@ -324,21 +314,18 @@ body {
 
 .card .btn {
   display: inline-block;
-  padding: 0.75rem 1.5rem; /* Matches invest.css .select-plan-btn */
-  background: linear-gradient(45deg, var(--primary), var(--primary-dark)); /* Matches invest.css .select-plan-btn */
+  padding: 0.6rem 1.2rem;
+  background: linear-gradient(45deg, var(--primary), var(--primary-dark));
   color: #000;
   text-decoration: none;
   border-radius: 5px;
-  font-size: 1rem; /* Matches invest.css .select-plan-btn */
-  font-weight: 600; /* Matches invest.css .select-plan-btn */
-  font-family: 'Poppins', sans-serif; /* Matches invest.css .select-plan-btn */
-  transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease; /* Matches invest.css .select-plan-btn */
+  font-weight: 600;
+  transition: background 0.3s ease, transform 0.3s ease;
 }
 
 .card .btn:hover {
-  background: linear-gradient(45deg, var(--primary-dark), var(--primary)); /* Matches invest.css .select-plan-btn */
-  transform: scale(1.05); /* Matches invest.css .select-plan-btn */
-  box-shadow: 0 0 15px rgba(255, 215, 0, 0.7); /* Matches invest.css .select-plan-btn */
+  background: linear-gradient(45deg, var(--primary-dark), var(--primary));
+  transform: translateY(-2px);
 }
 
 .card .invest-btn {
@@ -349,14 +336,13 @@ body {
 
 .card input[readonly] {
   width: 100%;
-  padding: 0.75rem; /* Matches invest.css .plan-card input[type="number"] */
-  margin: 1rem 0; /* Matches invest.css .plan-card input[type="number"] */
-  background: rgba(255, 255, 255, 0.1); /* Matches invest.css .plan-card input[type="number"] */
-  border: 1px solid var(--primary); /* Matches invest.css .plan-card input[type="number"] */
-  color: #e0e0ff; /* Matches invest.css .plan-card input[type="number"] */
+  padding: 0.5rem;
+  margin: 0.75rem 0;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--primary);
+  color: #fff;
   border-radius: 5px;
-  font-size: 1rem; /* Matches invest.css .plan-card input[type="number"] */
-  font-family: 'Poppins', sans-serif; /* Matches invest.css .plan-card input[type="number"] */
+  font-size: 0.85rem;
 }
 
 /* Investment Card Styles */
@@ -403,11 +389,11 @@ body {
 /* Footer */
 .site-footer {
   background: var(--glass-bg);
-  padding: 2rem; /* Matches invest.css .site-footer */
+  padding: 1.5rem;
   border-top: 1px solid var(--primary);
   backdrop-filter: blur(10px);
   text-align: center;
-  max-width: 1200px; /* Matches invest.css */
+  max-width: 1200px;
   margin: 0 auto;
 }
 
@@ -485,13 +471,13 @@ body {
 
 @media (max-width: 1024px) {
   .site-header {
-    padding: 1rem; /* Matches invest.css adjustment */
+    padding: 0.75rem 1rem;
   }
   .profile-section {
     padding: 1rem;
   }
   .dashboard-page.container {
-    padding: 1rem; /* Matches invest.css adjustment */
+    padding: 1rem;
   }
 }
 
@@ -500,36 +486,33 @@ body {
     display: block;
   }
   .logo-link img {
-    height: 60px; /* Matches invest.css proportionality */
+    height: 60px;
   }
   .profile-section {
     flex-direction: column;
     align-items: flex-start;
-    padding: 1rem; /* Matches invest.css */
+    padding: 1rem;
   }
   .profile-container {
     margin-right: 0;
     margin-bottom: 0.5rem;
   }
   .avatar {
-    width: 120px; /* Matches invest.css */
-    height: 120px;
-    font-size: 72px;
+    width: 100px;
+    height: 100px;
+    font-size: 60px;
   }
   .welcome-message {
-    font-size: 1.2rem; /* Matches invest.css */
+    font-size: 1.2rem;
   }
   .cards-grid {
-    grid-template-columns: 1fr; /* Matches invest.css .plans-grid */
+    grid-template-columns: 1fr;
   }
   .card {
-    padding: 1.5rem; /* Matches invest.css .plan-card */
+    padding: 1.5rem; /* Matches invest.css */
   }
   .card h2 {
-    font-size: 1.5rem; /* Matches invest.css .plan-card h3 */
-  }
-  .card p {
-    font-size: 1rem; /* Matches invest.css .plan-card p */
+    font-size: 1.3rem;
   }
 }
 
@@ -538,25 +521,25 @@ body {
     padding: 0.5rem;
   }
   .logo-link img {
-    height: 50px; /* Matches invest.css proportionality */
+    height: 50px;
   }
   .avatar {
-    width: 120px; /* Matches invest.css */
-    height: 120px;
-    font-size: 72px;
+    width: 80px;
+    height: 80px;
+    font-size: 48px;
   }
   .welcome-message {
-    font-size: 1rem; /* Matches invest.css */
+    font-size: 1rem;
   }
   .card {
-    padding: 1.5rem; /* Matches invest.css .plan-card */
+    padding: 1.5rem; /* Matches invest.css */
   }
   .card h2 {
-    font-size: 1.5rem; /* Matches invest.css .plan-card h3 */
+    font-size: 1.2rem;
   }
   .card .btn {
-    padding: 0.75rem 1.5rem; /* Matches invest.css .select-plan-btn */
-    font-size: 1rem; /* Matches invest.css .select-plan-btn */
+    padding: 0.5rem 0.75rem;
+    font-size: 0.85rem;
   }
   .referral-link-container {
     flex-direction: column;
