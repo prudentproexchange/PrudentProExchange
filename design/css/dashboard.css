@@ -43,7 +43,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem 1.5rem;
+  padding: 1.5rem 2rem; /* Updated to match invest.css */
   background: var(--glass-bg);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid rgba(255, 215, 0, 0.2);
@@ -57,7 +57,33 @@ body {
 .header-right {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 1rem; /* Updated to match invest.css */
+}
+
+/* Added profile styles for header */
+.header-right .profile-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.header-right .avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid var(--primary);
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.header-right .avatar:hover {
+  transform: scale(1.05);
+}
+
+.header-right .welcome-message {
+  font-size: 1rem;
+  color: var(--primary);
+  font-family: 'Playfair Display', serif;
 }
 
 #theme-toggle {
@@ -74,11 +100,11 @@ body {
 }
 
 .logo-link {
-  margin-left: 0.75rem;
+  margin-left: 1rem; /* Updated to match invest.css */
 }
 
 .logo-link img {
-  height: 80px;
+  height: 60px; /* Updated to match invest.css */
   width: auto;
   transition: transform 0.3s ease;
 }
@@ -128,7 +154,7 @@ body {
   border-left: 1px solid rgba(255, 215, 0, 0.2);
   transition: right 0.3s ease;
   z-index: 20;
-  padding: 1rem;
+  padding: 1.5rem; /* Updated to match invest.css */
   display: flex;
   flex-direction: column;
   overflow-y: auto;
@@ -153,16 +179,44 @@ body {
   display: block;
 }
 
+/* Added profile styles for nav-drawer */
+.nav-drawer .profile-section {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.nav-drawer .avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 2px solid var(--primary);
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.nav-drawer .avatar:hover {
+  transform: scale(1.05);
+}
+
+.nav-drawer .welcome-message {
+  font-size: 1.2rem;
+  color: var(--primary);
+  font-family: 'Playfair Display', serif;
+}
+
 .nav-drawer a {
-  padding: 0.5rem 1rem;
-  color: var(--text-color);
+  padding: 0.75rem 1rem; /* Updated to match invest.css */
+  color: #e0e0ff; /* Updated to match invest.css */
   text-decoration: none;
-  font-size: 0.95rem;
+  font-size: 1rem; /* Updated to match invest.css */
+  font-family: 'Poppins', sans-serif; /* Added to match invest.css */
   transition: color 0.3s ease;
 }
 
 .nav-drawer a:hover, .nav-drawer a.active {
-  color: var(--primary);
+  color: #ffd700; /* Updated to match invest.css */
 }
 
 .account-menu {
@@ -170,10 +224,11 @@ body {
 }
 
 .account-toggle {
-  padding: 0.5rem 1rem;
-  color: var(--text-color);
-  font-size: 0.95rem;
+  padding: 0.75rem 1rem; /* Updated to match invest.css */
+  color: #e0e0ff; /* Updated to match invest.css */
+  font-size: 1rem; /* Updated to match invest.css */
   cursor: pointer;
+  font-family: 'Poppins', sans-serif; /* Added to match invest.css */
 }
 
 .nav-drawer .submenu {
@@ -193,12 +248,13 @@ body {
 }
 
 .nav-drawer .submenu a {
-  color: var(--text-color);
-  font-size: 0.85rem;
+  color: #e0e0ff; /* Updated to match invest.css */
+  font-size: 0.9rem; /* Updated to match invest.css */
+  font-family: 'Poppins', sans-serif; /* Added to match invest.css */
 }
 
 .nav-drawer .submenu a:hover {
-  color: var(--primary);
+  color: #ffd700; /* Updated to match invest.css */
 }
 
 /* Profile Section */
@@ -482,6 +538,9 @@ body {
 }
 
 @media (max-width: 768px) {
+  .header-right .welcome-message {
+    display: none; /* Added to match invest.css */
+  }
   .hamburger {
     display: block;
   }
