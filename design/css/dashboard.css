@@ -10,6 +10,7 @@
 
 html {
   overflow-x: hidden;
+  overflow-y: auto;
 }
 
 * {
@@ -23,6 +24,7 @@ body {
   background: #000;
   color: var(--text-color);
   overflow-x: hidden;
+  overflow-y: auto;
   line-height: 1.5;
 }
 
@@ -239,7 +241,7 @@ body {
   font-size: 1.5rem;
   color: var(--primary);
   font-family: 'Playfair Display', serif;
-  word-break: break-word; /* Added for long usernames */
+  word-break: break-word;
 }
 
 /* Main Content */
@@ -541,6 +543,7 @@ body {
     padding: 0.5rem 0.75rem;
     font-size: 0.85rem;
   }
+informal
   .referral-link-container {
     flex-direction: column;
   }
