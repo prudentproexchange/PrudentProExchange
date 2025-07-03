@@ -9,16 +9,17 @@
 }
 
 * {
-  box-sizing: border-box; /* Ensure padding/borders don’t cause overflow */
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 body {
   font-family: 'Poppins', sans-serif;
-  margin: 0;
-  padding: 0;
   background: #000;
   color: var(--text-color);
-  overflow-x: hidden; /* Prevent horizontal scrolling */
+  overflow-x: hidden;
+  line-height: 1.5;
 }
 
 .bg-video {
@@ -42,25 +43,28 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem 2rem;
-  background: rgba(0, 0, 0, 0.8);
+  padding: 1rem 2rem; /* Matches invest.css container padding */
+  background: var(--glass-bg);
   backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 215, 0, 0.2);
   position: sticky;
   top: 0;
   z-index: 10;
+  max-width: 1200px; /* Matches invest.css container */
+  margin: 0 auto;
 }
 
 .header-right {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.75rem;
 }
 
 #theme-toggle {
   background: none;
   border: none;
   color: var(--primary);
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   cursor: pointer;
   transition: transform 0.3s ease;
 }
@@ -70,11 +74,11 @@ body {
 }
 
 .logo-link {
-  margin-left: 1rem; /* space between toggle & logo */
+  margin-left: 0.75rem;
 }
 
 .logo-link img {
-  height: 210px; /* Exactly 3 times the original 70px */
+  height: 80px;
   width: auto;
   transition: transform 0.3s ease;
 }
@@ -88,20 +92,20 @@ body {
   background: none;
   border: none;
   cursor: pointer;
-  padding: 0;
+  padding: 0.5rem;
 }
 
 .hamburger span {
   display: block;
-  width: 25px;
-  height: 3px;
+  width: 22px;
+  height: 2px;
   background: var(--primary);
-  margin: 5px 0;
+  margin: 4px 0;
   transition: all 0.3s ease;
 }
 
 .hamburger.active span:nth-child(1) {
-  transform: rotate(45deg) translate(5px, 5px);
+  transform: rotate(45deg) translate(4px, 4px);
 }
 
 .hamburger.active span:nth-child(2) {
@@ -109,7 +113,7 @@ body {
 }
 
 .hamburger.active span:nth-child(3) {
-  transform: rotate(-45deg) translate(7px, -7px);
+  transform: rotate(-45deg) translate(6px, -6px);
 }
 
 .nav-drawer {
@@ -117,13 +121,14 @@ body {
   top: 0;
   right: -100%;
   width: 80%;
-  max-width: 300px;
-  height: 100vh; /* Changed to 100vh to match full viewport height */
-  background: rgba(0, 0, 0, 0.9);
+  max-width: 280px;
+  height: 100vh;
+  background: var(--glass-bg);
   backdrop-filter: blur(10px);
+  border-left: 1px solid rgba(255, 215, 0, 0.2);
   transition: right 0.3s ease;
   z-index: 20;
-  padding: 0 1rem; /* Remove top/bottom padding */
+  padding: 1rem;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
@@ -149,11 +154,10 @@ body {
 }
 
 .nav-drawer a {
-  display: block;
   padding: 0.5rem 1rem;
   color: var(--text-color);
   text-decoration: none;
-  font-size: 1rem;
+  font-size: 0.95rem;
   transition: color 0.3s ease;
 }
 
@@ -166,19 +170,16 @@ body {
 }
 
 .account-toggle {
-  display: block;
   padding: 0.5rem 1rem;
   color: var(--text-color);
-  text-decoration: none;
-  font-size: 1rem;
+  font-size: 0.95rem;
   cursor: pointer;
 }
 
 .nav-drawer .submenu {
   display: none;
   list-style: none;
-  padding: 0;
-  margin: 0 0 1rem 1rem;
+  padding: 0.5rem 0 0.5rem 1rem;
   background: rgba(0, 0, 0, 0.8);
   border-radius: 5px;
 }
@@ -188,12 +189,12 @@ body {
 }
 
 .nav-drawer .submenu li {
-  padding: 0.5rem 1rem;
+  padding: 0.4rem 1rem;
 }
 
 .nav-drawer .submenu a {
   color: var(--text-color);
-  font-size: 0.9rem;
+  font-size: 0.85rem;
 }
 
 .nav-drawer .submenu a:hover {
@@ -207,6 +208,9 @@ body {
   padding: 1.5rem 2rem;
   background: var(--glass-bg);
   backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .profile-container {
@@ -214,17 +218,22 @@ body {
 }
 
 .avatar {
-  width: 150px;
-  height: 150px;
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
   border: 2px solid var(--primary);
   background: #000;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 120px;
+  font-size: 72px;
   color: var(--primary);
   object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.avatar:hover {
+  transform: scale(1.05);
 }
 
 .welcome-message {
@@ -237,42 +246,51 @@ body {
 .dashboard-page.container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 2rem; /* Matches invest.css container */
 }
 
 /* Cards Grid */
 .cards-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, 266px);
-  justify-content: center;
-  gap: 2rem;
-  margin-bottom: 2rem; /* Reduced to minimize vertical scrolling */
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Matches invest.css plans-grid */
+  gap: 2rem; /* Matches invest.css */
+  margin-bottom: 3rem; /* Matches invest.css */
 }
 
 .card {
-  background: var(--glass-bg);
-  padding: 2rem;
-  border: 1px solid var(--primary);
-  border-radius: 10px;
-  backdrop-filter: blur(10px);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background: rgba(255, 255, 255, 0.1); /* Matches invest.css plan-card */
+  padding: 2rem; /* Matches invest.css */
+  border: 2px solid var(--primary); /* Matches invest.css */
+  border-radius: 15px; /* Matches invest.css */
+  backdrop-filter: blur(15px); /* Matches invest.css */
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37); /* Matches invest.css */
+  text-align: center; /* Matches invest.css */
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease; /* Matches invest.css */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 100%;
 }
 
 .card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px var(--shadow);
+  transform: translateY(-10px); /* Matches invest.css */
+  box-shadow: 0 12px 40px rgba(255, 215, 0, 0.5); /* Matches invest.css */
+  border-color: var(--primary-dark); /* Matches invest.css */
 }
 
 .card h2 {
-  font-size: 1.8rem;
+  font-size: 1.75rem; /* Matches invest.css plan-card h3 */
   color: var(--primary);
-  margin-bottom: 1rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem; /* Matches invest.css */
   font-family: 'Playfair Display', serif;
 }
 
 .card p, .card ul {
-  font-size: 1rem;
+  font-size: 1.25rem; /* Matches invest.css plan-card p */
   color: #e0e0ff;
+  font-weight: 500; /* Matches invest.css */
+  margin-bottom: 1rem;
 }
 
 .card ul {
@@ -281,8 +299,8 @@ body {
 }
 
 .card ul li {
-  margin-bottom: 0.5rem;
-  padding-left: 1.5rem;
+  margin-bottom: 0.4rem;
+  padding-left: 1.2rem;
   position: relative;
 }
 
@@ -294,63 +312,81 @@ body {
 }
 
 .card .brand {
-  font-size: 0.9rem;
+  font-size: 0.9rem; /* Slightly larger for readability */
   color: var(--primary);
-  margin-top: 1rem;
+  margin-top: 0.75rem;
   font-style: italic;
 }
 
 .card .btn {
-  display: inline-block;
-  padding: 0.75rem 1.5rem;
+  padding: 0.75rem 1.5rem; /* Matches invest.css select-plan-btn */
   background: linear-gradient(45deg, var(--primary), var(--primary-dark));
   color: #000;
-  text-decoration: none;
+  border: none; /* Matches invest.css */
   border-radius: 5px;
+  font-size: 1rem; /* Matches invest.css */
   font-weight: 600;
-  transition: background 0.3s ease, transform 0.3s ease;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease; /* Matches invest.css */
 }
 
-.card .btn:hover {
+.card .btn:hover:not(:disabled) {
   background: linear-gradient(45deg, var(--primary-dark), var(--primary));
-  transform: translateY(-2px);
+  transform: scale(1.05); /* Matches invest.css */
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.7); /* Matches invest.css */
+}
+
+.card .btn:disabled {
+  background: #666; /* Matches invest.css */
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 .card .invest-btn {
   display: block;
-  margin: 1rem auto 0;
+  margin: 0.75rem auto 0;
   text-align: center;
 }
 
 .card input[readonly] {
+  padding: 0.75rem; /* Matches invest.css input */
   width: 100%;
-  padding: 0.5rem;
+  max-width: 300px; /* Matches invest.css */
   margin: 1rem 0;
-  background: rgba(0, 0, 0, 0.5);
   border: 1px solid var(--primary);
-  color: #fff;
   border-radius: 5px;
-  font-size: 0.9rem;
+  background: rgba(255, 255, 255, 0.1); /* Matches invest.css */
+  color: #e0e0ff;
+  font-size: 1rem; /* Matches invest.css */
+  font-family: 'Poppins', sans-serif;
+  transition: border-color 0.3s ease;
+}
+
+.card input[readonly]:focus {
+  border-color: var(--primary-dark); /* Matches invest.css */
+  outline: none;
 }
 
 /* Investment Card Styles */
 .investment-item {
-  margin-bottom: 1rem;
-  padding: 1rem;
+  margin-bottom: 0.75rem;
+  padding: 0.75rem;
   border: 1px solid var(--primary);
   border-radius: 5px;
   background: rgba(0, 0, 0, 0.5);
 }
 
 .investment-item p {
-  margin: 0.5rem 0;
+  margin: 0.4rem 0;
 }
 
 /* Transaction History */
 .transaction-history {
-  margin-top: 2rem; /* Reduced to minimize vertical scrolling */
-  max-width: 100%; /* Ensure table fits within container */
-  overflow-x: auto; /* Allow horizontal scrolling for table if needed */
+  margin-top: 1.5rem;
+  max-width: 100%;
+  overflow-x: auto;
 }
 
 #txTable {
@@ -361,10 +397,11 @@ body {
 }
 
 #txTable th, #txTable td {
-  padding: 0.75rem;
+  padding: 0.6rem;
   border: 1px solid var(--primary);
   color: #e0e0ff;
   text-align: left;
+  font-size: 0.9rem;
 }
 
 #txTable th {
@@ -376,21 +413,22 @@ body {
 /* Footer */
 .site-footer {
   background: var(--glass-bg);
-  padding: 2rem;
+  padding: 2rem; /* Matches invest.css */
   border-top: 1px solid var(--primary);
   backdrop-filter: blur(10px);
   text-align: center;
-  max-width: 1200px; /* Align with container for consistency */
+  max-width: 1200px; /* Matches invest.css */
   margin: 0 auto;
 }
 
 .footer-content p, .footer-links a {
   color: #e0e0ff;
-  margin: 0.5rem 0;
+  margin: 0.4rem 0;
+  font-size: 0.9rem;
 }
 
 .footer-links a {
-  margin: 0 1rem;
+  margin: 0 0.75rem;
   text-decoration: none;
   transition: color 0.3s ease;
 }
@@ -402,15 +440,15 @@ body {
 /* Back to Top */
 #back-to-top {
   position: fixed;
-  bottom: 20px;
-  right: 20px;
+  bottom: 15px;
+  right: 15px;
   background: var(--primary);
   color: #000;
   border: none;
-  padding: 10px;
+  padding: 8px;
   border-radius: 50%;
   cursor: pointer;
-  font-size: 1.2rem;
+  font-size: 1rem;
   transition: transform 0.3s ease;
 }
 
@@ -434,13 +472,13 @@ body {
   background: var(--primary);
   color: #000;
   border: none;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 0.75rem;
   border-radius: 5px;
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 0.9rem;
+  gap: 0.4rem;
+  font-size: 0.85rem;
   transition: background 0.3s ease;
 }
 
@@ -449,8 +487,20 @@ body {
 }
 
 /* Responsive Design */
+@media (min-width: 1200px) {
+  .cards-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Slightly larger for large screens */
+  }
+}
+
 @media (max-width: 1024px) {
   .site-header {
+    padding: 0.75rem 1rem;
+  }
+  .profile-section {
+    padding: 1rem;
+  }
+  .dashboard-page.container {
     padding: 1rem;
   }
 }
@@ -459,57 +509,54 @@ body {
   .hamburger {
     display: block;
   }
-  .site-header {
-    padding: 0.75rem 1rem;
-  }
   .logo-link img {
-    height: 120px; /* Adjusted proportionally for smaller screens (70px * 3 = 210px, scaled down) */
+    height: 60px; /* Matches invest.css proportionality */
   }
   .profile-section {
-    padding: 1rem;
-  }
-  .welcome-message {
-    font-size: 1.2rem;
-  }
-  .avatar {
-    width: 120px;
-    height: 120px;
-    font-size: 72px;
-  }
-  .dashboard-page.container {
-    padding: 1rem;
-  }
-  .cards-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 600px) {
-  .cards-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 480px) {
-  .site-header {
-    padding: 0.5rem;
-  }
-  .logo-link img {
-    height: 90px; /* Adjusted proportionally for smaller screens (70px * 3 = 210px, scaled down) */
-  }
-  .profile-section {
-    padding: 0.75rem;
     flex-direction: column;
     align-items: flex-start;
+    padding: 1rem;
   }
   .profile-container {
     margin-right: 0;
     margin-bottom: 0.5rem;
   }
   .avatar {
-    width: 90px;
-    height: 90px;
-    font-size: 57.6px;
+    width: 100px;
+    height: 100px;
+    font-size: 60px;
+  }
+  .welcome-message {
+    font-size: 1.2rem;
+  }
+  .cards-grid {
+    grid-template-columns: 1fr; /* Matches invest.css plans-grid */
+  }
+  .card {
+    padding: 1.5rem; /* Matches invest.css plan-card */
+  }
+  .card h2 {
+    font-size: 1.5rem; /* Matches invest.css plan-card h3 */
+  }
+  .card p, .card ul {
+    font-size: 1rem; /* Matches invest.css plan-card p */
+  }
+  .card input[readonly] {
+    max-width: 100%; /* Matches invest.css */
+  }
+}
+
+@media (max-width: 480px) {
+  .site-header {
+    padding: 0.5rem 1rem;
+  }
+  .logo-link img {
+    height: 50px;
+  }
+  .avatar {
+    width: 80px;
+    height: 80px;
+    font-size: 48px;
   }
   .welcome-message {
     font-size: 1rem;
@@ -521,7 +568,8 @@ body {
     font-size: 1.5rem;
   }
   .card .btn {
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.85rem;
   }
   .referral-link-container {
     flex-direction: column;
@@ -529,5 +577,9 @@ body {
   .referral-link-container input,
   .referral-link-container button {
     width: 100%;
+  }
+  #txTable th, #txTable td {
+    font-size: 0.8rem;
+    padding: 0.5rem;
   }
 }
