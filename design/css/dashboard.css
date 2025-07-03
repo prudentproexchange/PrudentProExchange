@@ -49,10 +49,10 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem 1.5rem;
-  background: var(--glass-bg);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+  padding: 1.5rem 2rem; /* Match invest.css profile-section padding */
+  background: rgba(255, 255, 255, 0.05); /* Match invest.css profile-section */
+  backdrop-filter: blur(10px); /* Match invest.css profile-section */
+  border-bottom: 1px solid rgba(255, 215, 0, 0.2); /* Match invest.css */
   position: sticky;
   top: 0;
   z-index: 10;
@@ -97,15 +97,20 @@ body {
   border: none;
   cursor: pointer;
   padding: 0.5rem;
+  transition: transform 0.3s ease, background 0.3s ease; /* Match invest.css button transitions */
 }
 
 .hamburger span {
   display: block;
   width: 22px;
   height: 2px;
-  background: var(--primary);
+  background: var(--primary); /* Gold, matching invest.css */
   margin: 4px 0;
   transition: all 0.3s ease;
+}
+
+.hamburger:hover {
+  background: linear-gradient(45deg, #ffd700, #cca300); /* Match invest.css select-plan-btn */
 }
 
 .hamburger.active span:nth-child(1) {
@@ -127,7 +132,7 @@ body {
   width: 100%;
   height: 100vh;
   background: #1a1a1a; /* Solid dark background, no glass effect */
-  border-left: 1px solid rgba(255, 215, 0, 0.2);
+  border-left: 1px solid rgba(255, 215, 0, 0.2); /* Match invest.css border */
   transition: right 0.3s ease;
   z-index: 20;
   padding: 1rem;
@@ -157,14 +162,16 @@ body {
 
 .nav-drawer a {
   padding: 0.5rem 1rem;
-  color: var(--text-color);
+  color: #e0e0ff; /* Match invest.css text color */
   text-decoration: none;
-  font-size: 0.95rem;
+  font-size: 1rem; /* Match invest.css font sizes */
+  font-family: 'Poppins', sans-serif; /* Match invest.css */
   transition: color 0.3s ease;
 }
 
 .nav-drawer a:hover, .nav-drawer a.active {
-  color: var(--primary);
+  color: var(--primary); /* Gold, matching invest.css footer-links */
+  text-decoration: underline; /* Match invest.css footer-links hover */
 }
 
 .account-menu {
@@ -173,8 +180,9 @@ body {
 
 .account-toggle {
   padding: 0.5rem 1rem;
-  color: var(--text-color);
-  font-size: 0.95rem;
+  color: #e0e0ff; /* Match invest.css */
+  font-size: 1rem; /* Match invest.css */
+  font-family: 'Poppins', sans-serif; /* Match invest.css */
   cursor: pointer;
 }
 
@@ -195,12 +203,14 @@ body {
 }
 
 .nav-drawer .submenu a {
-  color: var(--text-color);
-  font-size: 0.85rem;
+  color: #e0e0ff; /* Match invest.css */
+  font-size: 0.9rem; /* Match invest.css */
+  font-family: 'Poppins', sans-serif; /* Match invest.css */
 }
 
 .nav-drawer .submenu a:hover {
-  color: var(--primary);
+  color: var(--primary); /* Gold, matching invest.css */
+  text-decoration: underline; /* Match invest.css footer-links */
 }
 
 /* Profile Section */
@@ -457,7 +467,7 @@ body {
 
 .copy-btn:hover {
   background: var(--primary-dark);
-购
+}
 
 /* Responsive Design */
 @media (min-width: 1200px) {
