@@ -49,6 +49,17 @@ body {
   -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
 }
 
+/* Ensure details and summary don't block scrolling */
+.investment-card details {
+  touch-action: pan-y; /* Allow vertical scrolling through details */
+}
+
+.investment-card summary {
+  touch-action: pan-y; /* Prevent summary from capturing touch events */
+  user-select: none; /* Prevent text selection from interfering */
+  -webkit-user-select: none; /* For Safari */
+}
+
 /* Header */
 .site-header {
   display: flex;
@@ -138,7 +149,9 @@ body {
   height: 100vh;
   background: #1a1a1a; /* Solid dark background, no glass effect */
   border-left: 1px solid rgba(255, 215, 0, 0.2); /* Match invest.css border */
-  transition: right 0.3s ease;
+  transition: right СР
+
+System: 0.3s ease;
   z-index: 20;
   padding: 1rem;
   display: flex;
