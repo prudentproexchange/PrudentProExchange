@@ -1,87 +1,214 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Withdraw</title>
-  <link rel="stylesheet" href="/css/styles.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Withdraw • PrudentProExchange</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/withdraw.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4"></script>
+  <style>
+    .error-message {
+      color: #ff4444;
+      background: rgba(255, 0, 0, 0.1);
+      padding: 10px;
+      border-radius: 5px;
+      margin: 10px 0;
+      display: none;
+    }
+    .success-message {
+      color: #00cc00;
+      background: rgba(0, 255, 0, 0.1);
+      padding: 10px;
+      border-radius: 5px;
+      margin: 10px 0;
+      display: none;
+    }
+    .loading-spinner {
+      border: 4px solid rgba(255, 255, 255, 0.3);
+      border-top: 4px solid var(--primary);
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto;
+      display: none;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
 </head>
-<body>
-  <video class="bg-video" autoplay muted loop playsinline>
-    <source src="/videos/background.mp4" type="video/mp4">
+<body class="dashboard-page">
+  <!-- Video Background -->
+  <video class="bg-video" autoplay muted loop playsinline preload="auto">
+    <source src="assets/videos/background.webm" type="video/webm">
+    <source src="assets/videos/background.mp4" type="video/mp4">
+    Your browser does not support the video tag.
   </video>
-  <div class="nav-overlay"></div>
-  <nav>
-    <button id="hamburgerBtn"><i class="fas fa-bars"></i></button>
-    <div id="navDrawer">
-      <a href="/dashboard.html">Dashboard</a>
-      <a href="/kyc.html">KYC</a>
-      <a href="/withdraw.html">Withdraw</a>
-    </div>
-    <div class="nav-right">
-      <img id="navProfilePhoto" style="display: none;" alt="Profile Photo">
-      <i id="defaultProfileIcon" class="fas fa-user-circle"></i>
-      <a href="#" id="account-toggle">Account</a>
-      <div class="submenu">
-        <a href="/profile.html">Profile</a>
-        <a href="#" id="logout-btn">Logout</a>
+
+  <div class="overlay">
+    <!-- Header -->
+    <header class="site-header">
+      <a href="dashboard.html" class="logo-link">
+        <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo"/>
+      </a>
+      <div class="header-right">
+        <button id="theme-toggle" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
+        <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
       </div>
-      <button id="theme-toggle"><i class="fas fa-moon"></i></button>
+      <nav class="nav-drawer" id="navDrawer">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="invest.html">Invest</a>
+        <a href="withdraw.html" class="active">Withdraw</a>
+        <a href="transactions.html">Transactions</a>
+        <a href="referrals.html">Referrals</a>
+        <div class="account-menu">
+          <a href="#" class="account-toggle" id="account-toggle">Account ▾</a>
+          <ul class="submenu">
+            <li><a href="profile-settings.html">Profile Settings</a></li>
+            <li><a href="transfer.html">Transfer Balance</a></li>
+            <li><a href="change-password.html">Change Password</a></li>
+            <li><a href="support.html">Support Ticket</a></li>
+            <li><a href="promo-tools.html">Promotional Tools</a></li>
+            <li><a href="2fa.html">2FA Security</a></li>
+            <li><a href="#" id="logout-btn">Logout</a></li>
+          </ul>
+        </div>
+        <a href="kyc.html">KYC Verification</a>
+        <a href="transfer.html">Transfer</a>
+      </nav>
+    </header>
+    <div class="nav-overlay"></div>
+
+    <!-- Profile Section -->
+    <div class="profile-section">
+      <div class="profile-container">
+        <img id="navProfilePhoto" src="" alt="Profile" class="avatar" style="display: none;"/>
+        <span id="defaultProfileIcon" class="avatar">👤</span>
+      </div>
+      <div class="welcome-message">Welcome to Withdraw, <span id="welcomeName"></span>!</div>
     </div>
-  </nav>
-  <main>
-    <section id="pin-section" style="display: none;">
-      <h1>Enter Withdrawal PIN</h1>
-      <form id="pin-form">
-        <input type="text" id="pin-input" placeholder="Enter your PIN (4+ characters)" required>
-        <button type="submit">Verify PIN</button>
-        <a href="#" id="set-pin-link">Set a new PIN</a>
-      </form>
-    </section>
-    <section id="set-pin-section" style="display: none;">
-      <h1>Set Withdrawal PIN</h1>
-      <form id="set-pin-form">
-        <input type="text" id="new-pin" placeholder="Enter new PIN (4+ characters)" required>
-        <input type="text" id="confirm-pin" placeholder="Confirm PIN" required>
-        <button type="submit">Set PIN</button>
-      </form>
-    </section>
-    <section id="wallet-section" style="display: none;">
-      <h1>Manage Wallet Addresses</h1>
-      <form id="wallet-form">
-        <input type="text" id="wallet-address" placeholder="Enter wallet address" required>
-        <button type="submit">Add Wallet</button>
-      </form>
-      <select id="saved-wallets"></select>
-      <button id="delete-wallet-btn" disabled>Delete Selected Wallet</button>
-    </section>
-    <section id="withdraw-section" style="display: none;">
-      <h1>Withdraw Funds</h1>
-      <p>Balance: $<span id="user-balance">0.00</span></p>
-      <form id="withdraw-form">
-        <input type="number" id="withdraw-amount" placeholder="Enter amount" step="0.01" required>
-        <select id="withdraw-wallet" required></select>
-        <input type="password" id="withdraw-password" placeholder="Enter password" required>
-        <button type="submit">Submit Withdrawal</button>
-      </form>
-    </section>
-    <section id="history-section" style="display: none;">
-      <h1>Withdrawal History</h1>
-      <div id="withdraw-table"></div>
-    </section>
-    <div id="withdraw-error" style="display: none; color: red;"></div>
-    <div id="withdraw-success" style="display: none; color: green;"></div>
-    <div id="withdraw-loading" style="display: none;">Loading...</div>
-  </main>
-  <footer>
-    <p>Local Time: <span id="localTime"></span></p>
-    <p>Local Date: <span id="localDate"></span></p>
-    <p>UTC Time: <span id="utcTime"></span></p>
-    <button id="jet-button"><i class="fas fa-rocket"></i></button>
-  </footer>
-  <script type="module" src="/js/withdraw.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+
+    <!-- Main Content -->
+    <main class="container" data-aos="fade-up">
+      <div class="card withdraw-card" data-aos="zoom-in">
+        <h2>Withdraw Funds</h2>
+        <div class="loading-spinner" id="withdraw-loading"></div>
+        <div class="error-message" id="withdraw-error"></div>
+        <div class="success-message" id="withdraw-success"></div>
+
+        <!-- PIN Verification Section -->
+        <section class="withdraw-section" id="pin-section" style="display: none;">
+          <h3>Verify Withdrawal PIN</h3>
+          <p>Enter your 4-digit withdrawal PIN to access this page.</p>
+          <form id="pin-form">
+            <div class="form-group">
+              <label for="pin-input">Withdrawal PIN</label>
+              <input type="password" id="pin-input" placeholder="Enter 4-digit PIN" maxlength="4" pattern="\d{4}" required/>
+            </div>
+            <button type="submit" class="btn">Verify PIN</button>
+          </form>
+          <p><a href="#" id="set-pin-link">Set or reset your withdrawal PIN</a></p>
+        </section>
+
+        <!-- Set PIN Section -->
+        <section class="withdraw-section" id="set-pin-section" style="display: none;">
+          <h3>Set Withdrawal PIN</h3>
+          <p>Create a 4-digit PIN for withdrawals.</p>
+          <form id="set-pin-form">
+            <div class="form-group">
+              <label for="new-pin">New PIN</label>
+              <input type="password" id="new-pin" placeholder="Enter 4-digit PIN" maxlength="4" pattern="\d{4}" required/>
+            </div>
+            <div class="form-group">
+              <label for="confirm-pin">Confirm PIN</label>
+              <input type="password" id="confirm-pin" placeholder="Confirm 4-digit PIN" maxlength="4" pattern="\d{4}" required/>
+            </div>
+            <button type="submit" class="btn">Set PIN</button>
+          </form>
+        </section>
+
+        <!-- Wallet Configuration Section -->
+        <section class="withdraw-section" id="wallet-section" style="display: none;">
+          <h3>Configure Wallet Address</h3>
+          <p>Add or select a cryptocurrency wallet address for withdrawals.</p>
+          <form id="wallet-form">
+            <div class="form-group">
+              <label for="wallet-address">New Wallet Address</label>
+              <input type="text" id="wallet-address" placeholder="Enter crypto wallet address"/>
+            </div>
+            <button type="submit" class="btn">Add Wallet Address</button>
+          </form>
+          <div class="form-group">
+            <label for="saved-wallets">Saved Wallets</label>
+            <select id="saved-wallets">
+              <option value="" disabled selected>Select a wallet address</option>
+            </select>
+            <button class="btn" id="delete-wallet-btn" style="margin-top: 0.5rem;" disabled>Delete Selected Wallet</button>
+          </div>
+        </section>
+
+        <!-- Withdrawal Form -->
+        <section class="withdraw-section" id="withdraw-section" style="display: none;">
+          <h3>Your Balance</h3>
+          <p>Available Balance: $<span id="user-balance">0.00</span></p>
+          <h3>Request a Withdrawal</h3>
+          <p>Enter the amount and your account password to request a withdrawal.</p>
+          <form id="withdraw-form">
+            <div class="form-group">
+              <label for="withdraw-amount">Amount ($)</label>
+              <input type="number" id="withdraw-amount" placeholder="Enter amount" min="1" step="0.01" required/>
+            </div>
+            <div class="form-group">
+              <label for="withdraw-wallet">Wallet Address</label>
+              <select id="withdraw-wallet" required>
+                <option value="" disabled selected>Select a saved wallet address</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="withdraw-password">Account Password</label>
+              <input type="password" id="withdraw-password" placeholder="Enter your password" required/>
+            </div>
+            <button type="submit" class="btn">Request Withdrawal</button>
+          </form>
+        </section>
+
+        <!-- Withdrawal History -->
+        <section class="withdraw-section" id="history-section" style="display: none;">
+          <h3>Withdrawal History</h3>
+          <p>View the status of your withdrawal requests.</p>
+          <div id="withdraw-table"></div>
+        </section>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="section section-dark site-footer" data-aos="fade-up">
+      <div class="footer-content">
+        <p class="UTC-time">UTC Time: <span id="utcTime"></span></p>
+        <p class="local-time">Local Time: <span id="localTime"></span></p>
+        <p class="local-date">Local Date: <span id="localDate"></span></p>
+        <nav class="footer-links">
+          <a href="about.html">About Us</a>
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="terms.html">Terms & Conditions</a>
+        </nav>
+        <p class="copyright">© 2025 PrudentProExchange. All Rights Reserved. SEC Registration #0001230714</p>
+      </div>
+    </footer>
+  </div>
+
+  <button id="jet-button" aria-label="Back to top">🚀</button>
+
+  <!-- Scripts -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="js/withdraw.js"></script>
 </body>
 </html>
