@@ -1,0 +1,28 @@
+// .netlify/functions/set-pin.js
+const { createClient } = require('@supabase/supabase-js');
+const bcrypt = require('bcryptjs');
+
+exports.handler = async (event) => {
+  const supabase = createClient(
+    'https://iwkdznjqfbsfkscnbrkc.supabase.co',
+    process.env.SUPABASE_KEY // Use service role key
+  );
+
+  try {
+    const { user_id, pin } = JSON.parse(event.body);
+    if (!/^\d{4}$/.test(pin)) {
+      return { statusCode: 400, body: JSON.stringify({ ok: false, error: 'PIN must be 4 digits' }) };
+    }
+
+    const hashedPin = await bcrypt.hash(pin, 10);
+    const { error } = await supabase
+      .from('profiles')
+      .update({ withdrawal_pin: hashedPin })
+      .eq('id', user_id);
+    if (error) throw error;
+
+    return { statusCode: 200, body: JSON.stringify({ ok: true }) };
+  } catch (error) {
+    return { statusCode: 500, body: JSON.stringify({ ok: false, error: error.message }) };
+  }
+};
