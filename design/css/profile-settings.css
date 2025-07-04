@@ -1,4 +1,6 @@
-/* profile-settings.css */
+/* ──────────────────────────────────────────
+   PROFILE SETTINGS PAGE
+────────────────────────────────────────── */
 
 /* Container */
 .container {
@@ -7,112 +9,110 @@
   padding: 0 1rem;
 }
 
-/* Profile preview */
-.profile-section {
-  text-align: center;
-  margin-bottom: 2rem;
-}
-.profile-section .avatar,
-.profile-section .avatar-icon {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  border: 2px solid #ffd700;
-  margin: 0 auto 1rem;
-  font-size: 4rem;
+/* HEADER */
+.site-header {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   background: #000;
-  color: #ffd700;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #333;
+}
+.site-header .logo { height: 40px; }
+.main-nav a {
+  color: #ddd; margin: 0 0.75rem; text-decoration: none;
+}
+.main-nav a.active, .main-nav a:hover { color: #ffd700; }
+.header-controls button {
+  background: none; border: none; color: #ffd700; font-size: 1.25rem;
+  margin-left: 0.5rem; cursor: pointer;
 }
 
-/* Form */
+/* PROFILE PREVIEW */
+.profile-preview {
+  text-align: center;
+  margin: 2rem 0;
+}
+.avatar, .avatar-icon {
+  width: 120px; height: 120px;
+  border-radius: 50%;
+  border: 2px solid #ffd700;
+  display: inline-flex;
+  align-items: center; justify-content: center;
+  background: #111; color: #ffd700;
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+/* FORM */
 .settings-form {
   background: #111;
   padding: 2rem;
-  border-radius: 8px;
-  border: 1px solid #444;
+  border: 1px solid #333;
+  border-radius: 6px;
 }
 .settings-form h1 {
-  color: #ffd700;
-  text-align: center;
-  margin-bottom: 1.5rem;
+  color: #ffd700; text-align: center; margin-bottom: 1.5rem;
 }
-.form-group,
-.form-row {
+.form-group {
   margin-bottom: 1rem;
 }
+.form-group label {
+  display: block; color: #ddd; margin-bottom: 0.3rem;
+}
+.form-group input[type="text"],
+.form-group input[type="file"],
+.form-group select,
+.form-group input[type="color"] {
+  width: 100%; padding: 0.5rem;
+  background: #222; border: 1px solid #333;
+  border-radius: 4px; color: #eee;
+}
 .form-row {
-  display: flex;
-  gap: 1rem;
+  display: flex; gap: 1rem;
 }
-.form-row .half {
-  flex: 1;
-}
-.settings-form label {
-  display: block;
-  margin-bottom: 0.5rem;
-  color: #ddd;
-}
-.settings-form input[type="text"],
-.settings-form input[type="color"],
-.settings-form input[type="file"],
-.settings-form select {
-  width: 100%;
-  padding: 0.5rem;
-  border: 1px solid #555;
-  border-radius: 4px;
-  background: #222;
-  color: #eee;
-}
+.half { flex: 1; }
+
+/* FIELDSET */
 .settings-fieldset {
-  border: 1px solid #555;
-  padding: 1rem;
-  border-radius: 4px;
-  margin-bottom: 1rem;
-  color: #ddd;
+  border: 1px solid #333;
+  padding: 1rem; margin-bottom: 1rem;
+  color: #ddd; border-radius: 4px;
 }
 .settings-fieldset legend {
-  color: #ffd700;
-  padding: 0 0.5rem;
-}
-.form-group input[type="checkbox"] {
-  margin-right: 0.5rem;
+  padding: 0 0.5rem; color: #ffd700;
 }
 
-/* Buttons */
+/* BUTTONS */
 .cta {
-  display: inline-block;
-  padding: 0.75rem 1.5rem;
+  width: 100%; padding: 0.75rem;
   background: linear-gradient(45deg,#ffd700,#cca300);
-  color: #111;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: bold;
+  color: #111; border: none; border-radius: 4px;
+  font-weight: bold; cursor: pointer;
   transition: transform .2s;
 }
-.cta:hover {
-  transform: translateY(-2px);
-}
-.save-btn {
-  width: 100%;
-  text-align: center;
-  margin-top: 1rem;
-}
+.cta:hover { transform: translateY(-2px); }
 
-/* Header / Nav (reuse your style.css for global) */
+/* FOOTER */
+.site-footer {
+  background: #000; color: #666;
+  text-align: center; padding: 1rem 0; margin-top: 2rem;
+  border-top: 1px solid #333;
+}
+.site-footer .footer-nav a {
+  margin: 0 .5rem; color: #666; text-decoration: none;
+}
+.site-footer .footer-nav a:hover { color: #ffd700; }
 
-/* Back to top */
+/* BACK TO TOP */
 .back-to-top {
   position: fixed; bottom: 1rem; right: 1rem;
-  background: #ffd700; color: #111;
-  border: none; padding: .5rem; border-radius: 4px;
-  cursor: pointer;
+  background: #ffd700; color: #111; border: none;
+  padding: 0.5rem; border-radius: 4px; cursor: pointer;
 }
 
-/* Responsive */
+/* RESPONSIVE */
 @media (max-width: 600px) {
   .form-row { flex-direction: column; }
+  .header-controls { display: none; }
 }
