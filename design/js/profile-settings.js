@@ -48,7 +48,7 @@ function initCommonUI() {
     if (!isClickInsideNav && !isClickOnHamburger && navDrawer.classList.contains('open')) {
       navDrawer.classList.remove('open');
       hamburgerBtn.classList.remove('active');
-      overlay.classList.remove('com.nav-open');
+      overlay.classList.remove('nav-open');
     }
   });
 
@@ -60,7 +60,7 @@ function initCommonUI() {
     icon.classList.toggle('fa-sun');
   });
 
-  // Account menu toggle/OR toggle
+  // Account menu toggle
   accountToggle.addEventListener('click', (e) => {
     e.preventDefault();
     submenu.classList.toggle('open');
