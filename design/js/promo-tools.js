@@ -149,7 +149,7 @@ async function initPromoTools() {
         .from('promotional-banners')
         .getPublicUrl(banner.path);
       img.src = urlData.publicUrl;
-      const downloadBtn = document.querySelector(`.download-btn[data-banner="${banner.path}"]`);
+      const downloadBtn = document.querySelector(`.banner-card .download-btn[data-banner="${banner.path}"]`);
       downloadBtn.href = urlData.publicUrl;
       downloadBtn.setAttribute('download', banner.path.split('/').pop());
     });
