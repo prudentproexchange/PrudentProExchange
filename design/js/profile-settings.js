@@ -1,20 +1,12 @@
 // profile-settings.js
-
-// 1. Init AOS
 document.addEventListener('DOMContentLoaded', () => {
   AOS.init({ duration: 800, once: true });
   initCommonUI();
   initSettingsPage();
 });
 
-// 2. Supabase Client
-const { createClient } = supabase;
-const supabaseClient = createClient(
-  'https://iwkdznjqfbsfkscnbrkc.supabase.co',
-  'YOUR_ANON_KEY_HERE'
-);
 
-// 3. Common UI (hamburger, theme, logout, clocks)
+// 1) Common UI (hamburger, theme toggle, nav, logout, back-to-top, clock)
 function initCommonUI(){
   const hamburgerBtn = document.getElementById('hamburgerBtn'),
         navDrawer     = document.getElementById('navDrawer'),
@@ -25,50 +17,50 @@ function initCommonUI(){
         logoutBtn     = document.getElementById('logout-btn'),
         backToTop     = document.getElementById('back-to-top');
 
-  if (hamburgerBtn) {
-    hamburgerBtn.addEventListener('click', () => {
-      const open = navDrawer.classList.toggle('open');
-      hamburgerBtn.classList.toggle('active');
-      overlay.classList.toggle('nav-open');
-      hamburgerBtn.setAttribute('aria-expanded', open);
-    });
-    document.addEventListener('click', e => {
-      if (!navDrawer.contains(e.target) && !hamburgerBtn.contains(e.target) && navDrawer.classList.contains('open')) {
-        navDrawer.classList.remove('open');
-        hamburgerBtn.classList.remove('active');
-        overlay.classList.remove('nav-open');
-      }
-    });
-  }
+  // Sanity checks
+  console.log({ hamburgerBtn, navDrawer, themeToggle, accountToggle, logoutBtn, backToTop });
 
-  if (themeToggle) {
-    themeToggle.addEventListener('click', () => {
-      const icon = themeToggle.querySelector('i');
-      document.body.classList.toggle('light-theme');
-      icon.classList.toggle('fa-moon');
-      icon.classList.toggle('fa-sun');
-    });
-  }
+  hamburgerBtn?.addEventListener('click', () => {
+    const open = navDrawer.classList.toggle('open');
+    hamburgerBtn.classList.toggle('active');
+    overlay.classList.toggle('nav-open');
+    hamburgerBtn.setAttribute('aria-expanded', open);
+  });
 
-  if (accountToggle && submenu) {
-    accountToggle.addEventListener('click', e => {
-      e.preventDefault();
-      submenu.classList.toggle('open');
-    });
-  }
+  document.addEventListener('click', e => {
+    if (
+      navDrawer.classList.contains('open') &&
+      !navDrawer.contains(e.target) &&
+      !hamburgerBtn.contains(e.target)
+    ) {
+      navDrawer.classList.remove('open');
+      hamburgerBtn.classList.remove('active');
+      overlay.classList.remove('nav-open');
+      hamburgerBtn.setAttribute('aria-expanded','false');
+    }
+  });
 
-  if (logoutBtn) {
-    logoutBtn.addEventListener('click', async () => {
-      await supabaseClient.auth.signOut();
-      window.location.href = 'login.html';
-    });
-  }
+  themeToggle?.addEventListener('click', () => {
+    const icon = themeToggle.querySelector('i');
+    document.body.classList.toggle('light-theme');
+    icon.classList.toggle('fa-moon');
+    icon.classList.toggle('fa-sun');
+  });
 
-  if (backToTop) {
-    backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
-  }
+  accountToggle?.addEventListener('click', e => {
+    e.preventDefault();
+    const opened = submenu.classList.toggle('open');
+    accountToggle.setAttribute('aria-expanded', opened);
+  });
 
-  // Clocks
+  logoutBtn?.addEventListener('click', async () => {
+    await supabaseClient.auth.signOut();
+    window.location.href = 'login.html';
+  });
+
+  backToTop?.addEventListener('click', () => window.scrollTo({ top:0, behavior:'smooth' }));
+
+  // clocks
   function updateTimes(){
     const now = new Date();
     document.getElementById('utcTime').textContent   = now.toUTCString();
@@ -77,111 +69,107 @@ function initCommonUI(){
       weekday:'long',year:'numeric',month:'long',day:'numeric'
     });
   }
-  setInterval(updateTimes, 1000);
+  setInterval(updateTimes,1000);
   updateTimes();
 }
 
-// 4. Settings page logic
+
+// 2) Settings page logic
 async function initSettingsPage(){
-  // Auth check
+  // Supabase client
+  const { createClient } = supabase;
+  window.supabaseClient = createClient(
+    'https://iwkdznjqfbsfkscnbrkc.supabase.co',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9…' // your anon key
+  );
+
+  // 1) auth check
   const { data:{ user }, error: authErr } = await supabaseClient.auth.getUser();
   if (authErr || !user) {
     return void(window.location.href='login.html');
   }
 
-  // Load profile
+  // 2) load profile
   const { data: profile, error: profErr } = await supabaseClient
-    .from('profiles')
-    .select('first_name, photo_url')
-    .eq('id', user.id)
-    .single();
-  if (profErr) {
-    return console.error('Profile load error:', profErr);
-  }
-
-  document.getElementById('welcomeName').textContent = profile.first_name || 'User';
-  if (profile.photo_url) {
-    const { data: urlData } = supabaseClient.storage
-      .from('profile-photos')
-      .getPublicUrl(profile.photo_url);
+    .from('profiles').select('first_name,photo_url').eq('id', user.id).single();
+  if (profErr) return alert('Error loading profile');
+  document.getElementById('welcomeName').textContent = profile.first_name;
+  if (profile.photo_url){
+    const { data: urlData } = await supabaseClient.storage
+      .from('profile-photos').getPublicUrl(profile.photo_url);
     const img = document.getElementById('navProfilePhoto');
     img.src = urlData.publicUrl;
     img.style.display = 'block';
     document.getElementById('defaultProfileIcon').style.display = 'none';
   }
 
-  // Load or create settings
+  // 3) load user_settings (if none, PGRST116)
   const { data: settings, error: setErr } = await supabaseClient
-    .from('user_settings')
-    .select('*')
-    .eq('user_id', user.id)
-    .single();
+    .from('user_settings').select('*').eq('user_id', user.id).single();
   if (setErr && setErr.code !== 'PGRST116') {
-    return console.error('Settings load error:', setErr);
+    return alert('Error loading settings');
   }
 
-  // Populate form
-  if (settings) {
+  // 4) populate form
+  if (settings){
     document.getElementById('displayName').value     = settings.display_name || '';
     document.getElementById('timezone').value        = settings.timezone || 'UTC';
     document.getElementById('locale').value          = settings.locale || 'en-US';
-    document.getElementById('themeMode').value       = settings.theme_mode   || 'light';
+    document.getElementById('themeMode').value       = settings.theme_mode || 'light';
     document.getElementById('accentColor').value     = settings.accent_color || '#ffd700';
-    document.getElementById('fontSize').value        = settings.font_size    || 'medium';
-    document.getElementById('notifyEmail').checked   = settings.notify_email;
-    document.getElementById('notifySMS').checked     = settings.notify_sms;
-    document.getElementById('notifyPush').checked    = settings.notify_push;
+    document.getElementById('fontSize').value        = settings.font_size || 'medium';
+    document.getElementById('notifyEmail').checked   = settings.notify_email || false;
+    document.getElementById('notifySMS').checked     = settings.notify_sms || false;
+    document.getElementById('notifyPush').checked    = settings.notify_push || false;
     document.getElementById('digestFrequency').value = settings.digest_frequency || 'instant';
-    document.getElementById('twoFactorEnabled').checked = settings.two_factor_enabled;
+    document.getElementById('twoFactorEnabled').checked = settings.two_factor_enabled || false;
   }
 
-  // Timezone select
+  // 5) timezone dropdown
   const tzSelect = document.getElementById('timezone');
-  for (let tz of Intl.supportedValuesOf('timeZone')) {
-    const o = document.createElement('option');
+  for (let tz of Intl.supportedValuesOf('timeZone')){
+    let o = document.createElement('option');
     o.value = o.textContent = tz;
     tzSelect.appendChild(o);
   }
 
-  // Form submit
+  // 6) form submit
   document.getElementById('settingsForm').addEventListener('submit', async e => {
     e.preventDefault();
     const fd = new FormData(e.target);
-    const up = {
+    let up = {
       user_id: user.id,
       display_name: fd.get('displayName'),
-      timezone:     fd.get('timezone'),
-      locale:       fd.get('locale'),
-      theme_mode:   fd.get('themeMode'),
+      timezone: fd.get('timezone'),
+      locale: fd.get('locale'),
+      theme_mode: fd.get('themeMode'),
       accent_color: fd.get('accentColor'),
-      font_size:    fd.get('fontSize'),
-      notify_email: fd.get('notifyEmail') === 'on',
-      notify_sms:   fd.get('notifySMS') === 'on',
-      notify_push:  fd.get('notifyPush') === 'on',
+      font_size: fd.get('fontSize'),
+      notify_email: fd.get('notifyEmail')=== 'on',
+      notify_sms: fd.get('notifySMS')=== 'on',
+      notify_push: fd.get('notifyPush')=== 'on',
       digest_frequency: fd.get('digestFrequency'),
-      two_factor_enabled: fd.get('twoFactorEnabled') === 'on',
-      updated_at:   new Date().toISOString()
+      two_factor_enabled: fd.get('twoFactorEnabled')=== 'on',
+      updated_at: new Date().toISOString()
     };
 
-    // Handle avatar upload
+    // avatar upload
     const file = fd.get('avatarUpload');
-    if (file && file.size > 0) {
-      const path = `${user.id}_${Date.now()}_${file.name}`;
-      const { error: upErr } = await supabaseClient.storage
-        .from('profile-photos').upload(path, file, { upsert: true });
-      if (upErr) return alert('Avatar upload failed: ' + upErr.message);
-      up.avatar_url = path;
+    if (file && file.size) {
+      const name = `${user.id}_${Date.now()}_${file.name}`;
+      let { error: upErr } = await supabaseClient.storage
+        .from('profile-photos').upload(name, file, { upsert: true });
+      if (upErr) return alert('Avatar upload failed');
+      up.photo_url = name;
       await supabaseClient.from('profiles')
-        .update({ photo_url: path }).eq('id', user.id);
+        .update({ photo_url: name }).eq('id', user.id);
     }
 
-    // Upsert settings
+    // upsert settings
     const { error: saveErr } = await supabaseClient
       .from('user_settings')
       .upsert(up, { onConflict: 'user_id' });
-    if (saveErr) {
-      return alert('Save failed: ' + saveErr.message);
-    }
+    if (saveErr) return alert('Save failed');
     alert('Settings saved!');
   });
 }
