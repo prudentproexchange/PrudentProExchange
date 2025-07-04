@@ -113,19 +113,15 @@
         <!-- Withdrawal Form -->
         <section class="withdraw-section">
           <h3>Request a Withdrawal</h3>
-          <p>Enter the amount and select a payment method.</p>
+          <p>Enter the amount and your cryptocurrency wallet address.</p>
           <form id="withdraw-form">
             <div class="form-group">
               <label for="withdraw-amount">Amount ($)</label>
               <input type="number" id="withdraw-amount" placeholder="Enter amount" min="1" step="0.01" required/>
             </div>
             <div class="form-group">
-              <label for="withdraw-method">Payment Method</label>
-              <select id="withdraw-method" required>
-                <option value="" disabled selected>Select a method</option>
-                <option value="bank">Bank Transfer</option>
-                <option value="crypto">Cryptocurrency</option>
-              </select>
+              <label for="withdraw-wallet">Wallet Address</label>
+              <input type="text" id="withdraw-wallet" placeholder="Enter your crypto wallet address" required/>
             </div>
             <button type="submit" class="btn">Request Withdrawal</button>
           </form>
