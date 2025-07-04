@@ -1,6 +1,6 @@
-/* profile-settings.css */
+/* css/profile-settings.css */
 
-/* Ensure video is always in the background */
+/* Background video sits behind everything */
 .bg-video {
   position: fixed;
   top: 0; left: 0;
@@ -8,22 +8,98 @@
   object-fit: cover;
   z-index: -2;
 }
-
-/* Overlay sits above video */
 .overlay {
   position: relative;
   z-index: 1;
 }
 
-/* Sidebar & nav-overlay already styled globally */
+/* Container */
+.settings-page.container {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 1rem;
+  color: #e0e0ff;
+}
 
-/* Profile section at top */
+/* Cards */
+.settings-section.card {
+  background: rgba(0,0,0,0.5);
+  border: 1px solid #ffd700;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  backdrop-filter: blur(8px);
+}
+
+/* Headings */
+.settings-page h1, .settings-section h2 {
+  font-family: 'Playfair Display', serif;
+  color: #ffd700;
+  margin-bottom: 1rem;
+}
+.settings-section h2 {
+  font-size: 1.8rem;
+}
+
+/* Form groups */
+.form-group {
+  margin-bottom: 1rem;
+}
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+.form-group input[type="text"],
+.form-group input[type="file"],
+.form-group select,
+.form-group input[type="color"] {
+  width: 100%;
+  max-width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ffd700;
+  border-radius: 4px;
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  font-size: 1rem;
+}
+.form-group input[type="file"] {
+  background: transparent;
+}
+
+/* Checkboxes */
+.settings-section label input[type="checkbox"] {
+  margin-right: 0.5rem;
+}
+
+/* Save button */
+.save-btn {
+  display: block;
+  width: 100%;
+  max-width: 300px;
+  margin: 2rem auto 0;
+  padding: 1rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #000;
+  background: linear-gradient(45deg, #ffd700, #cca300);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.save-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(255,215,0,0.6);
+}
+
+/* Profile section (avatar + welcome) */
 .profile-section {
   display: flex;
   align-items: center;
-  padding: 1.5rem 2rem;
-  background: rgba(0,0,0,0.5);
-  border-bottom: 1px solid rgba(255,215,0,0.2);
+  padding: 1rem;
+  margin-bottom: 2rem;
 }
 .profile-container {
   margin-right: 1rem;
@@ -33,129 +109,24 @@
   border-radius: 50%;
   border: 2px solid #ffd700;
   background: #222;
-  display: flex; justify-content: center; align-items: center;
-  font-size: 2rem; color: #ffd700;
-}
-.welcome-message {
-  font-size: 1.25rem;
-  color: #ffd700;
-  font-family: 'Playfair Display', serif;
-}
-
-/* Main container */
-.settings-page.container {
-  max-width: 1000px;
-  margin: 2rem auto;
-  padding: 0 1rem;
-}
-
-/* Page title */
-.settings-page h1 {
-  font-size: 2rem;
-  color: #ffd700;
-  text-align: center;
-  margin-bottom: 2rem;
-  font-family: 'Playfair Display', serif;
-}
-
-/* Card panels */
-.settings-section.card {
-  background: rgba(0,0,0,0.6);
-  border: 2px solid rgba(255,215,0,0.3);
-  border-radius: 12px;
-  padding: 1.5rem;
-  margin-bottom: 2rem;
-  backdrop-filter: blur(10px);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-.settings-section.card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 30px rgba(255,215,0,0.5);
-}
-
-/* Section headings */
-.settings-section h2 {
-  font-size: 1.5rem;
-  color: #ffd700;
-  margin-bottom: 1rem;
-  font-family: 'Playfair Display', serif;
-}
-
-/* Form group */
-.form-group {
-  margin-bottom: 1rem;
-}
-.form-group label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-weight: 500;
-  color: #e0e0ff;
-}
-.form-group input[type="text"],
-.form-group input[type="file"],
-.form-group input[type="color"],
-.form-group select {
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #555;
-  border-radius: 5px;
-  background: rgba(255,255,255,0.05);
-  color: #fff;
-  font-size: 1rem;
-  transition: border-color 0.3s ease;
-}
-.form-group input:focus,
-.form-group select:focus {
-  outline: none;
-  border-color: #ffd700;
-}
-
-/* Checkbox labels */
-.settings-section label input[type="checkbox"] {
-  margin-right: 0.5rem;
-  transform: scale(1.2);
-  vertical-align: middle;
-}
-.settings-section label {
   display: flex;
   align-items: center;
-  color: #e0e0ff;
-  margin-bottom: 0.75rem;
-  cursor: pointer;
+  justify-content: center;
+  font-size: 2rem;
+  color: #ffd700;
+}
+.welcome-message {
+  font-size: 1.3rem;
+  color: #ffd700;
+  font-family: 'Playfair Display', serif;
 }
 
-/* Save button */
-.btn.save-btn {
-  display: block;
-  margin: 2rem auto;
-  padding: 0.75rem 2rem;
-  font-size: 1.1rem;
-  font-weight: 600;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  background: linear-gradient(45deg, #ffd700, #cca300);
-  color: #000;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-.btn.save-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(255,215,0,0.5);
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .profile-section {
-    flex-direction: column;
-    align-items: flex-start;
+/* Responsive */
+@media (max-width: 600px) {
+  .settings-page.container {
+    padding: 0.5rem;
   }
-  .avatar {
-    margin-bottom: 0.5rem;
-  }
-  .settings-page h1 {
-    font-size: 1.75rem;
-  }
-  .settings-section {
-    padding: 1rem;
+  .save-btn {
+    max-width: 100%;
   }
 }
