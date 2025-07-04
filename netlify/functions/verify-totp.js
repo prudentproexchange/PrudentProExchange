@@ -18,6 +18,8 @@ authenticator.options = {
 
 exports.handler = async (event) => {
   try {
+    console.log('verify-totp called with body:', event.body);
+
     // Validate environment variables
     if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
       console.error('Missing Supabase environment variables');
@@ -45,8 +47,6 @@ exports.handler = async (event) => {
 
     // Parse and validate input
     let { user_id, token } = JSON.parse(event.body);
-
-    // Validate user_id (assuming UUID format) and token
     const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
     if (!user_id || !uuidRegex.test(user_id) || !/^\d{6}$/.test(token)) {
       return {
@@ -56,14 +56,21 @@ exports.handler = async (event) => {
     }
 
     // Fetch user's Base32 secret from Supabase
-    const { data: profile, error } = await supabase
+    const { data: profile, error: dbError } = await supabase
       .from('profiles')
       .select('two_fa_secret')
       .eq('id', user_id)
-      .single();
+      .maybeSingle();    // <-- use maybeSingle()
 
-    if (error || !profile?.two_fa_secret) {
-      console.error('Supabase error or no secret found:', error?.message || 'No secret');
+    if (dbError) {
+      console.error('DB error fetching secret:', dbError);
+      return {
+        statusCode: 500,
+        body: JSON.stringify({ ok: false, error: 'Database error' })
+      };
+    }
+    if (!profile || !profile.two_fa_secret) {
+      console.warn('No 2FA secret found for user:', user_id);
       return {
         statusCode: 200,
         body: JSON.stringify({ ok: false, error: 'No secret found for user' })
