@@ -1,79 +1,31 @@
-/* Neutralize the overlay so you can click through and see your form */
-.overlay {
-  background: transparent !important;
-  backdrop-filter: none !important;
-  pointer-events: none;
-}
+/* Base resets */
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:Poppins, sans-serif; background:#111; color:#eee; line-height:1.5; }
+.container { max-width:800px; margin:2rem auto; padding:1rem; }
 
-/* Layout adjustments */
-.settings-page.container {
-  max-width: 800px;
-  margin: 2rem auto;
-  padding: 0 1rem;
-  position: relative; /* sits above the video */
-  z-index: 2;
-}
+/* Header */
+.site-header { display:flex; align-items:center; padding:1rem; background:#000; }
+.site-header .logo-link img { height:40px; }
+.site-header button { background:none; border:none; color:#fff; font-size:1.25rem; margin-left:1rem; cursor:pointer; }
+.nav-drawer { margin-left:auto; }
+.nav-drawer a { color:#ddd; text-decoration:none; margin:0 0.5rem; }
+.nav-drawer a.active { color:#ffd700; }
 
-/* Card styling */
-.settings-section.card {
-  background: rgba(0,0,0,0.6);
-  padding: 1.5rem;
-  border-radius: 8px;
-  margin-bottom: 2rem;
-}
+/* Profile Section */
+.profile-section { display:flex; align-items:center; padding:2rem 1rem; }
+.profile-container { position:relative; width:80px; height:80px; margin-right:1rem; }
+.avatar { width:100%; height:100%; border-radius:50%; object-fit:cover; background:#333; display:block; }
+.default-avatar { font-size:2rem; text-align:center; line-height:80px; color:#666; }
 
-/* Form elements */
-.form-group {
-  margin-bottom: 1rem;
-}
-.form-group label {
-  display: block;
-  margin-bottom: 0.5rem;
-  color: #FFD700;
-}
-.form-group input[type="text"],
-.form-group select,
-.form-group input[type="color"] {
-  width: 100%;
-  padding: 0.5rem;
-  border-radius: 4px;
-  border: 1px solid #444;
-  background: #111;
-  color: #fff;
-}
+/* Cards & Form */
+.card { background:rgba(255,255,255,0.05); padding:1.5rem; margin-bottom:1rem; border-radius:8px; }
+.card h2 { margin-bottom:1rem; color:#ffd700; }
+label { display:block; margin-bottom:0.75rem; }
+label input[type="text"],
+label select,
+label input[type="color"] { width:100%; padding:0.5rem; border:1px solid #444; border-radius:4px; background:#222; color:#eee; }
+label input[type="checkbox"] { margin-right:0.5rem; }
 
-/* Checkbox labels */
-.settings-section.card label {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: #E0E0FF;
-}
-
-/* Save button */
-.save-btn {
-  display: block;
-  margin: 2rem auto;
-  padding: 0.75rem 2rem;
-  background: linear-gradient(45deg, #FFD700, #CCA300);
-  border: none;
-  border-radius: 4px;
-  color: #000;
-  font-size: 1rem;
-  cursor: pointer;
-}
-.save-btn:hover {
-  transform: scale(1.05);
-}
-
-/* Avatar in header */
-.profile-section .avatar {
-  width: 80px;
-  height: 80px;
-  border: 2px solid #FFD700;
-}
-
-/* Hide nav-overlay’s pointer-block if it exists */
-.nav-overlay {
-  pointer-events: none;
-}
+/* Button */
+.btn { display:inline-block; padding:0.75rem 1.5rem; background:#ffd700; color:#000; border:none; border-radius:4px; cursor:pointer; }
+.btn:hover { background:#cca300; }
