@@ -1,107 +1,130 @@
-/* Settings Page Specific Styles */
+/* Ensure background video is behind everything */
+.bg-video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -2;
+}
+
+/* Overlay container floats above video */
+.overlay {
+  position: relative;
+  z-index: 1;
+}
+
+/* Main container for settings page */
 .settings-page.container {
-  max-width: 800px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
+  position: relative;
+  z-index: 2; /* Ensure it’s above the video */
 }
 
-.settings-page h1 {
-  font-size: 2.5rem;
+/* Profile Section */
+.profile-section {
+  display: flex;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+}
+
+.profile-container {
+  margin-right: 1rem;
+}
+
+.avatar {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  border: 2px solid #ffd700; /* Gold */
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 120px;
+  color: #ffd700; /* Gold */
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.avatar:hover {
+  transform: scale(1.05);
+}
+
+.welcome-message {
+  font-size: 1.5rem;
   color: #ffd700; /* Gold */
   font-family: 'Playfair Display', serif;
-  margin-bottom: 2rem;
-  text-align: center;
 }
 
-.settings-section.card {
+/* Settings Content */
+.settings-content {
+  display: block; /* Ensure visibility */
   background: rgba(255, 255, 255, 0.1);
   padding: 2rem;
-  border: 1px solid #ffd700; /* Gold */
+  border: 2px solid #ffd700; /* Gold */
   border-radius: 15px;
   backdrop-filter: blur(15px);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
-  margin-bottom: 2rem;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
-.settings-section h2 {
-  font-size: 1.8rem;
-  color: #ffd700; /* Gold */
-  margin-bottom: 1.5rem;
-  font-family: 'Playfair Display', serif;
+.settings-content:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 12px 40px rgba(255, 215, 0, 0.5); /* Gold glow */
+  border-color: #cca300;
 }
 
-.form-group {
-  margin-bottom: 1.5rem;
-}
-
-.form-group label {
-  display: block;
-  font-size: 1rem;
-  color: #e0e0ff;
-  margin-bottom: 0.5rem;
-  font-family: 'Poppins', sans-serif;
-}
-
-.form-group input[type="text"],
-.form-group input[type="file"],
-.form-group select {
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #ffd700; /* Gold */
-  border-radius: 5px;
-  background: rgba(255, 255, 255, 0.05);
-  color: #e0e0ff;
-  font-size: 1rem;
-  font-family: 'Poppins', sans-serif;
-}
-
-.form-group input[type="text"]::placeholder {
-  color: #a0a0ff;
-}
-
-.form-group input[type="color"] {
-  width: 100%;
-  height: 40px;
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  padding: 0;
-}
-
-.form-group input[type="checkbox"] {
-  margin-right: 0.5rem;
-  accent-color: #ffd700; /* Gold */
-}
-
-.save-btn {
-  display: block;
-  width: 100%;
-  padding: 1rem;
+/* Buttons */
+.btn, #theme-toggle, #hamburgerBtn {
+  padding: 0.75rem 1.5rem;
   background: linear-gradient(45deg, #ffd700, #cca300); /* Gold gradient */
   color: #000;
   border: none;
   border-radius: 5px;
-  font-size: 1.2rem;
+  font-size: 1rem;
   font-weight: 600;
   font-family: 'Poppins', sans-serif;
   cursor: pointer;
-  transition: background 0.3s ease, transform 0.3s ease;
-  text-align: center;
+  transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative; /* Ensure clickable */
+  z-index: 10; /* Prevent overlap issues */
 }
 
-.save-btn:hover {
+.btn:hover:not(:disabled), #theme-toggle:hover, #hamburgerBtn:hover {
   background: linear-gradient(45deg, #cca300, #ffd700);
   transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
 }
 
-.golden-btn {
-  animation: pulse 2s infinite;
+/* Navigation Drawer */
+#navDrawer {
+  position: fixed;
+  top: 0;
+  right: -250px; /* Hidden by default */
+  width: 250px;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.9);
+  transition: right 0.3s ease;
+  z-index: 100; /* Above other elements */
 }
 
-@keyframes pulse {
-  0% { background-color: #ffd700; }
-  50% { background-color: gold; }
-  100% { background-color: #ffd700; }
+#navDrawer.open {
+  right: 0; /* Visible when open */
+}
+
+/* Error Message */
+.error-message {
+  color: #ff6b6b;
+  font-size: 1rem;
+  margin-top: 1rem;
 }
 
 /* Responsive Design */
@@ -110,20 +133,24 @@
     padding: 1rem;
   }
 
-  .settings-page h1 {
-    font-size: 2rem;
+  .profile-section {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1rem;
   }
 
-  .settings-section h2 {
-    font-size: 1.5rem;
+  .profile-container {
+    margin-right: 0;
+    margin-bottom: 0.5rem;
   }
 
-  .form-group label {
-    font-size: 0.9rem;
+  .avatar {
+    width: 120px;
+    height: 120px;
+    font-size: 72px;
   }
 
-  .save-btn {
-    font-size: 1rem;
-    padding: 0.75rem;
+  .welcome-message {
+    font-size: 1.2rem;
   }
 }
