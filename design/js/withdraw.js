@@ -169,8 +169,8 @@ async function initPinVerification(userId, profile) {
     showLoading(true);
     try {
       const pin = document.getElementById('pin-input').value;
-      if (!/^\d{4}$/.test(pin)) {
-        throw new Error('PIN must be 4 digits');
+      if (!/^[0-9a-zA-Z]{4,}$/.test(pin)) {
+        throw new Error('PIN must be 4 or more alphanumeric characters');
       }
 
       // Verify PIN via server-side function
@@ -182,7 +182,7 @@ async function initPinVerification(userId, profile) {
       const result = await response.json();
 
       if (!result.ok) {
-        throw new Error('Invalid PIN');
+        throw new Error(result.error || 'Invalid PIN');
       }
 
       showSection('wallet-section');
@@ -212,8 +212,8 @@ async function initSetPinForm(userId) {
     try {
       const newPin = document.getElementById('new-pin').value;
       const confirmPin = document.getElementById('confirm-pin').value;
-      if (!/^\d{4}$/.test(newPin)) {
-        throw new Error('PIN must be 4 digits');
+      if (!/^[0-9a-zA-Z]{4,}$/.test(newPin)) {
+        throw new Error('PIN must be 4 or more alphanumeric characters');
       }
       if (newPin !== confirmPin) {
         throw new Error('PINs do not match');
@@ -227,7 +227,7 @@ async function initSetPinForm(userId) {
       });
       const result = await response.json();
 
-      if (!result.ok) {
+      if (!response.ok) {
         throw new Error(result.error || 'Error setting PIN');
       }
 
