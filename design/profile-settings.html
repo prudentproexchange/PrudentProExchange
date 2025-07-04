@@ -4,135 +4,189 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Profile Settings • PrudentProExchange</title>
-  <link rel="stylesheet" href="css/style.css"/>              <!-- global -->
-  <link rel="stylesheet" href="css/profile-settings.css"/>   <!-- this page -->
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/profile-settings.css"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4"></script>
+  <style>
+    .error-message {
+      color: #ff4444;
+      background: rgba(255, 0, 0, 0.1);
+      padding: 10px;
+      border-radius: 5px;
+      margin: 10px 0;
+      display: none;
+    }
+    .loading-spinner {
+      border: 4px solid rgba(255, 255, 255, 0.3);
+      border-top: 4px solid var(--primary);
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto;
+      display: none;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
 </head>
 <body class="dashboard-page">
+  <!-- Video Background -->
+  <video class="bg-video" autoplay muted loop playsinline preload="auto">
+    <source src="assets/videos/background.webm" type="video/webm">
+    <source src="assets/videos/background.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
 
-  <!-- SITE HEADER -->
-  <header class="site-header">
-    <a href="dashboard.html" class="logo-link">
-      <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo"/>
-    </a>
-    <nav class="main-nav">
-      <a href="dashboard.html">Dashboard</a>
-      <a href="invest.html">Invest</a>
-      <a href="profile-settings.html" class="active">Profile</a>
-      <a href="2fa.html">2FA</a>
-      <a href="#" id="logout-btn">Logout</a>
-    </nav>
-    <div class="header-controls">
-      <button id="theme-toggle" class="theme-toggle"><i class="fas fa-moon"></i></button>
-      <button id="hamburgerBtn" class="hamburger"><span></span><span></span><span></span></button>
-    </div>
-  </header>
-
-  <!-- PROFILE PREVIEW -->
-  <section class="profile-preview">
-    <div class="avatar-wrapper">
-      <img id="navProfilePhoto" class="avatar" src="" alt="Avatar" hidden/>
-      <div id="defaultProfileIcon" class="avatar-icon">👤</div>
-    </div>
-    <h2>Welcome, <span id="welcomeName">User</span>!</h2>
-  </section>
-
-  <!-- SETTINGS FORM -->
-  <main class="container">
-    <form id="settingsForm" class="settings-form" data-aos="fade-up">
-      <h1>Profile Settings</h1>
-
-      <!-- Display Name -->
-      <div class="form-group">
-        <label for="displayName">Display Name</label>
-        <input type="text" id="displayName" name="displayName" required/>
+  <div class="overlay">
+    <!-- Header -->
+    <header class="site-header">
+      <a href="dashboard.html" class="logo-link">
+        <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo"/>
+      </a>
+      <div class="header-right">
+        <button id="theme-toggle" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
+        <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
       </div>
-
-      <!-- Avatar Upload -->
-      <div class="form-group">
-        <label for="avatarUpload">Avatar</label>
-        <input type="file" id="avatarUpload" name="avatarUpload" accept="image/*"/>
-      </div>
-
-      <!-- Timezone -->
-      <div class="form-group">
-        <label for="timezone">Timezone</label>
-        <select id="timezone" name="timezone" required></select>
-      </div>
-
-      <div class="form-row">
-        <!-- Locale -->
-        <div class="form-group half">
-          <label for="locale">Locale</label>
-          <select id="locale" name="locale"></select>
+      <nav class="nav-drawer" id="navDrawer">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="invest.html">Invest</a>
+        <a href="withdraw.html">Withdraw</a>
+        <a href="transactions.html">Transactions</a>
+        <a href="referrals.html">Referrals</a>
+        <div class="account-menu">
+          <a href="#" class="account-toggle" id="account-toggle">Account ▾</a>
+          <ul class="submenu">
+            <li><a href="profile-settings.html" class="active">Profile Settings</a></li>
+            <li><a href="transfer.html">Transfer Balance</a></li>
+            <li><a href="change-password.html">Change Password</a></li>
+            <li><a href="support.html">Support Ticket</a></li>
+            <li><a href="promo-tools.html">Promotional Tools</a></li>
+            <li><a href="2fa.html">2FA Security</a></li>
+            <li><a href="#" id="logout-btn">Logout</a></li>
+          </ul>
         </div>
-        <!-- Theme -->
-        <div class="form-group half">
-          <label for="themeMode">Theme Mode</label>
-          <select id="themeMode" name="themeMode">
-            <option value="light">Light</option>
-            <option value="dark">Dark</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="form-row">
-        <!-- Accent Color -->
-        <div class="form-group half">
-          <label for="accentColor">Accent Color</label>
-          <input type="color" id="accentColor" name="accentColor" value="#ffd700"/>
-        </div>
-        <!-- Font Size -->
-        <div class="form-group half">
-          <label for="fontSize">Font Size</label>
-          <select id="fontSize" name="fontSize">
-            <option value="small">Small</option>
-            <option value="medium">Medium</option>
-            <option value="large">Large</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- Notifications -->
-      <fieldset class="settings-fieldset">
-        <legend>Notifications</legend>
-        <label><input type="checkbox" id="notifyEmail" name="notifyEmail"/> Email</label>
-        <label><input type="checkbox" id="notifySMS" name="notifySMS"/> SMS</label>
-        <label><input type="checkbox" id="notifyPush" name="notifyPush"/> Push</label>
-        <div class="form-group">
-          <label for="digestFrequency">Digest Frequency</label>
-          <select id="digestFrequency" name="digestFrequency">
-            <option value="instant">Instant</option>
-            <option value="daily">Daily</option>
-            <option value="weekly">Weekly</option>
-          </select>
-        </div>
-      </fieldset>
-
-      <!-- Two-Factor -->
-      <fieldset class="settings-fieldset">
-        <legend>Security</legend>
-        <label><input type="checkbox" id="twoFactorEnabled" name="twoFactorEnabled"/> Enable 2FA</label>
-      </fieldset>
-
-      <button type="submit" class="cta save-btn">Save Settings</button>
-    </form>
-  </main>
-
-  <!-- SITE FOOTER -->
-  <footer class="site-footer">
-    <div class="footer-content">
-      <p>© 2025 PrudentProExchange. All rights reserved.</p>
-      <nav class="footer-nav">
-        <a href="about.html">About</a>
-        <a href="privacy.html">Privacy</a>
-        <a href="terms.html">Terms</a>
+        <a href="kyc.html">KYC Verification</a>
+        <a href="transfer.html">Transfer</a>
       </nav>
-    </div>
-  </footer>
+    </header>
+    <div class="nav-overlay"></div>
 
-  <button id="back-to-top" class="back-to-top">↑</button>
+    <!-- Profile Section -->
+    <div class="profile-section">
+      <div class="profile-container">
+        <img id="navProfilePhoto" src="" alt="Profile" class="avatar" style="display: none;"/>
+        <span id="defaultProfileIcon" class="avatar">👤</span>
+      </div>
+      <div class="welcome-message">Welcome to Your Profile Settings! <span id="welcomeName"></span></div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="container" data-aos="fade-up">
+      <div class="card settings-card" data-aos="zoom-in">
+        <h2>Profile Settings</h2>
+        <div class="loading-spinner" id="settings-loading"></div>
+        <div class="error-message" id="settings-error"></div>
+        <form id="settingsForm" class="settings-form">
+          <div class="form-group">
+            <label for="displayName">Display Name</label>
+            <input type="text" id="displayName" name="displayName" required/>
+          </div>
+
+          <div class="form-group">
+            <label for="avatarUpload">Avatar</label>
+            <input type="file" id="avatarUpload" name="avatarUpload" accept="image/*"/>
+          </div>
+
+          <div class="form-group">
+            <label for="timezone">Timezone</label>
+            <select id="timezone" name="timezone" required></select>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group half">
+              <label for="locale">Locale</label>
+              <select id="locale" name="locale">
+                <option value="en-US">English (US)</option>
+                <option value="en-GB">English (UK)</option>
+              </select>
+            </div>
+            <div class="form-group half">
+              <label for="themeMode">Theme</label>
+              <select id="themeMode" name="themeMode">
+                <option value="light">Light</option>
+                <option value="dark">Dark</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group half">
+              <label for="accentColor">Accent Color</label>
+              <input type="color" id="accentColor" name="accentColor" value="#ffd700"/>
+            </div>
+            <div class="form-group half">
+              <label for="fontSize">Font Size</label>
+              <select id="fontSize" name="fontSize">
+                <option value="small">Small</option>
+                <option value="medium">Medium</option>
+                <option value="large">Large</option>
+              </select>
+            </div>
+          </div>
+
+          <fieldset class="settings-fieldset">
+            <legend>Notifications</legend>
+            <label><input type="checkbox" id="notifyEmail" name="notifyEmail"/> Email</label>
+            <label><input type="checkbox" id="notifySMS" name="notifySMS"/> SMS</label>
+            <label><input type="checkbox" id="notifyPush" name="notifyPush"/> Push</label>
+            <div class="form-group">
+              <label for="digestFrequency">Digest Frequency</label>
+              <select id="digestFrequency" name="digestFrequency">
+                <option value="instant">Instant</option>
+                <option value="daily">Daily</option>
+                <option value="weekly">Weekly</option>
+              </select>
+            </div>
+          </fieldset>
+
+          <fieldset class="settings-fieldset">
+            <legend>Security</legend>
+            <a href="2fa.html" class="btn">Enable Two-Factor Authentication</a>
+          </fieldset>
+
+          <button type="submit" class="btn save-btn">Save Settings</button>
+        </form>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="section section-dark site-footer" data-aos="fade-up">
+      <div class="footer-content">
+        <p class="UTC-time">UTC Time: <span id="utcTime"></span></p>
+        <p class="local-time">Local Time: <span id="localTime"></span></p>
+        <p class="local-date">Local Date: <span id="localDate"></span></p>
+        <nav class="footer-links">
+          <a href="about.html">About Us</a>
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="terms.html">Terms & Conditions</a>
+        </nav>
+        <p class="copyright">© 2025 PrudentProExchange. All Rights Reserved. SEC Registration #0001230714</p>
+      </div>
+    </footer>
+  </div>
+
+  <button id="jet-button" aria-label="Back to top">🚀</button>
+
+  <!-- Scripts -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script src="js/profile-settings.js"></script>
 </body>
 </html>
