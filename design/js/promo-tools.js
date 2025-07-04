@@ -158,6 +158,9 @@ async function initPromoTools() {
     const shareText = encodeURIComponent('Join PrudentProExchange and start investing today! ' + referralLink);
     document.getElementById('shareTwitter').href = `https://x.com/intent/tweet?text=${shareText}`;
     document.getElementById('shareLinkedIn').href = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(referralLink)}`;
+    document.getElementById('shareFacebook').href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(referralLink)}`;
+    document.getElementById('shareInstagram').href = `https://www.instagram.com/?url=${encodeURIComponent(referralLink)}`;
+    document.getElementById('shareWhatsApp').href = `https://api.whatsapp.com/send?text=${shareText}`;
 
     // Referral stats
     const { data: referralData, error: referralError } = await supabaseClient
