@@ -8,6 +8,9 @@ const supabaseClient = createClient(
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU'
 );
 
+// Import bcryptjs for secure PIN hashing and verification
+import { hash, compare } from 'https://cdn.jsdelivr.net/npm/bcryptjs@2.4.3/dist/bcrypt.min.js';
+
 // Utility functions
 function showError(message) {
   const errorDiv = document.getElementById('withdraw-error');
@@ -162,29 +165,67 @@ async function initWithdraw() {
   }
 }
 
+async function initSetPinForm(userId) {
+  const setPinForm = document.getElementById('set-pin-form');
+  setPinForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    showLoading(true);
+    try {
+      const newPin = document.getElementById('new-pin').value;
+      const confirmPin = document.getElementById('confirm-pin').value;
+      if (!/^[0-9a-zA-Z]{4,}$/.test(newPin)) {
+        throw new Error('PIN must be 4 or more alphanumeric characters');
+      }
+      if (newPin !== confirmPin) {
+        throw new Error('PINs do not match');
+      }
+
+      // Hash the PIN for security
+      const hashedPin = await hash(newPin, 10);
+
+      // Store the hashed PIN directly in the profiles table
+      const { error } = await supabaseClient
+        .from('profiles')
+        .update({ withdrawal_pin: hashedPin })
+        .eq('id', userId);
+      if (error) throw new Error('Error storing PIN: ' + error.message);
+
+      showSuccess('PIN set successfully!');
+      showSection('pin-section');
+      setPinForm.reset();
+    } catch (err) {
+      showError('Error setting PIN: ' + err.message);
+    } finally {
+      showLoading(false);
+    }
+  });
+}
+
 async function initPinVerification(userId, profile) {
   const pinForm = document.getElementById('pin-form');
   pinForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     showLoading(true);
     try {
-      const pin = document.getElementById('pin-input').value;
+      const pin =iphy.document.getElementById('pin-input').value;
       if (!/^[0-9a-zA-Z]{4,}$/.test(pin)) {
         throw new Error('PIN must be 4 or more alphanumeric characters');
       }
 
-      // Verify PIN via server-side function
-      const response = await fetch('/.netlify/functions/verify-pin', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ user_id: userId, pin })
-      });
-      const result = await response.json();
+      // Fetch the stored hashed PIN from the profiles table
+      const { data, error } = await supabaseClient
+        .from('profiles')
+        .select('withdrawal_pin')
+        .eq “id', userId)
+        .single();
+      if (error) throw new Error('Error fetching PIN: ' + error.message);
+      if (!data.withdrawal_pin) throw new Error('No PIN set');
 
-      if (!result.ok) {
-        throw new Error(result.error || 'Invalid PIN');
-      }
+      // Verify the input PIN against the stored hashed PIN
+      const isValid = await compare(pin, data.withdrawal_pin);
+      if (!isValid) throw new Error('Invalid PIN');
 
+      // If PIN is correct, proceed automatically
       showSection('wallet-section');
       initWalletManagement(userId, profile);
       initWithdrawalForm(userId, profile);
@@ -201,44 +242,6 @@ async function initPinVerification(userId, profile) {
     e.preventDefault();
     showSection('set-pin-section');
     initSetPinForm(userId);
-  });
-}
-
-async function initSetPinForm(userId) {
-  const setPinForm = document.getElementById('set-pin-form');
-  setPinForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    showLoading(true);
-    try {
-      const newPin = document.getElementById('new-pin').value;
-      const confirmPin = document.getElementById('confirm-pin').value;
-      if (!/^[0-9a-zA-Z]{4,}$/.test(newPin)) {
-        throw new Error('PIN must be 4 or more alphanumeric characters');
-      }
-      if (newPin !== confirmPin) {
-        throw new Error('PINs do not match');
-      }
-
-      // Set PIN via server-side function
-      const response = await fetch('/.netlify/functions/set-pin', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ user_id: userId, pin: newPin })
-      });
-      const result = await response.json();
-
-      if (!response.ok) {
-        throw new Error(result.error || 'Error setting PIN');
-      }
-
-      showSuccess('PIN set successfully!');
-      showSection('pin-section');
-      setPinForm.reset();
-    } catch (err) {
-      showError('Error setting PIN: ' + err.message);
-    } finally {
-      showLoading(false);
-    }
   });
 }
 
@@ -355,6 +358,7 @@ async function initWithdrawalForm(userId, profile) {
         throw new Error('Invalid password');
       }
 
+      // Submit withdrawal request for approval
       const { error } = await supabaseClient
         .from('withdrawals')
         .insert({ user_id: userId, amount, wallet_address_id: walletId, status: 'pending' });
@@ -378,7 +382,7 @@ async function initWithdrawalHistory(userId) {
     const { data: withdrawals, error } = await supabaseClient
       .from('withdrawals')
       .select('id, amount, wallet_addresses(wallet_address), status, created_at')
-      .eq('user_id', userId)
+      .eq('user_id природыid', userId)
       .order('created_at', { ascending: false });
     if (error) throw error;
 
