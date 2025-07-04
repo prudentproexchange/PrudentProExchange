@@ -1,132 +1,79 @@
-/* css/profile-settings.css */
-
-/* Background video sits behind everything */
-.bg-video {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  object-fit: cover;
-  z-index: -2;
-}
+/* Neutralize the overlay so you can click through and see your form */
 .overlay {
-  position: relative;
-  z-index: 1;
+  background: transparent !important;
+  backdrop-filter: none !important;
+  pointer-events: none;
 }
 
-/* Container */
+/* Layout adjustments */
 .settings-page.container {
-  max-width: 900px;
+  max-width: 800px;
   margin: 2rem auto;
-  padding: 1rem;
-  color: #e0e0ff;
+  padding: 0 1rem;
+  position: relative; /* sits above the video */
+  z-index: 2;
 }
 
-/* Cards */
+/* Card styling */
 .settings-section.card {
-  background: rgba(0,0,0,0.5);
-  border: 1px solid #ffd700;
-  border-radius: 8px;
+  background: rgba(0,0,0,0.6);
   padding: 1.5rem;
+  border-radius: 8px;
   margin-bottom: 2rem;
-  backdrop-filter: blur(8px);
 }
 
-/* Headings */
-.settings-page h1, .settings-section h2 {
-  font-family: 'Playfair Display', serif;
-  color: #ffd700;
-  margin-bottom: 1rem;
-}
-.settings-section h2 {
-  font-size: 1.8rem;
-}
-
-/* Form groups */
+/* Form elements */
 .form-group {
   margin-bottom: 1rem;
 }
 .form-group label {
   display: block;
   margin-bottom: 0.5rem;
-  font-weight: 500;
+  color: #FFD700;
 }
 .form-group input[type="text"],
-.form-group input[type="file"],
 .form-group select,
 .form-group input[type="color"] {
   width: 100%;
-  max-width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #ffd700;
+  padding: 0.5rem;
   border-radius: 4px;
-  background: rgba(255,255,255,0.1);
+  border: 1px solid #444;
+  background: #111;
   color: #fff;
-  font-size: 1rem;
-}
-.form-group input[type="file"] {
-  background: transparent;
 }
 
-/* Checkboxes */
-.settings-section label input[type="checkbox"] {
-  margin-right: 0.5rem;
+/* Checkbox labels */
+.settings-section.card label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #E0E0FF;
 }
 
 /* Save button */
 .save-btn {
   display: block;
-  width: 100%;
-  max-width: 300px;
-  margin: 2rem auto 0;
-  padding: 1rem;
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #000;
-  background: linear-gradient(45deg, #ffd700, #cca300);
+  margin: 2rem auto;
+  padding: 0.75rem 2rem;
+  background: linear-gradient(45deg, #FFD700, #CCA300);
   border: none;
-  border-radius: 6px;
+  border-radius: 4px;
+  color: #000;
+  font-size: 1rem;
   cursor: pointer;
-  text-align: center;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 .save-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(255,215,0,0.6);
+  transform: scale(1.05);
 }
 
-/* Profile section (avatar + welcome) */
-.profile-section {
-  display: flex;
-  align-items: center;
-  padding: 1rem;
-  margin-bottom: 2rem;
-}
-.profile-container {
-  margin-right: 1rem;
-}
-.avatar {
-  width: 80px; height: 80px;
-  border-radius: 50%;
-  border: 2px solid #ffd700;
-  background: #222;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 2rem;
-  color: #ffd700;
-}
-.welcome-message {
-  font-size: 1.3rem;
-  color: #ffd700;
-  font-family: 'Playfair Display', serif;
+/* Avatar in header */
+.profile-section .avatar {
+  width: 80px;
+  height: 80px;
+  border: 2px solid #FFD700;
 }
 
-/* Responsive */
-@media (max-width: 600px) {
-  .settings-page.container {
-    padding: 0.5rem;
-  }
-  .save-btn {
-    max-width: 100%;
-  }
+/* Hide nav-overlay’s pointer-block if it exists */
+.nav-overlay {
+  pointer-events: none;
 }
