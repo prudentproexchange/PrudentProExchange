@@ -1,11 +1,10 @@
-// .netlify/functions/verify-pin.js
 const { createClient } = require('@supabase/supabase-js');
 const bcrypt = require('bcryptjs');
 
 exports.handler = async (event) => {
   const supabase = createClient(
     'https://iwkdznjqfbsfkscnbrkc.supabase.co',
-    process.env.SUPABASE_KEY // Use service role key
+    process.env.SUPABASE_KEY
   );
 
   try {
