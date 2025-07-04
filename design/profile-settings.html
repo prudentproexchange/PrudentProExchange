@@ -1,29 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Profile Settings • PrudentProExchange</title>
-  <link rel="stylesheet" href="css/style.css" />
-  <link rel="stylesheet" href="css/profile-settings.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/profile-settings.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 </head>
-<body class="dashboard-page">
+<body class="settings-page">
   <!-- Video Background -->
   <video class="bg-video" autoplay muted loop playsinline preload="auto">
-    <source src="assets/videos/background.webm" type="video/webm" />
-    <source src="assets/videos/background.mp4" type="video/mp4" />
+    <source src="assets/videos/background.webm" type="video/webm">
+    <source src="assets/videos/background.mp4" type="video/mp4">
     Your browser does not support the video tag.
   </video>
 
   <div class="overlay">
-    <!-- Header -->
+    <!-- Header (Identical to Deposit Page) -->
     <header class="site-header">
       <a href="dashboard.html" class="logo-link">
-        <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo" />
+        <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo"/>
       </a>
       <div class="header-right">
         <button id="theme-toggle" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
@@ -40,7 +40,7 @@
         <div class="account-menu">
           <a href="#" class="account-toggle" id="account-toggle">Account ▾</a>
           <ul class="submenu">
-            <li><a href="profile-settings.html" class="active">Profile Settings</a></li>
+            <li><a href="profile-settings.html">Profile Settings</a></li>
             <li><a href="transfer.html">Transfer Balance</a></li>
             <li><a href="change-password.html">Change Password</a></li>
             <li><a href="support.html">Support Ticket</a></li>
@@ -55,121 +55,116 @@
     </header>
     <div class="nav-overlay"></div>
 
-    <!-- Profile Section -->
+    <!-- Profile Section (Identical to Deposit Page) -->
     <div class="profile-section">
       <div class="profile-container">
-        <img id="navProfilePhoto" src="" alt="Profile" class="avatar" style="display: none;" />
+        <img id="navProfilePhoto" src="" alt="Profile" class="avatar" style="display: none;"/>
         <span id="defaultProfileIcon" class="avatar">👤</span>
       </div>
-      <div class="welcome-message">Profile Settings <span id="welcomeName"></span></div>
+      <div class="welcome-message">Welcome to Your Settings, <span id="welcomeName"></span>!</div>
     </div>
 
     <!-- Main Content -->
-    <main class="dashboard-page container">
-      <section class="cards-grid" data-aos="fade-up">
+    <main class="settings-page container">
+      <h1>Profile Settings</h1>
+      <form id="settingsForm">
         <!-- Profile Information -->
-        <div class="card profile-info" data-aos="zoom-in">
+        <section class="settings-section card" data-aos="fade-up">
           <h2>Profile Information</h2>
-          <form id="profile-form">
-            <label for="display-name">Display Name</label>
-            <input type="text" id="display-name" name="display_name" placeholder="Enter your display name" />
-            <label for="avatar-upload">Profile Picture</label>
-            <input type="file" id="avatar-upload" name="avatar_url" accept="image/*" />
-            <div class="error-message" id="profile-error"></div>
-            <button type="submit" class="btn" id="save-profile-btn">Save Profile</button>
-          </form>
-        </div>
+          <div class="form-group">
+            <label for="displayName">Display Name</label>
+            <input type="text" id="displayName" name="displayName" placeholder="Enter your display name"/>
+          </div>
+          <div class="form-group">
+            <label for="avatarUpload">Avatar</label>
+            <input type="file" id="avatarUpload" name="avatarUpload" accept="image/*"/>
+          </div>
+        </section>
 
-        <!-- Appearance Settings -->
-        <div class="card appearance-settings" data-aos="zoom-in">
-          <h2>Appearance Settings</h2>
-          <form id="appearance-form">
+        <!-- Preferences -->
+        <section class="settings-section card" data-aos="fade-up">
+          <h2>Preferences</h2>
+          <div class="form-group">
             <label for="timezone">Timezone</label>
-            <select id="timezone" name="timezone"></select>
-            <label for="locale">Language</label>
+            <select id="timezone" name="timezone">
+              <!-- Populated via JavaScript -->
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="locale">Locale</label>
             <select id="locale" name="locale">
               <option value="en-US">English (US)</option>
-              <option value="es-ES">Spanish</option>
-              <option value="fr-FR">French</option>
-              <!-- Add more languages as needed -->
+              <option value="en-GB">English (UK)</option>
             </select>
-            <label for="theme-mode">Theme Mode</label>
-            <select id="theme-mode" name="theme_mode">
+          </div>
+          <div class="form-group">
+            <label for="themeMode">Theme Mode</label>
+            <select id="themeMode" name="themeMode">
               <option value="light">Light</option>
               <option value="dark">Dark</option>
             </select>
-            <label for="accent-color">Accent Color</label>
-            <input type="color" id="accent-color" name="accent_color" value="#ffd700" />
-            <label for="font-size">Font Size</label>
-            <select id="font-size" name="font_size">
+          </div>
+          <div class="form-group">
+            <label for="accentColor">Accent Color</label>
+            <input type="color" id="accentColor" name="accentColor" value="#ffd700"/>
+          </div>
+          <div class="form-group">
+            <label for="fontSize">Font Size</label>
+            <select id="fontSize" name="fontSize">
               <option value="small">Small</option>
               <option value="medium">Medium</option>
               <option value="large">Large</option>
             </select>
-            <div class="error-message" id="appearance-error"></div>
-            <button type="submit" class="btn" id="save-appearance-btn">Save Appearance</button>
-          </form>
-        </div>
+          </div>
+        </section>
 
-        <!-- Notification Preferences -->
-        <div class="card notifications" data-aos="zoom-in">
-          <h2>Notification Preferences</h2>
-          <form id="notifications-form">
-            <label><input type="checkbox" id="notify-email" name="notify_email" /> Email Notifications</label>
-            <label><input type="checkbox" id="notify-sms" name="notify_sms" /> SMS Notifications</label>
-            <label><input type="checkbox" id="notify-push" name="notify_push" /> Push Notifications</label>
-            <label for="digest-frequency">Digest Frequency</label>
-            <select id="digest-frequency" name="digest_frequency">
+        <!-- Notifications -->
+        <section class="settings-section card" data-aos="fade-up">
+          <h2>Notifications</h2>
+          <div class="form-group">
+            <label>
+              <input type="checkbox" id="notifyEmail" name="notifyEmail"/>
+              Email Notifications
+            </label>
+          </div>
+          <div class="form-group">
+            <label>
+              <input type="checkbox" id="notifySMS" name="notifySMS"/>
+              SMS Notifications
+            </label>
+          </div>
+          <div class="form-group">
+            <label>
+              <input type="checkbox" id="notifyPush" name="notifyPush"/>
+              Push Notifications
+            </label>
+          </div>
+          <div class="form-group">
+            <label for="digestFrequency">Digest Frequency</label>
+            <select id="digestFrequency" name="digestFrequency">
               <option value="instant">Instant</option>
               <option value="daily">Daily</option>
               <option value="weekly">Weekly</option>
             </select>
-            <div class="error-message" id="notifications-error"></div>
-            <button type="submit" class="btn" id="save-notifications-btn">Save Notifications</button>
-          </form>
-        </div>
+          </div>
+        </section>
 
-        <!-- Two-Factor Authentication -->
-        <div class="card two-factor" data-aos="zoom-in">
-          <h2>Two-Factor Authentication</h2>
-          <label><input type="checkbox" id="two-factor-enabled" name="two_factor_enabled" /> Enable 2FA</label>
-          <div class="error-message" id="two-factor-error"></div>
-          <button class="btn" id="save-two-factor-btn">Save 2FA Settings</button>
-        </div>
+        <!-- Security -->
+        <section class="settings-section card" data-aos="fade-up">
+          <h2>Security</h2>
+          <div class="form-group">
+            <label>
+              <input type="checkbox" id="twoFactorEnabled" name="twoFactorEnabled"/>
+              Enable Two-Factor Authentication
+            </label>
+          </div>
+        </section>
 
-        <!-- API Keys -->
-        <div class="card api-keys" data-aos="zoom-in">
-          <h2>API Keys</h2>
-          <button class="btn" id="generate-api-key-btn">Generate New API Key</button>
-          <div id="api-keys-container"></div>
-          <div class="loading-spinner" id="api-keys-loading" style="display: none;"></div>
-          <div class="error-message" id="api-keys-error"></div>
-        </div>
-
-        <!-- Webhooks -->
-        <div class="card webhooks" data-aos="zoom-in">
-          <h2>Webhooks</h2>
-          <form id="webhook-form">
-            <label for="webhook-url">Webhook URL</label>
-            <input type="url" id="webhook-url" name="url" placeholder="Enter webhook URL" />
-            <div class="error-message" id="webhook-error"></div>
-            <button type="submit" class="btn" id="add-webhook-btn">Add Webhook</button>
-          </form>
-          <div id="webhooks-container"></div>
-          <div class="loading-spinner" id="webhooks-loading" style="display: none;"></div>
-        </div>
-
-        <!-- Connected Services -->
-        <div class="card connected-services" data-aos="zoom-in">
-          <h2>Connected Services</h2>
-          <div id="connected-services-container"></div>
-          <div class="loading-spinner" id="connected-services-loading" style="display: none;"></div>
-          <div class="error-message" id="connected-services-error"></div>
-        </div>
-      </section>
+        <button type="submit" class="btn save-btn golden-btn">Save Settings</button>
+      </form>
     </main>
 
-    <!-- Footer -->
+    <!-- Footer (Identical to Deposit Page) -->
     <footer class="section section-dark site-footer" data-aos="fade-up">
       <div class="footer-content">
         <p class="UTC-time">UTC Time: <span id="utcTime"></span></p>
