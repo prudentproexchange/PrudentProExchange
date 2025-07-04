@@ -11,4 +11,4 @@
   force   = true
 
 [functions]
-  directory = "design/netlify/functions"  # <-- point Netlify at your functions
+  directory = "netlify/functions"  # <-- point Netlify at your functions
