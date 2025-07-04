@@ -4,161 +4,83 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Profile Settings • PrudentProExchange</title>
-  <link rel="stylesheet" href="css/style.css"/>
   <link rel="stylesheet" href="css/profile-settings.css"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4"></script>
 </head>
 <body class="settings-page">
-  <!-- Video Background -->
-  <video class="bg-video" autoplay muted loop playsinline preload="auto">
-    <source src="assets/videos/background.webm" type="video/webm"/>
-    <source src="assets/videos/background.mp4" type="video/mp4"/>
-  </video>
+  <!-- Header/Nav -->
+  <header class="site-header">
+    <a href="dashboard.html" class="logo-link"><img src="assets/images/logo.svg" alt="Logo"/></a>
+    <button id="theme-toggle"><i class="fas fa-moon"></i></button>
+    <button id="hamburgerBtn" class="hamburger"><span></span><span></span><span></span></button>
+    <nav id="navDrawer" class="nav-drawer">
+      <a href="dashboard.html">Dashboard</a>
+      <a href="profile-settings.html" class="active">Profile Settings</a>
+      <a href="#" id="logout-btn">Logout</a>
+    </nav>
+  </header>
 
-  <div class="overlay">
-    <!-- Header -->
-    <header class="site-header">
-      <a href="dashboard.html" class="logo-link">
-        <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo"/>
-      </a>
-      <div class="header-right">
-        <button id="theme-toggle" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
-        <button class="hamburger" id="hamburgerBtn" aria-label="Menu"><span></span><span></span><span></span></button>
-      </div>
-      <nav class="nav-drawer" id="navDrawer">
-        <a href="dashboard.html">Dashboard</a>
-        <a href="invest.html">Invest</a>
-        <a href="withdraw.html">Withdraw</a>
-        <a href="transactions.html">Transactions</a>
-        <a href="referrals.html">Referrals</a>
-        <div class="account-menu">
-          <a href="#" class="account-toggle" id="account-toggle">Account ▾</a>
-          <ul class="submenu">
-            <li><a href="profile-settings.html">Profile Settings</a></li>
-            <li><a href="transfer.html">Transfer Balance</a></li>
-            <li><a href="change-password.html">Change Password</a></li>
-            <li><a href="support.html">Support Ticket</a></li>
-            <li><a href="promo-tools.html">Promotional Tools</a></li>
-            <li><a href="2fa.html">2FA Security</a></li>
-            <li><a href="#" id="logout-btn">Logout</a></li>
-          </ul>
-        </div>
-        <a href="kyc.html">KYC Verification</a>
-        <a href="transfer.html">Transfer</a>
-      </nav>
-    </header>
-    <div class="nav-overlay"></div>
-
-    <!-- Profile Section -->
-    <div class="profile-section">
-      <div class="profile-container">
-        <img id="navProfilePhoto" src="" alt="Profile" class="avatar" style="display: none;"/>
-        <span id="defaultProfileIcon" class="avatar">👤</span>
-      </div>
-      <div class="welcome-message">Welcome to Your Settings, <span id="welcomeName"></span>!</div>
+  <!-- Profile Section -->
+  <section class="profile-section">
+    <div class="profile-container">
+      <img id="navProfilePhoto" class="avatar" src="" alt="Avatar" />
+      <span id="defaultProfileIcon" class="avatar">👤</span>
     </div>
+    <h2>Welcome, <span id="welcomeName"></span>!</h2>
+  </section>
 
-    <!-- Main Content -->
-    <main class="settings-page container">
-      <h1>Profile Settings</h1>
-      <form id="settingsForm">
-        <!-- Profile Information -->
-        <section class="settings-section card" data-aos="fade-up">
-          <h2>Profile Information</h2>
-          <div class="form-group">
-            <label for="displayName">Display Name</label>
-            <input type="text" id="displayName" name="displayName" placeholder="Enter your display name"/>
-          </div>
-          <div class="form-group">
-            <label for="avatarUpload">Avatar</label>
-            <input type="file" id="avatarUpload" name="avatarUpload" accept="image/*"/>
-          </div>
-        </section>
-
-        <!-- Preferences -->
-        <section class="settings-section card" data-aos="fade-up">
-          <h2>Preferences</h2>
-          <div class="form-group">
-            <label for="timezone">Timezone</label>
-            <select id="timezone" name="timezone"></select>
-          </div>
-          <div class="form-group">
-            <label for="locale">Locale</label>
-            <select id="locale" name="locale">
-              <option value="en-US">English (US)</option>
-              <option value="en-GB">English (UK)</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="themeMode">Theme Mode</label>
-            <select id="themeMode" name="themeMode">
-              <option value="light">Light</option>
-              <option value="dark">Dark</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="accentColor">Accent Color</label>
-            <input type="color" id="accentColor" name="accentColor" value="#ffd700"/>
-          </div>
-          <div class="form-group">
-            <label for="fontSize">Font Size</label>
-            <select id="fontSize" name="fontSize">
-              <option value="small">Small</option>
-              <option value="medium">Medium</option>
-              <option value="large">Large</option>
-            </select>
-          </div>
-        </section>
-
-        <!-- Notifications -->
-        <section class="settings-section card" data-aos="fade-up">
-          <h2>Notifications</h2>
-          <label><input type="checkbox" id="notifyEmail" name="notifyEmail"/> Email Notifications</label>
-          <label><input type="checkbox" id="notifySMS" name="notifySMS"/> SMS Notifications</label>
-          <label><input type="checkbox" id="notifyPush" name="notifyPush"/> Push Notifications</label>
-          <div class="form-group">
-            <label for="digestFrequency">Digest Frequency</label>
-            <select id="digestFrequency" name="digestFrequency">
-              <option value="instant">Instant</option>
-              <option value="daily">Daily</option>
-              <option value="weekly">Weekly</option>
-            </select>
-          </div>
-        </section>
-
-        <!-- Security -->
-        <section class="settings-section card" data-aos="fade-up">
-          <h2>Security</h2>
-          <label><input type="checkbox" id="twoFactorEnabled" name="twoFactorEnabled"/> Enable Two-Factor Authentication</label>
-        </section>
-
-        <button type="submit" class="btn save-btn golden-btn">Save Settings</button>
-      </form>
-    </main>
-
-    <!-- Footer -->
-    <footer class="section section-dark site-footer" data-aos="fade-up">
-      <div class="footer-content">
-        <p class="UTC-time">UTC Time: <span id="utcTime"></span></p>
-        <p class="local-time">Local Time: <span id="localTime"></span></p>
-        <p class="local-date">Local Date: <span id="localDate"></span></p>
-        <nav class="footer-links">
-          <a href="about.html">About Us</a>
-          <a href="privacy.html">Privacy Policy</a>
-          <a href="terms.html">Terms & Conditions</a>
-        </nav>
-        <p class="copyright">© 2025 PrudentProExchange. All Rights Reserved.</p>
+  <!-- Main Form -->
+  <main class="container">
+    <h1>Profile Settings</h1>
+    <form id="settingsForm">
+      <div class="card">
+        <h2>Profile Information</h2>
+        <label>Display Name<input type="text" id="displayName" name="displayName"/></label>
+        <label>Avatar<input type="file" id="avatarUpload" name="avatarUpload" accept="image/*"/></label>
       </div>
-    </footer>
-  </div>
 
-  <button id="back-to-top" aria-label="Back to top">🚀</button>
+      <div class="card">
+        <h2>Preferences</h2>
+        <label>Timezone<select id="timezone" name="timezone"></select></label>
+        <label>Locale<select id="locale" name="locale">
+          <option value="en-US">English (US)</option>
+          <option value="en-GB">English (UK)</option>
+        </select></label>
+        <label>Theme Mode<select id="themeMode" name="themeMode">
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+        </select></label>
+        <label>Accent Color<input type="color" id="accentColor" name="accentColor" value="#ffd700"/></label>
+        <label>Font Size<select id="fontSize" name="fontSize">
+          <option value="small">Small</option>
+          <option value="medium" selected>Medium</option>
+          <option value="large">Large</option>
+        </select></label>
+      </div>
 
+      <div class="card">
+        <h2>Notifications</h2>
+        <label><input type="checkbox" id="notifyEmail" name="notifyEmail"/> Email</label>
+        <label><input type="checkbox" id="notifySMS" name="notifySMS"/> SMS</label>
+        <label><input type="checkbox" id="notifyPush" name="notifyPush"/> Push</label>
+        <label>Digest Frequency<select id="digestFrequency" name="digestFrequency">
+          <option value="instant">Instant</option>
+          <option value="daily">Daily</option>
+          <option value="weekly">Weekly</option>
+        </select></label>
+      </div>
 
-  <!-- SCRIPTS: at end of body! -->
-  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-  <script src="profile-settings.js"></script>
+      <div class="card">
+        <h2>Security</h2>
+        <label><input type="checkbox" id="twoFactorEnabled" name="twoFactorEnabled"/> Enable Two-Factor Authentication</label>
+      </div>
+
+      <button type="submit" class="btn save-btn">Save Settings</button>
+    </form>
+  </main>
+
+  <script src="js/profile-settings.js"></script>
 </body>
 </html>
