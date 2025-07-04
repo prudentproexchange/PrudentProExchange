@@ -27,6 +27,12 @@ function showLoading(show) {
   document.getElementById('withdraw-loading').style.display = show ? 'block' : 'none';
 }
 
+function showSection(sectionId) {
+  ['pin-section', 'set-pin-section', 'wallet-section', 'withdraw-section', 'history-section'].forEach(id => {
+    document.getElementById(id).style.display = id === sectionId ? 'block' : 'none';
+  });
+}
+
 // Common UI
 function initCommonUI() {
   const hamburgerBtn = document.getElementById('hamburgerBtn');
@@ -38,7 +44,6 @@ function initCommonUI() {
   const logoutBtn = document.getElementById('logout-btn');
   const jetButton = document.getElementById('jet-button');
 
-  // Hamburger toggle
   hamburgerBtn.addEventListener('click', () => {
     navDrawer.classList.toggle('open');
     hamburgerBtn.classList.toggle('active');
@@ -48,7 +53,6 @@ function initCommonUI() {
     }
   });
 
-  // Close nav when clicking outside
   document.addEventListener('click', (event) => {
     const isClickInsideNav = navDrawer.contains(event.target);
     const isClickOnHamburger = hamburgerBtn.contains(event.target);
@@ -59,7 +63,6 @@ function initCommonUI() {
     }
   });
 
-  // Theme toggle
   themeToggle.addEventListener('click', () => {
     document.body.classList.toggle('light-theme');
     const icon = themeToggle.querySelector('i');
@@ -67,18 +70,15 @@ function initCommonUI() {
     icon.classList.toggle('fa-sun');
   });
 
-  // Account menu toggle
   accountToggle.addEventListener('click', (e) => {
     e.preventDefault();
     submenu.classList.toggle('open');
   });
 
-  // Jet button
   jetButton.addEventListener('click', () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 
-  // Time updates
   function updateTime() {
     const now = new Date();
     document.getElementById('localTime').textContent = now.toLocaleTimeString();
@@ -113,10 +113,24 @@ async function initWithdraw() {
 
     const userId = user.id;
 
-    // Load profile and balance
+    // Check KYC status
+    const { data: kycRequests, error: kycError } = await supabaseClient
+      .from('kyc_requests')
+      .select('status')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false })
+      .limit(1);
+    if (kycError) throw kycError;
+    if (!kycRequests.length || kycRequests[0].status !== 'approved') {
+      showError('You must complete KYC verification before withdrawing.');
+      setTimeout(() => window.location.href = 'kyc.html', 3000);
+      return;
+    }
+
+    // Load profile
     const { data: profile, error: profileError } = await supabaseClient
       .from('profiles')
-      .select('first_name, photo_url, balance')
+      .select('first_name, photo_url, balance, withdrawal_pin')
       .eq('id', userId)
       .single();
     if (profileError) throw profileError;
@@ -132,15 +146,242 @@ async function initWithdraw() {
       document.getElementById('defaultProfileIcon').style.display = 'none';
     }
 
-    // Load withdrawal history
-    const { data: withdrawals, error: withdrawError } = await supabaseClient
+    // Check if PIN is set
+    if (!profile.withdrawal_pin) {
+      showSection('set-pin-section');
+      initSetPinForm(userId);
+      showLoading(false);
+      return;
+    }
+
+    showSection('pin-section');
+    initPinVerification(userId, profile);
+  } catch (err) {
+    showError('Error initializing withdraw page: ' + err.message);
+    showLoading(false);
+  }
+}
+
+async function initPinVerification(userId, profile) {
+  const pinForm = document.getElementById('pin-form');
+  pinForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    showLoading(true);
+    try {
+      const pin = document.getElementById('pin-input').value;
+      if (!/^\d{4}$/.test(pin)) {
+        throw new Error('PIN must be 4 digits');
+      }
+
+      // Verify PIN via server-side function
+      const response = await fetch('/.netlify/functions/verify-pin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user_id: userId, pin })
+      });
+      const result = await response.json();
+
+      if (!result.ok) {
+        throw new Error('Invalid PIN');
+      }
+
+      showSection('wallet-section');
+      initWalletManagement(userId, profile);
+      initWithdrawalForm(userId, profile);
+      initWithdrawalHistory(userId);
+    } catch (err) {
+      showError('Error verifying PIN: ' + err.message);
+      pinForm.reset();
+    } finally {
+      showLoading(false);
+    }
+  });
+
+  document.getElementById('set-pin-link').addEventListener('click', (e) => {
+    e.preventDefault();
+    showSection('set-pin-section');
+    initSetPinForm(userId);
+  });
+}
+
+async function initSetPinForm(userId) {
+  const setPinForm = document.getElementById('set-pin-form');
+  setPinForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    showLoading(true);
+    try {
+      const newPin = document.getElementById('new-pin').value;
+      const confirmPin = document.getElementById('confirm-pin').value;
+      if (!/^\d{4}$/.test(newPin)) {
+        throw new Error('PIN must be 4 digits');
+      }
+      if (newPin !== confirmPin) {
+        throw new Error('PINs do not match');
+      }
+
+      // Set PIN via server-side function
+      const response = await fetch('/.netlify/functions/set-pin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user_id: userId, pin: newPin })
+      });
+      const result = await response.json();
+
+      if (!result.ok) {
+        throw new Error(result.error || 'Error setting PIN');
+      }
+
+      showSuccess('PIN set successfully!');
+      showSection('pin-section');
+      setPinForm.reset();
+    } catch (err) {
+      showError('Error setting PIN: ' + err.message);
+    } finally {
+      showLoading(false);
+    }
+  });
+}
+
+async function initWalletManagement(userId, profile) {
+  const walletForm = document.getElementById('wallet-form');
+  const savedWallets = document.getElementById('saved-wallets');
+  const deleteWalletBtn = document.getElementById('delete-wallet-btn');
+
+  async function loadWallets() {
+    const { data: wallets, error } = await supabaseClient
+      .from('wallet_addresses')
+      .select('id, wallet_address')
+      .eq('user_id', userId);
+    if (error) throw error;
+
+    savedWallets.innerHTML = '<option value="" disabled selected>Select a wallet address</option>';
+    document.getElementById('withdraw-wallet').innerHTML = '<option value="" disabled selected>Select a saved wallet address</option>';
+    wallets.forEach(w => {
+      const option = document.createElement('option');
+      option.value = w.id;
+      option.textContent = w.wallet_address;
+      savedWallets.appendChild(option);
+      document.getElementById('withdraw-wallet').appendChild(option.cloneNode(true));
+    });
+
+    deleteWalletBtn.disabled = !wallets.length;
+  }
+
+  await loadWallets();
+
+  walletForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    showLoading(true);
+    try {
+      const walletAddress = document.getElementById('wallet-address').value.trim();
+      if (!walletAddress) {
+        throw new Error('Wallet address is required');
+      }
+
+      const { error } = await supabaseClient
+        .from('wallet_addresses')
+        .insert({ user_id: userId, wallet_address: walletAddress });
+      if (error) throw error;
+
+      showSuccess('Wallet address added successfully!');
+      walletForm.reset();
+      await loadWallets();
+    } catch (err) {
+      showError('Error adding wallet address: ' + err.message);
+    } finally {
+      showLoading(false);
+    }
+  });
+
+  deleteWalletBtn.addEventListener('click', async () => {
+    const walletId = savedWallets.value;
+    if (!walletId) {
+      showError('Please select a wallet to delete');
+      return;
+    }
+
+    showLoading(true);
+    try {
+      const { error } = await supabaseClient
+        .from('wallet_addresses')
+        .delete()
+        .eq('id', walletId)
+        .eq('user_id', userId);
+      if (error) throw error;
+
+      showSuccess('Wallet address deleted successfully!');
+      await loadWallets();
+    } catch (err) {
+      showError('Error deleting wallet address: ' + err.message);
+    } finally {
+      showLoading(false);
+    }
+  });
+
+  savedWallets.addEventListener('change', () => {
+    deleteWalletBtn.disabled = !savedWallets.value;
+  });
+}
+
+async function initWithdrawalForm(userId, profile) {
+  const withdrawForm = document.getElementById('withdraw-form');
+  withdrawForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    showLoading(true);
+    try {
+      const amount = parseFloat(document.getElementById('withdraw-amount').value);
+      const walletId = document.getElementById('withdraw-wallet').value;
+      const password = document.getElementById('withdraw-password').value;
+
+      if (!amount || amount <= 0) {
+        throw new Error('Amount must be greater than 0');
+      }
+      if (!walletId) {
+        throw new Error('Please select a wallet address');
+      }
+      if (!password) {
+        throw new Error('Password is required');
+      }
+      if (amount > profile.balance) {
+        throw new Error('Insufficient balance');
+      }
+
+      // Verify password
+      const { error: authError } = await supabaseClient.auth.signInWithPassword({
+        email: (await supabaseClient.auth.getUser()).data.user.email,
+        password
+      });
+      if (authError) {
+        throw new Error('Invalid password');
+      }
+
+      const { error } = await supabaseClient
+        .from('withdrawals')
+        .insert({ user_id: userId, amount, wallet_address_id: walletId, status: 'pending' });
+      if (error) throw error;
+
+      showSuccess('Withdrawal request submitted successfully!');
+      withdrawForm.reset();
+      await initWithdrawalHistory(userId);
+    } catch (err) {
+      showError('Error submitting withdrawal: ' + err.message);
+    } finally {
+      showLoading(false);
+    }
+  });
+}
+
+async function initWithdrawalHistory(userId) {
+  showSection('history-section');
+  const withdrawTable = document.getElementById('withdraw-table');
+  try {
+    const { data: withdrawals, error } = await supabaseClient
       .from('withdrawals')
-      .select('id, amount, wallet_address, status, created_at')
+      .select('id, amount, wallet_addresses(wallet_address), status, created_at')
       .eq('user_id', userId)
       .order('created_at', { ascending: false });
-    if (withdrawError) throw withdrawError;
+    if (error) throw error;
 
-    const withdrawTable = document.getElementById('withdraw-table');
     withdrawTable.innerHTML = `
       <table>
         <thead>
@@ -157,7 +398,7 @@ async function initWithdraw() {
             <tr>
               <td>${w.id}</td>
               <td>${w.amount.toFixed(2)}</td>
-              <td>${w.wallet_address}</td>
+              <td>${w.wallet_addresses.wallet_address}</td>
               <td>${w.status.charAt(0).toUpperCase() + w.status.slice(1)}</td>
               <td>${new Date(w.created_at).toLocaleDateString()}</td>
             </tr>
@@ -165,76 +406,8 @@ async function initWithdraw() {
         </tbody>
       </table>
     `;
-
-    // Handle form submission
-    const withdrawForm = document.getElementById('withdraw-form');
-    withdrawForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      showLoading(true);
-      try {
-        const amount = parseFloat(document.getElementById('withdraw-amount').value);
-        const walletAddress = document.getElementById('withdraw-wallet').value.trim();
-
-        if (!amount || amount <= 0) {
-          throw new Error('Amount must be greater than 0');
-        }
-        if (!walletAddress) {
-          throw new Error('Please enter a wallet address');
-        }
-        if (amount > profile.balance) {
-          throw new Error('Insufficient balance');
-        }
-
-        const { error } = await supabaseClient
-          .from('withdrawals')
-          .insert({ user_id: userId, amount, wallet_address: walletAddress, status: 'pending' });
-        if (error) throw error;
-
-        showSuccess('Withdrawal request submitted successfully!');
-        withdrawForm.reset();
-
-        // Reload withdrawal history
-        const { data: newWithdrawals, error: newWithdrawError } = await supabaseClient
-          .from('withdrawals')
-          .select('id, amount, wallet_address, status, created_at')
-          .eq('user_id', userId)
-          .order('created_at', { ascending: false });
-        if (newWithdrawError) throw newWithdrawError;
-
-        withdrawTable.innerHTML = `
-          <table>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Amount ($)</th>
-                <th>Wallet Address</th>
-                <th>Status</th>
-                <th>Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${newWithdrawals?.map(w => `
-                <tr>
-                  <td>${w.id}</td>
-                  <td>${w.amount.toFixed(2)}</td>
-                  <td>${w.wallet_address}</td>
-                  <td>${w.status.charAt(0).toUpperCase() + w.status.slice(1)}</td>
-                  <td>${new Date(w.created_at).toLocaleDateString()}</td>
-                </tr>
-              `).join('') || '<tr><td colspan="5">No withdrawals found</td></tr>'}
-            </tbody>
-          </table>
-        `;
-      } catch (err) {
-        showError('Error submitting withdrawal: ' + err.message);
-      } finally {
-        showLoading(false);
-      }
-    });
   } catch (err) {
-    showError('Error loading withdraw page: ' + err.message);
-  } finally {
-    showLoading(false);
+    showError('Error loading withdrawal history: ' + err.message);
   }
 }
 
