@@ -104,16 +104,63 @@
         <div class="error-message" id="withdraw-error"></div>
         <div class="success-message" id="withdraw-success"></div>
 
-        <!-- Balance Display -->
-        <section class="withdraw-section">
-          <h3>Your Balance</h3>
-          <p>Available Balance: $<span id="user-balance">0.00</span></p>
+        <!-- PIN Verification Section -->
+        <section class="withdraw-section" id="pin-section" style="display: none;">
+          <h3>Verify Withdrawal PIN</h3>
+          <p>Enter your 4-digit withdrawal PIN to access this page.</p>
+          <form id="pin-form">
+            <div class="form-group">
+              <label for="pin-input">Withdrawal PIN</label>
+              <input type="password" id="pin-input" placeholder="Enter 4-digit PIN" maxlength="4" pattern="\d{4}" required/>
+            </div>
+            <button type="submit" class="btn">Verify PIN</button>
+          </form>
+          <p><a href="#" id="set-pin-link">Set or reset your withdrawal PIN</a></p>
+        </section>
+
+        <!-- Set PIN Section -->
+        <section class="withdraw-section" id="set-pin-section" style="display: none;">
+          <h3>Set Withdrawal PIN</h3>
+          <p>Create a 4-digit PIN for withdrawals.</p>
+          <form id="set-pin-form">
+            <div class="form-group">
+              <label for="new-pin">New PIN</label>
+              <input type="password" id="new-pin" placeholder="Enter 4-digit PIN" maxlength="4" pattern="\d{4}" required/>
+            </div>
+            <div class="form-group">
+              <label for="confirm-pin">Confirm PIN</label>
+              <input type="password" id="confirm-pin" placeholder="Confirm 4-digit PIN" maxlength="4" pattern="\d{4}" required/>
+            </div>
+            <button type="submit" class="btn">Set PIN</button>
+          </form>
+        </section>
+
+        <!-- Wallet Configuration Section -->
+        <section class="withdraw-section" id="wallet-section" style="display: none;">
+          <h3>Configure Wallet Address</h3>
+          <p>Add or select a cryptocurrency wallet address for withdrawals.</p>
+          <form id="wallet-form">
+            <div class="form-group">
+              <label for="wallet-address">New Wallet Address</label>
+              <input type="text" id="wallet-address" placeholder="Enter crypto wallet address"/>
+            </div>
+            <button type="submit" class="btn">Add Wallet Address</button>
+          </form>
+          <div class="form-group">
+            <label for="saved-wallets">Saved Wallets</label>
+            <select id="saved-wallets">
+              <option value="" disabled selected>Select a wallet address</option>
+            </select>
+            <button class="btn" id="delete-wallet-btn" style="margin-top: 0.5rem;" disabled>Delete Selected Wallet</button>
+          </div>
         </section>
 
         <!-- Withdrawal Form -->
-        <section class="withdraw-section">
+        <section class="withdraw-section" id="withdraw-section" style="display: none;">
+          <h3>Your Balance</h3>
+          <p>Available Balance: $<span id="user-balance">0.00</span></p>
           <h3>Request a Withdrawal</h3>
-          <p>Enter the amount and your cryptocurrency wallet address.</p>
+          <p>Enter the amount and your account password to request a withdrawal.</p>
           <form id="withdraw-form">
             <div class="form-group">
               <label for="withdraw-amount">Amount ($)</label>
@@ -121,14 +168,20 @@
             </div>
             <div class="form-group">
               <label for="withdraw-wallet">Wallet Address</label>
-              <input type="text" id="withdraw-wallet" placeholder="Enter your crypto wallet address" required/>
+              <select id="withdraw-wallet" required>
+                <option value="" disabled selected>Select a saved wallet address</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="withdraw-password">Account Password</label>
+              <input type="password" id="withdraw-password" placeholder="Enter your password" required/>
             </div>
             <button type="submit" class="btn">Request Withdrawal</button>
           </form>
         </section>
 
         <!-- Withdrawal History -->
-        <section class="withdraw-section">
+        <section class="withdraw-section" id="history-section" style="display: none;">
           <h3>Withdrawal History</h3>
           <p>View the status of your withdrawal requests.</p>
           <div id="withdraw-table"></div>
