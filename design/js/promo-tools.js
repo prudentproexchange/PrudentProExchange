@@ -1,3 +1,5 @@
+// promo-tools.js
+
 // Initialize AOS
 AOS.init({ duration: 800, once: true });
 
@@ -94,6 +96,7 @@ function initCommonUI() {
   });
 }
 
+// Promotional Tools
 async function initPromoTools() {
   showLoading(true);
   try {
@@ -103,7 +106,6 @@ async function initPromoTools() {
       window.location.href = 'login.html';
       return;
     }
-
     const userId = user.id;
 
     // Load profile
@@ -128,39 +130,51 @@ async function initPromoTools() {
     const referralLinkInput = document.getElementById('referralLink');
     const referralLink = `https://prudentproexchange.net/signup?ref=${profile.referral_code || ''}`;
     referralLinkInput.value = referralLink;
-
-    // Copy link button
     document.getElementById('copyLinkBtn').addEventListener('click', () => {
-      navigator.clipboard.writeText(referralLink).then(() => {
-        alert('Referral link copied to clipboard!');
-      }).catch(err => {
-        showError('Error copying link: ' + err.message);
-      });
+      navigator.clipboard.writeText(referralLink)
+        .then(() => alert('Referral link copied to clipboard!'))
+        .catch(err => showError('Error copying link: ' + err.message));
     });
 
     // Promotional banners
     const banners = [
-      { id: 'banner1', path: 'banners/banner1.jpg' },
-      { id: 'banner2', path: 'banners/banner2.jpg' }
+      { id: 'banner1', path: 'banner1.jpg' },
+      { id: 'banner2', path: 'banner2.jpg' }
     ];
-    banners.forEach(banner => {
+
+    banners.forEach(async banner => {
       const img = document.getElementById(banner.id);
-      const { data: urlData } = supabaseClient.storage
+      const { data: urlData, error: urlError } = await supabaseClient.storage
         .from('promotional-banners')
         .getPublicUrl(banner.path);
+
+      if (urlError) {
+        console.error('Error loading banner:', banner.path, urlError);
+        return;
+      }
+
       img.src = urlData.publicUrl;
-      const downloadBtn = document.querySelector(`.banner-card .download-btn[data-banner="${banner.path}"]`);
+
+      const card = img.closest('.banner-card');
+      const downloadBtn = card.querySelector('.download-btn');
       downloadBtn.href = urlData.publicUrl;
-      downloadBtn.setAttribute('download', banner.path.split('/').pop());
+      downloadBtn.setAttribute('download', banner.path);
     });
 
     // Social sharing
-    const shareText = encodeURIComponent('Join PrudentProExchange and start investing today! ' + referralLink);
-    document.getElementById('shareTwitter').href = `https://x.com/intent/tweet?text=${shareText}`;
-    document.getElementById('shareLinkedIn').href = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(referralLink)}`;
-    document.getElementById('shareFacebook').href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(referralLink)}`;
-    document.getElementById('shareInstagram').href = `https://www.instagram.com/?url=${encodeURIComponent(referralLink)}`;
-    document.getElementById('shareWhatsApp').href = `https://api.whatsapp.com/send?text=${shareText}`;
+    const shareText = encodeURIComponent(
+      'Join PrudentProExchange and start investing today! ' + referralLink
+    );
+    document.getElementById('shareTwitter').href =
+      `https://x.com/intent/tweet?text=${shareText}`;
+    document.getElementById('shareLinkedIn').href =
+      `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(referralLink)}`;
+    document.getElementById('shareFacebook').href =
+      `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(referralLink)}`;
+    document.getElementById('shareInstagram').href =
+      `https://www.instagram.com/?url=${encodeURIComponent(referralLink)}`;
+    document.getElementById('shareWhatsApp').href =
+      `https://api.whatsapp.com/send?text=${shareText}`;
 
     // Referral stats
     const { data: referralData, error: referralError } = await supabaseClient
@@ -169,10 +183,11 @@ async function initPromoTools() {
       .eq('referrer_id', userId);
     if (referralError) throw referralError;
 
-    const clicks = referralData.filter(r => r.action_type === 'click').length;
-    const signups = referralData.filter(r => r.action_type === 'signup').length;
-    document.getElementById('referralClicks').textContent = clicks;
-    document.getElementById('referralSignups').textContent = signups;
+    document.getElementById('referralClicks').textContent =
+      referralData.filter(r => r.action_type === 'click').length;
+    document.getElementById('referralSignups').textContent =
+      referralData.filter(r => r.action_type === 'signup').length;
+
   } catch (err) {
     showError('Error loading promotional tools: ' + err.message);
   } finally {
