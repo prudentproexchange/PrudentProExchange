@@ -142,7 +142,7 @@ async function initChangePassword() {
           throw new Error('New password and confirmation do not match.');
         }
 
-        // Attempt to sign in with current password to verify it
+        // Verify current password
         const { error: signInError } = await supabaseClient.auth.signInWithPassword({
           email: user.email,
           password: currentPassword
@@ -151,13 +151,18 @@ async function initChangePassword() {
           throw new Error('Current password is incorrect.');
         }
 
-        // Update password
-        const { error: updateError } = await supabaseClient.auth.updateUser({
-          password: newPassword
-        });
-        if (updateError) throw updateError;
+        // Update password using RPC
+        const { data, error } = await supabaseClient
+          .rpc('change_user_password', {
+            p_user_id: user.id,
+            p_new_pass: newPassword
+          });
 
-        alert('Password changed successfully!');
+        if (error) {
+          throw new Error('Error changing password: ' + error.message);
+        }
+
+        alert('Password updated everywhere!');
         window.location.href = 'dashboard.html';
       } catch (err) {
         showError('Error changing password: ' + err.message);
