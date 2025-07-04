@@ -3,7 +3,7 @@
 const { createClient } = require('@supabase/supabase-js');
 const { authenticator } = require('otplib');
 
-// Initialize Supabase with your service‐role key
+// Initialize Supabase with the service‐role key
 const supabase = createClient(
   process.env.SUPABASE_URL,
   process.env.SUPABASE_SERVICE_ROLE_KEY
@@ -18,27 +18,17 @@ authenticator.options = {
 
 exports.handler = async (event) => {
   try {
-    console.log('verify-totp called with body:', event.body);
-
-    // 1) Only POST allowed
     if (event.httpMethod !== 'POST') {
       return { statusCode: 405, body: JSON.stringify({ ok: false, error: 'Method not allowed' }) };
     }
-
-    // 2) Must have a request body
     if (!event.body) {
-      return { statusCode: 400, body: JSON.stringify({ ok: false, error: 'No request body provided' }) };
+      return { statusCode: 400, body: JSON.stringify({ ok: false, error: 'No request body' }) };
     }
 
-    // 3) Parse & validate
     const { user_id, token } = JSON.parse(event.body);
-    const uuidRe  = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-    const tokenRe = /^\d{6}$/;
-    if (!uuidRe.test(user_id) || !tokenRe.test(token)) {
-      return { statusCode: 400, body: JSON.stringify({ ok: false, error: 'Invalid user_id or token format' }) };
-    }
+    console.log('🔑 Incoming verify-totp:', { user_id, token });
 
-    // 4) Fetch the secret (zero or multiple rows → profile = null)
+    // Fetch the stored secret
     const { data: profile, error: dbError } = await supabase
       .from('profiles')
       .select('two_fa_secret')
@@ -46,20 +36,29 @@ exports.handler = async (event) => {
       .maybeSingle();
 
     if (dbError) {
-      console.error('DB error fetching 2FA secret:', dbError);
+      console.error('❌ DB error:', dbError);
       return { statusCode: 500, body: JSON.stringify({ ok: false, error: 'Database error' }) };
     }
     if (!profile || !profile.two_fa_secret) {
-      console.warn(`No 2FA secret found for user ${user_id}`);
-      return { statusCode: 200, body: JSON.stringify({ ok: false, error: 'No 2FA secret found; please re-enable 2FA.' }) };
+      console.warn('⚠️  No secret for user:', user_id);
+      return { statusCode: 200, body: JSON.stringify({ ok: false, error: 'No secret found' }) };
     }
 
-    // 5) Verify the TOTP code
-    const valid = authenticator.verify({ token, secret: profile.two_fa_secret });
-    return { statusCode: 200, body: JSON.stringify({ ok: valid }) };
+    // **DEBUG LOG** the secret you fetched
+    console.log('🔒 Stored secret is:', profile.two_fa_secret);
 
+    // Now verify
+    const valid = authenticator.verify({ token, secret: profile.two_fa_secret });
+    console.log(`📊 Verification result for token ${token}:`, valid);
+
+    // **For debugging only**: echo back the secret and token you checked
+    // Remove this `debug` field when you’re done diagnosing
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ ok: valid, debug: { secret: profile.two_fa_secret, token } })
+    };
   } catch (err) {
-    console.error('Unhandled error in verify-totp:', err);
+    console.error('🔥 Unexpected error in verify-totp:', err);
     return { statusCode: 500, body: JSON.stringify({ ok: false, error: 'Internal server error' }) };
   }
 };
