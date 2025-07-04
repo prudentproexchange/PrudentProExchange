@@ -135,7 +135,7 @@ async function initWithdraw() {
     // Load withdrawal history
     const { data: withdrawals, error: withdrawError } = await supabaseClient
       .from('withdrawals')
-      .select('id, amount, method, status, created_at')
+      .select('id, amount, wallet_address, status, created_at')
       .eq('user_id', userId)
       .order('created_at', { ascending: false });
     if (withdrawError) throw withdrawError;
@@ -147,7 +147,7 @@ async function initWithdraw() {
           <tr>
             <th>ID</th>
             <th>Amount ($)</th>
-            <th>Method</th>
+            <th>Wallet Address</th>
             <th>Status</th>
             <th>Date</th>
           </tr>
@@ -157,7 +157,7 @@ async function initWithdraw() {
             <tr>
               <td>${w.id}</td>
               <td>${w.amount.toFixed(2)}</td>
-              <td>${w.method.charAt(0).toUpperCase() + w.method.slice(1)}</td>
+              <td>${w.wallet_address}</td>
               <td>${w.status.charAt(0).toUpperCase() + w.status.slice(1)}</td>
               <td>${new Date(w.created_at).toLocaleDateString()}</td>
             </tr>
@@ -173,13 +173,13 @@ async function initWithdraw() {
       showLoading(true);
       try {
         const amount = parseFloat(document.getElementById('withdraw-amount').value);
-        const method = document.getElementById('withdraw-method').value;
+        const walletAddress = document.getElementById('withdraw-wallet').value.trim();
 
         if (!amount || amount <= 0) {
           throw new Error('Amount must be greater than 0');
         }
-        if (!method) {
-          throw new Error('Please select a payment method');
+        if (!walletAddress) {
+          throw new Error('Please enter a wallet address');
         }
         if (amount > profile.balance) {
           throw new Error('Insufficient balance');
@@ -187,25 +187,16 @@ async function initWithdraw() {
 
         const { error } = await supabaseClient
           .from('withdrawals')
-          .insert({ user_id: userId, amount, method, status: 'pending' });
+          .insert({ user_id: userId, amount, wallet_address: walletAddress, status: 'pending' });
         if (error) throw error;
-
-        // Update balance (optimistic update, actual balance update should be handled server-side)
-        const newBalance = profile.balance - amount;
-        const { error: balanceError } = await supabaseClient
-          .from('profiles')
-          .update({ balance: newBalance })
-          .eq('id', userId);
-        if (balanceError) throw balanceError;
 
         showSuccess('Withdrawal request submitted successfully!');
         withdrawForm.reset();
-        document.getElementById('user-balance').textContent = newBalance.toFixed(2);
 
         // Reload withdrawal history
         const { data: newWithdrawals, error: newWithdrawError } = await supabaseClient
           .from('withdrawals')
-          .select('id, amount, method, status, created_at')
+          .select('id, amount, wallet_address, status, created_at')
           .eq('user_id', userId)
           .order('created_at', { ascending: false });
         if (newWithdrawError) throw newWithdrawError;
@@ -216,7 +207,7 @@ async function initWithdraw() {
               <tr>
                 <th>ID</th>
                 <th>Amount ($)</th>
-                <th>Method</th>
+                <th>Wallet Address</th>
                 <th>Status</th>
                 <th>Date</th>
               </tr>
@@ -226,7 +217,7 @@ async function initWithdraw() {
                 <tr>
                   <td>${w.id}</td>
                   <td>${w.amount.toFixed(2)}</td>
-                  <td>${w.method.charAt(0).toUpperCase() + w.method.slice(1)}</td>
+                  <td>${w.wallet_address}</td>
                   <td>${w.status.charAt(0).toUpperCase() + w.status.slice(1)}</td>
                   <td>${new Date(w.created_at).toLocaleDateString()}</td>
                 </tr>
