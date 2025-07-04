@@ -126,7 +126,7 @@ async function initPromoTools() {
 
     // Referral link
     const referralLinkInput = document.getElementById('referralLink');
-    const referralLink = `https://prudentproexchange.com/signup?ref=${profile.referral_code || ''}`;
+    const referralLink = `https://prudentproexchange.net/signup?ref=${profile.referral_code || ''}`;
     referralLinkInput.value = referralLink;
 
     // Copy link button
@@ -138,7 +138,7 @@ async function initPromoTools() {
       });
     });
 
-    // Promotional banners (placeholders, replace with actual paths)
+    // Promotional banners
     const banners = [
       { id: 'banner1', path: 'banners/banner1.jpg' },
       { id: 'banner2', path: 'banners/banner2.jpg' }
