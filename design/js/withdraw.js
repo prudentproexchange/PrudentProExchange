@@ -8,6 +8,9 @@ const supabaseClient = createClient(
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU'
 );
 
+// Import bcryptjs
+import { hash, compare } from 'https://cdn.jsdelivr.net/npm/bcryptjs@2.4.3/dist/bcrypt.min.js';
+
 // Utility functions
 function showError(message) {
   const errorDiv = document.getElementById('withdraw-error');
@@ -104,7 +107,6 @@ function initCommonUI() {
 async function initWithdraw() {
   showLoading(true);
   try {
-    // Auth guard
     const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
     if (!user || authError) {
       window.location.href = 'login.html';
@@ -113,7 +115,6 @@ async function initWithdraw() {
 
     const userId = user.id;
 
-    // Check KYC status
     const { data: kycRequests, error: kycError } = await supabaseClient
       .from('kyc_requests')
       .select('status')
@@ -127,7 +128,6 @@ async function initWithdraw() {
       return;
     }
 
-    // Load profile
     const { data: profile, error: profileError } = await supabaseClient
       .from('profiles')
       .select('first_name, photo_url, balance, withdrawal_pin')
@@ -146,7 +146,6 @@ async function initWithdraw() {
       document.getElementById('defaultProfileIcon').style.display = 'none';
     }
 
-    // Check if PIN is set
     if (!profile.withdrawal_pin) {
       showSection('set-pin-section');
       initSetPinForm(userId);
@@ -173,17 +172,16 @@ async function initPinVerification(userId, profile) {
         throw new Error('PIN must be 4 or more alphanumeric characters');
       }
 
-      // Verify PIN via server-side function
-      const response = await fetch('/.netlify/functions/verify-pin', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ user_id: userId, pin })
-      });
-      const result = await response.json();
+      const { data: profileData, error } = await supabaseClient
+        .from('profiles')
+        .select('withdrawal_pin')
+        .eq('id', userId)
+        .single();
+      if (error) throw error;
+      if (!profileData.withdrawal_pin) throw new Error('No PIN set');
 
-      if (!result.ok) {
-        throw new Error(result.error || 'Invalid PIN');
-      }
+      const isValid = await compare(pin, profileData.withdrawal_pin);
+      if (!isValid) throw new Error('Invalid PIN');
 
       showSection('wallet-section');
       initWalletManagement(userId, profile);
@@ -219,17 +217,12 @@ async function initSetPinForm(userId) {
         throw new Error('PINs do not match');
       }
 
-      // Set PIN via server-side function
-      const response = await fetch('/.netlify/functions/set-pin', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ user_id: userId, pin: newPin })
-      });
-      const result = await response.json();
-
-      if (!response.ok) {
-        throw new Error(result.error || 'Error setting PIN');
-      }
+      const hashedPin = await hash(newPin, 10);
+      const { error } = await supabaseClient
+        .from('profiles')
+        .update({ withdrawal_pin: hashedPin })
+        .eq('id', userId);
+      if (error) throw error;
 
       showSuccess('PIN set successfully!');
       showSection('pin-section');
@@ -346,7 +339,6 @@ async function initWithdrawalForm(userId, profile) {
         throw new Error('Insufficient balance');
       }
 
-      // Verify password
       const { error: authError } = await supabaseClient.auth.signInWithPassword({
         email: (await supabaseClient.auth.getUser()).data.user.email,
         password
