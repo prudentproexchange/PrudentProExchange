@@ -1,156 +1,234 @@
-/* Ensure background video is behind everything */
+/* =============== Reset / Base =============== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  font-family: 'Poppins', sans-serif;
+  background: #000; /* fallback */
+  color: #e0e0ff;
+}
+
+/* =============== Background Video =============== */
 .bg-video {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  transform: translate(-50%, -50%);
+  z-index: -1;          /* behind everything */
+  object-fit: cover;
+  pointer-events: none; /* never capture clicks */
+}
+
+/* =============== Overlay Wrapper =============== */
+.overlay {
+  position: relative;
+  z-index: 1; /* sits above the video */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* =============== Header & Navigation =============== */
+.site-header {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  background: rgba(0,0,0,0.5);
+}
+.logo-link .logo {
+  height: 40px;
+}
+.header-right button {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: #fff;
+  margin-left: 1rem;
+  cursor: pointer;
+}
+.nav-drawer {
+  position: fixed;
+  top: 0;
+  left: -100%;
+  width: 240px;
+  height: 100%;
+  background: rgba(0,0,0,0.9);
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  transition: left 0.3s ease;
+  z-index: 9;
+}
+.nav-drawer.open {
+  left: 0;
+}
+.nav-drawer a {
+  color: #e0e0ff;
+  text-decoration: none;
+  font-size: 1rem;
+}
+.nav-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  z-index: -2;
+  display: none;
+  background: rgba(0,0,0,0.5);
+  z-index: 8;
+}
+.nav-overlay.nav-open {
+  display: block;
 }
 
-/* Overlay container floats above video */
-.overlay {
-  position: relative;
-  z-index: 1;
-}
-
-/* Main container for settings page */
-.settings-page.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem;
-  position: relative;
-  z-index: 2; /* Ensure it’s above the video */
-}
-
-/* Profile Section */
+/* =============== Profile Section =============== */
 .profile-section {
+  margin: 1rem 2rem;
   display: flex;
   align-items: center;
-  padding: 1.5rem 2rem;
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+  gap: 1rem;
+  z-index: 5;
 }
-
-.profile-container {
-  margin-right: 1rem;
-}
-
-.avatar {
-  width: 150px;
-  height: 150px;
+.profile-container .avatar {
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
-  border: 2px solid #ffd700; /* Gold */
-  background: #000;
-  display: flex;
+  background: #333;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 120px;
-  color: #ffd700; /* Gold */
-  object-fit: cover;
-  transition: transform 0.3s ease;
-}
-
-.avatar:hover {
-  transform: scale(1.05);
-}
-
-.welcome-message {
   font-size: 1.5rem;
-  color: #ffd700; /* Gold */
+}
+
+/* =============== Main Settings Container =============== */
+.settings-page.container {
+  z-index: 5;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto 2rem;
+  padding: 2rem 1rem;
+  background: rgba(0,0,0,0.6);
+  border-radius: 10px;
+  backdrop-filter: blur(10px);
+}
+
+/* Page Title */
+.settings-page h1 {
+  font-size: 2.5rem;
+  color: #ffd700;
+  font-family: 'Playfair Display', serif;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+/* =============== Card Sections =============== */
+.settings-section.card {
+  background: rgba(255,255,255,0.1);
+  padding: 2rem;
+  border: 1px solid #ffd700;
+  border-radius: 15px;
+  backdrop-filter: blur(15px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.37);
+  margin-bottom: 2rem;
+}
+.settings-section h2 {
+  font-size: 1.8rem;
+  color: #ffd700;
+  margin-bottom: 1.5rem;
   font-family: 'Playfair Display', serif;
 }
 
-/* Settings Content */
-.settings-content {
-  display: block; /* Ensure visibility */
-  background: rgba(255, 255, 255, 0.1);
-  padding: 2rem;
-  border: 2px solid #ffd700; /* Gold */
-  border-radius: 15px;
-  backdrop-filter: blur(15px);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
-  text-align: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+/* =============== Form Elements =============== */
+.form-group {
+  margin-bottom: 1.5rem;
+}
+.form-group label {
+  display: block;
+  font-size: 1rem;
+  color: #e0e0ff;
+  margin-bottom: 0.5rem;
+}
+.form-group input[type="text"],
+.form-group input[type="file"],
+.form-group select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ffd700;
+  border-radius: 5px;
+  background: rgba(255,255,255,0.05);
+  color: #e0e0ff;
+  font-size: 1rem;
+}
+.form-group input[type="text"]::placeholder {
+  color: #a0a0ff;
+}
+.form-group input[type="color"] {
+  width: 100%;
+  height: 40px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+}
+.form-group input[type="checkbox"] {
+  margin-right: 0.5rem;
+  accent-color: #ffd700;
 }
 
-.settings-content:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 12px 40px rgba(255, 215, 0, 0.5); /* Gold glow */
-  border-color: #cca300;
-}
-
-/* Buttons */
-.btn, #theme-toggle, #hamburgerBtn {
-  padding: 0.75rem 1.5rem;
-  background: linear-gradient(45deg, #ffd700, #cca300); /* Gold gradient */
+/* =============== Save Button =============== */
+.save-btn {
+  display: block;
+  width: 100%;
+  padding: 1rem;
+  background: linear-gradient(45deg,#ffd700,#cca300);
   color: #000;
   border: none;
   border-radius: 5px;
-  font-size: 1rem;
+  font-size: 1.2rem;
   font-weight: 600;
-  font-family: 'Poppins', sans-serif;
   cursor: pointer;
-  transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-  position: relative; /* Ensure clickable */
-  z-index: 10; /* Prevent overlap issues */
+  text-align: center;
+  transition: background 0.3s ease, transform 0.3s ease;
 }
-
-.btn:hover:not(:disabled), #theme-toggle:hover, #hamburgerBtn:hover {
-  background: linear-gradient(45deg, #cca300, #ffd700);
+.save-btn:hover {
+  background: linear-gradient(45deg,#cca300,#ffd700);
   transform: scale(1.05);
-  box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
+}
+.golden-btn {
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0% { background-color: #ffd700; }
+  50% { background-color: gold; }
+  100% { background-color: #ffd700; }
 }
 
-/* Navigation Drawer */
-#navDrawer {
-  position: fixed;
-  top: 0;
-  right: -250px; /* Hidden by default */
-  width: 250px;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.9);
-  transition: right 0.3s ease;
-  z-index: 100; /* Above other elements */
-}
-
-#navDrawer.open {
-  right: 0; /* Visible when open */
-}
-
-/* Error Message */
-.error-message {
-  color: #ff6b6b;
-  font-size: 1rem;
-  margin-top: 1rem;
-}
-
-/* Responsive Design */
+/* =============== Responsive =============== */
 @media (max-width: 768px) {
   .settings-page.container {
     padding: 1rem;
   }
-
-  .profile-section {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 1rem;
+  .settings-page h1 {
+    font-size: 2rem;
   }
-
-  .profile-container {
-    margin-right: 0;
-    margin-bottom: 0.5rem;
+  .settings-section h2 {
+    font-size: 1.5rem;
   }
-
-  .avatar {
-    width: 120px;
-    height: 120px;
-    font-size: 72px;
-  }
-
-  .welcome-message {
-    font-size: 1.2rem;
+  .save-btn {
+    font-size: 1rem;
+    padding: 0.75rem;
   }
 }
