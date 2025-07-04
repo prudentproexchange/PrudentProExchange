@@ -14,7 +14,7 @@ function showError(message) {
   errorDiv.textContent = message;
   errorDiv.style.display = 'block';
   setTimeout(() => errorDiv.style.display = 'none', 5000);
-  console.error('Error:', message); // Log to console for debugging
+  console.error('Error:', message);
 }
 
 function showSuccess(message) {
@@ -22,7 +22,7 @@ function showSuccess(message) {
   successDiv.textContent = message;
   successDiv.style.display = 'block';
   setTimeout(() => successDiv.style.display = 'none', 5000);
-  console.log('Success:', message); // Log to console
+  console.log('Success:', message);
 }
 
 function showLoading(show) {
@@ -160,7 +160,7 @@ async function initWithdraw() {
     initPinVerification(userId, profile);
   } catch (err) {
     showError('Error initializing withdraw page: ' + err.message);
-    console.error('Init error:', err); // Log detailed error
+    console.error('Init error:', err);
   } finally {
     showLoading(false);
   }
@@ -193,7 +193,7 @@ async function initSetPinForm(userId) {
       setPinForm.reset();
     } catch (err) {
       showError('Error setting PIN: ' + err.message);
-      console.error('Set PIN error:', err); // Log detailed error
+      console.error('Set PIN error:', err);
     } finally {
       showLoading(false);
     }
@@ -223,14 +223,13 @@ async function initPinVerification(userId, profile) {
       // Verify the input PIN against the stored PIN
       if (pin !== data.withdrawal_pin) throw new Error('Invalid PIN');
 
-      // If PIN is correct, proceed to wallet and withdrawal sections
-      showSection('wallet-section');
+      // Proceed to withdrawal section with wallet management
+      showSection('withdraw-section');
       initWalletManagement(userId, profile);
       initWithdrawalForm(userId, profile);
-      initWithdrawalHistory(userId);
     } catch (err) {
       showError('Error verifying PIN: ' + err.message);
-      console.error('PIN verification error:', err); // Log detailed error
+      console.error('PIN verification error:', err);
       pinForm.reset();
     } finally {
       showLoading(false);
@@ -257,7 +256,7 @@ async function initWalletManagement(userId, profile) {
         .eq('user_id', userId);
       if (error) throw error;
 
-      console.log('Fetched wallets:', wallets); // Log wallets for debugging
+      console.log('Fetched wallets:', wallets);
 
       savedWallets.innerHTML = '<option value="" disabled selected>Select a wallet address</option>';
       document.getElementById('withdraw-wallet').innerHTML = '<option value="" disabled selected>Select a saved wallet address</option>';
@@ -272,7 +271,7 @@ async function initWalletManagement(userId, profile) {
       deleteWalletBtn.disabled = !wallets.length;
     } catch (err) {
       showError('Error loading wallets: ' + err.message);
-      console.error('Load wallets error:', err); // Log detailed error
+      console.error('Load wallets error:', err);
     }
   }
 
@@ -297,7 +296,7 @@ async function initWalletManagement(userId, profile) {
       await loadWallets();
     } catch (err) {
       showError('Error adding wallet address: ' + err.message);
-      console.error('Add wallet error:', err); // Log detailed error
+      console.error('Add wallet error:', err);
     } finally {
       showLoading(false);
     }
@@ -323,7 +322,7 @@ async function initWalletManagement(userId, profile) {
       await loadWallets();
     } catch (err) {
       showError('Error deleting wallet address: ' + err.message);
-      console.error('Delete wallet error:', err); // Log detailed error
+      console.error('Delete wallet error:', err);
     } finally {
       showLoading(false);
     }
@@ -342,9 +341,8 @@ async function initWithdrawalForm(userId, profile) {
     try {
       const amount = parseFloat(document.getElementById('withdraw-amount').value);
       const walletId = document.getElementById('withdraw-wallet').value;
-      const password = document.getElementById('withdraw-password').value;
 
-      console.log('Withdrawal attempt:', { amount, walletId, password }); // Log input for debugging
+      console.log('Withdrawal attempt:', { amount, walletId });
 
       if (isNaN(amount) || amount <= 0) {
         throw new Error('Amount must be greater than 0');
@@ -352,23 +350,10 @@ async function initWithdrawalForm(userId, profile) {
       if (!walletId) {
         throw new Error('Please select a wallet address');
       }
-      if (!password) {
-        throw new Error('Password is required');
-      }
       if (amount > profile.balance) {
         throw new Error('Insufficient balance');
       }
 
-      // Verify password
-      const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
-      if (authError) throw authError;
-      const { error: signInError } = await supabaseClient.auth.signInWithPassword({
-        email: user.email,
-        password
-      });
-      if (signInError) throw new Error('Invalid password');
-
-      // Submit withdrawal request for approval
       const { error } = await supabaseClient
         .from('withdrawals')
         .insert({ user_id: userId, amount, wallet_address_id: walletId, status: 'pending' });
@@ -376,10 +361,9 @@ async function initWithdrawalForm(userId, profile) {
 
       showSuccess('Withdrawal request submitted successfully!');
       withdrawForm.reset();
-      await initWithdrawalHistory(userId);
     } catch (err) {
       showError('Error submitting withdrawal: ' + err.message);
-      console.error('Withdrawal error:', err); // Log detailed error
+      console.error('Withdrawal error:', err);
     } finally {
       showLoading(false);
     }
@@ -397,7 +381,7 @@ async function initWithdrawalHistory(userId) {
       .order('created_at', { ascending: false });
     if (error) throw error;
 
-    console.log('Fetched withdrawals:', withdrawals); // Log for debugging
+    console.log('Fetched withdrawals:', withdrawals);
 
     withdrawTable.innerHTML = `
       <table>
@@ -425,7 +409,7 @@ async function initWithdrawalHistory(userId) {
     `;
   } catch (err) {
     showError('Error loading withdrawal history: ' + err.message);
-    console.error('Withdrawal history error:', err); // Log detailed error
+    console.error('Withdrawal history error:', err);
   }
 }
 
