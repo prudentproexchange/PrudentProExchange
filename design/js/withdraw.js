@@ -14,6 +14,7 @@ function showError(message) {
   errorDiv.textContent = message;
   errorDiv.style.display = 'block';
   setTimeout(() => errorDiv.style.display = 'none', 5000);
+  console.error('Error:', message); // Log to console for debugging
 }
 
 function showSuccess(message) {
@@ -21,6 +22,7 @@ function showSuccess(message) {
   successDiv.textContent = message;
   successDiv.style.display = 'block';
   setTimeout(() => successDiv.style.display = 'none', 5000);
+  console.log('Success:', message); // Log to console
 }
 
 function showLoading(show) {
@@ -158,6 +160,8 @@ async function initWithdraw() {
     initPinVerification(userId, profile);
   } catch (err) {
     showError('Error initializing withdraw page: ' + err.message);
+    console.error('Init error:', err); // Log detailed error
+  } finally {
     showLoading(false);
   }
 }
@@ -189,6 +193,7 @@ async function initSetPinForm(userId) {
       setPinForm.reset();
     } catch (err) {
       showError('Error setting PIN: ' + err.message);
+      console.error('Set PIN error:', err); // Log detailed error
     } finally {
       showLoading(false);
     }
@@ -218,13 +223,14 @@ async function initPinVerification(userId, profile) {
       // Verify the input PIN against the stored PIN
       if (pin !== data.withdrawal_pin) throw new Error('Invalid PIN');
 
-      // If PIN is correct, proceed automatically
+      // If PIN is correct, proceed to wallet and withdrawal sections
       showSection('wallet-section');
       initWalletManagement(userId, profile);
       initWithdrawalForm(userId, profile);
       initWithdrawalHistory(userId);
     } catch (err) {
       showError('Error verifying PIN: ' + err.message);
+      console.error('PIN verification error:', err); // Log detailed error
       pinForm.reset();
     } finally {
       showLoading(false);
@@ -244,23 +250,30 @@ async function initWalletManagement(userId, profile) {
   const deleteWalletBtn = document.getElementById('delete-wallet-btn');
 
   async function loadWallets() {
-    const { data: wallets, error } = await supabaseClient
-      .from('wallet_addresses')
-      .select('id, wallet_address')
-      .eq('user_id', userId);
-    if (error) throw error;
+    try {
+      const { data: wallets, error } = await supabaseClient
+        .from('wallet_addresses')
+        .select('id, wallet_address')
+        .eq('user_id', userId);
+      if (error) throw error;
 
-    savedWallets.innerHTML = '<option value="" disabled selected>Select a wallet address</option>';
-    document.getElementById('withdraw-wallet').innerHTML = '<option value="" disabled selected>Select a saved wallet address</option>';
-    wallets.forEach(w => {
-      const option = document.createElement('option');
-      option.value = w.id;
-      option.textContent = w.wallet_address;
-      savedWallets.appendChild(option);
-      document.getElementById('withdraw-wallet').appendChild(option.cloneNode(true));
-    });
+      console.log('Fetched wallets:', wallets); // Log wallets for debugging
 
-    deleteWalletBtn.disabled = !wallets.length;
+      savedWallets.innerHTML = '<option value="" disabled selected>Select a wallet address</option>';
+      document.getElementById('withdraw-wallet').innerHTML = '<option value="" disabled selected>Select a saved wallet address</option>';
+      wallets.forEach(w => {
+        const option = document.createElement('option');
+        option.value = w.id;
+        option.textContent = w.wallet_address;
+        savedWallets.appendChild(option);
+        document.getElementById('withdraw-wallet').appendChild(option.cloneNode(true));
+      });
+
+      deleteWalletBtn.disabled = !wallets.length;
+    } catch (err) {
+      showError('Error loading wallets: ' + err.message);
+      console.error('Load wallets error:', err); // Log detailed error
+    }
   }
 
   await loadWallets();
@@ -277,13 +290,14 @@ async function initWalletManagement(userId, profile) {
       const { error } = await supabaseClient
         .from('wallet_addresses')
         .insert({ user_id: userId, wallet_address: walletAddress });
-      if (error) throw error;
+      if (error) throw new Error('Error adding wallet: ' + error.message);
 
       showSuccess('Wallet address added successfully!');
       walletForm.reset();
       await loadWallets();
     } catch (err) {
       showError('Error adding wallet address: ' + err.message);
+      console.error('Add wallet error:', err); // Log detailed error
     } finally {
       showLoading(false);
     }
@@ -303,12 +317,13 @@ async function initWalletManagement(userId, profile) {
         .delete()
         .eq('id', walletId)
         .eq('user_id', userId);
-      if (error) throw error;
+      if (error) throw new Error('Error deleting wallet: ' + error.message);
 
       showSuccess('Wallet address deleted successfully!');
       await loadWallets();
     } catch (err) {
       showError('Error deleting wallet address: ' + err.message);
+      console.error('Delete wallet error:', err); // Log detailed error
     } finally {
       showLoading(false);
     }
@@ -329,7 +344,9 @@ async function initWithdrawalForm(userId, profile) {
       const walletId = document.getElementById('withdraw-wallet').value;
       const password = document.getElementById('withdraw-password').value;
 
-      if (!amount || amount <= 0) {
+      console.log('Withdrawal attempt:', { amount, walletId, password }); // Log input for debugging
+
+      if (isNaN(amount) || amount <= 0) {
         throw new Error('Amount must be greater than 0');
       }
       if (!walletId) {
@@ -343,25 +360,26 @@ async function initWithdrawalForm(userId, profile) {
       }
 
       // Verify password
-      const { error: authError } = await supabaseClient.auth.signInWithPassword({
-        email: (await supabaseClient.auth.getUser()).data.user.email,
+      const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
+      if (authError) throw authError;
+      const { error: signInError } = await supabaseClient.auth.signInWithPassword({
+        email: user.email,
         password
       });
-      if (authError) {
-        throw new Error('Invalid password');
-      }
+      if (signInError) throw new Error('Invalid password');
 
       // Submit withdrawal request for approval
       const { error } = await supabaseClient
         .from('withdrawals')
         .insert({ user_id: userId, amount, wallet_address_id: walletId, status: 'pending' });
-      if (error) throw error;
+      if (error) throw new Error('Error submitting withdrawal: ' + error.message);
 
       showSuccess('Withdrawal request submitted successfully!');
       withdrawForm.reset();
       await initWithdrawalHistory(userId);
     } catch (err) {
       showError('Error submitting withdrawal: ' + err.message);
+      console.error('Withdrawal error:', err); // Log detailed error
     } finally {
       showLoading(false);
     }
@@ -379,6 +397,8 @@ async function initWithdrawalHistory(userId) {
       .order('created_at', { ascending: false });
     if (error) throw error;
 
+    console.log('Fetched withdrawals:', withdrawals); // Log for debugging
+
     withdrawTable.innerHTML = `
       <table>
         <thead>
@@ -395,7 +415,7 @@ async function initWithdrawalHistory(userId) {
             <tr>
               <td>${w.id}</td>
               <td>${w.amount.toFixed(2)}</td>
-              <td>${w.wallet_addresses.wallet_address}</td>
+              <td>${w.wallet_addresses?.wallet_address || 'N/A'}</td>
               <td>${w.status.charAt(0).toUpperCase() + w.status.slice(1)}</td>
               <td>${new Date(w.created_at).toLocaleDateString()}</td>
             </tr>
@@ -405,6 +425,7 @@ async function initWithdrawalHistory(userId) {
     `;
   } catch (err) {
     showError('Error loading withdrawal history: ' + err.message);
+    console.error('Withdrawal history error:', err); // Log detailed error
   }
 }
 
