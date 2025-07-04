@@ -8,15 +8,12 @@
   <link rel="stylesheet" href="css/profile-settings.css"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
-  <!-- Supabase client library -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 </head>
 <body class="settings-page">
   <!-- Video Background -->
   <video class="bg-video" autoplay muted loop playsinline preload="auto">
     <source src="assets/videos/background.webm" type="video/webm"/>
     <source src="assets/videos/background.mp4" type="video/mp4"/>
-    Your browser does not support the video tag.
   </video>
 
   <div class="overlay">
@@ -158,8 +155,10 @@
 
   <button id="back-to-top" aria-label="Back to top">🚀</button>
 
-  <!-- AOS & Your Script -->
+
+  <!-- SCRIPTS: at end of body! -->
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <script src="profile-settings.js"></script>
 </body>
 </html>
