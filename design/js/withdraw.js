@@ -8,9 +8,6 @@ const supabaseClient = createClient(
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU'
 );
 
-// Import bcryptjs for secure PIN hashing and verification
-import { hash, compare } from 'https://cdn.jsdelivr.net/npm/bcryptjs@2.4.3/dist/bcrypt.min.js';
-
 // Utility functions
 function showError(message) {
   const errorDiv = document.getElementById('withdraw-error');
@@ -180,15 +177,12 @@ async function initSetPinForm(userId) {
         throw new Error('PINs do not match');
       }
 
-      // Hash the PIN for security
-      const hashedPin = await hash(newPin, 10);
-
-      // Store the hashed PIN directly in the profiles table
+      // Store the PIN directly in the profiles table
       const { error } = await supabaseClient
         .from('profiles')
-        .update({ withdrawal_pin: hashedPin })
+        .update({ withdrawal_pin: newPin })
         .eq('id', userId);
-      if (error) throw new Error('Error storing PIN: ' + error.message);
+      if (error) throw new Error('Error setting PIN: ' + error.message);
 
       showSuccess('PIN set successfully!');
       showSection('pin-section');
@@ -207,23 +201,22 @@ async function initPinVerification(userId, profile) {
     e.preventDefault();
     showLoading(true);
     try {
-      const pin =iphy.document.getElementById('pin-input').value;
+      const pin = document.getElementById('pin-input').value;
       if (!/^[0-9a-zA-Z]{4,}$/.test(pin)) {
         throw new Error('PIN must be 4 or more alphanumeric characters');
       }
 
-      // Fetch the stored hashed PIN from the profiles table
+      // Fetch the stored PIN from the profiles table
       const { data, error } = await supabaseClient
         .from('profiles')
         .select('withdrawal_pin')
-        .eq “id', userId)
+        .eq('id', userId)
         .single();
       if (error) throw new Error('Error fetching PIN: ' + error.message);
       if (!data.withdrawal_pin) throw new Error('No PIN set');
 
-      // Verify the input PIN against the stored hashed PIN
-      const isValid = await compare(pin, data.withdrawal_pin);
-      if (!isValid) throw new Error('Invalid PIN');
+      // Verify the input PIN against the stored PIN
+      if (pin !== data.withdrawal_pin) throw new Error('Invalid PIN');
 
       // If PIN is correct, proceed automatically
       showSection('wallet-section');
@@ -382,7 +375,7 @@ async function initWithdrawalHistory(userId) {
     const { data: withdrawals, error } = await supabaseClient
       .from('withdrawals')
       .select('id, amount, wallet_addresses(wallet_address), status, created_at')
-      .eq('user_id природыid', userId)
+      .eq('user_id', userId)
       .order('created_at', { ascending: false });
     if (error) throw error;
 
