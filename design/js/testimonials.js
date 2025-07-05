@@ -1,228 +1,347 @@
-// testimonials.js
+// Initialize AOS
+AOS.init({ duration: 800, once: true });
 
-// Initialize Supabase client
-const supabase = Supabase.createClient('YOUR_SUPABASE_URL', 'YOUR_ANON_KEY');
-
-// DOM Elements
-const form = document.getElementById('testimonialForm');
-const titleInput = form.querySelector('input[name="title"]');
-const bodyInput = form.querySelector('textarea[name="body"]');
-const titleCount = document.getElementById('titleCount');
-const bodyCount = document.getElementById('bodyCount');
-const mediaInput = document.getElementById('media');
-const mediaPreview = document.getElementById('mediaPreview');
-const testimonialsContainer = document.getElementById('testimonialsContainer');
-const loadMoreBtn = document.getElementById('loadMore');
-const ratingFilter = document.getElementById('ratingFilter');
-const sortBy = document.getElementById('sortBy');
-const modal = document.getElementById('detailModal');
-const modalContent = document.getElementById('modalContent');
-const closeModal = document.querySelector('.close');
-const reviewerOfMonth = document.getElementById('reviewerOfMonth');
-
-let page = 1;
-const limit = 9;
-
-// Character Counters
-titleInput.addEventListener('input', () => {
-  titleCount.textContent = `${titleInput.value.length}/100`;
-});
-bodyInput.addEventListener('input', () => {
-  bodyCount.textContent = `${bodyInput.value.length}/1000`;
+// Hamburger Menu
+const hamburgerBtn = document.getElementById('hamburgerBtn');
+const navDrawer = document.getElementById('navDrawer');
+hamburgerBtn.addEventListener('click', () => {
+  navDrawer.classList.toggle('open');
+  hamburgerBtn.classList.toggle('active');
 });
 
-// Media Preview
-mediaInput.addEventListener('change', () => {
-  mediaPreview.innerHTML = '';
-  Array.from(mediaInput.files).forEach(file => {
-    const url = URL.createObjectURL(file);
-    const type = file.type.split('/')[0];
-    let element;
-    if (type === 'image') {
-      element = `<img src="${url}" alt="Preview"/>`;
-    } else if (type === 'video') {
-      element = `<video src="${url}" controls></video>`;
-    } else if (type === 'audio') {
-      element = `<audio src="${url}" controls></audio>`;
-    }
-    mediaPreview.innerHTML += element;
-  });
-});
-
-// Form Submission
-form.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const formData = new FormData(form);
-  const data = {
-    user_name: formData.get('name'),
-    user_email: formData.get('email'),
-    location: formData.get('location'),
-    title: formData.get('title'),
-    body: formData.get('body'),
-    rating: parseInt(formData.get('rating')),
-    media: [],
-    verified: false,
-    upvotes: 0,
-  };
-
-  const mediaFiles = formData.getAll('media');
-  for (const file of mediaFiles) {
-    const { data: uploadData, error } = await supabase.storage
-      .from('testimonials-media')
-      .upload(`public/${Date.now()}_${file.name}`, file);
-    if (error) {
-      console.error('Media upload error:', error);
-      return;
-    }
-    data.media.push({ url: uploadData.path, type: file.type });
-  }
-
-  const { error } = await supabase.from('testimonials').insert([data]);
-  if (error) {
-    console.error('Submission error:', error);
-  } else {
-    alert('Testimonial submitted! Please check your email to verify.');
-    form.reset();
-    mediaPreview.innerHTML = '';
-    titleCount.textContent = '0/100';
-    bodyCount.textContent = '0/1000';
-    // Trigger email via Brevo (placeholder for later implementation)
-  }
-});
-
-// Fetch Testimonials
-async function fetchTestimonials(reset = false) {
-  if (reset) page = 1;
-  let query = supabase.from('testimonials').select('*').eq('verified', true);
-
-  if (ratingFilter.value) query = query.eq('rating', ratingFilter.value);
-  if (sortBy.value === 'mostHelpful') query = query.order('upvotes', { ascending: false });
-  else query = query.order('created_at', { ascending: false });
-
-  const { data, error } = await query.range((page - 1) * limit, page * limit - 1);
-  if (error) {
-    console.error('Fetch error:', error);
-    return;
-  }
-
-  if (reset) testimonialsContainer.innerHTML = '';
-  data.forEach(testimonial => {
-    const card = document.createElement('article');
-    card.className = 'testimonial-card';
-    card.setAttribute('itemscope', '');
-    card.setAttribute('itemtype', 'https://schema.org/Review');
-    card.innerHTML = `
-      ${testimonial.media[0] ? `<img src="${supabase.storage.from('testimonials-media').getPublicUrl(testimonial.media[0].url).data.publicUrl}" alt="${testimonial.title}" itemprop="image"/>` : ''}
-      <h3 itemprop="name">${testimonial.title}</h3>
-      <p itemprop="reviewBody">${testimonial.body.substring(0, 100)}...</p>
-      <div class="rating" itemprop="reviewRating" itemscope itemtype="https://schema.org/Rating">
-        <span itemprop="ratingValue">${testimonial.rating}</span> ★
-      </div>
-      <div class="upvote" data-id="${testimonial.id}">
-        <i class="fas fa-thumbs-up"></i> <span>${testimonial.upvotes}</span>
-      </div>
-      <div class="share">
-        <a href="https://twitter.com/intent/tweet?text=${encodeURIComponent(testimonial.body.substring(0, 100))}" target="_blank" aria-label="Share on Twitter"><i class="fab fa-twitter"></i></a>
-        <a href="https://linkedin.com/shareArticle?mini=true&url=${window.location.href}" target="_blank" aria-label="Share on LinkedIn"><i class="fab fa-linkedin"></i></a>
-        <a href="https://facebook.com/sharer/sharer.php?u=${window.location.href}" target="_blank" aria-label="Share on Facebook"><i class="fab fa-facebook"></i></a>
-      </div>
-    `;
-    card.addEventListener('click', () => showDetailView(testimonial));
-    testimonialsContainer.appendChild(card);
-  });
-
-  loadMoreBtn.style.display = data.length < limit ? 'none' : 'block';
-}
-
-// Up-vote Functionality
-testimonialsContainer.addEventListener('click', async (e) => {
-  if (e.target.classList.contains('fa-thumbs-up')) {
-    const id = e.target.parentElement.dataset.id;
-    const { data, error } = await supabase.rpc('increment_upvote', { row_id: id });
-    if (!error) {
-      const span = e.target.nextElementSibling;
-      span.textContent = parseInt(span.textContent) + 1;
-    }
-  }
-});
-
-// Detail View
-function showDetailView(testimonial) {
-  modalContent.innerHTML = `
-    ${testimonial.media.map(m => `<${m.type.startsWith('image') ? 'img' : m.type.startsWith('video') ? 'video controls' : 'audio controls'} src="${supabase.storage.from('testimonials-media').getPublicUrl(m.url).data.publicUrl}" alt="${testimonial.title}"/>`).join('')}
-    <h3 itemprop="name">${testimonial.title}</h3>
-    <p itemprop="reviewBody">${testimonial.body}</p>
-    <div class="rating" itemprop="reviewRating" itemscope itemtype="https://schema.org/Rating">
-      <span itemprop="ratingValue">${testimonial.rating}</span> ★
-    </div>
-    <p>By: <span itemprop="author">${testimonial.user_name}</span>, ${testimonial.location}</p>
-    <div class="upvote" data-id="${testimonial.id}">
-      <i class="fas fa-thumbs-up"></i> <span>${testimonial.upvotes}</span>
-    </div>
-  `;
-  modal.style.display = 'block';
-}
-
-closeModal.addEventListener('click', () => modal.style.display = 'none');
-window.addEventListener('click', (e) => {
-  if (e.target === modal) modal.style.display = 'none';
-});
-
-// Reviewer of the Month
-async function fetchReviewerOfMonth() {
-  const { data } = await supabase.from('testimonials')
-    .select('*')
-    .eq('verified', true)
-    .order('upvotes', { ascending: false })
-    .limit(1);
-  if (data && data[0]) {
-    reviewerOfMonth.innerHTML = `
-      <h3>${data[0].title}</h3>
-      <p>${data[0].body.substring(0, 100)}...</p>
-      <p>By: ${data[0].user_name} - ${data[0].upvotes} Upvotes</p>
-    `;
-  }
-}
-
-// Event Listeners
-loadMoreBtn.addEventListener('click', () => {
-  page++;
-  fetchTestimonials();
-});
-
-ratingFilter.addEventListener('change', () => fetchTestimonials(true));
-sortBy.addEventListener('change', () => fetchTestimonials(true));
-
-// Initial Load
-fetchTestimonials();
-fetchReviewerOfMonth();
-
-// Page Functionality (from About page)
-const btn = document.getElementById('hamburgerBtn');
-const drawer = document.getElementById('navDrawer');
-btn.addEventListener('click', () => {
-  drawer.classList.toggle('open');
-  btn.classList.toggle('active');
-});
-
-function updateTimes() {
-  const now = new Date();
-  document.getElementById('localTime').textContent = now.toLocaleTimeString();
-  document.getElementById('localDate').textContent = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-  document.getElementById('utcTime').textContent = now.toUTCString();
-}
-setInterval(updateTimes, 1000);
-updateTimes();
-
-document.getElementById('theme-toggle').addEventListener('click', () => {
+// Theme Toggle
+const themeToggle = document.getElementById('theme-toggle');
+themeToggle.addEventListener('click', () => {
   document.body.classList.toggle('light-theme');
-  const icon = document.querySelector('#theme-toggle i');
+  const icon = themeToggle.querySelector('i');
   icon.classList.toggle('fa-moon');
   icon.classList.toggle('fa-sun');
 });
 
+// Back to Top
 document.getElementById('back-to-top').addEventListener('click', () => {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
-AOS.init({ duration: 800, once: true });
+// Time and Date
+function updateLocalTime() {
+  const now = new Date();
+  document.getElementById('localTime').textContent = now.toLocaleTimeString();
+  document.getElementById('localDate').textContent = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+}
+setInterval(updateLocalTime, 1000);
+updateLocalTime();
+
+function updateUTCTime() {
+  document.getElementById('utcTime').textContent = new Date().toUTCString();
+}
+setInterval(updateUTCTime, 1000);
+updateUTCTime();
+
+// Video Playback Optimization
+document.addEventListener('DOMContentLoaded', () => {
+  const video = document.querySelector('.bg-video');
+  let retryCount = 0;
+  const maxRetries = 3;
+  const retryDelay = 1000;
+
+  if (video) {
+    const playVideo = () => {
+      video
+        .play()
+        .then(() => {
+          console.log('Background video is playing successfully');
+          retryCount = 0;
+        })
+        .catch((error) => {
+          console.error(`Background video play failed (attempt ${retryCount + 1}):`, error);
+          if (retryCount < maxRetries) {
+            retryCount++;
+            setTimeout(playVideo, retryDelay);
+          } else {
+            console.error('Max retries reached. Video playback failed.');
+          }
+        });
+    };
+
+    playVideo();
+
+    video.addEventListener('canplay', () => console.log('Background video can play'));
+    video.addEventListener('playing', () => console.log('Background video is actively playing'));
+    video.addEventListener('error', (e) => console.error('Background video error:', e));
+    video.addEventListener('stalled', () => console.warn('Background video stalled'));
+    video.addEventListener('loadeddata', () => console.log('Background video data loaded'));
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') {
+        if (video.paused) {
+          playVideo();
+        }
+      } else {
+        video.pause();
+        console.log('Background video paused due to tab inactivity');
+      }
+    });
+
+    const forcePlayOnInteraction = () => {
+      if (video.paused) {
+        playVideo();
+        console.log('Attempting to play background video on user interaction');
+      }
+    };
+
+    window.addEventListener('scroll', forcePlayOnInteraction, { once: true });
+    window.addEventListener('click', forcePlayOnInteraction, { once: true });
+  } else {
+    console.error('Background video element not found');
+  }
+});
+
+// Testimonial Submission Form
+const testimonialForm = document.getElementById('submit-testimonial');
+const dragDropArea = document.getElementById('drag-drop-area');
+const mediaInput = document.getElementById('media');
+const mediaPreview = document.getElementById('media-preview');
+
+function updateCharCounter(input, counter, max) {
+  counter.textContent = `${input.value.length}/${max}`;
+}
+
+document.querySelectorAll('input[maxlength], textarea[maxlength]').forEach((input) => {
+  const counter = input.nextElementSibling;
+  const max = input.getAttribute('maxlength');
+  input.addEventListener('input', () => updateCharCounter(input, counter, max));
+  updateCharCounter(input, counter, max);
+});
+
+dragDropArea.addEventListener('dragover', (e) => {
+  e.preventDefault();
+  dragDropArea.classList.add('drag-over');
+});
+
+dragDropArea.addEventListener('dragleave', () => {
+  dragDropArea.classList.remove('drag-over');
+});
+
+dragDropArea.addEventListener('drop', (e) => {
+  e.preventDefault();
+  dragDropArea.classList.remove('drag-over');
+  const files = e.dataTransfer.files;
+  handleFiles(files);
+});
+
+mediaInput.addEventListener('change', () => {
+  handleFiles(mediaInput.files);
+});
+
+function handleFiles(files) {
+  mediaPreview.innerHTML = '';
+  Array.from(files).forEach((file) => {
+    if (file.type.startsWith('image/') || file.type.startsWith('video/') || file.type.startsWith('audio/')) {
+      const url = URL.createObjectURL(file);
+      const mediaElement = file.type.startsWith('image/')
+        ? `<img src="${url}" alt="Preview" />`
+        : file.type.startsWith('video/')
+        ? `<video src="${url}" controls></video>`
+        : `<audio src="${url}" controls></audio>`;
+      mediaPreview.innerHTML += `<div class="media-item">${mediaElement}</div>`;
+    }
+  });
+}
+
+testimonialForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const formData = new FormData(testimonialForm);
+
+  try {
+    const response = await fetch('/api/testimonials', {
+      method: 'POST',
+      body: formData,
+    });
+    if (response.ok) {
+      alert('Testimonial submitted! Please check your email to verify.');
+      testimonialForm.reset();
+      mediaPreview.innerHTML = '';
+      document.querySelectorAll('.char-counter').forEach((counter) => (counter.textContent = '0/' + counter.textContent.split('/')[1]));
+    } else {
+      alert('Error submitting testimonial. Please try again.');
+    }
+  } catch (error) {
+    console.error('Submission error:', error);
+    alert('Error submitting testimonial. Please try again.');
+  }
+});
+
+// Testimonials Gallery
+let page = 1;
+const limit = 9;
+
+async function loadTestimonials() {
+  const rating = document.getElementById('rating-filter').value;
+  const location = document.getElementById('location-filter').value;
+  const sort = document.getElementById('sort-filter').value;
+
+  try {
+    const response = await fetch(`/api/testimonials?page=${page}&limit=${limit}&rating=${rating}&location=${location}&sort=${sort}&verified=true`);
+    const testimonials = await response.json();
+    const galleryGrid = document.getElementById('testimonials-grid');
+
+    if (page === 1) {
+      galleryGrid.innerHTML = '';
+    }
+
+    testimonials.forEach((testimonial) => {
+      const mediaElement = testimonial.media[0]
+        ? testimonial.media[0].type.startsWith('image/')
+          ? `<img src="${testimonial.media[0].url}" alt="${testimonial.title}" />`
+          : testimonial.media[0].type.startsWith('video/')
+          ? `<video src="${testimonial.media[0].url}" controls></video>`
+          : `<audio src="${testimonial.media[0].url}" controls></audio>`
+        : '';
+      const stars = '★'.repeat(testimonial.rating) + '☆'.repeat(5 - testimonial.rating);
+      const card = `
+        <article class="testimonial-card" itemscope itemtype="https://schema.org/Review" data-id="${testimonial.id}">
+          ${mediaElement}
+          <h3 itemprop="name">${testimonial.title || 'Testimonial'}</h3>
+          <p class="reviewer-meta">
+            <span itemprop="author">${testimonial.user_name}</span>, 
+            <span itemprop="location">${testimonial.location}</span> •
+            <meta itemprop="datePublished" content="${testimonial.created_at}">
+            ${new Date(testimonial.created_at).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+          </p>
+          <div class="review-rating" itemprop="reviewRating" itemscope itemtype="https://schema.org/Rating">
+            <meta itemprop="ratingValue" content="${testimonial.rating}" />
+            <meta itemprop="bestRating" content="5" />
+            <span class="stars">${stars}</span>
+          </div>
+          <p itemprop="reviewBody">${testimonial.body.substring(0, 100)}...</p>
+          <div class="review-actions">
+            <button class="upvote-btn" data-id="${testimonial.id}" aria-label="Upvote this testimonial">
+              <i class="fas fa-heart"></i> <span class="upvote-count">${testimonial.upvotes}</span>
+            </button>
+            <div class="share-buttons">
+              <a href="https://twitter.com/intent/tweet?text=${encodeURIComponent(testimonial.title)}%20with%20PrudentProExchange" target="_blank" aria-label="Share on Twitter"><i class="fab fa-twitter"></i></a>
+              <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://prudentproexchange.com/testimonials" target="_blank" aria-label="Share on LinkedIn"><i class="fab fa-linkedin"></i></a>
+              <a href="https://www.facebook.com/sharer/sharer.php?u=https://prudentproexchange.com/testimonials" target="_blank" aria-label="Share on Facebook"><i class="fab fa-facebook"></i></a>
+            </div>
+            <button class="flag-btn" data-id="${testimonial.id}" aria-label="Flag this testimonial">Flag</button>
+          </div>
+        </article>
+      `;
+      galleryGrid.innerHTML += card;
+    });
+
+    document.getElementById('load-more').style.display = testimonials.length < limit ? 'none' : 'block';
+  } catch (error) {
+    console.error('Error loading testimonials:', error);
+  }
+}
+
+document.getElementById('load-more').addEventListener('click', () => {
+  page++;
+  loadTestimonials();
+});
+
+document.querySelectorAll('.filter-controls select').forEach((select) => {
+  select.addEventListener('change', () => {
+    page = 1;
+    loadTestimonials();
+  });
+});
+
+// Lightbox
+function openLightbox(testimonial) {
+  const mediaCarousel = testimonial.media
+    .map((media) =>
+      media.type.startsWith('image/')
+        ? `<img src="${media.url}" alt="${testimonial.title}" />`
+        : media.type.startsWith('video/')
+        ? `<video src="${media.url}" controls></video>`
+        : `<audio src="${media.url}" controls></audio>`
+    )
+    .join('');
+  const stars = '★'.repeat(testimonial.rating) + '☆'.repeat(5 - testimonial.rating);
+  const lightbox = document.createElement('div');
+  lightbox.className = 'lightbox';
+  lightbox.innerHTML = `
+    <div class="lightbox-content">
+      <button class="lightbox-close">✕</button>
+      <div class="media-carousel">${mediaCarousel}</div>
+      <h3>${testimonial.title || 'Testimonial'}</h3>
+      <p class="reviewer-meta">${testimonial.user_name}, ${testimonial.location} • ${new Date(testimonial.created_at).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</p>
+      <div class="review-rating">${stars}</div>
+      <p>${testimonial.body}</p>
+      <div class="review-actions">
+        <button class="upvote-btn" data-id="${testimonial.id}"><i class="fas fa-heart"></i> <span class="upvote-count">${testimonial.upvotes}</span></button>
+        <div class="share-buttons">
+          <a href="https://twitter.com/intent/tweet?text=${encodeURIComponent(testimonial.title)}%20with%20PrudentProExchange" target="_blank"><i class="fab fa-twitter"></i></a>
+          <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://prudentproexchange.com/testimonials" target="_blank"><i class="fab fa-linkedin"></i></a>
+          <a href="https://www.facebook.com/sharer/sharer.php?u=https://prudentproexchange.com/testimonials" target="_blank"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(lightbox);
+  lightbox.querySelector('.lightbox-close').addEventListener('click', () => {
+    lightbox.remove();
+  });
+}
+
+document.addEventListener('click', (e) => {
+  if (e.target.closest('.testimonial-card')) {
+    const id = e.target.closest('.testimonial-card').dataset.id;
+    // Fetch testimonial details (mocked here)
+    const testimonial = {
+      id,
+      title: 'Sample Testimonial',
+      user_name: 'John Doe',
+      location: 'New York, USA',
+      created_at: new Date().toISOString(),
+      rating: 4,
+      body: 'This is a sample testimonial body that describes the experience with PrudentProExchange.',
+      media: [{ url: 'assets/images/sample.jpg', type: 'image/jpeg' }],
+      upvotes: 10,
+    };
+    openLightbox(testimonial);
+  }
+});
+
+document.addEventListener('click', async (e) => {
+  if (e.target.closest('.upvote-btn')) {
+    const id = e.target.closest('.upvote-btn').dataset.id;
+    try {
+      await fetch(`/api/testimonials/${id}/upvote`, { method: 'POST' });
+      const countElement = e.target.closest('.upvote-btn').querySelector('.upvote-count');
+      countElement.textContent = parseInt(countElement.textContent) + 1;
+    } catch (error) {
+      console.error('Error upvoting:', error);
+    }
+  }
+});
+
+document.addEventListener('click', async (e) => {
+  if (e.target.closest('.flag-btn')) {
+    const id = e.target.closest('.flag-btn').dataset.id;
+    const reason = prompt('Please provide a reason for flagging this testimonial:');
+    if (reason) {
+      try {
+        await fetch(`/api/testimonials/${id}/flag`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ reason }),
+        });
+        alert('Testimonial flagged for moderation.');
+      } catch (error) {
+        console.error('Error flagging:', error);
+      }
+    }
+  }
+});
+
+// Initial Load
+loadTestimonials();
+
+// Scroll to Form
+function scrollToForm() {
+  document.getElementById('testimonial-form').scrollIntoView({ behavior: 'smooth' });
+}
