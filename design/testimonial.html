@@ -13,8 +13,8 @@
 <body class="testimonials-page">
   <!-- Video Background -->
   <video class="bg-video" autoplay muted loop playsinline preload="auto" poster="assets/images/video-poster.jpg">
-    <source src="assets/videos/background.webm" type="video/webm" />
-    <source src="assets/videos/background.mp4" type="video/mp4" />
+    <source src="assets/videos/background.webm" type="video/webm">
+    <source src="assets/videos/background.mp4" type="video/mp4">
     Your browser does not support the video tag.
   </video>
 
@@ -30,189 +30,89 @@
       <nav class="nav-drawer" id="navDrawer">
         <a href="application.html">Apply</a>
         <a href="about.html">About</a>
-        <a href="testimonials.html" class="active">Testimonials</a>
         <a href="privacy.html">Privacy Policy</a>
         <a href="terms.html">Terms & Conditions</a>
         <a href="login.html">Login</a>
         <a href="plans.html">Plans</a>
+        <a href="testimonials.html" class="active">Testimonials</a>
       </nav>
     </header>
 
     <div class="main-content">
       <main class="testimonials-page container">
-        <!-- Hero Section -->
-        <section class="section hero-section" data-aos="fade-up">
-          <h1 class="section-title gold">Voices of Our Celestial Community</h1>
-          <p class="section-text">
-            Discover the stories of triumph and transformation from our global constellation of investors. Each testimonial is a star in our universe, illuminating the path to financial transcendence with PrudentProExchange.
-          </p>
-          <button class="cta primary" onclick="document.getElementById('submission-form').scrollIntoView({ behavior: 'smooth' })">
-            Share Your Story
-          </button>
-        </section>
-
-        <!-- Reviewer of the Month -->
-        <section class="section reviewer-month" data-aos="fade-up">
-          <h2 class="section-title gold">Reviewer of the Month</h2>
-          <article class="testimonial-card featured" itemscope itemtype="https://schema.org/Review" data-aos="zoom-in">
-            <div class="testimonial-media">
-              <img src="assets/images/reviewer-month.jpg" alt="Reviewer of the Month" itemprop="image" />
-            </div>
-            <div class="testimonial-content">
-              <h3 class="testimonial-title" itemprop="name">A Journey to Financial Stars</h3>
-              <p class="testimonial-body" itemprop="reviewBody">
-                "PrudentProExchange transformed my approach to wealth. Their guidance was a beacon in the storm, leading me to unprecedented success."
-              </p>
-              <div class="testimonial-meta">
-                <span class="testimonial-author" itemprop="author">Emily R.</span>
-                <span class="testimonial-location">London, UK</span>
-                <time datetime="2025-06-01" itemprop="datePublished">June 1, 2025</time>
-                <div class="testimonial-rating" itemprop="reviewRating" itemscope itemtype="https://schema.org/Rating">
-                  <span class="stars" aria-label="5 stars">★★★★★</span>
-                  <meta itemprop="ratingValue" content="5" />
-                  <meta itemprop="bestRating" content="5" />
-                  <meta itemprop="worstRating" content="1" />
-                </div>
-              </div>
-              <div class="testimonial-actions">
-                <button class="upvote-btn" data-id="featured" aria-label="Upvote this testimonial">
-                  <i class="fas fa-thumbs-up"></i> <span class="upvote-count">142</span>
-                </button>
-                <div class="share-buttons">
-                  <a href="https://twitter.com/intent/tweet?text=A%20Journey%20to%20Financial%20Stars&url=https://prudentproexchange.com/testimonials" target="_blank" aria-label="Share on Twitter">
-                    <i class="fab fa-twitter"></i>
-                  </a>
-                  <a href="https://www.linkedin.com/shareArticle?url=https://prudentproexchange.com/testimonials" target="_blank" aria-label="Share on LinkedIn">
-                    <i class="fab fa-linkedin"></i>
-                  </a>
-                  <a href="https://www.facebook.com/sharer/sharer.php?u=https://prudentproexchange.com/testimonials" target="_blank" aria-label="Share on Facebook">
-                    <i class="fab fa-facebook"></i>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </article>
-        </section>
-
-        <!-- Testimonials Gallery -->
-        <section class="section testimonials-gallery" data-aos="fade-up">
-          <h2 class="section-title">Our Stellar Testimonials</h2>
-          <div class="filter-controls" data-aos="fade-up">
-            <label for="rating-filter">Filter by Rating:</label>
-            <select id="rating-filter" aria-label="Filter by star rating">
-              <option value="">All Ratings</option>
-              <option value="5">5 Stars</option>
-              <option value="4">4 Stars</option>
-              <option value="3">3 Stars</option>
-              <option value="2">2 Stars</option>
-              <option value="1">1 Star</option>
-            </select>
-            <label for="location-filter">Filter by Location:</label>
-            <input type="text" id="location-filter" placeholder="e.g., London, UK" aria-label="Filter by location" />
-            <label for="sort-by">Sort By:</label>
-            <select id="sort-by" aria-label="Sort testimonials">
-              <option value="newest">Newest</option>
-              <option value="most-helpful">Most Helpful</option>
-            </select>
-            <label class="verified-checkbox">
-              <input type="checkbox" id="verified-filter" checked aria-label="Show verified testimonials only" />
-              Verified Only
-            </label>
-          </div>
-          <div class="testimonials-grid" id="testimonials-grid" data-aos="fade-up" data-aos-delay="200">
-            <!-- Dynamically populated via JavaScript -->
-          </div>
-          <button class="load-more cta primary" id="load-more">Load More</button>
-        </section>
-
-        <!-- Submission Form -->
-        <section class="section submission-form" id="submission-form" data-aos="fade-up">
+        <!-- Submission Form Section -->
+        <section class="section submission-form" data-aos="fade-up">
           <h2 class="section-title gold">Share Your Celestial Story</h2>
-          <form id="testimonial-form" enctype="multipart/form-data">
+          <p class="section-text">Illuminate the cosmos with your experience at PrudentProExchange.</p>
+          <form id="testimonialForm" enctype="multipart/form-data">
             <div class="form-group">
-              <label for="user_name">Name</label>
-              <input type="text" id="user_name" name="user_name" required placeholder="e.g., Emily R." aria-required="true" />
+              <label for="name">Name <span class="required">*</span></label>
+              <input type="text" id="name" name="name" required aria-required="true" />
             </div>
             <div class="form-group">
-              <label for="user_email">Email (Private, for verification)</label>
-              <input type="email" id="user_email" name="user_email" required placeholder="you@example.com" aria-required="true" />
+              <label for="email">Email <span class="required">*</span></label>
+              <input type="email" id="email" name="email" required aria-required="true" />
+              <small class="form-note">For verification; not displayed publicly.</small>
             </div>
             <div class="form-group">
               <label for="location">Location</label>
-              <input type="text" id="location" name="location" placeholder="e.g., London, UK" />
+              <input type="text" id="location" name="location" />
             </div>
             <div class="form-group">
-              <label for="title">Title (Optional)</label>
-              <input type="text" id="title" name="title" maxlength="100" placeholder="Brief headline" />
-              <span class="char-count" id="title-count">0/100</span>
+              <label for="title">Title (max 100 characters)</label>
+              <input type="text" id="title" name="title" maxlength="100" />
+              <p id="titleCount" class="char-count">0/100</p>
             </div>
             <div class="form-group">
-              <label for="body">Your Story</label>
-              <textarea id="body" name="body" required maxlength="1000" placeholder="Tell us about your experience..." aria-required="true"></textarea>
-              <span class="char-count" id="body-count">0/1000</span>
+              <label for="body">Your Testimonial (max 1000 characters) <span class="required">*</span></label>
+              <textarea id="body" name="body" required maxlength="1000" aria-required="true"></textarea>
+              <p id="bodyCount" class="char-count">0/1000</p>
             </div>
             <div class="form-group">
-              <label for="rating">Rating</label>
-              <div class="star-rating" role="radiogroup" aria-label="Star rating">
-                <input type="radio" name="rating" id="star5" value="5" required aria-label="5 stars" />
-                <label for="star5">★</label>
-                <input type="radio" name="rating" id="star4" value="4" aria-label="4 stars" />
-                <label for="star4">★</label>
-                <input type="radio" name="rating" id="star3" value="3" aria-label="3 stars" />
-                <label for="star3">★</label>
-                <input type="radio" name="rating" id="star2" value="2" aria-label="2 stars" />
-                <label for="star2">★</label>
-                <input type="radio" name="rating" id="star1" value="1" aria-label="1 star" />
-                <label for="star1">★</label>
-              </div>
+              <label for="rating">Rating <span class="required">*</span></label>
+              <select id="rating" name="rating" required aria-required="true">
+                <option value="">Select rating</option>
+                <option value="1">1 Star</option>
+                <option value="2">2 Stars</option>
+                <option value="3">3 Stars</option>
+                <option value="4">4 Stars</option>
+                <option value="5">5 Stars</option>
+              </select>
             </div>
             <div class="form-group">
-              <label for="media">Upload Media (Photo, Video, Audio)</label>
-              <input type="file" id="media" name="media[]" multiple accept="image/*,video/*,audio/*" aria-label="Upload media files" />
-              <div class="media-preview" id="media-preview"></div>
+              <label for="media">Upload Media (photos, videos, audio)</label>
+              <input type="file" id="media" name="media" multiple accept="image/*,video/*,audio/*" aria-describedby="mediaHelp" />
+              <small id="mediaHelp" class="form-note">Drag and drop files here or click to upload.</small>
+              <div id="mediaPreview" class="media-preview"></div>
             </div>
-            <div class="form-group extra-fields" id="extra-fields" style="display: none;">
-              <label for="challenge">Challenge Faced (Optional)</label>
-              <textarea id="challenge" name="challenge" maxlength="500" placeholder="What challenge did you face?"></textarea>
-              <span class="char-count" id="challenge-count">0/500</span>
-              <label for="solution">Solution Provided (Optional)</label>
-              <textarea id="solution" name="solution" maxlength="500" placeholder="How did we help you overcome it?"></textarea>
-              <span class="char-count" id="solution-count">0/500</span>
-              <label for="outcome">Outcome Achieved (Optional)</label>
-              <textarea id="outcome" name="outcome" maxlength="500" placeholder="What was the result?"></textarea>
-              <span class="char-count" id="outcome-count">0/500</span>
-            </div>
-            <button type="submit" class="cta primary">Submit Testimonial</button>
+            <button type="submit" class="cta primary" aria-label="Submit Testimonial">Submit Testimonial</button>
           </form>
         </section>
 
-        <!-- Lightbox for Detail View -->
-        <div class="lightbox" id="lightbox" role="dialog" aria-hidden="true">
-          <div class="lightbox-content">
-            <button class="close-btn" aria-label="Close lightbox">×</button>
-            <div class="lightbox-media" id="lightbox-media"></div>
-            <div class="lightbox-details">
-              <h3 class="lightbox-title" id="lightbox-title"></h3>
-              <p class="lightbox-body" id="lightbox-body"></p>
-              <div class="lightbox-meta">
-                <span class="lightbox-author" id="lightbox-author"></span>
-                <span class="lightbox-location" id="lightbox-location"></span>
-                <time id="lightbox-date"></time>
-                <div class="lightbox-rating" id="lightbox-rating"></div>
-              </div>
-              <div class="lightbox-actions">
-                <button class="upvote-btn" id="lightbox-upvote" aria-label="Upvote this testimonial">
-                  <i class="fas fa-thumbs-up"></i> <span id="lightbox-upvote-count"></span>
-                </button>
-                <div class="share-buttons">
-                  <a id="lightbox-twitter" href="#" target="_blank" aria-label="Share on Twitter"><i class="fab fa-twitter"></i></a>
-                  <a id="lightbox-linkedin" href="#" target="_blank" aria-label="Share on LinkedIn"><i class="fab fa-linkedin"></i></a>
-                  <a id="lightbox-facebook" href="#" target="_blank" aria-label="Share on Facebook"><i class="fab fa-facebook"></i></a>
-                </div>
-              </div>
-            </div>
+        <!-- Testimonials Gallery Section -->
+        <section class="section testimonials-gallery" data-aos="fade-up">
+          <h2 class="section-title gold">Voices of the Cosmos</h2>
+          <div class="filter-controls">
+            <select id="ratingFilter" aria-label="Filter by Rating">
+              <option value="">All Ratings</option>
+              <option value="1">1 Star</option>
+              <option value="2">2 Stars</option>
+              <option value="3">3 Stars</option>
+              <option value="4">4 Stars</option>
+              <option value="5">5 Stars</option>
+            </select>
+            <select id="locationFilter" aria-label="Filter by Location">
+              <option value="">All Locations</option>
+              <!-- Populated dynamically -->
+            </select>
+            <select id="sortBy" aria-label="Sort By">
+              <option value="newest">Newest First</option>
+              <option value="mostHelpful">Most Helpful</option>
+            </select>
           </div>
-        </div>
+          <div class="testimonials-container" role="list"></div>
+          <button id="loadMore" class="cta primary" aria-label="Load More Testimonials">Load More</button>
+        </section>
       </main>
     </div>
 
@@ -224,7 +124,6 @@
         <p class="local-date">Local Date: <span id="localDate"></span></p>
         <nav class="footer-links">
           <a href="about.html">About Us</a>
-          <a href="testimonials.html">Testimonials</a>
           <a href="privacy.html">Privacy Policy</a>
           <a href="terms.html">Terms & Conditions</a>
         </nav>
@@ -233,10 +132,27 @@
     </footer>
   </div>
 
-  <button id="back-to-top" aria-label="Back to top">🚀</button>
+  <!-- Modal for Detail View -->
+  <div id="testimonialModal" class="modal" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
+    <div class="modal-content">
+      <span class="close" tabindex="0" aria-label="Close Modal">&times;</span>
+      <div class="media-carousel"></div>
+      <h3 id="modalTitle"></h3>
+      <p id="modalBody"></p>
+      <div id="modalRating" class="rating"></div>
+      <p>By <span id="modalAuthor"></span> from <span id="modalLocation"></span> on <span id="modalDate"></span></p>
+      <button id="modalUpvoteBtn" class="upvote-btn" aria-label="Upvote Testimonial">Upvote (<span id="modalUpvoteCount">0</span>)</button>
+      <div class="share-buttons">
+        <a href="#" id="shareTwitter" target="_blank" class="share-btn" aria-label="Share on Twitter"><i class="fab fa-twitter"></i></a>
+        <a href="#" id="shareLinkedIn" target="_blank" class="share-btn" aria-label="Share on LinkedIn"><i class="fab fa-linkedin"></i></a>
+        <a href="#" id="shareFacebook" target="_blank" class="share-btn" aria-label="Share on Facebook"><i class="fab fa-facebook"></i></a>
+      </div>
+    </div>
+  </div>
 
-  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Scripts -->
+  <script src="https://unpkg.com/a solos@2.3.1/dist/aos.js"></script>
+  <script src="js/main.js"></script>
   <script src="js/testimonials.js"></script>
 </body>
 </html>
