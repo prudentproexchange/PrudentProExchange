@@ -1,0 +1,291 @@
+:root {
+  --primary: #ffd700;
+  --secondary: #1e1e2f;
+  --glass-bg: rgba(255, 255, 255, 0.1);
+  --shadow: rgba(0, 0, 0, 0.3);
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: #121212;
+  color: #fff;
+  margin: 0;
+  overflow-x: hidden;
+}
+
+.bg-video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+}
+
+.overlay {
+  position: relative;
+  min-height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.site-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--primary);
+}
+
+.logo {
+  height: 40px;
+}
+
+.nav-drawer {
+  position: fixed;
+  top: 0;
+  right: -300px;
+  width: 300px;
+  height: 100%;
+  background: var(--secondary);
+  transition: right 0.3s ease;
+  padding: 2rem;
+  z-index: 1000;
+}
+
+.nav-drawer.open {
+  right: 0;
+}
+
+.nav-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: none;
+  z-index: 999;
+}
+
+.nav-overlay.nav-open {
+  display: block;
+}
+
+.nav-drawer a {
+  display: block;
+  color: #fff;
+  padding: 0.5rem 0;
+  text-decoration: none;
+  font-size: 1.1rem;
+}
+
+.nav-drawer a.active {
+  color: var(--primary);
+}
+
+.hamburger {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.hamburger span {
+  width: 25px;
+  height: 3px;
+  background: #fff;
+  transition: all 0.3s;
+}
+
+.hamburger.active span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.hamburger.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(7px, -7px);
+}
+
+.account-menu {
+  position: relative;
+}
+
+.submenu {
+  display: none;
+  padding-left: 1rem;
+}
+
+.submenu.open {
+  display: block;
+}
+
+.profile-section {
+  display: flex;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+}
+
+.avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 1rem;
+}
+
+.welcome-message {
+  font-size: 1.2rem;
+  font-family: 'Playfair Display', serif;
+}
+
+.container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.card {
+  background: var(--glass-bg);
+  padding: 2rem;
+  border: 1px solid var(--primary);
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 8px var(--shadow);
+  margin-bottom: 2rem;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px var(--shadow);
+}
+
+.btn {
+  background: var(--primary);
+  color: #000;
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.3s;
+}
+
+.btn:hover {
+  background: #ffeb3b;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.loading-spinner {
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-top: 4px solid var(--primary);
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto;
+  display: none;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.error-message {
+  color: #ff4444;
+  background: rgba(255, 0, 0, 0.1);
+  padding: 10px;
+  border-radius: 5px;
+  margin: 10px 0;
+  display: none;
+}
+
+.success-message {
+  color: #00cc00;
+  background: rgba(0, 255, 0, 0.1);
+  padding: 10px;
+  border-radius: 5px;
+  margin: 10px 0;
+  display: none;
+}
+
+.investment-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.investment-form input,
+.investment-form select {
+  padding: 0.8rem;
+  border: 1px solid var(--primary);
+  border-radius: 5px;
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  font-size: 1rem;
+}
+
+.investment-form label {
+  font-size: 1rem;
+  color: var(--primary);
+}
+
+.investment-details {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 5px;
+}
+
+.investment-details p {
+  margin: 0.5rem 0;
+}
+
+.site-footer {
+  background: var(--secondary);
+  padding: 2rem;
+  text-align: center;
+}
+
+.footer-content p {
+  margin: 0.5rem 0;
+}
+
+.footer-links a {
+  color: #fff;
+  margin: 0 1rem;
+  text-decoration: none;
+}
+
+#back-to-top {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: var(--primary);
+  color: #000;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: none;
+}
+
+#back-to-top:hover {
+  background: #ffeb3b;
+}
