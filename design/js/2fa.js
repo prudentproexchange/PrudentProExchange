@@ -19,15 +19,22 @@ async function init2FAPage() {
   }
   userId = authData.user.id;
 
-  // 2.2 Fetch profile
-  const { data: profile, error: profErr } = await supabaseClient
-    .from('profiles')
-    .select('first_name,photo_url,two_fa_enabled')
-    .eq('id', userId)
-    .single();
-  if (profErr) {
-    return showError('Error loading profile: ' + profErr.message);
-  }
+  // 2.2 Fetch profile info + 2FA status
+  const [{ data: profile }, { data: twofa }, profileErr, twofaErr] = await Promise.all([
+    supabaseClient
+      .from('profiles')
+      .select('first_name, photo_url')
+      .eq('id', userId)
+      .single(),
+    supabaseClient
+      .from('user_2fa')
+      .select('enabled')
+      .eq('user_id', userId)
+      .maybeSingle(),
+  ]);
+
+  if (profileErr)     return showError('Error loading profile: ' + profileErr.message);
+  if (twofaErr)       return showError('Error loading 2FA status: ' + twofaErr.message);
 
   // 2.3 Update UI
   document.getElementById('welcomeName').textContent = profile.first_name || 'User';
@@ -40,15 +47,15 @@ async function init2FAPage() {
     document.getElementById('defaultProfileIcon').style.display = 'none';
   }
 
-  const enabled = profile.two_fa_enabled;
+  const enabled = twofa?.enabled === true;
   document.getElementById('twofa-status').textContent = enabled
     ? '2FA is currently enabled.'
     : '2FA is currently disabled.';
   document.getElementById('enable-2fa-section').style.display = enabled ? 'none' : 'block';
   document.getElementById('disable-2fa-section').style.display = enabled ? 'block' : 'none';
 
-  // 2.4 If disabled, generate+store the secret via Netlify function
-  if (!enabled) {
+  // 2.4 If no row or disabled, generate+store the secret via Netlify
+  if (!twofa?.enabled) {
     await generateTotpSecret();
   }
 
@@ -101,12 +108,14 @@ function setupEventListeners() {
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const { ok } = await res.json();
       if (!ok) return showError('Invalid code');
-      // Flip the flag in your profiles table
+
+      // Flip the flag in your user_2fa table
       const { error: updErr } = await supabaseClient
-        .from('profiles')
-        .update({ two_fa_enabled: true })
-        .eq('id', userId);
+        .from('user_2fa')
+        .update({ enabled: true })
+        .eq('user_id', userId);
       if (updErr) throw updErr;
+
       alert('2FA enabled successfully!');
       window.location.reload();
     } catch (e) {
@@ -127,19 +136,19 @@ function setupEventListeners() {
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const { ok } = await res.json();
       if (!ok) return showError('Invalid code');
+
       const { error: updErr } = await supabaseClient
-        .from('profiles')
-        .update({ two_fa_enabled: false })
-        .eq('id', userId);
+        .from('user_2fa')
+        .update({ enabled: false })
+        .eq('user_id', userId);
       if (updErr) throw updErr;
+
       alert('2FA disabled successfully!');
       window.location.reload();
     } catch (e) {
       showError('Error verifying TOTP: ' + e.message);
     }
   });
-
-  // … copy over your hamburger / theme-toggle / nav / logout / time code here …
 }
 
 // Helper
