@@ -26,39 +26,29 @@ exports.handler = async (event) => {
     }
 
     const { user_id, token } = JSON.parse(event.body);
-    console.log('🔑 Incoming verify-totp:', { user_id, token });
 
-    // Fetch the stored secret
-    const { data: profile, error: dbError } = await supabase
-      .from('profiles')
-      .select('two_fa_secret')
-      .eq('id', user_id)
+    // Fetch the stored secret from user_2fa
+    const { data, error: dbError } = await supabase
+      .from('user_2fa')
+      .select('secret')
+      .eq('user_id', user_id)
       .maybeSingle();
 
     if (dbError) {
-      console.error('❌ DB error:', dbError);
+      console.error('DB error fetching 2FA secret:', dbError);
       return { statusCode: 500, body: JSON.stringify({ ok: false, error: 'Database error' }) };
     }
-    if (!profile || !profile.two_fa_secret) {
-      console.warn('⚠️  No secret for user:', user_id);
-      return { statusCode: 200, body: JSON.stringify({ ok: false, error: 'No secret found' }) };
+    if (!data || !data.secret) {
+      console.warn('No 2FA secret found for user:', user_id);
+      return { statusCode: 200, body: JSON.stringify({ ok: false, error: 'No secret found; please enable 2FA first.' }) };
     }
 
-    // **DEBUG LOG** the secret you fetched
-    console.log('🔒 Stored secret is:', profile.two_fa_secret);
+    // Verify the TOTP code
+    const valid = authenticator.verify({ token, secret: data.secret });
+    return { statusCode: 200, body: JSON.stringify({ ok: valid }) };
 
-    // Now verify
-    const valid = authenticator.verify({ token, secret: profile.two_fa_secret });
-    console.log(`📊 Verification result for token ${token}:`, valid);
-
-    // **For debugging only**: echo back the secret and token you checked
-    // Remove this `debug` field when you’re done diagnosing
-    return {
-      statusCode: 200,
-      body: JSON.stringify({ ok: valid, debug: { secret: profile.two_fa_secret, token } })
-    };
   } catch (err) {
-    console.error('🔥 Unexpected error in verify-totp:', err);
+    console.error('Unexpected error in verify-totp:', err);
     return { statusCode: 500, body: JSON.stringify({ ok: false, error: 'Internal server error' }) };
   }
 };
