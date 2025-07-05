@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>World-Class Testimonials</title>
+    <link rel="stylesheet" href="testimonial.css">
+</head>
+<body>
+    <!-- Header matching your website’s external pages -->
+    <header>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="testimonial.html" class="active">Testimonials</a>
+        </nav>
+    </header>
+
+    <!-- Testimonial Submission Form -->
+    <section class="submission-section">
+        <h1>Share Your Story</h1>
+        <form id="testimonialForm" enctype="multipart/form-data">
+            <input type="text" id="name" placeholder="Your Name" required>
+            <textarea id="text" placeholder="Your Testimonial" required></textarea>
+            <input type="file" id="image" accept="image/*" aria-label="Upload an image">
+            <input type="url" id="video" placeholder="Video URL (e.g., YouTube link)">
+            <input type="text" id="tags" placeholder="Add tags (e.g., service, product)">
+            <div class="rating">
+                <label>Rate Us:</label>
+                <input type="number" id="rating" min="1" max="5" placeholder="1-5" required>
+            </div>
+            <button type="submit">Submit Testimonial</button>
+            <div id="feedback"></div>
+        </form>
+    </section>
+
+    <!-- Approved Testimonials Display -->
+    <section class="testimonials-section">
+        <h2>Verified Testimonials</h2>
+        <div id="testimonialsContainer" class="testimonials-grid"></div>
+    </section>
+
+    <script src="testimonial.js"></script>
+</body>
+</html>
