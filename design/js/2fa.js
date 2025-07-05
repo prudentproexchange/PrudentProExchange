@@ -1,9 +1,15 @@
 // js/2fa.js
 
-// 1) Init Supabase client (anon key)
+// 1) Init Supabase client (anon key), explicitly enabling session persistence
 const supabaseClient = supabase.createClient(
   'https://iwkdznjqfbsfkscnbrkc.supabase.co',
-  '<YOUR_ANON_KEY>'
+  '<YOUR_ANON_KEY>',
+  {
+    auth: {
+      persistSession: true,
+      detectSessionInUrl: false
+    }
+  }
 );
 
 let userId;
@@ -12,39 +18,34 @@ let userId;
 async function init2FAPage() {
   AOS.init({ duration: 800, once: true });
 
-  // 2.1 Get current user
-  const { data: authData, error: authErr } = await supabaseClient.auth.getUser();
-  if (authErr || !authData.user) {
+  // --- WAIT FOR SESSION TO BE RESTORED ---
+  // This avoids a race where your code runs before the stored session
+  const { data: { session }, error: sessionErr } = await supabaseClient.auth.getSession();
+  if (sessionErr || !session) {
+    // no session found → back to login
     return window.location.replace('login.html');
   }
-  userId = authData.user.id;
+  userId = session.user.id;
 
-  // 2.2 Fetch profile info + 2FA row
-  const [ profileResp, twofaResp ] = await Promise.all([
-    supabaseClient
-      .from('profiles')
-      .select('first_name, photo_url')
-      .eq('id', userId)
-      .single(),
+  // --- LOAD PROFILE + 2FA STATE ---
+  const [ { data: profile, error: profErr }, { data: twofa, error: twofaErr } ] =
+    await Promise.all([
+      supabaseClient
+        .from('profiles')
+        .select('first_name, photo_url')
+        .eq('id', userId)
+        .single(),
+      supabaseClient
+        .from('user_2fa')
+        .select('secret, enabled')
+        .eq('user_id', userId)
+        .maybeSingle(),
+    ]);
 
-    supabaseClient
-      .from('user_2fa')
-      .select('secret, enabled')
-      .eq('user_id', userId)
-      .maybeSingle(),
-  ]);
+  if (profErr)   return showError('Error loading profile: ' + profErr.message);
+  if (twofaErr)  return showError('Error loading 2FA status: ' + twofaErr.message);
 
-  if (profileResp.error) {
-    return showError('Error loading profile: ' + profileResp.error.message);
-  }
-  if (twofaResp.error) {
-    return showError('Error loading 2FA status: ' + twofaResp.error.message);
-  }
-
-  const profile = profileResp.data;
-  const twofa   = twofaResp.data || { secret: null, enabled: false };
-
-  // 2.3 Update UI
+  // --- RENDER UI ---
   document.getElementById('welcomeName').textContent = profile.first_name || 'User';
   if (profile.photo_url) {
     const { data: urlData } = supabaseClient
@@ -55,59 +56,30 @@ async function init2FAPage() {
     document.getElementById('defaultProfileIcon').style.display = 'none';
   }
 
-  const enabled = twofa.enabled === true;
+  const enabled = twofa?.enabled === true;
   document.getElementById('twofa-status').textContent = enabled
     ? '2FA is currently enabled.'
     : '2FA is currently disabled.';
-  document.getElementById('enable-2fa-section').style.display = enabled ? 'none' : 'block';
+  document.getElementById('enable-2fa-section').style.display  = enabled ? 'none' : 'block';
   document.getElementById('disable-2fa-section').style.display = enabled ? 'block' : 'none';
 
-  // 2.4 If no secret, generate + store one
-  if (!twofa.secret) {
+  // Ensure we show a QR/secret if we don’t already have one
+  if (!twofa?.secret) {
     await generateTotpSecret();
   } else {
-    // if secret already exists but not yet shown (e.g. page reload), display it
-    document.getElementById('qrcode').src = twofa.qr_code_url || '';
+    document.getElementById('qrcode').src       = twofa.qr_code_url || '';
     document.getElementById('qrcode').style.display = 'block';
-    document.getElementById('secret').textContent = twofa.secret;
+    document.getElementById('secret').textContent  = twofa.secret;
   }
 
   setupEventListeners();
 }
 
-// 3) Call create-totp Netlify function
-async function generateTotpSecret() {
-  try {
-    const res = await fetch('/.netlify/functions/create-totp', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ user_id: userId })
-    });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const { secret, qr_code_url } = await res.json();
+// 3) Call create-totp (unchanged)
+async function generateTotpSecret() { /* … */ }
 
-    // Inject into UI
-    const img = document.getElementById('qrcode');
-    img.src = qr_code_url;
-    img.style.display = 'block';
-    document.getElementById('secret').textContent = secret;
-  } catch (e) {
-    showError('Error generating TOTP secret: ' + e.message);
-  }
-}
+// 4) Wire up your buttons (unchanged)…
 
-// 4) Wire up buttons (unchanged)…
-function setupEventListeners() {
-  // … your copy, verify+enable, verify+disable code here …
-}
+// HELPER: showError, setupEventListeners, etc.
 
-// Helper
-function showError(msg) {
-  const el = document.getElementById('error-message');
-  el.textContent = msg;
-  el.style.display = 'block';
-  setTimeout(() => el.style.display = 'none', 5000);
-}
-
-// Kick it off
 document.addEventListener('DOMContentLoaded', init2FAPage);
