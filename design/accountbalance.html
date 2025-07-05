@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Manage your account balance and invest with PrudentProExchange. Secure, fast, and verified."/>
+  <title>Account Balance • PrudentProExchange</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/dashboard.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --primary: #ffd700;
+      --secondary: #1e1e2f;
+      --glass-bg: rgba(255, 255, 255, 0.1);
+      --shadow: rgba(0, 0, 0, 0.3);
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #121212;
+      color: #fff;
+      margin: 0;
+      overflow-x: hidden;
+    }
+    .bg-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+    }
+    .overlay {
+      position: relative;
+      min-height: 100vh;
+      background: rgba(0, 0, 0, 0.5);
+    }
+    .site-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background: var(--glass-bg);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--primary);
+    }
+    .logo {
+      height: 40px;
+    }
+    .nav-drawer {
+      position: fixed;
+      top: 0;
+      right: -300px;
+      width: 300px;
+      height: 100%;
+      background: var(--secondary);
+      transition: right 0.3s ease;
+      padding: 2rem;
+      z-index: 1000;
+    }
+    .nav-drawer.open {
+      right: 0;
+    }
+    .nav-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      z-index: 999;
+    }
+    .nav-overlay.nav-open {
+      display: block;
+    }
+    .nav-drawer a {
+      display: block;
+      color: #fff;
+      padding: 0.5rem 0;
+      text-decoration: none;
+      font-size: 1.1rem;
+    }
+    .nav-drawer a.active {
+      color: var(--primary);
+    }
+    .hamburger {
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .hamburger span {
+      width: 25px;
+      height: 3px;
+      background: #fff;
+      transition: all 0.3s;
+    }
+    .hamburger.active span:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 5px);
+    }
+    .hamburger.active span:nth-child(2) {
+      opacity: 0;
+    }
+    .hamburger.active span:nth-child(3) {
+      transform: rotate(-45deg) translate(7px, -7px);
+    }
+    .account-menu {
+      position: relative;
+    }
+    .submenu {
+      display: none;
+      padding-left: 1rem;
+    }
+    .submenu.open {
+      display: block;
+    }
+    .profile-section {
+      display: flex;
+      align-items: center;
+      padding: 1rem 2rem;
+      background: var(--glass-bg);
+      backdrop-filter: blur(10px);
+    }
+    .avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      margin-right: 1rem;
+    }
+    .welcome-message {
+      font-size: 1.2rem;
+      font-family: 'Playfair Display', serif;
+    }
+    .container {
+      padding: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .card {
+      background: var(--glass-bg);
+      padding: 2rem;
+      border: 1px solid var(--primary);
+      border-radius: 20px;
+      backdrop-filter: blur(10px);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 4px 8px var(--shadow);
+      margin-bottom: 2rem;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px var(--shadow);
+    }
+    .btn {
+      background: var(--primary);
+      color: #000;
+      padding: 0.8rem 1.5rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.3s;
+    }
+    .btn:hover {
+      background: #ffeb3b;
+    }
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .loading-spinner {
+      border: 4px solid rgba(255, 255, 255, 0.3);
+      border-top: 4px solid var(--primary);
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto;
+      display: none;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .error-message {
+      color: #ff4444;
+      background: rgba(255, 0, 0, 0.1);
+      padding: 10px;
+      border-radius: 5px;
+      margin: 10px 0;
+      display: none;
+    }
+    .success-message {
+      color: #00cc00;
+      background: rgba(0, 255, 0, 0.1);
+      padding: 10px;
+      border-radius: 5px;
+      margin: 10px 0;
+      display: none;
+    }
+    .investment-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .investment-form input, .investment-form select {
+      padding: 0.8rem;
+      border: 1px solid var(--primary);
+      border-radius: 5px;
+      background: rgba(0, 0, 0, 0.5);
+      color: #fff;
+      font-size: 1rem;
+    }
+    .investment-form label {
+      font-size: 1rem;
+      color: var(--primary);
+    }
+    .investment-details {
+      margin-top: 1rem;
+      padding: 1rem;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 5px;
+    }
+    .investment-details p {
+      margin: 0.5rem 0;
+    }
+    .site-footer {
+      background: var(--secondary);
+      padding: 2rem;
+      text-align: center;
+    }
+    .footer-content p {
+      margin: 0.5rem 0;
+    }
+    .footer-links a {
+      color: #fff;
+      margin: 0 1rem;
+      text-decoration: none;
+    }
+    #back-to-top {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: var(--primary);
+      color: #000;
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      font-size: 1.5rem;
+      cursor: pointer;
+      display: none;
+    }
+    #back-to-top:hover {
+      background: #ffeb3b;
+    }
+  </style>
+</head>
+<body class="account-balance-page">
+  <video class="bg-video" autoplay muted loop playsinline preload="auto">
+    <source src="assets/videos/background.webm" type="video/webm">
+    <source src="assets/videos/background.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+
+  <div class="overlay">
+    <header class="site-header">
+      <a href="dashboard.html" class="logo-link">
+        <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo"/>
+      </a>
+      <div class="header-right">
+        <button id="theme-toggle" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
+        <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+      <nav class="nav-drawer" id="navDrawer">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="invest.html">Invest</a>
+        <a href="withdraw.html">Withdraw</a>
+        <a href="transactions.html">Transactions</a>
+        <a href="referrals.html">Referrals</a>
+        <div class="account-menu">
+          <a href="#" class="account-toggle" id="account-toggle">Account ▾</a>
+          <ul class="submenu">
+            <li><a href="profile-settings.html">Profile Settings</a></li>
+            <li><a href="transfer.html">Transfer Balance</a></li>
+            <li><a href="change-password.html">Change Password</a></li>
+            <li><a href="support.html">Support Ticket</a></li>
+            <li><a href="promo-tools.html">Promotional Tools</a></li>
+            <li><a href="2fa.html">2FA Security</a></li>
+            <li><a href="#" id="logout-btn">Logout</a></li>
+          </ul>
+        </div>
+        <a href="kyc.html">KYC Verification</a>
+        <a href="transfer.html">Transfer</a>
+        <a href="accountbalance.html" class="active">Account Balance</a>
+      </nav>
+    </header>
+    <div class="nav-overlay"></div>
+
+    <div class="profile-section">
+      <div class="profile-container">
+        <img id="navProfilePhoto" src="" alt="Profile" class="avatar" style="display: none;"/>
+        <span id="defaultProfileIcon" class="avatar">👤</span>
+      </div>
+      <div class="welcome-message">Welcome to Your Account Balance, <span id="welcomeName"></span>!</div>
+    </div>
+
+    <main class="container">
+      <section class="cards-grid" data-aos="fade-up">
+        <div class="card balance-card" data-aos="zoom-in">
+          <h2>Total Account Balance</h2>
+          <span id="totalBalance" style="font-size: 2rem; color: var(--primary);">$0.00</span>
+          <p>Deposit Wallet: <span id="depositWallet">$0.00</span></p>
+          <p>Account Balance: <span id="accountBalance">$0.00</span></p>
+          <a href="deposit.html" class="btn">Add Funds</a>
+          <a href="withdraw.html" class="btn">Withdraw Funds</a>
+        </div>
+
+        <div class="card investment-card" data-aos="zoom-in">
+          <h2>Invest from Balance</h2>
+          <form id="invest-form" class="investment-form">
+            <label for="invest-amount">Investment Amount ($)</label>
+            <input type="number" id="invest-amount" placeholder="Enter amount (min $200)" min="200" required>
+            <p id="invest-validation" class="validation-message" aria-live="assertive"></p>
+            <div class="investment-details" id="investment-details" style="display: none;">
+              <p>Selected Plan: <span id="selected-plan">None</span></p>
+              <p>Weekly ROI: <span id="weekly-roi">0%</span></p>
+              <p>Estimated Weekly Profit: <span id="weekly-profit">$0.00</span></p>
+              <p>Investment Duration: 4 months</p>
+            </div>
+            <button type="submit" class="btn" id="invest-btn" disabled>Invest Now</button>
+          </form>
+          <div class="loading-spinner" id="invest-loading"></div>
+          <div class="error-message" id="invest-error"></div>
+          <div class="success-message" id="invest-success"></div>
+        </div>
+
+        <div class="card active-investments" data-aos="zoom-in">
+          <h2>Active Investments</h2>
+          <div id="investments-container" aria-live="polite"></div>
+          <div id="no-investments" style="display: none;">
+            <p>No active investments currently.</p>
+          </div>
+          <div class="loading-spinner" id="investments-loading"></div>
+          <div class="error-message" id="investments-error"></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="section section-dark site-footer" data-aos="fade-up">
+      <div class="footer-content">
+        <p class="UTC-time">UTC Time: <span id="utcTime"></span></p>
+        <p class="local-time">Local Time: <span id="localTime"></span></p>
+        <p class="local-date">Local Date: <span id="localDate"></span></p>
+        <nav class="footer-links">
+          <a href="about.html">About Us</a>
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="terms.html">Terms & Conditions</a>
+        </nav>
+        <p class="copyright">© 2025 PrudentProExchange. All Rights Reserved. SEC Registration #0001230714</p>
+      </div>
+    </footer>
+  </div>
+
+  <button id="back-to-top" aria-label="Back to top">🚀</button>
+
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <script>
+    // Initialize AOS
+    AOS.init({ duration: 800, once: true });
+
+    // Supabase client
+    const { createClient } = supabase;
+    const supabaseClient = createClient(
+      'https://iwkdznjqfbsfkscnbrkc.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU'
+    );
+
+    // Utility functions
+    function formatCurrency(amount) {
+      return amount.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+    }
+
+    function showError(elementId, message) {
+      const errorDiv = document.getElementById(elementId);
+      errorDiv.textContent = message;
+      errorDiv.style.display = 'block';
+      setTimeout(() => errorDiv.style.display = 'none', 5000);
+    }
+
+    function showSuccess(elementId, message) {
+      const successDiv = document.getElementById(elementId);
+      successDiv.textContent = message;
+      successDiv.style.display = 'block';
+      setTimeout(() => successDiv.style.display = 'none', 5000);
+    }
+
+    function showLoading(elementId, show) {
+      document.getElementById(elementId).style.display = show ? 'block' : 'none';
+    }
+
+    // Investment plans
+    const plans = [
+      { id: 1, name: 'The Dawn Star (Basic)', min: 200, max: 4999, weeklyRoi: 5 },
+      { id: 2, name: 'The Nebula Glow (Standard)', min: 5000, max: 14999, weeklyRoi: 6.5 },
+      { id: 3, name: 'The Lunar Crest (Silver)', min: 15000, max: 49999, weeklyRoi: 7.5 },
+      { id: 4, name: 'The Solar Flare (Gold)', min: 50000, max: 99999, weeklyRoi: 8.5 },
+      { id: 5, name: 'The Galactic Crown (Diamond)', min: 100000, max: Infinity, weeklyRoi: 10 }
+    ];
+
+    let investmentIntervals = [];
+
+    // Initialize page
+    async function initAccountBalance() {
+      showLoading('invest-loading', true);
+      try {
+        // Auth guard
+        const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
+        if (!user || authError) {
+          window.location.href = 'login.html';
+          return;
+        }
+
+        // Check KYC status
+        const { data: kycRequests, error: kycError } = await supabaseClient
+          .from('kyc_requests')
+          .select('status')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false })
+          .limit(1);
+        if (kycError) throw kycError;
+        if (!kycRequests.length || kycRequests[0].status !== 'approved') {
+          showError('invest-error', 'You must complete KYC verification before investing.');
+          setTimeout(() => window.location.href = 'kyc.html', 3000);
+          return;
+        }
+
+        // Load profile
+        const { data: profile, error: profileError } = await supabaseClient
+          .from('profiles')
+          .select('first_name, photo_url, deposit_wallet, account_balance')
+          .eq('id', user.id)
+          .single();
+        if (profileError) throw profileError;
+
+        document.getElementById('welcomeName').textContent = profile.first_name || 'User';
+        const totalBalance = (profile.deposit_wallet || 0) + (profile.account_balance || 0);
+        document.getElementById('totalBalance').textContent = formatCurrency(totalBalance);
+        document.getElementById('depositWallet').textContent = formatCurrency(profile.deposit_wallet || 0);
+        document.getElementById('accountBalance').textContent = formatCurrency(profile.account_balance || 0);
+
+        if (profile.photo_url) {
+          const { data: urlData } = supabaseClient.storage
+            .from('profile-photos')
+            .getPublicUrl(profile.photo_url);
+          document.getElementById('navProfilePhoto').src = urlData.publicUrl;
+          document.getElementById('navProfilePhoto').style.display = 'block';
+          document.getElementById('defaultProfileIcon').style.display = 'none';
+        }
+
+        // Initialize investment form
+        initInvestmentForm(totalBalance);
+
+        // Load active investments
+        await loadActiveInvestments(user.id);
+      } catch (err) {
+        showError('invest-error', 'Error initializing page: ' + err.message);
+        console.error('Init error:', err);
+      } finally {
+        showLoading('invest-loading', false);
+      }
+    }
+
+    function initInvestmentForm(totalBalance) {
+      const investForm = document.getElementById('invest-form');
+      const investAmount = document.getElementById('invest-amount');
+      const investBtn = document.getElementById('invest-btn');
+      const validationMessage = document.getElementById('invest-validation');
+      const investmentDetails = document.getElementById('investment-details');
+      const selectedPlan = document.getElementById('selected-plan');
+      const weeklyRoi = document.getElementById('weekly-roi');
+      const weeklyProfit = document.getElementById('weekly-profit');
+
+      investAmount.addEventListener('input', () => {
+        const amount = parseFloat(investAmount.value);
+        validationMessage.textContent = '';
+        investmentDetails.style.display = 'none';
+        investBtn.disabled = true;
+
+        if (isNaN(amount) || amount < 200) {
+          validationMessage.textContent = 'Amount must be at least $200';
+          return;
+        }
+        if (amount > totalBalance) {
+          validationMessage.textContent = 'Amount exceeds your total balance';
+          return;
+        }
+
+        const plan = plans.find(p => amount >= p.min && amount <= p.max);
+        if (!plan) {
+          validationMessage.textContent = 'Invalid amount for any investment plan';
+          return;
+        }
+
+        selectedPlan.textContent = plan.name;
+        weeklyRoi.textContent = `${plan.weeklyRoi}%`;
+        weeklyProfit.textContent = formatCurrency((amount * plan.weeklyRoi) / 100);
+        investmentDetails.style.display = 'block';
+        investBtn.disabled = false;
+      });
+
+      investForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        showLoading('invest-loading', true);
+        try {
+          const amount = parseFloat(investAmount.value);
+          if (isNaN(amount) || amount < 200 || amount > totalBalance) {
+            throw new Error('Invalid investment amount');
+          }
+
+          const plan = plans.find(p => amount >= p.min && amount <= p.max);
+          if (!plan) throw new Error('No matching investment plan');
+
+          // Calculate total profit (4 months = 16 weeks)
+          const totalProfit = (amount * plan.weeklyRoi * 16) / 100;
+          const startTime = new Date();
+          const endTime = new Date(startTime.getTime() + 16 * 7 * 24 * 60 * 60 * 1000); // 16 weeks
+
+          // Insert investment
+          const { error: investError } = await supabaseClient
+            .from('investments')
+            .insert({
+              user_id: supabaseClient.auth.getUser().then(({ data: { user } }) => user.id),
+              plan_id: plan.id,
+              principal: amount,
+              total_profit: totalProfit,
+              start_time: startTime.toISOString(),
+              end_time: endTime.toISOString(),
+              status: 'active'
+            });
+          if (investError) throw investError;
+
+          // Update profile balance
+          const newBalance = totalBalance - amount;
+          const { error: profileError } = await supabaseClient
+            .from('profiles')
+            .update({ account_balance: newBalance })
+            .eq('id', supabaseClient.auth.getUser().then(({ data: { user } }) => user.id));
+          if (profileError) throw profileError;
+
+          // Update UI
+          document.getElementById('totalBalance').textContent = formatCurrency(newBalance);
+          document.getElementById('accountBalance').textContent = formatCurrency(newBalance);
+          showSuccess('invest-success', 'Investment started successfully!');
+          investForm.reset();
+          investmentDetails.style.display = 'none';
+          await loadActiveInvestments(await supabaseClient.auth.getUser().then(({ data: { user } }) => user.id));
+        } catch (err) {
+          showError('invest-error', 'Error starting investment: ' + err.message);
+          console.error('Investment error:', err);
+        } finally {
+          showLoading('invest-loading', false);
+        }
+      });
+    }
+
+    async function loadActiveInvestments(userId) {
+      showLoading('investments-loading', true);
+      try {
+        const { data: investments, error } = await supabaseClient
+          .from('investments')
+          .select(`
+            *,
+            plan:plans (
+              name
+            )
+          `)
+          .eq('user_id', userId)
+          .in('status', ['active', 'profit_ready'])
+          .order('start_time', { ascending: false });
+        if (error) throw error;
+
+        const container = document.getElementById('investments-container');
+        const noInvestmentsDiv = document.getElementById('no-investments');
+        container.innerHTML = '';
+        noInvestmentsDiv.style.display = investments.length ? 'none' : 'block';
+
+        if (investments.length) {
+          const fragment = document.createDocumentFragment();
+          investments.forEach(investment => {
+            const investmentDiv = document.createElement('div');
+            investmentDiv.className = 'investment-item';
+            investmentDiv.dataset.id = investment.id;
+            investmentDiv.innerHTML = `
+              <p>Plan: <span>${investment.plan?.name ?? 'Unknown'}</span></p>
+              <p>Invested Amount: <span>${formatCurrency(investment.principal)}</span></p>
+              <p>Current Profit: <span class="current-profit">${formatCurrency(0)}</span></p>
+              <p>Time Remaining: <span class="time-left"></span></p>
+            `;
+            fragment.appendChild(investmentDiv);
+            startInvestmentCalculator(investment, investmentDiv);
+          });
+          container.appendChild(fragment);
+        }
+      } catch (err) {
+        showError('investments-error', 'Error loading investments: ' + err.message);
+        console.error('Load investments error:', err);
+      } finally {
+        showLoading('investments-loading', false);
+      }
+    }
+
+    function startInvestmentCalculator(investment, investmentDiv) {
+      const { start_time, end_time, principal, total_profit } = investment;
+      const startTime = new Date(start_time);
+      const endTime = new Date(end_time);
+      const totalSeconds = (endTime - startTime) / 1000;
+      const profitPerSecond = total_profit / totalSeconds;
+
+      const currentProfitSpan = investmentDiv.querySelector('.current-profit');
+      const timeLeftSpan = investmentDiv.querySelector('.time-left');
+
+      const updateInvestment = async () => {
+        const now = new Date();
+        if (now >= endTime && investment.status === 'active') {
+          currentProfitSpan.textContent = formatCurrency(total_profit);
+          timeLeftSpan.textContent = '0d 0h 0m 0s';
+          if (!investment.completed) {
+            investment.completed = true;
+            const message = document.createElement('p');
+            message.textContent = 'Investment cycle completed. Profits ready to claim after 14 days.';
+            investmentDiv.appendChild(message);
+
+            await supabaseClient
+              .from('investments')
+              .update({ status: 'profit_ready' })
+              .eq('id', investment.id);
+          }
+          clearInterval(interval);
+        } else if (investment.status === 'active') {
+          const elapsedSeconds = (now - startTime) / 1000;
+          const currentProfit = Math.min(elapsedSeconds * profitPerSecond, total_profit);
+          currentProfitSpan.textContent = formatCurrency(currentProfit);
+          const timeLeftMs = endTime - now;
+          timeLeftSpan.textContent = formatTimeLeft(timeLeftMs);
+        }
+      };
+
+      const interval = setInterval(updateInvestment, 500);
+      investmentIntervals.push(interval);
+      updateInvestment();
+    }
+
+    function formatTimeLeft(ms) {
+      const seconds = Math.floor(ms / 1000);
+      const days = Math.floor(seconds / (24 * 3600));
+      const hours = Math.floor((seconds % (24 * 3600)) / 3600);
+      const minutes = Math.floor((seconds % 3600) / 60);
+      const secs = seconds % 60;
+      return `${days}d ${hours}h ${minutes}m ${secs}s`;
+    }
+
+    function clearAllInvestmentIntervals() {
+      investmentIntervals.forEach(id => clearInterval(id));
+      investmentIntervals = [];
+    }
+
+    // UI Interactions
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const navDrawer = document.getElementById('navDrawer');
+    const overlay = document.querySelector('.nav-overlay');
+    hamburgerBtn.addEventListener('click', () => {
+      navDrawer.classList.toggle('open');
+      hamburgerBtn.classList.toggle('active');
+      overlay.classList.toggle('nav-open');
+      if (navDrawer.classList.contains('open')) {
+        navDrawer.scrollTop = 0;
+      }
+    });
+
+    document.addEventListener('click', (event) => {
+      const isClickInsideNav = navDrawer.contains(event.target);
+      const isClickOnHamburger = hamburgerBtn.contains(event.target);
+      if (!isClickInsideNav && !isClickOnHamburger && navDrawer.classList.contains('open')) {
+        navDrawer.classList.remove('open');
+        hamburgerBtn.classList.remove('active');
+        overlay.classList.remove('nav-open');
+      }
+    });
+
+    const themeToggle = document.getElementById('theme-toggle');
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('light-theme');
+      const icon = themeToggle.querySelector('i');
+      icon.classList.toggle('fa-moon');
+      icon.classList.toggle('fa-sun');
+    });
+
+    const accountToggle = document.getElementById('account-toggle');
+    const submenu = accountToggle.nextElementSibling;
+    accountToggle.addEventListener('click', (e) => {
+      e.preventDefault();
+      submenu.classList.toggle('open');
+    });
+
+    document.getElementById('back-to-top').addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    document.getElementById('logout-btn').addEventListener('click', async () => {
+      try {
+        const { error } = await supabaseClient.auth.signOut();
+        if (error) throw error;
+        window.location.href = 'login.html';
+      } catch (err) {
+        showError('invest-error', 'Error logging out: ' + err.message);
+      }
+    });
+
+    function updateTimes() {
+      const now = new Date();
+      document.getElementById('localTime').textContent = now.toLocaleTimeString();
+      document.getElementById('localDate').textContent = now.toLocaleDateString('en-US', {
+        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+      });
+      document.getElementById('utcTime').textContent = now.toUTCString();
+    }
+    setInterval(updateTimes, 1000);
+    updateTimes();
+
+    const video = document.querySelector('.bg-video');
+    video.addEventListener('canplay', () => {
+      video.play().catch(error => console.error('Error playing video:', error));
+    });
+
+    // Initialize page
+    initAccountBalance();
+  </script>
+</body>
+</html>
