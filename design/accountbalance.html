@@ -407,14 +407,20 @@
       document.getElementById(elementId).style.display = show ? 'block' : 'none';
     }
 
-    // Investment plans
-    const plans = [
-      { id: 1, name: 'The Dawn Star (Basic)', min: 200, max: 4999, weeklyRoi: 5 },
-      { id: 2, name: 'The Nebula Glow (Standard)', min: 5000, max: 14999, weeklyRoi: 6.5 },
-      { id: 3, name: 'The Lunar Crest (Silver)', min: 15000, max: 49999, weeklyRoi: 7.5 },
-      { id: 4, name: 'The Solar Flare (Gold)', min: 50000, max: 99999, weeklyRoi: 8.5 },
-      { id: 5, name: 'The Galactic Crown (Diamond)', min: 100000, max: Infinity, weeklyRoi: 10 }
-    ];
+    // Fetch investment plans from Supabase
+    async function fetchPlans() {
+      const { data, error } = await supabaseClient
+        .from('plans')
+        .select('id, name, weekly_roi, min_investment, max_investment');
+      if (error) throw error;
+      return data.map(plan => ({
+        id: plan.id,
+        name: plan.name,
+        min: plan.min_investment,
+        max: plan.max_investment || Infinity,
+        weeklyRoi: plan.weekly_roi
+      }));
+    }
 
     let investmentIntervals = [];
 
@@ -437,9 +443,7 @@
           .single();
         if (profileError) throw profileError;
 
-        document.getElementById('welcomeName').textContent = profile.first_name ||
-
- 'User';
+        document.getElementById('welcomeName').textContent = profile.first_name || 'User';
         const totalBalance = (profile.deposit_wallet || 0) + (profile.account_balance || 0);
         document.getElementById('totalBalance').textContent = formatCurrency(totalBalance);
         document.getElementById('depositWallet').textContent = formatCurrency(profile.deposit_wallet || 0);
@@ -454,8 +458,9 @@
           document.getElementById('defaultProfileIcon').style.display = 'none';
         }
 
-        // Initialize investment form
-        initInvestmentForm(totalBalance);
+        // Initialize investment form with fetched plans
+        const plans = await fetchPlans();
+        initInvestmentForm(totalBalance, plans);
 
         // Load active investments
         await loadActiveInvestments(user.id);
@@ -467,7 +472,7 @@
       }
     }
 
-    function initInvestmentForm(totalBalance) {
+    function initInvestmentForm(totalBalance, plans) {
       const investForm = document.getElementById('invest-form');
       const investAmount = document.getElementById('invest-amount');
       const investBtn = document.getElementById('invest-btn');
@@ -526,7 +531,7 @@
           const { error: investError } = await supabaseClient
             .from('investments')
             .insert({
-              user_id: supabaseClient.auth.getUser().then(({ data: { user } }) => user.id),
+              user_id: (await supabaseClient.auth.getUser()).data.user.id,
               plan_id: plan.id,
               principal: amount,
               total_profit: totalProfit,
@@ -541,7 +546,7 @@
           const { error: profileError } = await supabaseClient
             .from('profiles')
             .update({ account_balance: newBalance })
-            .eq('id', supabaseClient.auth.getUser().then(({ data: { user } }) => user.id));
+            .eq('id', (await supabaseClient.auth.getUser()).data.user.id);
           if (profileError) throw profileError;
 
           // Update UI
@@ -550,7 +555,7 @@
           showSuccess('invest-success', 'Investment started successfully!');
           investForm.reset();
           investmentDetails.style.display = 'none';
-          await loadActiveInvestments(await supabaseClient.auth.getUser().then(({ data: { user } }) => user.id));
+          await loadActiveInvestments((await supabaseClient.auth.getUser()).data.user.id);
         } catch (err) {
           showError('invest-error', 'Error starting investment: ' + err.message);
           console.error('Investment error:', err);
