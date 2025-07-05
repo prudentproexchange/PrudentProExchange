@@ -429,20 +429,6 @@
           return;
         }
 
-        // Check KYC status
-        const { data: kycRequests, error: kycError } = await supabaseClient
-          .from('kyc_requests')
-          .select('status')
-          .eq('user_id', user.id)
-          .order('created_at', { ascending: false })
-          .limit(1);
-        if (kycError) throw kycError;
-        if (!kycRequests.length || kycRequests[0].status !== 'approved') {
-          showError('invest-error', 'You must complete KYC verification before investing.');
-          setTimeout(() => window.location.href = 'kyc.html', 3000);
-          return;
-        }
-
         // Load profile
         const { data: profile, error: profileError } = await supabaseClient
           .from('profiles')
@@ -451,7 +437,9 @@
           .single();
         if (profileError) throw profileError;
 
-        document.getElementById('welcomeName').textContent = profile.first_name || 'User';
+        document.getElementById('welcomeName').textContent = profile.first_name ||
+
+ 'User';
         const totalBalance = (profile.deposit_wallet || 0) + (profile.account_balance || 0);
         document.getElementById('totalBalance').textContent = formatCurrency(totalBalance);
         document.getElementById('depositWallet').textContent = formatCurrency(profile.deposit_wallet || 0);
