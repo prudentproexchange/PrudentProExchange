@@ -1,15 +1,38 @@
-// Initialize AOS
+// ---------------------------------------------
+// testimony.js
+// Full edited version with Supabase uploads
+// and non-blocking Brevo email integration
+// ---------------------------------------------
+
+// If you’re using modules/bundler, ensure you have:
+//   npm install @supabase/supabase-js
+import { createClient } from '@supabase/supabase-js';
+
+// 1) Supabase configuration
+const SUPABASE_URL    = 'https://iwkdznjqfbsfkscnbrkc.supabase.co';
+const SUPABASE_ANON   = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU';
+const supabase        = createClient(SUPABASE_URL, SUPABASE_ANON);
+const BUCKET_NAME     = 'celestial-testimonials';
+
+// ---------------------------------------------
+// Initialize AOS (Animate On Scroll)
+// ---------------------------------------------
 AOS.init({ duration: 800, once: true });
 
+// ---------------------------------------------
 // Hamburger Menu
+// ---------------------------------------------
 const hamburgerBtn = document.getElementById('hamburgerBtn');
-const navDrawer = document.getElementById('navDrawer');
+const navDrawer    = document.getElementById('navDrawer');
+
 hamburgerBtn.addEventListener('click', () => {
   navDrawer.classList.toggle('open');
   hamburgerBtn.classList.toggle('active');
 });
 
-// Theme Toggle
+// ---------------------------------------------
+// Theme Toggle (Light / Dark)
+// ---------------------------------------------
 const themeToggle = document.getElementById('theme-toggle');
 themeToggle.addEventListener('click', () => {
   document.body.classList.toggle('light-theme');
@@ -18,16 +41,22 @@ themeToggle.addEventListener('click', () => {
   icon.classList.toggle('fa-sun');
 });
 
-// Back to Top
+// ---------------------------------------------
+// Back to Top Button
+// ---------------------------------------------
 document.getElementById('back-to-top').addEventListener('click', () => {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
-// Time and Date
+// ---------------------------------------------
+// Local Time & Date Display
+// ---------------------------------------------
 function updateLocalTime() {
   const now = new Date();
   document.getElementById('localTime').textContent = now.toLocaleTimeString();
-  document.getElementById('localDate').textContent = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+  document.getElementById('localDate').textContent = now.toLocaleDateString('en-US', {
+    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+  });
 }
 setInterval(updateLocalTime, 1000);
 updateLocalTime();
@@ -38,202 +67,252 @@ function updateUTCTime() {
 setInterval(updateUTCTime, 1000);
 updateUTCTime();
 
-// Video Playback Optimization
+// ---------------------------------------------
+// Background Video Playback Optimization
+// ---------------------------------------------
 document.addEventListener('DOMContentLoaded', () => {
-  const video = document.querySelector('.bg-video');
-  let retryCount = 0;
+  const video      = document.querySelector('.bg-video');
+  let retryCount   = 0;
   const maxRetries = 3;
   const retryDelay = 1000;
 
-  if (video) {
-    const playVideo = () => {
-      video
-        .play()
-        .then(() => {
-          console.log('Background video is playing successfully');
-          retryCount = 0;
-        })
-        .catch((error) => {
-          console.error(`Background video play failed (attempt ${retryCount + 1}):`, error);
-          if (retryCount < maxRetries) {
-            retryCount++;
-            setTimeout(playVideo, retryDelay);
-          } else {
-            console.error('Max retries reached. Video playback failed.');
-          }
-        });
-    };
-
-    playVideo();
-
-    video.addEventListener('canplay', () => console.log('Background video can play'));
-    video.addEventListener('playing', () => console.log('Background video is actively playing'));
-    video.addEventListener('error', (e) => console.error('Background video error:', e));
-    video.addEventListener('stalled', () => console.warn('Background video stalled'));
-    video.addEventListener('loadeddata', () => console.log('Background video data loaded'));
-
-    document.addEventListener('visibilitychange', () => {
-      if (document.visibilityState === 'visible') {
-        if (video.paused) {
-          playVideo();
-        }
-      } else {
-        video.pause();
-        console.log('Background video paused due to tab inactivity');
-      }
-    });
-
-    const forcePlayOnInteraction = () => {
-      if (video.paused) {
-        playVideo();
-        console.log('Attempting to play background video on user interaction');
-      }
-    };
-
-    window.addEventListener('scroll', forcePlayOnInteraction, { once: true });
-    window.addEventListener('click', forcePlayOnInteraction, { once: true });
-  } else {
+  if (!video) {
     console.error('Background video element not found');
+    return;
   }
+
+  const playVideo = () => {
+    video.play()
+      .then(() => {
+        console.log('Background video is playing successfully');
+        retryCount = 0;
+      })
+      .catch((error) => {
+        console.error(`Background video play failed (attempt ${retryCount + 1}):`, error);
+        if (retryCount < maxRetries) {
+          retryCount++;
+          setTimeout(playVideo, retryDelay);
+        } else {
+          console.error('Max retries reached. Video playback failed.');
+        }
+      });
+  };
+
+  playVideo();
+
+  // Logging events
+  ['canplay', 'playing', 'error', 'stalled', 'loadeddata'].forEach(evt => {
+    video.addEventListener(evt, () => console.log(`Background video event: ${evt}`));
+  });
+
+  // Pause when tab inactive
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+      if (video.paused) playVideo();
+    } else {
+      video.pause();
+      console.log('Background video paused due to tab inactivity');
+    }
+  });
+
+  // Force play on first interaction
+  const forcePlay = () => {
+    if (video.paused) {
+      playVideo();
+      console.log('Attempting to play background video on user interaction');
+    }
+  };
+  window.addEventListener('scroll', forcePlay, { once: true });
+  window.addEventListener('click',  forcePlay, { once: true });
 });
 
-// Testimonial Submission Form
-const testimonialForm = document.getElementById('submit-testimonial');
-const dragDropArea = document.getElementById('drag-drop-area');
-const mediaInput = document.getElementById('media');
-const mediaPreview = document.getElementById('media-preview');
-
+// ---------------------------------------------
+// Char Counters for maxlength inputs
+// ---------------------------------------------
 function updateCharCounter(input, counter, max) {
   counter.textContent = `${input.value.length}/${max}`;
 }
 
-document.querySelectorAll('input[maxlength], textarea[maxlength]').forEach((input) => {
+document.querySelectorAll('input[maxlength], textarea[maxlength]').forEach(input => {
   const counter = input.nextElementSibling;
-  const max = input.getAttribute('maxlength');
+  const max     = input.getAttribute('maxlength');
   input.addEventListener('input', () => updateCharCounter(input, counter, max));
   updateCharCounter(input, counter, max);
 });
 
-dragDropArea.addEventListener('dragover', (e) => {
-  e.preventDefault();
-  dragDropArea.classList.add('drag-over');
+// ---------------------------------------------
+// Drag & Drop Media Preview
+// ---------------------------------------------
+const dragDropArea  = document.getElementById('drag-drop-area');
+const mediaInput    = document.getElementById('media');
+const mediaPreview  = document.getElementById('media-preview');
+
+['dragover','dragleave','drop'].forEach(evt => {
+  dragDropArea.addEventListener(evt, e => {
+    e.preventDefault();
+    dragDropArea.classList.toggle('drag-over', evt === 'dragover');
+  });
 });
 
-dragDropArea.addEventListener('dragleave', () => {
-  dragDropArea.classList.remove('drag-over');
+dragDropArea.addEventListener('drop', e => {
+  handleFiles(e.dataTransfer.files);
 });
-
-dragDropArea.addEventListener('drop', (e) => {
-  e.preventDefault();
-  dragDropArea.classList.remove('drag-over');
-  const files = e.dataTransfer.files;
-  handleFiles(files);
-});
-
-mediaInput.addEventListener('change', () => {
-  handleFiles(mediaInput.files);
-});
+mediaInput.addEventListener('change', () => handleFiles(mediaInput.files));
 
 function handleFiles(files) {
   mediaPreview.innerHTML = '';
-  Array.from(files).forEach((file) => {
-    if (file.type.startsWith('image/') || file.type.startsWith('video/') || file.type.startsWith('audio/')) {
-      const url = URL.createObjectURL(file);
-      const mediaElement = file.type.startsWith('image/')
-        ? `<img src="${url}" alt="Preview" />`
-        : file.type.startsWith('video/')
-        ? `<video src="${url}" controls></video>`
-        : `<audio src="${url}" controls></audio>`;
-      mediaPreview.innerHTML += `<div class="media-item">${mediaElement}</div>`;
+  Array.from(files).forEach(file => {
+    let mediaElement;
+    const url = URL.createObjectURL(file);
+    if (file.type.startsWith('image/')) {
+      mediaElement = `<img src="${url}" alt="Preview" />`;
+    } else if (file.type.startsWith('video/')) {
+      mediaElement = `<video src="${url}" controls></video>`;
+    } else if (file.type.startsWith('audio/')) {
+      mediaElement = `<audio src="${url}" controls></audio>`;
     }
+    mediaPreview.innerHTML += `<div class="media-item">${mediaElement}</div>`;
   });
 }
 
+// ---------------------------------------------
+// Testimonial Submission Handler
+// (with Supabase uploads & non-blocking Brevo mail)
+// ---------------------------------------------
+const testimonialForm = document.getElementById('submit-testimonial');
+
 testimonialForm.addEventListener('submit', async (e) => {
   e.preventDefault();
-  const formData = new FormData(testimonialForm);
 
-  try {
-    const response = await fetch('/api/testimonials', {
-      method: 'POST',
-      body: formData,
-    });
-    if (response.ok) {
-      alert('Testimonial submitted! Please check your email to verify.');
-      testimonialForm.reset();
-      mediaPreview.innerHTML = '';
-      document.querySelectorAll('.char-counter').forEach((counter) => (counter.textContent = '0/' + counter.textContent.split('/')[1]));
-    } else {
-      alert('Error submitting testimonial. Please try again.');
+  // Gather form values
+  const formData   = new FormData(testimonialForm);
+  const title      = formData.get('title');
+  const body       = formData.get('body');
+  const rating     = formData.get('rating');
+  const user_name  = formData.get('user_name');
+  const location   = formData.get('location');
+  const files      = mediaInput.files;
+
+  // Upload media to Supabase Storage
+  const media = [];
+  for (let file of files) {
+    const path = `${Date.now()}_${file.name}`;
+    const { data, error: uploadError } = await supabase
+      .storage
+      .from(BUCKET_NAME)
+      .upload(path, file, { cacheControl: '3600', upsert: false });
+    if (uploadError) {
+      console.error('Upload error:', uploadError);
+      alert('Failed to upload media. Please try again.');
+      return;
     }
-  } catch (error) {
-    console.error('Submission error:', error);
+
+    const { publicURL, error: urlError } = supabase
+      .storage
+      .from(BUCKET_NAME)
+      .getPublicUrl(data.path);
+    if (urlError) {
+      console.error('Public URL error:', urlError);
+    } else {
+      media.push({ url: publicURL, type: file.type });
+    }
+  }
+
+  // Fire & forget Brevo email
+  fetch('/api/send-testimonial-email', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ title, body, user_name, location, rating, media }),
+  }).catch(err => console.warn('Brevo mail failed:', err));
+
+  // Submit testimonial record
+  try {
+    const res = await fetch('/api/testimonials', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title, body, user_name, location, rating, media }),
+    });
+    if (!res.ok) {
+      const text = await res.text();
+      console.error('Submission error:', text);
+      throw new Error(text);
+    }
+    alert('Testimonial submitted! Please check your email to verify.');
+    testimonialForm.reset();
+    mediaPreview.innerHTML = '';
+    document.querySelectorAll('.char-counter')
+      .forEach(c => c.textContent = `0/${c.textContent.split('/')[1]}`);
+  } catch (err) {
+    console.error('Submission exception:', err);
     alert('Error submitting testimonial. Please try again.');
   }
 });
 
-// Testimonials Gallery
-let page = 1;
+// ---------------------------------------------
+// Testimonials Gallery & Filtering
+// ---------------------------------------------
+let page  = 1;
 const limit = 9;
 
 async function loadTestimonials() {
-  const rating = document.getElementById('rating-filter').value;
+  const rating   = document.getElementById('rating-filter').value;
   const location = document.getElementById('location-filter').value;
-  const sort = document.getElementById('sort-filter').value;
+  const sort     = document.getElementById('sort-filter').value;
 
   try {
-    const response = await fetch(`/api/testimonials?page=${page}&limit=${limit}&rating=${rating}&location=${location}&sort=${sort}&verified=true`);
-    const testimonials = await response.json();
-    const galleryGrid = document.getElementById('testimonials-grid');
+    const res = await fetch(
+      `/api/testimonials?page=${page}&limit=${limit}` +
+      `&rating=${rating}&location=${location}&sort=${sort}&verified=true`
+    );
+    const testimonials = await res.json();
+    const grid = document.getElementById('testimonials-grid');
 
-    if (page === 1) {
-      galleryGrid.innerHTML = '';
-    }
+    if (page === 1) grid.innerHTML = '';
 
-    testimonials.forEach((testimonial) => {
-      const mediaElement = testimonial.media[0]
-        ? testimonial.media[0].type.startsWith('image/')
-          ? `<img src="${testimonial.media[0].url}" alt="${testimonial.title}" />`
-          : testimonial.media[0].type.startsWith('video/')
-          ? `<video src="${testimonial.media[0].url}" controls></video>`
-          : `<audio src="${testimonial.media[0].url}" controls></audio>`
+    testimonials.forEach(t => {
+      const mediaEl = t.media[0]
+        ? t.media[0].type.startsWith('image/') ? `<img src="${t.media[0].url}" alt="${t.title}" />`
+        : t.media[0].type.startsWith('video/') ? `<video src="${t.media[0].url}" controls></video>`
+        : `<audio src="${t.media[0].url}" controls></audio>`
         : '';
-      const stars = '★'.repeat(testimonial.rating) + '☆'.repeat(5 - testimonial.rating);
+      const stars = '★'.repeat(t.rating) + '☆'.repeat(5 - t.rating);
       const card = `
-        <article class="testimonial-card" itemscope itemtype="https://schema.org/Review" data-id="${testimonial.id}">
-          ${mediaElement}
-          <h3 itemprop="name">${testimonial.title || 'Testimonial'}</h3>
+        <article class="testimonial-card" data-id="${t.id}" itemscope itemtype="https://schema.org/Review">
+          ${mediaEl}
+          <h3 itemprop="name">${t.title || 'Testimonial'}</h3>
           <p class="reviewer-meta">
-            <span itemprop="author">${testimonial.user_name}</span>, 
-            <span itemprop="location">${testimonial.location}</span> •
-            <meta itemprop="datePublished" content="${testimonial.created_at}">
-            ${new Date(testimonial.created_at).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+            <span itemprop="author">${t.user_name}</span>,
+            <span itemprop="location">${t.location}</span> •
+            <meta itemprop="datePublished" content="${t.created_at}">
+            ${new Date(t.created_at).toLocaleDateString('en-US',{ month:'long', year:'numeric'})}
           </p>
           <div class="review-rating" itemprop="reviewRating" itemscope itemtype="https://schema.org/Rating">
-            <meta itemprop="ratingValue" content="${testimonial.rating}" />
+            <meta itemprop="ratingValue" content="${t.rating}" />
             <meta itemprop="bestRating" content="5" />
             <span class="stars">${stars}</span>
           </div>
-          <p itemprop="reviewBody">${testimonial.body.substring(0, 100)}...</p>
+          <p itemprop="reviewBody">${t.body.substring(0,100)}...</p>
           <div class="review-actions">
-            <button class="upvote-btn" data-id="${testimonial.id}" aria-label="Upvote this testimonial">
-              <i class="fas fa-heart"></i> <span class="upvote-count">${testimonial.upvotes}</span>
+            <button class="upvote-btn" data-id="${t.id}" aria-label="Upvote">
+              <i class="fas fa-heart"></i> <span class="upvote-count">${t.upvotes}</span>
             </button>
             <div class="share-buttons">
-              <a href="https://twitter.com/intent/tweet?text=${encodeURIComponent(testimonial.title)}%20with%20PrudentProExchange" target="_blank" aria-label="Share on Twitter"><i class="fab fa-twitter"></i></a>
-              <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://prudentproexchange.com/testimonials" target="_blank" aria-label="Share on LinkedIn"><i class="fab fa-linkedin"></i></a>
-              <a href="https://www.facebook.com/sharer/sharer.php?u=https://prudentproexchange.com/testimonials" target="_blank" aria-label="Share on Facebook"><i class="fab fa-facebook"></i></a>
+              <a href="https://twitter.com/intent/tweet?text=${encodeURIComponent(t.title)}" target="_blank"><i class="fab fa-twitter"></i></a>
+              <a href="https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}" target="_blank"><i class="fab fa-linkedin"></i></a>
+              <a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}" target="_blank"><i class="fab fa-facebook"></i></a>
             </div>
-            <button class="flag-btn" data-id="${testimonial.id}" aria-label="Flag this testimonial">Flag</button>
+            <button class="flag-btn" data-id="${t.id}" aria-label="Flag">Flag</button>
           </div>
         </article>
       `;
-      galleryGrid.innerHTML += card;
+      grid.insertAdjacentHTML('beforeend', card);
     });
 
-    document.getElementById('load-more').style.display = testimonials.length < limit ? 'none' : 'block';
-  } catch (error) {
-    console.error('Error loading testimonials:', error);
+    document.getElementById('load-more').style.display =
+      testimonials.length < limit ? 'none' : 'block';
+
+  } catch (err) {
+    console.error('Error loading testimonials:', err);
   }
 }
 
@@ -241,107 +320,95 @@ document.getElementById('load-more').addEventListener('click', () => {
   page++;
   loadTestimonials();
 });
-
-document.querySelectorAll('.filter-controls select').forEach((select) => {
-  select.addEventListener('change', () => {
+document.querySelectorAll('.filter-controls select').forEach(sel => {
+  sel.addEventListener('change', () => {
     page = 1;
     loadTestimonials();
   });
 });
 
-// Lightbox
-function openLightbox(testimonial) {
-  const mediaCarousel = testimonial.media
-    .map((media) =>
-      media.type.startsWith('image/')
-        ? `<img src="${media.url}" alt="${testimonial.title}" />`
-        : media.type.startsWith('video/')
-        ? `<video src="${media.url}" controls></video>`
-        : `<audio src="${media.url}" controls></audio>`
-    )
-    .join('');
-  const stars = '★'.repeat(testimonial.rating) + '☆'.repeat(5 - testimonial.rating);
-  const lightbox = document.createElement('div');
-  lightbox.className = 'lightbox';
-  lightbox.innerHTML = `
+// ---------------------------------------------
+// Lightbox for Expanded View
+// ---------------------------------------------
+function openLightbox(t) {
+  const mediaCarousel = t.media.map(m =>
+    m.type.startsWith('image/') ? `<img src="${m.url}" alt="${t.title}"/>`
+  : m.type.startsWith('video/') ? `<video src="${m.url}" controls></video>`
+  : `<audio src="${m.url}" controls></audio>`
+  ).join('');
+  const stars = '★'.repeat(t.rating)+'☆'.repeat(5-t.rating);
+
+  const lb = document.createElement('div');
+  lb.className = 'lightbox';
+  lb.innerHTML = `
     <div class="lightbox-content">
       <button class="lightbox-close">✕</button>
       <div class="media-carousel">${mediaCarousel}</div>
-      <h3>${testimonial.title || 'Testimonial'}</h3>
-      <p class="reviewer-meta">${testimonial.user_name}, ${testimonial.location} • ${new Date(testimonial.created_at).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</p>
+      <h3>${t.title || 'Testimonial'}</h3>
+      <p class="reviewer-meta">${t.user_name}, ${t.location} • ${
+        new Date(t.created_at).toLocaleDateString('en-US',{month:'long',year:'numeric'})
+      }</p>
       <div class="review-rating">${stars}</div>
-      <p>${testimonial.body}</p>
+      <p>${t.body}</p>
       <div class="review-actions">
-        <button class="upvote-btn" data-id="${testimonial.id}"><i class="fas fa-heart"></i> <span class="upvote-count">${testimonial.upvotes}</span></button>
+        <button class="upvote-btn" data-id="${t.id}"><i class="fas fa-heart"></i> <span class="upvote-count">${t.upvotes}</span></button>
         <div class="share-buttons">
-          <a href="https://twitter.com/intent/tweet?text=${encodeURIComponent(testimonial.title)}%20with%20PrudentProExchange" target="_blank"><i class="fab fa-twitter"></i></a>
-          <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://prudentproexchange.com/testimonials" target="_blank"><i class="fab fa-linkedin"></i></a>
-          <a href="https://www.facebook.com/sharer/sharer.php?u=https://prudentproexchange.com/testimonials" target="_blank"><i class="fab fa-facebook"></i></a>
+          <a href="https://twitter.com/intent/tweet?text=${encodeURIComponent(t.title)}" target="_blank"><i class="fab fa-twitter"></i></a>
+          <a href="https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}" target="_blank"><i class="fab fa-linkedin"></i></a>
+          <a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}" target="_blank"><i class="fab fa-facebook"></i></a>
         </div>
       </div>
     </div>
   `;
-  document.body.appendChild(lightbox);
-  lightbox.querySelector('.lightbox-close').addEventListener('click', () => {
-    lightbox.remove();
-  });
+  document.body.appendChild(lb);
+  lb.querySelector('.lightbox-close').addEventListener('click', () => lb.remove());
 }
 
-document.addEventListener('click', (e) => {
-  if (e.target.closest('.testimonial-card')) {
-    const id = e.target.closest('.testimonial-card').dataset.id;
-    // Fetch testimonial details (mocked here)
-    const testimonial = {
-      id,
-      title: 'Sample Testimonial',
-      user_name: 'John Doe',
-      location: 'New York, USA',
-      created_at: new Date().toISOString(),
-      rating: 4,
-      body: 'This is a sample testimonial body that describes the experience with PrudentProExchange.',
-      media: [{ url: 'assets/images/sample.jpg', type: 'image/jpeg' }],
-      upvotes: 10,
-    };
-    openLightbox(testimonial);
-  }
-});
-
-document.addEventListener('click', async (e) => {
-  if (e.target.closest('.upvote-btn')) {
-    const id = e.target.closest('.upvote-btn').dataset.id;
-    try {
-      await fetch(`/api/testimonials/${id}/upvote`, { method: 'POST' });
-      const countElement = e.target.closest('.upvote-btn').querySelector('.upvote-count');
-      countElement.textContent = parseInt(countElement.textContent) + 1;
-    } catch (error) {
-      console.error('Error upvoting:', error);
+// ---------------------------------------------
+// Delegated Click Handlers
+// ---------------------------------------------
+document.addEventListener('click', async e => {
+  // Open lightbox
+  const card = e.target.closest('.testimonial-card');
+  if (card && !e.target.closest('.upvote-btn') && !e.target.closest('.flag-btn')) {
+    const id = card.dataset.id;
+    const res = await fetch(`/api/testimonials/${id}`);
+    if (res.ok) {
+      const t = await res.json();
+      openLightbox(t);
     }
+    return;
   }
-});
 
-document.addEventListener('click', async (e) => {
+  // Upvote
+  if (e.target.closest('.upvote-btn')) {
+    const btn = e.target.closest('.upvote-btn');
+    const countEl = btn.querySelector('.upvote-count');
+    await fetch(`/api/testimonials/${btn.dataset.id}/upvote`, { method: 'POST' });
+    countEl.textContent = parseInt(countEl.textContent) + 1;
+    return;
+  }
+
+  // Flag
   if (e.target.closest('.flag-btn')) {
     const id = e.target.closest('.flag-btn').dataset.id;
     const reason = prompt('Please provide a reason for flagging this testimonial:');
-    if (reason) {
-      try {
-        await fetch(`/api/testimonials/${id}/flag`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ reason }),
-        });
-        alert('Testimonial flagged for moderation.');
-      } catch (error) {
-        console.error('Error flagging:', error);
-      }
-    }
+    if (!reason) return;
+    await fetch(`/api/testimonials/${id}/flag`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ reason })
+    });
+    alert('Testimonial flagged for moderation.');
   }
 });
 
-// Initial Load
+// ---------------------------------------------
+// Initial Load & Scroll-to-Form
+// ---------------------------------------------
 loadTestimonials();
 
-// Scroll to Form
 function scrollToForm() {
-  document.getElementById('testimonial-form').scrollIntoView({ behavior: 'smooth' });
+  document.getElementById('testimonial-form')
+    .scrollIntoView({ behavior: 'smooth' });
 }
