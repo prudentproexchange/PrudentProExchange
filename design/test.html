@@ -3,55 +3,61 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Smartsupp Integration Test</title>
+  <title>Tawk.to Live Chat Test</title>
   <style>
+    :root {
+      --primary: #0044cc;
+      --bg: #f5f7fa;
+      --card-bg: #fff;
+      --text: #333;
+    }
     body {
-      font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
-      line-height: 1.6;
-      background: #f9f9f9;
-      color: #333;
+      font-family: Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
     }
     header, footer {
-      background: #0044cc;
+      background: var(--primary);
       color: #fff;
-      padding: 1rem 2rem;
       text-align: center;
+      padding: 1rem 2rem;
     }
     main {
-      padding: 2rem;
       max-width: 800px;
-      margin: auto;
-    }
-    h1 {
-      margin-bottom: 0.5rem;
-    }
-    p {
-      margin-bottom: 1rem;
+      margin: 2rem auto;
+      padding: 0 1rem;
     }
     .card {
-      background: #fff;
+      background: var(--card-bg);
       border-radius: 8px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
       padding: 1.5rem;
       margin-bottom: 1.5rem;
+    }
+    h1, h2 {
+      margin-top: 0;
+    }
+    ul {
+      list-style: disc inside;
     }
   </style>
 </head>
 <body>
 
   <header>
-    <h1>Welcome to PrudentProExchange</h1>
+    <h1>PrudentProExchange</h1>
     <p>Your trusted partner in trading success</p>
   </header>
 
   <main>
     <div class="card">
-      <h2>About Us</h2>
+      <h2>Welcome!</h2>
       <p>
-        At PrudentProExchange, we provide a cutting-edge platform for traders of all levels.  
-        Our mission is to empower investors with the tools and support they need to succeed in the financial markets.
+        This is a simple test page for your Tawk.to live chat integration.
+        Within a few seconds you should see the chat bubble pop up
+        in the lower right corner of the screen.
       </p>
     </div>
 
@@ -66,10 +72,9 @@
     </div>
 
     <div class="card">
-      <h2>Get Started</h2>
+      <h2>Need Help?</h2>
       <p>
-        Sign up today to start your trading journey with PrudentProExchange!  
-        Click the chat bubble at the bottom right if you have any questions—we’re here to help.
+        Click the chat icon at the bottom right to start a conversation with us instantly.
       </p>
     </div>
   </main>
@@ -78,18 +83,19 @@
     <p>© 2025 PrudentProExchange. All Rights Reserved.</p>
   </footer>
 
-  <!-- Smartsupp Live Chat script -->
+  <!-- Start of Tawk.to Script -->
   <script type="text/javascript">
-    var _smartsupp = _smartsupp || {};
-    _smartsupp.key = '5cad898c402867525302411bf6c2a1cb862fc7f7';
-    window.smartsupp||(function(d) {
-      var s,c,o=smartsupp=function(){ o._.push(arguments)};o._=[];
-      s=d.getElementsByTagName('script')[0];c=d.createElement('script');
-      c.type='text/javascript';c.charset='utf-8';c.async=true;
-      c.src='https://www.smartsuppchat.com/loader.js?';
-      s.parentNode.insertBefore(c,s);
-    })(document);
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    (function(){
+      var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+      s1.async=true;
+      s1.src='https://embed.tawk.to/686af1bfcb0f551911918bd8/default';
+      s1.charset='UTF-8';
+      s1.setAttribute('crossorigin','*');
+      s0.parentNode.insertBefore(s1,s0);
+    })();
   </script>
+  <!-- End of Tawk.to Script -->
 
 </body>
 </html>
