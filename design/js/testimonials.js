@@ -102,6 +102,7 @@ const testimonialForm = document.getElementById('submit-testimonial');
 const dragDropArea = document.getElementById('drag-drop-area');
 const mediaInput = document.getElementById('media');
 const mediaPreview = document.getElementById('media-preview');
+const BACKEND_URL = 'http://localhost:3000'; // Update to your deployed backend URL
 
 function updateCharCounter(input, counter, max) {
   counter.textContent = `${input.value.length}/${max}`;
@@ -168,46 +169,65 @@ testimonialForm.addEventListener('submit', async (e) => {
       }
     }
 
-    // Upload media files to Supabase bucket
+    // Upload media files to Supabase bucket with retry logic
     for (const file of mediaFiles) {
       if (file.type.startsWith('image/') || file.type.startsWith('video/') || file.type.startsWith('audio/')) {
         const fileExt = file.name.split('.').pop();
         const fileName = `${Date.now()}_${Math.random().toString(36).substring(2, 15)}.${fileExt}`;
-        const response = await fetch('/api/upload-to-supabase', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            fileName,
-            fileType: file.type,
-            bucket: 'celestial-testimonials',
-          }),
-        });
+        let retryCount = 0;
+        const maxRetries = 3;
 
-        if (!response.ok) {
-          throw new Error(`Failed to get signed URL for ${fileName}`);
-        }
+        const uploadFile = async () => {
+          try {
+            const response = await fetch(`${BACKEND_URL}/api/upload-to-supabase`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                fileName,
+                fileType: file.type,
+                bucket: 'celestial-testimonials',
+              }),
+            });
 
-        const { signedUrl, publicUrl } = await response.json();
+            if (!response.ok) {
+              const errorData = await response.json();
+              throw new Error(`Failed to get signed URL for ${fileName}: ${errorData.error}`);
+            }
 
-        // Upload file to Supabase using signed URL
-        const uploadResponse = await fetch(signedUrl, {
-          method: 'PUT',
-          body: file,
-          headers: {
-            'Content-Type': file.type,
-          },
-        });
+            const { signedUrl, publicUrl } = await response.json();
 
-        if (!uploadResponse.ok) {
-          throw new Error(`Failed to upload ${fileName} to Supabase`);
-        }
+            // Upload file to Supabase using signed URL
+            const uploadResponse = await fetch(signedUrl, {
+              method: 'PUT',
+              body: file,
+              headers: {
+                'Content-Type': file.type,
+              },
+            });
 
-        uploadedMedia.push({
-          url: publicUrl,
-          type: file.type,
-        });
+            if (!uploadResponse.ok) {
+              throw new Error(`Failed to upload ${fileName} to Supabase`);
+            }
+
+            uploadedMedia.push({
+              url: publicUrl,
+              type: file.type,
+            });
+          } catch (error) {
+            if (retryCount < maxRetries) {
+              retryCount++;
+              console.warn(`Retrying upload for ${fileName} (attempt ${retryCount})`);
+              await new Promise(resolve => setTimeout(resolve, 1000));
+              return uploadFile();
+            } else {
+              throw error;
+            }
+          }
+        };
+
+        await uploadFile();
       }
     }
 
@@ -215,14 +235,14 @@ testimonialForm.addEventListener('submit', async (e) => {
     formData.append('media', JSON.stringify(uploadedMedia));
 
     // Submit testimonial data to backend
-    const submitResponse = await fetch('/api/testimonials', {
+    const submitResponse = await fetch(`${BACKEND_URL}/api/testimonials`, {
       method: 'POST',
       body: formData,
     });
 
     if (submitResponse.ok) {
       // Trigger Brevo email in a non-blocking way
-      fetch('/api/send-brevo-email', {
+      fetch(`${BACKEND_URL}/api/send-brevo-email`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -230,11 +250,10 @@ testimonialForm.addEventListener('submit', async (e) => {
         body: JSON.stringify({
           email: formData.get('email'),
           name: formData.get('user_name'),
-          testimonialId: (await submitResponse.json()).id, // Assuming backend returns testimonial ID
+          testimonialId: (await submitResponse.json()).id,
         }),
       }).catch((error) => {
         console.error('Brevo email sending failed:', error);
-        // Do not block form submission if email fails
       });
 
       alert('Testimonial submitted! Please check your email to verify.');
@@ -245,7 +264,8 @@ testimonialForm.addEventListener('submit', async (e) => {
       page = 1;
       loadTestimonials();
     } else {
-      throw new Error('Failed to submit testimonial');
+      const errorData = await submitResponse.json();
+      throw new Error(`Failed to submit testimonial: ${errorData.error}`);
     }
   } catch (error) {
     console.error('Submission error:', error);
@@ -258,23 +278,36 @@ let page = 1;
 const limit = 9;
 
 async function loadTestimonials() {
-  const rating = document.getElementById('rating-filter').value;
-  const location = document.getElementById('location-filter').value;
-  const sort = document.getElementById('sort-filter').value;
+  const rating = document.getElementById('rating-filter')?.value || '';
+  const location = document.getElementById('location-filter')?.value || '';
+  const sort = document.getElementById('sort-filter')?.value || '';
 
   try {
-    const response = await fetch(`/api/testimonials?page=${page}&limit=${limit}&rating=${rating}&location=${location}&sort=${sort}&verified=true`);
+    const response = await fetch(`${BACKEND_URL}/api/testimonials?page=${page}&limit=${limit}&rating=${rating}&location=${location}&sort=${sort}&verified=true`);
+    if (!response.ok) {
+      throw new Error(`Failed to load testimonials: ${response.statusText}`);
+    }
     const testimonials = await response.json();
     const galleryGrid = document.getElementById('testimonials-grid');
+
+    if (!galleryGrid) {
+      throw new Error('Testimonials grid element not found');
+    }
 
     if (page === 1) {
       galleryGrid.innerHTML = '';
     }
 
+    if (testimonials.length === 0 && page === 1) {
+      galleryGrid.innerHTML = '<p>No testimonials found.</p>';
+      document.getElementById('load-more').style.display = 'none';
+      return;
+    }
+
     testimonials.forEach((testimonial) => {
-      const mediaElement = testimonial.media[0]
+      const mediaElement = testimonial.media && testimonial.media[0]
         ? testimonial.media[0].type.startsWith('image/')
-          ? `<img src="${testimonial.media[0].url}" alt="${testimonial.title}" />`
+          ? `<img src="${testimonial.media[0].url}" alt="${testimonial.title || 'Testimonial'}" />`
           : testimonial.media[0].type.startsWith('video/')
           ? `<video src="${testimonial.media[0].url}" controls></video>`
           : `<audio src="${testimonial.media[0].url}" controls></audio>`
@@ -298,10 +331,10 @@ async function loadTestimonials() {
           <p itemprop="reviewBody">${testimonial.body.substring(0, 100)}...</p>
           <div class="review-actions">
             <button class="upvote-btn" data-id="${testimonial.id}" aria-label="Upvote this testimonial">
-              <i class="fas fa-heart"></i> <span class="upvote-count">${testimonial.upvotes}</span>
+              <i class="fas fa-heart"></i> <span class="upvote-count">${testimonial.upvotes || 0}</span>
             </button>
             <div class="share-buttons">
-              <a href="https://twitter.com/intent/tweet?text=${encodeURIComponent(testimonial.title)}%20with%20PrudentProExchange" target="_blank" aria-label="Share on Twitter"><i class="fab fa-twitter"></i></a>
+              <a href="https://twitter.com/intent/tweet?text=${encodeURIComponent(testimonial.title || 'Testimonial')}%20with%20PrudentProExchange" target="_blank" aria-label="Share on Twitter"><i class="fab fa-twitter"></i></a>
               <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://prudentproexchange.com/testimonials" target="_blank" aria-label="Share on LinkedIn"><i class="fab fa-linkedin"></i></a>
               <a href="https://www.facebook.com/sharer/sharer.php?u=https://prudentproexchange.com/testimonials" target="_blank" aria-label="Share on Facebook"><i class="fab fa-facebook"></i></a>
             </div>
@@ -315,7 +348,11 @@ async function loadTestimonials() {
     document.getElementById('load-more').style.display = testimonials.length < limit ? 'none' : 'block';
   } catch (error) {
     console.error('Error loading testimonials:', error);
-    alert('Error loading testimonials. Please try again.');
+    const galleryGrid = document.getElementById('testimonials-grid');
+    if (galleryGrid && page === 1) {
+      galleryGrid.innerHTML = '<p>Error loading testimonials. Please try again later.</p>';
+    }
+    alert(`Error loading testimonials: ${error.message}. Please try again.`);
   }
 }
 
@@ -333,15 +370,17 @@ document.querySelectorAll('.filter-controls select').forEach((select) => {
 
 // Lightbox
 function openLightbox(testimonial) {
-  const mediaCarousel = testimonial.media
-    .map((media) =>
-      media.type.startsWith('image/')
-        ? `<img src="${media.url}" alt="${testimonial.title}" />`
-        : media.type.startsWith('video/')
-        ? `<video src="${media.url}" controls></video>`
-        : `<audio src="${media.url}" controls></audio>`
-    )
-    .join('');
+  const mediaCarousel = testimonial.media && testimonial.media.length
+    ? testimonial.media
+        .map((media) =>
+          media.type.startsWith('image/')
+            ? `<img src="${media.url}" alt="${testimonial.title || 'Testimonial'}" />`
+            : media.type.startsWith('video/')
+            ? `<video src="${media.url}" controls></video>`
+            : `<audio src="${media.url}" controls></audio>`
+        )
+        .join('')
+    : '<p>No media available</p>';
   const stars = '★'.repeat(testimonial.rating) + '☆'.repeat(5 - testimonial.rating);
   const lightbox = document.createElement('div');
   lightbox.className = 'lightbox';
@@ -354,9 +393,9 @@ function openLightbox(testimonial) {
       <div class="review-rating">${stars}</div>
       <p>${testimonial.body}</p>
       <div class="review-actions">
-        <button class="upvote-btn" data-id="${testimonial.id}"><i class="fas fa-heart"></i> <span class="upvote-count">${testimonial.upvotes}</span></button>
+        <button class="upvote-btn" data-id="${testimonial.id}"><i class="fas fa-heart"></i> <span class="upvote-count">${testimonial.upvotes || 0}</span></button>
         <div class="share-buttons">
-          <a href="https://twitter.com/intent/tweet?text=${encodeURIComponent(testimonial.title)}%20with%20PrudentProExchange" target="_blank"><i class="fab fa-twitter"></i></a>
+          <a href="https://twitter.com/intent/tweet?text=${encodeURIComponent(testimonial.title || 'Testimonial')}%20with%20PrudentProExchange" target="_blank"><i class="fab fa-twitter"></i></a>
           <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://prudentproexchange.com/testimonials" target="_blank"><i class="fab fa-linkedin"></i></a>
           <a href="https://www.facebook.com/sharer/sharer.php?u=https://prudentproexchange.com/testimonials" target="_blank"><i class="fab fa-facebook"></i></a>
         </div>
@@ -373,15 +412,15 @@ document.addEventListener('click', async (e) => {
   if (e.target.closest('.testimonial-card')) {
     const id = e.target.closest('.testimonial-card').dataset.id;
     try {
-      const response = await fetch(`/api/testimonials/${id}`);
+      const response = await fetch(`${BACKEND_URL}/api/testimonials/${id}`);
       if (!response.ok) {
-        throw new Error('Failed to fetch testimonial details');
+        throw new Error(`Failed to fetch testimonial: ${response.statusText}`);
       }
       const testimonial = await response.json();
       openLightbox(testimonial);
     } catch (error) {
       console.error('Error fetching testimonial:', error);
-      alert('Error loading testimonial details. Please try again.');
+      alert(`Error loading testimonial details: ${error.message}. Please try again.`);
     }
   }
 });
@@ -390,12 +429,15 @@ document.addEventListener('click', async (e) => {
   if (e.target.closest('.upvote-btn')) {
     const id = e.target.closest('.upvote-btn').dataset.id;
     try {
-      await fetch(`/api/testimonials/${id}/upvote`, { method: 'POST' });
+      const response = await fetch(`${BACKEND_URL}/api/testimonials/${id}/upvote`, { method: 'POST' });
+      if (!response.ok) {
+        throw new Error(`Failed to upvote: ${response.statusText}`);
+      }
       const countElement = e.target.closest('.upvote-btn').querySelector('.upvote-count');
       countElement.textContent = parseInt(countElement.textContent) + 1;
     } catch (error) {
       console.error('Error upvoting:', error);
-      alert('Error upvoting testimonial. Please try again.');
+      alert(`Error upvoting testimonial: ${error.message}. Please try again.`);
     }
   }
 });
@@ -406,15 +448,18 @@ document.addEventListener('click', async (e) => {
     const reason = prompt('Please provide a reason for flagging this testimonial:');
     if (reason) {
       try {
-        await fetch(`/api/testimonials/${id}/flag`, {
+        const response = await fetch(`${BACKEND_URL}/api/testimonials/${id}/flag`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ reason }),
         });
+        if (!response.ok) {
+          throw new Error(`Failed to flag: ${response.statusText}`);
+        }
         alert('Testimonial flagged for moderation.');
       } catch (error) {
         console.error('Error flagging:', error);
-        alert('Error flagging testimonial. Please try again.');
+        alert(`Error flagging testimonial: ${error.message}. Please try again.`);
       }
     }
   }
