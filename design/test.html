@@ -56,8 +56,7 @@
       <h2>Welcome!</h2>
       <p>
         This is a simple test page for your Smartsupp live chat integration.
-        Within a few seconds you should see the chat bubble pop up
-        in the lower right corner of the screen.
+        The chat bubble should appear in the lower-right corner.
       </p>
     </div>
 
@@ -83,15 +82,20 @@
     <p>© 2025 PrudentProExchange. All Rights Reserved.</p>
   </footer>
 
-  <!-- Smartsupp Live Chat script -->
+  <!-- ✅ Smartsupp Live Chat Script -->
   <script type="text/javascript">
     var _smartsupp = _smartsupp || {};
     _smartsupp.key = '6a53a0d4440df26e63d93402f253e0941e1d565e';
-    window.smartsupp||(function(d) {
-      var s,c,o=smartsupp=function(){ o._.push(arguments)};o._=[];
-      s=d.getElementsByTagName('script')[0];c=d.createElement('script');
-      c.type='text/javascript';c.charset='utf-8';c.async=true;
-      c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);
+    window.smartsupp || (function(d) {
+      var s, c, o = smartsupp = function() { o._.push(arguments) };
+      o._ = [];
+      s = d.getElementsByTagName('script')[0];
+      c = d.createElement('script');
+      c.type = 'text/javascript';
+      c.charset = 'utf-8';
+      c.async = true;
+      c.src = 'https://www.smartsuppchat.com/loader.js';
+      s.parentNode.insertBefore(c, s);
     })(document);
   </script>
 
