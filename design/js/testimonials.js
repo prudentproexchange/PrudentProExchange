@@ -152,23 +152,104 @@ function handleFiles(files) {
 testimonialForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   const formData = new FormData(testimonialForm);
+  const mediaFiles = mediaInput.files;
+  const uploadedMedia = [];
 
   try {
-    const response = await fetch('/api/testimonials', {
+    // Validate file types and sizes
+    const allowedTypes = ['image/jpeg', 'image/png', 'video/mp4', 'audio/mpeg'];
+    const maxFileSize = 10 * 1024 * 1024; // 10MB
+    for (const file of mediaFiles) {
+      if (!allowedTypes.includes(file.type)) {
+        throw new Error(`Unsupported file type: ${file.type}`);
+      }
+      if (file.size > maxFileSize) {
+        throw new Error(`File ${file.name} exceeds 10MB limit`);
+      }
+    }
+
+    // Upload media files to Supabase bucket
+    for (const file of mediaFiles) {
+      if (file.type.startsWith('image/') || file.type.startsWith('video/') || file.type.startsWith('audio/')) {
+        const fileExt = file.name.split('.').pop();
+        const fileName = `${Date.now()}_${Math.random().toString(36).substring(2, 15)}.${fileExt}`;
+        const response = await fetch('/api/upload-to-supabase', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            fileName,
+            fileType: file.type,
+            bucket: 'celestial-testimonials',
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error(`Failed to get signed URL for ${fileName}`);
+        }
+
+        const { signedUrl, publicUrl } = await response.json();
+
+        // Upload file to Supabase using signed URL
+        const uploadResponse = await fetch(signedUrl, {
+          method: 'PUT',
+          body: file,
+          headers: {
+            'Content-Type': file.type,
+          },
+        });
+
+        if (!uploadResponse.ok) {
+          throw new Error(`Failed to upload ${fileName} to Supabase`);
+        }
+
+        uploadedMedia.push({
+          url: publicUrl,
+          type: file.type,
+        });
+      }
+    }
+
+    // Append uploaded media URLs to formData
+    formData.append('media', JSON.stringify(uploadedMedia));
+
+    // Submit testimonial data to backend
+    const submitResponse = await fetch('/api/testimonials', {
       method: 'POST',
       body: formData,
     });
-    if (response.ok) {
+
+    if (submitResponse.ok) {
+      // Trigger Brevo email in a non-blocking way
+      fetch('/api/send-brevo-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: formData.get('email'),
+          name: formData.get('user_name'),
+          testimonialId: (await submitResponse.json()).id, // Assuming backend returns testimonial ID
+        }),
+      }).catch((error) => {
+        console.error('Brevo email sending failed:', error);
+        // Do not block form submission if email fails
+      });
+
       alert('Testimonial submitted! Please check your email to verify.');
       testimonialForm.reset();
       mediaPreview.innerHTML = '';
       document.querySelectorAll('.char-counter').forEach((counter) => (counter.textContent = '0/' + counter.textContent.split('/')[1]));
+      // Reload testimonials to reflect new submission
+      page = 1;
+      loadTestimonials();
     } else {
-      alert('Error submitting testimonial. Please try again.');
+      throw new Error('Failed to submit testimonial');
     }
   } catch (error) {
     console.error('Submission error:', error);
-    alert('Error submitting testimonial. Please try again.');
+    alert(`Error submitting testimonial: ${error.message}. Please try again.`);
   }
 });
 
@@ -234,6 +315,7 @@ async function loadTestimonials() {
     document.getElementById('load-more').style.display = testimonials.length < limit ? 'none' : 'block';
   } catch (error) {
     console.error('Error loading testimonials:', error);
+    alert('Error loading testimonials. Please try again.');
   }
 }
 
@@ -287,22 +369,20 @@ function openLightbox(testimonial) {
   });
 }
 
-document.addEventListener('click', (e) => {
+document.addEventListener('click', async (e) => {
   if (e.target.closest('.testimonial-card')) {
     const id = e.target.closest('.testimonial-card').dataset.id;
-    // Fetch testimonial details (mocked here)
-    const testimonial = {
-      id,
-      title: 'Sample Testimonial',
-      user_name: 'John Doe',
-      location: 'New York, USA',
-      created_at: new Date().toISOString(),
-      rating: 4,
-      body: 'This is a sample testimonial body that describes the experience with PrudentProExchange.',
-      media: [{ url: 'assets/images/sample.jpg', type: 'image/jpeg' }],
-      upvotes: 10,
-    };
-    openLightbox(testimonial);
+    try {
+      const response = await fetch(`/api/testimonials/${id}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch testimonial details');
+      }
+      const testimonial = await response.json();
+      openLightbox(testimonial);
+    } catch (error) {
+      console.error('Error fetching testimonial:', error);
+      alert('Error loading testimonial details. Please try again.');
+    }
   }
 });
 
@@ -315,6 +395,7 @@ document.addEventListener('click', async (e) => {
       countElement.textContent = parseInt(countElement.textContent) + 1;
     } catch (error) {
       console.error('Error upvoting:', error);
+      alert('Error upvoting testimonial. Please try again.');
     }
   }
 });
@@ -333,6 +414,7 @@ document.addEventListener('click', async (e) => {
         alert('Testimonial flagged for moderation.');
       } catch (error) {
         console.error('Error flagging:', error);
+        alert('Error flagging testimonial. Please try again.');
       }
     }
   }
