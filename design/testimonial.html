@@ -383,10 +383,59 @@
         box-shadow: 0 4px 10px var(--shadow);
         z-index: 1000; /* Ensure it’s above other elements */
       }
-      #back-to-top:hover–
-
+      #back-to-top:hover {
         background: var(--gold-dark);
         transform: scale(1.1);
+      }
+
+      /* Tawk.to Widget Styling */
+      #tawkto-button,
+      #tawkto-overlay {
+        font-family: 'Poppins', sans-serif !important;
+        z-index: 999 !important; /* Below back-to-top button but above other elements */
+      }
+      #tawkto-button {
+        background: var(--gold) !important;
+        border-radius: 50% !important;
+        box-shadow: 0 4px 10px var(--shadow) !important;
+        transition: all 0.3s ease !important;
+      }
+      #tawkto-button:hover {
+        background: var(--gold-dark) !important;
+        transform: scale(1.1) !important;
+      }
+      #tawkto-overlay {
+        background: var(--glass) !important;
+        backdrop-filter: blur(12px) !important;
+        border-radius: 15px !important;
+        box-shadow: 0 4px 20px var(--shadow) !important;
+        color: var(--text) !important;
+      }
+      #tawkto-overlay .tawk-text,
+      #tawkto-overlay .tawk-input,
+      #tawkto-overlay .tawk-button {
+        font-family: 'Poppins', sans-serif !important;
+        color: var(--text) !important;
+      }
+      #tawkto-overlay .tawk-button {
+        background: var(--gold) !important;
+        border-radius: 30px !important;
+        transition: all 0.3s ease !important;
+      }
+      #tawkto-overlay .tawk-button:hover {
+        background: var(--gold-dark) !important;
+        transform: translateY(-2px) !important;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3) !important;
+      }
+      #tawkto-overlay .tawk-input {
+        background: rgba(255, 255, 255, 0.05) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border-radius: 8px !important;
+        transition: border-color 0.3s ease !important;
+      }
+      #tawkto-overlay .tawk-input:focus {
+        border-color: var(--gold) !important;
+        outline: none !important;
       }
 
       /* Responsive */
@@ -506,16 +555,36 @@
     <!-- Back to Top Button -->
     <button id="back-to-top" aria-label="Back to top">🚀</button>
 
-    <!-- Smartsupp Live Chat script -->
+    <!-- Start of Tawk.to Live Chat embed -->
     <script type="text/javascript">
-      var _smartsupp = _smartsupp || {};
-      _smartsupp.key = '5a5cfade0908f482b595bad4ba46106cec8b8358';
-      window.smartsupp||(function(d) {
-        var s,c,o=smartsupp=function(){ o._.push(arguments)};o._=[];
-        s=d.getElementsByTagName('script')[0];c=d.createElement('script');
-        c.type='text/javascript';c.charset='utf-8';c.async=true;
-        c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);
-      })(document);
+      var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+      (function(){
+        var s1 = document.createElement("script"),
+            s0 = document.getElementsByTagName("script")[0];
+        s1.async = true;
+        s1.src   = 'https://embed.tawk.to/685f9177dd2e4119172ad8ec/default';
+        s1.charset = 'UTF-8';
+        s1.setAttribute('crossorigin','*');
+        s0.parentNode.insertBefore(s1, s0);
+      })();
+    </script>
+    <!-- End of Tawk.to embed -->
+
+    <!-- Tawk.to API customizations -->
+    <script type="text/javascript">
+      Tawk_API.onLoad = function() {
+        // move widget to bottom-left
+        Tawk_API.setAttributes({ position: 'bottom-left' });
+        // prefill visitor name & email
+        Tawk_API.setAttributes({
+          visitor: {
+            name:  'Jane Doe',
+            email: 'jane.doe@example.com'
+          }
+        });
+        // automatically pop the chat window
+        Tawk_API.popup();
+      };
     </script>
 
     <!-- Scripts -->
