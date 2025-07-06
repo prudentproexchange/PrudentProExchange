@@ -1,24 +1,413 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Testimonials • PrudentProExchange</title>
-  <link rel="stylesheet" href="css/style.css" />
-  <link rel="stylesheet" href="css/testimonials.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet" />
-</head>
-<body class="testimonials-page">
-  <!-- Video Background -->
-  <video class="bg-video" autoplay muted loop playsinline preload="auto" poster="assets/images/video-poster.jpg">
-    <source src="assets/videos/background.webm" type="video/webm" />
-    <source src="assets/videos/background.mp4" type="video/mp4" />
-    Your browser does not support the video tag.
-  </video>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Testimonials – PrudentProExchange</title>
+    <meta name="description" content="Real feedback from investors with PrudentProExchange" />
+    <meta name="keywords" content="CBE, testimonials, forex trading, feedback" />
 
-  <div class="overlay">
+    <!-- Poppins & FontAwesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet" />
+    <script src="https://kit.fontawesome.com/your-kit-code.js" crossorigin="anonymous"></script>
+
+    <!-- AOS for Animations -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+
+    <style>
+      /* Theme Variables */
+      :root[data-theme="dark"] {
+        --bg: #1a1a1a;
+        --text: #e0e0e0;
+        --gold: #ffd700;
+        --gold-dark: #cca300;
+        --glass: rgba(255, 255, 255, 0.1);
+        --shadow: rgba(0, 0, 0, 0.3);
+        --text-light: #b0b0b0;
+        --text-muted: #888;
+      }
+      :root[data-theme="light"] {
+        --bg: #f5f5f5;
+        --text: #333;
+        --gold: #cca300;
+        --gold-dark: #b58900;
+        --glass: rgba(0, 0, 0, 0.05);
+        --shadow: rgba(0, 0, 0, 0.1);
+        --text-light: #555;
+        --text-muted: #666;
+      }
+
+      /* Reset & Base */
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        font-family: 'Poppins', sans-serif;
+        color: var(--text);
+        background: var(--bg);
+        overflow-x: hidden;
+        line-height: 1.6;
+      }
+      a { color: var(--gold); text-decoration: none; }
+      a:hover { color: var(--gold-dark); }
+
+      /* Video Background */
+      .bg-video {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: -1;
+        opacity: 0.8;
+      }
+
+      /* Header */
+      .site-header {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        z-index: 1000;
+        background: rgba(0, 0, 0, 0.2);
+        backdrop-filter: blur(5px);
+      }
+      .logo-link img {
+        height: 50px;
+        transition: transform 0.3s ease;
+      }
+      .logo-link:hover img { transform: scale(1.1); }
+      #theme-toggle {
+        background: none;
+        border: none;
+        font-size: 1.8rem;
+        color: var(--text);
+        cursor: pointer;
+        transition: transform 0.3s ease;
+      }
+      #theme-toggle:hover { transform: rotate(180deg); }
+      .hamburger {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 30px;
+        height: 20px;
+        background: none;
+        border: none;
+        cursor: pointer;
+      }
+      .hamburger span {
+        width: 100%;
+        height: 3px;
+        background: var(--gold);
+        transition: all 0.3s ease;
+      }
+      .hamburger.active span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+      }
+      .hamburger.active span:nth-child(2) { opacity: 0; }
+      .hamburger.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(7px, -7px);
+      }
+      .nav-drawer {
+        position: fixed;
+        top: 70px;
+        right: -250px;
+        width: 250px;
+        background: var(--glass);
+        padding: 20px;
+        transition: right 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        box-shadow: -2px 0 10px var(--shadow);
+      }
+      .nav-drawer.open { right: 0; }
+      .nav-drawer a {
+        padding: 10px;
+        font-size: 1.1rem;
+        color: var(--text-light);
+      }
+      .nav-drawer a:hover, .nav-drawer a.active {
+        color: var(--gold);
+        background: rgba(255, 215, 0, 0.1);
+        border-radius: 5px;
+      }
+
+      /* Main */
+      main {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 100px 20px 60px;
+        position: relative;
+      }
+
+      /* Header Card */
+      .header-card {
+        background: linear-gradient(135deg, var(--glass), rgba(255, 215, 0, 0.1));
+        backdrop-filter: blur(12px);
+        padding: 50px 20px;
+        text-align: center;
+        border-radius: 15px;
+        box-shadow: 0 4px 20px var(--shadow);
+        margin-bottom: 40px;
+      }
+      .header-card h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--gold);
+        margin-bottom: 10px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+      .header-card p {
+        font-size: 1.1rem;
+        color: var(--text-light);
+      }
+
+      /* Form Card */
+      .form-card {
+        background: var(--glass);
+        backdrop-filter: blur(12px);
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: 0 4px 20px var(--shadow);
+        margin-bottom: 60px;
+      }
+      .form-card h2 {
+        font-size: 2rem;
+        font-weight: 500;
+        color: var(--gold);
+        margin-bottom: 20px;
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+      .form-group {
+        margin-bottom: 20px;
+        position: relative;
+      }
+      .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--text-light);
+        font-weight: 500;
+      }
+      .form-group input[type="text"],
+      .form-group textarea {
+        width: 100%;
+        padding: 12px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        color: var(--text);
+        font-size: 1rem;
+        transition: border-color 0.3s ease;
+      }
+      .form-group input[type="text"]:focus,
+      .form-group textarea:focus {
+        border-color: var(--gold);
+        outline: none;
+      }
+      .form-group input[type="file"] {
+        color: var(--text-light);
+      }
+      .char-counter {
+        position: absolute;
+        bottom: -20px;
+        right: 10px;
+        font-size: 0.8rem;
+        color: var(--text-muted);
+      }
+      .media-preview img,
+      .media-preview video {
+        max-width: 100%;
+        max-height: 200px;
+        margin-top: 10px;
+        border-radius: 8px;
+      }
+      .star-rating {
+        display: flex;
+        direction: rtl;
+        justify-content: center;
+      }
+      .star-rating input {
+        display: none;
+      }
+      .star-rating label {
+        font-size: 2rem;
+        color: #ccc;
+        cursor: pointer;
+        transition: color 0.2s ease;
+      }
+      .star-rating input:checked ~ label,
+      .star-rating label:hover,
+      .star-rating label:hover ~ label {
+        color: var(--gold);
+      }
+      .form-card button {
+        display: block;
+        margin: 20px auto 0;
+        padding: 12px 40px;
+        background: var(--gold);
+        color: #000;
+        font-size: 1rem;
+        font-weight: 500;
+        border: none;
+        border-radius: 30px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      .form-card button:hover:enabled {
+        background: var(--gold-dark);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      }
+      .form-card button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+      #submitAlert {
+        text-align: center;
+        margin-top: 15px;
+        font-weight: 500;
+        font-size: 1rem;
+      }
+
+      /* Progress Bar */
+      #progressContainer {
+        width: 100%;
+        height: 8px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 4px;
+        margin-top: 10px;
+        overflow: hidden;
+        display: none;
+      }
+      #progressBar {
+        width: 0;
+        height: 100%;
+        background: var(--gold);
+        transition: width 0.3s ease;
+      }
+
+      /* Testimonials Grid */
+      .testimonials-grid {
+        display: grid;
+        gap: 20px;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      }
+      .testimonial-card {
+        background: var(--glass);
+        backdrop-filter: blur(12px);
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 4px 20px var(--shadow);
+        transition: all 0.3s ease;
+      }
+      .testimonial-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 30px var(--shadow);
+        background: rgba(255, 215, 0, 0.1);
+      }
+      .testimonial-card blockquote {
+        font-style: italic;
+        margin-bottom: 15px;
+        color: var(--text-light);
+        line-height: 1.5;
+      }
+      .testimonial-card .byline {
+        text-align: right;
+        font-weight: 500;
+        color: var(--text-muted);
+      }
+      .testimonial-card .review-rating {
+        font-size: 1.5rem;
+        color: var(--gold);
+        margin: 10px 0;
+      }
+      .testimonial-card img,
+      .testimonial-card video {
+        display: block;
+        max-width: 100%;
+        margin: 15px auto 0;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px var(--shadow);
+      }
+      .company-response {
+        margin-top: 20px;
+        padding: 15px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 8px;
+      }
+      .company-response strong {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--gold);
+        font-weight: 500;
+      }
+
+      /* Footer */
+      .site-footer {
+        text-align: center;
+        padding: 20px 0;
+        margin-top: 60px;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        background: rgba(0, 0, 0, 0.2);
+        backdrop-filter: blur(5px);
+      }
+      .footer-content p { margin: 5px 0; }
+      .footer-links a {
+        margin: 0 10px;
+        color: var(--text-muted);
+      }
+      .footer-links a:hover { color: var(--gold); }
+
+      /* Back to Top Button */
+      #back-to-top {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: var(--gold);
+        color: #000;
+        border: none;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 10px var(--shadow);
+      }
+      #back-to-top:hover {
+        background: var(--gold-dark);
+        transform: scale(1.1);
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        main { padding: 80px 15px 40px; }
+        .logo-link img { height: 40px; }
+        .header-card h1 { font-size: 2rem; }
+        .form-card { padding: 20px; }
+        .testimonials-grid { grid-template-columns: 1fr; }
+        .nav-drawer { width: 200px; }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Video Background -->
+    <video class="bg-video" autoplay muted loop playsinline preload="auto" poster="assets/images/video-poster.jpg">
+      <source src="assets/videos/background.webm" type="video/webm" />
+      <source src="assets/videos/background.mp4" type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+
+    <!-- Header -->
     <header class="site-header">
       <button id="theme-toggle" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
       <a href="/" class="logo-link">
@@ -38,149 +427,66 @@
       </nav>
     </header>
 
-    <div class="main-content">
-      <main class="testimonials-page container">
-        <!-- Hero Section -->
-        <section class="section hero-section" data-aos="fade-up">
-          <h1 class="section-title gold">Voices of the Cosmos</h1>
-          <p class="section-text">
-            Hear the radiant stories of those who’ve ascended with PrudentProExchange. Every testimonial is a star in our constellation, illuminating the path to financial transcendence. Share your journey and join the celestial chorus.
-          </p>
-          <button class="cta primary" onclick="scrollToForm()">Share Your Story</button>
-        </section>
+    <main>
+      <div class="header-card" data-aos="fade-up">
+        <h1>What Our Members Are Saying</h1>
+        <p>Real feedback from traders who’ve grown with PrudentProExchange.</p>
+      </div>
 
-        <!-- Reviewer of the Month -->
-        <section class="section reviewer-month" data-aos="fade-up">
-          <h2 class="section-title gold">Reviewer of the Month</h2>
-          <article class="reviewer-card" itemscope itemtype="https://schema.org/Review" data-aos="zoom-in">
-            <div class="reviewer-image">
-              <img src="assets/images/reviewer-month.jpg" alt="Reviewer of the Month" />
-            </div>
-            <div class="reviewer-content">
-              <h3 itemprop="name">A Stellar Journey</h3>
-              <p class="reviewer-meta">
-                <span itemprop="author">Emily R.</span>, <span itemprop="location">London, UK</span> •
-                <meta itemprop="datePublished" content="2025-06-01">June 2025
-              </p>
-              <div class="review-rating" itemprop="reviewRating" itemscope itemtype="https://schema.org/Rating">
-                <meta itemprop="worstRating" content="1" />
-                <meta itemprop="ratingValue" content="5" />
-                <meta itemprop="bestRating" content="5" />
-                <span class="stars">★★★★★</span>
-              </div>
-              <p itemprop="reviewBody">
-                PrudentProExchange transformed my financial destiny. Their divine guidance turned my doubts into a thriving empire. A true beacon of trust!
-              </p>
-              <div class="review-actions">
-                <button class="upvote-btn" data-id="reviewer-month" aria-label="Upvote this testimonial">
-                  <i class="fas fa-heart"></i> <span class="upvote-count">142</span>
-                </button>
-                <div class="share-buttons">
-                  <a href="https://twitter.com/intent/tweet?text=A%20Stellar%20Journey%20with%20PrudentProExchange" target="_blank" aria-label="Share on Twitter"><i class="fab fa-twitter"></i></a>
-                  <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://prudentproexchange.com/testimonials" target="_blank" aria-label="Share on LinkedIn"><i class="fab fa-linkedin"></i></a>
-                  <a href="https://www.facebook.com/sharer/sharer.php?u=https://prudentproexchange.com/testimonials" target="_blank" aria-label="Share on Facebook"><i class="fab fa-facebook"></i></a>
-                </div>
-              </div>
-            </div>
-          </article>
-        </section>
-
-        <!-- Testimonials Gallery -->
-        <section class="section testimonials-gallery" data-aos="fade-up">
-          <h2 class="section-title gold">Our Celestial Chorus</h2>
-          <div class="filter-controls">
-            <select id="rating-filter" aria-label="Filter by rating">
-              <option value="">All Ratings</option>
-              <option value="5">5 Stars</option>
-              <option value="4">4 Stars</option>
-              <option value="3">3 Stars</option>
-              <option value="2">2 Stars</option>
-              <option value="1">1 Star</option>
-            </select>
-            <select id="location-filter" aria-label="Filter by location">
-              <option value="">All Locations</option>
-              <option value="London, UK">London, UK</option>
-              <option value="New York, USA">New York, USA</option>
-              <option value="Tokyo, Japan">Tokyo, Japan</option>
-            </select>
-            <select id="sort-filter" aria-label="Sort testimonials">
-              <option value="newest">Newest First</option>
-              <option value="most-helpful">Most Helpful</option>
-            </select>
+      <div class="form-card" data-aos="fade-up" data-aos-delay="300">
+        <h2>Share Your Experience</h2>
+        <form id="testimonialForm">
+          <div class="form-group">
+            <label for="name">Your Name<span style="color: red;">*</span></label>
+            <input type="text" id="name" name="name" required maxlength="255" />
+            <span class="char-counter">0/255</span>
           </div>
-          <div class="gallery-grid" id="testimonials-grid">
-            <!-- Testimonials will be dynamically loaded here -->
+          <div class="form-group">
+            <label for="testimonial">Your Testimonial<span style="color: red;">*</span></label>
+            <textarea id="testimonial" name="testimonial_text" rows="4" required maxlength="1000"></textarea>
+            <span class="char-counter">0/1000</span>
           </div>
-          <button class="load-more primary" id="load-more">Load More</button>
-        </section>
+          <div class="form-group">
+            <label for="rating">Rating<span style="color: red;">*</span></label>
+            <div class="star-rating" role="radiogroup" aria-label="Star rating">
+              <input type="radio" id="star5" name="rating" value="5" required />
+              <label for="star5" title="5 stars">★</label>
+              <input type="radio" id="star4" name="rating" value="4" />
+              <label for="star4" title="4 stars">★</label>
+              <input type="radio" id="star3" name="rating" value="3" />
+              <label for="star3" title="3 stars">★</label>
+              <input type="radio" id="star2" name="rating" value="2" />
+              <label for="star2" title="2 stars">★</label>
+              <input type="radio" id="star1" name="rating" value="1" />
+              <label for="star1" title="1 star">★</label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="media">Upload Photo or Video (optional)</label>
+            <input type="file" id="media" name="media" accept="image/*,video/*" />
+            <small style="color: var(--text-muted);">Max. 5 MB (images), no limit (videos)</small>
+            <div class="media-preview" id="media-preview"></div>
+          </div>
 
-        <!-- Submission Form -->
-        <section class="section testimonial-form" id="testimonial-form" data-aos="fade-up">
-          <h2 class="section-title gold">Share Your Cosmic Journey</h2>
-          <form id="submit-testimonial" enctype="multipart/form-data">
-            <div class="form-group">
-              <label for="name">Your Name</label>
-              <input type="text" id="name" name="name" required maxlength="100" placeholder="e.g., Emily R." />
-              <span class="char-counter">0/100</span>
-            </div>
-            <div class="form-group">
-              <label for="email">Email (Private, for Verification)</label>
-              <input type="email" id="email" name="email" required placeholder="your.email@example.com" />
-            </div>
-            <div class="form-group">
-              <label for="location">Location</label>
-              <input type="text" id="location" name="location" placeholder="e.g., London, UK" />
-            </div>
-            <div class="form-group">
-              <label for="title">Testimonial Title</label>
-              <input type="text" id="title" name="title" maxlength="100" placeholder="e.g., A Stellar Experience" />
-              <span class="char-counter">0/100</span>
-            </div>
-            <div class="form-group">
-              <label for="body">Your Story</label>
-              <textarea id="body" name="body" required maxlength="1000" placeholder="Tell us about your journey with PrudentProExchange..."></textarea>
-              <span class="char-counter">0/1000</span>
-            </div>
-            <div class="form-group">
-              <label for="rating">Rating</label>
-              <div class="star-rating" role="radiogroup" aria-label="Star rating">
-                <input type="radio" id="star5" name="rating" value="5" required />
-                <label for="star5" title="5 stars">★</label>
-                <input type="radio" id="star4" name="rating" value="4" />
-                <label for="star4" title="4 stars">★</label>
-                <input type="radio" id="star3" name="rating" value="3" />
-                <label for="star3" title="3 stars">★</label>
-                <input type="radio" id="star2" name="rating" value="2" />
-                <label for="star2" title="2 stars">★</label>
-                <input type="radio" id="star1" name="rating" value="1" />
-                <label for="star1" title="1 star">★</label>
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="media">Upload Media (Photos, Videos, Audio)</label>
-              <div class="drag-drop-area" id="drag-drop-area">
-                <p>Drag & drop files here or click to upload</p>
-                <input type="file" id="media" name="media[]" multiple accept="image/*,video/*,audio/*" />
-              </div>
-              <div class="media-preview" id="media-preview"></div>
-            </div>
-            <button type="submit" class="cta primary">Submit Your Testimonial</button>
-          </form>
-        </section>
+          <div id="progressContainer">
+            <div id="progressBar"></div>
+          </div>
 
-        <!-- Final CTA -->
-        <section class="section cta-section" data-aos="fade-up">
-          <h2 class="section-title gold">Join the Celestial Chorus</h2>
-          <p class="section-text">
-            Your story is a star waiting to shine. Submit your testimonial and become part of the PrudentProExchange legacy, where every voice fuels a financial renaissance.
-          </p>
-          <button class="cta primary" onclick="location.href='application.html'">Apply to Join Now</button>
-        </section>
-      </main>
-    </div>
+          <button type="submit" id="submitBtn">Submit for Review</button>
+        </form>
+        <div id="submitAlert"></div>
+      </div>
+
+      <section id="testimonialsSection" data-aos="fade-up" data-aos-delay="600">
+        <h2 style="font-family: 'Poppins', sans-serif; color: var(--gold); margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px;">
+          Approved Testimonials
+        </h2>
+        <div class="testimonials-grid" id="testimonialsGrid"></div>
+      </section>
+    </main>
 
     <!-- Footer -->
-    <footer class="section section-dark site-footer" data-aos="fade-up">
+    <footer class="section section-dark site-footer" data-aos="fade-up" data-aos-delay="900">
       <div class="footer-content">
         <p class="utc-time">UTC Time: <span id="utcTime"></span></p>
         <p class="local-time">Local Time: <span id="localTime"></span></p>
@@ -194,14 +500,217 @@
         <p class="copyright">© 2025 PrudentProExchange. All Rights Reserved. SEC Registration #0001230714</p>
       </div>
     </footer>
-  </div>
 
-  <button id="back-to-top" aria-label="Back to top">🚀</button>
+    <!-- Back to Top Button -->
+    <button id="back-to-top" aria-label="Back to top">🚀</button>
 
-  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-  <script src="js/mainξης
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js" defer></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js" defer></script>
+    <script defer>
+      document.addEventListener("DOMContentLoaded", () => {
+        // Initialize AOS
+        AOS.init({ duration: 800, once: true });
 
-System: main.js"></script>
-  <script src="js/testimonials.js"></script>
-</body>
+        // Theme Toggle
+        const toggle = document.getElementById("theme-toggle");
+        const setTheme = (t) => {
+          document.documentElement.setAttribute("data-theme", t);
+          localStorage.setItem("theme", t);
+          toggle.innerHTML = t === "dark" ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+        };
+        toggle.addEventListener("click", () =>
+          setTheme(document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark")
+        );
+        setTheme(localStorage.getItem("theme") || "dark");
+
+        // Hamburger Menu
+        const hamburgerBtn = document.getElementById('hamburgerBtn');
+        const navDrawer = document.getElementById('navDrawer');
+        hamburgerBtn.addEventListener('click', () => {
+          navDrawer.classList.toggle('open');
+          hamburgerBtn.classList.toggle('active');
+        });
+
+        // Back to Top
+        document.getElementById('back-to-top').addEventListener('click', () => {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Time and Date
+        function updateLocalTime() {
+          const now = new Date();
+          document.getElementById('localTime').textContent = now.toLocaleTimeString();
+          document.getElementById('localDate').textContent = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        }
+        setInterval(updateLocalTime, 1000);
+        updateLocalTime();
+
+        function updateUTCTime() {
+          document.getElementById('utcTime').textContent = new Date().toUTCString();
+        }
+        setInterval(updateUTCTime, 1000);
+        updateUTCTime();
+
+        // Character Counters
+        function updateCharCounter(input, counter, max) {
+          counter.textContent = `${input.value.length}/${max}`;
+        }
+        const nameInput = document.getElementById('name');
+        const testimonialInput = document.getElementById('testimonial');
+        const nameCounter = nameInput.nextElementSibling;
+        const testimonialCounter = testimonialInput.nextElementSibling;
+        nameInput.addEventListener('input', () => updateCharCounter(nameInput, nameCounter, 255));
+        testimonialInput.addEventListener('input', () => updateCharCounter(testimonialInput, testimonialCounter, 1000));
+        updateCharCounter(nameInput, nameCounter, 255);
+        updateCharCounter(testimonialInput, testimonialCounter, 1000);
+
+        // Media Preview
+        const mediaInput = document.getElementById('media');
+        const mediaPreview = document.getElementById('media-preview');
+        mediaInput.addEventListener('change', () => {
+          mediaPreview.innerHTML = '';
+          const file = mediaInput.files[0];
+          if (file) {
+            const url = URL.createObjectURL(file);
+            if (file.type.startsWith('image/')) {
+              mediaPreview.innerHTML = `<img src="${url}" alt="Preview" />`;
+            } else if (file.type.startsWith('video/')) {
+              mediaPreview.innerHTML = `<video src="${url}" controls></video>`;
+            }
+          }
+        });
+
+        // Supabase Client
+        const SUPABASE_URL = "https://iwkdznjqfbsfkscnbrkc.supabase.co";
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU";
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // Load Testimonials
+        async function loadTestimonials() {
+          const { data, error } = await supabase
+            .from("testimonials")
+            .select("id,name,testimonial_text,screenshot_url,video_url,company_response,status,rating")
+            .eq("status", "approved")
+            .order("created_at", { ascending: false });
+          if (error) {
+            console.error("Fetch error:", error);
+            return;
+          }
+          const grid = document.getElementById("testimonialsGrid");
+          grid.innerHTML = "";
+          data.forEach((t) => {
+            const card = document.createElement("div");
+            card.className = "testimonial-card";
+            card.setAttribute("data-aos", "fade-up");
+            let html = `<blockquote>${t.testimonial_text}</blockquote>`;
+            html += `<div class="byline">— ${t.name}</div>`;
+            if (t.rating) {
+              const stars = '★'.repeat(t.rating) + '☆'.repeat(5 - t.rating);
+              html += `<div class="review-rating">${stars}</div>`;
+            }
+            if (t.screenshot_url) {
+              html += `<img src="${t.screenshot_url}" alt="testimonial image"/>`;
+            } else if (t.video_url) {
+              html += `<video controls><source src="${t.video_url}" type="video/mp4"/></video>`;
+            }
+            if (t.company_response) {
+              html += `<div class="company-response"><strong>Our Response:</strong><p>${t.company_response}</p></div>`;
+            }
+            card.innerHTML = html;
+            grid.appendChild(card);
+          });
+        }
+        loadTestimonials();
+
+        // Form Submission
+        const form = document.getElementById("testimonialForm");
+        const alertDiv = document.getElementById("submitAlert");
+        const submitBtn = document.getElementById("submitBtn");
+        const progressContainer = document.getElementById("progressContainer");
+        const progressBar = document.getElementById("progressBar");
+
+        form.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          alertDiv.textContent = "";
+          submitBtn.disabled = true;
+          progressBar.style.width = "0%";
+          progressContainer.style.display = "block";
+          alertDiv.style.color = "var(--text)";
+          alertDiv.textContent = "Uploading…";
+
+          const name = form.name.value.trim();
+          const text = form.testimonial.value.trim();
+          const rating = form.querySelector('input[name="rating"]:checked')?.value;
+          if (!name || !text || !rating) {
+            alertDiv.style.color = "crimson";
+            alertDiv.textContent = "Please fill all required fields.";
+            submitBtn.disabled = false;
+            progressContainer.style.display = "none";
+            return;
+          }
+
+          let screenshot_url = null, video_url = null;
+          const file = form.media.files[0];
+          if (file) {
+            if (file.type.startsWith("image/") && file.size > 5 * 1024 * 1024) {
+              alertDiv.style.color = "crimson";
+              alertDiv.textContent = "Image must be under 5 MB.";
+              submitBtn.disabled = false;
+              progressContainer.style.display = "none";
+              return;
+            }
+            const bucket = file.type.startsWith("image/") ? "testimonial-screenshots" : "testimonial-videos";
+            const path = `${bucket}/${Date.now()}_${file.name}`;
+            const { error: uploadErr } = await supabase.storage
+              .from(bucket)
+              .upload(path, file, {
+                onProgress: (evt) => {
+                  const pct = Math.round((evt.loaded / evt.total) * 100);
+                  progressBar.style.width = pct + "%";
+                  alertDiv.textContent = `Uploading… ${pct}%`;
+                },
+              });
+            if (uploadErr) {
+              console.error("Upload Error →", uploadErr);
+              alertDiv.style.color = "crimson";
+              alertDiv.textContent = `Upload failed: ${uploadErr.message}`;
+              submitBtn.disabled = false;
+              progressContainer.style.display = "none";
+              return;
+            }
+            const { data: urlData, error: urlErr } = await supabase.storage.from(bucket).getPublicUrl(path);
+            if (urlErr) {
+              console.error("GetPublicUrl Error →", urlErr);
+              alertDiv.style.color = "crimson";
+              alertDiv.textContent = `Couldn’t get URL: ${urlErr.message}`;
+              submitBtn.disabled = false;
+              progressContainer.style.display = "none";
+              return;
+            }
+            if (file.type.startsWith("image/")) screenshot_url = urlData.publicUrl;
+            else video_url = urlData.publicUrl;
+          }
+
+          const { error: insertErr } = await supabase
+            .from("testimonials")
+            .insert([{ name, testimonial_text: text, screenshot_url, video_url, rating: parseInt(rating), status: "pending" }]);
+          if (insertErr) {
+            console.error("Insert Error →", insertErr);
+            alertDiv.style.color = "crimson";
+            alertDiv.textContent = `Submit failed: ${insertErr.message}`;
+          } else {
+            alertDiv.style.color = "lightgreen";
+            alertDiv.textContent = "Thanks—awaiting approval!";
+            form.reset();
+            mediaPreview.innerHTML = '';
+            updateCharCounter(nameInput, nameCounter, 255);
+            updateCharCounter(testimonialInput, testimonialCounter, 1000);
+          }
+          submitBtn.disabled = false;
+          progressContainer.style.display = "none";
+        });
+      });
+    </script>
+  </body>
 </html>
