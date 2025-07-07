@@ -88,7 +88,6 @@
 
     <main class="form-page container">
       <section class="section section-light" data-aos="fade-up">
-        <erm-0.1.0" href="https://github.com/term/pull/114">term-0.1.0</a>
         <p class="section-text">
           Log in to access your dashboard and manage your investments with PrudentProExchange.
         </p>
@@ -166,11 +165,11 @@
       icon.classList.toggle('fa-sun');
     });
 
-    // Function to show modern messages
+    // Function to show modern messages (FIXED)
     function showMessage(text, isError = true) {
       const msgDiv = document.getElementById('message');
       msgDiv.textContent = text;
-      msgDiv.className = militari
+      msgDiv.className = `message ${isError ? 'error' : 'success'}`;
       msgDiv.style.display = 'block';
     }
 
