@@ -10,11 +10,11 @@
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
   <style>
-    /* Theme Variables (Unchanged) */
+    /* Theme Variables (Updated for consistency) */
     :root[data-theme="dark"] {
       --bg: #1a1a1a;
       --text: #e0e0e0;
-      --primary: #ffd700;
+      --gold: #ffd700;
       --gold-dark: #cca300;
       --glass: rgba(255, 255, 255, 0.1);
       --shadow: rgba(0, 0, 0, 0.3);
@@ -24,7 +24,7 @@
     :root[data-theme="light"] {
       --bg: #f5f5f5;
       --text: #333;
-      --primary: #cca300;
+      --gold: #cca300;
       --gold-dark: #b58900;
       --glass: rgba(0, 0, 0, 0.05);
       --shadow: rgba(0, 0, 0, 0.1);
@@ -73,7 +73,7 @@
       height: 100%;
       object-fit: cover;
       border-radius: 50%;
-      border: 3px solid var(--primary);
+      border: 3px solid var(--gold);
       box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
       transition: transform 0.5s ease;
     }
@@ -101,7 +101,7 @@
 
     .map-orb-ring circle {
       fill: none;
-      stroke: var(--primary);
+      stroke: var(--gold);
       stroke-width: 2;
       stroke-dasharray: 10, 5;
       animation: orbit 10s linear infinite;
@@ -138,7 +138,7 @@
     }
 
     .gold-text {
-      color: var(--primary);
+      color: var(--gold);
       font-weight: bold;
     }
 
@@ -152,7 +152,7 @@
       align-items: center;
       padding: 1rem 2rem;
       font-size: 1.3rem;
-      background: var(--primary);
+      background: var(--gold);
       color: #000;
       border: none;
       border-radius: 50px;
@@ -167,7 +167,7 @@
     }
 
     .map-button:hover {
-      background: #ffd700; /* Lighter gold */
+      background: var(--gold-dark);
       transform: translateY(-5px) scale(1.05);
       box-shadow: 0 10px 20px rgba(255, 215, 0, 0.6);
     }
@@ -196,7 +196,7 @@
 
     .feature-item i {
       font-size: 2rem;
-      color: var(--primary);
+      color: var(--gold);
       margin-bottom: 1rem;
     }
 
@@ -225,7 +225,7 @@
       }
     }
 
-    /* New Team Section Styles */
+    /* New Team Section Styles (Unchanged) */
     .team-container {
       display: flex;
       flex-wrap: wrap;
@@ -242,14 +242,14 @@
       width: 100%;
       height: auto;
       border-radius: 50%;
-      border: 3px solid var(--primary);
+      border: 3px solid var(--gold);
       box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
     }
 
     .team-member h3 {
       margin-top: 1rem;
       font-size: 1.2rem;
-      color: var(--primary);
+      color: var(--gold);
     }
 
     .team-member p {
@@ -257,7 +257,15 @@
       color: #fff;
     }
 
-    /* Tidio Widget Styling (Unchanged) */
+    /* GTranslate Widget Positioning */
+    .gtranslate_wrapper {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      z-index: 1000;
+    }
+
+    /* Tidio Widget Styling (Updated for consistency) */
     #tidio-chat,
     #tidio-chat-iframe-container {
       font-family: 'Poppins', sans-serif !important;
@@ -265,7 +273,7 @@
     }
     #tidio-chat > button,
     #tidio-chat-iframe-container .tidio-chat-button {
-      background: var(--primary) !important;
+      background: var(--gold) !important;
       border-radius: 50% !important;
       box-shadow: 0 4px 10px var(--shadow) !important;
       transition: all 0.3s ease !important;
@@ -289,7 +297,7 @@
       color: var(--text) !important;
     }
     #tidio-chat-iframe-container .tidio-chat-button {
-      background: var(--primary) !important;
+      background: var(--gold) !important;
       border-radius: 30px !important;
       transition: all 0.3s ease !important;
     }
@@ -305,17 +313,17 @@
       transition: border-color 0.3s ease !important;
     }
     #tidio-chat-iframe-container .tidio-chat-input:focus {
-      border-color: var(--primary) !important;
+      border-color: var(--gold) !important;
       outline: none !important;
     }
 
-    /* Back-to-Top Button Styling */
+    /* Back-to-Top Button Styling (Updated to match homepage) */
     #back-to-top {
-      position: fixed;
-      bottom: 20px;
-      left: 20px; /* Moved to left side */
-      z-index: 1000;
-      background: var(--primary);
+      position: fixed !important;
+      bottom: 80px !important;
+      right: 20px !important;
+      z-index: 1000 !important;
+      background: var(--gold);
       color: #000;
       border: none;
       border-radius: 50%;
@@ -333,18 +341,33 @@
       background: var(--gold-dark);
       transform: scale(1.1);
     }
-    @media (max-width: 480px) {
+
+    /* Map Fallback for JavaScript Disabled */
+    .map-fallback {
+      text-align: center;
+      color: var(--text);
+      font-size: 1.2rem;
+      margin: 2rem 0;
+    }
+    .map-fallback img {
+      max-width: 300px;
+      border-radius: 10px;
+      border: 3px solid var(--gold);
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+      .gtranslate_wrapper {
+        bottom: 10px;
+        left: 10px;
+      }
       #back-to-top {
-        bottom: 15px;
-        left: 15px; /* Adjusted for smaller screens */
+        bottom: 70px !important;
+        right: 10px !important;
         width: 40px;
         height: 40px;
         font-size: 1.2rem;
       }
-    }
-
-    /* Responsive Adjustments for Map Section (Unchanged) */
-    @media (max-width: 768px) {
       .map-portal-container {
         flex-direction: column;
         gap: 2rem;
@@ -359,6 +382,9 @@
       .map-button {
         font-size: 1.1rem;
         padding: 0.75rem 1.5rem;
+      }
+      .team-member {
+        width: 150px;
       }
     }
 
@@ -376,16 +402,6 @@
       .feature-item {
         width: 100%;
       }
-    }
-
-    /* Responsive Adjustments for Team Section */
-    @media (max-width: 768px) {
-      .team-member {
-        width: 150px;
-      }
-    }
-
-    @media (max-width: 480px) {
       .team-container {
         gap: 1rem;
       }
@@ -561,6 +577,12 @@
               </div>
             </div>
           </div>
+          <noscript>
+            <div class="map-fallback">
+              <p>Please enable JavaScript to view the interactive map. Alternatively, visit our location at <a href="https://maps.google.com/?q=32.7878921,-96.7992963" target="_blank">32.7878921, -96.7992963</a>.</p>
+              <img src="assets/images/map-preview.jpg" alt="Map of Dallas, Texas">
+            </div>
+          </noscript>
           <div class="map-features">
             <div class="feature-item" data-aos="fade-right">
               <i class="fas fa-star"></i>
@@ -604,7 +626,13 @@
     </footer>
   </div>
 
+  <!-- Back to Top Button -->
   <button id="back-to-top" aria-label="Back to top">🚀</button>
+
+  <!-- GTranslate Widget -->
+  <div class="gtranslate_wrapper"></div>
+  <script>window.gtranslateSettings = {"default_language":"en","native_language_names":true,"detect_browser_language":true,"wrapper_selector":".gtranslate_wrapper","flag_style":"3d"}</script>
+  <script src="https://cdn.gtranslate.net/widgets/latest/float.js" defer></script>
 
   <!-- Tidio Live Chat embed -->
   <script src="//code.tidio.co/peclwowoqcbxhfe3wbowfneh1rabrdjz.js" async></script>
