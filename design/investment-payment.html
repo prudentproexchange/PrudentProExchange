@@ -10,11 +10,135 @@
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Crisp Chat Widget -->
+  <script type="text/javascript">window.$crisp=[];window.CRISP_WEBSITE_ID="599e8216-ab4f-4d4f-bb22-5d47cf14031f";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();</script>
   <style>
+    /* Theme Variables */
+    :root[data-theme="dark"] {
+      --bg: #1a1a1a;
+      --text: #e0e0e0;
+      --gold: #ffd700;
+      --gold-dark: #cca300;
+      --glass: rgba(255, 255, 255, 0.1);
+      --shadow: rgba(0, 0, 0, 0.3);
+      --text-light: #b0b0b0;
+      --text-muted: #888;
+    }
+    :root[data-theme="light"] {
+      --bg: #f5f5f5;
+      --text: #333;
+      --gold: #cca300;
+      --gold-dark: #b58900;
+      --glass: rgba(0, 0, 0, 0.05);
+      --shadow: rgba(0, 0, 0, 0.1);
+      --text-light: #555;
+      --text-muted: #666;
+    }
+
+    /* Message Styling */
+    .message {
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border-radius: 4px;
+      text-align: center;
+      display: none;
+    }
+    .message.error {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+    .message.success {
+      background-color: #d4edda;
+      color: #155724;
+    }
+
+    /* GTranslate Widget Positioning */
+    .gtranslate_wrapper {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      z-index: 1000;
+    }
+
+    /* Crisp Widget Styling */
+    .crisp-client .cc-tlyw,
+    .crisp-client .cc-kxra {
+      font-family: 'Poppins', sans-serif !important;
+      z-index: 999 !important; /* Below back-to-top button but above other elements */
+    }
+    .crisp-client .cc-tlyw .cc-1xry .cc-kxra {
+      background: var(--gold) !important;
+      border-radius: 50% !important;
+      box-shadow: 0 4px 10px var(--shadow) !important;
+      transition: all 0.3s ease !important;
+    }
+    .crisp-client .cc-tlyw .cc-1xry .cc-kxra:hover {
+      background: var(--gold-dark) !important;
+      transform: scale(1.1) !important;
+    }
+    .crisp-client .cc-tlyw .cc-1xry .cc-unoo {
+      background: var(--glass) !important;
+      backdrop-filter: blur(12px) !important;
+      border-radius: 15px !important;
+      box-shadow: 0 4px 20px var(--shadow) !important;
+      color: var(--text) !important;
+    }
+    .crisp-client .cc-tlyw .cc-1xry .cc-unoo .cc-kc1c .cc-5wlh,
+    .crisp-client .cc-tlyw .cc-1xry .cc-unoo .cc-kc1c .cc-18oq {
+      font-family: 'Poppins', sans-serif !important;
+      color: var(--text) !important;
+    }
+    .crisp-client .cc-tlyw .cc-1xry .cc-unoo .cc-1w6g {
+      background: var(--gold) !important;
+      border-radius: 30px !important;
+      transition: all 0.3s ease !important;
+    }
+    .crisp-client .cc-tlyw .cc-1xry .cc-unoo .cc-1w6g:hover {
+      background: var(--gold-dark) !important;
+      transform: translateY(-2px) !important;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3) !important;
+    }
+    .crisp-client .cc-tlyw .cc-1xry .cc-unoo .cc-18oq {
+      background: rgba(255, 255, 255, 0.05) !important;
+      border: 1px solid rgba(255, 255, 255, 0.1) !important;
+      border-radius: 8px !important;
+      transition: border-color 0.3s ease !important;
+    }
+    .crisp-client .cc-tlyw .cc-1xry .cc-unoo .cc-18oq:focus {
+      border-color: var(--gold) !important;
+      outline: none !important;
+    }
+
+    /* Back-to-Top Button Styling */
+    #back-to-top {
+      position: fixed !important;
+      bottom: 80px !important;
+      right: 20px !important;
+      z-index: 1000 !important;
+      background: var(--gold);
+      color: #000;
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      font-size: 1.5rem;
+      cursor: pointer;
+      box-shadow: 0 4px 10px var(--shadow);
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #back-to-top:hover {
+      background: var(--gold-dark);
+      transform: scale(1.1);
+    }
+
+    /* Existing Styles with Theme Variables */
     .spinner {
       display: none;
       border: 4px solid rgba(0, 0, 0, 0.1);
-      border-left-color: #ffd700;
+      border-left-color: var(--gold);
       border-radius: 50%;
       width: 24px;
       height: 24px;
@@ -37,7 +161,7 @@
     }
     .loading-text {
       font-size: 14px;
-      color: #e0e0ff;
+      color: var(--text-light);
     }
     .btn, .payment-section {
       transition: opacity 0.3s ease, background-color 0.3s ease;
@@ -49,10 +173,10 @@
     }
     .payment-method-card:focus, .payment-method-card:hover {
       transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 4px 8px var(--shadow);
     }
     .payment-method-card:focus .btn {
-      outline: 2px solid #ffd700;
+      outline: 2px solid var(--gold);
       outline-offset: 2px;
     }
     .sr-only {
@@ -65,7 +189,19 @@
       clip: rect(0, 0, 0, 0);
       border: 0;
     }
+    /* Responsive Adjustments */
     @media (max-width: 768px) {
+      .gtranslate_wrapper {
+        bottom: 10px;
+        left: 10px;
+      }
+      #back-to-top {
+        bottom: 70px !important;
+        right: 10px !important;
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+      }
       .payment-section {
         padding: 1rem;
       }
@@ -138,6 +274,7 @@
     </div>
 
     <main class="payment-page container" role="main">
+      <div id="message" class="message"></div>
       <section class="payment-options" data-aos="fade-up" aria-labelledby="payment-options-heading">
         <h2 id="payment-options-heading">Choose Your Payment Method</h2>
         <p class="investment-amount">Investment Amount: <span id="investmentAmount"></span> USD</p>
@@ -162,10 +299,24 @@
     </footer>
   </div>
 
+  <!-- Back to Top Button -->
   <button id="back-to-top" aria-label="Scroll back to top">🚀</button>
+
+  <!-- GTranslate Widget -->
+  <div class="gtranslate_wrapper"></div>
+  <script>window.gtranslateSettings = {"default_language":"en","native_language_names":true,"detect_browser_language":true,"wrapper_selector":".gtranslate_wrapper","flag_style":"3d"}</script>
+  <script src="https://cdn.gtranslate.net/widgets/latest/float.js" defer></script>
 
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
+    // Message Display Function
+    function showMessage(text, isError = true) {
+      const msgDiv = document.getElementById('message');
+      msgDiv.textContent = text;
+      msgDiv.className = `message ${isError ? 'error' : 'success'}`;
+      msgDiv.style.display = 'block';
+    }
+
     AOS.init({ duration: 800, once: true });
 
     const { createClient } = supabase;
@@ -196,7 +347,10 @@
       try {
         const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
         if (authError || !user) {
-          window.location.href = 'login.html';
+          showMessage('Error: Please log in.', true);
+          setTimeout(() => {
+            window.location.href = 'login.html';
+          }, 2000);
           return;
         }
 
@@ -207,7 +361,7 @@
           .single();
         if (profileError) {
           console.error('Error loading profile:', profileError);
-          alert('Failed to load your profile.');
+          showMessage('Failed to load your profile.', true);
           return;
         }
         document.getElementById('welcomeName').textContent = profile.first_name || 'User';
@@ -226,8 +380,10 @@
         const planSlug = urlParams.get('plan');
 
         if (!amount || isNaN(amount) || parseFloat(amount) <= 0) {
-          alert('Invalid investment amount.');
-          window.location.href = 'invest.html';
+          showMessage('Invalid investment amount.', true);
+          setTimeout(() => {
+            window.location.href = 'invest.html';
+          }, 2000);
           return;
         }
         const parsedAmount = parseFloat(amount);
@@ -239,8 +395,10 @@
           .eq('slug', planSlug)
           .single();
         if (planError || !plan) {
-          alert('Invalid investment plan.');
-          window.location.href = 'invest.html';
+          showMessage('Invalid investment plan.', true);
+          setTimeout(() => {
+            window.location.href = 'invest.html';
+          }, 2000);
           return;
         }
         const planId = plan.id;
@@ -298,7 +456,7 @@
         });
       } catch (error) {
         console.error('Initialization error:', error);
-        alert('An unexpected error occurred.');
+        showMessage('An unexpected error occurred.', true);
       }
     }
 
@@ -334,14 +492,14 @@
         const copyButton = document.getElementById('copyButton');
         const debouncedCopy = debounce(() => {
           navigator.clipboard.writeText(address).then(() => {
-            alert('Wallet address copied!');
+            showMessage('Wallet address copied!', false);
             const proceedButton = document.getElementById('proceedButton');
             proceedButton.disabled = false;
             proceedButton.removeAttribute('aria-disabled');
             proceedButton.classList.add('blink');
           }).catch(err => {
             console.error('Copy failed:', err);
-            alert('Failed to copy address.');
+            showMessage('Failed to copy address.', true);
           });
         }, 500);
         copyButton.addEventListener('click', debouncedCopy);
@@ -365,16 +523,16 @@
           e.preventDefault();
           const file = fileInput.files[0];
           if (!file) {
-            alert('Please select a file.');
+            showMessage('Please select a file.', true);
             return;
           }
           if (file.size > 5 * 1024 * 1024) {
-            alert('File size exceeds 5MB.');
+            showMessage('File size exceeds 5MB.', true);
             return;
           }
           const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg', 'application/pdf'];
           if (!allowedTypes.includes(file.type)) {
-            alert('Invalid file type. Use PNG, JPEG, or PDF.');
+            showMessage('Invalid file type. Use PNG, JPEG, or PDF.', true);
             return;
           }
 
@@ -414,11 +572,13 @@
             if (insertError) throw new Error('Insert error: ' + insertError.message);
 
             localStorage.removeItem(`pendingUpload_${userId}_${planId}_${method}`);
-            alert(`Investment submitted successfully with proof for ${method}. Awaiting approval.`);
-            window.location.href = 'dashboard.html';
+            showMessage(`Investment submitted successfully with proof for ${method}. Awaiting approval.`, false);
+            setTimeout(() => {
+              window.location.href = 'dashboard.html';
+            }, 2000);
           } catch (error) {
             console.error('Error during upload or insert:', error);
-            alert('Failed to process request: ' + error.message);
+            showMessage('Failed to process request: ' + error.message, true);
           } finally {
             uploadButton.disabled = false;
             uploadButton.removeAttribute('aria-disabled');
@@ -428,7 +588,7 @@
         });
       } catch (error) {
         console.error('Error showing upload form:', error);
-        alert('Error preparing payment form.');
+        showMessage('Error preparing payment form.', true);
       }
     }
 
@@ -478,6 +638,69 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
+    // Video Playback Optimization
+    document.addEventListener('DOMContentLoaded', () => {
+      const video = document.querySelector('.bg-video');
+      let retryCount = 0;
+      const maxRetries = 3;
+      const retryDelay = 1000; // 1 second
+
+      if (video) {
+        const playVideo = () => {
+          video.play()
+            .then(() => {
+              console.log('Background video is playing successfully');
+              retryCount = 0;
+            })
+            .catch(error => {
+              console.error(`Background video play failed (attempt ${retryCount + 1}):`, error);
+              if (retryCount < maxRetries) {
+                retryCount++;
+                setTimeout(playVideo, retryDelay);
+              } else {
+                console.error('Max retries reached. Video playback failed.');
+                showMessage('Failed to load background video. Please refresh the page.', true);
+              }
+            });
+        };
+
+        playVideo();
+
+        video.addEventListener('canplay', () => console.log('Background video can play'));
+        video.addEventListener('playing', () => console.log('Background video is actively playing'));
+        video.addEventListener('error', (e) => {
+          console.error('Background video error:', e);
+          showMessage('Failed to load background video. Please refresh the page.', true);
+        });
+        video.addEventListener('stalled', () => console.warn('Background video stalled'));
+        video.addEventListener('loadeddata', () => console.log('Background video data loaded'));
+
+        document.addEventListener('visibilitychange', () => {
+          if (document.visibilityState === 'visible') {
+            if (video.paused) {
+              playVideo();
+            }
+          } else {
+            video.pause();
+            console.log('Background video paused due to tab inactivity');
+          }
+        });
+
+        const forcePlayOnInteraction = () => {
+          if (video.paused) {
+            playVideo();
+            console.log('Attempting to play background video on user interaction');
+          }
+        };
+
+        window.addEventListener('scroll', forcePlayOnInteraction, { once: true });
+        window.addEventListener('click', forcePlayOnInteraction, { once: true });
+      } else {
+        console.error('Background video element not found');
+        showMessage('Background video element not found.', true);
+      }
+    });
+
     function updateLocalTime() {
       const now = new Date();
       document.getElementById('localTime').textContent = now.toLocaleTimeString('en-US', { hour12: true });
@@ -493,11 +716,6 @@
     }
     setInterval(updateUTCTime, 1000);
     updateUTCTime();
-
-    const video = document.querySelector('.bg-video');
-    video.addEventListener('canplay', () => {
-      video.play().catch(error => console.error('Video playback error:', error));
-    });
 
     function clearStaleUploads() {
       const keys = Object.keys(localStorage);
