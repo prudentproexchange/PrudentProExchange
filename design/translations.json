@@ -3,30 +3,630 @@
     "title": "Welcome to our test page",
     "paragraph": "This is a sample paragraph you can use to verify that your language selector is working.",
     "home_title": "Home Page",
-    "about_title": "About Us",
-    "contact_title": "Contact Us"
-    // Add more keys for other pages
+    "bitcoin_button": "Buy Bitcoin"
   },
   "es": {
     "title": "Bienvenido a nuestra página de prueba",
     "paragraph": "Este es un párrafo de ejemplo que puedes usar para verificar que tu selector de idioma funciona.",
     "home_title": "Página de inicio",
-    "about_title": "Sobre nosotros",
-    "contact_title": "Contáctanos"
+    "bitcoin_button": "Comprar Bitcoin"
   },
-  // ... Include all 110 languages with translations for all page elements ...
-  "yo": {
-    "title": "Kaabọ si oju-iwe idanwo wa",
-    "paragraph": "Eyi jẹ apakan ayẹwo ti o le lo lati rii daju pe aṣayan ede rẹ n ṣiṣẹ.",
-    "home_title": "Oju-iwe Ibẹrẹ",
-    "about_title": "Nipa Wa",
-    "contact_title": "Kan si Wa"
+  "fr": {
+    "title": "Bienvenue sur notre page de test",
+    "paragraph": "Ceci est un paragraphe d'exemple que vous pouvez utiliser pour vérifier que votre sélecteur de langue fonctionne.",
+    "home_title": "Page d'accueil",
+    "bitcoin_button": "Acheter Bitcoin"
+  },
+  "de": {
+    "title": "Willkommen auf unserer Testseite",
+    "paragraph": "Dies ist ein Beispielabsatz, den Sie verwenden können, um zu überprüfen, ob Ihr Sprachwähler funktioniert.",
+    "home_title": "Startseite",
+    "bitcoin_button": "Bitcoin kaufen"
+  },
+  "pt": {
+    "title": "Bem-vindo à nossa página de teste",
+    "paragraph": "Este é um parágrafo de exemplo que você pode usar para verificar se seu seletor de idioma está funcionando.",
+    "home_title": "Página inicial",
+    "bitcoin_button": "Comprar Bitcoin"
+  },
+  "ru": {
+    "title": "Добро пожаловать на нашу тестовую страницу",
+    "paragraph": "Это пример абзаца, который вы можете использовать, чтобы убедиться, что ваш языковой переключатель работает.",
+    "home_title": "Главная страница",
+    "bitcoin_button": "Купить Биткойн"
+  },
+  "zh": {
+    "title": "欢迎来到我们的测试页面",
+    "paragraph": "这是一个示例段落，您可以使用它来验证您的语言选择器是否正常工作。",
+    "home_title": "主页",
+    "bitcoin_button": "购买比特币"
+  },
+  "zh-tw": {
+    "title": "歡迎來到我們的測試頁面",
+    "paragraph": "這是一個示例段落，您可以使用它來驗證您的語言選擇器是否正常工作。",
+    "home_title": "首頁",
+    "bitcoin_button": "購買比特幣"
+  },
+  "ja": {
+    "title": "テストページへようこそ",
+    "paragraph": "これは、言語セレクターが正しく機能しているかを確認するために使用できるサンプルの段落です。",
+    "home_title": "ホームページ",
+    "bitcoin_button": "ビットコインを購入"
+  },
+  "ar": {
+    "title": "مرحبًا بك في صفحة الاختبار الخاصة بنا",
+    "paragraph": "هذا مقطع تجريبي يمكنك استخدامه للتحقق من أن محدد اللغة يعمل.",
+    "home_title": "الصفحة الرئيسية",
+    "bitcoin_button": "شراء بيتكوين"
+  },
+  "hi": {
+    "title": "हमारे परीक्षण पृष्ठ पर आपका स्वागत है",
+    "paragraph": "यह एक नमूना पैराग्राफ़ है जिसका उपयोग आप यह सत्यापित करने के लिए कर सकते हैं कि आपकी भाषा चयनकर्ता काम कर रहा है।",
+    "home_title": "होम पेज",
+    "bitcoin_button": "बिटकॉइन खरीदें"
+  },
+  "id": {
+    "title": "Selamat datang di halaman uji kami",
+    "paragraph": "Ini adalah paragraf contoh yang dapat Anda gunakan untuk memverifikasi bahwa pemilih bahasa Anda berfungsi.",
+    "home_title": "Halaman Beranda",
+    "bitcoin_button": "Beli Bitcoin"
+  },
+  "it": {
+    "title": "Benvenuto nella nostra pagina di prova",
+    "paragraph": "Questo è un paragrafo di esempio che puoi usare per verificare che il selettore di lingua funzioni.",
+    "home_title": "Pagina iniziale",
+    "bitcoin_button": "Acquista Bitcoin"
+  },
+  "af": {
+    "title": "Welkom by ons toetsbladsy",
+    "paragraph": "Dit is 'n voorbeeldparagraaf wat jy kan gebruik om te verifieer dat jou taal-kiezer werk.",
+    "home_title": "Tuisblad",
+    "bitcoin_button": "Koop Bitcoin"
+  },
+  "bn": {
+    "title": "আমাদের পরীক্ষা পৃষ্ঠায় স্বাগতম",
+    "paragraph": "এটি একটি নমুনা অনুচ্ছেদ যা আপনি ব্যবহার করতে পারেন আপনার ভাষা নির্বাচক কাজ করছে কিনা তা যাচাই করতে।",
+    "home_title": "হোম পেজ",
+    "bitcoin_button": "বিটকয়েন কিনুন"
+  },
+  "sw": {
+    "title": "Karibu kwenye ukurasa wetu wa jaribio",
+    "paragraph": "Hii ni paragrafu ya mfano ambayo unaweza kutumia kuthibitisha kuwa kichagua lugha yako kinafanya kazi.",
+    "home_title": "Ukurasa wa Nyumbani",
+    "bitcoin_button": "Nunua Bitcoin"
+  },
+  "ko": {
+    "title": "테스트 페이지에 오신 것을 환영합니다",
+    "paragraph": "이것은 언어 선택기가 제대로 작동하는지 확인하기 위해 사용할 수 있는 샘플 단락입니다.",
+    "home_title": "홈 페이지",
+    "bitcoin_button": "비트코인 구매"
+  },
+  "tr": {
+    "title": "Test sayfamıza hoş geldiniz",
+    "paragraph": "Bu, dil seçicinizin çalıştığını doğrulamak için kullanabileceğiniz bir örnek paragraftır.",
+    "home_title": "Ana Sayfa",
+    "bitcoin_button": "Bitcoin Satın Al"
+  },
+  "vi": {
+    "title": "Chào mừng bạn đến với trang thử nghiệm của chúng tôi",
+    "paragraph": "Đây là một đoạn văn mẫu mà bạn có thể sử dụng để kiểm tra xem bộ chọn ngôn ngữ của bạn có hoạt động hay không.",
+    "home_title": "Trang chủ",
+    "bitcoin_button": "Mua Bitcoin"
+  },
+  "th": {
+    "title": "ยินดีต้อนรับสู่หน้าทดสอบของเรา",
+    "paragraph": "นี่คือย่อหน้าตัวอย่างที่คุณสามารถใช้เพื่อตรวจสอบว่าโปรแกรมเลือกภาษาของคุณทำงานหรือไม่",
+    "home_title": "หน้าแรก",
+    "bitcoin_button": "ซื้อบิตคอยน์"
+  },
+  "nl": {
+    "title": "Welkom op onze testpagina",
+    "paragraph": "Dit is een voorbeeldparagraaf die u kunt gebruiken om te controleren of uw taalkiezer werkt.",
+    "home_title": "Startpagina",
+    "bitcoin_button": "Bitcoin kopen"
+  },
+  "sv": {
+    "title": "Välkommen till vår testsida",
+    "paragraph": "Detta är ett exempelstycke som du kan använda för att verifiera att din språkväljare fungerar.",
+    "home_title": "Hemsida",
+    "bitcoin_button": "Köp Bitcoin"
+  },
+  "pl": {
+    "title": "Witamy na naszej stronie testowej",
+    "paragraph": "To jest przykładowy akapit, którego możesz użyć, aby sprawdzić, czy twój selektor języka działa.",
+    "home_title": "Strona główna",
+    "bitcoin_button": "Kup Bitcoin"
+  },
+  "he": {
+    "title": "ברוכים הבאים לדף הבדיקה שלנו",
+    "paragraph": "זו פסקה לדוגמה שבה תוכלו להשתמש כדי לוודא שבורר השפות שלכם פועל.",
+    "home_title": "דף הבית",
+    "bitcoin_button": "קנה ביטקוין"
+  },
+  "fa": {
+    "title": "به صفحه آزمایشی ما خوش آمدید",
+    "paragraph": "این یک پاراگراف نمونه است که می‌توانید از آن برای بررسی عملکرد انتخابگر زبان خود استفاده کنید.",
+    "home_title": "صفحه اصلی",
+    "bitcoin_button": "خرید بیت‌کوین"
+  },
+  "ta": {
+    "title": "எங்கள் சோதனைப் பக்கத்திற்கு வரவேற்கிறோம்",
+    "paragraph": "இது ஒரு மாதிரி பத்தி, உங்கள் மொழி தேர்ந்தெடுப்பவர் வேலை செய்கிறதா என்பதை சரிபார்க்க பயன்படுத்தலாம்.",
+    "home_title": "முகப்பு பக்கம்",
+    "bitcoin_button": "பிட்காயின் வாங்கு"
+  },
+  "te": {
+    "title": "మా పరీక్షా పేజీకి స్వాగతం",
+    "paragraph": "ఇది ఒక నమూనా పేరా, మీ భాషా సెలెక్టర్ పనిచేస్తుందో లేదో ధృవీకరించడానికి మీరు ఉపయోగించవచ్చు.",
+    "home_title": "హోమ్ పేజీ",
+    "bitcoin_button": "బిట్‌కాయిన్ కొనండి"
+  },
+  "ms": {
+    "title": "Selamat datang ke laman ujian kami",
+    "paragraph": "Ini adalah perenggan contoh yang boleh anda gunakan untuk mengesahkan bahawa pemilih bahasa anda berfungsi.",
+    "home_title": "Laman Utama",
+    "bitcoin_button": "Beli Bitcoin"
+  },
+  "ur": {
+    "title": "ہمارے ٹیسٹ پیج پر خوش آمدید",
+    "paragraph": "یہ ایک نمونہ پیراگراف ہے جسے آپ اپنے زبان سلیکٹر کے کام کرنے کی تصدیق کے لیے استعمال کر سکتے ہیں۔",
+    "home_title": "ہوم پیج",
+    "bitcoin_button": "بٹ کوائن خریدیں"
+  },
+  "el": {
+    "title": "Καλώς ήρθατε στη δοκιμαστική μας σελίδα",
+    "paragraph": "Αυτή είναι μια δειγματοληπτική παράγραφος που μπορείτε να χρησιμοποιήσετε για να επαληθεύσετε ότι ο επιλογέας γλώσσας σας λειτουργεί.",
+    "home_title": "Αρχική σελίδα",
+    "bitcoin_button": "Αγορά Bitcoin"
+  },
+  "cs": {
+    "title": "Vítejte na naší testovací stránce",
+    "paragraph": "Toto je ukázkový odstavec, který můžete použít k ověření, zda váš výběr jazyka funguje.",
+    "home_title": "Domovská stránka",
+    "bitcoin_button": "Koupit Bitcoin"
+  },
+  "fi": {
+    "title": "Tervetuloa testisivullemme",
+    "paragraph": "Tämä on esimerkkikappale, jota voit käyttää varmistaaksesi, että kielivalitsimesi toimii.",
+    "home_title": "Kotisivu",
+    "bitcoin_button": "Osta Bitcoin"
+  },
+  "no": {
+    "title": "Velkommen til vår testside",
+    "paragraph": "Dette er et eksempelavsnitt du kan bruke for å bekrefte at språkvelgeren din fungerer.",
+    "home_title": "Hjemmeside",
+    "bitcoin_button": "Kjøp Bitcoin"
+  },
+  "da": {
+    "title": "Velkommen til vores tests side",
+    "paragraph": "Dette er et eksempelafsnit, du kan bruge til at verificere, at din sprogvalg fungerer.",
+    "home_title": "Hjemmeside",
+    "bitcoin_button": "Køb Bitcoin"
+  },
+  "hu": {
+    "title": "Üdvözöljük tesztoldalunkon",
+    "paragraph": "Ez egy mintaparagrafus, amelyet használhat annak ellenőrzésére, hogy a nyelvválasztója működik-e.",
+    "home_title": "Kezdőlap",
+    "bitcoin_button": "Bitcoin vásárlás"
+  },
+  "uk": {
+    "title": "Ласкаво просимо на нашу тестову сторінку",
+    "paragraph": "Це зразок абзацу, який ви можете використати, щоб перевірити, чи працює ваш вибір мови.",
+    "home_title": "Домашня сторінка",
+    "bitcoin_button": "Купити біткойн"
+  },
+  "ro": {
+    "title": "Bine ați venit pe pagina noastră de test",
+    "paragraph": "Acesta este un paragraf de exemplu pe care îl puteți folosi pentru a verifica dacă selectorul de limbă funcționează.",
+    "home_title": "Pagina principală",
+    "bitcoin_button": "Cumpără Bitcoin"
+  },
+  "qu": {
+    "title": "Qampaq pruebapaq p'anqamanqa kuyaykuy",
+    "paragraph": "Kayqa huk qatina parrafu, chayta utilizayta atinki rimay taptayki puriqta kashanqanta tapyanapaq.",
+    "home_title": "Qampaq p'anqa",
+    "bitcoin_button": "Bitcoin rantiy"
   },
   "zu": {
     "title": "Siyakwamukela ekhasini lethu lokuhlola",
     "paragraph": "Lesi yisampula yesiqephu ongayisebenzisa ukuze uqinisekise ukuthi isikhethi solimi lwakho siyasebenza.",
     "home_title": "Ikhasi Lasekhaya",
-    "about_title": "Mayelana Nathi",
-    "contact_title": "Xhumana Nathi"
+    "bitcoin_button": "Thenga i-Bitcoin"
+  },
+  "am": {
+    "title": "ወደ የፈተና ገፃችን እንኳን ደህና መጡ",
+    "paragraph": "ይህ የቋንቋ መራጭዎ መሥራቱን ለመፈተሽ መጠቀም የሚችሉት ናሙና አንቀጽ ነው።",
+    "home_title": "የመነሻ ገፅ",
+    "bitcoin_button": "ቢትኮይን ግዛ"
+  },
+  "ha": {
+    "title": "Barka da zuwa shafinmu na gwaji",
+    "paragraph": "Wannan misali ne na sakin layi da za ku iya amfani da shi don tabbatar da cewa zaɓin harshenku yana aiki.",
+    "home_title": "Shafin Gida",
+    "bitcoin_button": "Sayi Bitcoin"
+  },
+  "sq": {
+    "title": "Mirë se vini në faqen tonë të testimit",
+    "paragraph": "Ky është një paragraf shembull që mund ta përdorni për të verifikuar nëse përzgjedhësi juaj i gjuhës funksionon.",
+    "home_title": "Faqja kryesore",
+    "bitcoin_button": "Bli Bitcoin"
+  },
+  "hy": {
+    "title": "Բարի գալուստ մեր փորձարկման էջ",
+    "paragraph": "Սա օրինակելի պարբերություն է, որը կարող եք օգտագործել՝ ստուգելու համար, արդյոք Ձեր լեզվի ընտրիչը աշխատում է:",
+    "home_title": "Հաշվի էջ",
+    "bitcoin_button": "Գնեք Բիթքոյն"
+  },
+  "as": {
+    "title": "আমাৰ পৰীক্ষণ পৃষ্ঠালৈ স্বাগতম",
+    "paragraph": "এইটো এটা নমুনা পেৰাগ্ৰাফ যিটো আপুনি আপোনাৰ ভাষা নিৰ্বাচক কাম কৰি আছে নে নাই পৰীক্ষা কৰিবলৈ ব্যৱহাৰ কৰিব পাৰে।",
+    "home_title": "মুখ্য পৃষ্ঠা",
+    "bitcoin_button": "বিটকইন কিনক"
+  },
+  "az": {
+    "title": "Test səhifəmizə xoş gəlmisiniz",
+    "paragraph": "Bu, dil seçicinizin işlədiyini yoxlamaq üçün istifadə edə biləcəyiniz nümunəvi bir abzasdır.",
+    "home_title": "Ana Səhifə",
+    "bitcoin_button": "Bitcoin al"
+  },
+  "be": {
+    "title": "Сардэчна запрашаем на нашу тэставую старонку",
+    "paragraph": "Гэта ўзорны абзац, які вы можаце выкарыстаць для праверкі працы вашага пераключальніка моў.",
+    "home_title": "Галоўная старонка",
+    "bitcoin_button": "Купіць Біткойн"
+  },
+  "bs": {
+    "title": "Dobrodošli na našu testnu stranicu",
+    "paragraph": "Ovo je primjer paragrafa koji možete koristiti da provjerite radi li vaš birač jezika.",
+    "home_title": "Početna stranica",
+    "bitcoin_button": "Kupi Bitcoin"
+  },
+  "bg": {
+    "title": "Добре дошли на нашата тестова страница",
+    "paragraph": "Това е примерен параграф, който можете да използвате, за да проверите дали вашият селектор на език работи.",
+    "home_title": "Начална страница",
+    "bitcoin_button": "Купи Биткойн"
+  },
+  "my": {
+    "title": "ကျွန်ုပ်တို့၏စမ်းသပ်စာမျက်နှာမှကြိုဆိုပါသည်",
+    "paragraph": "ဤသည်မှာ သင့်ဘာသာစကားရွေးချယ်မှုသည် အလုပ်လုပ်နေသလားဆိုသည်ကို စစ်ဆေးရန် သုံးနိုင်သည့် နမူနာစာပိုဒ်တစ်ခုဖြစ်သည်။",
+    "home_title": "ပင်မစာမျက်နှာ",
+    "bitcoin_button": "ဘိတ်ကွိုင်းဝယ်ပါ"
+  },
+  "ca": {
+    "title": "Benvingut a la nostra pàgina de proves",
+    "paragraph": "Aquest és un paràgraf de mostra que podeu utilitzar per verificar que el vostre selector d'idioma funciona.",
+    "home_title": "Pàgina d'inici",
+    "bitcoin_button": "Comprar Bitcoin"
+  },
+  "ceb": {
+    "title": "Welcome sa among test page",
+    "paragraph": "Kini usa ka sample nga parapo nga imong magamit aron masusi kung nagtrabaho ang imong language selector.",
+    "home_title": "Panid sa Balay",
+    "bitcoin_button": "Palita ang Bitcoin"
+  },
+  "ny": {
+    "title": "Takulandirani ku tsamba lathu loyesa",
+    "paragraph": "Iyi ndi ndime yachitsanzo yomwe mungagwiritse ntchito kutsimikizira ngati chosankha chanu cha chinenero chikugwira ntchito.",
+    "home_title": "Tsamba Loyamba",
+    "bitcoin_button": "Gula Bitcoin"
+  },
+  "co": {
+    "title": "Benvenuti in a nostra pagina di prova",
+    "paragraph": "Questu hè un paragrafu d'esempiu chì pudete aduprà per verificà chì u vostru selezzione di lingua funziona.",
+    "home_title": "Pagina d'iniziu",
+    "bitcoin_button": "Cumprà Bitcoin"
+  },
+  "hr": {
+    "title": "Dobrodošli na našu testnu stranicu",
+    "paragraph": "Ovo je primjer paragrafa koji možete koristiti da provjerite radi li vaš birač jezika.",
+    "home_title": "Početna stranica",
+    "bitcoin_button": "Kupi Bitcoin"
+  },
+  "eo": {
+    "title": "Bonvenon al nia testa paĝo",
+    "paragraph": "Ĉi tio estas ekzempla paragrafo, kiun vi povas uzi por kontroli, ĉu via lingvo-elektilo funkcias.",
+    "home_title": "Hejmpaĝo",
+    "bitcoin_button": "Aĉeti Bitcoin"
+  },
+  "et": {
+    "title": "Tere tulemast meie testlehele",
+    "paragraph": "See on näidisparagrahv, mida saate kasutada, et kontrollida, kas teie keeleväljavalija töötab.",
+    "home_title": "Avaleht",
+    "bitcoin_button": "Osta Bitcoin"
+  },
+  "tl": {
+    "title": "Maligayang pagdating sa aming pahina ng pagsubok",
+    "paragraph": "Ito ay isang sample na talata na maaari mong gamitin upang i-verify na gumagana ang iyong tagapili ng wika.",
+    "home_title": "Home Page",
+    "bitcoin_button": "Bumili ng Bitcoin"
+  },
+  "gl": {
+    "title": "Benvido á nosa páxina de probas",
+    "paragraph": "Este é un parágrafo de exemplo que podes usar para verificar que o teu selector de idioma funciona.",
+    "home_title": "Páxina de inicio",
+    "bitcoin_button": "Comprar Bitcoin"
+  },
+  "ka": {
+    "title": "მოგესალმებით ჩვენს სატესტო გვერდზე",
+    "paragraph": "ეს არის ნიმუშის აბზაცი, რომელიც შეგიძლიათ გამოიყენოთ იმის შესამოწმებლად, თუ თქვენი ენის შემრჩევი მუშაობს.",
+    "home_title": "მთავარი გვერდი",
+    "bitcoin_button": "ბიტკოინის ყიდვა"
+  },
+  "gu": {
+    "title": "અમારા પરીક્ષણ પૃષ્ઠ પર આપનું સ્વાગત છે",
+    "paragraph": "આ એક નમૂનાનો ફકરો છે જેનો ઉપયોગ તમે તમારા ભાષા પસંદગીકર્તા કામ કરે છે કે નહીં તે ચકાસવા માટે કરી શકો છો.",
+    "home_title": "હોમ પેજ",
+    "bitcoin_button": "બિટકોઇન ખરીદો"
+  },
+  "ht": {
+    "title": "Byenveni nan paj tès nou an",
+    "paragraph": "Sa a se yon paragraf echantiyon ou ka itilize pou verifye ke selektè lang ou a ap mache.",
+    "home_title": "Paj Akèy",
+    "bitcoin_button": "Achte Bitcoin"
+  },
+  "haw": {
+    "title": "Welina mai i kā mākou ʻaoʻao hoʻāʻo",
+    "paragraph": "He kenika kēia i hiki iā ʻoe ke hoʻohana no ka hōʻoia ʻana i ka hana o kāu koho ʻōlelo.",
+    "home_title": "ʻAoʻao Home",
+    "bitcoin_button": "Kūʻai Bitcoin"
+  },
+  "hmn": {
+    "title": "Zoo siab txais tos rau peb nplooj ntawv sim",
+    "paragraph": "Qhov no yog ib qho piv txwv kab lus uas koj tuaj yeem siv los xyuas seb koj tus xaiv lus puas ua haujlwm.",
+    "home_title": "Nplooj Ntawv Tsev",
+    "bitcoin_button": "Yuav Bitcoin"
+  },
+  "is": {
+    "title": "Velkomin á prófunarsíðuna okkar",
+    "paragraph": "Þetta er sýnishorn af málsgrein sem þú getur notað til að sannreyna hvort tungumálavali þinn virkar.",
+    "home_title": "Heimasíða",
+    "bitcoin_button": "Kaupa Bitcoin"
+  },
+  "ig": {
+    "title": "Nnoo na ibe ule anyị",
+    "paragraph": "Nke a bụ paragraf nlele nke ị nwere ike iji chọpụta ma onye nhọrọ asụsụ gị ọ na-arụ ọrụ.",
+    "home_title": "Ibe Mbido",
+    "bitcoin_button": "Zụta Bitcoin"
+  },
+  "ga": {
+    "title": "Fáilte chuig ár leathanach tástála",
+    "paragraph": "Is sampla alt é seo is féidir leat a úsáid chun a fhíorú an bhfuil do roghnóir teanga ag obair.",
+    "home_title": "Leathanach Baile",
+    "bitcoin_button": "Ceannaigh Bitcoin"
+  },
+  "jv": {
+    "title": "Sugeng rawuh ing kaca uji coba kita",
+    "paragraph": "Iki minangka paragraf conto sing bisa digunakake kanggo verifikasi manawa pamilih basa sampeyan bisa digunakake.",
+    "home_title": "Kaca Ngarep",
+    "bitcoin_button": "Tuku Bitcoin"
+  },
+  "kn": {
+    "title": "ನಮ್ಮ ಪರೀಕ್ಷಾ ಪುಟಕ್ಕೆ ಸ್ವಾಗತ",
+    "paragraph": "ಇದು ಒಂದು ಮಾದರಿ ಫಕರವಾಗಿದ್ದು, ನಿಮ್ಮ ಭಾಷಾ ಆಯ್ಕೆಗಾರ ಕಾರ್ಯನಿರ್ವಹಿಸುತ್ತಿದೆಯೇ ಎಂದು ಪರಿಶೀಲಿಸಲು ನೀವು ಬಳಸಬಹುದು.",
+    "home_title": "ಮುಖಪುಟ",
+    "bitcoin_button": "ಬಿಟ್‌ಕಾಯಿನ್ ಖರೀದಿಸಿ"
+  },
+  "kk": {
+    "title": "Біздің сынақ бетіне қош келдіңіз",
+    "paragraph": "Бұл сіздің тіл таңдағышыңыздың жұмыс істеп тұрғанын тексеру үшін пайдалануға болатын үлгі абзац.",
+    "home_title": "Басты бет",
+    "bitcoin_button": "Биткоин сатып алу"
+  },
+  "km": {
+    "title": "សូមស្វាគមន៍មកកាន់ទំព័រសាកល្បងរបស់យើង",
+    "paragraph": "នេះគឺជាកថាខណ្ឌគំរូមួយដែលអ្នកអាចប្រើដើម្បីផ្ទៀងផ្ទាត់ថាឧបករណ៍ជ្រើសរើសភាសារបស់អ្នកកំពុងដំណើរការ។",
+    "home_title": "ទំព័រដើម",
+    "bitcoin_button": "ទិញប៊ីតខូន"
+  },
+  "rw": {
+    "title": "Murakaza neza kuri paji yacu yo kugerageza",
+    "paragraph": "Iyi ni paragrafi y'urugero ushobora gukoresha kugira ngo urebe niba icyatoranyije ururimi cyawe gikora.",
+    "home_title": "Urupapuro rw'Intangiriro",
+    "bitcoin_button": "Gura Bitcoin"
+  },
+  "ku": {
+    "title": "Bi xêr hatin rûpela meya ceribandinê",
+    "paragraph": "Ev paragrafek mînak e ku hûn dikarin bikar bînin da ku kontrol bikin ka hilbijêrê zimanê we dixebite.",
+    "home_title": "Rûpela Sereke",
+    "bitcoin_button": "Bitcoin bikirin"
+  },
+  "ky": {
+    "title": "Биздин сыноо баракчабызга кош келиңиз",
+    "paragraph": "Бул сиздин тил тандоочуңуз иштеп жатканын текшерүү үчүн колдоно турган үлгү абзац.",
+    "home_title": "Башкы бет",
+    "bitcoin_button": "Биткоин сатып алуу"
+  },
+  "lo": {
+    "title": "ຍິນດີຕ້ອນຮັບສູ່ໜ້າທົດສອບຂອງພວກເຮົາ",
+    "paragraph": "ນີ້ແມ່ນຕົວຢ່າງຍໍ້ໜ້າທີ່ທ່ານສາມາດໃຊ້ເພື່ອກວດສອບວ່າເຄື່ອງເລືອກພາສາຂອງທ່ານເຮັດວຽກຢູ່ຫຼືບໍ່.",
+    "home_title": "ໜ້າທຳອິດ",
+    "bitcoin_button": "ຊື້ບິດຄອຍ"
+  },
+  "lv": {
+    "title": "Laipni lūdzam mūsu testa lapā",
+    "paragraph": "Šis ir parauga rindkopa, kuru varat izmantot, lai pārbaudītu, vai jūsu valodas izvēlētājs darbojas.",
+    "home_title": "Sākumlapa",
+    "bitcoin_button": "Pirkt Bitcoin"
+  },
+  "lt": {
+    "title": "Sveiki atvykę į mūsų bandymo puslapį",
+    "paragraph": "Tai yra pavyzdinis paragrafas, kurį galite naudoti norėdami patikrinti, ar jūsų kalbos pasirinkėjas veikia.",
+    "home_title": "Pagrindinis puslapis",
+    "bitcoin_button": "Pirkti Bitcoin"
+  },
+  "lb": {
+    "title": "Wëllkomm op eiser Test Säit",
+    "paragraph": "Dëst ass e Beispill Paragraf, deen Dir benotze kënnt fir ze kontrolléieren ob Äre Sproochewähler funktionéiert.",
+    "home_title": "Haaptsäit",
+    "bitcoin_button": "Bitcoin kafen"
+  },
+  "mk": {
+    "title": "Добредојдовте на нашата тест страница",
+    "paragraph": "Ова е пример параграф што можете да го користите за да проверите дали вашиот избирач на јазик работи.",
+    "home_title": "Почетна страница",
+    "bitcoin_button": "Купи Биткоин"
+  },
+  "mg": {
+    "title": "Tongasoa eto amin'ny pejinay fitsapana",
+    "paragraph": "Ity dia paragrafy santionany azonao ampiasaina hanamarinana raha mandeha ny mpifantina fiteny anao.",
+    "home_title": "Pejy fandraisana",
+    "bitcoin_button": "Hividy Bitcoin"
+  },
+  "ml": {
+    "title": "ഞങ്ങളുടെ ടെസ്റ്റ് പേജിലേക്ക് സ്വാഗതം",
+    "paragraph": "നിന്റെ ഭാഷാ തിരഞ്ഞെടുപ്പുകാരൻ പ്രവർത്തിക്കുന്നുണ്ടോ എന്ന് പരിശോധിക്കാൻ നിനക്ക് ഉപയോഗിക്കാവുന്ന ഒരു സാമ്പിൾ ഫലകമാണ് ഇത്.",
+    "home_title": "ഹോം പേജ്",
+    "bitcoin_button": "ബിറ്റ്‌കോയിൻ വാങ്ങുക"
+  },
+  "mt": {
+    "title": "Merħba fil-paġna tat-test tagħna",
+    "paragraph": "Dan hu paragrafu ta’ eżempju li tista’ tuża biex tivverifika jekk is-selettur tal-lingwa tiegħek hux jaħdem.",
+    "home_title": "Paġna ewlenija",
+    "bitcoin_button": "Ixtri Bitcoin"
+  },
+  "mi": {
+    "title": "Nau mai ki tō mātou whārangi whakamātau",
+    "paragraph": "He tauira kōwae tēnei ka taea e koe te whakamahi hei manatū mena kei te mahi tō kōwhirite reo.",
+    "home_title": "Whārangi Kāinga",
+    "bitcoin_button": "Hoko Bitcoin"
+  },
+  "mr": {
+    "title": "आमच्या चाचणी पृष्ठावर स्वागत आहे",
+    "paragraph": "हा एक नमुना परिच्छेद आहे जो तुम्ही तुमचा भाषा निवडकर्ता कार्यरत आहे की नाही हे तपासण्यासाठी वापरू शकता.",
+    "home_title": "मुख्य पान",
+    "bitcoin_button": "बिटकॉइन खरेदी करा"
+  },
+  "mn": {
+    "title": "Манай туршилтын хуудас руу тавтай морил",
+    "paragraph": "Энд таны хэлний сонгогч ажиллаж байгаа эсэхийг шалгахад ашиглаж болох жишээний догол мөр байна.",
+    "home_title": "Нүүр хуудас",
+    "bitcoin_button": "Биткойн худалдаж авах"
+  },
+  "ne": {
+    "title": "हाम्रो परीक्षण पृष्ठमा स्वागत छ",
+    "paragraph": "यो एक नमूना अनुच्छेद हो जुन तपाईंले आफ्नो भाषा चयनकर्ता काम गरिरहेको छ कि छैन भनेर जाँच गर्न प्रयोग गर्न सक्नुहुन्छ।",
+    "home_title": "गृह पृष्ठ",
+    "bitcoin_button": "बिटकॉइन किन्नुहोस्"
+  },
+  "or": {
+    "title": "ଆମର ପରୀକ୍ଷଣ ପୃଷ୍ଠାକୁ ସ୍ଵାଗତ",
+    "paragraph": "ଏହା ଏକ ନମୁନା ପାରାଗ୍ରାଫ ଯାହା ଆପଣ ଆପଣଙ୍କର ଭାଷା ଚୟନକାରୀ କାମ କରୁଛି କି ନାହିଁ তାହା ଯାଞ୍ଚ କରିବା ପାଇଁ ବ୍ୟବହାର କରିପାରିବେ।",
+    "home_title": "ମୂଳ ପୃଷ୍ଠା",
+    "bitcoin_button": "ବିଟକଏନ୍ କିଣନ୍ତୁ"
+  },
+  "ps": {
+    "title": "زموږ د ازموینې پاڼې ته ښه راغلاست",
+    "paragraph": "دا یوه نمونه پراګراف دی چې تاسو یې کارولی شئ ترڅو وڅیړئ چې ستاسو د ژبې انتخاب کوونکی کار کوي.",
+    "home_title": "کور پاڼه",
+    "bitcoin_button": "بټکوین وپیرئ"
+  },
+  "sr": {
+    "title": "Добродошли на нашу тестну страницу",
+    "paragraph": "Ово је пример параграфа који можете користити да проверите да ли ваш бирач језика ради.",
+    "home_title": "Почетна страница",
+    "bitcoin_button": "Купи Биткоин"
+  },
+  "st": {
+    "title": "Rea u amohela leqepheng la rona la teko",
+    "paragraph": "Sena ke temana ea mohlala eo u ka e sebelisang ho netefatsa hore mokhethoa oa puo ea hau oa sebetsa.",
+    "home_title": "Leqephe la Lehae",
+    "bitcoin_button": "Reka Bitcoin"
+  },
+  "sn": {
+    "title": "Tikugashirei kumapeji edu ekuedza",
+    "paragraph": "Iyi indima yemuenzaniso yaungashandisa kuratidza kana musarudzo wemutauro wako wakushanda.",
+    "home_title": "Mapeji Ekutanga",
+    "bitcoin_button": "Tenga Bitcoin"
+  },
+  "sd": {
+    "title": "اسان جي امتحاني صفحي تي ڀليڪار",
+    "paragraph": "هي هڪ نموني وارو پيراگراف آهي جيڪو توهان استعمال ڪري سگهو ٿا ته توهان جي ٻولي چونڊيندڙ ڪم ڪري رهيو آهي يا نه.",
+    "home_title": "مکيه صفحو",
+    "bitcoin_button": "بٽڪوئن خريد ڪريو"
+  },
+  "si": {
+    "title": "අපගේ පරීක්ෂණ පිටුවට සාදරයෙන් පිළිගනිමු",
+    "paragraph": "මෙය ඔබේ භාෂා තේරීම භාවිතා කරන්නේද යන්න පරීක්ෂා කිරීමට භාවිතා කළ හැකි නියැදි ඡේදයකි.",
+    "home_title": "මුල් පිටුව",
+    "bitcoin_button": "බිට්කොයින් මිලදී ගන්න"
+  },
+  "sk": {
+    "title": "Vitajte na našej testovacej stránke",
+    "paragraph": "Toto je ukážkový odsek, ktorý môžete použiť na overenie, či váš výber jazyka funguje.",
+    "home_title": "Domovská stránka",
+    "bitcoin_button": "Kúpiť Bitcoin"
+  },
+  "sl": {
+    "title": "Dobrodošli na naši testni strani",
+    "paragraph": "To je vzorčni odstavek, ki ga lahko uporabite za preverjanje, ali vaš izbirnik jezika deluje.",
+    "home_title": "Domača stran",
+    "bitcoin_button": "Nakup Bitcoin"
+  },
+  "so": {
+    "title": "Ku soo dhawoow boggeena imtixaanka",
+    "paragraph": "Kani waa cutub tusaale ah oo aad isticmaali karto si aad u hubiso in xulashadaada luqadda ay shaqaynayso.",
+    "home_title": "Bogga Hore",
+    "bitcoin_button": "Iibso Bitcoin"
+  },
+  "su": {
+    "title": "Wilujeng sumping ka halaman uji kami",
+    "paragraph": "Ieu mangrupikeun paragraf conto anu anjeun tiasa anggo pikeun mariksa naha pamilih basa anjeun tiasa dianggo.",
+    "home_title": "Kaca Utama",
+    "bitcoin_button": "Mésér Bitcoin"
+  },
+  "tg": {
+    "title": "Хуш омадед ба саҳифаи озмоишии мо",
+    "paragraph": "Ин як параграфи намунавӣ аст, ки шумо метавонед барои санҷиши кор кардани интихобгари забони худ истифода баред.",
+    "home_title": "Саҳифаи асосӣ",
+    "bitcoin_button": "Харидани Биткоин"
+  },
+  "tt": {
+    "title": "Безнең тест битенә рәхим итегез",
+    "paragraph": "Бу сезнең тел сайлагычыгыз эшләп торуын тикшерү өчен куллана алырлык үрнәк абзац.",
+    "home_title": "Төп бит",
+    "bitcoin_button": "Биткоин сатып алу"
+  },
+  "tk": {
+    "title": "Synag sahypamyza hoş geldiňiz",
+    "paragraph": "Bu, dil saýlawçyňyzyň işleýändigini barlamak üçün ulanyp boljak mysal paragraf.",
+    "home_title": "Baş sahypa",
+    "bitcoin_button": "Bitcoin satyn al"
+  },
+  "ug": {
+    "title": "سىناق بېتىمىزگە خۇش كەلدىڭىز",
+    "paragraph": "بۇ سىز تىل تاللىغۇچىڭىزنىڭ ئىشلەۋاتقانلىقىنى تەكشۈرۈش ئۈچۈن ئىشلىتەلەيدىغان ئۈلگە بىر پاراگراف.",
+    "home_title": "باش بەت",
+    "bitcoin_button": "بىتكوين سېتىۋېلىش"
+  },
+  "uz": {
+    "title": "Sinov sahifamizga xush kelibsiz",
+    "paragraph": "Bu sizning til tanlagichingiz ishlashini tekshirish uchun foydalanishingiz mumkin bo'lgan namuna paragraf.",
+    "home_title": "Bosh sahifa",
+    "bitcoin_button": "Bitcoin sotib olish"
+  },
+  "cy": {
+    "title": "Croeso i’n tudalen brawf",
+    "paragraph": "Dyma baragraff enghreifftiol y gallwch ei ddefnyddio i wirio a yw’ch dewiswr iaith yn gweithio.",
+    "home_title": "Tudalen Cartref",
+    "bitcoin_button": "Prynu Bitcoin"
+  },
+  "xh": {
+    "title": "Wamkelekile kwiphepha lethu lovavanyo",
+    "paragraph": "Esi sisampuli yomhlathi ongasisebenzisa ukuze uqinisekisa ukuba umkhethi wolwimi lwakho uyasebenza.",
+    "home_title": "Iphepha lasekhaya",
+    "bitcoin_button": "Thenga i-Bitcoin"
+  },
+  "yi": {
+    "title": "ברוכים הבאים צו אונדזער טעסט בלאַט",
+    "paragraph": "דאָס איז אַ מוסטער פּאַראַגראַף וואָס איר קענט נוצן צו באַשטעטיקן אַז דיין שפּראַך סעלעקטאָר אַרבעט.",
+    "home_title": "היים בלאַט",
+    "bitcoin_button": "קויפן ביטקאָין"
+  },
+  "yo": {
+    "title": "Kaabọ si oju-iwe idanwo wa",
+    "paragraph": "Eyi jẹ apakan ayẹwo ti o le lo lati rii daju pe aṣayan ede rẹ n ṣiṣẹ.",
+    "home_title": "Oju-iwe Ibẹrẹ",
+    "bitcoin_button": "Ra Bitcoin"
   }
 }
