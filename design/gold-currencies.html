@@ -32,6 +32,23 @@
       --text-muted: #666;
     }
 
+    /* Message Styling */
+    .message {
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border-radius: 4px;
+      text-align: center;
+      display: none;
+    }
+    .message.error {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+    .message.success {
+      background-color: #d4edda;
+      color: #155724;
+    }
+
     /* GTranslate Widget Positioning */
     .gtranslate_wrapper {
       position: fixed;
@@ -163,6 +180,7 @@
 
     <div class="main-content">
       <main class="gold-currencies-page container">
+        <div id="message" class="message"></div>
         <!-- Introduction Section -->
         <section id="intro" class="section" data-aos="fade-up">
           <h2 class="section-title gold">Securing Wealth with PrudentProExchange: The Global Leader in Managed Gold-Backed Currency Investments</h2>
@@ -259,6 +277,14 @@
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script src="js/main.js"></script>
   <script>
+    // Message Display Function
+    function showMessage(text, isError = true) {
+      const msgDiv = document.getElementById('message');
+      msgDiv.textContent = text;
+      msgDiv.className = `message ${isError ? 'error' : 'success'}`;
+      msgDiv.style.display = 'block';
+    }
+
     // Hamburger toggle
     const btnGold = document.getElementById('hamburgerBtnGold');
     const drawerGold = document.getElementById('navDrawerGold');
@@ -321,6 +347,7 @@
                 setTimeout(playVideo, retryDelay);
               } else {
                 console.error('Max retries reached. Video playback failed.');
+                showMessage('Failed to load background video. Please refresh the page.', true);
               }
             });
         };
@@ -329,7 +356,10 @@
 
         video.addEventListener('canplay', () => console.log('Background video can play'));
         video.addEventListener('playing', () => console.log('Background video is actively playing'));
-        video.addEventListener('error', (e) => console.error('Background video error:', e));
+        video.addEventListener('error', (e) => {
+          console.error('Background video error:', e);
+          showMessage('Failed to load background video. Please refresh the page.', true);
+        });
         video.addEventListener('stalled', () => console.warn('Background video stalled'));
         video.addEventListener('loadeddata', () => console.log('Background video data loaded'));
 
@@ -355,6 +385,7 @@
         window.addEventListener('click', forcePlayOnInteraction, { once: true });
       } else {
         console.error('Background video element not found');
+        showMessage('Background video element not found.', true);
       }
     });
   </script>
