@@ -10,6 +10,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
+  <!-- Crisp Chat Widget -->
+  <script type="text/javascript">window.$crisp=[];window.CRISP_WEBSITE_ID="599e8216-ab4f-4d4f-bb22-5d47cf14031f";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();</script>
   <style>
     /* Theme Variables */
     :root[data-theme="dark"] {
@@ -58,54 +60,51 @@
       z-index: 1000;
     }
 
-    /* Tidio Widget Styling */
-    #tidio-chat,
-    #tidio-chat-iframe-container {
+    /* Crisp Widget Styling */
+    .crisp-client .cc-tlyw,
+    .crisp-client .cc-kxra {
       font-family: 'Poppins', sans-serif !important;
       z-index: 999 !important; /* Below back-to-top button but above other elements */
     }
-    #tidio-chat > button,
-    #tidio-chat-iframe-container .tidio-chat-button {
+    .crisp-client .cc-tlyw .cc-1xry .cc-kxra {
       background: var(--gold) !important;
       border-radius: 50% !important;
       box-shadow: 0 4px 10px var(--shadow) !important;
       transition: all 0.3s ease !important;
     }
-    #tidio-chat > button:hover,
-    #tidio-chat-iframe-container .tidio-chat-button:hover {
+    .crisp-client .cc-tlyw .cc-1xry .cc-kxra:hover {
       background: var(--gold-dark) !important;
       transform: scale(1.1) !important;
     }
-    #tidio-chat-iframe-container iframe {
+    .crisp-client .cc-tlyw .cc-1xry .cc-unoo {
       background: var(--glass) !important;
       backdrop-filter: blur(12px) !important;
       border-radius: 15px !important;
       box-shadow: 0 4px 20px var(--shadow) !important;
       color: var(--text) !important;
     }
-    #tidio-chat-iframe-container .tidio-chat-text,
-    #tidio-chat-iframe-container .tidio-chat-input,
-    #tidio-chat-iframe-container .tidio-chat-button {
+    .crisp-client .cc-tlyw .cc-1xry .cc-unoo .cc-kc1c .cc-5wlh,
+    .crisp-client .cc-tlyw .cc-1xry .cc-unoo .cc-kc1c .cc-18oq {
       font-family: 'Poppins', sans-serif !important;
       color: var(--text) !important;
     }
-    #tidio-chat-iframe-container .tidio-chat-button {
+    .crisp-client .cc-tlyw .cc-1xry .cc-unoo .cc-1w6g {
       background: var(--gold) !important;
       border-radius: 30px !important;
       transition: all 0.3s ease !important;
     }
-    #tidio-chat-iframe-container .tidio-chat-button:hover {
+    .crisp-client .cc-tlyw .cc-1xry .cc-unoo .cc-1w6g:hover {
       background: var(--gold-dark) !important;
       transform: translateY(-2px) !important;
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3) !important;
     }
-    #tidio-chat-iframe-container .tidio-chat-input {
+    .crisp-client .cc-tlyw .cc-1xry .cc-unoo .cc-18oq {
       background: rgba(255, 255, 255, 0.05) !important;
       border: 1px solid rgba(255, 255, 255, 0.1) !important;
       border-radius: 8px !important;
       transition: border-color 0.3s ease !important;
     }
-    #tidio-chat-iframe-container .tidio-chat-input:focus {
+    .crisp-client .cc-tlyw .cc-1xry .cc-unoo .cc-18oq:focus {
       border-color: var(--gold) !important;
       outline: none !important;
     }
@@ -133,6 +132,37 @@
     #back-to-top:hover {
       background: var(--gold-dark);
       transform: scale(1.1);
+    }
+
+    /* Plan Card Styling with Theme Variables */
+    .plan-card {
+      background: var(--glass);
+      box-shadow: 0 4px 10px var(--shadow);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .plan-card:hover, .plan-card:focus {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px var(--shadow);
+    }
+    .select-plan-btn {
+      background: var(--gold);
+      color: #000;
+      transition: background 0.3s ease;
+    }
+    .select-plan-btn:hover {
+      background: var(--gold-dark);
+    }
+    .select-plan-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    .validation-message {
+      color: #f8d7da;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+    }
+    .plan-card.invalid .validation-message {
+      color: #f8d7da;
     }
 
     /* Responsive Adjustments */
@@ -290,9 +320,6 @@
   <div class="gtranslate_wrapper"></div>
   <script>window.gtranslateSettings = {"default_language":"en","native_language_names":true,"detect_browser_language":true,"wrapper_selector":".gtranslate_wrapper","flag_style":"3d"}</script>
   <script src="https://cdn.gtranslate.net/widgets/latest/float.js" defer></script>
-
-  <!-- Tidio Live Chat embed -->
-  <script src="//code.tidio.co/peclwowoqcbxhfe3wbowfneh1rabrdjz.js" async></script>
 
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js" defer></script>
