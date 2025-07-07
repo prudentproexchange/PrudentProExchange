@@ -40,58 +40,6 @@
       z-index: 1000;
     }
 
-    /* Tidio Widget Styling */
-    #tidio-chat,
-    #tidio-chat-iframe-container {
-      font-family: 'Poppins', sans-serif !important;
-      z-index: 999 !important; /* Below back-to-top button but above other elements */
-    }
-    #tidio-chat > button,
-    #tidio-chat-iframe-container .tidio-chat-button {
-      background: var(--gold) !important;
-      border-radius: 50% !important;
-      box-shadow: 0 4px 10px var(--shadow) !important;
-      transition: all 0.3s ease !important;
-    }
-    #tidio-chat > button:hover,
-    #tidio-chat-iframe-container .tidio-chat-button:hover {
-      background: var(--gold-dark) !important;
-      transform: scale(1.1) !important;
-    }
-    #tidio-chat-iframe-container iframe {
-      background: var(--glass) !important;
-      backdrop-filter: blur(12px) !important;
-      border-radius: 15px !important;
-      box-shadow: 0 4px 20px var(--shadow) !important;
-      color: var(--text) !important;
-    }
-    #tidio-chat-iframe-container .tidio-chat-text,
-    #tidio-chat-iframe-container .tidio-chat-input,
-    #tidio-chat-iframe-container .tidio-chat-button {
-      font-family: 'Poppins', sans-serif !important;
-      color: var(--text) !important;
-    }
-    #tidio-chat-iframe-container .tidio-chat-button {
-      background: var(--gold) !important;
-      border-radius: 30px !important;
-      transition: all 0.3s ease !important;
-    }
-    #tidio-chat-iframe-container .tidio-chat-button:hover {
-      background: var(--gold-dark) !important;
-      transform: translateY(-2px) !important;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3) !important;
-    }
-    #tidio-chat-iframe-container .tidio-chat-input {
-      background: rgba(255, 255, 255, 0.05) !important;
-      border: 1px solid rgba(255, 255, 255, 0.1) !important;
-      border-radius: 8px !important;
-      transition: border-color 0.3s ease !important;
-    }
-    #tidio-chat-iframe-container .tidio-chat-input:focus {
-      border-color: var(--gold) !important;
-      outline: none !important;
-    }
-
     /* Back-to-Top Button Styling */
     #back-to-top {
       position: fixed !important;
@@ -204,7 +152,7 @@
           <p class="section-text">
             PrudentProExchange transforms client capital into sustainable wealth by managing investments in crypto and forex with unrivaled precision and foresight. Our platform combines advanced technology, strategic expertise, and rigorous stewardship to deliver unparalleled results. Here’s why we stand as the global leader:
           </p>
-          < Hoskins
+          <ul class="features-list">
             <li><strong>Unmatched Expertise and Strategic Vision:</strong> Our team of elite professionals, with decades of experience in cryptocurrencies, forex, and global finance, manages every facet of your investment. We conduct exhaustive market analysis, monitor regulatory shifts, and track macroeconomic trends to identify high-yield opportunities. This deep insight ensures that your capital is deployed with strategic precision, maximizing returns while maintaining stability.</li>
             <li><strong>Disciplined Capital Management:</strong> At PrudentProExchange, we manage client capital with meticulous care, crafting bespoke strategies tailored to your financial objectives and risk profile. Our process begins with rigorous due diligence, selecting only the most promising crypto assets and forex opportunities. Through continuous monitoring and adaptive management, we optimize performance, ensuring your capital thrives in volatile markets. This disciplined approach guarantees long-term growth and wealth preservation.</li>
             <li><strong>Assured Profitability Through Diversification:</strong> We ensure consistent profits by strategically allocating client capital across diversified portfolios of cryptocurrencies and forex pairs. Our proprietary analytics and advanced algorithms enable us to anticipate market trends, capitalize on volatility, and mitigate risks. This sophisticated approach delivers reliable income streams that consistently outperform industry benchmarks, ensuring your wealth grows with certainty.</li>
@@ -258,8 +206,18 @@
   <script>window.gtranslateSettings = {"default_language":"en","native_language_names":true,"detect_browser_language":true,"wrapper_selector":".gtranslate_wrapper","flag_style":"3d"}</script>
   <script src="https://cdn.gtranslate.net/widgets/latest/float.js" defer></script>
 
-  <!-- Tidio Live Chat embed -->
-  <script src="//code.tidio.co/peclwowoqcbxhfe3wbowfneh1rabrdjz.js" async></script>
+  <!-- Crisp Chat Widget -->
+  <script type="text/javascript">
+    window.$crisp = [];
+    window.CRISP_WEBSITE_ID = "599e8216-ab4f-4d4f-bb22-5d47cf14031f";
+    (function() {
+      d = document;
+      s = d.createElement("script");
+      s.src = "https://client.crisp.chat/l.js";
+      s.async = 1;
+      d.getElementsByTagName("head")[0].appendChild(s);
+    })();
+  </script>
 
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script src="js/main.js"></script>
@@ -268,100 +226,4 @@
     const btnCrypto = document.getElementById('hamburgerBtnCrypto');
     const drawerCrypto = document.getElementById('navDrawerCrypto');
     btnCrypto.addEventListener('click', () => {
-      drawerCrypto.classList.toggle('open');
-      btnCrypto.classList.toggle('active');
-    });
-
-    // Local Time and Date
-    function updateLocalTime() {
-      const now = new Date();
-      document.getElementById('localTime').textContent = now.toLocaleTimeString();
-      document.getElementById('localDate').textContent = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-    }
-    setInterval(updateLocalTime, 1000);
-    updateLocalTime();
-
-    // UTC Time
-    function updateUTCTime() {
-      document.getElementById('utcTime').textContent = new Date().toUTCString();
-    }
-    setInterval(updateUTCTime, 1000);
-    updateUTCTime();
-
-    // Theme Toggle
-    const themeToggle = document.getElementById('theme-toggle');
-    themeToggle.addEventListener('click', () => {
-      document.body.classList.toggle('light-theme');
-      const icon = themeToggle.querySelector('i');
-      icon.classList.toggle('fa-moon');
-      icon.classList.toggle('fa-sun');
-    });
-
-    // Back to Top
-    document.getElementById('back-to-top').addEventListener('click', () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-
-    // Initialize AOS
-    AOS.init({ duration: 800, once: true });
-
-    // Video Playback Optimization
-    document.addEventListener('DOMContentLoaded', () => {
-      const video = document.querySelector('.bg-video');
-      let retryCount = 0;
-      const maxRetries = 3;
-      const retryDelay = 1000; // 1 second
-
-      if (video) {
-        const playVideo = () => {
-          video.play()
-            .then(() => {
-              console.log('Background video is playing successfully');
-              retryCount = 0;
-            })
-            .catch(error => {
-              console.error(`Background video play failed (attempt ${retryCount + 1}):`, error);
-              if (retryCount < maxRetries) {
-                retryCount++;
-                setTimeout(playVideo, retryDelay);
-              } else {
-                console.error('Max retries reached. Video playback failed.');
-              }
-            });
-        };
-
-        playVideo();
-
-        video.addEventListener('canplay', () => console.log('Background video can play'));
-        video.addEventListener('playing', () => console.log('Background video is actively playing'));
-        video.addEventListener('error', (e) => console.error('Background video error:', e));
-        video.addEventListener('stalled', () => console.warn('Background video stalled'));
-        video.addEventListener('loadeddata', () => console.log('Background video data loaded'));
-
-        document.addEventListener('visibilitychange', () => {
-          if (document.visibilityState === 'visible') {
-            if (video.paused) {
-              playVideo();
-            }
-          } else {
-            video.pause();
-            console.log('Background video paused due to tab inactivity');
-          }
-        });
-
-        const forcePlayOnInteraction = () => {
-          if (video.paused) {
-            playVideo();
-            console.log('Attempting to play background video on user interaction');
-          }
-        };
-
-        window.addEventListener('scroll', forcePlayOnInteraction, { once: true });
-        window.addEventListener('click', forcePlayOnInteraction, { once: true });
-      } else {
-        console.error('Background video element not found');
-      }
-    });
-  </script>
-</body>
-</html>
+      drawerCrypto.classList.toggle
