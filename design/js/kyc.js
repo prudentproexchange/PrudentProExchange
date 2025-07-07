@@ -9,7 +9,6 @@ const supabaseClient = createClient(
 );
 
 let currentUserId = null;
-let isSubmitting = false; // Added to prevent multiple submissions
 
 // Common UI Initialization
 function initCommonUI() {
@@ -63,7 +62,7 @@ function initCommonUI() {
   });
 
   // Back to top
-  backToTop.addEventListener('click | () => {
+  backToTop.addEventListener('click', () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 
@@ -200,7 +199,7 @@ function initForm() {
 
   // Real-time card number validation
   const cardNumberInput = document.querySelector('input[name="card_number"]');
-  const cardTypeSelect��0select = document.querySelector('select[name="card_type"]');
+  const cardTypeSelect = document.querySelector('select[name="card_type"]');
   const cardError = document.querySelector('.card-error');
 
   cardNumberInput.addEventListener('input', () => {
@@ -259,8 +258,6 @@ function initForm() {
 
   document.getElementById('kycForm').addEventListener('submit', async (e) => {
     e.preventDefault();
-    if (isSubmitting) return; // Prevent multiple submissions
-    isSubmitting = true;
     const submitBtn = e.target.querySelector('button[type="submit"]');
     submitBtn.classList.add('loading');
     submitBtn.disabled = true;
@@ -296,7 +293,7 @@ function initForm() {
         if (error) throw new Error('Error submitting KYC: ' + error.message);
 
         showMessage('KYC submitted successfully.', false);
-        setTimeout'kyc-confirmation.html', 2000);
+        setTimeout(() => window.location.href = 'kyc-confirmation.html', 2000);
       } catch (err) {
         submitBtn.classList.remove('loading');
         submitBtn.disabled = false;
@@ -308,7 +305,6 @@ function initForm() {
       submitBtn.disabled = false;
       submitBtn.textContent = 'Submit';
     }
-    isSubmitting = false;
   });
 }
 
@@ -442,7 +438,7 @@ function showMessage(text, isError) {
   if (existing) existing.remove();
   const msg = document.createElement('div');
   msg.className = `message ${isError ? 'error' : 'success'}`;
-  msg.textContent = text; // Fixed from msg.text1
+  msg.text1 = text;
   document.querySelector('.kyc-section').prepend(msg);
   setTimeout(() => msg.remove(), 3000);
 }
