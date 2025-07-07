@@ -165,7 +165,7 @@
       icon.classList.toggle('fa-sun');
     });
 
-    // Function to show modern messages (FIXED)
+    // Function to show modern messages
     function showMessage(text, isError = true) {
       const msgDiv = document.getElementById('message');
       msgDiv.textContent = text;
@@ -207,25 +207,25 @@
       // Store the session temporarily
       tempSession = authData.session;
 
-      // 2) Check 2FA flag in the profiles table
+      // 2) Check 2FA flag in the user_2fa table
       const user = authData.user;
-      const { data: profile, error: profErr } = await supabaseClient
-        .from('profiles')
-        .select('two_fa_enabled')
-        .eq('id', user.id)
-        .single();
+      const { data: twofa, error: faErr } = await supabaseClient
+        .from('user_2fa')
+        .select('enabled')
+        .eq('user_id', user.id)
+        .maybeSingle();
 
-      if (profErr) {
-        console.error(profErr);
+      if (faErr) {
+        console.error(faErr);
         showMessage('Error checking 2FA status. Please try again.');
         return;
       }
 
-      if (profile.two_fa_enabled) {
+      if (twofa?.enabled) {
         // Prompt for TOTP if 2FA is enabled
         promptFor2FA(user.id);
       } else {
-        // Redirect to dashboard if 2FA is not enabled
+        // Redirect to dashboard if 2FA is not enabled or no row exists
         window.location.href = 'dashboard.html';
       }
     });
