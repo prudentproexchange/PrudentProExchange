@@ -8,8 +8,8 @@
     <meta name="keywords" content="CBE, testimonials, forex trading, feedback" />
 
     <!-- Poppins & FontAwesome -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet" />
-    <script src="https://kit.fontawesome.com/your-kit-code.js" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
     <!-- AOS for Animations -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
@@ -17,23 +17,23 @@
     <style>
       /* Theme Variables */
       :root[data-theme="dark"] {
-        --bg: #1a1a1a;
-        --text: #e0e0e0;
-        --gold: #ffd700;
-        --gold-dark: #cca300;
-        --glass: rgba(255, 255, 255, 0.1);
-        --shadow: rgba(0, 0, 0, 0.3);
-        --text-light: #b0b0b0;
-        --text-muted: #888;
+        --bg: #121212;
+        --text: #e6e6e6;
+        --gold: #FFD700;
+        --gold-dark: #D4A017;
+        --glass: rgba(255, 255, 255, 0.08);
+        --shadow: rgba(0, 0, 0, 0.4);
+        --text-light: #b8b8b8;
+        --text-muted: #7a7a7a;
       }
       :root[data-theme="light"] {
-        --bg: #f5f5f5;
-        --text: #333;
-        --gold: #cca300;
+        --bg: #f8f8f8;
+        --text: #2a2a2a;
+        --gold: #D4A017;
         --gold-dark: #b58900;
         --glass: rgba(0, 0, 0, 0.05);
-        --shadow: rgba(0, 0, 0, 0.1);
-        --text-light: #555;
+        --shadow: rgba(0, 0, 0, 0.15);
+        --text-light: #4a4a4a;
         --text-muted: #666;
       }
 
@@ -45,9 +45,9 @@
         color: var(--text);
         background: var(--bg);
         overflow-x: hidden;
-        line-height: 1.6;
+        line-height: 1.7;
       }
-      a { color: var(--gold); text-decoration: none; }
+      a { color: var(--gold); text-decoration: none; transition: color 0.3s ease; }
       a:hover { color: var(--gold-dark); }
 
       /* Video Background */
@@ -59,7 +59,8 @@
         height: 100%;
         object-fit: cover;
         z-index: -1;
-        opacity: 0.8;
+        opacity: 0.7;
+        will-change: opacity;
       }
 
       /* Header */
@@ -67,34 +68,44 @@
         position: fixed;
         top: 0;
         width: 100%;
-        padding: 20px;
+        padding: 15px 20px;
         display: flex;
         align-items: center;
         justify-content: space-between;
         z-index: 1000;
-        background: rgba(0, 0, 0, 0.2);
-        backdrop-filter: blur(5px);
+        background: rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(8px);
+        box-shadow: 0 2px 10px var(--shadow);
+      }
+      .logo-link {
+        order: 1;
       }
       .logo-link img {
-        height: 50px;
+        height: 45px;
         transition: transform 0.3s ease;
       }
       .logo-link:hover img { transform: scale(1.1); }
+      .header-right {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        order: 2;
+      }
       #theme-toggle {
         background: none;
         border: none;
-        font-size: 1.8rem;
+        font-size: 1.6rem;
         color: var(--text);
         cursor: pointer;
-        transition: transform 0.3s ease;
+        transition: transform 0.3s ease, color 0.3s ease;
       }
-      #theme-toggle:hover { transform: rotate(180deg); }
+      #theme-toggle:hover { transform: rotate(180deg); color: var(--gold); }
       .hamburger {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        width: 30px;
-        height: 20px;
+        width: 28px;
+        height: 18px;
         background: none;
         border: none;
         cursor: pointer;
@@ -103,6 +114,7 @@
         width: 100%;
         height: 3px;
         background: var(--gold);
+        border-radius: 2px;
         transition: all 0.3s ease;
       }
       .hamburger.active span:nth-child(1) {
@@ -123,138 +135,153 @@
         display: flex;
         flex-direction: column;
         box-shadow: -2px 0 10px var(--shadow);
+        z-index: 999;
       }
       .nav-drawer.open { right: 0; }
       .nav-drawer a {
-        padding: 10px;
+        padding: 12px;
         font-size: 1.1rem;
+        font-weight: 400;
         color: var(--text-light);
+        border-radius: 5px;
+        margin: 5px 0;
+        transition: all 0.3s ease;
       }
       .nav-drawer a:hover, .nav-drawer a.active {
         color: var(--gold);
-        background: rgba(255, 215, 0, 0.1);
-        border-radius: 5px;
+        background: rgba(255, 215, 0, 0.15);
       }
 
       /* Main */
       main {
         max-width: 1200px;
         margin: 0 auto;
-        padding: 100px 20px 60px;
+        padding: 90px 20px 60px;
         position: relative;
       }
 
       /* Header Card */
       .header-card {
-        background: linear-gradient(135deg, var(--glass), rgba(255, 215, 0, 0.1));
+        background: linear-gradient(135deg, var(--glass), rgba(255, 215, 0, 0.12));
         backdrop-filter: blur(12px);
-        padding: 50px 20px;
+        padding: 40px 20px;
         text-align: center;
-        border-radius: 15px;
-        box-shadow: 0 4px 20px var(--shadow);
-        margin-bottom: 40px;
+        border-radius: 20px;
+        box-shadow: 0 6px 25px var(--shadow);
+        margin-bottom: 50px;
+        border: 1px solid rgba(255, 215, 0, 0.2);
       }
       .header-card h1 {
-        font-size: 2.5rem;
+        font-size: 2.8rem;
         font-weight: 700;
         color: var(--gold);
-        margin-bottom: 10px;
+        margin-bottom: 12px;
         text-transform: uppercase;
-        letter-spacing: 1px;
+        letter-spacing: 1.5px;
       }
       .header-card p {
-        font-size: 1.1rem;
+        font-size: 1.2rem;
+        font-weight: 300;
         color: var(--text-light);
+        max-width: 600px;
+        margin: 0 auto;
       }
 
       /* Form Card */
       .form-card {
-        background: var(--glass);
+        background: linear-gradient(135deg, var(--glass), rgba(255, 215, 0, 0.08));
         backdrop-filter: blur(12px);
         padding: 40px;
-        border-radius: 15px;
-        box-shadow: 0 4px 20px var(--shadow);
+        border-radius: 20px;
+        box-shadow: 0 6px 25px var(--shadow);
         margin-bottom: 60px;
+        border: 1px solid rgba(255, 215, 0, 0.2);
       }
       .form-card h2 {
-        font-size: 2rem;
-        font-weight: 500;
+        font-size: 2.2rem;
+        font-weight: 600;
         color: var(--gold);
-        margin-bottom: 20px;
+        margin-bottom: 25px;
         text-align: center;
         text-transform: uppercase;
-        letter-spacing: 1px;
+        letter-spacing: 1.2px;
       }
       .form-group {
-        margin-bottom: 20px;
+        margin-bottom: 25px;
         position: relative;
       }
       .form-group label {
         display: block;
-        margin-bottom: 8px;
+        margin-bottom: 10px;
         color: var(--text-light);
         font-weight: 500;
+        font-size: 1rem;
       }
       .form-group input[type="text"],
       .form-group textarea {
         width: 100%;
-        padding: 12px;
+        padding: 14px;
         background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 8px;
+        border: 1px solid rgba(255, 215, 0, 0.3);
+        border-radius: 10px;
         color: var(--text);
         font-size: 1rem;
-        transition: border-color 0.3s ease;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
       }
       .form-group input[type="text"]:focus,
       .form-group textarea:focus {
         border-color: var(--gold);
+        box-shadow: 0 0 8px rgba(255, 215, 0, 0.3);
         outline: none;
       }
       .form-group input[type="file"] {
         color: var(--text-light);
+        padding: 10px 0;
       }
       .char-counter {
         position: absolute;
-        bottom: -20px;
+        bottom: -25px;
         right: 10px;
-        font-size: 0.8rem;
+        font-size: 0.85rem;
         color: var(--text-muted);
       }
       .media-preview img,
       .media-preview video {
         max-width: 100%;
-        max-height: 200px;
-        margin-top: 10px;
-        border-radius: 8px;
+        max-height: 220px;
+        margin-top: 15px;
+        border-radius: 10px;
+        border: 1px solid rgba(255, 215, 0, 0.2);
       }
       .star-rating {
         display: flex;
         direction: rtl;
         justify-content: center;
+        gap: 5px;
       }
       .star-rating input {
         display: none;
       }
       .star-rating label {
-        font-size: 2rem;
-        color: #ccc;
+        font-size: 2.2rem;
+        color: #555;
         cursor: pointer;
-        transition: color 0.2s ease;
+        transition: color 0.2s ease, transform 0.2s ease;
       }
       .star-rating input:checked ~ label,
       .star-rating label:hover,
       .star-rating label:hover ~ label {
         color: var(--gold);
+        transform: scale(1.1);
       }
       .form-card button {
         display: block;
-        margin: 20px auto 0;
-        padding: 12px 40px;
-        background: var(--gold);
+        margin: 25px auto 0;
+        padding: 14px 50px;
+        background: linear-gradient(135deg, var(--gold), var(--gold-dark));
         color: #000;
-        font-size: 1rem;
-        font-weight: 500;
+        font-size: 1.1rem;
+        font-weight: 600;
         border: none;
         border-radius: 30px;
         cursor: pointer;
@@ -262,8 +289,8 @@
       }
       .form-card button:hover:enabled {
         background: var(--gold-dark);
-        transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(255, 215, 0, 0.4);
       }
       .form-card button:disabled {
         opacity: 0.6;
@@ -271,9 +298,10 @@
       }
       #submitAlert {
         text-align: center;
-        margin-top: 15px;
+        margin-top: 20px;
         font-weight: 500;
         font-size: 1rem;
+        transition: opacity 0.3s ease;
       }
 
       /* Progress Bar */
@@ -282,96 +310,111 @@
         height: 8px;
         background: rgba(255, 255, 255, 0.1);
         border-radius: 4px;
-        margin-top: 10px;
+        margin-top: 15px;
         overflow: hidden;
         display: none;
       }
       #progressBar {
         width: 0;
         height: 100%;
-        background: var(--gold);
+        background: linear-gradient(90deg, var(--gold), var(--gold-dark));
         transition: width 0.3s ease;
       }
 
       /* Testimonials Grid */
       .testimonials-grid {
         display: grid;
-        gap: 20px;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 25px;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
       }
       .testimonial-card {
-        background: var(--glass);
+        background: linear-gradient(135deg, var(--glass), rgba(255, 215, 0, 0.08));
         backdrop-filter: blur(12px);
-        padding: 30px;
-        border-radius: 15px;
-        box-shadow: 0 4px 20px var(--shadow);
+        padding: 35px;
+        border-radius: 20px;
+        box-shadow: 0 6px 25px var(--shadow);
         transition: all 0.3s ease;
+        border: 1px solid rgba(255, 215, 0, 0.2);
       }
       .testimonial-card:hover {
         transform: translateY(-5px);
-        box-shadow: 0 8px 30px var(--shadow);
-        background: rgba(255, 215, 0, 0.1);
+        box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
+        background: rgba(255, 215, 0, 0.15);
       }
       .testimonial-card blockquote {
         font-style: italic;
-        margin-bottom: 15px;
+        margin-bottom: 20px;
         color: var(--text-light);
-        line-height: 1.5;
+        line-height: 1.6;
+        font-size: 1.1rem;
       }
       .testimonial-card .byline {
         text-align: right;
         font-weight: 500;
         color: var(--text-muted);
+        font-size: 0.95rem;
       }
       .testimonial-card .review-rating {
-        font-size: 1.5rem;
+        font-size: 1.6rem;
         color: var(--gold);
-        margin: 10px 0;
+        margin: 15px 0;
+        text-align: center;
       }
       .testimonial-card img,
       .testimonial-card video {
         display: block;
         max-width: 100%;
-        margin: 15px auto 0;
-        border-radius: 8px;
-        box-shadow: 0 2px 10px var(--shadow);
+        margin: 20px auto 0;
+        border-radius: 10px;
+        border: 1px solid rgba(255, 215, 0, 0.2);
+        box-shadow: 0 3px 12px var(--shadow);
       }
       .company-response {
-        margin-top: 20px;
+        margin-top: 25px;
         padding: 15px;
         background: rgba(255, 255, 255, 0.05);
-        border-radius: 8px;
+        border-radius: 10px;
+        border: 1px solid rgba(255, 215, 0, 0.2);
       }
       .company-response strong {
         display: block;
-        margin-bottom: 8px;
+        margin-bottom: 10px;
         color: var(--gold);
         font-weight: 500;
+        font-size: 1rem;
       }
 
       /* Footer */
       .site-footer {
         text-align: center;
-        padding: 20px 0;
-        margin-top: 60px;
+        padding: 30px 20px;
+        margin-top: 80px;
         color: var(--text-muted);
         font-size: 0.9rem;
-        background: rgba(0, 0, 0, 0.2);
-        backdrop-filter: blur(5px);
+        background: rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(8px);
+        border-top: 1px solid rgba(255, 215, 0, 0.2);
       }
-      .footer-content p { margin: 5px 0; }
+      .footer-content p { margin: 8px 0; }
+      .footer-links {
+        margin: 15px 0;
+      }
       .footer-links a {
-        margin: 0 10px;
+        margin: 0 15px;
         color: var(--text-muted);
+        font-weight: 400;
+        transition: color 0.3s ease;
       }
       .footer-links a:hover { color: var(--gold); }
+      .gtranslate_wrapper { margin: 15px 0; }
+      .copyright { font-weight: 300; }
 
       /* Back to Top Button */
       #back-to-top {
         position: fixed;
         bottom: 80px;
         right: 20px;
-        background: var(--gold);
+        background: linear-gradient(135deg, var(--gold), var(--gold-dark));
         color: #000;
         border: none;
         border-radius: 50%;
@@ -380,22 +423,34 @@
         font-size: 1.5rem;
         cursor: pointer;
         transition: all 0.3s ease;
-        box-shadow: 0 4px 10px var(--shadow);
+        box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
         z-index: 1000;
       }
       #back-to-top:hover {
         background: var(--gold-dark);
-        transform: scale(1.1);
+        transform: scale(1.15);
+        box-shadow: 0 6px 20px rgba(255, 215, 0, 0.6);
       }
 
       /* Responsive */
       @media (max-width: 768px) {
-        main { padding: 80px 15px 40px; }
-        .logo-link img { height: 40px; }
-        .header-card h1 { font-size: 2rem; }
-        .form-card { padding: 20px; }
+        main { padding: 80px 15px 50px; }
+        .logo-link img { height: 38px; }
+        .header-card { padding: 30px 15px; }
+        .header-card h1 { font-size: 2.2rem; }
+        .form-card { padding: 25px; }
+        .form-card h2 { font-size: 1.8rem; }
         .testimonials-grid { grid-template-columns: 1fr; }
-        .nav-drawer { width: 200px; }
+        .testimonial-card { padding: 25px; }
+        .nav-drawer { width: 220px; top: 60px; }
+        .site-footer { padding: 20px 15px; }
+      }
+      @media (max-width: 480px) {
+        .header-card h1 { font-size: 1.8rem; }
+        .form-card { padding: 20px; }
+        .form-card h2 { font-size: 1.6rem; }
+        .star-rating label { font-size: 1.8rem; }
+        #back-to-top { width: 45px; height: 45px; font-size: 1.3rem; }
       }
     </style>
   </head>
@@ -410,13 +465,15 @@
 
     <!-- Header -->
     <header class="site-header">
-      <button id="theme-toggle" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
       <a href="/" class="logo-link">
         <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo" />
       </a>
-      <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
-        <span></span><span></span><span></span>
-      </button>
+      <div class="header-right">
+        <button id="theme-toggle" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
+        <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
       <nav class="nav-drawer" id="navDrawer">
         <a href="application.html">Apply</a>
         <a href="about.html">About</a>
@@ -429,12 +486,12 @@
     </header>
 
     <main>
-      <div class="header-card" data-aos="fade-up">
+      <div class="header-card" data-aos="fade-up" data-aos-delay="100">
         <h1>What Our Members Are Saying</h1>
-        <p>Real feedback from traders who’ve grown with PrudentProExchange.</p>
+        <p>Discover the experiences of traders who’ve thrived with PrudentProExchange.</p>
       </div>
 
-      <div class="form-card" data-aos="fade-up" data-aos-delay="300">
+      <div class="form-card" data-aos="zoom-in" data-aos-delay="300">
         <h2>Share Your Experience</h2>
         <form id="testimonialForm">
           <div class="form-group">
@@ -479,7 +536,7 @@
       </div>
 
       <section id="testimonialsSection" data-aos="fade-up" data-aos-delay="600">
-        <h2 style="font-family: 'Poppins', sans-serif; color: var(--gold); margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px;">
+        <h2 style="font-family: 'Poppins', sans-serif; color: var(--gold); margin-bottom: 30px; text-transform: uppercase; letter-spacing: 1.2px;">
           Approved Testimonials
         </h2>
         <div class="testimonials-grid" id="testimonialsGrid"></div>
@@ -506,7 +563,7 @@
     </footer>
 
     <!-- Back to Top Button -->
-    <button id="back-to-top" aria-label="Back to top">🚀</button>
+    <button id="back-to-top" aria-label="Back to top" style="position: fixed; bottom: 80px; right: 20px; z-index: 1000;">🚀</button>
 
     <!-- Crisp Chat Widget -->
     <script type="text/javascript">
@@ -547,6 +604,16 @@
         hamburgerBtn.addEventListener('click', () => {
           navDrawer.classList.toggle('open');
           hamburgerBtn.classList.toggle('active');
+        });
+
+        // Close Nav When Clicking Outside
+        document.addEventListener('click', (event) => {
+          const isClickInsideNav = navDrawer.contains(event.target);
+          const isClickOnHamburger = hamburgerBtn.contains(event.target);
+          if (!isClickInsideNav && !isClickOnHamburger && navDrawer.classList.contains('open')) {
+            navDrawer.classList.remove('open');
+            hamburgerBtn.classList.remove('active');
+          }
         });
 
         // Back to Top
