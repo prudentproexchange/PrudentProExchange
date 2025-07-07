@@ -9,6 +9,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
+  <!-- Crisp Chat Widget -->
+  <script type="text/javascript">window.$crisp=[];window.CRISP_WEBSITE_ID="599e8216-ab4f-4d4f-bb22-5d47cf14031f";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();</script>
   <style>
     /* Theme Variables */
     :root[data-theme="dark"] {
@@ -57,54 +59,51 @@
       z-index: 1000;
     }
 
-    /* Tidio Widget Styling */
-    #tidio-chat,
-    #tidio-chat-iframe-container {
+    /* Crisp Widget Styling */
+    .crisp-client .cc-tlyw,
+    .crisp-client .cc-kxra {
       font-family: 'Poppins', sans-serif !important;
       z-index: 999 !important; /* Below back-to-top button but above other elements */
     }
-    #tidio-chat > button,
-    #tidio-chat-iframe-container .tidio-chat-button {
+    .crisp-client .cc-tlyw .cc-1xry .cc-kxra {
       background: var(--gold) !important;
       border-radius: 50% !important;
       box-shadow: 0 4px 10px var(--shadow) !important;
       transition: all 0.3s ease !important;
     }
-    #tidio-chat > button:hover,
-    #tidio-chat-iframe-container .tidio-chat-button:hover {
+    .crisp-client .cc-tlyw .cc-1xry .cc-kxra:hover {
       background: var(--gold-dark) !important;
       transform: scale(1.1) !important;
     }
-    #tidio-chat-iframe-container iframe {
+    .crisp-client .cc-tlyw .cc-1xry .cc-unoo {
       background: var(--glass) !important;
       backdrop-filter: blur(12px) !important;
       border-radius: 15px !important;
       box-shadow: 0 4px 20px var(--shadow) !important;
       color: var(--text) !important;
     }
-    #tidio-chat-iframe-container .tidio-chat-text,
-    #tidio-chat-iframe-container .tidio-chat-input,
-    #tidio-chat-iframe-container .tidio-chat-button {
+    .crisp-client .cc-tlyw .cc-1xry .cc-unoo .cc-kc1c .cc-5wlh,
+    .crisp-client .cc-tlyw .cc-1xry .cc-unoo .cc-kc1c .cc-18oq {
       font-family: 'Poppins', sans-serif !important;
       color: var(--text) !important;
     }
-    #tidio-chat-iframe-container .tidio-chat-button {
+    .crisp-client .cc-tlyw .cc-1xry .cc-unoo .cc-1w6g {
       background: var(--gold) !important;
       border-radius: 30px !important;
       transition: all 0.3s ease !important;
     }
-    #tidio-chat-iframe-container .tidio-chat-button:hover {
+    .crisp-client .cc-tlyw .cc-1xry .cc-unoo .cc-1w6g:hover {
       background: var(--gold-dark) !important;
       transform: translateY(-2px) !important;
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3) !important;
     }
-    #tidio-chat-iframe-container .tidio-chat-input {
+    .crisp-client .cc-tlyw .cc-1xry .cc-unoo .cc-18oq {
       background: rgba(255, 255, 255, 0.05) !important;
       border: 1px solid rgba(255, 255, 255, 0.1) !important;
       border-radius: 8px !important;
       transition: border-color 0.3s ease !important;
     }
-    #tidio-chat-iframe-container .tidio-chat-input:focus {
+    .crisp-client .cc-tlyw .cc-1xry .cc-unoo .cc-18oq:focus {
       border-color: var(--gold) !important;
       outline: none !important;
     }
@@ -132,6 +131,20 @@
     #back-to-top:hover {
       background: var(--gold-dark);
       transform: scale(1.1);
+    }
+
+    /* Section and CTA Styling with Theme Variables */
+    .section-title.gold {
+      color: var(--gold);
+    }
+    .cta.enhanced {
+      background: var(--gold);
+      color: #000;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+    .cta.enhanced:hover {
+      background: var(--gold-dark);
+      transform: translateY(-2px);
     }
 
     /* Responsive Adjustments */
@@ -271,11 +284,7 @@
   <script>window.gtranslateSettings = {"default_language":"en","native_language_names":true,"detect_browser_language":true,"wrapper_selector":".gtranslate_wrapper","flag_style":"3d"}</script>
   <script src="https://cdn.gtranslate.net/widgets/latest/float.js" defer></script>
 
-  <!-- Tidio Live Chat embed -->
-  <script src="//code.tidio.co/peclwowoqcbxhfe3wbowfneh1rabrdjz.js" async></script>
-
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-  <script src="js/main.js"></script>
   <script>
     // Message Display Function
     function showMessage(text, isError = true) {
@@ -289,8 +298,20 @@
     const btnGold = document.getElementById('hamburgerBtnGold');
     const drawerGold = document.getElementById('navDrawerGold');
     btnGold.addEventListener('click', () => {
-      drawerGold.classList.toggle('open');
+      const isOpen = drawerGold.classList.toggle('open');
       btnGold.classList.toggle('active');
+      btnGold.setAttribute('aria-expanded', isOpen);
+    });
+
+    // Close Nav When Clicking Outside
+    document.addEventListener('click', (event) => {
+      const isClickInsideNav = drawerGold.contains(event.target);
+      const isClickOnHamburger = btnGold.contains(event.target);
+      if (!isClickInsideNav && !isClickOnHamburger && drawerGold.classList.contains('open')) {
+        drawerGold.classList.remove('open');
+        btnGold.classList.remove('active');
+        btnGold.setAttribute('aria-expanded', 'false');
+      }
     });
 
     // Local Time and Date
@@ -316,6 +337,7 @@
       const icon = themeToggle.querySelector('i');
       icon.classList.toggle('fa-moon');
       icon.classList.toggle('fa-sun');
+      themeToggle.setAttribute('aria-label', document.body.classList.contains('light-theme') ? 'Switch to dark theme' : 'Switch to light theme');
     });
 
     // Back to Top
