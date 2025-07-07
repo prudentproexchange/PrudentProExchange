@@ -1,19 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Language Selector Test Page</title>
+  <title data-tolgee="title">Welcome to our test page</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       padding: 2rem;
       background: #f9f9f9;
+      min-height: 100vh;
+      margin: 0;
     }
     .lang-selector {
-      position: relative;
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      z-index: 1000;
       display: inline-block;
-      margin-bottom: 2rem;
     }
     .lang-btn {
       background: #fff;
@@ -24,6 +28,7 @@
       align-items: center;
       gap: 0.5rem;
       box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      border-radius: 4px;
     }
     .lang-btn img {
       width: 20px;
@@ -43,7 +48,8 @@
       max-height: 300px;
       overflow-y: auto;
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      z-index: 10;
+      z-index: 1001;
+      border-radius: 4px;
     }
     .lang-list li {
       padding: 0.5rem 1rem;
@@ -65,6 +71,19 @@
       direction: rtl;
       text-align: right;
     }
+    /* Responsive design */
+    @media (max-width: 480px) {
+      .lang-selector {
+        bottom: 15px;
+        left: 15px;
+      }
+      .lang-btn {
+        padding: 0.4rem 0.8rem;
+      }
+      .lang-list {
+        width: 200px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -75,870 +94,469 @@
     <ul class="lang-list" id="lang-list" role="menu" aria-label="Select Language">
       <!-- Afrikaans -->
       <li data-lang="af" data-flag="za.png" role="menuitem">
-        <img src="flags/za.png" alt="Afrikaans"> Afrikaans
+        <img src="flags/za.png" alt="Afrikaans" loading="lazy"> Afrikaans
       </li>
       <!-- Albanian -->
       <li data-lang="sq" data-flag="al.png" role="menuitem">
-        <img src="flags/al.png" alt="Shqip"> Shqip
+        <img src="flags/al.png" alt="Shqip" loading="lazy"> Shqip
       </li>
       <!-- Amharic -->
       <li data-lang="am" data-flag="et.png" role="menuitem">
-        <img src="flags/et.png" alt="አማርኛ"> አማርኛ
+        <img src="flags/et.png" alt="አማርኛ" loading="lazy"> አማርኛ
       </li>
       <!-- Arabic -->
       <li data-lang="ar" data-flag="sa.png" role="menuitem" dir="rtl">
-        <img src="flags/sa.png" alt="العربية"> العربية
+        <img src="flags/sa.png" alt="العربية" loading="lazy"> العربية
       </li>
       <!-- Armenian -->
       <li data-lang="hy" data-flag="am.png" role="menuitem">
-        <img src="flags/am.png" alt="Հայերեն"> Հայերեն
+        <img src="flags/am.png" alt="Հայերեն" loading="lazy"> Հայերեն
       </li>
       <!-- Assamese -->
       <li data-lang="as" data-flag="in.png" role="menuitem">
-        <img src="flags/in.png" alt="অসমীয়া"> অসমীয়া
+        <img src="flags/in.png" alt="অসমীয়া" loading="lazy"> অসমীয়া
       </li>
       <!-- Azerbaijani -->
       <li data-lang="az" data-flag="az.png" role="menuitem">
-        <img src="flags/az.png" alt="Azərbaycan dili"> Azərbaycan dili
+        <img src="flags/az.png" alt="Azərbaycan dili" loading="lazy"> Azərbaycan dili
       </li>
       <!-- Belarusian -->
       <li data-lang="be" data-flag="by.png" role="menuitem">
-        <img src="flags/by.png" alt="Беларуская"> Беларуская
+        <img src="flags/by.png" alt="Беларуская" loading="lazy"> Беларуская
       </li>
       <!-- Bengali -->
       <li data-lang="bn" data-flag="bd.png" role="menuitem">
-        <img src="flags/bd.png" alt="বাংলা"> বাংলা
+        <img src="flags/bd.png" alt="বাংলা" loading="lazy"> বাংলা
       </li>
       <!-- Bosnian -->
       <li data-lang="bs" data-flag="ba.png" role="menuitem">
-        <img src="flags/ba.png" alt="Bosanski"> Bosanski
+        <img src="flags/ba.png" alt="Bosanski" loading="lazy"> Bosanski
       </li>
       <!-- Bulgarian -->
       <li data-lang="bg" data-flag="bg.png" role="menuitem">
-        <img src="flags/bg.png" alt="Български"> Български
+        <img src="flags/bg.png" alt="Български" loading="lazy"> Български
       </li>
       <!-- Burmese -->
       <li data-lang="my" data-flag="mm.png" role="menuitem">
-        <img src="flags/mm.png" alt="မြန်မာစာ"> မြန်မာစာ
+        <img src="flags/mm.png" alt="မြန်မာစာ" loading="lazy"> မြန်မာစာ
       </li>
       <!-- Catalan -->
       <li data-lang="ca" data-flag="es.png" role="menuitem">
-        <img src="flags/es.png" alt="Català"> Català
+        <img src="flags/es.png" alt="Català" loading="lazy"> Català
       </li>
       <!-- Cebuano -->
       <li data-lang="ceb" data-flag="ph.png" role="menuitem">
-        <img src="flags/ph.png" alt="Cebuano"> Cebuano
+        <img src="flags/ph.png" alt="Cebuano" loading="lazy"> Cebuano
       </li>
       <!-- Chichewa -->
       <li data-lang="ny" data-flag="mw.png" role="menuitem">
-        <img src="flags/mw.png" alt="Chichewa"> Chichewa
+        <img src="flags/mw.png" alt="Chichewa" loading="lazy"> Chichewa
       </li>
       <!-- Chinese (Simplified) -->
       <li data-lang="zh" data-flag="cn.png" role="menuitem">
-        <img src="flags/cn.png" alt="中文"> 中文
+        <img src="flags/cn.png" alt="中文" loading="lazy"> 中文
       </li>
       <!-- Chinese (Traditional) -->
       <li data-lang="zh-tw" data-flag="tw.png" role="menuitem">
-        <img src="flags/tw.png" alt="繁體中文"> 繁體中文
+        <img src="flags/tw.png" alt="繁體中文" loading="lazy"> 繁體中文
       </li>
       <!-- Corsican -->
       <li data-lang="co" data-flag="fr.png" role="menuitem">
-        <img src="flags/fr.png" alt="Corsu"> Corsu
+        <img src="flags/fr.png" alt="Corsu" loading="lazy"> Corsu
       </li>
       <!-- Croatian -->
       <li data-lang="hr" data-flag="hr.png" role="menuitem">
-        <img src="flags/hr.png" alt="Hrvatski"> Hrvatski
+        <img src="flags/hr.png" alt="Hrvatski" loading="lazy"> Hrvatski
       </li>
       <!-- Czech -->
       <li data-lang="cs" data-flag="cz.png" role="menuitem">
-        <img src="flags/cz.png" alt="Čeština"> Čeština
+        <img src="flags/cz.png" alt="Čeština" loading="lazy"> Čeština
       </li>
       <!-- Danish -->
       <li data-lang="da" data-flag="dk.png" role="menuitem">
-        <img src="flags/dk.png" alt="Dansk"> Dansk
+        <img src="flags/dk.png" alt="Dansk" loading="lazy"> Dansk
       </li>
       <!-- Dutch -->
       <li data-lang="nl" data-flag="nl.png" role="menuitem">
-        <img src="flags/nl.png" alt="Nederlands"> Nederlands
+        <img src="flags/nl.png" alt="Nederlands" loading="lazy"> Nederlands
       </li>
       <!-- English -->
       <li data-lang="en" data-flag="gb.png" role="menuitem">
-        <img src="flags/gb.png" alt="English"> English
+        <img src="flags/gb.png" alt="English" loading="lazy"> English
       </li>
       <!-- Esperanto -->
       <li data-lang="eo" data-flag="un.png" role="menuitem">
-        <img src="flags/un.png" alt="Esperanto"> Esperanto
+        <img src="flags/un.png" alt="Esperanto" loading="lazy"> Esperanto
       </li>
       <!-- Estonian -->
       <li data-lang="et" data-flag="ee.png" role="menuitem">
-        <img src="flags/ee.png" alt="Eesti"> Eesti
+        <img src="flags/ee.png" alt="Eesti" loading="lazy"> Eesti
       </li>
       <!-- Filipino -->
       <li data-lang="tl" data-flag="ph.png" role="menuitem">
-        <img src="flags/ph.png" alt="Filipino"> Filipino
+        <img src="flags/ph.png" alt="Filipino" loading="lazy"> Filipino
       </li>
       <!-- Finnish -->
       <li data-lang="fi" data-flag="fi.png" role="menuitem">
-        <img src="flags/fi.png" alt="Suomi"> Suomi
+        <img src="flags/fi.png" alt="Suomi" loading="lazy"> Suomi
       </li>
       <!-- French -->
       <li data-lang="fr" data-flag="fr.png" role="menuitem">
-        <img src="flags/fr.png" alt="Français"> Français
+        <img src="flags/fr.png" alt="Français" loading="lazy"> Français
       </li>
       <!-- Galician -->
       <li data-lang="gl" data-flag="es.png" role="menuitem">
-        <img src="flags/es.png" alt="Galego"> Galego
+        <img src="flags/es.png" alt="Galego" loading="lazy"> Galego
       </li>
       <!-- Georgian -->
       <li data-lang="ka" data-flag="ge.png" role="menuitem">
-        <img src="flags/ge.png" alt="ქართული"> ქართული
+        <img src="flags/ge.png" alt="ქართული" loading="lazy"> ქართული
       </li>
       <!-- German -->
       <li data-lang="de" data-flag="de.png" role="menuitem">
-        <img src="flags/de.png" alt="Deutsch"> Deutsch
+        <img src="flags/de.png" alt="Deutsch" loading="lazy"> Deutsch
       </li>
       <!-- Greek -->
       <li data-lang="el" data-flag="gr.png" role="menuitem">
-        <img src="flags/gr.png" alt="Ελληνικά"> Ελληνικά
+        <img src="flags/gr.png" alt="Ελληνικά" loading="lazy"> Ελληνικά
       </li>
       <!-- Gujarati -->
       <li data-lang="gu" data-flag="in.png" role="menuitem">
-        <img src="flags/in.png" alt="ગુજરાતી"> ગુજરાતી
+        <img src="flags/in.png" alt="ગુજરાતી" loading="lazy"> ગુજરાતી
       </li>
       <!-- Haitian Creole -->
       <li data-lang="ht" data-flag="ht.png" role="menuitem">
-        <img src="flags/ht.png" alt="Kreyòl Ayisyen"> Kreyòl Ayisyen
+        <img src="flags/ht.png" alt="Kreyòl Ayisyen" loading="lazy"> Kreyòl Ayisyen
       </li>
       <!-- Hausa -->
       <li data-lang="ha" data-flag="ng.png" role="menuitem">
-        <img src="flags/ng.png" alt="Hausa"> Hausa
+        <img src="flags/ng.png" alt="Hausa" loading="lazy"> Hausa
       </li>
       <!-- Hawaiian -->
       <li data-lang="haw" data-flag="us.png" role="menuitem">
-        <img src="flags/us.png" alt="ʻŌlelo Hawaiʻi"> ʻŌlelo Hawaiʻi
+        <img src="flags/us.png" alt="ʻŌlelo Hawaiʻi" loading="lazy"> ʻŌlelo Hawaiʻi
       </li>
       <!-- Hebrew -->
       <li data-lang="he" data-flag="il.png" role="menuitem" dir="rtl">
-        <img src="flags/il.png" alt="עברית"> עברית
+        <img src="flags/il.png" alt="עברית" loading="lazy"> עברית
       </li>
       <!-- Hindi -->
       <li data-lang="hi" data-flag="in.png" role="menuitem">
-        <img src="flags/in.png" alt="हिन्दी"> हिन्दी
+        <img src="flags/in.png" alt="हिन्दी" loading="lazy"> हिन्दी
       </li>
       <!-- Hmong -->
       <li data-lang="hmn" data-flag="la.png" role="menuitem">
-        <img src="flags/la.png" alt="Hmoob"> Hmoob
+        <img src="flags/la.png" alt="Hmoob" loading="lazy"> Hmoob
       </li>
       <!-- Hungarian -->
       <li data-lang="hu" data-flag="hu.png" role="menuitem">
-        <img src="flags/hu.png" alt="Magyar"> Magyar
+        <img src="flags/hu.png" alt="Magyar" loading="lazy"> Magyar
       </li>
       <!-- Icelandic -->
       <li data-lang="is" data-flag="is.png" role="menuitem">
-        <img src="flags/is.png" alt="Íslenska"> Íslenska
+        <img src="flags/is.png" alt="Íslenska" loading="lazy"> Íslenska
       </li>
       <!-- Igbo -->
       <li data-lang="ig" data-flag="ng.png" role="menuitem">
-        <img src="flags/ng.png" alt="Igbo"> Igbo
+        <img src="flags/ng.png" alt="Igbo" loading="lazy"> Igbo
       </li>
       <!-- Indonesian -->
       <li data-lang="id" data-flag="id.png" role="menuitem">
-        <img src="flags/id.png" alt="Bahasa Indonesia"> Bahasa Indonesia
+        <img src="flags/id.png" alt="Bahasa Indonesia" loading="lazy"> Bahasa Indonesia
       </li>
       <!-- Irish -->
       <li data-lang="ga" data-flag="ie.png" role="menuitem">
-        <img src="flags/ie.png" alt="Gaelige"> Gaelige
+        <img src="flags/ie.png" alt="Gaelige" loading="lazy"> Gaelige
       </li>
       <!-- Italian -->
       <li data-lang="it" data-flag="it.png" role="menuitem">
-        <img src="flags/it.png" alt="Italiano"> Italiano
+        <img src="flags/it.png" alt="Italiano" loading="lazy"> Italiano
       </li>
       <!-- Japanese -->
       <li data-lang="ja" data-flag="jp.png" role="menuitem">
-        <img src="flags/jp.png" alt="日本語"> 日本語
+        <img src="flags/jp.png" alt="日本語" loading="lazy"> 日本語
       </li>
       <!-- Javanese -->
       <li data-lang="jv" data-flag="id.png" role="menuitem">
-        <img src="flags/id.png" alt="Basa Jawa"> Basa Jawa
+        <img src="flags/id.png" alt="Basa Jawa" loading="lazy"> Basa Jawa
       </li>
       <!-- Kannada -->
       <li data-lang="kn" data-flag="in.png" role="menuitem">
-        <img src="flags/in.png" alt="ಕನ್ನಡ"> ಕನ್ನಡ
+        <img src="flags/in.png" alt="ಕನ್ನಡ" loading="lazy"> ಕನ್ನಡ
       </li>
       <!-- Kazakh -->
       <li data-lang="kk" data-flag="kz.png" role="menuitem">
-        <img src="flags/kz.png" alt="Қазақша"> Қазақша
+        <img src="flags/kz.png" alt="Қазақша" loading="lazy"> Қазақша
       </li>
       <!-- Khmer -->
       <li data-lang="km" data-flag="kh.png" role="menuitem">
-        <img src="flags/kh.png" alt="ខ្មែរ"> ខ្មែរ
+        <img src="flags/kh.png" alt="ខ្មែរ" loading="lazy"> ខ្មែរ
       </li>
       <!-- Kinyarwanda -->
       <li data-lang="rw" data-flag="rw.png" role="menuitem">
-        <img src="flags/rw.png" alt="Ikinyarwanda"> Ikinyarwanda
+        <img src="flags/rw.png" alt="Ikinyarwanda" loading="lazy"> Ikinyarwanda
       </li>
       <!-- Korean -->
       <li data-lang="ko" data-flag="kr.png" role="menuitem">
-        <img src="flags/kr.png" alt="한국어"> 한국어
+        <img src="flags/kr.png" alt="한국어" loading="lazy"> 한국어
       </li>
       <!-- Kurdish -->
       <li data-lang="ku" data-flag="iq.png" role="menuitem" dir="rtl">
-        <img src="flags/iq.png" alt="Kurdî"> Kurdî
+        <img src="flags/iq.png" alt="Kurdî" loading="lazy"> Kurdî
       </li>
       <!-- Kyrgyz -->
       <li data-lang="ky" data-flag="kg.png" role="menuitem">
-        <img src="flags/kg.png" alt="Кыргызча"> Кыргызча
+        <img src="flags/kg.png" alt="Кыргызча" loading="lazy"> Кыргызча
       </li>
       <!-- Lao -->
       <li data-lang="lo" data-flag="la.png" role="menuitem">
-        <img src="flags/la.png" alt="ລາວ"> ລາວ
+        <img src="flags/la.png" alt="ລາວ" loading="lazy"> ລາວ
       </li>
       <!-- Latvian -->
       <li data-lang="lv" data-flag="lv.png" role="menuitem">
-        <img src="flags/lv.png" alt="Latviešu"> Latviešu
+        <img src="flags/lv.png" alt="Latviešu" loading="lazy"> Latviešu
       </li>
       <!-- Lithuanian -->
       <li data-lang="lt" data-flag="lt.png" role="menuitem">
-        <img src="flags/lt.png" alt="Lietuvių"> Lietuvių
+        <img src="flags/lt.png" alt="Lietuvių" loading="lazy"> Lietuvių
       </li>
       <!-- Luxembourgish -->
       <li data-lang="lb" data-flag="lu.png" role="menuitem">
-        <img src="flags/lu.png" alt="Lëtzebuergesch"> Lëtzebuergesch
+        <img src="flags/lu.png" alt="Lëtzebuergesch" loading="lazy"> Lëtzebuergesch
       </li>
       <!-- Macedonian -->
       <li data-lang="mk" data-flag="mk.png" role="menuitem">
-        <img src="flags/mk.png" alt="Македонски"> Македонски
+        <img src="flags/mk.png" alt="Македонски" loading="lazy"> Македонски
       </li>
       <!-- Malagasy -->
       <li data-lang="mg" data-flag="mg.png" role="menuitem">
-        <img src="flags/mg.png" alt="Malagasy"> Malagasy
+        <img src="flags/mg.png" alt="Malagasy" loading="lazy"> Malagasy
       </li>
       <!-- Malay -->
       <li data-lang="ms" data-flag="my.png" role="menuitem">
-        <img src="flags/my.png" alt="Bahasa Melayu"> Bahasa Melayu
+        <img src="flags/my.png" alt="Bahasa Melayu" loading="lazy"> Bahasa Melayu
       </li>
       <!-- Malayalam -->
       <li data-lang="ml" data-flag="in.png" role="menuitem">
-        <img src="flags/in.png" alt="മലയാളം"> മലയാളം
+        <img src="flags/in.png" alt="മലയാളം" loading="lazy"> മലയാളം
       </li>
       <!-- Maltese -->
       <li data-lang="mt" data-flag="mt.png" role="menuitem">
-        <img src="flags/mt.png" alt="Malti"> Malti
+        <img src="flags/mt.png" alt="Malti" loading="lazy"> Malti
       </li>
       <!-- Maori -->
       <li data-lang="mi" data-flag="nz.png" role="menuitem">
-        <img src="flags/nz.png" alt="Māori"> Māori
+        <img src="flags/nz.png" alt="Māori" loading="lazy"> Māori
       </li>
       <!-- Marathi -->
       <li data-lang="mr" data-flag="in.png" role="menuitem">
-        <img src="flags/in.png" alt="मराठी"> मराठी
+        <img src="flags/in.png" alt="मराठी" loading="lazy"> मराठी
       </li>
       <!-- Mongolian -->
       <li data-lang="mn" data-flag="mn.png" role="menuitem">
-        <img src="flags/mn.png" alt="Монгол"> Монгол
+        <img src="flags/mn.png" alt="Монгол" loading="lazy"> Монгол
       </li>
       <!-- Nepali -->
       <li data-lang="ne" data-flag="np.png" role="menuitem">
-        <img src="flags/np.png" alt="नेपाली"> नेपाली
+        <img src="flags/np.png" alt="नेपाली" loading="lazy"> नेपाली
       </li>
       <!-- Norwegian -->
       <li data-lang="no" data-flag="no.png" role="menuitem">
-        <img src="flags/no.png" alt="Norsk"> Norsk
+        <img src="flags/no.png" alt="Norsk" loading="lazy"> Norsk
       </li>
       <!-- Odia -->
       <li data-lang="or" data-flag="in.png" role="menuitem">
-        <img src="flags/in.png" alt="ଓଡ଼ିଆ"> ଓଡ଼ିଆ
+        <img src="flags/in.png" alt="ଓଡ଼ିଆ" loading="lazy"> ଓଡ଼ିଆ
       </li>
       <!-- Pashto -->
       <li data-lang="ps" data-flag="af.png" role="menuitem" dir="rtl">
-        <img src="flags/af.png" alt="پښتو"> پښتو
+        <img src="flags/af.png" alt="پښتو" loading="lazy"> پښتو
       </li>
       <!-- Persian -->
       <li data-lang="fa" data-flag="ir.png" role="menuitem" dir="rtl">
-        <img src="flags/ir.png" alt="فارسی"> فارسی
+        <img src="flags/ir.png" alt="فارسی" loading="lazy"> فارسی
       </li>
       <!-- Polish -->
       <li data-lang="pl" data-flag="pl.png" role="menuitem">
-        <img src="flags/pl.png" alt="Polski"> Polski
+        <img src="flags/pl.png" alt="Polski" loading="lazy"> Polski
       </li>
       <!-- Portuguese -->
       <li data-lang="pt" data-flag="pt.png" role="menuitem">
-        <img src="flags/pt.png" alt="Português"> Português
+        <img src="flags/pt.png" alt="Português" loading="lazy"> Português
       </li>
       <!-- Punjabi -->
       <li data-lang="pa" data-flag="in.png" role="menuitem">
-        <img src="flags/in.png" alt="ਪੰਜਾਬੀ"> ਪੰਜਾਬੀ
+        <img src="flags/in.png" alt="ਪੰਜਾਬੀ" loading="lazy"> ਪੰਜਾਬੀ
       </li>
       <!-- Quechua -->
       <li data-lang="qu" data-flag="pe.png" role="menuitem">
-        <img src="flags/pe.png" alt="Runasimi"> Runasimi
+        <img src="flags/pe.png" alt="Runasimi" loading="lazy"> Runasimi
       </li>
       <!-- Romanian -->
       <li data-lang="ro" data-flag="ro.png" role="menuitem">
-        <img src="flags/ro.png" alt="Română"> Română
+        <img src="flags/ro.png" alt="Română" loading="lazy"> Română
       </li>
       <!-- Russian -->
       <li data-lang="ru" data-flag="ru.png" role="menuitem">
-        <img src="flags/ru.png" alt="Русский"> Русский
+        <img src="flags/ru.png" alt="Русский" loading="lazy"> Русский
       </li>
       <!-- Samoan -->
       <li data-lang="sm" data-flag="ws.png" role="menuitem">
-        <img src="flags/ws.png" alt="Gagana Samoa"> Gagana Samoa
+        <img src="flags/ws.png" alt="Gagana Samoa" loading="lazy"> Gagana Samoa
       </li>
       <!-- Serbian -->
       <li data-lang="sr" data-flag="rs.png" role="menuitem">
-        <img src="flags/rs.png" alt="Српски"> Српски
+        <img src="flags/rs.png" alt="Српски" loading="lazy"> Српски
       </li>
       <!-- Sesotho -->
       <li data-lang="st" data-flag="ls.png" role="menuitem">
-        <img src="flags/ls.png" alt="Sesotho"> Sesotho
+        <img src="flags/ls.png" alt="Sesotho" loading="lazy"> Sesotho
       </li>
       <!-- Shona -->
       <li data-lang="sn" data-flag="zw.png" role="menuitem">
-        <img src="flags/zw.png" alt="ChiShona"> ChiShona
+        <img src="flags/zw.png" alt="ChiShona" loading="lazy"> ChiShona
       </li>
       <!-- Sindhi -->
       <li data-lang="sd" data-flag="pk.png" role="menuitem" dir="rtl">
-        <img src="flags/pk.png" alt="سنڌي"> سنڌي
+        <img src="flags/pk.png" alt="سنڌي" loading="lazy"> سنڌي
       </li>
       <!-- Sinhala -->
       <li data-lang="si" data-flag="lk.png" role="menuitem">
-        <img src="flags/lk.png" alt="සිංහල"> සිංහල
+        <img src="flags/lk.png" alt="සිංහල" loading="lazy"> සිංහල
       </li>
       <!-- Slovak -->
       <li data-lang="sk" data-flag="sk.png" role="menuitem">
-        <img src="flags/sk.png" alt="Slovenčina"> Slovenčina
+        <img src="flags/sk.png" alt="Slovenčina" loading="lazy"> Slovenčina
       </li>
       <!-- Slovenian -->
       <li data-lang="sl" data-flag="si.png" role="menuitem">
-        <img src="flags/si.png" alt="Slovenščina"> Slovenščina
+        <img src="flags/si.png" alt="Slovenščina" loading="lazy"> Slovenščina
       </li>
       <!-- Somali -->
       <li data-lang="so" data-flag="so.png" role="menuitem">
-        <img src="flags/so.png" alt="Soomaali"> Soomaali
+        <img src="flags/so.png" alt="Soomaali" loading="lazy"> Soomaali
       </li>
       <!-- Spanish -->
       <li data-lang="es" data-flag="es.png" role="menuitem">
-        <img src="flags/es.png" alt="Español"> Español
+        <img src="flags/es.png" alt="Español" loading="lazy"> Español
       </li>
       <!-- Sundanese -->
       <li data-lang="su" data-flag="id.png" role="menuitem">
-        <img src="flags/id.png" alt="Basa Sunda"> Basa Sunda
+        <img src="flags/id.png" alt="Basa Sunda" loading="lazy"> Basa Sunda
       </li>
       <!-- Swahili -->
       <li data-lang="sw" data-flag="tz.png" role="menuitem">
-        <img src="flags/tz.png" alt="Kiswahili"> Kiswahili
+        <img src="flags/tz.png" alt="Kiswahili" loading="lazy"> Kiswahili
       </li>
       <!-- Swedish -->
       <li data-lang="sv" data-flag="se.png" role="menuitem">
-        <img src="flags/se.png" alt="Svenska"> Svenska
+        <img src="flags/se.png" alt="Svenska" loading="lazy"> Svenska
       </li>
       <!-- Tajik -->
       <li data-lang="tg" data-flag="tj.png" role="menuitem">
-        <img src="flags/tj.png" alt="Тоҷикӣ"> Тоҷикӣ
+        <img src="flags/tj.png" alt="Тоҷикӣ" loading="lazy"> Тоҷикӣ
       </li>
       <!-- Tamil -->
       <li data-lang="ta" data-flag="lk.png" role="menuitem">
-        <img src="flags/lk.png" alt="தமிழ்"> தமிழ்
+        <img src="flags/lk.png" alt="தமிழ்" loading="lazy"> தமிழ்
       </li>
       <!-- Tatar -->
       <li data-lang="tt" data-flag="ru.png" role="menuitem">
-        <img src="flags/ru.png" alt="Татарча"> Татарча
+        <img src="flags/ru.png" alt="Татарча" loading="lazy"> Татарча
       </li>
       <!-- Telugu -->
       <li data-lang="te" data-flag="in.png" role="menuitem">
-        <img src="flags/in.png" alt="తెలుగు"> తెలుగు
+        <img src="flags/in.png" alt="తెలుగు" loading="lazy"> తెలుగు
       </li>
       <!-- Thai -->
       <li data-lang="th" data-flag="th.png" role="menuitem">
-        <img src="flags/th.png" alt="ไทย"> ไทย
+        <img src="flags/th.png" alt="ไทย" loading="lazy"> ไทย
       </li>
       <!-- Turkish -->
       <li data-lang="tr" data-flag="tr.png" role="menuitem">
-        <img src="flags/tr.png" alt="Türkçe"> Türkçe
+        <img src="flags/tr.png" alt="Türkçe" loading="lazy"> Türkçe
       </li>
       <!-- Turkmen -->
       <li data-lang="tk" data-flag="tm.png" role="menuitem">
-        <img src="flags/tm.png" alt="Türkmençe"> Türkmençe
+        <img src="flags/tm.png" alt="Türkmençe" loading="lazy"> Türkmençe
       </li>
       <!-- Ukrainian -->
       <li data-lang="uk" data-flag="ua.png" role="menuitem">
-        <img src="flags/ua.png" alt="Українська"> Українська
+        <img src="flags/ua.png" alt="Українська" loading="lazy"> Українська
       </li>
       <!-- Urdu -->
       <li data-lang="ur" data-flag="pk.png" role="menuitem" dir="rtl">
-        <img src="flags/pk.png" alt="اردو"> اردو
+        <img src="flags/pk.png" alt="اردو" loading="lazy"> اردو
       </li>
       <!-- Uyghur -->
       <li data-lang="ug" data-flag="cn.png" role="menuitem" dir="rtl">
-        <img src="flags/cn.png" alt="ئۇيغۇرچە"> ئۇيغۇرچە
+        <img src="flags/cn.png" alt="ئۇيغۇرچە" loading="lazy"> ئۇيغۇرچە
       </li>
       <!-- Uzbek -->
       <li data-lang="uz" data-flag="uz.png" role="menuitem">
-        <img src="flags/uz.png" alt="Oʻzbekcha"> Oʻzbekcha
+        <img src="flags/uz.png" alt="Oʻzbekcha" loading="lazy"> Oʻzbekcha
       </li>
       <!-- Vietnamese -->
       <li data-lang="vi" data-flag="vn.png" role="menuitem">
-        <img src="flags/vn.png" alt="Tiếng Việt"> Tiếng Việt
+        <img src="flags/vn.png" alt="Tiếng Việt" loading="lazy"> Tiếng Việt
       </li>
       <!-- Welsh -->
       <li data-lang="cy" data-flag="gb.png" role="menuitem">
-        <img src="flags/gb.png" alt="Cymraeg"> Cymraeg
+        <img src="flags/gb.png" alt="Cymraeg" loading="lazy"> Cymraeg
       </li>
       <!-- Xhosa -->
       <li data-lang="xh" data-flag="za.png" role="menuitem">
-        <img src="flags/za.png" alt="isiXhosa"> isiXhosa
+        <img src="flags/za.png" alt="isiXhosa" loading="lazy"> isiXhosa
       </li>
       <!-- Yiddish -->
       <li data-lang="yi" data-flag="il.png" role="menuitem" dir="rtl">
-        <img src="flags/il.png" alt="ייִדיש"> ייִדיש
+        <img src="flags/il.png" alt="ייִדיש" loading="lazy"> ייִדיש
       </li>
       <!-- Yoruba -->
       <li data-lang="yo" data-flag="ng.png" role="menuitem">
-        <img src="flags/ng.png" alt="Yorùbá"> Yorùbá
+        <img src="flags/ng.png" alt="Yorùbá" loading="lazy"> Yorùbá
       </li>
       <!-- Zulu -->
       <li data-lang="zu" data-flag="za.png" role="menuitem">
-        <img src="flags/za.png" alt="isiZulu"> isiZulu
+        <img src="flags/za.png" alt="isiZulu" loading="lazy"> isiZulu
       </li>
     </ul>
   </div>
 
-  <h1 id="title">Welcome to our test page</h1>
-  <p id="paragraph">
+  <h1 data-tolgee="title">Welcome to our test page</h1>
+  <p data-tolgee="paragraph">
     This is a sample paragraph you can use to verify that your language selector is working.
   </p>
 
+  <!-- Tolgee SDK -->
+  <script src="https://unpkg.com/@tolgee/web@5.24.0/dist/tolgee-web.umd.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
+    // Initialize Tolgee
+    (async () => {
+      const { Tolgee } = window.Tolgee;
+
+      await Tolgee.init({
+        apiKey: 'tgpak_ge4toojxl53gk5tenfyggndpnf2gmnrxgvrw423kobzwundsobzq',
+        apiUrl: 'https://app.tolgee.io',
+        defaultLanguage: 'en',
+        availableLanguages: [
+          'af', 'sq', 'am', 'ar', 'hy', 'as', 'az', 'be', 'bn', 'bs', 'bg', 'my', 'ca', 'ceb', 'ny', 'zh', 'zh-tw',
+          'co', 'hr', 'cs', 'da', 'nl', 'en', 'eo', 'et', 'tl', 'fi', 'fr', 'gl', 'ka', 'de', 'el', 'gu', 'ht', 'ha',
+          'haw', 'he', 'hi', 'hmn', 'hu', 'is', 'ig', 'id', 'ga', 'it', 'ja', 'jv', 'kn', 'kk', 'km', 'rw', 'ko', 'ku',
+          'ky', 'lo', 'lv', 'lt', 'lb', 'mk', 'mg', 'ms', 'ml', 'mt', 'mi', 'mr', 'mn', 'ne', 'no', 'or', 'ps', 'fa',
+          'pl', 'pt', 'pa', 'qu', 'ro', 'ru', 'sm', 'sr', 'st', 'sn', 'sd', 'si', 'sk', 'sl', 'so', 'es', 'su', 'sw',
+          'sv', 'tg', 'ta', 'tt', 'te', 'th', 'tr', 'tk', 'uk', 'ur', 'ug', 'uz', 'vi', 'cy', 'xh', 'yi', 'yo', 'zu'
+        ],
+        // Enable Google Translate for automatic translations
+        translationProvider: {
+          type: 'google',
+          apiKey: null // Uses Tolgee's built-in Google Translate integration (free)
+        }
+      }).run();
+
+      // Language selector logic
       const btn = document.getElementById('current-language');
       const list = document.getElementById('lang-list');
-      const title = document.getElementById('title');
-      const paragraph = document.getElementById('paragraph');
-
-      // Translations for title and paragraph in all supported languages
-      const translations = {
-        en: {
-          title: "Welcome to our test page",
-          paragraph: "This is a sample paragraph you can use to verify that your language selector is working."
-        },
-        es: {
-          title: "Bienvenido a nuestra página de prueba",
-          paragraph: "Este es un párrafo de ejemplo que puedes usar para verificar que tu selector de idioma funciona."
-        },
-        fr: {
-          title: "Bienvenue sur notre page de test",
-          paragraph: "Ceci est un paragraphe d'exemple que vous pouvez utiliser pour vérifier que votre sélecteur de langue fonctionne."
-        },
-        de: {
-          title: "Willkommen auf unserer Testseite",
-          paragraph: "Dies ist ein Beispielabsatz, den Sie verwenden können, um zu überprüfen, ob Ihr Sprachwähler funktioniert."
-        },
-        pt: {
-          title: "Bem-vindo à nossa página de teste",
-          paragraph: "Este é um parágrafo de exemplo que você pode usar para verificar se seu seletor de idioma está funcionando."
-        },
-        ru: {
-          title: "Добро пожаловать на нашу тестовую страницу",
-          paragraph: "Это пример абзаца, который вы можете использовать, чтобы убедиться, что ваш языковой переключатель работает."
-        },
-        zh: {
-          title: "欢迎来到我们的测试页面",
-          paragraph: "这是一个示例段落，您可以使用它来验证您的语言选择器是否正常工作。"
-        },
-        zh_tw: {
-          title: "歡迎來到我們的測試頁面",
-          paragraph: "這是一個示例段落，您可以使用它來驗證您的語言選擇器是否正常工作。"
-        },
-        ja: {
-          title: "テストページへようこそ",
-          paragraph: "これは、言語セレクターが正しく機能しているかを確認するために使用できるサンプルの段落です。"
-        },
-        ar: {
-          title: "مرحبًا بك في صفحة الاختبار الخاصة بنا",
-          paragraph: "هذا مقطع تجريبي يمكنك استخدامه للتحقق من أن محدد اللغة يعمل."
-        },
-        hi: {
-          title: "हमारे परीक्षण पृष्ठ पर आपका स्वागत है",
-          paragraph: "यह एक नमूना पैराग्राफ़ है जिसका उपयोग आप यह सत्यापित करने के लिए कर सकते हैं कि आपकी भाषा चयनकर्ता काम कर रहा है।"
-        },
-        id: {
-          title: "Selamat datang di halaman uji kami",
-          paragraph: "Ini adalah paragraf contoh yang dapat Anda gunakan untuk memverifikasi bahwa pemilih bahasa Anda berfungsi."
-        },
-        it: {
-          title: "Benvenuto nella nostra pagina di prova",
-          paragraph: "Questo è un paragrafo di esempio che puoi usare per verificare che il selettore di lingua funzioni."
-        },
-        af: {
-          title: "Welkom by ons toetsbladsy",
-          paragraph: "Dit is 'n voorbeeldparagraaf wat jy kan gebruik om te verifieer dat jou taal-kiezer werk."
-        },
-        bn: {
-          title: "আমাদের পরীক্ষা পৃষ্ঠায় স্বাগতম",
-          paragraph: "এটি একটি নমুনা অনুচ্ছেদ যা আপনি ব্যবহার করতে পারেন আপনার ভাষা নির্বাচক কাজ করছে কিনা তা যাচাই করতে।"
-        },
-        sw: {
-          title: "Karibu kwenye ukurasa wetu wa jaribio",
-          paragraph: "Hii ni paragrafu ya mfano ambayo unaweza kutumia kuthibitisha kuwa kichagua lugha yako kinafanya kazi."
-        },
-        ko: {
-          title: "테스트 페이지에 오신 것을 환영합니다",
-          paragraph: "이것은 언어 선택기가 제대로 작동하는지 확인하기 위해 사용할 수 있는 샘플 단락입니다."
-        },
-        tr: {
-          title: "Test sayfamıza hoş geldiniz",
-          paragraph: "Bu, dil seçicinizin çalıştığını doğrulamak için kullanabileceğiniz bir örnek paragraftır."
-        },
-        vi: {
-          title: "Chào mừng bạn đến với trang thử nghiệm của chúng tôi",
-          paragraph: "Đây là một đoạn văn mẫu mà bạn có thể sử dụng để kiểm tra xem bộ chọn ngôn ngữ của bạn có hoạt động hay không."
-        },
-        th: {
-          title: "ยินดีต้อนรับสู่หน้าทดสอบของเรา",
-          paragraph: "นี่คือย่อหน้าตัวอย่างที่คุณสามารถใช้เพื่อตรวจสอบว่าโปรแกรมเลือกภาษาของคุณทำงานหรือไม่"
-        },
-        nl: {
-          title: "Welkom op onze testpagina",
-          paragraph: "Dit is een voorbeeldparagraaf die u kunt gebruiken om te controleren of uw taalkiezer werkt."
-        },
-        sv: {
-          title: "Välkommen till vår testsida",
-          paragraph: "Detta är ett exempelstycke som du kan använda för att verifiera att din språkväljare fungerar."
-        },
-        pl: {
-          title: "Witamy na naszej stronie testowej",
-          paragraph: "To jest przykładowy akapit, którego możesz użyć, aby sprawdzić, czy twój selektor języka działa."
-        },
-        he: {
-          title: "ברוכים הבאים לדף הבדיקה שלנו",
-          paragraph: "זו פסקה לדוגמה שבה תוכלו להשתמש כדי לוודא שבורר השפות שלכם פועל."
-        },
-        fa: {
-          title: "به صفحه آزمایشی ما خوش آمدید",
-          paragraph: "این یک پاراگراف نمونه است که می‌توانید از آن برای بررسی عملکرد انتخابگر زبان خود استفاده کنید."
-        },
-        ta: {
-          title: "எங்கள் சோதனைப் பக்கத்திற்கு வரவேற்கிறோம்",
-          paragraph: "இது ஒரு மாதிரி பத்தி, உங்கள் மொழி தேர்ந்தெடுப்பவர் வேலை செய்கிறதா என்பதை சரிபார்க்க பயன்படுத்தலாம்."
-        },
-        te: {
-          title: "మా పరీక్షా పేజీకి స్వాగతం",
-          paragraph: "ఇది ఒక నమూనా పేరా, మీ భాషా సెలెక్టర్ పనిచేస్తుందో లేదో ధృవీకరించడానికి మీరు ఉపయోగించవచ్చు."
-        },
-        ms: {
-          title: "Selamat datang ke laman ujian kami",
-          paragraph: "Ini adalah perenggan contoh yang boleh anda gunakan untuk mengesahkan bahawa pemilih bahasa anda berfungsi."
-        },
-        ur: {
-          title: "ہمارے ٹیسٹ پیج پر خوش آمدید",
-          paragraph: "یہ ایک نمونہ پیراگراف ہے جسے آپ اپنے زبان سلیکٹر کے کام کرنے کی تصدیق کے لیے استعمال کر سکتے ہیں۔"
-        },
-        el: {
-          title: "Καλώς ήρθατε στη δοκιμαστική μας σελίδα",
-          paragraph: "Αυτή είναι μια δειγματοληπτική παράγραφος που μπορείτε να χρησιμοποιήσετε για να επαληθεύσετε ότι ο επιλογέας γλώσσας σας λειτουργεί."
-        },
-        cs: {
-          title: "Vítejte na naší testovací stránce",
-          paragraph: "Toto je ukázkový odstavec, který můžete použít k ověření, zda váš výběr jazyka funguje."
-        },
-        fi: {
-          title: "Tervetuloa testisivullemme",
-          paragraph: "Tämä on esimerkkikappale, jota voit käyttää varmistaaksesi, että kielivalitsimesi toimii."
-        },
-        no: {
-          title: "Velkommen til vår testside",
-          paragraph: "Dette er et eksempelavsnitt du kan bruke for å bekrefte at språkvelgeren din fungerer."
-        },
-        da: {
-          title: "Velkommen til vores tests side",
-          paragraph: "Dette er et eksempelafsnit, du kan bruge til at verificere, at din sprogvalg fungerer."
-        },
-        hu: {
-          title: "Üdvözöljük tesztoldalunkon",
-          paragraph: "Ez egy mintaparagrafus, amelyet használhat annak ellenőrzésére, hogy a nyelvválasztója működik-e."
-        },
-        uk: {
-          title: "Ласкаво просимо на нашу тестову сторінку",
-          paragraph: "Це зразок абзацу, який ви можете використати, щоб перевірити, чи працює ваш вибір мови."
-        },
-        ro: {
-          title: "Bine ați venit pe pagina noastră de test",
-          paragraph: "Acesta este un paragraf de exemplu pe care îl puteți folosi pentru a verifica dacă selectorul de limbă funcționează."
-        },
-        qu: {
-          title: "Qampaq pruebapaq p'anqamanqa kuyaykuy",
-          paragraph: "Kayqa huk qatina parrafu, chayta utilizayta atinki rimay taptayki puriqta kashanqanta tapyanapaq."
-        },
-        zu: {
-          title: "Siyakwamukela ekhasini lethu lokuhlola",
-          paragraph: "Lesi yisampula yesiqephu ongayisebenzisa ukuze uqinisekise ukuthi isikhethi solimi lwakho siyasebenza."
-        },
-        am: {
-          title: "ወደ የፈተና ገፃችን እንኳን ደህና መጡ",
-          paragraph: "ይህ የቋንቋ መራጭዎ መሥራቱን ለመፈተሽ መጠቀም የሚችሉት ናሙና አንቀጽ ነው።"
-        },
-        ha: {
-          title: "Barka da zuwa shafinmu na gwaji",
-          paragraph: "Wannan misali ne na sakin layi da za ku iya amfani da shi don tabbatar da cewa zaɓin harshenku yana aiki."
-        },
-        sq: {
-          title: "Mirë se vini në faqen tonë të testimit",
-          paragraph: "Ky është një paragraf shembull që mund ta përdorni për të verifikuar nëse përzgjedhësi juaj i gjuhës funksionon."
-        },
-        hy: {
-          title: "Բարի գալուստ մեր փորձարկման էջ",
-          paragraph: "Սա օրինակելի պարբերություն է, որը կարող եք օգտագործել՝ ստուգելու համար, արդյոք Ձեր լեզվի ընտրիչը աշխատում է:"
-        },
-        as: {
-          title: "আমাৰ পৰীক্ষণ পৃষ্ঠালৈ স্বাগতম",
-          paragraph: "এইটো এটা নমুনা পেৰাগ্ৰাফ যিটো আপুনি আপোনাৰ ভাষা নিৰ্বাচক কাম কৰি আছে নে নাই পৰীক্ষা কৰিবলৈ ব্যৱহাৰ কৰিব পাৰে।"
-        },
-        az: {
-          title: "Test səhifəmizə xoş gəlmisiniz",
-          paragraph: "Bu, dil seçicinizin işlədiyini yoxlamaq üçün istifadə edə biləcəyiniz nümunəvi bir abzasdır."
-        },
-        be: {
-          title: "Сардэчна запрашаем на нашу тэставую старонку",
-          paragraph: "Гэта ўзорны абзац, які вы можаце выкарыстаць для праверкі працы вашага пераключальніка моў."
-        },
-        bs: {
-          title: "Dobrodošli na našu testnu stranicu",
-          paragraph: "Ovo je primjer paragrafa koji možete koristiti da provjerite radi li vaš birač jezika."
-        },
-        bg: {
-          title: "Добре дошли на нашата тестова страница",
-          paragraph: "Това е примерен параграф, който можете да използвате, за да проверите дали вашият селектор на език работи."
-        },
-        my: {
-          title: "ကျွန်ုပ်တို့၏စမ်းသပ်စာမျက်နှာမှကြိုဆိုပါသည်",
-          paragraph: "ဤသည်မှာ သင့်ဘာသာစကားရွေးချယ်မှုသည် အလုပ်လုပ်နေသလားဆိုသည်ကို စစ်ဆေးရန် သုံးနိုင်သည့် နမူနာစာပိုဒ်တစ်ခုဖြစ်သည်။"
-        },
-        ca: {
-          title: "Benvingut a la nostra pàgina de proves",
-          paragraph: "Aquest és un paràgraf de mostra que podeu utilitzar per verificar que el vostre selector d'idioma funciona."
-        },
-        ceb: {
-          title: "Welcome sa among test page",
-          paragraph: "Kini usa ka sample nga parapo nga imong magamit aron masusi kung nagtrabaho ang imong language selector."
-        },
-        ny: {
-          title: "Takulandirani ku tsamba lathu loyesa",
-          paragraph: "Iyi ndi ndime yachitsanzo yomwe mungagwiritse ntchito kutsimikizira ngati chosankha chanu cha chinenero chikugwira ntchito."
-        },
-        co: {
-          title: "Benvenuti in a nostra pagina di prova",
-          paragraph: "Questu hè un paragrafu d'esempiu chì pudete aduprà per verificà chì u vostru selezzione di lingua funziona."
-        },
-        hr: {
-          title: "Dobrodošli na našu testnu stranicu",
-          paragraph: "Ovo je primjer paragrafa koji možete koristiti da provjerite radi li vaš birač jezika."
-        },
-        eo: {
-          title: "Bonvenon al nia testa paĝo",
-          paragraph: "Ĉi tio estas ekzempla paragrafo, kiun vi povas uzi por kontroli, ĉu via lingvo-elektilo funkcias."
-        },
-        et: {
-          title: "Tere tulemast meie testlehele",
-          paragraph: "See on näidisparagrahv, mida saate kasutada, et kontrollida, kas teie keeleväljavalija töötab."
-        },
-        tl: {
-          title: "Maligayang pagdating sa aming pahina ng pagsubok",
-          paragraph: "Ito ay isang sample na talata na maaari mong gamitin upang i-verify na gumagana ang iyong tagapili ng wika."
-        },
-        gl: {
-          title: "Benvido á nosa páxina de probas",
-          paragraph: "Este é un parágrafo de exemplo que podes usar para verificar que o teu selector de idioma funciona."
-        },
-        ka: {
-          title: "მოგესალმებით ჩვენს სატესტო გვერდზე",
-          paragraph: "ეს არის ნიმუშის აბზაცი, რომელიც შეგიძლიათ გამოიყენოთ იმის შესამოწმებლად, თუ თქვენი ენის შემრჩევი მუშაობს."
-        },
-        gu: {
-          title: "અમારા પરીક્ષણ પૃષ્ઠ પર આપનું સ્વાગત છે",
-          paragraph: "આ એક નમૂનાનો ફકરો છે જેનો ઉપયોગ તમે તમારા ભાષા પસંદગીકર્તા કામ કરે છે કે નહીં તે ચકાસવા માટે કરી શકો છો."
-        },
-        ht: {
-          title: "Byenveni nan paj tès nou an",
-          paragraph: "Sa a se yon paragraf echantiyon ou ka itilize pou verifye ke selektè lang ou a ap mache."
-        },
-        haw: {
-          title: "Welina mai i kā mākou ʻaoʻao hoʻāʻo",
-          paragraph: "He kenika kēia i hiki iā ʻoe ke hoʻohana no ka hōʻoia ʻana i ka hana o kāu koho ʻōlelo."
-        },
-        hmn: {
-          title: "Zoo siab txais tos rau peb nplooj ntawv sim",
-          paragraph: "Qhov no yog ib qho piv txwv kab lus uas koj tuaj yeem siv los xyuas seb koj tus xaiv lus puas ua haujlwm."
-        },
-        is: {
-          title: "Velkomin á prófunarsíðuna okkar",
-          paragraph: "Þetta er sýnishorn af málsgrein sem þú getur notað til að sannreyna hvort tungumálavali þinn virkar."
-        },
-        ig: {
-          title: "Nnoo na ibe ule anyị",
-          paragraph: "Nke a bụ paragraf nlele nke ị nwere ike iji chọpụta ma onye nhọrọ asụsụ gị ọ na-arụ ọrụ."
-        },
-        ga: {
-          title: "Fáilte chuig ár leathanach tástála",
-          paragraph: "Is sampla alt é seo is féidir leat a úsáid chun a fhíorú an bhfuil do roghnóir teanga ag obair."
-        },
-        jv: {
-          title: "Sugeng rawuh ing kaca uji coba kita",
-          paragraph: "Iki minangka paragraf conto sing bisa digunakake kanggo verifikasi manawa pamilih basa sampeyan bisa digunakake."
-        },
-        kn: {
-          title: "ನಮ್ಮ ಪರೀಕ್ಷಾ ಪುಟಕ್ಕೆ ಸ್ವಾಗತ",
-          paragraph: "ಇದು ಒಂದು ಮಾದರಿ ಫಕರವಾಗಿದ್ದು, ನಿಮ್ಮ ಭಾಷಾ ಆಯ್ಕೆಗಾರ ಕಾರ್ಯನಿರ್ವಹಿಸುತ್ತಿದೆಯೇ ಎಂದು ಪರಿಶೀಲಿಸಲು ನೀವು ಬಳಸಬಹುದು."
-        },
-        kk: {
-          title: "Біздің сынақ бетіне қош келдіңіз",
-          paragraph: "Бұл сіздің тіл таңдағышыңыздың жұмыс істеп тұрғанын тексеру үшін пайдалануға болатын үлгі абзац."
-        },
-        km: {
-          title: "សូមស្វាគមន៍មកកាន់ទំព័រសាកល្បងរបស់យើង",
-          paragraph: "នេះគឺជាកថាខណ្ឌគំរូមួយដែលអ្នកអាចប្រើដើម្បីផ្ទៀងផ្ទាត់ថាឧបករណ៍ជ្រើសរើសភាសារបស់អ្នកកំពុងដំណើរការ។"
-        },
-        rw: {
-          title: "Murakaza neza kuri paji yacu yo kugerageza",
-          paragraph: "Iyi ni paragrafi y'urugero ushobora gukoresha kugira ngo urebe niba icyatoranyije ururimi cyawe gikora."
-        },
-        ku: {
-          title: "Bi xêr hatin rûpela meya ceribandinê",
-          paragraph: "Ev paragrafek mînak e ku hûn dikarin bikar bînin da ku kontrol bikin ka hilbijêrê zimanê we dixebite."
-        },
-        ky: {
-          title: "Биздин сыноо баракчабызга кош келиңиз",
-          paragraph: "Бул сиздин тил тандоочуңуз иштеп жатканын текшерүү үчүн колдоно турган үлгү абзац."
-        },
-        lo: {
-          title: "ຍິນດີຕ້ອນຮັບສູ່ໜ້າທົດສອບຂອງພວກເຮົາ",
-          paragraph: "ນີ້ແມ່ນຕົວຢ່າງຍໍ້ໜ້າທີ່ທ່ານສາມາດໃຊ້ເພື່ອກວດສອບວ່າເຄື່ອງເລືອກພາສາຂອງທ່ານເຮັດວຽກຢູ່ຫຼືບໍ່."
-        },
-        lv: {
-          title: "Laipni lūdzam mūsu testa lapā",
-          paragraph: "Šis ir parauga rindkopa, kuru varat izmantot, lai pārbaudītu, vai jūsu valodas izvēlētājs darbojas."
-        },
-        lt: {
-          title: "Sveiki atvykę į mūsų bandymo puslapį",
-          paragraph: "Tai yra pavyzdinis paragrafas, kurį galite naudoti norėdami patikrinti, ar jūsų kalbos pasirinkėjas veikia."
-        },
-        lb: {
-          title: "Wëllkomm op eiser Test Säit",
-          paragraph: "Dëst ass e Beispill Paragraf, deen Dir benotze kënnt fir ze kontrolléieren ob Äre Sproochewähler funktionéiert."
-        },
-        mk: {
-          title: "Добредојдовте на нашата тест страница",
-          paragraph: "Ова е пример параграф што можете да го користите за да проверите дали вашиот избирач на јазик работи."
-        },
-        mg: {
-          title: "Tongasoa eto amin'ny pejinay fitsapana",
-          paragraph: "Ity dia paragrafy santionany azonao ampiasaina hanamarinana raha mandeha ny mpifantina fiteny anao."
-        },
-        ml: {
-          title: "ഞങ്ങളുടെ ടെസ്റ്റ് പേജിലേക്ക് സ്വാഗതം",
-          paragraph: "നിന്റെ ഭാഷാ തിരഞ്ഞെടുപ്പുകാരൻ പ്രവർത്തിക്കുന്നുണ്ടോ എന്ന് പരിശോധിക്കാൻ നിനക്ക് ഉപയോഗിക്കാവുന്ന ഒരു സാമ്പിൾ ഫലകമാണ് ഇത്."
-        },
-        mt: {
-          title: "Merħba fil-paġna tat-test tagħna",
-          paragraph: "Dan hu paragrafu ta’ eżempju li tista’ tuża biex tivverifika jekk is-selettur tal-lingwa tiegħek hux jaħdem."
-        },
-        mi: {
-          title: "Nau mai ki tō mātou whārangi whakamātau",
-          paragraph: "He tauira kōwae tēnei ka taea e koe te whakamahi hei manatū mena kei te mahi tō kōwhirite reo."
-        },
-        mr: {
-          title: "आमच्या चाचणी पृष्ठावर स्वागत आहे",
-          paragraph: "हा एक नमुना परिच्छेद आहे जो तुम्ही तुमचा भाषा निवडकर्ता कार्यरत आहे की नाही हे तपासण्यासाठी वापरू शकता."
-        },
-        mn: {
-          title: "Манай туршилтын хуудас руу тавтай морил",
-          paragraph: "Энд таны хэлний сонгогч ажиллаж байгаа эсэхийг шалгахад ашиглаж болох жишээний догол мөр байна."
-        },
-        ne: {
-          title: "हाम्रो परीक्षण पृष्ठमा स्वागत छ",
-          paragraph: "यो एक नमूना अनुच्छेद हो जुन तपाईंले आफ्नो भाषा चयनकर्ता काम गरिरहेको छ कि छैन भनेर जाँच गर्न प्रयोग गर्न सक्नुहुन्छ।"
-        },
-        or: {
-          title: "ଆମର ପରୀକ୍ଷଣ ପୃଷ୍ଠାକୁ ସ୍ଵାଗତ",
-          paragraph: "ଏହା ଏକ ନମୁନା ପାରାଗ୍ରାଫ ଯାହା ଆପଣ ଆପଣଙ୍କର ଭାଷା ଚୟନକାରୀ କାମ କରୁଛି କି ନାହିଁ ତାହା ଯାଞ୍ଚ କରିବା ପାଇଁ ବ୍ୟବହାର କରିପାରିବେ।"
-        },
-        ps: {
-          title: "زموږ د ازموینې پاڼې ته ښه راغلاست",
-          paragraph: "دا یوه نمونه پراګراف دی چې تاسو یې کارولی شئ ترڅو وڅیړئ چې ستاسو د ژبې انتخاب کوونکی کار کوي."
-        },
-        sr: {
-          title: "Добродошли на нашу тестну страницу",
-          paragraph: "Ово је пример параграфа који можете користити да проверите да ли ваш бирач језика ради."
-        },
-        st: {
-          title: "Rea u amohela leqepheng la rona la teko",
-          paragraph: "Sena ke temana ea mohlala eo u ka e sebelisang ho netefatsa hore mokhethoa oa puo ea hau oa sebetsa."
-        },
-        sn: {
-          title: "Tikugashirei kumapeji edu ekuedza",
-          paragraph: "Iyi indima yemuenzaniso yaungashandisa kuratidza kana musarudzo wemutauro wako wakushanda."
-        },
-        sd: {
-          title: "اسان جي امتحاني صفحي تي ڀليڪار",
-          paragraph: "هي هڪ نموني وارو پيراگراف آهي جيڪو توهان استعمال ڪري سگهو ٿا ته توهان جي ٻولي چونڊيندڙ ڪم ڪري رهيو آهي يا نه."
-        },
-        si: {
-          title: "අපගේ පරීක්ෂණ පිටුවට සාදරයෙන් පිළිගනිමු",
-          paragraph: "මෙය ඔබේ භාෂා තේරීම භාවිතා කරන්නේද යන්න පරීක්ෂා කිරීමට භාවිතා කළ හැකි නියැදි ඡේදයකි."
-        },
-        sk: {
-          title: "Vitajte na našej testovacej stránke",
-          paragraph: "Toto je ukážkový odsek, ktorý môžete použiť na overenie, či váš výber jazyka funguje."
-        },
-        sl: {
-          title: "Dobrodošli na naši testni strani",
-          paragraph: "To je vzorčni odstavek, ki ga lahko uporabite za preverjanje, ali vaš izbirnik jezika deluje."
-        },
-        so: {
-          title: "Ku soo dhawoow boggeena imtixaanka",
-          paragraph: "Kani waa cutub tusaale ah oo aad isticmaali karto si aad u hubiso in xulashadaada luqadda ay shaqaynayso."
-        },
-        su: {
-          title: "Wilujeng sumping ka halaman uji kami",
-          paragraph: "Ieu mangrupikeun paragraf conto anu anjeun tiasa anggo pikeun mariksa naha pamilih basa anjeun tiasa dianggo."
-        },
-        tg: {
-          title: "Хуш омадед ба саҳифаи озмоишии мо",
-          paragraph: "Ин як параграфи намунавӣ аст, ки шумо метавонед барои санҷиши кор кардани интихобгари забони худ истифода баред."
-        },
-        tt: {
-          title: "Безнең тест битенә рәхим итегез",
-          paragraph: "Бу сезнең тел сайлагычыгыз эшләп торуын тикшерү өчен куллана алырлык үрнәк абзац."
-        },
-        tk: {
-          title: "Synag sahypamyza hoş geldiňiz",
-          paragraph: "Bu, dil saýlawçyňyzyň işleýändigini barlamak üçin ulanyp boljak mysal paragraf."
-        },
-        ug: {
-          title: "سىناق بېتىمىزگە خۇش كەلدىڭىز",
-          paragraph: "بۇ سىز تىل تاللىغۇچىڭىزنىڭ ئىشلەۋاتقانلىقىنى تەكشۈرۈش ئۈچۈن ئىشلىتەلەيدىغان ئۈلگە بىر پاراگراف."
-        },
-        uz: {
-          title: "Sinov sahifamizga xush kelibsiz",
-          paragraph: "Bu sizning til tanlagichingiz ishlashini tekshirish uchun foydalanishingiz mumkin bo'lgan namuna paragraf."
-        },
-        cy: {
-          title: "Croeso i’n tudalen brawf",
-          paragraph: "Dyma baragraff enghreifftiol y gallwch ei ddefnyddio i wirio a yw’ch dewiswr iaith yn gweithio."
-        },
-        xh: {
-          title: "Wamkelekile kwiphepha lethu lovavanyo",
-          paragraph: "Esi sisampuli yomhlathi ongasisebenzisa ukuqinisekisa ukuba umkhethi wolwimi lwakho uyasebenza."
-        },
-        yi: {
-          title: "ברוכים הבאים צו אונדזער טעסט בלאַט",
-          paragraph: "דאָס איז אַ מוסטער פּאַראַגראַף וואָס איר קענט נוצן צו באַשטעטיקן אַז דיין שפּראַך סעלעקטאָר אַרבעט."
-        },
-        yo: {
-          title: "Kaabọ si oju-iwe idanwo wa",
-          paragraph: "Eyi jẹ apakan ayẹwo ti o le lo lati rii daju pe aṣayan ede rẹ n ṣiṣẹ."
-        }
-      };
 
       // Toggle dropdown
       btn.addEventListener('click', () => {
@@ -957,31 +575,28 @@
 
       // Language selection
       list.querySelectorAll('li').forEach(item => {
-        item.addEventListener('click', () => {
+        item.addEventListener('click', async () => {
           const lang = item.dataset.lang;
           const flag = item.dataset.flag;
           // Update button
           btn.querySelector('img').src = `flags/${flag}`;
           btn.querySelector('img').alt = item.textContent.trim();
           btn.querySelector('span').textContent = lang.toUpperCase();
-          // Apply translations
-          if (translations[lang]) {
-            title.textContent = translations[lang].title;
-            paragraph.textContent = translations[lang].paragraph;
-            document.documentElement.lang = lang;
-            // Handle RTL for additional languages
-            document.documentElement.dir = (
-              lang === 'ar' || 
-              lang === 'he' || 
-              lang === 'fa' || 
-              lang === 'ur' || 
-              lang === 'ku' || 
-              lang === 'ps' || 
-              lang === 'sd' || 
-              lang === 'ug' || 
-              lang === 'yi'
-            ) ? 'rtl' : 'ltr';
-          }
+          // Switch language with Tolgee
+          await Tolgee.changeLanguage(lang);
+          // Update HTML lang and dir attributes
+          document.documentElement.lang = lang;
+          document.documentElement.dir = (
+            lang === 'ar' || 
+            lang === 'he' || 
+            lang === 'fa' || 
+            lang === 'ur' || 
+            lang === 'ku' || 
+            lang === 'ps' || 
+            lang === 'sd' || 
+            lang === 'ug' || 
+            lang === 'yi'
+          ) ? 'rtl' : 'ltr';
           list.style.display = 'none';
           btn.setAttribute('aria-expanded', 'false');
         });
@@ -991,7 +606,7 @@
       document.querySelectorAll('.lang-list img').forEach(img => {
         img.setAttribute('loading', 'lazy');
       });
-    });
+    })();
   </script>
 </body>
 </html>
