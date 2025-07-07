@@ -1,22 +1,114 @@
-<!-- language-selector.html -->
 <div class="lang-selector">
   <button class="lang-btn" id="current-language" aria-haspopup="true" aria-expanded="false">
     <img src="flags/gb.png" alt="English"> <span>EN</span> ▼
   </button>
   <ul class="lang-list" id="lang-list" role="menu" aria-label="Select Language">
-    <!-- Languages (same as provided, 110 total) -->
-    <li data-lang="af" data-flag="za.png" role="menuitem">
-      <img src="flags/za.png" alt="Afrikaans"> Afrikaans
-    </li>
-    <li data-lang="sq" data-flag="al.png" role="menuitem">
-      <img src="flags/al.png" alt="Shqip"> Shqip
-    </li>
-    <!-- ... Include all 110 languages from the previous code ... -->
-    <li data-lang="yo" data-flag="ng.png" role="menuitem">
-      <img src="flags/ng.png" alt="Yorùbá"> Yorùbá
-    </li>
-    <li data-lang="zu" data-flag="za.png" role="menuitem">
-      <img src="flags/za.png" alt="isiZulu"> isiZulu
-    </li>
+    <li data-lang="af" data-flag="za.png" role="menuitem"><img src="flags/za.png" alt="Afrikaans"> Afrikaans</li>
+    <li data-lang="sq" data-flag="al.png" role="menuitem"><img src="flags/al.png" alt="Shqip"> Shqip</li>
+    <li data-lang="am" data-flag="et.png" role="menuitem"><img src="flags/et.png" alt="አማርኛ"> አማርኛ</li>
+    <li data-lang="ar" data-flag="sa.png" role="menuitem" dir="rtl"><img src="flags/sa.png" alt="العربية"> العربية</li>
+    <li data-lang="hy" data-flag="am.png" role="menuitem"><img src="flags/am.png" alt="Հայերեն"> Հայերեն</li>
+    <li data-lang="as" data-flag="in.png" role="menuitem"><img src="flags/in.png" alt="অসমীয়া"> অসমীয়া</li>
+    <li data-lang="az" data-flag="az.png" role="menuitem"><img src="flags/az.png" alt="Azərbaycan dili"> Azərbaycan dili</li>
+    <li data-lang="be" data-flag="by.png" role="menuitem"><img src="flags/by.png" alt="Беларуская"> Беларуская</li>
+    <li data-lang="bn" data-flag="bd.png" role="menuitem"><img src="flags/bd.png" alt="বাংলা"> বাংলা</li>
+    <li data-lang="bs" data-flag="ba.png" role="menuitem"><img src="flags/ba.png" alt="Bosanski"> Bosanski</li>
+    <li data-lang="bg" data-flag="bg.png" role="menuitem"><img src="flags/bg.png" alt="Български"> Български</li>
+    <li data-lang="my" data-flag="mm.png" role="menuitem"><img src="flags/mm.png" alt="မြန်မာစာ"> မြန်မာစာ</li>
+    <li data-lang="ca" data-flag="es.png" role="menuitem"><img src="flags/es.png" alt="Català"> Català</li>
+    <li data-lang="ceb" data-flag="ph.png" role="menuitem"><img src="flags/ph.png" alt="Cebuano"> Cebuano</li>
+    <li data-lang="ny" data-flag="mw.png" role="menuitem"><img src="flags/mw.png" alt="Chichewa"> Chichewa</li>
+    <li data-lang="zh" data-flag="cn.png" role="menuitem"><img src="flags/cn.png" alt="中文"> 中文</li>
+    <li data-lang="zh-tw" data-flag="tw.png" role="menuitem"><img src="flags/tw.png" alt="繁體中文"> 繁體中文</li>
+    <li data-lang="co" data-flag="fr.png" role="menuitem"><img src="flags/fr.png" alt="Corsu"> Corsu</li>
+    <li data-lang="hr" data-flag="hr.png" role="menuitem"><img src="flags/hr.png" alt="Hrvatski"> Hrvatski</li>
+    <li data-lang="cs" data-flag="cz.png" role="menuitem"><img src="flags/cz.png" alt="Čeština"> Čeština</li>
+    <li data-lang="da" data-flag="dk.png" role="menuitem"><img src="flags/dk.png" alt="Dansk"> Dansk</li>
+    <li data-lang="nl" data-flag="nl.png" role="menuitem"><img src="flags/nl.png" alt="Nederlands"> Nederlands</li>
+    <li data-lang="en" data-flag="gb.png" role="menuitem"><img src="flags/gb.png" alt="English"> English</li>
+    <li data-lang="eo" data-flag="un.png" role="menuitem"><img src="flags/un.png" alt="Esperanto"> Esperanto</li>
+    <li data-lang="et" data-flag="ee.png" role="menuitem"><img src="flags/ee.png" alt="Eesti"> Eesti</li>
+    <li data-lang="tl" data-flag="ph.png" role="menuitem"><img src="flags/ph.png" alt="Filipino"> Filipino</li>
+    <li data-lang="fi" data-flag="fi.png" role="menuitem"><img src="flags/fi.png" alt="Suomi"> Suomi</li>
+    <li data-lang="fr" data-flag="fr.png" role="menuitem"><img src="flags/fr.png" alt="Français"> Français</li>
+    <li data-lang="gl" data-flag="es.png" role="menuitem"><img src="flags/es.png" alt="Galego"> Galego</li>
+    <li data-lang="ka" data-flag="ge.png" role="menuitem"><img src="flags/ge.png" alt="ქართული"> ქართული</li>
+    <li data-lang="de" data-flag="de.png" role="menuitem"><img src="flags/de.png" alt="Deutsch"> Deutsch</li>
+    <li data-lang="el" data-flag="gr.png" role="menuitem"><img src="flags/gr.png" alt="Ελληνικά"> Ελληνικά</li>
+    <li data-lang="gu" data-flag="in.png" role="menuitem"><img src="flags/in.png" alt="ગુજરાતી"> ગુજરાતી</li>
+    <li data-lang="ht" data-flag="ht.png" role="menuitem"><img src="flags/ht.png" alt="Kreyòl Ayisyen"> Kreyòl Ayisyen</li>
+    <li data-lang="ha" data-flag="ng.png" role="menuitem"><img src="flags/ng.png" alt="Hausa"> Hausa</li>
+    <li data-lang="haw" data-flag="us.png" role="menuitem"><img src="flags/us.png" alt="ʻŌlelo Hawaiʻi"> ʻŌlelo Hawaiʻi</li>
+    <li data-lang="he" data-flag="il.png" role="menuitem" dir="rtl"><img src="flags/il.png" alt="עברית"> עברית</li>
+    <li data-lang="hi" data-flag="in.png" role="menuitem"><img src="flags/in.png" alt="हिन्दी"> हिन्दी</li>
+    <li data-lang="hmn" data-flag="la.png" role="menuitem"><img src="flags/la.png" alt="Hmoob"> Hmoob</li>
+    <li data-lang="hu" data-flag="hu.png" role="menuitem"><img src="flags/hu.png" alt="Magyar"> Magyar</li>
+    <li data-lang="is" data-flag="is.png" role="menuitem"><img src="flags/is.png" alt="Íslenska"> Íslenska</li>
+    <li data-lang="ig" data-flag="ng.png" role="menuitem"><img src="flags/ng.png" alt="Igbo"> Igbo</li>
+    <li data-lang="id" data-flag="id.png" role="menuitem"><img src="flags/id.png" alt="Bahasa Indonesia"> Bahasa Indonesia</li>
+    <li data-lang="ga" data-flag="ie.png" role="menuitem"><img src="flags/ie.png" alt="Gaelige"> Gaelige</li>
+    <li data-lang="it" data-flag="it.png" role="menuitem"><img src="flags/it.png" alt="Italiano"> Italiano</li>
+    <li data-lang="ja" data-flag="jp.png" role="menuitem"><img src="flags/jp.png" alt="日本語"> 日本語</li>
+    <li data-lang="jv" data-flag="id.png" role="menuitem"><img src="flags/id.png" alt="Basa Jawa"> Basa Jawa</li>
+    <li data-lang="kn" data-flag="in.png" role="menuitem"><img src="flags/in.png" alt="ಕನ್ನಡ"> ಕನ್ನಡ</li>
+    <li data-lang="kk" data-flag="kz.png" role="menuitem"><img src="flags/kz.png" alt="Қазақша"> Қазақша</li>
+    <li data-lang="km" data-flag="kh.png" role="menuitem"><img src="flags/kh.png" alt="ខ្មែរ"> ខ្មែរ</li>
+    <li data-lang="rw" data-flag="rw.png" role="menuitem"><img src="flags/rw.png" alt="Ikinyarwanda"> Ikinyarwanda</li>
+    <li data-lang="ko" data-flag="kr.png" role="menuitem"><img src="flags/kr.png" alt="한국어"> 한국어</li>
+    <li data-lang="ku" data-flag="iq.png" role="menuitem" dir="rtl"><img src="flags/iq.png" alt="Kurdî"> Kurdî</li>
+    <li data-lang="ky" data-flag="kg.png" role="menuitem"><img src="flags/kg.png" alt="Кыргызча"> Кыргызча</li>
+    <li data-lang="lo" data-flag="la.png" role="menuitem"><img src="flags/la.png" alt="ລາວ"> ລາວ</li>
+    <li data-lang="lv" data-flag="lv.png" role="menuitem"><img src="flags/lv.png" alt="Latviešu"> Latviešu</li>
+    <li data-lang="lt" data-flag="lt.png" role="menuitem"><img src="flags/lt.png" alt="Lietuvių"> Lietuvių</li>
+    <li data-lang="lb" data-flag="lu.png" role="menuitem"><img src="flags/lu.png" alt="Lëtzebuergesch"> Lëtzebuergesch</li>
+    <li data-lang="mk" data-flag="mk.png" role="menuitem"><img src="flags/mk.png" alt="Македонски"> Македонски</li>
+    <li data-lang="mg" data-flag="mg.png" role="menuitem"><img src="flags/mg.png" alt="Malagasy"> Malagasy</li>
+    <li data-lang="ms" data-flag="my.png" role="menuitem"><img src="flags/my.png" alt="Bahasa Melayu"> Bahasa Melayu</li>
+    <li data-lang="ml" data-flag="in.png" role="menuitem"><img src="flags/in.png" alt="മലയാളം"> മലയാളം</li>
+    <li data-lang="mt" data-flag="mt.png" role="menuitem"><img src="flags/mt.png" alt="Malti"> Malti</li>
+    <li data-lang="mi" data-flag="nz.png" role="menuitem"><img src="flags/nz.png" alt="Māori"> Māori</li>
+    <li data-lang="mr" data-flag="in.png" role="menuitem"><img src="flags/in.png" alt="मराठी"> मराठी</li>
+    <li data-lang="mn" data-flag="mn.png" role="menuitem"><img src="flags/mn.png" alt="Монгол"> Монгол</li>
+    <li data-lang="ne" data-flag="np.png" role="menuitem"><img src="flags/np.png" alt="नेपाली"> नेपाली</li>
+    <li data-lang="no" data-flag="no.png" role="menuitem"><img src="flags/no.png" alt="Norsk"> Norsk</li>
+    <li data-lang="or" data-flag="in.png" role="menuitem"><img src="flags/in.png" alt="ଓଡ଼ିଆ"> ଓଡ଼ିଆ</li>
+    <li data-lang="ps" data-flag="af.png" role="menuitem" dir="rtl"><img src="flags/af.png" alt="پښتو"> پښتو</li>
+    <li data-lang="fa" data-flag="ir.png" role="menuitem" dir="rtl"><img src="flags/ir.png" alt="فارسی"> فارسی</li>
+    <li data-lang="pl" data-flag="pl.png" role="menuitem"><img src="flags/pl.png" alt="Polski"> Polski</li>
+    <li data-lang="pt" data-flag="pt.png" role="menuitem"><img src="flags/pt.png" alt="Português"> Português</li>
+    <li data-lang="pa" data-flag="in.png" role="menuitem"><img src="flags/in.png" alt="ਪੰਜਾਬੀ"> ਪੰਜਾਬੀ</li>
+    <li data-lang="qu" data-flag="pe.png" role="menuitem"><img src="flags/pe.png" alt="Runasimi"> Runasimi</li>
+    <li data-lang="ro" data-flag="ro.png" role="menuitem"><img src="flags/ro.png" alt="Română"> Română</li>
+    <li data-lang="ru" data-flag="ru.png" role="menuitem"><img src="flags/ru.png" alt="Русский"> Русский</li>
+    <li data-lang="sm" data-flag="ws.png" role="menuitem"><img src="flags/ws.png" alt="Gagana Samoa"> Gagana Samoa</li>
+    <li data-lang="sr" data-flag="rs.png" role="menuitem"><img src="flags/rs.png" alt="Српски"> Српски</li>
+    <li data-lang="st" data-flag="ls.png" role="menuitem"><img src="flags/ls.png" alt="Sesotho"> Sesotho</li>
+    <li data-lang="sn" data-flag="zw.png" role="menuitem"><img src="flags/zw.png" alt="ChiShona"> ChiShona</li>
+    <li data-lang="sd" data-flag="pk.png" role="menuitem" dir="rtl"><img src="flags/pk.png" alt="سنڌي"> سنڌي</li>
+    <li data-lang="si" data-flag="lk.png" role="menuitem"><img src="flags/lk.png" alt="සිංහල"> සිංහල</li>
+    <li data-lang="sk" data-flag="sk.png" role="menuitem"><img src="flags/sk.png" alt="Slovenčina"> Slovenčina</li>
+    <li data-lang="sl" data-flag="si.png" role="menuitem"><img src="flags/si.png" alt="Slovenščina"> Slovenščina</li>
+    <li data-lang="so" data-flag="so.png" role="menuitem"><img src="flags/so.png" alt="Soomaali"> Soomaali</li>
+    <li data-lang="es" data-flag="es.png" role="menuitem"><img src="flags/es.png" alt="Español"> Español</li>
+    <li data-lang="su" data-flag="id.png" role="menuitem"><img src="flags/id.png" alt="Basa Sunda"> Basa Sunda</li>
+    <li data-lang="sw" data-flag="tz.png" role="menuitem"><img src="flags/tz.png" alt="Kiswahili"> Kiswahili</li>
+    <li data-lang="sv" data-flag="se.png" role="menuitem"><img src="flags/se.png" alt="Svenska"> Svenska</li>
+    <li data-lang="tg" data-flag="tj.png" role="menuitem"><img src="flags/tj.png" alt="Тоҷикӣ"> Тоҷикӣ</li>
+    <li data-lang="ta" data-flag="lk.png" role="menuitem"><img src="flags/lk.png" alt="தமிழ்"> தமிழ்</li>
+    <li data-lang="tt" data-flag="ru.png" role="menuitem"><img src="flags/ru.png" alt="Татарча"> Татарча</li>
+    <li data-lang="te" data-flag="in.png" role="menuitem"><img src="flags/in.png" alt="తెలుగు"> తెలుగు</li>
+    <li data-lang="th" data-flag="th.png" role="menuitem"><img src="flags/th.png" alt="ไทย"> ไทย</li>
+    <li data-lang="tr" data-flag="tr.png" role="menuitem"><img src="flags/tr.png" alt="Türkçe"> Türkçe</li>
+    <li data-lang="tk" data-flag="tm.png" role="menuitem"><img src="flags/tm.png" alt="Türkmençe"> Türkmençe</li>
+    <li data-lang="uk" data-flag="ua.png" role="menuitem"><img src="flags/ua.png" alt="Українська"> Українська</li>
+    <li data-lang="ur" data-flag="pk.png" role="menuitem" dir="rtl"><img src="flags/pk.png" alt="اردو"> اردو</li>
+    <li data-lang="ug" data-flag="cn.png" role="menuitem" dir="rtl"><img src="flags/cn.png" alt="ئۇيغۇرچە"> ئۇيغۇرچە</li>
+    <li data-lang="uz" data-flag="uz.png" role="menuitem"><img src="flags/uz.png" alt="Oʻzbekcha"> Oʻzbekcha</li>
+    <li data-lang="vi" data-flag="vn.png" role="menuitem"><img src="flags/vn.png" alt="Tiếng Việt"> Tiếng Việt</li>
+    <li data-lang="cy" data-flag="gb.png" role="menuitem"><img src="flags/gb.png" alt="Cymraeg"> Cymraeg</li>
+    <li data-lang="xh" data-flag="za.png" role="menuitem"><img src="flags/za.png" alt="isiXhosa"> isiXhosa</li>
+    <li data-lang="yi" data-flag="il.png" role="menuitem" dir="rtl"><img src="flags/il.png" alt="ייִדיש"> ייִדיש</li>
+    <li data-lang="yo" data-flag="ng.png" role="menuitem"><img src="flags/ng.png" alt="Yorùbá"> Yorùbá</li>
+    <li data-lang="zu" data-flag="za.png" role="menuitem"><img src="flags/za.png" alt="isiZulu"> isiZulu</li>
   </ul>
 </div>
