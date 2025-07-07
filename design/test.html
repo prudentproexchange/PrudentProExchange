@@ -1,54 +1,155 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- Give <title> its own key so it won’t stomp on the H1 -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <title data-tolgee="page_title">Welcome to our test page</title>
+
   <style>
-    /* … keep your existing CSS here … */
+    /* reset a bit */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #333;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    h1, p {
+      backdrop-filter: blur(8px);
+      background: rgba(255, 255, 255, 0.6);
+      border-radius: 12px;
+      padding: 1.5rem 2rem;
+      margin: 1rem auto;
+      max-width: 600px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+    }
+    h1:hover, p:hover {
+      transform: translateY(-4px);
+    }
+
+    .lang-selector {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      z-index: 1000;
+      font-size: 0.9rem;
+    }
+
+    .lang-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(255,255,255,0.7);
+      border: none;
+      border-radius: 999px;
+      padding: 0.6rem 1rem;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+      cursor: pointer;
+      backdrop-filter: blur(6px);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .lang-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    }
+    .lang-btn img {
+      width: 20px; height: auto;
+      border-radius: 50%;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .lang-list {
+      position: absolute;
+      top: calc(100% + 0.5rem);
+      left: 0;
+      background: rgba(255,255,255,0.9);
+      backdrop-filter: blur(6px);
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+      width: 200px;
+      list-style: none;
+      padding: 0.5rem 0;
+      display: none;
+      max-height: 280px;
+      overflow-y: auto;
+      transition: opacity 0.2s ease;
+    }
+    .lang-list li {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 1rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .lang-list li:hover {
+      background: rgba(0, 123, 255, 0.1);
+    }
+    .lang-list img {
+      width: 18px; height: auto;
+      border-radius: 50%;
+    }
+
+    /* hide any Google logo from the translation provider */
+    .tg-translate-provider-logo,
+    .tolgee-google-logo {
+      display: none !important;
+    }
+
+    @media (max-width: 480px) {
+      .lang-btn { padding: 0.5rem 0.8rem; }
+      .lang-list { width: 160px; }
+    }
   </style>
 </head>
 <body>
-  <div class="lang-selector">
-    <button class="lang-btn" id="current-language" aria-haspopup="true" aria-expanded="false">
-      <img src="flags/gb.png" alt="English"> <span>EN</span> ▼
-    </button>
-    <ul class="lang-list" id="lang-list" role="menu" aria-label="Select Language">
-      <!-- … all your <li data-lang="xx" data-flag="yy.png"> items … -->
-    </ul>
-  </div>
 
-  <!-- Now use a different key here so it maps separately -->
   <h1 data-tolgee="page_title">Welcome to our test page</h1>
   <p data-tolgee="sample_paragraph">
     This is a sample paragraph you can use to verify that your language selector is working.
   </p>
 
-  <!-- Tolgee UMD bundle -->
+  <div class="lang-selector">
+    <button class="lang-btn" id="current-language" aria-haspopup="true" aria-expanded="false">
+      <img src="flags/gb.png" alt="English"> <span>EN</span> ▼
+    </button>
+    <ul class="lang-list" id="lang-list" role="menu" aria-label="Select Language">
+      <!-- replicate all your <li data-lang="xx" data-flag="yy.png"> items here -->
+      <li data-lang="fr" data-flag="fr.png" role="menuitem">
+        <img src="flags/fr.png" alt="Français" loading="lazy"> Français
+      </li>
+      <li data-lang="es" data-flag="es.png" role="menuitem">
+        <img src="flags/es.png" alt="Español" loading="lazy"> Español
+      </li>
+      <!-- …etc… -->
+    </ul>
+  </div>
+
   <script src="https://unpkg.com/@tolgee/web@5.24.0/dist/tolgee-web.umd.js"></script>
   <script>
     (async () => {
       const { Tolgee } = window.Tolgee;
-
-      // Initialize Tolgee with your real key
-      await Tolgee.init({
+      const tolgee = await Tolgee.init({
         apiKey: 'tgpak_ge4toojxl44dqzdbmjvgqmdigrtw4nltgbwdg4dbm4zwiy3gny2a',
         apiUrl: 'https://app.tolgee.io',
         defaultLanguage: 'en',
-        availableLanguages: [
-          /* ... same list of codes you already have ... */
-        ],
-        translationProvider: {
-          type: 'google',
-          apiKey: null
-        }
-      }).run();
+        availableLanguages: [ /* …your codes… */ ],
+        translationProvider: { type: 'google', apiKey: null }
+      });
+      await tolgee.run();
 
       const btn = document.getElementById('current-language');
       const list = document.getElementById('lang-list');
 
-      // Toggle dropdown
       btn.addEventListener('click', e => {
         e.stopPropagation();
         const open = list.style.display === 'block';
@@ -56,38 +157,31 @@
         btn.setAttribute('aria-expanded', String(!open));
       });
 
-      // Close on outside click
       document.addEventListener('click', () => {
         list.style.display = 'none';
         btn.setAttribute('aria-expanded', 'false');
       });
 
-      // Handle selection
       list.querySelectorAll('li').forEach(item => {
         item.addEventListener('click', async () => {
           const lang = item.dataset.lang;
           const flag = item.dataset.flag;
+          // update button
           btn.querySelector('img').src = `flags/${flag}`;
           btn.querySelector('img').alt = item.textContent.trim();
           btn.querySelector('span').textContent = lang.toUpperCase();
-
-          await Tolgee.changeLanguage(lang);
-
+          // change & translate
+          await tolgee.changeLanguage(lang);
+          await tolgee.translate();
+          // adjust dir/lang attrs
           document.documentElement.lang = lang;
-          document.documentElement.dir = [
-            'ar','he','fa','ur','ku','ps','sd','ug','yi'
-          ].includes(lang)
-            ? 'rtl'
-            : 'ltr';
-
+          document.documentElement.dir = ['ar','he','fa','ur','ku','ps','sd','ug','yi'].includes(lang)
+            ? 'rtl' : 'ltr';
+          // close dropdown
           list.style.display = 'none';
           btn.setAttribute('aria-expanded', 'false');
         });
       });
-
-      // Lazy-load flags
-      document.querySelectorAll('.lang-list img')
-        .forEach(img => img.setAttribute('loading', 'lazy'));
     })();
   </script>
 </body>
