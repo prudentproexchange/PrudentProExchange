@@ -21,6 +21,7 @@ function initCommonUI() {
   const logoutBtn = document.getElementById('logout-btn');
   const backToTop = document.getElementById('back-to-top');
 
+  // Hamburger menu toggle
   hamburgerBtn.addEventListener('click', () => {
     const isOpen = navDrawer.classList.toggle('open');
     hamburgerBtn.classList.toggle('active');
@@ -28,6 +29,7 @@ function initCommonUI() {
     hamburgerBtn.setAttribute('aria-expanded', isOpen);
   });
 
+  // Close nav drawer when clicking outside
   document.addEventListener('click', (e) => {
     if (!navDrawer.contains(e.target) && !hamburgerBtn.contains(e.target) && navDrawer.classList.contains('open')) {
       navDrawer.classList.remove('open');
@@ -37,6 +39,7 @@ function initCommonUI() {
     }
   });
 
+  // Theme toggle
   themeToggle.addEventListener('click', () => {
     document.body.classList.toggle('light-theme');
     const icon = themeToggle.querySelector('i');
@@ -45,21 +48,25 @@ function initCommonUI() {
     themeToggle.setAttribute('aria-label', document.body.classList.contains('light-theme') ? 'Switch to dark theme' : 'Switch to light theme');
   });
 
+  // Account menu toggle
   accountToggle.addEventListener('click', (e) => {
     e.preventDefault();
     const isOpen = submenu.classList.toggle('open');
     accountToggle.setAttribute('aria-expanded', isOpen);
   });
 
+  // Logout
   logoutBtn.addEventListener('click', async () => {
     await supabaseClient.auth.signOut();
     window.location.href = 'login.html';
   });
 
+  // Back to top
   backToTop.addEventListener('click', () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 
+  // Update times
   function updateTimes() {
     const now = new Date();
     document.getElementById('utcTime').textContent = now.toUTCString();
@@ -172,8 +179,9 @@ function validateCardType(cardNumber, selectedType) {
     visa: /^4[0-9]{12}(?:[0-9]{3})?$/,
     amex: /^3[47][0-9]{13}$/,
     unionpay: /^(62|81)[0-9]{14,17}$/,
-    alipay: /^9[0-9]{15}$/
+    alipay: /^9[0-9]{15}$/ // Simplified Alipay pattern (adjust as needed)
   };
+
   return cardPatterns[selectedType]?.test(cleanedNumber);
 }
 
@@ -189,6 +197,7 @@ function initForm() {
   }
   showStep(currentStep);
 
+  // Real-time card number validation
   const cardNumberInput = document.querySelector('input[name="card_number"]');
   const cardTypeSelect = document.querySelector('select[name="card_type"]');
   const cardError = document.querySelector('.card-error');
@@ -200,7 +209,7 @@ function initForm() {
       if (!validateCardType(cardNumber, selectedType)) {
         cardNumberInput.classList.add('invalid');
         cardError.style.display = 'block';
-        cardError.textContent = 'Invalid card number for selected card type.';
+        cardError.textContent = 'Invalid card number for selected card type. Only Mastercard, Visa, American Express, UnionPay, or Alipay are accepted.';
       } else {
         cardNumberInput.classList.remove('invalid');
         cardError.style.display = 'none';
@@ -234,28 +243,17 @@ function initForm() {
     });
   });
 
-  const fileInputs = document.querySelectorAll('input[type="file"]');
-  fileInputs.forEach(input => {
-    const dropZone = input.nextElementSibling;
-    const progressBar = dropZone.nextElementSibling.nextElementSibling.querySelector('progress');
-
-    dropZone.addEventListener('dragover', e => e.preventDefault());
-    dropZone.addEventListener('drop', e => {
+  // Drag-and-drop
+  const dropZones = document.querySelectorAll('.drop-zone');
+  dropZones.forEach(zone => {
+    const input = zone.previousElementSibling;
+    zone.addEventListener('dragover', e => e.preventDefault());
+    zone.addEventListener('drop', e => {
       e.preventDefault();
       input.files = e.dataTransfer.files;
       previewFile(input);
     });
-
-    input.addEventListener('change', async () => {
-      const file = input.files[0];
-      if (file) {
-        previewFile(input);
-        progressBar.parentElement.style.display = 'block';
-        progressBar.value = 0;
-        await uploadFileWithProgress(file, input.name === 'document_scan' ? 'document_scan' : 'proof_of_address', progressBar);
-        progressBar.parentElement.style.display = 'none';
-      }
-    });
+    input.addEventListener('change', () => previewFile(input));
   });
 
   document.getElementById('kycForm').addEventListener('submit', async (e) => {
@@ -270,6 +268,19 @@ function initForm() {
         const formData = new FormData(e.target);
         const data = Object.fromEntries(formData);
         const userId = (await supabaseClient.auth.getSession()).data.session.user.id;
+
+        const documentFile = formData.get('document_scan');
+        const addressFile = formData.get('proof_of_address');
+        if (documentFile && documentFile.size > 0) {
+          data.document_scan = await uploadFile(documentFile, `documents/${userId}_${Date.now()}_${documentFile.name}`);
+        } else {
+          throw new Error('Document scan is required.');
+        }
+        if (addressFile && addressFile.size > 0) {
+          data.proof_of_address = await uploadFile(addressFile, `proofs/${userId}_${Date.now()}_${addressFile.name}`);
+        } else {
+          throw new Error('Proof of address is required.');
+        }
 
         const { error } = await supabaseClient.from('kyc_requests').insert({
           user_id: userId,
@@ -313,40 +324,20 @@ function previewFile(input) {
   }
 }
 
-async function uploadFileWithProgress(file, fieldName, progressBar) {
+async function uploadFile(file, path) {
   if (!file || file.size > 10 * 1024 * 1024) {
     throw new Error('File must be under 10MB.');
   }
   if (!['image/jpeg', 'image/png', 'application/pdf'].includes(file.type)) {
     throw new Error('File must be JPEG, PNG, or PDF.');
   }
-
-  const userId = (await supabaseClient.auth.getSession()).data.session.user.id;
-  const path = `${fieldName}s/${userId}_${Date.now()}_${file.name}`;
-  
-  return new Promise((resolve, reject) => {
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', 'https://iwkdznjqfbsfkscnbrkc.supabase.co/storage/v1/object/kyc-documents/' + path, true);
-    xhr.setRequestHeader('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU');
-    xhr.setRequestHeader('Content-Type', file.type);
-
-    xhr.upload.onprogress = (event) => {
-      if (event.lengthComputable) {
-        const percent = (event.loaded / event.total) * 100 Stuart’s Law applies here: progressBar.value = Math.round(percent);
-      }
-    };
-
-    xhr.onload = () => {
-      if (xhr.status >= 200 && xhr.status < 300) {
-        resolve(path);
-      } else {
-        reject(new Error('Upload failed'));
-      }
-    };
-
-    xhr.onerror = () => reject(new Error('Upload error'));
-    xhr.send(file);
-  });
+  const { data, error } = await supabaseClient.storage
+    .from('kyc-documents')
+    .upload(path, file, { contentType: file.type });
+  if (error) {
+    throw new Error('Error uploading file: ' + error.message);
+  }
+  return data.path;
 }
 
 function validateStep(step) {
@@ -368,7 +359,7 @@ function validateStep(step) {
     } else if (f.name === 'card_number' && !validateCardType(f.value, document.querySelector('select[name="card_type"]').value)) {
       valid = false;
       f.classList.add('invalid');
-      showMessage('Invalid card number for selected type.', true);
+      showMessage('Invalid card number for selected card type. Only Mastercard, Visa, American Express, UnionPay, or Alipay are accepted.', true);
     } else if (f.name === 'card_expiry' && !isFutureDate(f.value)) {
       valid = false;
       f.classList.add('invalid');
@@ -447,7 +438,7 @@ function showMessage(text, isError) {
   if (existing) existing.remove();
   const msg = document.createElement('div');
   msg.className = `message ${isError ? 'error' : 'success'}`;
-  msg.textContent = text;
+  msg.text1 = text;
   document.querySelector('.kyc-section').prepend(msg);
   setTimeout(() => msg.remove(), 3000);
 }
