@@ -8,63 +8,9 @@
   <link rel="stylesheet" href="css/application.css"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Added CSS for the loading spinner -->
   <style>
-    /* Theme Variables */
-    :root[data-theme="dark"] {
-      --bg: #1a1a1a;
-      --text: #e0e0e0;
-      --gold: #ffd700;
-      --gold-dark: #cca300;
-      --glass: rgba(255, 255, 255, 0.1);
-      --shadow: rgba(0, 0, 0, 0.3);
-      --text-light: #b0b0b0;
-      --text-muted: #888;
-    }
-    :root[data-theme="light"] {
-      --bg: #f5f5f5;
-      --text: #333;
-      --gold: #cca300;
-      --gold-dark: #b58900;
-      --glass: rgba(0, 0, 0, 0.05);
-      --shadow: rgba(0, 0, 0, 0.1);
-      --text-light: #555;
-      --text-muted: #666;
-    }
-
-    /* GTranslate Widget Positioning */
-    .gtranslate_wrapper {
-      position: fixed;
-      bottom: 20px;
-      left: 20px;
-      z-index: 1000;
-    }
-
-    /* Back-to-Top Button Styling */
-    #back-to-top {
-      position: fixed !important;
-      bottom: 80px !important;
-      right: 20px !important;
-      z-index: 1000 !important;
-      background: var(--gold);
-      color: #000;
-      border: none;
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      font-size: 1.5rem;
-      cursor: pointer;
-      box-shadow: 0 4px 10px var(--shadow);
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    #back-to-top:hover {
-      background: var(--gold-dark);
-      transform: scale(1.1);
-    }
-
-    /* Loading Spinner */
     .loading-spinner {
       display: none;
       text-align: center;
@@ -72,23 +18,8 @@
     }
     .loading-spinner i {
       font-size: 24px;
-      color: var(--gold);
+      color: #ffd700;
       margin-right: 8px;
-    }
-
-    /* Responsive Adjustments */
-    @media (max-width: 768px) {
-      .gtranslate_wrapper {
-        bottom: 10px;
-        left: 10px;
-      }
-      #back-to-top {
-        bottom: 70px !important;
-        right: 10px !important;
-        width: 40px;
-        height: 40px;
-        font-size: 1.2rem;
-      }
     }
   </style>
 </head>
@@ -96,7 +27,6 @@
   <video class="bg-video" autoplay muted loop playsinline preload="auto">
     <source src="assets/videos/background.webm" type="video/webm">
     <source src="assets/videos/background.mp4" type="video/mp4">
-    Your browser does not support the video tag.
   </video>
   <div class="overlay">
     <header class="site-header">
@@ -285,7 +215,7 @@
                   <option value="PL">Poland</option>
                   <option value="PT">Portugal</option>
                   <option value="QA">Qatar</option>
-                  <option value="RO">Romania</option>
+                  <option manage="RO">Romania</option>
                   <option value="RU">Russia</option>
                   <option value="RW">Rwanda</option>
                   <option value="KN">Saint Kitts and Nevis</option>
@@ -301,7 +231,7 @@
                   <option value="SL">Sierra Leone</option>
                   <option value="SG">Singapore</option>
                   <option value="SK">Slovakia</option>
-                  <option value="SI">Slovenia</option>
+                  <option value="SI">Sl>Select Country</option>
                   <option value="SB">Solomon Islands</option>
                   <option value="SO">Somalia</option>
                   <option value="ZA">South Africa</option>
@@ -360,8 +290,10 @@
               <input type="checkbox" name="terms" required aria-label="Terms Agreement"/>
               I agree with the <a href="privacy.html">Privacy Policy</a> and <a href="terms.html">Terms & Conditions</a>
             </label>
+            <!-- Added ID to the submit button for easier access -->
             <button type="submit" class="cta primary" id="submitButton">Create Account</button>
             <p class="login-link">Already have an account? <a href="login.html">Login</a></p>
+            <!-- Added loading spinner element -->
             <div class="loading-spinner" id="loadingSpinner">
               <i class="fas fa-spinner fa-spin"></i> Processing your application...
             </div>
@@ -369,50 +301,19 @@
         </div>
       </section>
     </main>
-
-    <footer class="section section-dark site-footer" data-aos="fade-up">
-      <div class="footer-content">
-        <p class="utc-time">UTC Time: <span id="utcTime"></span></p>
-        <p class="local-time">Local Time: <span id="localTime"></span></p>
-        <p class="local-date">Local Date: <span id="localDate"></span></p>
-        <nav class="footer-links">
-          <a href="about.html">About Us</a>
-          <a href="privacy.html">Privacy Policy</a>
-          <a href="terms.html">Terms & Conditions</a>
-        </nav>
-        <p class="copyright">© 2025 PrudentProExchange. All Rights Reserved. SEC Registration #0001230714</p>
-      </div>
-    </footer>
   </div>
 
-  <!-- Back to Top Button -->
-  <button id="back-to-top" aria-label="Back to top">🚀</button>
-
-  <!-- GTranslate Widget -->
-  <div class="gtranslate_wrapper"></div>
-  <script>window.gtranslateSettings = {"default_language":"en","native_language_names":true,"detect_browser_language":true,"wrapper_selector":".gtranslate_wrapper","flag_style":"3d"}</script>
-  <script src="https://cdn.gtranslate.net/widgets/latest/float.js" defer></script>
-
-  <!-- Crisp Chat Widget -->
-  <script type="text/javascript">
-    window.$crisp = [];
-    window.CRISP_WEBSITE_ID = "599e8216-ab4f-4d4f-bb22-5d47cf14031f";
-    (function() {
-      d = document;
-      s = d.createElement("script");
-      s.src = "https://client.crisp.chat/l.js";
-      s.async = 1;
-      d.getElementsByTagName("head")[0].appendChild(s);
-    })();
-  </script>
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
-    // Initialize AOS
     AOS.init({ duration: 800, once: true });
 
-    // Hamburger Toggle
+    window.addEventListener('error', event => {
+      alert(`Error: ${event.message}\nFile: ${event.filename}:${event.lineno}`);
+    });
+    window.addEventListener('unhandledrejection', event => {
+      alert(`Unhandled promise rejection:\n${event.reason}`);
+    });
+
     const btnApp = document.getElementById('hamburgerApp'),
           drawerApp = document.getElementById('navDrawerApp');
     btnApp.addEventListener('click', () => {
@@ -420,7 +321,6 @@
       btnApp.classList.toggle('active');
     });
 
-    // Theme Toggle
     const themeToggle = document.getElementById('theme-toggle');
     themeToggle.addEventListener('click', () => {
       document.body.classList.toggle('light-theme');
@@ -429,36 +329,6 @@
       icon.classList.toggle('fa-sun');
     });
 
-    // Local Time and Date
-    function updateLocalTime() {
-      const now = new Date();
-      document.getElementById('localTime').textContent = now.toLocaleTimeString();
-      document.getElementById('localDate').textContent = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-    }
-    setInterval(updateLocalTime, 1000);
-    updateLocalTime();
-
-    // UTC Time
-    function updateUTCTime() {
-      document.getElementById('utcTime').textContent = new Date().toUTCString();
-    }
-    setInterval(updateUTCTime, 1000);
-    updateUTCTime();
-
-    // Back to Top
-    document.getElementById('back-to-top').addEventListener('click', () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-
-    // Error Handling
-    window.addEventListener('error', event => {
-      alert(`Error: ${event.message}\nFile: ${event.filename}:${event.lineno}`);
-    });
-    window.addEventListener('unhandledrejection', event => {
-      alert(`Unhandled promise rejection:\n${event.reason}`);
-    });
-
-    // Referral Code Generation
     function generateReferralCode(length = 8) {
       const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
       let code = '';
@@ -468,14 +338,13 @@
       return code;
     }
 
-    // Supabase Client
     const { createClient } = supabase;
     const supabaseClient = createClient(
       'https://iwkdznjqfbsfkscnbrkc.supabase.co',
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU'
     );
 
-    // Real-time Username Availability Check
+    // Real-time username availability check
     const usernameInput = document.querySelector('input[name="username"]');
     usernameInput.addEventListener('blur', async () => {
       const username = usernameInput.value.trim();
@@ -486,7 +355,7 @@
             .select('username')
             .eq('username', username)
             .single();
-          if (error && error.code !== 'PGRST116') { // PGRST116 means no rows found
+          if (error && error.code !== 'PGRST116') { // PGRST116 means no rows found, which is fine
             throw error;
           }
           if (data) {
@@ -503,7 +372,6 @@
       }
     });
 
-    // Form Submission
     document.getElementById('applicationForm').addEventListener('submit', async (event) => {
       event.preventDefault();
       event.stopPropagation();
@@ -517,11 +385,14 @@
       loadingSpinner.style.display = 'block';
 
       try {
-        // Client-Side Validation
+        // **Step 1: Robust Client-Side Validation**
+        // Check HTML5 form validity (required fields, email format, etc.)
         if (!form.checkValidity()) {
           form.reportValidity();
           throw new Error('Please fill in all required fields correctly.');
         }
+
+        // Additional custom validations
         if (form.password.value !== form.confirm_password.value) {
           throw new Error('Passwords do not match.');
         }
@@ -531,6 +402,8 @@
         if (!form.country.value) {
           throw new Error('Please select a country.');
         }
+
+        // Password strength validation (e.g., minimum 8 characters)
         if (form.password.value.length < 8) {
           throw new Error('Password must be at least 8 characters long.');
         }
@@ -547,6 +420,7 @@
         const referralCode = generateReferralCode();
         const referralLink = `https://prudentproexchange.net/referral/${referralCode}`;
 
+        // **Step 2: Perform All Operations Sequentially**
         // Sign up the user
         const { data: authData, error: signUpError } = await supabaseClient.auth.signUp({
           email: form.email.value,
@@ -665,7 +539,7 @@
 
         console.log('Profile inserted successfully');
 
-        // Success Handling
+        // **Step 3: Success Handling**
         alert('Sign-up successful! Please check your email to confirm your account, then log in.');
         window.location.href = 'login.html';
       } catch (error) {
