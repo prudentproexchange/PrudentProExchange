@@ -25,13 +25,48 @@
       padding: 1rem 2rem;
       position: relative;
     }
-    /* Float the translator widget */
+
+    /* Default (simple) widget: right side */
     #google_translate_element {
       position: absolute;
       top: 50%;
       right: 2rem;
       transform: translateY(-50%);
     }
+
+    /* Custom widget “card”: left side */
+    #custom_translate_card {
+      position: absolute;
+      top: 50%;
+      left: 2rem;
+      transform: translateY(-50%);
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      padding: 0.75rem 1rem;
+      display: flex;
+      align-items: center;
+      font-size: 0.95rem;
+      line-height: 1.2;
+    }
+    /* Hide the default Google logo */
+    #custom_translate_card .goog-logo-link { display: none !important; }
+    /* Tidy up the select */
+    #custom_translate_card select {
+      border: none;
+      background: transparent;
+      font-weight: bold;
+      font-family: inherit;
+      cursor: pointer;
+      outline: none;
+    }
+    /* Optional: show a custom globe emoji/icon */
+    #custom_translate_card::before {
+      content: "🌐";
+      margin-right: 0.5rem;
+      font-size: 1.2rem;
+    }
+
     main {
       max-width: 800px;
       margin: 2rem auto;
@@ -57,7 +92,13 @@
   <header>
     <h1>PrudentProExchange</h1>
     <p>Your trusted partner in trading success</p>
-    <!-- Google Translate Widget -->
+
+    <!-- Left: custom-styled translator card -->
+    <div id="custom_translate_card">
+      <div id="google_translate_custom"></div>
+    </div>
+
+    <!-- Right: simple inline translator -->
     <div id="google_translate_element"></div>
   </header>
 
@@ -87,21 +128,30 @@
     <p>© 2025 PrudentProExchange. All Rights Reserved.</p>
   </footer>
 
-  <!-- ✅ Google Translate Script -->
+  <!-- Google Translate initialization for both widgets -->
   <script type="text/javascript">
     function googleTranslateElementInit() {
+      // Simple inline picker (right)
       new google.translate.TranslateElement({
         pageLanguage: 'en',
         includedLanguages: 'en,fr,es,de,it,zh-CN,ja,ar,ru,pt',
         layout: google.translate.TranslateElement.InlineLayout.SIMPLE
       }, 'google_translate_element');
+
+      // Custom picker (left)
+      new google.translate.TranslateElement({
+        pageLanguage: 'en',
+        includedLanguages: 'en,fr,es,de,it,zh-CN,ja,ar,ru,pt',
+        layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+        autoDisplay: false
+      }, 'google_translate_custom');
     }
   </script>
   <script type="text/javascript"
     src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit">
   </script>
 
-  <!-- ✅ Smartsupp Live Chat Script -->
+  <!-- Smartsupp Live Chat Script -->
   <script type="text/javascript">
     var _smartsupp = _smartsupp || {};
     _smartsupp.key = '6a53a0d4440df26e63d93402f253e0941e1d565e';
@@ -116,7 +166,7 @@
     })(document);
   </script>
 
-  <!-- ✅ Tidio Live Chat Script -->
+  <!-- Tidio Live Chat Script -->
   <script src="//code.tidio.co/peclwowoqcbxhfe3wbowfneh1rabrdjz.js" async></script>
 
 </body>
