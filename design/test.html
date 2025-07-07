@@ -5,124 +5,238 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Language Selector Test Page</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 2rem; background: #f9f9f9; }
-    .lang-selector { position: relative; display: inline-block; margin-bottom: 2rem; }
+    body {
+      font-family: Arial, sans-serif;
+      padding: 2rem;
+      background: #f9f9f9;
+    }
+    .lang-selector {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 2rem;
+    }
     .lang-btn {
-      background: #fff; border: 1px solid #ccc; padding: 0.5rem 1rem;
-      cursor: pointer; display: flex; align-items: center; gap: 0.5rem;
+      background: #fff;
+      border: 1px solid #ccc;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
       box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     }
-    .lang-btn img { width: 20px; }
+    .lang-btn img {
+      width: 20px;
+      height: auto;
+    }
     .lang-list {
-      position: absolute; top: calc(100% + 0.2rem); left: 0;
-      margin: 0; padding: 0.2rem 0; list-style: none;
-      background: #fff; border: 1px solid #ccc; width: 260px;
-      display: none; max-height: 400px; overflow-y: auto;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1); z-index: 10;
+      position: absolute;
+      top: calc(100% + 0.2rem);
+      left: 0;
+      margin: 0;
+      padding: 0.2rem 0;
+      list-style: none;
+      background: #fff;
+      border: 1px solid #ccc;
+      width: 240px;
+      display: none;
+      max-height: 300px;
+      overflow-y: auto;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      z-index: 10;
     }
     .lang-list li {
-      padding: 0.5rem 1rem; cursor: pointer;
-      display: flex; align-items: center; gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
-    .lang-list li:hover { background: #f0f0f0; }
-    .lang-list img { width: 20px; }
+    .lang-list li:hover {
+      background: #f0f0f0;
+    }
+    .lang-list img {
+      width: 20px;
+      height: auto;
+    }
+    /* RTL support for languages like Arabic, Hebrew, Persian */
+    [dir="rtl"] .lang-btn,
+    [dir="rtl"] .lang-list li {
+      direction: rtl;
+      text-align: right;
+    }
   </style>
 </head>
 <body>
 
   <div class="lang-selector">
-    <button class="lang-btn" id="current-language">
-      <img src="flags/en.png" alt="EN"> <span>EN</span> ▼
+    <button class="lang-btn" id="current-language" aria-haspopup="true" aria-expanded="false">
+      <img src="flags/gb.png" alt="English"> <span>EN</span> ▼
     </button>
-    <ul class="lang-list" id="lang-list">
-      <!-- 1–20: original set -->
-      <li data-lang="en"    data-flag="en.png"><img src="flags/en.png"> English</li>
-      <li data-lang="en-us" data-flag="en-us.png"><img src="flags/en-us.png"> English (US)</li>
-      <li data-lang="en-gb" data-flag="en-gb.png"><img src="flags/en-gb.png"> English (UK)</li>
-      <li data-lang="en-au" data-flag="en-au.png"><img src="flags/en-au.png"> English (AU)</li>
-      <li data-lang="en-ca" data-flag="en-ca.png"><img src="flags/en-ca.png"> English (CA)</li>
-      <li data-lang="en-in" data-flag="en-in.png"><img src="flags/en-in.png"> English (IN)</li>
-      <li data-lang="zh" data-flag="zh.png"><img src="flags/zh.png"> 中文 (Chinese)</li>
-      <li data-lang="hi" data-flag="hi.png"><img src="flags/hi.png"> हिन्दी (Hindi)</li>
-      <li data-lang="es" data-flag="es.png"><img src="flags/es.png"> Español (Spanish)</li>
-      <li data-lang="fr" data-flag="fr.png"><img src="flags/fr.png"> Français (French)</li>
-      <li data-lang="ar" data-flag="ar.png"><img src="flags/ar.png"> العربية (Arabic)</li>
-      <li data-lang="bn" data-flag="bn.png"><img src="flags/bn.png"> বাংলা (Bengali)</li>
-      <li data-lang="ru" data-flag="ru.png"><img src="flags/ru.png"> Русский (Russian)</li>
-      <li data-lang="pt" data-flag="pt.png"><img src="flags/pt.png"> Português (Portuguese)</li>
-      <li data-lang="ur" data-flag="ur.png"><img src="flags/ur.png"> اُردُو (Urdu)</li>
-      <li data-lang="id" data-flag="id.png"><img src="flags/id.png"> Bahasa Indonesia</li>
-      <li data-lang="de" data-flag="de.png"><img src="flags/de.png"> Deutsch (German)</li>
-      <li data-lang="ja" data-flag="ja.png"><img src="flags/ja.png"> 日本語 (Japanese)</li>
-      <li data-lang="sw" data-flag="sw.png"><img src="flags/sw.png"> Kiswahili (Swahili)</li>
-      <li data-lang="mr" data-flag="mr.png"><img src="flags/mr.png"> मराठी (Marathi)</li>
-
-      <!-- 21–90: 70 additional major languages -->
-      <li data-lang="ms" data-flag="ms.png"><img src="flags/ms.png"> Bahasa Melayu</li>
-      <li data-lang="fa" data-flag="fa.png"><img src="flags/fa.png"> فارسی (Persian)</li>
-      <li data-lang="uk" data-flag="uk.png"><img src="flags/uk.png"> Українська (Ukrainian)</li>
-      <li data-lang="pl" data-flag="pl.png"><img src="flags/pl.png"> Polski (Polish)</li>
-      <li data-lang="nl" data-flag="nl.png"><img src="flags/nl.png"> Nederlands (Dutch)</li>
-      <li data-lang="ro" data-flag="ro.png"><img src="flags/ro.png"> Română (Romanian)</li>
-      <li data-lang="hu" data-flag="hu.png"><img src="flags/hu.png"> Magyar (Hungarian)</li>
-      <li data-lang="cs" data-flag="cs.png"><img src="flags/cs.png"> Čeština (Czech)</li>
-      <li data-lang="el" data-flag="el.png"><img src="flags/el.png"> Ελληνικά (Greek)</li>
-      <li data-lang="bg" data-flag="bg.png"><img src="flags/bg.png"> Български (Bulgarian)</li>
-      <li data-lang="sv" data-flag="sv.png"><img src="flags/sv.png"> Svenska (Swedish)</li>
-      <li data-lang="da" data-flag="da.png"><img src="flags/da.png"> Dansk (Danish)</li>
-      <li data-lang="no" data-flag="no.png"><img src="flags/no.png"> Norsk (Norwegian)</li>
-      <li data-lang="fi" data-flag="fi.png"><img src="flags/fi.png"> Suomi (Finnish)</li>
-      <li data-lang="sk" data-flag="sk.png"><img src="flags/sk.png"> Slovenčina (Slovak)</li>
-      <li data-lang="sl" data-flag="sl.png"><img src="flags/sl.png"> Slovenščina (Slovenian)</li>
-      <li data-lang="hr" data-flag="hr.png"><img src="flags/hr.png"> Hrvatski (Croatian)</li>
-      <li data-lang="sr" data-flag="sr.png"><img src="flags/sr.png"> Српски (Serbian)</li>
-      <li data-lang="bs" data-flag="bs.png"><img src="flags/bs.png"> Bosanski (Bosnian)</li>
-      <li data-lang="he" data-flag="he.png"><img src="flags/he.png"> עברית (Hebrew)</li>
-      <li data-lang="th" data-flag="th.png"><img src="flags/th.png"> ไทย (Thai)</li>
-      <li data-lang="vi" data-flag="vi.png"><img src="flags/vi.png"> Tiếng Việt (Vietnamese)</li>
-      <li data-lang="ta" data-flag="ta.png"><img src="flags/ta.png"> தமிழ் (Tamil)</li>
-      <li data-lang="kn" data-flag="kn.png"><img src="flags/kn.png"> ಕನ್ನಡ (Kannada)</li>
-      <li data-lang="ml" data-flag="ml.png"><img src="flags/ml.png"> മലയാളം (Malayalam)</li>
-      <li data-lang="gu" data-flag="gu.png"><img src="flags/gu.png"> ગુજરાતી (Gujarati)</li>
-      <li data-lang="pa" data-flag="pa.png"><img src="flags/pa.png"> ਪੰਜਾਬੀ (Punjabi)</li>
-      <li data-lang="ne" data-flag="ne.png"><img src="flags/ne.png"> नेपाली (Nepali)</li>
-      <li data-lang="si" data-flag="si.png"><img src="flags/si.png"> සිංහල (Sinhala)</li>
-      <li data-lang="my" data-flag="my.png"><img src="flags/my.png"> မြန်မာ (Burmese)</li>
-      <li data-lang="km" data-flag="km.png"><img src="flags/km.png"> ខ្មែរ (Khmer)</li>
-      <li data-lang="lo" data-flag="lo.png"><img src="flags/lo.png"> ລາວ (Lao)</li>
-      <li data-lang="am" data-flag="am.png"><img src="flags/am.png"> አማርኛ (Amharic)</li>
-      <li data-lang="yo" data-flag="yo.png"><img src="flags/yo.png"> Yorùbá (Yoruba)</li>
-      <li data-lang="ig" data-flag="ig.png"><img src="flags/ig.png"> Igbo (Igbo)</li>
-      <li data-lang="zu" data-flag="zu.png"><img src="flags/zu.png"> isiZulu (Zulu)</li>
-      <li data-lang="xh" data-flag="xh.png"><img src="flags/xh.png"> isiXhosa (Xhosa)</li>
-      <li data-lang="xh" data-flag="xh.png"><img src="flags/xh.png"> isiXhosa (Xhosa)</li>
-      <li data-lang="af" data-flag="af.png"><img src="flags/af.png"> Afrikaans</li>
-      <li data-lang="tg" data-flag="tg.png"><img src="flags/tg.png"> Тоҷикӣ (Tajik)</li>
-      <li data-lang="uz" data-flag="uz.png"><img src="flags/uz.png"> Oʻzbek (Uzbek)</li>
-      <li data-lang="kk" data-flag="kk.png"><img src="flags/kk.png"> Қазақ (Kazakh)</li>
-      <li data-lang="mn" data-flag="mn.png"><img src="flags/mn.png"> Монгол (Mongolian)</li>
-      <li data-lang="ps" data-flag="ps.png"><img src="flags/ps.png"> پښتو (Pashto)</li>
-      <li data-lang="sd" data-flag="sd.png"><img src="flags/sd.png"> سنڌي (Sindhi)</li>
-      <li data-lang="ha" data-flag="ha.png"><img src="flags/ha.png"> Hausa (Hausa)</li>
-      <li data-lang="mn" data-flag="mn.png"><img src="flags/mn.png"> Монгол (Mongolian)</li>
-      <li data-lang="gl" data-flag="gl.png"><img src="flags/gl.png"> Galego (Galician)</li>
-      <li data-lang="eo" data-flag="eo.png"><img src="flags/eo.png"> Esperanto</li>
-      <li data-lang="cy" data-flag="cy.png"><img src="flags/cy.png"> Cymraeg (Welsh)</li>
-      <li data-lang="ga" data-flag="ga.png"><img src="flags/ga.png"> Gaeilge (Irish)</li>
-      <li data-lang="mt" data-flag="mt.png"><img src="flags/mt.png"> Malti (Maltese)</li>
-      <li data-lang="is" data-flag="is.png"><img src="flags/is.png"> Íslenska (Icelandic)</li>
-      <li data-lang="lb" data-flag="lb.png"><img src="flags/lb.png"> Lëtzebuergesch (Luxembourgish)</li>
-      <li data-lang="az" data-flag="az.png"><img src="flags/az.png"> Azərbaycan (Azerbaijani)</li>
-      <li data-lang="hy" data-flag="hy.png"><img src="flags/hy.png"> Ελληνικά (Armenian)</li>
-      <li data-lang="ka" data-flag="ka.png"><img src="flags/ka.png"> ქართული (Georgian)</li>
-      <li data-lang="tg" data-flag="tg.png"><img src="flags/tg.png"> Тоҷикӣ (Tajik)</li>
-      <li data-lang="ht" data-flag="ht.png"><img src="flags/ht.png"> Kreyòl ayisyen (Haitian Creole)</li>
-      <li data-lang="uz" data-flag="uz.png"><img src="flags/uz.png"> Oʻzbek (Uzbek)</li>
-      <li data-lang="km" data-flag="km.png"><img src="flags/km.png"> ខ្មែរ (Khmer)</li>
+    <ul class="lang-list" id="lang-list" role="menu" aria-label="Select Language">
+      <!-- English -->
+      <li data-lang="en" data-flag="gb.png" role="menuitem">
+        <img src="flags/gb.png" alt="English"> English
+      </li>
+      <!-- Spanish -->
+      <li data-lang="es" data-flag="es.png" role="menuitem">
+        <img src="flags/es.png" alt="Español"> Español
+      </li>
+      <!-- French -->
+      <li data-lang="fr" data-flag="fr.png" role="menuitem">
+        <img src="flags/fr.png" alt="Français"> Français
+      </li>
+      <!-- German -->
+      <li data-lang="de" data-flag="de.png" role="menuitem">
+        <img src="flags/de.png" alt="Deutsch"> Deutsch
+      </li>
+      <!-- Portuguese -->
+      <li data-lang="pt" data-flag="pt.png" role="menuitem">
+        <img src="flags/pt.png" alt="Português"> Português
+      </li>
+      <!-- Russian -->
+      <li data-lang="ru" data-flag="ru.png" role="menuitem">
+        <img src="flags/ru.png" alt="Русский"> Русский
+      </li>
+      <!-- Chinese (Simplified) -->
+      <li data-lang="zh" data-flag="cn.png" role="menuitem">
+        <img src="flags/cn.png" alt="中文"> 中文
+      </li>
+      <!-- Japanese -->
+      <li data-lang="ja" data-flag="jp.png" role="menuitem">
+        <img src="flags/jp.png" alt="日本語"> 日本語
+      </li>
+      <!-- Arabic -->
+      <li data-lang="ar" data-flag="sa.png" role="menuitem" dir="rtl">
+        <img src="flags/sa.png" alt="العربية"> العربية
+      </li>
+      <!-- Hindi -->
+      <li data-lang="hi" data-flag="in.png" role="menuitem">
+        <img src="flags/in.png" alt="हिन्दी"> हिन्दी
+      </li>
+      <!-- Indonesian -->
+      <li data-lang="id" data-flag="id.png" role="menuitem">
+        <img src="flags/id.png" alt="Bahasa Indonesia"> Bahasa Indonesia
+      </li>
+      <!-- Italian -->
+      <li data-lang="it" data-flag="it.png" role="menuitem">
+        <img src="flags/it.png" alt="Italiano"> Italiano
+      </li>
+      <!-- Afrikaans -->
+      <li data-lang="af" data-flag="za.png" role="menuitem">
+        <img src="flags/za.png" alt="Afrikaans"> Afrikaans
+      </li>
+      <!-- Bengali -->
+      <li data-lang="bn" data-flag="bd.png" role="menuitem">
+        <img src="flags/bd.png" alt="বাংলা"> বাংলা
+      </li>
+      <!-- Swahili -->
+      <li data-lang="sw" data-flag="tz.png" role="menuitem">
+        <img src="flags/tz.png" alt="Kiswahili"> Kiswahili
+      </li>
+      <!-- Korean -->
+      <li data-lang="ko" data-flag="kr.png" role="menuitem">
+        <img src="flags/kr.png" alt="한국어"> 한국어
+      </li>
+      <!-- Turkish -->
+      <li data-lang="tr" data-flag="tr.png" role="menuitem">
+        <img src="flags/tr.png" alt="Türkçe"> Türkçe
+      </li>
+      <!-- Vietnamese -->
+      <li data-lang="vi" data-flag="vn.png" role="menuitem">
+        <img src="flags/vn.png" alt="Tiếng Việt"> Tiếng Việt
+      </li>
+      <!-- Thai -->
+      <li data-lang="th" data-flag="th.png" role="menuitem">
+        <img src="flags/th.png" alt="ไทย"> ไทย
+      </li>
+      <!-- Dutch -->
+      <li data-lang="nl" data-flag="nl.png" role="menuitem">
+        <img src="flags/nl.png" alt="Nederlands"> Nederlands
+      </li>
+      <!-- Swedish -->
+      <li data-lang="sv" data-flag="se.png" role="menuitem">
+        <img src="flags/se.png" alt="Svenska"> Svenska
+      </li>
+      <!-- Polish -->
+      <li data-lang="pl" data-flag="pl.png" role="menuitem">
+        <img src="flags/pl.png" alt="Polski"> Polski
+      </li>
+      <!-- Hebrew -->
+      <li data-lang="he" data-flag="il.png" role="menuitem" dir="rtl">
+        <img src="flags/il.png" alt="עברית"> עברית
+      </li>
+      <!-- Persian -->
+      <li data-lang="fa" data-flag="ir.png" role="menuitem" dir="rtl">
+        <img src="flags/ir.png" alt="فارسی"> فارسی
+      </li>
+      <!-- Tamil -->
+      <li data-lang="ta" data-flag="lk.png" role="menuitem">
+        <img src="flags/lk.png" alt="தமிழ்"> தமிழ்
+      </li>
+      <!-- Telugu -->
+      <li data-lang="te" data-flag="in.png" role="menuitem">
+        <img src="flags/in.png" alt="తెలుగు"> తెలుగు
+      </li>
+      <!-- Malay -->
+      <li data-lang="ms" data-flag="my.png" role="menuitem">
+        <img src="flags/my.png" alt="Bahasa Melayu"> Bahasa Melayu
+      </li>
+      <!-- Urdu -->
+      <li data-lang="ur" data-flag="pk.png" role="menuitem" dir="rtl">
+        <img src="flags/pk.png" alt="اردو"> اردو
+      </li>
+      <!-- Greek -->
+      <li data-lang="el" data-flag="gr.png" role="menuitem">
+        <img src="flags/gr.png" alt="Ελληνικά"> Ελληνικά
+      </li>
+      <!-- Czech -->
+      <li data-lang="cs" data-flag="cz.png" role="menuitem">
+        <img src="flags/cz.png" alt="Čeština"> Čeština
+      </li>
+      <!-- Finnish -->
+      <li data-lang="fi" data-flag="fi.png" role="menuitem">
+        <img src="flags/fi.png" alt="Suomi"> Suomi
+      </li>
+      <!-- Norwegian -->
+      <li data-lang="no" data-flag="no.png" role="menuitem">
+        <img src="flags/no.png" alt="Norsk"> Norsk
+      </li>
+      <!-- Danish -->
+      <li data-lang="da" data-flag="dk.png" role="menuitem">
+        <img src="flags/dk.png" alt="Dansk"> Dansk
+      </li>
+      <!-- Hungarian -->
+      <li data-lang="hu" data-flag="hu.png" role="menuitem">
+        <img src="flags/hu.png" alt="Magyar"> Magyar
+      </li>
+      <!-- Ukrainian -->
+      <li data-lang="uk" data-flag="ua.png" role="menuitem">
+        <img src="flags/ua.png" alt="Українська"> Українська
+      </li>
+      <!-- Romanian -->
+      <li data-lang="ro" data-flag="ro.png" role="menuitem">
+        <img src="flags/ro.png" alt="Română"> Română
+      </li>
+      <!-- Quechua -->
+      <li data-lang="qu" data-flag="pe.png" role="menuitem">
+        <img src="flags/pe.png" alt="Runasimi"> Runasimi
+      </li>
+      <!-- Zulu -->
+      <li data-lang="zu" data-flag="za.png" role="menuitem">
+        <img src="flags/za.png" alt="isiZulu"> isiZulu
+      </li>
+      <!-- Amharic -->
+      <li data-lang="am" data-flag="et.png" role="menuitem">
+        <img src="flags/et.png" alt="አማርኛ"> አማርኛ
+      </li>
+      <!-- Hausa -->
+      <li data-lang="ha" data-flag="ng.png" role="menuitem">
+        <img src="flags/ng.png" alt="Hausa"> Hausa
+      </li>
     </ul>
   </div>
 
-  <!-- Sample content to be “translated” -->
   <h1 id="title">Welcome to our test page</h1>
   <p id="paragraph">
     This is a sample paragraph you can use to verify that your language selector is working.
@@ -135,37 +249,211 @@
       const title     = document.getElementById('title');
       const paragraph = document.getElementById('paragraph');
 
-      // Placeholder translations: replace each with real text!
-      const translations = {};
-      document.querySelectorAll('#lang-list li').forEach(li => {
-        const code = li.getAttribute('data-lang');
-        translations[code] = {
-          title:     `[${code}] Welcome to our test page`,
-          paragraph: `[${code}] This is a sample paragraph you can use to verify that your language selector is working.`
-        };
-      });
+      const translations = {
+        en: {
+          title: "Welcome to our test page",
+          paragraph: "This is a sample paragraph you can use to verify that your language selector is working."
+        },
+        es: {
+          title: "Bienvenido a nuestra página de prueba",
+          paragraph: "Este es un párrafo de ejemplo que puedes usar para verificar que tu selector de idioma funciona."
+        },
+        fr: {
+          title: "Bienvenue sur notre page de test",
+          paragraph: "Ceci est un paragraphe d'exemple que vous pouvez utiliser pour vérifier que votre sélecteur de langue fonctionne."
+        },
+        de: {
+          title: "Willkommen auf unserer Testseite",
+          paragraph: "Dies ist ein Beispielabsatz, den Sie verwenden können, um zu überprüfen, ob Ihr Sprachwähler funktioniert."
+        },
+        pt: {
+          title: "Bem-vindo à nossa página de teste",
+          paragraph: "Este é um parágrafo de exemplo que você pode usar para verificar se seu seletor de idioma está funcionando."
+        },
+        ru: {
+          title: "Добро пожаловать на нашу тестовую страницу",
+          paragraph: "Это пример абзаца, который вы можете использовать, чтобы убедиться, что ваш языковой переключатель работает."
+        },
+        zh: {
+          title: "欢迎来到我们的测试页面",
+          paragraph: "这是一个示例段落，您可以使用它来验证您的语言选择器是否正常工作。"
+        },
+        ja: {
+          title: "テストページへようこそ",
+          paragraph: "これは、言語セレクターが正しく機能しているかを確認するために使用できるサンプルの段落です。"
+        },
+        ar: {
+          title: "مرحبًا بك في صفحة الاختبار الخاصة بنا",
+          paragraph: "هذا مقطع تجريبي يمكنك استخدامه للتحقق من أن محدد اللغة يعمل."
+        },
+        hi: {
+          title: "हमारे परीक्षण पृष्ठ पर आपका स्वागत है",
+          paragraph: "यह एक नमूना पैराग्राफ़ है जिसका उपयोग आप यह सत्यापित करने के लिए कर सकते हैं कि आपकी भाषा चयनकर्ता काम कर रहा है।"
+        },
+        id: {
+          title: "Selamat datang di halaman uji kami",
+          paragraph: "Ini adalah paragraf contoh yang dapat Anda gunakan untuk memverifikasi bahwa pemilih bahasa Anda berfungsi."
+        },
+        it: {
+          title: "Benvenuto nella nostra pagina di prova",
+          paragraph: "Questo è un paragrafo di esempio che puoi usare per verificare che il selettore di lingua funzioni."
+        },
+        af: {
+          title: "Welkom by ons toetsbladsy",
+          paragraph: "Dit is 'n voorbeeldparagraaf wat jy kan gebruik om te verifieer dat jou taal-kiezer werk."
+        },
+        bn: {
+          title: "আমাদের পরীক্ষা পৃষ্ঠায় স্বাগতম",
+          paragraph: "এটি একটি নমুনা অনুচ্ছেদ যা আপনি ব্যবহার করতে পারেন আপনার ভাষা নির্বাচক কাজ করছে কিনা তা যাচাই করতে।"
+        },
+        sw: {
+          title: "Karibu kwenye ukurasa wetu wa jaribio",
+          paragraph: "Hii ni paragrafu ya mfano ambayo unaweza kutumia kuthibitisha kuwa kichagua lugha yako kinafanya kazi."
+        },
+        ko: {
+          title: "테스트 페이지에 오신 것을 환영합니다",
+          paragraph: "이것은 언어 선택기가 제대로 작동하는지 확인하기 위해 사용할 수 있는 샘플 단락입니다."
+        },
+        tr: {
+          title: "Test sayfamıza hoş geldiniz",
+          paragraph: "Bu, dil seçicinizin çalıştığını doğrulamak için kullanabileceğiniz bir örnek paragraftır."
+        },
+        vi: {
+          title: "Chào mừng bạn đến với trang thử nghiệm của chúng tôi",
+          paragraph: "Đây là một đoạn văn mẫu mà bạn có thể sử dụng để kiểm tra xem bộ chọn ngôn ngữ của bạn có hoạt động hay không."
+        },
+        th: {
+          title: "ยินดีต้อนรับสู่หน้าทดสอบของเรา",
+          paragraph: "นี่คือย่อหน้าตัวอย่างที่คุณสามารถใช้เพื่อตรวจสอบว่าโปรแกรมเลือกภาษาของคุณทำงานหรือไม่"
+        },
+        nl: {
+          title: "Welkom op onze testpagina",
+          paragraph: "Dit is een voorbeeldparagraaf die u kunt gebruiken om te controleren of uw taalkiezer werkt."
+        },
+        sv: {
+          title: "Välkommen till vår testsida",
+          paragraph: "Detta är ett exempelstycke som du kan använda för att verifiera att din språkväljare fungerar."
+        },
+        pl: {
+          title: "Witamy na naszej stronie testowej",
+          paragraph: "To jest przykładowy akapit, którego możesz użyć, aby sprawdzić, czy twój selektor języka działa."
+        },
+        he: {
+          title: "ברוכים הבאים לדף הבדיקה שלנו",
+          paragraph: "זו פסקה לדוגמה שבה תוכלו להשתמש כדי לוודא שבורר השפות שלכם פועל."
+        },
+        fa: {
+          title: "به صفحه آزمایشی ما خوش آمدید",
+          paragraph: "این یک پاراگراف نمونه است که می‌توانید از آن برای بررسی عملکرد انتخابگر زبان خود استفاده کنید."
+        },
+        ta: {
+          title: "எங்கள் சோதனைப் பக்கத்திற்கு வரவேற்கிறோம்",
+          paragraph: "இது ஒரு மாதிரி பத்தி, உங்கள் மொழி தேர்ந்தெடுப்பவர் வேலை செய்கிறதா என்பதை சரிபார்க்க பயன்படுத்தலாம்."
+        },
+        te: {
+          title: "మా పరీక్షా పేజీకి స్వాగతం",
+          paragraph: "ఇది ఒక నమూనా పేరా, మీ భాషా సెలెక్టర్ పనిచేస్తుందో లేదో ధృవీకరించడానికి మీరు ఉపయోగించవచ్చు."
+        },
+        ms: {
+          title: "Selamat datang ke laman ujian kami",
+          paragraph: "Ini adalah perenggan contoh yang boleh anda gunakan untuk mengesahkan bahawa pemilih bahasa anda berfungsi."
+        },
+        ur: {
+          title: "ہمارے ٹیسٹ پیج پر خوش آمدید",
+          paragraph: "یہ ایک نمونہ پیراگراف ہے جسے آپ اپنے زبان سلیکٹر کے کام کرنے کی تصدیق کے لیے استعمال کر سکتے ہیں۔"
+        },
+        el: {
+          title: "Καλώς ήρθατε στη δοκιμαστική μας σελίδα",
+          paragraph: "Αυτή είναι μια δειγματοληπτική παράγραφος που μπορείτε να χρησιμοποιήσετε για να επαληθεύσετε ότι ο επιλογέας γλώσσας σας λειτουργεί."
+        },
+        cs: {
+          title: "Vítejte na naší testovací stránce",
+          paragraph: "Toto je ukázkový odstavec, který můžete použít k ověření, zda váš výběr jazyka funguje."
+        },
+        fi: {
+          title: "Tervetuloa testisivullemme",
+          paragraph: "Tämä on esimerkkikappale, jota voit käyttää varmistaaksesi, että kielivalitsimesi toimii."
+        },
+        no: {
+          title: "Velkommen til vår testside",
+          paragraph: "Dette er et eksempelavsnitt du kan bruke for å bekrefte at språkvelgeren din fungerer."
+        },
+        da: {
+          title: "Velkommen til vores tests side",
+          paragraph: "Dette er et eksempelafsnit, du kan bruge til at verificere, at din sprogvalg fungerer."
+        },
+        hu: {
+          title: "Üdvözöljük tesztoldalunkon",
+          paragraph: "Ez egy mintaparagrafus, amelyet használhat annak ellenőrzésére, hogy a nyelvválasztója működik-e."
+        },
+        uk: {
+          title: "Ласкаво просимо на нашу тестову сторінку",
+          paragraph: "Це зразок абзацу, який ви можете використати, щоб перевірити, чи працює ваш вибір мови."
+        },
+        ro: {
+          title: "Bine ați venit pe pagina noastră de test",
+          paragraph: "Acesta este un paragraf de exemplu pe care îl puteți folosi pentru a verifica dacă selectorul de limbă funcționează."
+        },
+        qu: {
+          title: "Qampaq pruebapaq p'anqamanqa kuyaykuy",
+          paragraph: "Kayqa huk qatina parrafu, chayta utilizayta atinki rimay taptayki puriqta kashanqanta tapyanapaq."
+        },
+        zu: {
+          title: "Siyakwamukela ekhasini lethu lokuhlola",
+          paragraph: "Lesi yisampula yesiqephu ongayisebenzisa ukuze uqinisekise ukuthi isikhethi solimi lwakho siyasebenza."
+        },
+        am: {
+          title: "ወደ የፈተና ገፃችን እንኳን ደህና መጡ",
+          paragraph: "ይህ የቋንቋ መራጭዎ መሥራቱን ለመፈተሽ መጠቀም የሚችሉት ናሙና አንቀጽ ነው።"
+        },
+        ha: {
+          title: "Barka da zuwa shafinmu na gwaji",
+          paragraph: "Wannan misali ne na sakin layi da za ku iya amfani da shi don tabbatar da cewa zaɓin harshenku yana aiki."
+        }
+      };
 
+      // Toggle dropdown
       btn.addEventListener('click', () => {
-        list.style.display = list.style.display === 'block' ? 'none' : 'block';
-      });
-      document.addEventListener('click', e => {
-        if (!btn.contains(e.target) && !list.contains(e.target)) list.style.display = 'none';
+        const open = list.style.display === 'block';
+        list.style.display = open ? 'none' : 'block';
+        btn.setAttribute('aria-expanded', String(!open));
       });
 
+      // Close on outside click
+      document.addEventListener('click', e => {
+        if (!btn.contains(e.target) && !list.contains(e.target)) {
+          list.style.display = 'none';
+          btn.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      // Language selection
       list.querySelectorAll('li').forEach(item => {
         item.addEventListener('click', () => {
-          const code = item.getAttribute('data-lang');
-          const flag = item.getAttribute('data-flag');
+          const lang = item.dataset.lang;
+          const flag = item.dataset.flag;
+          // Update button
           btn.querySelector('img').src  = `flags/${flag}`;
-          btn.querySelector('span').textContent = code.toUpperCase();
-          title.textContent     = translations[code].title;
-          paragraph.textContent = translations[code].paragraph;
-          document.documentElement.lang = code;
+          btn.querySelector('img').alt  = item.textContent.trim();
+          btn.querySelector('span').textContent = lang.toUpperCase();
+          // Apply translations
+          if (translations[lang]) {
+            title.textContent     = translations[lang].title;
+            paragraph.textContent = translations[lang].paragraph;
+            document.documentElement.lang = lang;
+            // Handle RTL
+            document.documentElement.dir = (lang === 'ar' || lang === 'he' || lang === 'fa' || lang === 'ur') ? 'rtl' : 'ltr';
+          }
           list.style.display = 'none';
+          btn.setAttribute('aria-expanded', 'false');
         });
+      });
+
+      // Lazy load flag images
+      document.querySelectorAll('.lang-list img').forEach(img => {
+        img.setAttribute('loading', 'lazy');
       });
     });
   </script>
-
 </body>
 </html>
