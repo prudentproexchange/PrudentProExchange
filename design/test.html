@@ -1,137 +1,148 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Smartsupp Live Chat Test</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Language Selector Test Page</title>
   <style>
-    :root {
-      --primary: #0044cc;
-      --bg: #f5f7fa;
-      --card-bg: #fff;
-      --text: #333;
-    }
     body {
-      margin: 0;
-      padding: 0;
       font-family: Arial, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-    }
-    header, footer {
-      background: var(--primary);
-      color: #fff;
-      text-align: center;
-      padding: 1rem 2rem;
-      position: relative;
-    }
-    main {
-      max-width: 800px;
-      margin: 2rem auto;
-      padding: 0 1rem;
-    }
-    .card {
-      background: var(--card-bg);
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      padding: 1.5rem;
-      margin-bottom: 1.5rem;
-    }
-    h1, h2 {
-      margin-top: 0;
-    }
-    ul {
-      list-style: disc inside;
+      padding: 2rem;
+      background: #f9f9f9;
     }
 
-    /* ===== ImTranslator Widget Styles ===== */
-    #imtranslator_iframe {
-      position: fixed;
-      top: 50%;
-      left: 1rem;
-      transform: translateY(-50%);
-      width: 300px;
-      height: 60px;            /* minimized */
-      border: none;
-      border-radius: 8px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
-      transition: height 0.3s ease;
-      z-index: 9999;
+    /* --- Language selector styles --- */
+    .lang-selector {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 2rem;
+    }
+
+    .lang-btn {
+      background: #fff;
+      border: 1px solid #ccc;
+      padding: 0.5rem 1rem;
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     }
-    #imtranslator_iframe:hover {
-      height: 400px;           /* fully expanded */
+
+    .lang-btn img {
+      width: 20px;
+      height: auto;
     }
-    /* Globe icon overlay */
-    #imtranslator_iframe::before {
-      content: "🌐";
+
+    .lang-list {
       position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 1.5rem;
-      pointer-events: none;
+      top: calc(100% + 0.2rem);
+      left: 0;
+      margin: 0;
+      padding: 0.2rem 0;
+      list-style: none;
+      background: #fff;
+      border: 1px solid #ccc;
+      width: 220px;
+      display: none;
+      max-height: 200px;
+      overflow-y: auto;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      z-index: 10;
+    }
+
+    .lang-list li {
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .lang-list li:hover {
+      background: #f0f0f0;
+    }
+
+    .lang-list img {
+      width: 20px;
+      height: auto;
     }
   </style>
 </head>
 <body>
 
-  <header>
-    <h1>PrudentProExchange</h1>
-    <p>Your trusted partner in trading success</p>
-  </header>
+  <div class="lang-selector">
+    <button class="lang-btn" id="current-language">
+      <img src="flags/gb.svg" alt="EN"> <span>EN</span> ▼
+    </button>
+    <ul class="lang-list" id="lang-list">
+      <li data-lang="en" data-flag="gb.svg"><img src="flags/gb.svg" alt=""> English</li>
+      <li data-lang="af" data-flag="za.svg"><img src="flags/za.svg" alt=""> Afrikaans</li>
+      <!-- add more languages here -->
+    </ul>
+  </div>
 
-  <main>
-    <div class="card">
-      <h2>Welcome!</h2>
-      <p>This is a simple test page for your Smartsupp live chat integration. The chat bubble should appear in the lower-right corner.</p>
-    </div>
+  <!-- Sample content to be translated -->
+  <h1 id="title">Welcome to our test page</h1>
+  <p id="paragraph">
+    This is a sample paragraph you can use to verify that your language selector is working.
+  </p>
 
-    <div class="card">
-      <h2>Features</h2>
-      <ul>
-        <li>Real-time market data</li>
-        <li>Advanced charting tools</li>
-        <li>24/7 customer support</li>
-        <li>Secure and reliable infrastructure</li>
-      </ul>
-    </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const btn       = document.getElementById('current-language');
+      const list      = document.getElementById('lang-list');
+      const title     = document.getElementById('title');
+      const paragraph = document.getElementById('paragraph');
 
-    <div class="card">
-      <h2>Need Help?</h2>
-      <p>Click the chat icon at the bottom right to start a conversation with us instantly.</p>
-    </div>
-  </main>
+      // Simple translations object
+      const translations = {
+        en: {
+          title:     "Welcome to our test page",
+          paragraph: "This is a sample paragraph you can use to verify that your language selector is working."
+        },
+        af: {
+          title:     "Welkom by ons toetsbladsy",
+          paragraph: "Dit is 'n voorbeeldparagraaf wat jy kan gebruik om te verifieer dat jou taal-kiezer werk."
+        }
+        // you can add more languages here
+      };
 
-  <footer>
-    <p>© 2025 PrudentProExchange. All Rights Reserved.</p>
-  </footer>
+      // Toggle dropdown on button click
+      btn.addEventListener('click', () => {
+        list.style.display = list.style.display === 'block' ? 'none' : 'block';
+      });
 
-  <!-- ImTranslator iFrame Widget -->
-  <iframe
-    id="imtranslator_iframe"
-    src="https://about.imtranslator.net/iframe-widget/?lang=en&lm=auto"
-    title="Website Translation"
-    scrolling="no">
-  </iframe>
+      // Close when clicking outside
+      document.addEventListener('click', (e) => {
+        if (!btn.contains(e.target) && !list.contains(e.target)) {
+          list.style.display = 'none';
+        }
+      });
 
-  <!-- Smartsupp Live Chat Script -->
-  <script type="text/javascript">
-    var _smartsupp = _smartsupp || {};
-    _smartsupp.key = '6a53a0d4440df26e63d93402f253e0941e1d565e';
-    window.smartsupp||(function(d) {
-      var s,c,o=smartsupp=function(){ o._.push(arguments)};
-      o._=[];
-      s=d.getElementsByTagName('script')[0];
-      c=d.createElement('script');
-      c.type='text/javascript';c.charset='utf-8';c.async=true;
-      c.src='https://www.smartsuppchat.com/loader.js?';
-      s.parentNode.insertBefore(c,s);
-    })(document);
+      // Handle language selection
+      list.querySelectorAll('li').forEach(item => {
+        item.addEventListener('click', () => {
+          const langCode = item.getAttribute('data-lang');
+          const flagFile = item.getAttribute('data-flag');
+
+          // Update button UI
+          btn.querySelector('img').src  = `flags/${flagFile}`;
+          btn.querySelector('span').textContent = langCode.toUpperCase();
+
+          // Update page content
+          if (translations[langCode]) {
+            title.textContent     = translations[langCode].title;
+            paragraph.textContent = translations[langCode].paragraph;
+            document.documentElement.lang = langCode;
+          }
+
+          // Close menu
+          list.style.display = 'none';
+        });
+      });
+    });
   </script>
-
-  <!-- Tidio Live Chat Script -->
-  <script src="//code.tidio.co/peclwowoqcbxhfe3wbowfneh1rabrdjz.js" async></script>
 
 </body>
 </html>
