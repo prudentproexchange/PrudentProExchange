@@ -3,42 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <meta name="description" content="KYC verification complete for PrudentProExchange. Access your dashboard and start your investment journey."/>
   <title>KYC Confirmation | PrudentProExchange</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
-  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
-  <!-- Crisp Chat Widget -->
-  <script type="text/javascript">window.$crisp=[];window.CRISP_WEBSITE_ID="599e8216-ab4f-4d4f-bb22-5d47cf14031f";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
   <style>
-    /* Theme Variables */
-    :root[data-theme="dark"] {
-      --bg: #1a1a1a;
-      --text: #e0e0e0;
-      --gold: #ffd700;
-      --gold-dark: #cca300;
-      --glass: rgba(255, 255, 255, 0.1);
-      --shadow: rgba(0, 0, 0, 0.3);
-      --text-light: #b0b0b0;
-      --text-muted: #888;
-    }
-    :root[data-theme="light"] {
-      --bg: #f5f5f5;
-      --text: #333;
-      --gold: #cca300;
-      --gold-dark: #b58900;
-      --glass: rgba(0, 0, 0, 0.05);
-      --shadow: rgba(0, 0, 0, 0.1);
-      --text-light: #555;
-      --text-muted: #666;
-    }
-
-    /* Reset & base */
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      font-family: 'Inter', 'Poppins', sans-serif;
-      background: var(--bg);
-      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      background: #1a1a1a;
+      color: #ffd700;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -49,7 +21,6 @@
     }
     a { text-decoration: none; }
 
-    /* Background video */
     .bg-video {
       position: absolute;
       top: 0;
@@ -61,54 +32,10 @@
       opacity: 0.5;
     }
 
-    /* Message Styling */
-    .message {
-      padding: 1rem;
-      margin-bottom: 1rem;
-      border-radius: 4px;
-      text-align: center;
-      display: none;
-      color: var(--text);
-    }
-    .message.error {
-      background-color: #f8d7da;
-      color: #721c24;
-    }
-    .message.success {
-      background-color: #d4edda;
-      color: #155724;
-    }
-
-    /* Header */
-    .site-header {
-      position: absolute;
-      top: 1rem;
-      left: 1rem;
-      right: 1rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      z-index: 10;
-    }
-    .logo-link img {
-      height: 40px;
-    }
-    #theme-toggle {
-      background: transparent;
-      border: none;
-      color: var(--gold);
-      font-size: 1.5rem;
-      cursor: pointer;
-    }
-    #theme-toggle:hover {
-      color: var(--gold-dark);
-    }
-
-    /* Card container */
     .card {
-      background: var(--glass);
+      background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
       border-radius: 1rem;
-      box-shadow: 0 8px 24px var(--shadow);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
       max-width: 480px;
       width: 100%;
       padding: 2rem;
@@ -122,11 +49,10 @@
       to { transform: translateY(0); opacity: 1; }
     }
 
-    /* Icon */
     .icon {
       font-size: 4rem;
       margin-bottom: 1rem;
-      color: var(--gold);
+      color: #ffd700;
       animation: pulse 2s infinite;
     }
     @keyframes pulse {
@@ -134,25 +60,23 @@
       50% { transform: scale(1.1); }
     }
 
-    /* Headings & text */
     h1 {
       font-size: 2rem;
       font-weight: 700;
       margin-bottom: 0.5rem;
-      color: var(--gold);
+      color: #ffd700;
     }
     p {
       font-size: 1rem;
       margin-bottom: 1.5rem;
       line-height: 1.6;
-      color: var(--text-light);
+      color: #ffd700;
     }
     p.lead {
       font-weight: 600;
-      color: var(--gold);
+      color: #ffd700;
     }
 
-    /* Buttons */
     .btn-container {
       display: flex;
       flex-direction: column;
@@ -167,33 +91,31 @@
       cursor: pointer;
     }
     .btn-primary {
-      background: var(--gold);
-      color: var(--bg);
+      background: #ffd700;
+      color: #1a1a1a;
       border: none;
     }
     .btn-primary:hover {
-      background: var(--gold-dark);
+      background: #e6c200;
       transform: translateY(-2px);
     }
     .btn-secondary {
       background: transparent;
-      color: var(--gold);
-      border: 2px solid var(--gold);
+      color: #ffd700;
+      border: 2px solid #ffd700;
     }
     .btn-secondary:hover {
-      background: var(--gold);
-      color: var(--bg);
+      background: #ffd700;
+      color: #1a1a1a;
       transform: translateY(-2px);
     }
 
-    /* Footer note */
     .footer-note {
       margin-top: 1.5rem;
       font-size: 0.875rem;
-      color: var(--text-muted);
+      color: #ffd700;
     }
 
-    /* Progress bar */
     .progress-bar {
       display: flex;
       justify-content: space-between;
@@ -201,20 +123,18 @@
     }
     .progress-step {
       font-size: 0.875rem;
-      color: var(--text-muted);
+      color: #ffd700;
       opacity: 0.6;
     }
     .progress-step.active {
       opacity: 1;
       font-weight: 600;
-      color: var(--gold);
     }
 
-    /* Security highlights */
     .security-highlights {
       margin-top: 1rem;
       font-size: 0.875rem;
-      color: var(--text-light);
+      color: #ffd700;
       opacity: 0.8;
     }
     .security-highlights ul {
@@ -224,121 +144,16 @@
     .security-highlights li {
       margin-bottom: 0.5rem;
     }
-
-    /* GTranslate Widget Positioning */
-    .gtranslate_wrapper {
-      position: fixed;
-      bottom: 20px;
-      left: 20px;
-      z-index: 1000;
-    }
-
-    /* Crisp Widget Styling */
-    .crisp-client .cc-tlyw,
-    .crisp-client .cc-kxra {
-      font-family: 'Inter', 'Poppins', sans-serif !important;
-      z-index: 999 !important; /* Below back-to-top button but above other elements */
-    }
-    .crisp-client .cc-tlyw .cc-1xry .cc-kxra {
-      background: var(--gold) !important;
-      border-radius: 50% !important;
-      box-shadow: 0 4px 10px var(--shadow) !important;
-      transition: all 0.3s ease !important;
-    }
-    .crisp-client .cc-tlyw .cc-1xry .cc-kxra:hover {
-      background: var(--gold-dark) !important;
-      transform: scale(1.1) !important;
-    }
-    .crisp-client .cc-tlyw .cc-1xry .cc-unoo {
-      background: var(--glass) !important;
-      backdrop-filter: blur(12px) !important;
-      border-radius: 15px !important;
-      box-shadow: 0 4px 20px var(--shadow) !important;
-      color: var(--text) !important;
-    }
-    .crisp-client .cc-tlyw .cc-1xry .cc-unoo .cc-kc1c .cc-5wlh,
-    .crisp-client .cc-tlyw .cc-1xry .cc-unoo .cc-kc1c .cc-18oq {
-      font-family: 'Inter', 'Poppins', sans-serif !important;
-      color: var(--text) !important;
-    }
-    .crisp-client .cc-tlyw .cc-1xry .cc-unoo .cc-1w6g {
-      background: var(--gold) !important;
-      border-radius: 30px !important;
-      transition: all 0.3s ease !important;
-    }
-    .crisp-client .cc-tlyw .cc-1xry .cc-unoo .cc-1w6g:hover {
-      background: var(--gold-dark) !important;
-      transform: translateY(-2px) !important;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3) !important;
-    }
-    .crisp-client .cc-tlyw .cc-1xry .cc-unoo .cc-18oq {
-      background: rgba(255, 255, 255, 0.05) !important;
-      border: 1px solid rgba(255, 255, 255, 0.1) !important;
-      border-radius: 8px !important;
-      transition: border-color 0.3s ease !important;
-    }
-    .crisp-client .cc-tlyw .cc-1xry .cc-unoo .cc-18oq:focus {
-      border-color: var(--gold) !important;
-      outline: none !important;
-    }
-
-    /* Back-to-Top Button Styling */
-    #back-to-top {
-      position: fixed !important;
-      bottom: 80px !important;
-      right: 20px !important;
-      z-index: 1000 !important;
-      background: var(--gold);
-      color: var(--bg);
-      border: none;
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      font-size: 1.5rem;
-      cursor: pointer;
-      box-shadow: 0 4px 10px var(--shadow);
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    #back-to-top:hover {
-      background: var(--gold-dark);
-      transform: scale(1.1);
-    }
-
-    /* Responsive Adjustments */
-    @media (max-width: 768px) {
-      .gtranslate_wrapper {
-        bottom: 10px;
-        left: 10px;
-      }
-      #back-to-top {
-        bottom: 70px !important;
-        right: 10px !important;
-        width: 40px;
-        height: 40px;
-        font-size: 1.2rem;
-      }
-    }
   </style>
 </head>
 <body>
-  <header class="site-header">
-    <a href="/dashboard" class="logo-link">
-      <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo"/>
-    </a>
-    <button id="theme-toggle" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
-  </header>
 
-  <video class="bg-video" autoplay muted loop playsinline preload="auto" poster="assets/images/video-poster.jpg">
-    <source src="assets/videos/background.webm" type="video/webm">
-    <source src="assets/videos/background.mp4" type="video/mp4">
+  <video class="bg-video" autoplay muted loop>
+    <source src="path/to/your/video.mp4" type="video/mp4">
     Your browser does not support the video tag.
   </video>
 
-  <div class="card" data-aos="fade-up">
-    <div id="message" class="message"></div>
+  <div class="card">
     <div class="icon">🎉</div>
     <h1>Congratulations!</h1>
     <p class="lead">Your KYC verification is complete.</p>
@@ -358,112 +173,26 @@
       </ul>
     </div>
     <div class="btn-container">
-      <a href="/dashboard" class="btn btn-primary" aria-label="Go to Dashboard">Go to Dashboard</a>
-      <a href="mailto:supports@prudentproexchange.net" class="btn btn-secondary" aria-label="Contact Support">Contact Support</a>
+      <a href="/dashboard" class="btn btn-primary">Go to Dashboard</a>
+      <a href="mailto:supports@prudentproexchange.net" class="btn btn-secondary">Contact Support</a>
     </div>
     <div class="footer-note">
       Have any questions? Our support team is here to help 24/7.
     </div>
   </div>
 
-  <!-- Back to Top Button -->
-  <button id="back-to-top" aria-label="Back to top">🚀</button>
-
-  <!-- GTranslate Widget -->
-  <div class="gtranslate_wrapper"></div>
-  <script>window.gtranslateSettings = {"default_language":"en","native_language_names":true,"detect_browser_language":true,"wrapper_selector":".gtranslate_wrapper","flag_style":"3d"}</script>
-  <script src="https://cdn.gtranslate.net/widgets/latest/float.js" defer></script>
-
-  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js" defer></script>
-  <script>
-    // Message Display Function
-    function showMessage(text, isError = true) {
-      const msgDiv = document.getElementById('message');
-      msgDiv.textContent = text;
-      msgDiv.className = `message ${isError ? 'error' : 'success'}`;
-      msgDiv.style.display = 'block';
-    }
-
-    // Theme Toggle
-    const themeToggle = document.getElementById('theme-toggle');
-    themeToggle.addEventListener('click', () => {
-      document.body.classList.toggle('light-theme');
-      const icon = themeToggle.querySelector('i');
-      icon.classList.toggle('fa-moon');
-      icon.classList.toggle('fa-sun');
-      themeToggle.setAttribute('aria-label', document.body.classList.contains('light-theme') ? 'Switch to dark theme' : 'Switch to light theme');
-    });
-
-    // Back to Top
-    document.getElementById('back-to-top').addEventListener('click', () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-
-    // Initialize AOS
-    AOS.init({ duration: 800, once: true });
-
-    // Video Playback Optimization
-    document.addEventListener('DOMContentLoaded', () => {
-      const video = document.querySelector('.bg-video');
-      let retryCount = 0;
-      const maxRetries = 3;
-      const retryDelay = 1000; // 1 second
-
-      if (video) {
-        const playVideo = () => {
-          video.play()
-            .then(() => {
-              console.log('Background video is playing successfully');
-              retryCount = 0;
-            })
-            .catch(error => {
-              console.error(`Background video play failed (attempt ${retryCount + 1}):`, error);
-              if (retryCount < maxRetries) {
-                retryCount++;
-                setTimeout(playVideo, retryDelay);
-              } else {
-                console.error('Max retries reached. Video playback failed.');
-                showMessage('Failed to load background video. Please refresh the page.', true);
-              }
-            });
-        };
-
-        playVideo();
-
-        video.addEventListener('canplay', () => console.log('Background video can play'));
-        video.addEventListener('playing', () => console.log('Background video is actively playing'));
-        video.addEventListener('error', (e) => {
-          console.error('Background video error:', e);
-          showMessage('Failed to load background video. Please refresh the page.', true);
-        });
-        video.addEventListener('stalled', () => console.warn('Background video stalled'));
-        video.addEventListener('loadeddata', () => console.log('Background video data loaded'));
-
-        document.addEventListener('visibilitychange', () => {
-          if (document.visibilityState === 'visible') {
-            if (video.paused) {
-              playVideo();
-            }
-          } else {
-            video.pause();
-            console.log('Background video paused due to tab inactivity');
-          }
-        });
-
-        const forcePlayOnInteraction = () => {
-          if (video.paused) {
-            playVideo();
-            console.log('Attempting to play background video on user interaction');
-          }
-        };
-
-        window.addEventListener('scroll', forcePlayOnInteraction, { once: true });
-        window.addEventListener('click', forcePlayOnInteraction, { once: true });
-      } else {
-        console.error('Background video element not found');
-        showMessage('Background video element not found.', true);
-      }
-    });
+  <!-- Crisp Chat Widget -->
+  <script type="text/javascript">
+    window.$crisp = [];
+    window.CRISP_WEBSITE_ID = "599e8216-ab4f-4d4f-bb22-5d47cf14031f";
+    (function () {
+      var d = document;
+      var s = d.createElement("script");
+      s.src = "https://client.crisp.chat/l.js";
+      s.async = 1;
+      d.getElementsByTagName("head")[0].appendChild(s);
+    })();
   </script>
+
 </body>
 </html>
