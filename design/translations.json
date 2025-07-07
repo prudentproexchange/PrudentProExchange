@@ -1,0 +1,32 @@
+{
+  "en": {
+    "title": "Welcome to our test page",
+    "paragraph": "This is a sample paragraph you can use to verify that your language selector is working.",
+    "home_title": "Home Page",
+    "about_title": "About Us",
+    "contact_title": "Contact Us"
+    // Add more keys for other pages
+  },
+  "es": {
+    "title": "Bienvenido a nuestra página de prueba",
+    "paragraph": "Este es un párrafo de ejemplo que puedes usar para verificar que tu selector de idioma funciona.",
+    "home_title": "Página de inicio",
+    "about_title": "Sobre nosotros",
+    "contact_title": "Contáctanos"
+  },
+  // ... Include all 110 languages with translations for all page elements ...
+  "yo": {
+    "title": "Kaabọ si oju-iwe idanwo wa",
+    "paragraph": "Eyi jẹ apakan ayẹwo ti o le lo lati rii daju pe aṣayan ede rẹ n ṣiṣẹ.",
+    "home_title": "Oju-iwe Ibẹrẹ",
+    "about_title": "Nipa Wa",
+    "contact_title": "Kan si Wa"
+  },
+  "zu": {
+    "title": "Siyakwamukela ekhasini lethu lokuhlola",
+    "paragraph": "Lesi yisampula yesiqephu ongayisebenzisa ukuze uqinisekise ukuthi isikhethi solimi lwakho siyasebenza.",
+    "home_title": "Ikhasi Lasekhaya",
+    "about_title": "Mayelana Nathi",
+    "contact_title": "Xhumana Nathi"
+  }
+}
