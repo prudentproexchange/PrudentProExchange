@@ -9,6 +9,86 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
+  <style>
+    /* Message Styling */
+    .message {
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border-radius: 4px;
+      text-align: center;
+      display: none;
+    }
+    .message.error {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+    .message.success {
+      background-color: #d4edda;
+      color: #155724;
+    }
+    /* GTranslate Widget Positioning */
+    .gtranslate_wrapper {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      z-index: 1000;
+    }
+    /* Back-to-Top Button Styling */
+    #back-to-top {
+      position: fixed !important;
+      bottom: 80px !important;
+      right: 20px !important;
+      z-index: 1000 !important;
+      background: var(--gold);
+      color: #000;
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      font-size: 1.5rem;
+      cursor: pointer;
+      box-shadow: 0 4px 10px var(--shadow);
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #back-to-top:hover {
+      background: var(--gold-dark);
+      transform: scale(1.1);
+    }
+    /* Crisp Widget Styling */
+    .crisp-client .cc-unoo {
+      background: var(--gold) !important;
+      border-radius: 50% !important;
+      box-shadow: 0 4px 10px var(--shadow) !important;
+    }
+    .crisp-client .cc-unoo:hover {
+      background: var(--gold-dark) !important;
+      transform: scale(1.1) !important;
+    }
+    .crisp-client .cc-conv {
+      background: var(--glass-bg) !important;
+      backdrop-filter: blur(10px) !important;
+      border-radius: 15px !important;
+      box-shadow: 0 4px 20px var(--shadow) !important;
+      color: var(--text) !important;
+    }
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+      .gtranslate_wrapper {
+        bottom: 10px;
+        left: 10px;
+      }
+      #back-to-top {
+        bottom: 70px !important;
+        right: 10px !important;
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+      }
+    }
+  </style>
 </head>
 <body class="forex-trading-page">
   <!-- Video Background -->
@@ -42,6 +122,7 @@
     <!-- Main Content -->
     <div class="main-content">
       <main class="forex-trading-page container">
+        <div id="message" class="message"></div>
         <!-- Introduction -->
         <section class="section" data-aos="fade-up">
           <h2 class="section-title gold">Empowering Wealth Creation: PrudentProExchange, the Global Leader in Managed Forex Trading Investments</h2>
@@ -180,12 +261,39 @@
     </footer>
   </div>
 
+  <!-- Back to Top Button -->
   <button id="back-to-top" aria-label="Back to top">🚀</button>
+
+  <!-- GTranslate Widget -->
+  <div class="gtranslate_wrapper"></div>
+  <script>window.gtranslateSettings = {"default_language":"en","native_language_names":true,"detect_browser_language":true,"wrapper_selector":".gtranslate_wrapper","flag_style":"3d"}</script>
+  <script src="https://cdn.gtranslate.net/widgets/latest/float.js" defer></script>
+
+  <!-- Crisp Chat Widget -->
+  <script type="text/javascript">
+    window.$crisp = [];
+    window.CRISP_WEBSITE_ID = "599e8216-ab4f-4d4f-bb22-5d47cf14031f";
+    (function() {
+      d = document;
+      s = d.createElement("script");
+      s.src = "https://client.crisp.chat/l.js";
+      s.async = 1;
+      d.getElementsByTagName("head")[0].appendChild(s);
+    })();
+  </script>
 
   <!-- Scripts -->
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script src="js/main.js"></script>
   <script>
+    // Message Display Function
+    function showMessage(text, isError = true) {
+      const msgDiv = document.getElementById('message');
+      msgDiv.textContent = text;
+      msgDiv.className = `message ${isError ? 'error' : 'success'}`;
+      msgDiv.style.display = 'block';
+    }
+
     // Hamburger Menu Toggle
     const btn = document.getElementById('hamburgerBtn');
     const drawer = document.getElementById('navDrawer');
@@ -222,6 +330,69 @@
     // Back to Top
     document.getElementById('back-to-top').addEventListener('click', () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // Video Playback Optimization
+    document.addEventListener('DOMContentLoaded', () => {
+      const video = document.querySelector('.bg-video');
+      let retryCount = 0;
+      const maxRetries = 3;
+      const retryDelay = 1000; // 1 second
+
+      if (video) {
+        const playVideo = () => {
+          video.play()
+            .then(() => {
+              console.log('Background video is playing successfully');
+              retryCount = 0;
+            })
+            .catch(error => {
+              console.error(`Background video play failed (attempt ${retryCount + 1}):`, error);
+              if (retryCount < maxRetries) {
+                retryCount++;
+                setTimeout(playVideo, retryDelay);
+              } else {
+                console.error('Max retries reached. Video playback failed.');
+                showMessage('Failed to load background video. Please refresh the page.', true);
+              }
+            });
+        };
+
+        playVideo();
+
+        video.addEventListener('canplay', () => console.log('Background video can play'));
+        video.addEventListener('playing', () => console.log('Background video is actively playing'));
+        video.addEventListener('error', (e) => {
+          console.error('Background video error:', e);
+          showMessage('Failed to load background video. Please refresh the page.', true);
+        });
+        video.addEventListener('stalled', () => console.warn('Background video stalled'));
+        video.addEventListener('loadeddata', () => console.log('Background video data loaded'));
+
+        document.addEventListener('visibilitychange', () => {
+          if (document.visibilityState === 'visible') {
+            if (video.paused) {
+              playVideo();
+            }
+          } else {
+            video.pause();
+            console.log('Background video paused due to tab inactivity');
+          }
+        });
+
+        const forcePlayOnInteraction = () => {
+          if (video.paused) {
+            playVideo();
+            console.log('Attempting to play background video on user interaction');
+          }
+        };
+
+        window.addEventListener('scroll', forcePlayOnInteraction, { once: true });
+        window.addEventListener('click', forcePlayOnInteraction, { once: true });
+      } else {
+        console.error('Background video element not found');
+        showMessage('Background video element not found.', true);
+      }
     });
 
     // Initialize AOS Animations
