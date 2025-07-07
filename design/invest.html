@@ -33,6 +33,23 @@
       --text-muted: #666;
     }
 
+    /* Message Styling */
+    .message {
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border-radius: 4px;
+      text-align: center;
+      display: none;
+    }
+    .message.error {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+    .message.success {
+      background-color: #d4edda;
+      color: #155724;
+    }
+
     /* GTranslate Widget Positioning */
     .gtranslate_wrapper {
       position: fixed;
@@ -192,6 +209,7 @@
     </div>
 
     <main class="container" role="main">
+      <div id="message" class="message"></div>
       <section class="investment-plans" data-aos="fade-up" aria-labelledby="investment-plans-heading">
         <h2 id="investment-plans-heading">Choose Your Investment Plan</h2>
         <p class="investment-description">Select a plan that suits your financial goals and start your investment journey with us.</p>
@@ -216,7 +234,7 @@
             <p class="validation-message" aria-live="assertive"></p>
             <button type="submit" class="btn select-plan-btn" data-plan="nebula-glow" disabled aria-label="Choose payment option for Nebula Glow plan">Choose Payment Option</button>
           </form>
-          <form class="plan-card" data-min="150 Hurley
+          <form class="plan-card" data-min="15000" data-max="49999" data-aos="zoom-in" role="form" tabindex="0" data-plan-name="The Lunar Crest (Silver)">
             <div class="plan-icon"><i class="fas fa-moon"></i></div>
             <h3>The Lunar Crest (Silver)</h3>
             <p>7.5% weekly return</p>
@@ -279,6 +297,14 @@
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js" defer></script>
   <script>
+    // Message Display Function
+    function showMessage(text, isError = true) {
+      const msgDiv = document.getElementById('message');
+      msgDiv.textContent = text;
+      msgDiv.className = `message ${isError ? 'error' : 'success'}`;
+      msgDiv.style.display = 'block';
+    }
+
     // Initialize AOS after DOM is loaded
     window.addEventListener('DOMContentLoaded', () => {
       AOS.init({ duration: 800, once: true });
@@ -334,7 +360,7 @@
                 setTimeout(playVideo, retryDelay);
               } else {
                 console.error('Max retries reached. Video playback failed.');
-                video.poster = 'assets/images/bg-fallback.jpg';
+                showMessage('Failed to load background video. Please refresh the page.', true);
               }
             });
         };
@@ -345,7 +371,7 @@
         video.addEventListener('playing', () => console.log('Background video is actively playing'));
         video.addEventListener('error', (e) => {
           console.error('Background video error:', e);
-          video.poster = 'assets/images/bg-fallback.jpg';
+          showMessage('Failed to load background video. Please refresh the page.', true);
         });
         video.addEventListener('stalled', () => console.warn('Background video stalled'));
         video.addEventListener('loadeddata', () => console.log('Background video data loaded'));
@@ -372,6 +398,7 @@
         window.addEventListener('click', forcePlayOnInteraction, { once: true });
       } else {
         console.error('Background video element not found');
+        showMessage('Background video element not found.', true);
       }
 
       // Initialize Investment Page
@@ -379,8 +406,7 @@
         // Check Authentication
         const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
         if (!user || authError) {
-          welcomeMessage.textContent = 'Error: Please log in.';
-          welcomeMessage.classList.add('error-message');
+          showMessage('Error: Please log in.', true);
           setTimeout(() => {
             window.location.href = 'login.html';
           }, 2000);
@@ -396,8 +422,7 @@
           .single();
         if (profileError) {
           console.error('Error loading profile:', profileError);
-          welcomeMessage.textContent = 'Error loading profile.';
-          welcomeMessage.classList.add('error-message');
+          showMessage('Error loading profile.', true);
           return;
         }
 
@@ -492,7 +517,7 @@
           const planName = decodeURIComponent(urlParams.get('planName') || '');
 
           if (!validPlans[plan] || isNaN(amount) || amount < validPlans[plan].min || (validPlans[plan].max !== Infinity && amount > validPlans[plan].max) || planName !== validPlans[plan].name) {
-            alert('Invalid investment parameters. Redirecting to investment page.');
+            showMessage('Invalid investment parameters. Redirecting to investment page.', true);
             setTimeout(() => {
               window.location.href = 'invest.html';
             }, 2000);
@@ -554,8 +579,7 @@
       // Initialize page
       initInvestPage().catch(error => {
         console.error('Initialization error:', error);
-        welcomeMessage.textContent = 'An unexpected error occurred.';
-        welcomeMessage.classList.add('error-message');
+        showMessage('An unexpected error occurred.', true);
       });
     });
   </script>
