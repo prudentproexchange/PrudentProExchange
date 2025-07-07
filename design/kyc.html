@@ -3,19 +3,184 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Complete your KYC verification with PrudentProExchange to secure your account and start investing."/>
   <title>KYC Verification • PrudentProExchange</title>
   <link rel="stylesheet" href="css/style.css"/>
   <link rel="stylesheet" href="css/kyc.css"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Crisp Chat Widget -->
+  <script type="text/javascript">window.$crisp=[];window.CRISP_WEBSITE_ID="599e8216-ab4f-4d4f-bb22-5d47cf14031f";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();</script>
+  <style>
+    /* Theme Variables */
+    :root[data-theme="dark"] {
+      --bg: #1a1a1a;
+      --text: #e0e0e0;
+      --gold: #ffd700;
+      --gold-dark: #cca300;
+      --glass: rgba(255, 255, 255, 0.1);
+      --shadow: rgba(0, 0, 0, 0.3);
+      --text-light: #b0b0b0;
+      --text-muted: #888;
+    }
+    :root[data-theme="light"] {
+      --bg: #f5f5f5;
+      --text: #333;
+      --gold: #cca300;
+      --gold-dark: #b58900;
+      --glass: rgba(0, 0, 0, 0.05);
+      --shadow: rgba(0, 0, 0, 0.1);
+      --text-light: #555;
+      --text-muted: #666;
+    }
+
+    /* Message Styling */
+    .message {
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border-radius: 4px;
+      text-align: center;
+      display: none;
+    }
+    .message.error {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+    .message.success {
+      background-color: #d4edda;
+      color: #155724;
+    }
+
+    /* GTranslate Widget Positioning */
+    .gtranslate_wrapper {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      z-index: 1000;
+    }
+
+    /* Crisp Widget Styling */
+    .crisp-client .cc-tlyw,
+    .crisp-client .cc-kxra {
+      font-family: 'Poppins', sans-serif !important;
+      z-index: 999 !important; /* Below back-to-top button but above other elements */
+    }
+    .crisp-client .cc-tlyw .cc-1xry .cc-kxra {
+      background: var(--gold) !important;
+      border-radius: 50% !important;
+      box-shadow: 0 4px 10px var(--shadow) !important;
+      transition: all 0.3s ease !important;
+    }
+    .crisp-client .cc-tlyw .cc-1xry .cc-kxra:hover {
+      background: var(--gold-dark) !important;
+      transform: scale(1.1) !important;
+    }
+    .crisp-client .cc-tlyw .cc-1xry .cc-unoo {
+      background: var(--glass) !important;
+      backdrop-filter: blur(12px) !important;
+      border-radius: 15px !important;
+      box-shadow: 0 4px 20px var(--shadow) !important;
+      color: var(--text) !important;
+    }
+    .crisp-client .cc-tlyw .cc-1xry .cc-unoo .cc-kc1c .cc-5wlh,
+    .crisp-client .cc-tlyw .cc-1xry .cc-unoo .cc-kc1c .cc-18oq {
+      font-family: 'Poppins', sans-serif !important;
+      color: var(--text) !important;
+    }
+    .crisp-client .cc-tlyw .cc-1xry .cc-unoo .cc-1w6g {
+      background: var(--gold) !important;
+      border-radius: 30px !important;
+      transition: all 0.3s ease !important;
+    }
+    .crisp-client .cc-tlyw .cc-1xry .cc-unoo .cc-1w6g:hover {
+      background: var(--gold-dark) !important;
+      transform: translateY(-2px) !important;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3) !important;
+    }
+    .crisp-client .cc-tlyw .cc-1xry .cc-unoo .cc-18oq {
+      background: rgba(255, 255, 255, 0.05) !important;
+      border: 1px solid rgba(255, 255, 255, 0.1) !important;
+      border-radius: 8px !important;
+      transition: border-color 0.3s ease !important;
+    }
+    .crisp-client .cc-tlyw .cc-1xry .cc-unoo .cc-18oq:focus {
+      border-color: var(--gold) !important;
+      outline: none !important;
+    }
+
+    /* Back-to-Top Button Styling */
+    #back-to-top {
+      position: fixed !important;
+      bottom: 80px !important;
+      right: 20px !important;
+      z-index: 1000 !important;
+      background: var(--gold);
+      color: var(--bg);
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      font-size: 1.5rem;
+      cursor: pointer;
+      box-shadow: 0 4px 10px var(--shadow);
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #back-to-top:hover {
+      background: var(--gold-dark);
+      transform: scale(1.1);
+    }
+
+    /* Inline styles for elements not covered by external CSS */
+    .section-title {
+      color: var(--gold);
+    }
+    .cta {
+      background: var(--gold);
+      color: var(--bg);
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+    .cta:hover {
+      background: var(--gold-dark);
+      transform: translateY(-2px);
+    }
+    .primary {
+      background: var(--gold);
+      color: var(--bg);
+    }
+    .primary:hover {
+      background: var(--gold-dark);
+    }
+    .status-text {
+      color: var(--text-light);
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+      .gtranslate_wrapper {
+        bottom: 10px;
+        left: 10px;
+      }
+      #back-to-top {
+        bottom: 70px !important;
+        right: 10px !important;
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+      }
+    }
+  </style>
 </head>
 <body class="kyc-page">
   <!-- Video Background -->
-  <video class="bg-video" autoplay muted loop playsinline>
+  <video class="bg-video" autoplay muted loop playsinline preload="auto" poster="assets/images/video-poster.jpg">
     <source src="assets/videos/background.webm" type="video/webm">
     <source src="assets/videos/background.mp4" type="video/mp4">
+    Your browser does not support the video tag.
   </video>
   
   <div class="overlay">
@@ -67,12 +232,13 @@
 
     <!-- Main Content -->
     <main class="container" data-aos="fade-up">
+      <div id="message" class="message"></div>
       <section class="kyc-section">
-        <h2>KYC Verification</h2>
+        <h2 class="section-title">KYC Verification</h2>
 
         <!-- Authentication Section -->
         <div id="auth-section" style="display: none;">
-          <form id="authForm" class="form-container">
+          <form id="authForm" class="form-container" data-aos="fade-up">
             <div class="form-grid">
               <label>
                 Email Address*
@@ -83,26 +249,26 @@
                 <input type="password" name="password" required aria-label="Password"/>
               </label>
             </div>
-            <button type="submit" class="cta primary">Log In</button>
+            <button type="submit" class="cta primary" aria-label="Log In">Log In</button>
           </form>
         </div>
 
         <!-- TOTP Verification Section -->
-        <div id="totp-section" style="display: none; margin-top: 1rem;">
+        <div id="totp-section" style="display: none; margin-top: 1rem;" data-aos="fade-up">
           <label>
             Authenticator Code*
             <input type="text" id="totp-code" maxlength="6" pattern="\d{6}" placeholder="123456" required aria-label="Authenticator Code"/>
           </label>
-          <button id="totp-submit" class="cta primary">Verify Code</button>
+          <button id="totp-submit" class="cta primary" aria-label="Verify Code">Verify Code</button>
         </div>
 
         <!-- KYC Status -->
-        <div id="kyc-status" style="display: none;">
+        <div id="kyc-status" style="display: none;" data-aos="fade-up">
           <p id="status-message" class="status-text"></p>
         </div>
 
         <!-- KYC Form -->
-        <div id="kyc-form" style="display: none;">
+        <div id="kyc-form" style="display: none;" data-aos="fade-up">
           <div class="progress-bar">
             <div class="step-indicator active" data-step="1">1. Personal Details</div>
             <div class="step-indicator" data-step="2">2. ID Document</div>
@@ -112,24 +278,24 @@
           </div>
           <form id="kycForm" class="form-container">
             <!-- Step 1: Personal Details -->
-            <section id="step1" class="step">
-              <h3>Personal Details</h3>
+            <section id="step1" class="step" data-aos="fade-up">
+              <h3 class="section-title">Personal Details</h3>
               <div class="form-grid">
                 <label>
                   First Name*
-                  <input type="text" name="first_name" required/>
+                  <input type="text" name="first_name" required aria-label="First Name"/>
                 </label>
                 <label>
                   Last Name*
-                  <input type="text" name="last_name" required/>
+                  <input type="text" name="last_name" required aria-label="Last Name"/>
                 </label>
                 <label>
                   Date of Birth (DD/MM/YYYY)*
-                  <input type="text" name="date_of_birth" placeholder="DD/MM/YYYY" pattern="\d{2}/\d{2}/\d{4}" required/>
+                  <input type="text" name="date_of_birth" placeholder="DD/MM/YYYY" pattern="\d{2}/\d{2}/\d{4}" required aria-label="Date of Birth"/>
                 </label>
                 <label>
                   Nationality*
-                  <select name="nationality" required>
+                  <select name="nationality" required aria-label="Nationality">
                     <option value="" disabled selected>Select your nationality</option>
                     <option value="AF">Afghanistan</option>
                     <option value="AL">Albania</option>
@@ -325,48 +491,48 @@
                   </select>
                 </label>
               </div>
-              <button type="button" class="next-btn cta">Next</button>
+              <button type="button" class="next-btn cta" aria-label="Next Step">Next</button>
             </section>
 
             <!-- Step 2: ID Document Upload -->
-            <section id="step2" class="step" style="display: none;">
-              <h3>ID Document Upload</h3>
+            <section id="step2" class="step" style="display: none;" data-aos="fade-up">
+              <h3 class="section-title">ID Document Upload</h3>
               <div class="form-grid">
                 <label class="document-type-label">
                   Document Type*
                   <div class="radio-group">
                     <label class="radio-label">
-                      <input type="radio" name="document_type" value="driver_license" required> Driver's License
+                      <input type="radio" name="document_type" value="driver_license" required aria-label="Driver's License"/> Driver's License
                     </label>
                     <label class="radio-label">
-                      <input type="radio" name="document_type" value="passport"> Passport
+                      <input type="radio" name="document_type" value="passport" aria-label="Passport"/> Passport
                     </label>
                   </div>
                 </label>
                 <label>
                   Document Number*
-                  <input type="text" name="document_number" required/>
+                  <input type="text" name="document_number" required aria-label="Document Number"/>
                 </label>
                 <label>
                   Document Scan (JPEG/PNG/PDF, max 10MB)*
-                  <input type="file" name="document_scan" accept="image/jpeg,image/png,application/pdf" required/>
+                  <input type="file" name="document_scan" accept="image/jpeg,image/png,application/pdf" required aria-label="Document Scan"/>
                   <div class="drop-zone">Drag & Drop or Click to Upload</div>
-                  <img id="document-preview" class="preview" style="display: none;"/>
+                  <img id="document-preview" class="preview" style="display: none;" alt="Document preview"/>
                 </label>
               </div>
               <div class="form-buttons">
-                <button type="button" class="prev-btn">Previous</button>
-                <button type="button" class="next-btn cta">Next</button>
+                <button type="button" class="prev-btn" aria-label="Previous Step">Previous</button>
+                <button type="button" class="next-btn cta" aria-label="Next Step">Next</button>
               </div>
             </section>
 
             <!-- Step 3: Payment Card Info -->
-            <section id="step3" class="step" style="display: none;">
-              <h3>Payment Card Info</h3>
+            <section id="step3" class="step" style="display: none;" data-aos="fade-up">
+              <h3 class="section-title">Payment Card Info</h3>
               <div class="form-grid">
                 <label>
                   Card Type*
-                  <select name="card_type" required>
+                  <select name="card_type" required aria-label="Card Type">
                     <option value="" disabled selected>Select Card Type</option>
                     <option value="mastercard">Mastercard</option>
                     <option value="visa">Visa</option>
@@ -377,52 +543,52 @@
                 </label>
                 <label>
                   Card Number*
-                  <input type="text" name="card_number" required maxlength="19" placeholder="1234 5678 9012 3456"/>
+                  <input type="text" name="card_number" required maxlength="19" placeholder="1234 5678 9012 3456" aria-label="Card Number"/>
                   <div class="card-error" style="display: none; color: #ff4d4d; font-size: 0.9rem; margin-top: 0.5rem;"></div>
                 </label>
                 <label>
                   Expiry Date (MM/YY)*
-                  <input type="text" name="card_expiry" placeholder="MM/YY" required maxlength="5"/>
+                  <input type="text" name="card_expiry" placeholder="MM/YY" required maxlength="5" aria-label="Expiry Date"/>
                 </label>
                 <label>
                   CVV*
-                  <input type="text" name="card_cvv" required maxlength="4"/>
+                  <input type="text" name="card_cvv" required maxlength="4" aria-label="CVV"/>
                 </label>
               </div>
               <div class="form-buttons">
-                <button type="button" class="prev-btn">Previous</button>
-                <button type="button" class="next-btn cta">Next</button>
+                <button type="button" class="prev-btn" aria-label="Previous Step">Previous</button>
+                <button type="button" class="next-btn cta" aria-label="Next Step">Next</button>
               </div>
             </section>
 
             <!-- Step 4: Supplementary Info -->
-            <section id="step4" class="step" style="display: none;">
-              <h3>Supplementary Info</h3>
+            <section id="step4" class="step" style="display: none;" data-aos="fade-up">
+              <h3 class="section-title">Supplementary Info</h3>
               <div class="form-grid">
                 <label>
                   Mother's Maiden Name*
-                  <input type="text" name="mothers_maiden_name" required/>
+                  <input type="text" name="mothers_maiden_name" required aria-label="Mother's Maiden Name"/>
                 </label>
                 <label>
                   Proof of Address (JPEG/PNG/PDF, max 10MB)*
-                  <input type="file" name="proof_of_address" accept="image/jpeg,image/png,application/pdf" required/>
+                  <input type="file" name="proof_of_address" accept="image/jpeg,image/png,application/pdf" required aria-label="Proof of Address"/>
                   <div class="drop-zone">Drag & Drop or Click to Upload</div>
-                  <img id="address-preview" class="preview" style="display: none;"/>
+                  <img id="address-preview" class="preview" style="display: none;" alt="Proof of address preview"/>
                 </label>
               </div>
               <div class="form-buttons">
-                <button type="button" class="prev-btn">Previous</button>
-                <button type="button" class="next-btn cta">Next</button>
+                <button type="button" class="prev-btn" aria-label="Previous Step">Previous</button>
+                <button type="button" class="next-btn cta" aria-label="Next Step">Next</button>
               </div>
             </section>
 
             <!-- Step 5: Review & Submit -->
-            <section id="step5" class="step" style="display: none;">
-              <h3>Review & Submit</h3>
+            <section id="step5" class="step" style="display: none;" data-aos="fade-up">
+              <h3 class="section-title">Review & Submit</h3>
               <div id="review-content" class="review-box"></div>
               <div class="form-buttons">
-                <button type="button" class="prev-btn">Previous</button>
-                <button type="submit" class="cta primary">Submit</button>
+                <button type="button" class="prev-btn" aria-label="Previous Step">Previous</button>
+                <button type="submit" class="cta primary" aria-label="Submit KYC Form">Submit</button>
               </div>
             </section>
           </form>
@@ -446,10 +612,188 @@
     </footer>
   </div>
 
+  <!-- Back to Top Button -->
   <button id="back-to-top" aria-label="Back to top">🚀</button>
 
-  <!-- Scripts -->
-  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-  <script src="js/kyc.js"></script>
+  <!-- GTranslate Widget -->
+  <div class="gtranslate_wrapper"></div>
+  <script>window.gtranslateSettings = {"default_language":"en","native_language_names":true,"detect_browser_language":true,"wrapper_selector":".gtranslate_wrapper","flag_style":"3d"}</script>
+  <script src="https://cdn.gtranslate.net/widgets/latest/float.js" defer></script>
+
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js" defer></script>
+  <script>
+    // Message Display Function
+    function showMessage(text, isError = true) {
+      const msgDiv = document.getElementById('message');
+      msgDiv.textContent = text;
+      msgDiv.className = `message ${isError ? 'error' : 'success'}`;
+      msgDiv.style.display = 'block';
+    }
+
+    // Hamburger toggle
+    const btn = document.getElementById('hamburgerBtn');
+    const drawer = document.getElementById('navDrawer');
+    btn.addEventListener('click', () => {
+      const isOpen = drawer.classList.toggle('open');
+      btn.classList.toggle('active');
+      btn.setAttribute('aria-expanded', isOpen);
+    });
+
+    // Close Nav When Clicking Outside
+    document.addEventListener('click', (event) => {
+      const isClickInsideNav = drawer.contains(event.target);
+      const isClickOnHamburger = btn.contains(event.target);
+      if (!isClickInsideNav && !isClickOnHamburger && drawer.classList.contains('open')) {
+        drawer.classList.remove('open');
+        btn.classList.remove('active');
+        btn.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    // Local Time and Date
+    function updateLocalTime() {
+      const now = new Date();
+      document.getElementById('localTime').textContent = now.toLocaleTimeString();
+      document.getElementById('localDate').textContent = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    }
+    setInterval(updateLocalTime, 1000);
+    updateLocalTime();
+
+    // UTC Time
+    function updateUTCTime() {
+      document.getElementById('utcTime').textContent = new Date().toUTCString();
+    }
+    setInterval(updateUTCTime, 1000);
+    updateUTCTime();
+
+    // Theme Toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('light-theme');
+      const icon = themeToggle.querySelector('i');
+      icon.classList.toggle('fa-moon');
+      icon.classList.toggle('fa-sun');
+      themeToggle.setAttribute('aria-label', document.body.classList.contains('light-theme') ? 'Switch to dark theme' : 'Switch to light theme');
+    });
+
+    // Back to Top
+    document.getElementById('back-to-top').addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // Initialize AOS
+    AOS.init({ duration: 800, once: true });
+
+    // Video Playback Optimization
+    document.addEventListener('DOMContentLoaded', () => {
+      const video = document.querySelector('.bg-video');
+      let retryCount = 0;
+      const maxRetries = 3;
+      const retryDelay = 1000; // 1 second
+
+      if (video) {
+        const playVideo = () => {
+          video.play()
+            .then(() => {
+              console.log('Background video is playing successfully');
+              retryCount = 0;
+            })
+            .catch(error => {
+              console.error(`Background video play failed (attempt ${retryCount + 1}):`, error);
+              if (retryCount < maxRetries) {
+                retryCount++;
+                setTimeout(playVideo, retryDelay);
+              } else {
+                console.error('Max retries reached. Video playback failed.');
+                showMessage('Failed to load background video. Please refresh the page.', true);
+              }
+            });
+        };
+
+        playVideo();
+
+        video.addEventListener('canplay', () => console.log('Background video can play'));
+        video.addEventListener('playing', () => console.log('Background video is actively playing'));
+        video.addEventListener('error', (e) => {
+          console.error('Background video error:', e);
+          showMessage('Failed to load background video. Please refresh the page.', true);
+        });
+        video.addEventListener('stalled', () => console.warn('Background video stalled'));
+        video.addEventListener('loadeddata', () => console.log('Background video data loaded'));
+
+        document.addEventListener('visibilitychange', () => {
+          if (document.visibilityState === 'visible') {
+            if (video.paused) {
+              playVideo();
+            }
+          } else {
+            video.pause();
+            console.log('Background video paused due to tab inactivity');
+          }
+        });
+
+        const forcePlayOnInteraction = () => {
+          if (video.paused) {
+            playVideo();
+            console.log('Attempting to play background video on user interaction');
+          }
+        };
+
+        window.addEventListener('scroll', forcePlayOnInteraction, { once: true });
+        window.addEventListener('click', forcePlayOnInteraction, { once: true });
+      } else {
+        console.error('Background video element not found');
+        showMessage('Background video element not found.', true);
+      }
+    });
+
+    // Basic Supabase Error Handling
+    document.addEventListener('DOMContentLoaded', () => {
+      const authForm = document.getElementById('authForm');
+      const totpForm = document.getElementById('totp-section');
+      const kycForm = document.getElementById('kycForm');
+
+      if (authForm) {
+        authForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          try {
+            // Placeholder for Supabase auth logic
+            // const { data, error } = await supabase.auth.signInWithPassword({...});
+            // if (error) throw error;
+            showMessage('Login successful!', false);
+          } catch (error) {
+            showMessage(`Login failed: ${error.message}`, true);
+          }
+        });
+      }
+
+      if (totpForm) {
+        document.getElementById('totp-submit').addEventListener('click', async () => {
+          try {
+            // Placeholder for Supabase TOTP logic
+            // const { data, error } = await supabase.auth.verifyOTP({...});
+            // if (error) throw error;
+            showMessage('TOTP verification successful!', false);
+          } catch (error) {
+            showMessage(`TOTP verification failed: ${error.message}`, true);
+          }
+        });
+      }
+
+      if (kycForm) {
+        kycForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          try {
+            // Placeholder for Supabase KYC submission logic
+            // const { data, error } = await supabase.from('kyc').insert({...});
+            // if (error) throw error;
+            showMessage('KYC submission successful!', false);
+          } catch (error) {
+            showMessage(`KYC submission failed: ${error.message}`, true);
+          }
+        });
+      }
+    });
+  </script>
 </body>
 </html>
