@@ -32,58 +32,6 @@
       --text-muted: #666;
     }
 
-    /* Tidio Widget Styling (Unchanged) */
-    #tidio-chat,
-    #tidio-chat-iframe-container {
-      font-family: 'Poppins', sans-serif !important;
-      z-index: 999 !important; /* Below back-to-top button but above other elements */
-    }
-    #tidio-chat > button,
-    #tidio-chat-iframe-container .tidio-chat-button {
-      background: var(--gold) !important;
-      border-radius: 50% !important;
-      box-shadow: 0 4px 10px var(--shadow) !important;
-      transition: all 0.3s ease !important;
-    }
-    #tidio-chat > button:hover,
-    #tidio-chat-iframe-container .tidio-chat-button:hover {
-      background: var(--gold-dark) !important;
-      transform: scale(1.1) !important;
-    }
-    #tidio-chat-iframe-container iframe {
-      background: var(--glass) !important;
-      backdrop-filter: blur(12px) !important;
-      border-radius: 15px !important;
-      box-shadow: 0 4px 20px var(--shadow) !important;
-      color: var(--text) !important;
-    }
-    #tidio-chat-iframe-container .tidio-chat-text,
-    #tidio-chat-iframe-container .tidio-chat-input,
-    #tidio-chat-iframe-container .tidio-chat-button {
-      font-family: 'Poppins', sans-serif !important;
-      color: var(--text) !important;
-    }
-    #tidio-chat-iframe-container .tidio-chat-button {
-      background: var(--gold) !important;
-      border-radius: 30px !important;
-      transition: all 0.3s ease !important;
-    }
-    #tidio-chat-iframe-container .tidio-chat-button:hover {
-      background: var(--gold-dark) !important;
-      transform: translateY(-2px) !important;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3) !important;
-    }
-    #tidio-chat-iframe-container .tidio-chat-input {
-      background: rgba(255, 255, 255, 0.05) !important;
-      border: 1px solid rgba(255, 255, 255, 0.1) !important;
-      border-radius: 8px !important;
-      transition: border-color 0.3s ease !important;
-    }
-    #tidio-chat-iframe-container .tidio-chat-input:focus {
-      border-color: var(--gold) !important;
-      outline: none !important;
-    }
-
     /* GTranslate Widget Positioning */
     .gtranslate_wrapper {
       position: fixed;
@@ -126,7 +74,7 @@
       #back-to-top {
         bottom: 70px !important;
         right: 10px !important;
-        width: 40 railwaypx;
+        width: 40px;
         height: 40px;
         font-size: 1.2rem;
       }
@@ -247,8 +195,18 @@
   <script>window.gtranslateSettings = {"default_language":"en","native_language_names":true,"detect_browser_language":true,"wrapper_selector":".gtranslate_wrapper","flag_style":"3d"}</script>
   <script src="https://cdn.gtranslate.net/widgets/latest/float.js" defer></script>
 
-  <!-- Tidio Chat Widget -->
-  <script src="//code.tidio.co/peclwowoqcbxhfe3wbowfneh1rabrdjz.js" async></script>
+  <!-- Crisp Chat Widget -->
+  <script type="text/javascript">
+    window.$crisp = [];
+    window.CRISP_WEBSITE_ID = "599e8216-ab4f-4d4f-bb22-5d47cf14031f";
+    (function() {
+      d = document;
+      s = d.createElement("script");
+      s.src = "https://client.crisp.chat/l.js";
+      s.async = 1;
+      d.getElementsByTagName("head")[0].appendChild(s);
+    })();
+  </script>
 
   <!-- Scripts -->
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
