@@ -43,9 +43,9 @@
       list-style: none;
       background: #fff;
       border: 1px solid #ccc;
-      width: 220px;
+      width: 240px;
       display: none;
-      max-height: 200px;
+      max-height: 300px;
       overflow-y: auto;
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
       z-index: 10;
@@ -73,12 +73,29 @@
 
   <div class="lang-selector">
     <button class="lang-btn" id="current-language">
-      <img src="flags/gb.svg" alt="EN"> <span>EN</span> ▼
+      <img src="flags/en.png" alt="EN"> <span>EN</span> ▼
     </button>
     <ul class="lang-list" id="lang-list">
-      <li data-lang="en" data-flag="gb.svg"><img src="flags/gb.svg" alt=""> English</li>
-      <li data-lang="af" data-flag="za.svg"><img src="flags/za.svg" alt=""> Afrikaans</li>
-      <!-- add more languages here -->
+      <li data-lang="en" data-flag="en.png"><img src="flags/en.png" alt=""> English</li>
+      <li data-lang="zh" data-flag="zh.png"><img src="flags/zh.png" alt=""> 中文 (Chinese)</li>
+      <li data-lang="hi" data-flag="hi.png"><img src="flags/hi.png" alt=""> हिन्दी (Hindi)</li>
+      <li data-lang="es" data-flag="es.png"><img src="flags/es.png" alt=""> Español (Spanish)</li>
+      <li data-lang="fr" data-flag="fr.png"><img src="flags/fr.png" alt=""> Français (French)</li>
+      <li data-lang="ar" data-flag="ar.png"><img src="flags/ar.png" alt=""> العربية (Arabic)</li>
+      <li data-lang="bn" data-flag="bn.png"><img src="flags/bn.png" alt=""> বাংলা (Bengali)</li>
+      <li data-lang="ru" data-flag="ru.png"><img src="flags/ru.png" alt=""> Русский (Russian)</li>
+      <li data-lang="pt" data-flag="pt.png"><img src="flags/pt.png" alt=""> Português (Portuguese)</li>
+      <li data-lang="ur" data-flag="ur.png"><img src="flags/ur.png" alt=""> اُردُو (Urdu)</li>
+      <li data-lang="id" data-flag="id.png"><img src="flags/id.png" alt=""> Bahasa Indonesia</li>
+      <li data-lang="de" data-flag="de.png"><img src="flags/de.png" alt=""> Deutsch (German)</li>
+      <li data-lang="ja" data-flag="ja.png"><img src="flags/ja.png" alt=""> 日本語 (Japanese)</li>
+      <li data-lang="sw" data-flag="sw.png"><img src="flags/sw.png" alt=""> Kiswahili (Swahili)</li>
+      <li data-lang="mr" data-flag="mr.png"><img src="flags/mr.png" alt=""> मराठी (Marathi)</li>
+      <li data-lang="te" data-flag="te.png"><img src="flags/te.png" alt=""> తెలుగు (Telugu)</li>
+      <li data-lang="tr" data-flag="tr.png"><img src="flags/tr.png" alt=""> Türkçe (Turkish)</li>
+      <li data-lang="ko" data-flag="ko.png"><img src="flags/ko.png" alt=""> 한국어 (Korean)</li>
+      <li data-lang="ta" data-flag="ta.png"><img src="flags/ta.png" alt=""> தமிழ் (Tamil)</li>
+      <li data-lang="vi" data-flag="vi.png"><img src="flags/vi.png" alt=""> Tiếng Việt (Vietnamese)</li>
     </ul>
   </div>
 
@@ -95,20 +112,31 @@
       const title     = document.getElementById('title');
       const paragraph = document.getElementById('paragraph');
 
-      // Simple translations object
+      // Simple translations object for our 20 languages
       const translations = {
-        en: {
-          title:     "Welcome to our test page",
-          paragraph: "This is a sample paragraph you can use to verify that your language selector is working."
-        },
-        af: {
-          title:     "Welkom by ons toetsbladsy",
-          paragraph: "Dit is 'n voorbeeldparagraaf wat jy kan gebruik om te verifieer dat jou taal-kiezer werk."
-        }
-        // you can add more languages here
+        en: { title: "Welcome to our test page", paragraph: "This is a sample paragraph you can use to verify that your language selector is working." },
+        zh: { title: "欢迎来到我们的测试页面", paragraph: "这是一段示例文字，可用于验证您的语言选择器是否正常工作。" },
+        hi: { title: "हमारे परीक्षण पृष्ठ पर आपका स्वागत है", paragraph: "यह एक नमूना पैराग्राफ है जिसका उपयोग आप यह सत्यापित करने के लिए कर सकते हैं कि आपका भाषा चयनकर्ता काम कर रहा है।" },
+        es: { title: "Bienvenido a nuestra página de prueba", paragraph: "Este es un párrafo de muestra que puede usar para verificar que su selector de idioma funciona." },
+        fr: { title: "Bienvenue sur notre page de test", paragraph: "Ceci est un paragraphe d'exemple que vous pouvez utiliser pour vérifier que votre sélecteur de langue fonctionne." },
+        ar: { title: "مرحبًا بك في صفحة الاختبار الخاصة بنا", paragraph: "هذه فقرة نموذجية يمكنك استخدامها للتحقق من أن محدد اللغة الخاص بك يعمل." },
+        bn: { title: "আমাদের পরীক্ষার পৃষ্ঠায় আপনাকে স্বাগতম", paragraph: "এটি একটি নমুনা প্যারাগ্রাফ যা আপনি আপনার ভাষা নির্বাচনকারী কাজ করছে কিনা তা যাচাই করার জন্য ব্যবহার করতে পারেন।" },
+        ru: { title: "Добро пожаловать на нашу тестовую страницу", paragraph: "Это пример абзаца, который вы можете использовать, чтобы проверить, что ваш переключатель языка работает." },
+        pt: { title: "Bem-vindo à nossa página de teste", paragraph: "Este é um parágrafo de exemplo que você pode usar para verificar se seu seletor de idioma está funcionando." },
+        ur: { title: "ہمارے ٹیسٹ پیج میں خوش آمدید", paragraph: "یہ ایک نمونہ پیراگراف ہے جسے آپ یہ تصدیق کرنے کے لیے استعمال کر سکتے ہیں کہ آپ کا زبان منتخب کرنے والا کام کر رہا ہے۔" },
+        id: { title: "Selamat datang di halaman uji kami", paragraph: "Ini adalah paragraf sampel yang dapat Anda gunakan untuk memverifikasi bahwa pemilih bahasa Anda berfungsi." },
+        de: { title: "Willkommen auf unserer Testseite", paragraph: "Dies ist ein Beispielabsatz, mit dem Sie überprüfen können, ob Ihr Sprachwähler funktioniert." },
+        ja: { title: "テストページへようこそ", paragraph: "これは言語セレクターが機能しているかを検証するために使用できるサンプル段落です。" },
+        sw: { title: "Karibu kwenye ukurasa wetu wa majaribio", paragraph: "Huu ni kifungu cha sampuli ambacho unaweza kutumia kuthibitisha kuwa chaguo lako la lugha kinafanya kazi." },
+        mr: { title: "आमच्या चाचणी पृष्ठावर आपले स्वागत आहे", paragraph: "हा एक नमुना परिच्छेद आहे ज्याचा वापर तुम्ही तुमचा भाषा निवडकर्ता कार्यरत आहे की नाही हे सत्यापित करण्यासाठी करू शकता." },
+        te: { title: "మా పరీక్షా పేజీకి స్వాగతం", paragraph: "మీ భాషా ఎంపిక పని చేస్తుందో లేదో మీరు నిర్ధారించుకోవడానికి ఇది ఒక నమూనా పేరా." },
+        tr: { title: "Test sayfamıza hoş geldiniz", paragraph: "Bu, dil seçicinizin çalışıp çalışmadığını doğrulamak için kullanabileceğiniz örnek bir paragraftır." },
+        ko: { title: "테스트 페이지에 오신 것을 환영합니다", paragraph: "언어 선택기가 제대로 작동하는지 확인하는 데 사용할 수 있는 샘플 단락입니다." },
+        ta: { title: "எங்கள் சோதனைப் பக்கத்திற்கு வரவேற்கிறோம்", paragraph: "உங்கள் மொழி தேர்வான் செயல்பட்டு கொண்டிருக்கிறதா என்பதை சரிபார்க்க நீங்கள் பயன்படுத்தக்கூடிய உதாரண பரிச்ச्छேதம் இது." },
+        vi: { title: "Chào mừng đến với trang thử nghiệm của chúng tôi", paragraph: "Đây là một đoạn văn mẫu mà bạn có thể sử dụng để xác minh rằng trình chọn ngôn ngữ của bạn hoạt động." }
       };
 
-      // Toggle dropdown on button click
+      // Toggle dropdown
       btn.addEventListener('click', () => {
         list.style.display = list.style.display === 'block' ? 'none' : 'block';
       });
