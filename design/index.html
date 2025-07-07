@@ -47,6 +47,31 @@
       transform: scale(1.1);
       filter: brightness(0.5);
     }
+    /* GTranslate Widget Positioning */
+    .gtranslate_wrapper {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      z-index: 1000;
+    }
+    /* Adjust Back to Top Button to Avoid Conflict with Tidio */
+    #back-to-top {
+      position: fixed !important;
+      bottom: 80px !important;
+      right: 20px !important;
+      z-index: 1000 !important;
+    }
+    /* Media Queries for Mobile Responsiveness */
+    @media (max-width: 768px) {
+      .gtranslate_wrapper {
+        bottom: 10px;
+        left: 10px;
+      }
+      #back-to-top {
+        bottom: 70px;
+        right: 10px;
+      }
+    }
   </style>
 </head>
 <body class="homepage">
@@ -65,6 +90,7 @@
         <a href="about.html">About</a>
         <a href="privacy.html">Privacy Policy</a>
         <a href="terms.html">Terms & Conditions</a>
+        <a href="testimonial.html">view live testimonials</a>
         <a href="login.html">Login</a>
         <a href="plans.html">Investment Plans</a>
         <div class="dropdown">
@@ -193,7 +219,7 @@
               <div class="result-value" id="roi">0.0%</div>
             </div>
             <div class="highlight-result">
-              <div class="label">Your Balance After <span id="period-display">1</span> Week</div>
+              <div class="label"> lehetőség Your Balance After <span id="period-display">1</span> Week</div>
               <div class="value" id="final-balance">$0.00</div>
             </div>
           </div>
@@ -251,7 +277,7 @@
       </section>
 
       <!-- FAQ Section -->
-      <section id="faq" class="section section-light faq-section" data-aos="fade-up">
+      <,section id="faq" class="section section-light faq-section" data-aos="fade-up">
         <h2 class="section-title">Frequently Asked Questions</h2>
         <div class="faq-container" id="faq-container">
           <div class="faq-item">
@@ -260,7 +286,7 @@
           </div>
           <div class="faq-item">
             <div class="faq-question">How do I begin?<i class="fas fa-chevron-down"></i></div>
-            <div class="faq-answer">Click 'Get Started', register,select your plan and deposit at least $200. </div>
+            <div class="faq-answer">Click 'Get Started', register, select your plan and deposit at least $200. </div>
           </div>
           <div class="faq-item">
             <div class="faq-question">Is it secure and legitimate?<i class="fas fa-chevron-down"></i></div>
@@ -370,211 +396,208 @@
 
     <!-- Back to Top Button -->
     <button id="back-to-top" aria-label="Back to top">🚀</button>
-  </div>
 
-  <script src="js/main.js"></script>
-  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-  <script>
-    // Local Time and Date
-    function updateLocalTime() {
-      const now = new Date();
-      document.getElementById('localTime').textContent = now.toLocaleTimeString();
-      document.getElementById('localDate').textContent = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-    }
-    setInterval(updateLocalTime, 1000);
-    updateLocalTime();
+    <!-- GTranslate Widget -->
+    <div class="gtranslate_wrapper"></div>
+    <script>window.gtranslateSettings = {"default_language":"en","native_language_names":true,"detect_browser_language":true,"wrapper_selector":".gtranslate_wrapper","flag_style":"3d"}</script>
+    <script src="https://cdn.gtranslate.net/widgets/latest/float.js" defer></script>
 
-    // Hamburger Toggle
-    const btn = document.getElementById('hamburgerBtn');
-    const drawer = document.getElementById('navDrawer');
-    btn.addEventListener('click', () => {
-      drawer.classList.toggle('open');
-      btn.classList.toggle('active');
-    });
+    <!-- Tidio Chat Widget -->
+    <script src="//code.tidio.co/peclwowoqcbxhfe3wbowfneh1rabrdjz.js" async></script>
 
-    // Theme Toggle
-    const themeToggle = document.getElementById('theme-toggle');
-    themeToggle.addEventListener('click', () => {
-      document.body.classList.toggle('light-theme');
-      const icon = themeToggle.querySelector('i');
-      icon.classList.toggle('fa-moon');
-      icon.classList.toggle('fa-sun');
-    });
-
-    // Back to Top
-    document.getElementById('back-to-top').addEventListener('click', () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-
-    // Testimonials Slider
-    (function() {
-      const items = document.querySelectorAll('.testimonial');
-      let idx = 0;
-      function show(i) {
-        items.forEach((el, j) => el.classList.toggle('active', j === i));
+    <script src="js/main.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+      // Local Time and Date
+      function updateLocalTime() {
+        const now = new Date();
+        document.getElementById('localTime').textContent = now.toLocaleTimeString();
+        document.getElementById('localDate').textContent = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
       }
-      setInterval(() => {
-        idx = (idx + 1) % items.length;
-        show(idx);
-      }, 5000);
-    })();
+      setInterval(updateLocalTime, 1000);
+      updateLocalTime();
 
-    // Investment Calculator
-    const plans = {
-      basic: { min: 200, max: 4999, rate: 0.05 },
-      standard: { min: 5000, max: 14999, rate: 0.065 },
-      silver: { min: 15000, max: 49999, rate: 0.075 },
-      gold: { min: 50000, max: 99999, rate: 0.085 },
-      diamond: { min: 100000, max: 1000000, rate: 0.10 }
-    };
-    const amountInput = document.getElementById('investment-amount');
-    const amountSlider = document.getElementById('amount-slider');
-    const planSelect = document.getElementById('investment-plan');
-    const periodInput = document.getElementById('investment-period');
-    const calculateBtn = document.getElementById('calculate-btn');
-
-    amountSlider.addEventListener('input', () => { amountInput.value = amountSlider.value; updatePlan(); calculateReturns(); });
-    amountInput.addEventListener('input', () => { amountSlider.value = amountInput.value; updatePlan(); calculateReturns(); });
-    planSelect.addEventListener('change', calculateReturns);
-    periodInput.addEventListener('input', calculateReturns);
-    calculateBtn.addEventListener('click', calculateReturns);
-
-    function updatePlan() {
-      const amount = parseFloat(amountInput.value);
-      for (const [key, plan] of Object.entries(plans)) {
-        if (amount >= plan.min && amount <= plan.max) {
-          planSelect.value = key;
-          document.getElementById('min-amount').textContent = '$' + plan.min.toLocaleString();
-          document.getElementById('max-amount').textContent = '$' + plan.max.toLocaleString();
-          break;
-        }
-      }
-    }
-
-    function calculateReturns() {
-      const amount = parseFloat(amountInput.value);
-      const planKey = planSelect.value;
-      const weeks = parseInt(periodInput.value) || 1;
-      const plan = plans[planKey];
-
-      if (amount < plan.min) amountInput.value = plan.min;
-      if (amount > plan.max) amountInput.value = plan.max;
-
-      const weeklyReturn = amount * plan.rate;
-      const totalReturn = weeklyReturn * weeks;
-      const totalProfit = totalReturn;
-      const roi = (totalProfit / amount * 100).toFixed(1);
-      const finalBalance = amount + totalReturn;
-
-      document.getElementById('weekly-return').textContent = '$' + weeklyReturn.toFixed(2);
-      document.getElementById('total-return').textContent = '$' + totalReturn.toFixed(2);
-      document.getElementById('total-profit').textContent = '$' + totalProfit.toFixed(2);
-      document.getElementById('roi').textContent = roi + '%';
-      document.getElementById('final-balance').textContent = '$' + finalBalance.toLocaleString(undefined, { minimumFractionDigits: 2 });
-      document.getElementById('period-display').textContent = weeks;
-    }
-    updatePlan();
-    calculateReturns();
-
-    // UTC Time
-    function updateUTCTime() {
-      document.getElementById('utcTime').textContent = new Date().toUTCString();
-    }
-    setInterval(updateUTCTime, 1000);
-    updateUTCTime();
-
-    // FAQ Accordion
-    document.querySelectorAll('.faq-item').forEach(item => {
-      item.querySelector('.faq-question').addEventListener('click', () => {
-        item.classList.toggle('active');
+      // Hamburger Toggle
+      const btn = document.getElementById('hamburgerBtn');
+      const drawer = document.getElementById('navDrawer');
+      btn.addEventListener('click', () => {
+        drawer.classList.toggle('open');
+        btn.classList.toggle('active');
       });
-    });
 
-    // Smooth Scrolling
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', (e) => {
-        e.preventDefault();
-        document.querySelector(anchor.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+      // Theme Toggle
+      const themeToggle = document.getElementById('theme-toggle');
+      themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('light-theme');
+        const icon = themeToggle.querySelector('i');
+        icon.classList.toggle('fa-moon');
+        icon.classList.toggle('fa-sun');
       });
-    });
 
-    // Initialize AOS
-    AOS.init({ duration: 800, once: true });
+      // Back to Top
+      document.getElementById('back-to-top').addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
 
-    // Dropdown Toggle
-    function toggleDropdown(btn) {
-      const dropdown = btn.nextElementSibling;
-      dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
-    }
-
-    // Video Playback with Enhanced Debugging
-    document.addEventListener('DOMContentLoaded', function() {
-      const playVideo = (videoElement, name) => {
-        if (videoElement) {
-          videoElement.play()
-            .then(() => console.log(`${name} video is playing successfully`))
-            .catch(error => {
-              console.error(`${name} video play failed:`, error);
-              setTimeout(() => {
-                videoElement.play()
-                  .then(() => console.log(`${name} video retry successful`))
-                  .catch(err => console.error(`Retry failed for ${name} video:`, err));
-              }, 1000);
-            });
-          // Additional event listeners for monitoring
-          videoElement.addEventListener('error', (e) => console.error(`${name} video error:`, e));
-          videoElement.addEventListener('stalled', () => console.warn(`${name} video stalled`));
-          videoElement.addEventListener('loadeddata', () => console.log(`${name} video data loaded`));
+      // Testimonials Slider
+      (function() {
+        const items = document.querySelectorAll('.testimonial');
+        let idx = 0;
+        function show(i) {
+          items.forEach((el, j) => el.classList.toggle('active', j === i));
         }
+        setInterval(() => {
+          idx = (idx + 1) % items.length;
+          show(idx);
+        }, 5000);
+      })();
+
+      // Investment Calculator
+      const plans = {
+        basic: { min: 200, max: 4999, rate: 0.05 },
+        standard: { min: 5000, max: 14999, rate: 0.065 },
+        silver: { min: 15000, max: 49999, rate: 0.075 },
+        gold: { min: 50000, max: 99999, rate: 0.085 },
+        diamond: { min: 100000, max: 1000000, rate: 0.10 }
       };
-      playVideo(document.querySelector('.hero-video'), 'Hero');
-    });
+      const amountInput = document.getElementById('investment-amount');
+      const amountSlider = document.getElementById('amount-slider');
+      const planSelect = document.getElementById('investment-plan');
+      const periodInput = document.getElementById('investment-period');
+      const calculateBtn = document.getElementById('calculate-btn');
 
-    // Video Sync Logic
-    document.addEventListener('DOMContentLoaded', function() {
-      const heroSection = document.querySelector('#hero');
-      const heroVideo = document.querySelector('.hero-video');
-      const mainVideoContainer = document.querySelector('.main-content-video-container');
-      const mainVideo = document.querySelector('.main-content-video');
+      amountSlider.addEventListener('input', () => { amountInput.value = amountSlider.value; updatePlan(); calculateReturns(); });
+      amountInput.addEventListener('input', () => { amountSlider.value = amountInput.value; updatePlan(); calculateReturns(); });
+      planSelect.addEventListener('change', calculateReturns);
+      periodInput.addEventListener('input', calculateReturns);
+      calculateBtn.addEventListener('click', calculateReturns);
 
-      if (heroVideo && mainVideo && heroSection && mainVideoContainer) {
-        // Ensure main video is initially paused
-        mainVideo.pause();
-
-        // Intersection Observer to detect hero section visibility
-        const observer = new IntersectionObserver((entries) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              // Hero section is visible
-              mainVideoContainer.classList.remove('visible');
-              mainVideo.pause();
-              heroVideo.play().catch(e => console.error('Hero video play failed:', e));
-            } else {
-              // Hero section is out of view
-              mainVideoContainer.classList.add('visible');
-              mainVideo.currentTime = heroVideo.currentTime; // Sync playback
-              mainVideo.play().catch(e => console.error('Main video play failed:', e));
-              heroVideo.pause();
-            }
-          });
-        }, {
-          threshold: 0.1 // Trigger when 10% of hero section is visible
-        });
-
-        observer.observe(heroSection);
-
-        // Handle video looping for continuity
-        heroVideo.addEventListener('ended', () => {
-          heroVideo.currentTime = 0;
-          heroVideo.play();
-        });
-
-        mainVideo.addEventListener('ended', () => {
-          mainVideo.currentTime = 0;
-          mainVideo.play();
-        });
+      function updatePlan() {
+        const amount = parseFloat(amountInput.value);
+        for (const [key, plan] of Object.entries(plans)) {
+          if (amount >= plan.min && amount <= plan.max) {
+            planSelect.value = key;
+            document.getElementById('min-amount').textContent = '$' + plan.min.toLocaleString();
+            document.getElementById('max-amount').textContent = '$' + plan.max.toLocaleString();
+            break;
+          }
+        }
       }
-    });
-  </script>
-</body>
+
+      function calculateReturns() {
+        const amount = parseFloat(amountInput.value);
+        const planKey = planSelect.value;
+        const weeks = parseInt(periodInput.value) || 1;
+        const plan = plans[planKey];
+
+        if (amount < plan.min) amountInput.value = plan.min;
+        if (amount > plan.max) amountInput.value = plan.max;
+
+        const weeklyReturn = amount * plan.rate;
+        const totalReturn = weeklyReturn * weeks;
+        const totalProfit = totalReturn;
+        const roi = (totalProfit / amount * 100).toFixed(1);
+        const finalBalance = amount + totalReturn;
+
+        document.getElementById('weekly-return').textContent = '$' + weeklyReturn.toFixed(2);
+        document.getElementById('total-return').textContent = '$' + totalReturn.toFixed(2);
+        document.getElementById('total-profit').textContent = '$' + totalProfit.toFixed(2);
+        document.getElementById('roi').textContent = roi + '%';
+        document.getElementById('final-balance').textContent = '$' + finalBalance.toLocaleString(undefined, { minimumFractionDigits: 2 });
+        document.getElementById('period-display').textContent = weeks;
+      }
+      updatePlan();
+      calculateReturns();
+
+      // UTC Time
+      function updateUTCTime() {
+        document.getElementById('utcTime').textContent = new Date().toUTCString();
+      }
+      setInterval(updateUTCTime, 1000);
+      updateUTCTime();
+
+      // FAQ Accordion
+      document.querySelectorAll('.faq-item').forEach(item => {
+        item.querySelector('.faq-question').addEventListener('click', () => {
+          item.classList.toggle('active');
+        });
+      });
+
+      // Smooth Scrolling
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', (e) => {
+          e.preventDefault();
+          document.querySelector(anchor.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+        });
+      });
+
+      // Initialize AOS
+      AOS.init({ duration: 800, once: true });
+
+      // Dropdown Toggle
+      function toggleDropdown(btn) {
+        const dropdown = btn.nextElementSibling;
+        dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+      }
+
+      // Video Playback with Enhanced Debugging
+      document.addEventListener('DOMContentLoaded', function() {
+        const playVideo = (videoElement, name) => {
+          if (videoElement) {
+            videoElement.play()
+              .then(() => console.log(`${name} video is playing successfully`))
+              .catch(error => {
+                console.error(`${name} video play failed:`, error);
+                setTimeout(() => {
+                  videoElement.play()
+                    .then(() => console.log(`${name} video retry successful`))
+                    .catch(err => console.error(`Retry failed for ${name} video:`, err));
+                }, 1000);
+              });
+            videoElement.addEventListener('error', (e) => console.error(`${name} video error:`, e));
+            videoElement.addEventListener('stalled', () => console.warn(`${name} video stalled`));
+            videoElement.addEventListener('loadeddata', () => console.log(`${name} video data loaded`));
+          }
+        };
+        playVideo(document.querySelector('.hero-video'), 'Hero');
+      });
+
+      // Video Sync Logic
+      document.addEventListener('DOMContentLoaded', function() {
+        const heroSection = document.querySelector('#hero');
+        const heroVideo = document.querySelector('.hero-video');
+        const mainVideoContainer = document.querySelector('.main-content-video-container');
+        const mainVideo = document.querySelector('.main-content-video');
+
+        if (heroVideo && mainVideo && heroSection && mainVideoContainer) {
+          mainVideo.pause();
+          const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                mainVideoContainer.classList.remove('visible');
+                mainVideo.pause();
+                heroVideo.play().catch(e => console.error('Hero video play failed:', e));
+              } else {
+                mainVideoContainer.classList.add('visible');
+                mainVideo.currentTime = heroVideo.currentTime;
+                mainVideo.play().catch(e => console.error('Main video play failed:', e));
+                heroVideo.pause();
+              }
+            });
+          }, {
+            threshold: 0.1
+          });
+          observer.observe(heroSection);
+          heroVideo.addEventListener('ended', () => {
+            heroVideo.currentTime = 0;
+            heroVideo.play();
+          });
+          mainVideo.addEventListener('ended', () => {
+            mainVideo.currentTime = 0;
+            mainVideo.play();
+          });
+        }
+      });
+    </script>
+  </body>
 </html>
