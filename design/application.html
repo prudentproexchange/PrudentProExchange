@@ -9,111 +9,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Added CSS for the loading spinner -->
   <style>
-    /* Theme Variables */
-    :root[data-theme="dark"] {
-      --bg: #1a1a1a;
-      --text: #e0e0e0;
-      --gold: #ffd700;
-      --gold-dark: #cca300;
-      --glass: rgba(255, 255, 255, 0.1);
-      --shadow: rgba(0, 0, 0, 0.3);
-      --text-light: #b0b0b0;
-      --text-muted: #888;
-    }
-    :root[data-theme="light"] {
-      --bg: #f5f5f5;
-      --text: #333;
-      --gold: #cca300;
-      --gold-dark: #b58900;
-      --glass: rgba(0, 0, 0, 0.05);
-      --shadow: rgba(0, 0, 0, 0.1);
-      --text-light: #555;
-      --text-muted: #666;
-    }
-
-    /* GTranslate Widget Positioning */
-    .gtranslate_wrapper {
-      position: fixed;
-      bottom: 20px;
-      left: 20px;
-      z-index: 1000;
-    }
-
-    /* Crisp Chat Widget Styling */
-    #crisp-chatbox,
-    #crisp-chatbox > div {
-      font-family: 'Poppins', sans-serif !important;
-      z-index: 999 !important; /* Below back-to-top button but above other elements */
-    }
-    #crisp-chatbox > div > a > span {
-      background: var(--gold) !important;
-      border-radius: 50% !important;
-      box-shadow: 0 4px 10px var(--shadow) !important;
-      transition: all 0.3s ease !important;
-    }
-    #crisp-chatbox > div > a > span:hover {
-      background: var(--gold-dark) !important;
-      transform: scale(1.1) !important;
-    }
-    #crisp-chatbox .crisp-client .cc-kv6t .cc-1xry .cc-unoo {
-      background: var(--glass) !important;
-      backdrop-filter: blur(12px) !important;
-      border-radius: 15px !important;
-      box-shadow: 0 4px 20px var(--shadow) !important;
-      color: var(--text) !important;
-    }
-    #crisp-chatbox .crisp-client .cc-kv6t .cc-unoo .cc-1t03 .cc-n7hd .cc-1g7g {
-      font-family: 'Poppins', sans-serif !important;
-      color: var(--text) !important;
-    }
-    #crisp-chatbox .crisp-client .cc-kv6t .cc-unoo .cc-1t03 .cc-1v0c .cc-1g7g {
-      background: var(--gold) !important;
-      border-radius: 30px !important;
-      transition: all 0.3s ease !important;
-    }
-    #crisp-chatbox .crisp-client .cc-kv6t .cc-unoo .cc-1t03 .cc-1v0c .cc-1g7g:hover {
-      background: var(--gold-dark) !important;
-      transform: translateY(-2px) !important;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3) !important;
-    }
-    #crisp-chatbox .crisp-client .cc-kv6t .cc-unoo .cc-1t03 .cc-1fuf {
-      background: rgba(255, 255, 255, 0.05) !important;
-      border: 1px solid rgba(255, 255, 255, 0.1) !important;
-      border-radius: 8px !important;
-      transition: border-color 0.3s ease !important;
-    }
-    #crisp-chatbox .crisp-client .cc-kv6t .cc-unoo .cc-1t03 .cc-1fuf:focus {
-      border-color: var(--gold) !important;
-      outline: none !important;
-    }
-
-    /* Back-to-Top Button Styling */
-    #back-to-top {
-      position: fixed !important;
-      bottom: 80px !important;
-      right: 20px !important;
-      z-index: 1000 !important;
-      background: var(--gold);
-      color: #000;
-      border: none;
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      font-size: 1.5rem;
-      cursor: pointer;
-      box-shadow: 0 4px 10px var(--shadow);
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    #back-to-top:hover {
-      background: var(--gold-dark);
-      transform: scale(1.1);
-    }
-
-    /* Existing Spinner Styles Preserved */
     .loading-spinner {
       display: none;
       text-align: center;
@@ -124,39 +21,23 @@
       color: #ffd700;
       margin-right: 8px;
     }
-
-    /* Responsive Adjustments */
-    @media (max-width: 768px) {
-      .gtranslate_wrapper {
-        bottom: 10px;
-        left: 10px;
-      }
-      #back-to-top {
-        bottom: 70px !important;
-        right: 10px !important;
-        width: 40px;
-        height: 40px;
-        font-size: 1.2rem;
-      }
-    }
   </style>
 </head>
 <body class="application-page">
-  <video class="bg-video" autoplay muted loop playsinline preload="auto" poster="assets/images/bg-fallback.jpg" aria-hidden="true">
+  <video class="bg-video" autoplay muted loop playsinline preload="auto">
     <source src="assets/videos/background.webm" type="video/webm">
     <source src="assets/videos/background.mp4" type="video/mp4">
-    Your browser does not support the video tag.
   </video>
   <div class="overlay">
-    <header class="site-header" role="banner">
-      <button id="theme-toggle" aria-label="Toggle light/dark theme"><i class="fas fa-moon"></i></button>
-      <a href="/" class="logo-link" aria-label="PrudentProExchange Home">
-        <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo" loading="lazy"/>
+    <header class="site-header">
+      <button id="theme-toggle" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
+      <a href="/" class="logo-link">
+        <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo"/>
       </a>
-      <button class="hamburger" id="hamburgerApp" aria-label="Toggle navigation menu" aria-expanded="false">
+      <button class="hamburger" id="hamburgerApp" aria-label="Menu">
         <span></span><span></span><span></span>
       </button>
-      <nav class="nav-drawer" id="navDrawerApp" role="navigation" aria-label="Main navigation">
+      <nav class="nav-drawer" id="navDrawerApp">
         <a href="application.html" class="active">Apply</a>
         <a href="about.html">About</a>
         <a href="privacy.html">Privacy Policy</a>
@@ -165,16 +46,15 @@
         <a href="plans.html">Investment Plans</a>
       </nav>
     </header>
-    <div class="nav-overlay" aria-hidden="true"></div>
 
-    <main class="form-page container" role="main">
-      <section class="section section-light" data-aos="fade-up" aria-labelledby="create-account-heading">
-        <h1 class="section-title gold" id="create-account-heading">👋 Create an Account</h1>
+    <main class="form-page container">
+      <section class="section section-light" data-aos="fade-up">
+        <h1 class="section-title gold">👋 Create an Account</h1>
         <p class="section-text">
           Register to continue with PrudentProExchange and unlock personalized investment opportunities.
         </p>
         <div class="form-wrapper">
-          <form id="applicationForm" class="form-container" role="form" aria-label="Create account form">
+          <form id="applicationForm" class="form-container">
             <div class="form-grid">
               <label>
                 First Name*
@@ -335,7 +215,7 @@
                   <option value="PL">Poland</option>
                   <option value="PT">Portugal</option>
                   <option value="QA">Qatar</option>
-                  <option value="RO">Romania</option>
+                  <option manage="RO">Romania</option>
                   <option value="RU">Russia</option>
                   <option value="RW">Rwanda</option>
                   <option value="KN">Saint Kitts and Nevis</option>
@@ -351,7 +231,7 @@
                   <option value="SL">Sierra Leone</option>
                   <option value="SG">Singapore</option>
                   <option value="SK">Slovakia</option>
-                  <option value="SI">Slovenia</option>
+                  <option value="SI">Sl>Select Country</option>
                   <option value="SB">Solomon Islands</option>
                   <option value="SO">Somalia</option>
                   <option value="ZA">South Africa</option>
@@ -410,8 +290,10 @@
               <input type="checkbox" name="terms" required aria-label="Terms Agreement"/>
               I agree with the <a href="privacy.html">Privacy Policy</a> and <a href="terms.html">Terms & Conditions</a>
             </label>
+            <!-- Added ID to the submit button for easier access -->
             <button type="submit" class="cta primary" id="submitButton">Create Account</button>
             <p class="login-link">Already have an account? <a href="login.html">Login</a></p>
+            <!-- Added loading spinner element -->
             <div class="loading-spinner" id="loadingSpinner">
               <i class="fas fa-spinner fa-spin"></i> Processing your application...
             </div>
@@ -421,85 +303,9 @@
     </main>
   </div>
 
-  <!-- Back to Top Button -->
-  <button id="back-to-top" aria-label="Scroll back to top">🚀</button>
-
-  <!-- GTranslate Widget -->
-  <div class="gtranslate_wrapper"></div>
-  <script>window.gtranslateSettings = {"default_language":"en","native_language_names":true,"detect_browser_language":true,"wrapper_selector":".gtranslate_wrapper","flag_style":"3d"}</script>
-  <script src="https://cdn.gtranslate.net/widgets/latest/float.js" defer></script>
-
-  <!-- Crisp Chat Widget -->
-  <script type="text/javascript">window.$crisp=[];window.CRISP_WEBSITE_ID="599e8216-ab4f-4d4f-bb22-5d47cf14031f";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();</script>
-
-  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js" defer></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
     AOS.init({ duration: 800, once: true });
-
-    // Video Playback Optimization
-    const video = document.querySelector('.bg-video');
-    let retryCount = 0;
-    const maxRetries = 3;
-    const retryDelay = 1000; // 1 second
-
-    if (video) {
-      const playVideo = () => {
-        video.play()
-          .then(() => {
-            console.log('Background video is playing successfully');
-            retryCount = 0;
-          })
-          .catch(error => {
-            console.error(`Background video play failed (attempt ${retryCount + 1}):`, error);
-            if (retryCount < maxRetries) {
-              retryCount++;
-              setTimeout(playVideo, retryDelay);
-            } else {
-              console.error('Max retries reached. Video playback failed.');
-              video.poster = 'assets/images/bg-fallback.jpg';
-            }
-          });
-      };
-
-      playVideo();
-
-      video.addEventListener('canplay', () => console.log('Background video can play'));
-      video.addEventListener('playing', () => console.log('Background video is actively playing'));
-      video.addEventListener('error', (e) => {
-        console.error('Background video error:', e);
-        video.poster = 'assets/images/bg-fallback.jpg';
-      });
-      video.addEventListener('stalled', () => console.warn('Background video stalled'));
-      video.addEventListener('loadeddata', () => console.log('Background video data loaded'));
-
-      document.addEventListener('visibilitychange', () => {
-        if (document.visibilityState === 'visible') {
-          if (video.paused) {
-            playVideo();
-          }
-        } else {
-          video.pause();
-          console.log('Background video paused due to tab inactivity');
-        }
-      });
-
-      const forcePlayOnInteraction = () => {
-        if (video.paused) {
-          playVideo();
-          console.log('Attempting to play background video on user interaction');
-        }
-      };
-
-      window.addEventListener('scroll', forcePlayOnInteraction, { once: true });
-      window.addEventListener('click', forcePlayOnInteraction, { once: true });
-    } else {
-      console.error('Background video element not found');
-    }
-
-    // Back to Top Functionality
-    document.getElementById('back-to-top').addEventListener('click', () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
 
     window.addEventListener('error', event => {
       alert(`Error: ${event.message}\nFile: ${event.filename}:${event.lineno}`);
@@ -509,28 +315,10 @@
     });
 
     const btnApp = document.getElementById('hamburgerApp'),
-          drawerApp = document.getElementById('navDrawerApp'),
-          overlay = document.querySelector('.nav-overlay');
+          drawerApp = document.getElementById('navDrawerApp');
     btnApp.addEventListener('click', () => {
-      const isOpen = drawerApp.classList.toggle('open');
+      drawerApp.classList.toggle('open');
       btnApp.classList.toggle('active');
-      btnApp.setAttribute('aria-expanded', isOpen);
-      overlay.classList.toggle('nav-open');
-      if (isOpen) {
-        drawerApp.scrollTop = 0;
-        drawerApp.querySelector('a').focus();
-      }
-    });
-
-    document.addEventListener('click', (event) => {
-      const isClickInsideNav = drawerApp.contains(event.target);
-      const isClickOnHamburger = btnApp.contains(event.target);
-      if (!isClickInsideNav && !isClickOnHamburger && drawerApp.classList.contains('open')) {
-        drawerApp.classList.remove('open');
-        btnApp.classList.remove('active');
-        btnApp.setAttribute('aria-expanded', 'false');
-        overlay.classList.remove('nav-open');
-      }
     });
 
     const themeToggle = document.getElementById('theme-toggle');
@@ -539,7 +327,6 @@
       const icon = themeToggle.querySelector('i');
       icon.classList.toggle('fa-moon');
       icon.classList.toggle('fa-sun');
-      themeToggle.setAttribute('aria-label', document.body.classList.contains('light-theme') ? 'Switch to dark theme' : 'Switch to light theme');
     });
 
     function generateReferralCode(length = 8) {
