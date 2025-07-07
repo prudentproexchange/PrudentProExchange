@@ -1,311 +1,86 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title data-tolgee="title">Welcome to our test page</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GTranslate Language Selector Demo</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      padding: 2rem;
-      background: #f9f9f9;
-      min-height: 100vh;
       margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #e0eafc, #cfdef3);
+      height: 100vh;
+      overflow-x: hidden;
     }
-    .lang-selector {
+
+    header {
+      padding: 20px;
+      background-color: #0044cc;
+      color: white;
+      text-align: center;
+    }
+
+    .content {
+      padding: 40px;
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .content h1 {
+      font-size: 36px;
+      color: #0044cc;
+    }
+
+    .content p {
+      font-size: 18px;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    /* Optional: Style adjustment to your floating GTranslate */
+    .gtranslate_wrapper {
       position: fixed;
       bottom: 20px;
       left: 20px;
-      z-index: 1000;
-      display: inline-block;
+      z-index: 9999;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     }
-    .lang-btn {
-      background: #fff;
+
+    /* Optional: Additional styling */
+    .gtranslate_wrapper select {
+      border-radius: 8px;
+      padding: 6px 12px;
       border: 1px solid #ccc;
-      padding: 0.5rem 1rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-      border-radius: 4px;
-    }
-    .lang-btn img {
-      width: 20px;
-      height: auto;
-    }
-    .lang-list {
-      position: absolute;
-      top: calc(100% + 0.2rem);
-      left: 0;
-      margin: 0;
-      padding: 0.2rem 0;
-      list-style: none;
+      font-size: 14px;
       background: #fff;
-      border: 1px solid #ccc;
-      width: 240px;
-      display: none;
-      max-height: 300px;
-      overflow-y: auto;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      z-index: 1001;
-      border-radius: 4px;
-    }
-    .lang-list li {
-      padding: 0.5rem 1rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    .lang-list li:hover {
-      background: #f0f0f0;
-    }
-    .lang-list img {
-      width: 20px;
-      height: auto;
-    }
-    [dir="rtl"] .lang-btn,
-    [dir="rtl"] .lang-list li {
-      direction: rtl;
-      text-align: right;
-    }
-    @media (max-width: 480px) {
-      .lang-selector {
-        bottom: 15px;
-        left: 15px;
-      }
-      .lang-btn {
-        padding: 0.4rem 0.8rem;
-      }
-      .lang-list {
-        width: 200px;
-      }
-    }
-    .error-message {
-      color: red;
-      position: fixed;
-      top: 20px;
-      left: 20px;
-      z-index: 1002;
+      color: #333;
     }
   </style>
 </head>
 <body>
-  <div class="lang-selector">
-    <button class="lang-btn" id="current-language" aria-haspopup="true" aria-expanded="false">
-      <img src="flags/gb.png" alt="English"> <span>EN</span> ▼
-    </button>
-    <ul class="lang-list" id="lang-list" role="menu" aria-label="Select Language">
-      <li data-lang="af" data-flag="za.png" role="menuitem"><img src="flags/za.png" alt="Afrikaans" loading="lazy"> Afrikaans</li>
-      <li data-lang="sq" data-flag="al.png" role="menuitem"><img src="flags/al.png" alt="Shqip" loading="lazy"> Shqip</li>
-      <li data-lang="am" data-flag="et.png" role="menuitem"><img src="flags/et.png" alt="አማርኛ" loading="lazy"> አማርኛ</li>
-      <li data-lang="ar" data-flag="sa.png" role="menuitem" dir="rtl"><img src="flags/sa.png" alt="العربية" loading="lazy"> العربية</li>
-      <li data-lang="hy" data-flag="am.png" role="menuitem"><img src="flags/am.png" alt="Հայերեն" loading="lazy"> Հայերեն</li>
-      <li data-lang="as" data-flag="in.png" role="menuitem"><img src="flags/in.png" alt="অসমীয়া" loading="lazy"> অসমীয়া</li>
-      <li data-lang="az" data-flag="az.png" role="menuitem"><img src="flags/az.png" alt="Azərbaycan dili" loading="lazy"> Azərbaycan dili</li>
-      <li data-lang="be" data-flag="by.png" role="menuitem"><img src="flags/by.png" alt="Беларуская" loading="lazy"> Беларуская</li>
-      <li data-lang="bn" data-flag="bd.png" role="menuitem"><img src="flags/bd.png" alt="বাংলা" loading="lazy"> বাংলা</li>
-      <li data-lang="bs" data-flag="ba.png" role="menuitem"><img src="flags/ba.png" alt="Bosanski" loading="lazy"> Bosanski</li>
-      <li data-lang="bg" data-flag="bg.png" role="menuitem"><img src="flags/bg.png" alt="Български" loading="lazy"> Български</li>
-      <li data-lang="my" data-flag="mm.png" role="menuitem"><img src="flags/mm.png" alt="မြန်မာစာ" loading="lazy"> မြန်မာစာ</li>
-      <li data-lang="ca" data-flag="es.png" role="menuitem"><img src="flags/es.png" alt="Català" loading="lazy"> Català</li>
-      <li data-lang="ceb" data-flag="ph.png" role="menuitem"><img src="flags/ph.png" alt="Cebuano" loading="lazy"> Cebuano</li>
-      <li data-lang="ny" data-flag="mw.png" role="menuitem"><img src="flags/mw.png" alt="Chichewa" loading="lazy"> Chichewa</li>
-      <li data-lang="zh" data-flag="cn.png" role="menuitem"><img src="flags/cn.png" alt="中文" loading="lazy"> 中文</li>
-      <li data-lang="zh-tw" data-flag="tw.png" role="menuitem"><img src="flags/tw.png" alt="繁體中文" loading="lazy"> 繁體中文</li>
-      <li data-lang="co" data-flag="fr.png" role="menuitem"><img src="flags/fr.png" alt="Corsu" loading="lazy"> Corsu</li>
-      <li data-lang="hr" data-flag="hr.png" role="menuitem"><img src="flags/hr.png" alt="Hrvatski" loading="lazy"> Hrvatski</li>
-      <li data-lang="cs" data-flag="cz.png" role="menuitem"><img src="flags/cz.png" alt="Čeština" loading="lazy"> Čeština</li>
-      <li data-lang="da" data-flag="dk.png" role="menuitem"><img src="flags/dk.png" alt="Dansk" loading="lazy"> Dansk</li>
-      <li data-lang="nl" data-flag="nl.png" role="menuitem"><img src="flags/nl.png" alt="Nederlands" loading="lazy"> Nederlands</li>
-      <li data-lang="en" data-flag="gb.png" role="menuitem"><img src="flags/gb.png" alt="English" loading="lazy"> English</li>
-      <li data-lang="eo" data-flag="un.png" role="menuitem"><img src="flags/un.png" alt="Esperanto" loading="lazy"> Esperanto</li>
-      <li data-lang="et" data-flag="ee.png" role="menuitem"><img src="flags/ee.png" alt="Eesti" loading="lazy"> Eesti</li>
-      <li data-lang="tl" data-flag="ph.png" role="menuitem"><img src="flags/ph.png" alt="Filipino" loading="lazy"> Filipino</li>
-      <li data-lang="fi" data-flag="fi.png" role="menuitem"><img src="flags/fi.png" alt="Suomi" loading="lazy"> Suomi</li>
-      <li data-lang="fr" data-flag="fr.png" role="menuitem"><img src="flags/fr.png" alt="Français" loading="lazy"> Français</li>
-      <li data-lang="gl" data-flag="es.png" role="menuitem"><img src="flags/es.png" alt="Galego" loading="lazy"> Galego</li>
-      <li data-lang="ka" data-flag="ge.png" role="menuitem"><img src="flags/ge.png" alt="ქართული" loading="lazy"> ქართული</li>
-      <li data-lang="de" data-flag="de.png" role="menuitem"><img src="flags/de.png" alt="Deutsch" loading="lazy"> Deutsch</li>
-      <li data-lang="el" data-flag="gr.png" role="menuitem"><img src="flags/gr.png" alt="Ελληνικά" loading="lazy"> Ελληνικά</li>
-      <li data-lang="gu" data-flag="in.png" role="menuitem"><img src="flags/in.png" alt="ગુજરાતી" loading="lazy"> ગુજરાતી</li>
-      <li data-lang="ht" data-flag="ht.png" role="menuitem"><img src="flags/ht.png" alt="Kreyòl Ayisyen" loading="lazy"> Kreyòl Ayisyen</li>
-      <li data-lang="ha" data-flag="ng.png" role="menuitem"><img src="flags/ng.png" alt="Hausa" loading="lazy"> Hausa</li>
-      <li data-lang="haw" data-flag="us.png" role="menuitem"><img src="flags/us.png" alt="ʻŌlelo Hawaiʻi" loading="lazy"> ʻŌlelo Hawaiʻi</li>
-      <li data-lang="he" data-flag="il.png" role="menuitem" dir="rtl"><img src="flags/il.png" alt="עברית" loading="lazy"> עברית</li>
-      <li data-lang="hi" data-flag="in.png" role="menuitem"><img src="flags/in.png" alt="हिन्दी" loading="lazy"> हिन्दी</li>
-      <li data-lang="hmn" data-flag="la.png" role="menuitem"><img src="flags/la.png" alt="Hmoob" loading="lazy"> Hmoob</li>
-      <li data-lang="hu" data-flag="hu.png" role="menuitem"><img src="flags/hu.png" alt="Magyar" loading="lazy"> Magyar</li>
-      <li data-lang="is" data-flag="is.png" role="menuitem"><img src="flags/is.png" alt="Íslenska" loading="lazy"> Íslenska</li>
-      <li data-lang="ig" data-flag="ng.png" role="menuitem"><img src="flags/ng.png" alt="Igbo" loading="lazy"> Igbo</li>
-      <li data-lang="id" data-flag="id.png" role="menuitem"><img src="flags/id.png" alt="Bahasa Indonesia" loading="lazy"> Bahasa Indonesia</li>
-      <li data-lang="ga" data-flag="ie.png" role="menuitem"><img src="flags/ie.png" alt="Gaelige" loading="lazy"> Gaelige</li>
-      <li data-lang="it" data-flag="it.png" role="menuitem"><img src="flags/it.png" alt="Italiano" loading="lazy"> Italiano</li>
-      <li data-lang="ja" data-flag="jp.png" role="menuitem"><img src="flags/jp.png" alt="日本語" loading="lazy"> 日本語</li>
-      <li data-lang="jv" data-flag="id.png" role="menuitem"><img src="flags/id.png" alt="Basa Jawa" loading="lazy"> Basa Jawa</li>
-      <li data-lang="kn" data-flag="in.png" role="menuitem"><img src="flags/in.png" alt="ಕನ್ನಡ" loading="lazy"> ಕನ್ನಡ</li>
-      <li data-lang="kk" data-flag="kz.png" role="menuitem"><img src="flags/kz.png" alt="Қазақша" loading="lazy"> Қазақша</li>
-      <li data-lang="km" data-flag="kh.png" role="menuitem"><img src="flags/kh.png" alt="ខ្មែរ" loading="lazy"> ខ្មែរ</li>
-      <li data-lang="rw" data-flag="rw.png" role="menuitem"><img src="flags/rw.png" alt="Ikinyarwanda" loading="lazy"> Ikinyarwanda</li>
-      <li data-lang="ko" data-flag="kr.png" role="menuitem"><img src="flags/kr.png" alt="한국어" loading="lazy"> 한국어</li>
-      <li data-lang="ku" data-flag="iq.png" role="menuitem" dir="rtl"><img src="flags/iq.png" alt="Kurdî" loading="lazy"> Kurdî</li>
-      <li data-lang="ky" data-flag="kg.png" role="menuitem"><img src="flags/kg.png" alt="Кыргызча" loading="lazy"> Кыргызча</li>
-      <li data-lang="lo" data-flag="la.png" role="menuitem"><img src="flags/la.png" alt="ລາວ" loading="lazy"> ລາວ</li>
-      <li data-lang="lv" data-flag="lv.png" role="menuitem"><img src="flags/lv.png" alt="Latviešu" loading="lazy"> Latviešu</li>
-      <li data-lang="lt" data-flag="lt.png" role="menuitem"><img src="flags/lt.png" alt="Lietuvių" loading="lazy"> Lietuvių</li>
-      <li data-lang="lb" data-flag="lu.png" role="menuitem"><img src="flags/lu.png" alt="Lëtzebuergesch" loading="lazy"> Lëtzebuergesch</li>
-      <li data-lang="mk" data-flag="mk.png" role="menuitem"><img src="flags/mk.png" alt="Македонски" loading="lazy"> Македонски</li>
-      <li data-lang="mg" data-flag="mg.png" role="menuitem"><img src="flags/mg.png" alt="Malagasy" loading="lazy"> Malagasy</li>
-      <li data-lang="ms" data-flag="my.png" role="menuitem"><img src="flags/my.png" alt="Bahasa Melayu" loading="lazy"> Bahasa Melayu</li>
-      <li data-lang="ml" data-flag="in.png" role="menuitem"><img src="flags/in.png" alt="മലയാളം" loading="lazy"> മലയാളം</li>
-      <li data-lang="mt" data-flag="mt.png" role="menuitem"><img src="flags/mt.png" alt="Malti" loading="lazy"> Malti</li>
-      <li data-lang="mi" data-flag="nz.png" role="menuitem"><img src="flags/nz.png" alt="Māori" loading="lazy"> Māori</li>
-      <li data-lang="mr" data-flag="in.png" role="menuitem"><img src="flags/in.png" alt="मराठी" loading="lazy"> मराठी</li>
-      <li data-lang="mn" data-flag="mn.png" role="menuitem"><img src="flags/mn.png" alt="Монгол" loading="lazy"> Монгол</li>
-      <li data-lang="ne" data-flag="np.png" role="menuitem"><img src="flags/np.png" alt="नेपाली" loading="lazy"> नेपाली</li>
-      <li data-lang="no" data-flag="no.png" role="menuitem"><img src="flags/no.png" alt="Norsk" loading="lazy"> Norsk</li>
-      <li data-lang="or" data-flag="in.png" role="menuitem"><img src="flags/in.png" alt="ଓଡ଼ିଆ" loading="lazy"> ଓଡ଼ିଆ</li>
-      <li data-lang="ps" data-flag="af.png" role="menuitem" dir="rtl"><img src="flags/af.png" alt="پښتو" loading="lazy"> پښتو</li>
-      <li data-lang="fa" data-flag="ir.png" role="menuitem" dir="rtl"><img src="flags/ir.png" alt="فارسی" loading="lazy"> فارسی</li>
-      <li data-lang="pl" data-flag="pl.png" role="menuitem"><img src="flags/pl.png" alt="Polski" loading="lazy"> Polski</li>
-      <li data-lang="pt" data-flag="pt.png" role="menuitem"><img src="flags/pt.png" alt="Português" loading="lazy"> Português</li>
-      <li data-lang="pa" data-flag="in.png" role="menuitem"><img src="flags/in.png" alt="ਪੰਜਾਬੀ" loading="lazy"> ਪੰਜਾਬੀ</li>
-      <li data-lang="qu" data-flag="pe.png" role="menuitem"><img src="flags/pe.png" alt="Runasimi" loading="lazy"> Runasimi</li>
-      <li data-lang="ro" data-flag="ro.png" role="menuitem"><img src="flags/ro.png" alt="Română" loading="lazy"> Română</li>
-      <li data-lang="ru" data-flag="ru.png" role="menuitem"><img src="flags/ru.png" alt="Русский" loading="lazy"> Русский</li>
-      <li data-lang="sm" data-flag="ws.png" role="menuitem"><img src="flags/ws.png" alt="Gagana Samoa" loading="lazy"> Gagana Samoa</li>
-      <li data-lang="sr" data-flag="rs.png" role="menuitem"><img src="flags/rs.png" alt="Српски" loading="lazy"> Српски</li>
-      <li data-lang="st" data-flag="ls.png" role="menuitem"><img src="flags/ls.png" alt="Sesotho" loading="lazy"> Sesotho</li>
-      <li data-lang="sn" data-flag="zw.png" role="menuitem"><img src="flags/zw.png" alt="ChiShona" loading="lazy"> ChiShona</li>
-      <li data-lang="sd" data-flag="pk.png" role="menuitem" dir="rtl"><img src="flags/pk.png" alt="سنڌي" loading="lazy"> سنڌي</li>
-      <li data-lang="si" data-flag="lk.png" role="menuitem"><img src="flags/lk.png" alt="සිංහල" loading="lazy"> සිංහල</li>
-      <li data-lang="sk" data-flag="sk.png" role="menuitem"><img src="flags/sk.png" alt="Slovenčina" loading="lazy"> Slovenčina</li>
-      <li data-lang="sl" data-flag="si.png" role="menuitem"><img src="flags/si.png" alt="Slovenščina" loading="lazy"> Slovenščina</li>
-      <li data-lang="so" data-flag="so.png" role="menuitem"><img src="flags/so.png" alt="Soomaali" loading="lazy"> Soomaali</li>
-      <li data-lang="es" data-flag="es.png" role="menuitem"><img src="flags/es.png" alt="Español" loading="lazy"> Español</li>
-      <li data-lang="su" data-flag="id.png" role="menuitem"><img src="flags/id.png" alt="Basa Sunda" loading="lazy"> Basa Sunda</li>
-      <li data-lang="sw" data-flag="tz.png" role="menuitem"><img src="flags/tz.png" alt="Kiswahili" loading="lazy"> Kiswahili</li>
-      <li data-lang="sv" data-flag="se.png" role="menuitem"><img src="flags/se.png" alt="Svenska" loading="lazy"> Svenska</li>
-      <li data-lang="tg" data-flag="tj.png" role="menuitem"><img src="flags/tj.png" alt="Тоҷикӣ" loading="lazy"> Тоҷикӣ</li>
-      <li data-lang="ta" data-flag="lk.png" role="menuitem"><img src="flags/lk.png" alt="தமிழ்" loading="lazy"> தமிழ்</li>
-      <li data-lang="tt" data-flag="ru.png" role="menuitem"><img src="flags/ru.png" alt="Татарча" loading="lazy"> Татарча</li>
-      <li data-lang="te" data-flag="in.png" role="menuitem"><img src="flags/in.png" alt="తెలుగు" loading="lazy"> తెలుగు</li>
-      <li data-lang="th" data-flag="th.png" role="menuitem"><img src="flags/th.png" alt="ไทย" loading="lazy"> ไทย</li>
-      <li data-lang="tr" data-flag="tr.png" role="menuitem"><img src="flags/tr.png" alt="Türkçe" loading="lazy"> Türkçe</li>
-      <li data-lang="tk" data-flag="tm.png" role="menuitem"><img src="flags/tm.png" alt="Türkmençe" loading="lazy"> Türkmençe</li>
-      <li data-lang="uk" data-flag="ua.png" role="menuitem"><img src="flags/ua.png" alt="Українська" loading="lazy"> Українська</li>
-      <li data-lang="ur" data-flag="pk.png" role="menuitem" dir="rtl"><img src="flags/pk.png" alt="اردو" loading="lazy"> اردو</li>
-      <li data-lang="ug" data-flag="cn.png" role="menuitem" dir="rtl"><img src="flags/cn.png" alt="ئۇيغۇرچە" loading="lazy"> ئۇيغۇرچە</li>
-      <li data-lang="uz" data-flag="uz.png" role="menuitem"><img src="flags/uz.png" alt="Oʻzbekcha" loading="lazy"> Oʻzbekcha</li>
-      <li data-lang="vi" data-flag="vn.png" role="menuitem"><img src="flags/vn.png" alt="Tiếng Việt" loading="lazy"> Tiếng Việt</li>
-      <li data-lang="cy" data-flag="gb.png" role="menuitem"><img src="flags/gb.png" alt="Cymraeg" loading="lazy"> Cymraeg</li>
-      <li data-lang="xh" data-flag="za.png" role="menuitem"><img src="flags/za.png" alt="isiXhosa" loading="lazy"> isiXhosa</li>
-      <li data-lang="yi" data-flag="il.png" role="menuitem" dir="rtl"><img src="flags/il.png" alt="ייִדיש" loading="lazy"> ייִדיש</li>
-      <li data-lang="yo" data-flag="ng.png" role="menuitem"><img src="flags/ng.png" alt="Yorùbá" loading="lazy"> Yorùbá</li>
-      <li data-lang="zu" data-flag="za.png" role="menuitem"><img src="flags/za.png" alt="isiZulu" loading="lazy"> isiZulu</li>
-    </ul>
+
+  <header>
+    <h1>Welcome to My Website</h1>
+  </header>
+
+  <div class="content">
+    <h1>Hello World!</h1>
+    <p>This is a beautiful multilingual website powered by GTranslate. Use the language selector at the bottom left to translate the page into your preferred language.</p>
   </div>
 
-  <h1 data-tolgee="title">Welcome to our test page</h1>
-  <p data-tolgee="paragraph">This is a sample paragraph you can use to verify that your language selector is working.</p>
-
-  <!-- Tolgee SDK -->
-  <script src="https://unpkg.com/@tolgee/web@5.24.0/dist/tolgee-web.umd.js"></script>
-  <!-- Tidio Chat -->
-  <script src="//code.tidio.co/YOUR_TIDIO_PUBLIC_KEY.js" async></script>
+  <!-- GTranslate Widget -->
+  <div class="gtranslate_wrapper"></div>
   <script>
-    // Initialize Tolgee with error handling
-    (async () => {
-      try {
-        const { Tolgee } = window.Tolgee;
-        if (!Tolgee) {
-          throw new Error('Tolgee SDK not loaded');
-        }
-
-        await Tolgee.init({
-          apiKey: 'tgpak_ge4toojxl53gk5tenfyggndpnf2gmnrxgvrw423kobzwundsobzq',
-          apiUrl: 'https://app.tolgee.io',
-          defaultLanguage: 'en',
-          availableLanguages: [
-            'af', 'sq', 'am', 'ar', 'hy', 'as', 'az', 'be', 'bn', 'bs', 'bg', 'my', 'ca', 'ceb', 'ny', 'zh', 'zh-tw',
-            'co', 'hr', 'cs', 'da', 'nl', 'en', 'eo', 'et', 'tl', 'fi', 'fr', 'gl', 'ka', 'de', 'el', 'gu', 'ht', 'ha',
-            'haw', 'he', 'hi', 'hmn', 'hu', 'is', 'ig', 'id', 'ga', 'it', 'ja', 'jv', 'kn', 'kk', 'km', 'rw', 'ko', 'ku',
-            'ky', 'lo', 'lv', 'lt', 'lb', 'mk', 'mg', 'ms', 'ml', 'mt', 'mi', 'mr', 'mn', 'ne', 'no', 'or', 'ps', 'fa',
-            'pl', 'pt', 'pa', 'qu', 'ro', 'ru', 'sm', 'sr', 'st', 'sn', 'sd', 'si', 'sk', 'sl', 'so', 'es', 'su', 'sw',
-            'sv', 'tg', 'ta', 'tt', 'te', 'th', 'tr', 'tk', 'uk', 'ur', 'ug', 'uz', 'vi', 'cy', 'xh', 'yi', 'yo', 'zu'
-          ],
-          translationProvider: {
-            type: 'google',
-            apiKey: null
-          }
-        }).run();
-
-        // Language selector logic
-        const btn = document.getElementById('current-language');
-        const list = document.getElementById('lang-list');
-
-        btn.addEventListener('click', () => {
-          const open = list.style.display === 'block';
-          list.style.display = open ? 'none' : 'block';
-          btn.setAttribute('aria-expanded', String(!open));
-        });
-
-        document.addEventListener('click', e => {
-          if (!btn.contains(e.target) && !list.contains(e.target)) {
-            list.style.display = 'none';
-            btn.setAttribute('aria-expanded', 'false');
-          }
-        });
-
-        list.querySelectorAll('li').forEach(item => {
-          item.addEventListener('click', async () => {
-            try {
-              const lang = item.dataset.lang;
-              const flag = item.dataset.flag;
-              btn.querySelector('img').src = `flags/${flag}`;
-              btn.querySelector('img').alt = item.textContent.trim();
-              btn.querySelector('span').textContent = lang.toUpperCase();
-              await Tolgee.changeLanguage(lang);
-              document.documentElement.lang = lang;
-              document.documentElement.dir = ['ar', 'he', 'fa', 'ur', 'ku', 'ps', 'sd', 'ug', 'yi'].includes(lang) ? 'rtl' : 'ltr';
-              list.style.display = 'none';
-              btn.setAttribute('aria-expanded', 'false');
-            } catch (error) {
-              console.error('Language switch error:', error);
-              showError('Failed to switch language');
-            }
-          });
-        });
-
-        // Lazy load flag images
-        document.querySelectorAll('.lang-list img').forEach(img => {
-          img.setAttribute('loading', 'lazy');
-        });
-
-        // Sync Tidio with Tolgee language
-        const syncTidioLanguage = () => {
-          if (window.tidioChatApi) {
-            const lang = Tolgee.getLanguage();
-            window.tidioChatApi.setVisitorData({ language: lang });
-          }
-        };
-        Tolgee.on('languageChange', syncTidioLanguage);
-        syncTidioLanguage();
-      } catch (error) {
-        console.error('Tolgee initialization failed:', error);
-        showError('Failed to initialize translations. Check API key or network.');
-      }
-    })();
-
-    // Error display function
-    function showError(message) {
-      const errorDiv = document.createElement('div');
-      errorDiv.className = 'error-message';
-      errorDiv.textContent = message;
-      document.body.appendChild(errorDiv);
-      setTimeout(() => errorDiv.remove(), 5000);
-    }
+    window.gtranslateSettings = {
+      "default_language": "en",
+      "native_language_names": true,
+      "detect_browser_language": true,
+      "wrapper_selector": ".gtranslate_wrapper",
+      "flag_style": "3d"
+    };
   </script>
+  <script src="https://cdn.gtranslate.net/widgets/latest/float.js" defer></script>
+
 </body>
 </html>
