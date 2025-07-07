@@ -388,52 +388,54 @@
         transform: scale(1.1);
       }
 
-      /* Tawk.to Widget Styling */
-      #tawkto-button,
-      #tawkto-overlay {
+      /* Tidio Widget Styling */
+      #tidio-chat,
+      #tidio-chat-iframe-container {
         font-family: 'Poppins', sans-serif !important;
         z-index: 999 !important; /* Below back-to-top button but above other elements */
       }
-      #tawkto-button {
+      #tidio-chat > button,
+      #tidio-chat-iframe-container .tidio-chat-button {
         background: var(--gold) !important;
         border-radius: 50% !important;
         box-shadow: 0 4px 10px var(--shadow) !important;
         transition: all 0.3s ease !important;
       }
-      #tawkto-button:hover {
+      #tidio-chat > button:hover,
+      #tidio-chat-iframe-container .tidio-chat-button:hover {
         background: var(--gold-dark) !important;
         transform: scale(1.1) !important;
       }
-      #tawkto-overlay {
+      #tidio-chat-iframe-container iframe {
         background: var(--glass) !important;
         backdrop-filter: blur(12px) !important;
         border-radius: 15px !important;
         box-shadow: 0 4px 20px var(--shadow) !important;
         color: var(--text) !important;
       }
-      #tawkto-overlay .tawk-text,
-      #tawkto-overlay .tawk-input,
-      #tawkto-overlay .tawk-button {
+      #tidio-chat-iframe-container .tidio-chat-text,
+      #tidio-chat-iframe-container .tidio-chat-input,
+      #tidio-chat-iframe-container .tidio-chat-button {
         font-family: 'Poppins', sans-serif !important;
         color: var(--text) !important;
       }
-      #tawkto-overlay .tawk-button {
+      #tidio-chat-iframe-container .tidio-chat-button {
         background: var(--gold) !important;
         border-radius: 30px !important;
         transition: all 0.3s ease !important;
       }
-      #tawkto-overlay .tawk-button:hover {
+      #tidio-chat-iframe-container .tidio-chat-button:hover {
         background: var(--gold-dark) !important;
         transform: translateY(-2px) !important;
         box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3) !important;
       }
-      #tawkto-overlay .tawk-input {
+      #tidio-chat-iframe-container .tidio-chat-input {
         background: rgba(255, 255, 255, 0.05) !important;
         border: 1px solid rgba(255, 255, 255, 0.1) !important;
         border-radius: 8px !important;
         transition: border-color 0.3s ease !important;
       }
-      #tawkto-overlay .tawk-input:focus {
+      #tidio-chat-iframe-container .tidio-chat-input:focus {
         border-color: var(--gold) !important;
         outline: none !important;
       }
@@ -555,37 +557,8 @@
     <!-- Back to Top Button -->
     <button id="back-to-top" aria-label="Back to top">🚀</button>
 
-    <!-- Start of Tawk.to Live Chat embed -->
-    <script type="text/javascript">
-      var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
-      (function(){
-        var s1 = document.createElement("script"),
-            s0 = document.getElementsByTagName("script")[0];
-        s1.async = true;
-        s1.src   = 'https://embed.tawk.to/685f9177dd2e4119172ad8ec/default';
-        s1.charset = 'UTF-8';
-        s1.setAttribute('crossorigin','*');
-        s0.parentNode.insertBefore(s1, s0);
-      })();
-    </script>
-    <!-- End of Tawk.to embed -->
-
-    <!-- Tawk.to API customizations -->
-    <script type="text/javascript">
-      Tawk_API.onLoad = function() {
-        // move widget to bottom-left
-        Tawk_API.setAttributes({ position: 'bottom-left' });
-        // prefill visitor name & email
-        Tawk_API.setAttributes({
-          visitor: {
-            name:  'Jane Doe',
-            email: 'jane.doe@example.com'
-          }
-        });
-        // automatically pop the chat window
-        Tawk_API.popup();
-      };
-    </script>
+    <!-- Tidio Live Chat embed -->
+    <script src="//code.tidio.co/peclwowoqcbxhfe3wbowfneh1rabrdjz.js" async></script>
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js" defer></script>
