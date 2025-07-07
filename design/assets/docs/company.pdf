@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nexlify Solutions - Company Documents</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/translator.css">
+  <style>
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      padding: 3rem 2rem;
+      background: linear-gradient(135deg, #f9f9f9 0%, #e3f2fd 100%);
+      min-height: 100vh;
+      margin: 0;
+      color: #333;
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    header h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #1a73e8;
+      margin-bottom: 0.5rem;
+    }
+    header p {
+      font-size: 1.2rem;
+      color: #555;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .pdf-section, .certifications-section {
+      margin-bottom: 4rem;
+    }
+    .section-title {
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: #1a73e8;
+      margin-bottom: 1.5rem;
+      position: relative;
+      display: inline-block;
+    }
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -0.3rem;
+      left: 0;
+      width: 50%;
+      height: 3px;
+      background: #1a73e8;
+      border-radius: 2px;
+    }
+    .pdf-grid, .certifications-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+    .pdf-card, .certification-card {
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      text-align: center;
+    }
+    .pdf-card:hover, .certification-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+    }
+    .pdf-card img, .certification-card img {
+      width: 100%;
+      max-width: 120px;
+      height: auto;
+      margin-bottom: 1rem;
+    }
+    .pdf-card h3, .certification-card h3 {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 0.5rem;
+    }
+    .pdf-card p, .certification-card p {
+      font-size: 1rem;
+      color: #666;
+      margin-bottom: 1rem;
+    }
+    .pdf-card a {
+      display: inline-block;
+      background: #1a73e8;
+      color: #fff;
+      padding: 0.8rem 1.5rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: background 0.2s ease;
+    }
+    .pdf-card a:hover {
+      background: #135ab6;
+    }
+    .trust-banner {
+      background: #1a73e8;
+      color: #fff;
+      padding: 2rem;
+      border-radius: 12px;
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    .trust-banner h2 {
+      font-size: 1.8rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    .trust-banner p {
+      font-size: 1.1rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 2rem;
+      }
+      header p {
+        font-size: 1rem;
+      }
+      .section-title {
+        font-size: 1.5rem;
+      }
+      .pdf-card, .certification-card {
+        padding: 1rem;
+      }
+    }
+    @media (max-width: 480px) {
+      .pdf-grid, .certifications-grid {
+        grid-template-columns: 1fr;
+      }
+      .translator-container {
+        bottom: 10px;
+        left: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Translator Widget -->
+  <div class="translator-container">
+    <button class="translator-button" id="current-language">
+      <img src="../../flags/gb.png" alt="English"> <span>EN</span>
+    </button>
+    <div id="google_translate_element"></div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="container">
+    <header>
+      <h1>Our Company Documents</h1>
+      <p>Explore our collection of professional documents and certifications that showcase Nexlify Solutions' expertise, commitment, and achievements.</p>
+    </header>
+
+    <div class="trust-banner">
+      <h2>Trusted by Industry Leaders</h2>
+      <p>With over a decade of excellence, Nexlify Solutions delivers innovative technology solutions backed by globally recognized certifications and a proven track record.</p>
+    </div>
+
+    <section class="pdf-section">
+      <h2 class="section-title">Company PDFs</h2>
+      <div class="pdf-grid">
+        <div class="pdf-card">
+          <img src="../../assets/icons/pdf-icon.png" alt="PDF Icon">
+          <h3>Company Profile</h3>
+          <p>Learn about Nexlify Solutions’ mission, vision, and innovative services in our comprehensive company profile.</p>
+          <a href="company-profile.pdf" target="_blank">Download PDF</a>
+        </div>
+        <div class="pdf-card">
+          <img src="../../assets/icons/pdf-icon.png" alt="PDF Icon">
+          <h3>Annual Report 2024</h3>
+          <p>Discover our achievements, financial performance, and future goals in our latest annual report.</p>
+          <a href="annual-report-2024.pdf" target="_blank">Download PDF</a>
+        </div>
+        <div class="pdf-card">
+          <img src="../../assets/icons/pdf-icon.png" alt="PDF Icon">
+          <h3>Service Brochure</h3>
+          <p>Explore our cutting-edge technology solutions and how we drive success for our clients.</p>
+          <a href="service-brochure.pdf" target="_blank">Download PDF</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="certifications-section">
+      <h2 class="section-title">Our Certifications</h2>
+      <div class="certifications-grid">
+        <div class="certification-card">
+          <img src="../../assets/certifications/iso-9001.png" alt="ISO 9001 Certification">
+          <h3>ISO 9001:2015</h3>
+          <p>Certified for our commitment to quality management and consistent service excellence.</p>
+        </div>
+        <div class="certification-card">
+          <img src="../../assets/certifications/cmmi-level-3.png" alt="CMMI Level 3 Certification">
+          <h3>CMMI Level 3</h3>
+          <p>Recognized for our robust processes in software development and project management.</p>
+        </div>
+        <div class="certification-card">
+          <img src="../../assets/certifications/aws-partner.png" alt="AWS Partner Certification">
+          <h3>AWS Partner</h3>
+          <p>Trusted partner of Amazon Web Services, delivering cloud-based solutions.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Scripts -->
+  <script type="text/javascript">
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'en',
+        includedLanguages: 'af,sq,am,ar,hy,as,az,be,bn,bs,bg,my,ca,ceb,ny,zh-CN,zh-TW,co,hr,cs,da,nl,en,eo,et,tl,fi,fr,gl,ka,de,el,gu,ht,ha,haw,he,hi,hmn,hu,is,ig,id,ga,it,ja,jv,kn,kk,km,rw,ko,ku,ky,lo,lv,lt,lb,mk,mg,ms,ml,mt,mi,mr,mn,ne,no,or,ps,fa,pl,pt,pa,qu,ro,ru,sm,sr,st,sn,sd,si,sk,sl,so,es,su,sw,sv,tg,ta,tt,te,th,tr,tk,uk,ur,ug,uz,vi,cy,xh,yi,yo,zu',
+        layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+        autoDisplay: false
+      }, 'google_translate_element');
+    }
+  </script>
+  <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" async></script>
+  <script src="//code.tidio.co/YOUR_TIDIO_PUBLIC_KEY.js" async></script>
+  <script src="../../js/translator.js"></script>
+</body>
+</html>
