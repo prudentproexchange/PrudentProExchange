@@ -25,48 +25,6 @@
       padding: 1rem 2rem;
       position: relative;
     }
-
-    /* Default (simple) widget: right side */
-    #google_translate_element {
-      position: absolute;
-      top: 50%;
-      right: 2rem;
-      transform: translateY(-50%);
-    }
-
-    /* Custom widget “card”: left side */
-    #custom_translate_card {
-      position: absolute;
-      top: 50%;
-      left: 2rem;
-      transform: translateY(-50%);
-      background: #fff;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      padding: 0.75rem 1rem;
-      display: flex;
-      align-items: center;
-      font-size: 0.95rem;
-      line-height: 1.2;
-    }
-    /* Hide the default Google logo */
-    #custom_translate_card .goog-logo-link { display: none !important; }
-    /* Tidy up the select */
-    #custom_translate_card select {
-      border: none;
-      background: transparent;
-      font-weight: bold;
-      font-family: inherit;
-      cursor: pointer;
-      outline: none;
-    }
-    /* Optional: show a custom globe emoji/icon */
-    #custom_translate_card::before {
-      content: "🌐";
-      margin-right: 0.5rem;
-      font-size: 1.2rem;
-    }
-
     main {
       max-width: 800px;
       margin: 2rem auto;
@@ -85,6 +43,35 @@
     ul {
       list-style: disc inside;
     }
+
+    /* ===== ImTranslator Widget Styles ===== */
+    #imtranslator_iframe {
+      position: fixed;
+      top: 50%;
+      left: 1rem;
+      transform: translateY(-50%);
+      width: 300px;
+      height: 60px;            /* minimized */
+      border: none;
+      border-radius: 8px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+      transition: height 0.3s ease;
+      z-index: 9999;
+      cursor: pointer;
+    }
+    #imtranslator_iframe:hover {
+      height: 400px;           /* fully expanded */
+    }
+    /* Globe icon overlay */
+    #imtranslator_iframe::before {
+      content: "🌐";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 1.5rem;
+      pointer-events: none;
+    }
   </style>
 </head>
 <body>
@@ -92,14 +79,6 @@
   <header>
     <h1>PrudentProExchange</h1>
     <p>Your trusted partner in trading success</p>
-
-    <!-- Left: custom-styled translator card -->
-    <div id="custom_translate_card">
-      <div id="google_translate_custom"></div>
-    </div>
-
-    <!-- Right: simple inline translator -->
-    <div id="google_translate_element"></div>
   </header>
 
   <main>
@@ -128,28 +107,13 @@
     <p>© 2025 PrudentProExchange. All Rights Reserved.</p>
   </footer>
 
-  <!-- Google Translate initialization for both widgets -->
-  <script type="text/javascript">
-    function googleTranslateElementInit() {
-      // Simple inline picker (right)
-      new google.translate.TranslateElement({
-        pageLanguage: 'en',
-        includedLanguages: 'en,fr,es,de,it,zh-CN,ja,ar,ru,pt',
-        layout: google.translate.TranslateElement.InlineLayout.SIMPLE
-      }, 'google_translate_element');
-
-      // Custom picker (left)
-      new google.translate.TranslateElement({
-        pageLanguage: 'en',
-        includedLanguages: 'en,fr,es,de,it,zh-CN,ja,ar,ru,pt',
-        layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
-        autoDisplay: false
-      }, 'google_translate_custom');
-    }
-  </script>
-  <script type="text/javascript"
-    src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit">
-  </script>
+  <!-- ImTranslator iFrame Widget -->
+  <iframe
+    id="imtranslator_iframe"
+    src="https://about.imtranslator.net/iframe-widget/?lang=en&lm=auto"
+    title="Website Translation"
+    scrolling="no">
+  </iframe>
 
   <!-- Smartsupp Live Chat Script -->
   <script type="text/javascript">
