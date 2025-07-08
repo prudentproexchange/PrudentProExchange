@@ -1,862 +1,840 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Testimonials – PrudentProExchange</title>
-    <meta name="description" content="Real feedback from investors with PrudentProExchange" />
-    <meta name="keywords" content="CBE, testimonials, forex trading, feedback" />
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="PrudentProExchange Admin Dashboard - Testimonials">
+  <title>Testimonials • PrudentProExchange</title>
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+  <!-- Bootstrap, FontAwesome, DataTables CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+  <link href="https://cdn.datatables.net/buttons/2.3.6/css/buttons.bootstrap5.min.css" rel="stylesheet">
+  <link href="https://cdn.datatables.net/select/1.7.0/css/select.bootstrap5.min.css" rel="stylesheet">
+  <style>
+    /* Theme Variables */
+    :root[data-theme="dark"] {
+      --bg: #121212;
+      --text: #ffd700;
+      --gold: #ffd700;
+      --gold-dark: #cca300;
+      --glass: rgba(255, 255, 255, 0.1);
+      --shadow: rgba(0, 0, 0, 0.5);
+      --text-light: #e6b800;
+      --text-muted: #ffd700;
+      --success: #4caf50;
+      --error: #e57373;
+      --accent: #1e1e1e;
+      --highlight: #ffffff;
+    }
+    :root[data-theme="light"] {
+      --bg: #f5f5f5;
+      --text: #333;
+      --gold: #cca300;
+      --gold-dark: #b58900;
+      --glass: rgba(0, 0, 0, 0.08);
+      --shadow: rgba(0, 0, 0, 0.15);
+      --text-light: #555;
+      --text-muted: #666;
+      --success: #388e3c;
+      --error: #d32f2f;
+      --accent: #e0e0e0;
+      --highlight: #000000;
+    }
 
-    <!-- Poppins & FontAwesome -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    /* Reset & Base */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
 
-    <!-- AOS for Animations -->
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+    /* Background Video & Overlay */
+    #bg-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -2;
+      opacity: 0.7;
+    }
+    .bg-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: -1;
+    }
 
-    <style>
-      /* Theme Variables */
-      :root[data-theme="dark"] {
-        --bg: #121212;
-        --text: #e6e6e6;
-        --gold: #FFD700;
-        --gold-dark: #D4A017;
-        --glass: rgba(255, 255, 255, 0.08);
-        --shadow: rgba(0, 0, 0, 0.4);
-        --text-light: #b8b8b8;
-        --text-muted: #7a7a7a;
-      }
-      :root[data-theme="light"] {
-        --bg: #f8f8f8;
-        --text: #2a2a2a;
-        --gold: #D4A017;
-        --gold-dark: #b58900;
-        --glass: rgba(0, 0, 0, 0.05);
-        --shadow: rgba(0, 0, 0, 0.15);
-        --text-light: #4a4a4a;
-        --text-muted: #666;
-      }
-
-      /* Reset & Base */
-      * { margin: 0; padding: 0; box-sizing: border-box; }
-      html { scroll-behavior: smooth; }
-      body {
-        font-family: 'Poppins', sans-serif;
-        color: var(--text);
-        background: var(--bg);
-        overflow-x: hidden;
-        line-height: 1.7;
-      }
-      a { color: var(--gold); text-decoration: none; transition: color 0.3s ease; }
-      a:hover { color: var(--gold-dark); }
-
-      /* Video Background */
-      .bg-video {
-        position: fixed;
-        top: 0;
+    /* Sidebar */
+    .sidebar-toggle {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 1001;
+      background: var(--gold);
+      color: #000;
+      border: none;
+      padding: 10px;
+      font-size: 1.5rem;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: background 0.3s ease;
+    }
+    .sidebar-toggle:hover {
+      background: var(--gold-dark);
+    }
+    .container {
+      display: flex;
+      min-height: 100vh;
+    }
+    .sidebar {
+      width: 250px;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(8px);
+      padding: 20px;
+      position: fixed;
+      top: 0;
+      left: -250px;
+      height: 100%;
+      z-index: 1000;
+      transition: left 0.3s ease;
+    }
+    .sidebar.active {
+      left: 0;
+    }
+    .sidebar-header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .sidebar-header img {
+      height: 50px;
+      margin-bottom: 10px;
+    }
+    .sidebar-header h2 {
+      font-size: 1.5rem;
+      color: var(--gold);
+    }
+    .sidebar ul {
+      list-style: none;
+    }
+    .sidebar ul li {
+      margin: 10px 0;
+    }
+    .sidebar ul li a {
+      color: var(--text-light);
+      text-decoration: none;
+      padding: 10px;
+      display: block;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+    }
+    .sidebar ul li a:hover,
+    .sidebar ul li a.active {
+      background: rgba(255, 215, 0, 0.15);
+      color: var(--gold);
+    }
+    .backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+      display: none;
+    }
+    .backdrop.active {
+      display: block;
+    }
+    .main {
+      flex-grow: 1;
+      padding: 20px;
+      margin-left: 0;
+      transition: margin-left 0.3s ease;
+    }
+    @media (min-width: 769px) {
+      .sidebar {
         left: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        z-index: -1;
-        opacity: 0.7;
-        will-change: opacity;
       }
-
-      /* Header */
-      .site-header {
-        position: fixed;
-        top: 0;
-        width: 100%;
-        padding: 15px 20px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        z-index: 1000;
-        background: rgba(0, 0, 0, 0.4);
-        backdrop-filter: blur(8px);
-        box-shadow: 0 2px 10px var(--shadow);
+      .main {
+        margin-left: 250px;
       }
-      .logo-link {
-        order: 1;
-      }
-      .logo-link img {
-        height: 45px;
-        transition: transform 0.3s ease;
-      }
-      .logo-link:hover img { transform: scale(1.1); }
-      .header-right {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        order: 2;
-      }
-      #theme-toggle {
-        background: none;
-        border: none;
-        font-size: 1.6rem;
-        color: var(--text);
-        cursor: pointer;
-        transition: transform 0.3s ease, color 0.3s ease;
-      }
-      #theme-toggle:hover { transform: rotate(180deg); color: var(--gold); }
-      .hamburger {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        width: 28px;
-        height: 18px;
-        background: none;
-        border: none;
-        cursor: pointer;
-      }
-      .hamburger span {
-        width: 100%;
-        height: 3px;
-        background: var(--gold);
-        border-radius: 2px;
-        transition: all 0.3s ease;
-      }
-      .hamburger.active span:nth-child(1) {
-        transform: rotate(45deg) translate(5px, 5px);
-      }
-      .hamburger.active span:nth-child(2) { opacity: 0; }
-      .hamburger.active span:nth-child(3) {
-        transform: rotate(-45deg) translate(7px, -7px);
-      }
-      .nav-drawer {
-        position: fixed;
-        top: 70px;
-        right: -250px;
-        width: 250px;
-        background: var(--glass);
-        padding: 20px;
-        transition: right 0.3s ease;
-        display: flex;
-        flex-direction: column;
-        box-shadow: -2px 0 10px var(--shadow);
-        z-index: 999;
-      }
-      .nav-drawer.open { right: 0; }
-      .nav-drawer a {
-        padding: 12px;
-        font-size: 1.1rem;
-        font-weight: 400;
-        color: var(--text-light);
-        border-radius: 5px;
-        margin: 5px 0;
-        transition: all 0.3s ease;
-      }
-      .nav-drawer a:hover, .nav-drawer a.active {
-        color: var(--gold);
-        background: rgba(255, 215, 0, 0.15);
-      }
-
-      /* Main */
-      main {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 90px 20px 60px;
-        position: relative;
-      }
-
-      /* Header Card */
-      .header-card {
-        background: linear-gradient(135deg, var(--glass), rgba(255, 215, 0, 0.12));
-        backdrop-filter: blur(12px);
-        padding: 40px 20px;
-        text-align: center;
-        border-radius: 20px;
-        box-shadow: 0 6px 25px var(--shadow);
-        margin-bottom: 50px;
-        border: 1px solid rgba(255, 215, 0, 0.2);
-      }
-      .header-card h1 {
-        font-size: 2.8rem;
-        font-weight: 700;
-        color: var(--gold);
-        margin-bottom: 12px;
-        text-transform: uppercase;
-        letter-spacing: 1.5px;
-      }
-      .header-card p {
-        font-size: 1.2rem;
-        font-weight: 300;
-        color: var(--text-light);
-        max-width: 600px;
-        margin: 0 auto;
-      }
-
-      /* Form Card */
-      .form-card {
-        background: linear-gradient(135deg, var(--glass), rgba(255, 215, 0, 0.08));
-        backdrop-filter: blur(12px);
-        padding: 40px;
-        border-radius: 20px;
-        box-shadow: 0 6px 25px var(--shadow);
-        margin-bottom: 60px;
-        border: 1px solid rgba(255, 215, 0, 0.2);
-      }
-      .form-card h2 {
-        font-size: 2.2rem;
-        font-weight: 600;
-        color: var(--gold);
-        margin-bottom: 25px;
-        text-align: center;
-        text-transform: uppercase;
-        letter-spacing: 1.2px;
-      }
-      .form-group {
-        margin-bottom: 25px;
-        position: relative;
-      }
-      .form-group label {
-        display: block;
-        margin-bottom: 10px;
-        color: var(--text-light);
-        font-weight: 500;
-        font-size: 1rem;
-      }
-      .form-group input[type="text"],
-      .form-group textarea {
-        width: 100%;
-        padding: 14px;
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 215, 0, 0.3);
-        border-radius: 10px;
-        color: var(--text);
-        font-size: 1rem;
-        transition: border-color 0.3s ease, box-shadow 0.3s ease;
-      }
-      .form-group input[type="text"]:focus,
-      .form-group textarea:focus {
-        border-color: var(--gold);
-        box-shadow: 0 0 8px rgba(255, 215, 0, 0.3);
-        outline: none;
-      }
-      .form-group input[type="file"] {
-        color: var(--text-light);
-        padding: 10px 0;
-      }
-      .char-counter {
-        position: absolute;
-        bottom: -25px;
-        right: 10px;
-        font-size: 0.85rem;
-        color: var(--text-muted);
-      }
-      .media-preview img,
-      .media-preview video {
-        max-width: 100%;
-        max-height: 220px;
-        margin-top: 15px;
-        border-radius: 10px;
-        border: 1px solid rgba(255, 215, 0, 0.2);
-      }
-      .star-rating {
-        display: flex;
-        direction: rtl;
-        justify-content: center;
-        gap: 5px;
-      }
-      .star-rating input {
+      .sidebar-toggle {
         display: none;
       }
-      .star-rating label {
-        font-size: 2.2rem;
-        color: #555;
-        cursor: pointer;
-        transition: color 0.2s ease, transform 0.2s ease;
-      }
-      .star-rating input:checked ~ label,
-      .star-rating label:hover,
-      .star-rating label:hover ~ label {
-        color: var(--gold);
-        transform: scale(1.1);
-      }
-      .form-card button {
-        display: block;
-        margin: 25px auto 0;
-        padding: 14px 50px;
-        background: linear-gradient(135deg, var(--gold), var(--gold-dark));
-        color: #000;
-        font-size: 1.1rem;
-        font-weight: 600;
-        border: none;
-        border-radius: 30px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-      }
-      .form-card button:hover:enabled {
-        background: var(--gold-dark);
-        transform: translateY(-3px);
-        box-shadow: 0 8px 20px rgba(255, 215, 0, 0.4);
-      }
-      .form-card button:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
-      }
-      #submitAlert {
-        text-align: center;
-        margin-top: 20px;
-        font-weight: 500;
-        font-size: 1rem;
-        transition: opacity 0.3s ease;
-      }
-
-      /* Progress Bar */
-      #progressContainer {
-        width: 100%;
-        height: 8px;
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 4px;
-        margin-top: 15px;
-        overflow: hidden;
-        display: none;
-      }
-      #progressBar {
-        width: 0;
-        height: 100%;
-        background: linear-gradient(90deg, var(--gold), var(--gold-dark));
-        transition: width 0.3s ease;
-      }
-
-      /* Testimonials Grid */
-      .testimonials-grid {
-        display: grid;
-        gap: 25px;
-        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      }
-      .testimonial-card {
-        background: linear-gradient(135deg, var(--glass), rgba(255, 215, 0, 0.08));
-        backdrop-filter: blur(12px);
-        padding: 35px;
-        border-radius: 20px;
-        box-shadow: 0 6px 25px var(--shadow);
-        transition: all 0.3s ease;
-        border: 1px solid rgba(255, 215, 0, 0.2);
-      }
-      .testimonial-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
-        background: rgba(255, 215, 0, 0.15);
-      }
-      .testimonial-card blockquote {
-        font-style: italic;
-        margin-bottom: 20px;
-        color: var(--text-light);
-        line-height: 1.6;
-        font-size: 1.1rem;
-      }
-      .testimonial-card .byline {
-        text-align: right;
-        font-weight: 500;
-        color: var(--text-muted);
-        font-size: 0.95rem;
-      }
-      .testimonial-card .review-rating {
-        font-size: 1.6rem;
-        color: var(--gold);
-        margin: 15px 0;
-        text-align: center;
-      }
-      .testimonial-card img,
-      .testimonial-card video {
-        display: block;
-        max-width: 100%;
-        margin: 20px auto 0;
-        border-radius: 10px;
-        border: 1px solid rgba(255, 215, 0, 0.2);
-        box-shadow: 0 3px 12px var(--shadow);
-      }
-      .company-response {
-        margin-top: 25px;
+    }
+    @media (max-width: 768px) {
+      .main {
         padding: 15px;
-        background: rgba(255, 255, 255, 0.05);
-        border-radius: 10px;
-        border: 1px solid rgba(255, 215, 0, 0.2);
       }
-      .company-response strong {
-        display: block;
-        margin-bottom: 10px;
-        color: var(--gold);
-        font-weight: 500;
-        font-size: 1rem;
-      }
+    }
 
-      /* Footer */
-      .site-footer {
-        text-align: center;
-        padding: 30px 20px;
-        margin-top: 80px;
-        color: var(--text-muted);
-        font-size: 0.9rem;
-        background: rgba(0, 0, 0, 0.3);
-        backdrop-filter: blur(8px);
-        border-top: 1px solid rgba(255, 215, 0, 0.2);
-      }
-      .footer-content p { margin: 8px 0; }
-      .footer-links {
-        margin: 15px 0;
-      }
-      .footer-links a {
-        margin: 0 15px;
-        color: var(--text-muted);
-        font-weight: 400;
-        transition: color 0.3s ease;
-      }
-      .footer-links a:hover { color: var(--gold); }
-      .gtranslate_wrapper { margin: 15px 0; }
-      .copyright { font-weight: 300; }
+    /* Testimonials Table */
+    #section-title {
+      font-size: 2.8rem;
+      font-weight: 700;
+      color: var(--gold);
+      text-align: center;
+      margin: 2rem 0 1.5rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      text-shadow: 0 2px 10px rgba(255, 215, 0, 0.3);
+    }
+    .table-panel {
+      background: var(--glass);
+      backdrop-filter: blur(15px);
+      padding: 2.5rem;
+      border-radius: 20px;
+      box-shadow: 0 8px 30px var(--shadow);
+      border: 1px solid rgba(255, 215, 0, 0.15);
+      margin-bottom: 2rem;
+    }
+    .table-panel .form-control {
+      background: var(--accent);
+      border: 1px solid rgba(255, 215, 0, 0.2);
+      color: var(--text);
+      border-radius: 8px;
+      padding: 10px 15px;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .table-panel .form-control:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 10px rgba(255, 215, 0, 1);
+      outline: none;
+    }
+    .table-panel .form-control::placeholder {
+      color: var(--text-muted);
+    }
+    .dt-buttons .btn {
+      background: linear-gradient(45deg, var(--gold), var(--gold-dark));
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      margin-right: 0.5rem;
+      padding: 8px 20px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+    .dt-buttons .btn:hover {
+      background: linear-gradient(45deg, var(--gold-dark), var(--gold));
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+    }
+    table.dataTable {
+      color: var(--text) !important;
+      border-collapse: separate;
+      border-spacing: 0 12px;
+    }
+    table.dataTable thead th {
+      background: linear-gradient(45deg, var(--gold-dark), var(--gold));
+      color: #000;
+      padding: 1.2rem;
+      text-align: center;
+      border-radius: 10px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    table.dataTable tbody td {
+      padding: 1.2rem;
+      background: var(--accent);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      vertical-align: middle;
+      border-radius: 8px;
+      color: var(--text);
+    }
+    table.dataTable tbody tr {
+      transition: all 0.3s ease;
+      border-radius: 12px;
+    }
+    table.dataTable tbody tr:hover {
+      background: rgba(255, 215, 0, 0.15);
+      box-shadow: 0 6px 20px var(--shadow);
+      transform: translateY(-3px);
+    }
+    .btn-sm {
+      padding: 0.5rem 1rem;
+      font-size: 0.9rem;
+      border-radius: 6px;
+      margin: 0 0.4rem;
+      transition: all 0.3s ease;
+    }
+    .btn-sm:hover {
+      transform: translateY(-2px);
+    }
+    .btn-success {
+      background: var(--success);
+      border: none;
+    }
+    .btn-success:hover {
+      background: #388e3c;
+      box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+    }
+    .btn-danger {
+      background: var(--error);
+      border: none;
+    }
+    .btn-danger:hover {
+      background: #d32f2f;
+      box-shadow: 0 4px 15px rgba(229, 115, 115, 0.3);
+    }
+    .btn-warning {
+      background: var(--gold);
+      color: #000;
+    }
+    .btn-warning:hover {
+      background: var(--gold-dark);
+      box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+    }
+    .btn-outline-danger {
+      border-color: var(--error);
+      color: var(--error);
+    }
+    .btn-outline-danger:hover {
+      background: var(--error);
+      color: #fff;
+    }
+    .btn-info {
+      background: #0288d1;
+      color: #fff;
+    }
+    .btn-info:hover {
+      background: #0277bd;
+      box-shadow: 0 4px 15px rgba(2, 136, 209, 0.3);
+    }
+    .btn-gold {
+      background: linear-gradient(45deg, var(--gold), var(--gold-dark));
+      color: #000;
+    }
+    .btn-gold:hover {
+      background: linear-gradient(45deg, var(--gold-dark), var(--gold));
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+    }
 
-      /* Back to Top Button */
-      #back-to-top {
-        position: fixed;
-        bottom: 80px;
-        right: 20px;
-        background: linear-gradient(135deg, var(--gold), var(--gold-dark));
-        color: #000;
-        border: none;
-        border-radius: 50%;
-        width: 50px;
-        height: 50px;
-        font-size: 1.5rem;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
-        z-index: 1000;
-      }
-      #back-to-top:hover {
-        background: var(--gold-dark);
-        transform: scale(1.15);
-        box-shadow: 0 6px 20px rgba(255, 215, 0, 0.6);
-      }
+    /* Filter Bar */
+    .filter-bar {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+    .filter-btn {
+      padding: 10px 25px;
+      background: var(--glass);
+      color: var(--text);
+      border: 1px solid rgba(255, 215, 0, 0.2);
+      border-radius: 25px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .filter-btn:hover,
+    .filter-btn.active {
+      background: linear-gradient(45deg, var(--gold), var(--gold-dark));
+      color: #000;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+    }
 
-      /* Responsive */
-      @media (max-width: 768px) {
-        main { padding: 80px 15px 50px; }
-        .logo-link img { height: 38px; }
-        .header-card { padding: 30px 15px; }
-        .header-card h1 { font-size: 2.2rem; }
-        .form-card { padding: 25px; }
-        .form-card h2 { font-size: 1.8rem; }
-        .testimonials-grid { grid-template-columns: 1fr; }
-        .testimonial-card { padding: 25px; }
-        .nav-drawer { width: 220px; top: 60px; }
-        .site-footer { padding: 20px 15px; }
-      }
-      @media (max-width: 480px) {
-        .header-card h1 { font-size: 1.8rem; }
-        .form-card { padding: 20px; }
-        .form-card h2 { font-size: 1.6rem; }
-        .star-rating label { font-size: 1.8rem; }
-        #back-to-top { width: 45px; height: 45px; font-size: 1.3rem; }
-      }
-    </style>
-  </head>
+    /* Modal */
+    .modal-content.glass {
+      background: var(--glass);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 215, 0, 0.15);
+      color: var(--text);
+      border-radius: 15px;
+    }
+    .modal-header, .modal-footer {
+      border-color: rgba(255, 215, 0, 0.2);
+    }
+    .modal-title {
+      color: var(--gold);
+      font-weight: 500;
+    }
+    .modal-body textarea {
+      background: var(--accent);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: var(--text);
+      border-radius: 8px;
+      padding: 12px;
+    }
+    .modal-body textarea:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+      outline: none;
+    }
+    .modal-body label {
+      color: var(--text-light);
+    }
 
-  <body>
-    <!-- Video Background -->
-    <video class="bg-video" autoplay muted loop playsinline preload="auto" poster="assets/images/video-poster.jpg">
-      <source src="assets/videos/background.webm" type="video/webm" />
-      <source src="assets/videos/background.mp4" type="video/mp4" />
-      Your browser does not support the video tag.
-    </video>
+    /* Toast */
+    .toast {
+      background: var(--glass) !important;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 215, 0, 0.2);
+      color: var(--text);
+      border-radius: 10px;
+      box-shadow: 0 6px 20px var(--shadow);
+    }
+    .toast.bg-success { background: rgba(76, 175, 80, 0.8) !important; }
+    .toast.bg-danger { background: rgba(229, 115, 115, 0.8) !important; }
+    .toast-body { font-weight: 500; }
 
-    <!-- Header -->
-    <header class="site-header">
-      <a href="/" class="logo-link">
-        <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo" />
-      </a>
-      <div class="header-right">
-        <button id="theme-toggle" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
-        <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
-          <span></span><span></span><span></span>
-        </button>
+    /* Media */
+    .media-img {
+      max-height: 80px;
+      border-radius: 5px;
+      border: 1px solid rgba(255, 215, 0, 0.2);
+      transition: transform 0.2s ease;
+    }
+    .media-img:hover {
+      transform: scale(1.05);
+    }
+    .media-video {
+      max-width: 150px;
+      border-radius: 5px;
+      border: 1px solid rgba(255, 215, 0, 0.2);
+    }
+
+    /* Error Message */
+    .error {
+      color: var(--error);
+      text-align: center;
+      font-size: 1.2rem;
+    }
+  </style>
+</head>
+<body>
+  <!-- Background Video & Overlay -->
+  <video id="bg-video" autoplay muted loop playsinline poster="assets/images/video-poster.jpg">
+    <source src="assets/background.webm" type="video/webm">
+    <source src="assets/background.mp4" type="video/mp4">
+  </video>
+  <div class="bg-overlay"></div>
+
+  <!-- Sidebar Toggle Button -->
+  <button class="sidebar-toggle" id="toggle-btn"><i class="bi bi-list"></i></button>
+
+  <!-- Page Layout -->
+  <div class="container">
+    <!-- Sidebar -->
+    <nav class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <img src="assets/logo.svg" alt="PrudentProExchange Logo" class="logo">
+        <h2>Admin Dashboard</h2>
       </div>
-      <nav class="nav-drawer" id="navDrawer">
-        <a href="application.html">Apply</a>
-        <a href="about.html">About</a>
-        <a href="testimonials.html" class="active">Testimonials</a>
-        <a href="privacy.html">Privacy Policy</a>
-        <a href="terms.html">Terms & Conditions</a>
-        <a href="login.html">Login</a>
-        <a href="plans.html">Plans</a>
-      </nav>
-    </header>
+      <ul>
+        <li><a href="overview.html">Overview</a></li>
+        <li><a href="users.html">Users Management</a></li>
+        <li><a href="deposits.html">Deposits</a></li>
+        <li><a href="withdrawals.html">Withdrawals</a></li>
+        <li><a href="transactions.html">Transactions</a></li>
+        <li><a href="investments.html">Investments</a></li>
+        <li><a href="investment-plans.html">Investment Plans</a></li>
+        <li><a href="wallets.html">Wallets</a></li>
+        <li><a href="payment-proofs.html">Payment Proofs</a></li>
+        <li><a href="referrals.html">Referrals</a></li>
+        <li><a href="kyc-verification.html">KYC Verification</a></li>
+        <li><a href="support-tickets.html">Support Tickets</a></li>
+        <li><a href="promotional-offers.html">Promotional Offers</a></li>
+        <li><a href="testimonials.html" class="active">Testimonials</a></li>
+        <li><a href="settings.html">Settings / Admin Users</a></li>
+      </ul>
+    </nav>
 
-    <main>
-      <div class="header-card" data-aos="fade-up" data-aos-delay="100">
-        <h1>What Our Members Are Saying</h1>
-        <p>Discover the experiences of traders who’ve thrived with PrudentProExchange.</p>
+    <!-- Mobile Backdrop -->
+    <div class="backdrop" id="backdrop"></div>
+
+    <!-- Main Content -->
+    <main class="main">
+      <h2 id="section-title" class="slide-in">Testimonials Management</h2>
+      <div class="glass table-panel slide-in" style="transition-delay: 0.3s;">
+        <div class="filter-bar">
+          <button class="filter-btn active" data-filter="all">All</button>
+          <button class="filter-btn" data-filter="pending">Pending</button>
+          <button class="filter-btn" data-filter="approved">Approved</button>
+          <button class="filter-btn" data-filter="rejected">Rejected</button>
+        </div>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <input id="testimonial-search" class="form-control w-50" placeholder="Search testimonials…">
+          <div class="bulk-actions d-flex gap-2">
+            <button class="btn btn-sm btn-gold" id="bulk-approve">Approve Selected</button>
+            <button class="btn btn-sm btn-gold" id="bulk-reject">Reject Selected</button>
+            <button class="btn btn-sm btn-gold" id="bulk-delete">Delete Selected</button>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <table id="testimonials-table" class="table table-hover w-100">
+            <thead>
+              <tr>
+                <th><input type="checkbox" id="select-all"></th>
+                <th>#</th>
+                <th>Name</th>
+                <th>Testimonial</th>
+                <th>Rating</th>
+                <th>Media</th>
+                <th>Company Response</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
       </div>
-
-      <div class="form-card" data-aos="zoom-in" data-aos-delay="300">
-        <h2>Share Your Experience</h2>
-        <form id="testimonialForm">
-          <div class="form-group">
-            <label for="name">Your Name<span style="color: red;">*</span></label>
-            <input type="text" id="name" name="name" required maxlength="255" />
-            <span class="char-counter">0/255</span>
-          </div>
-          <div class="form-group">
-            <label for="testimonial">Your Testimonial<span style="color: red;">*</span></label>
-            <textarea id="testimonial" name="testimonial_text" rows="4" required maxlength="1000"></textarea>
-            <span class="char-counter">0/1000</span>
-          </div>
-          <div class="form-group">
-            <label for="rating">Rating<span style="color: red;">*</span></label>
-            <div class="star-rating" role="radiogroup" aria-label="Star rating">
-              <input type="radio" id="star5" name="rating" value="5" required />
-              <label for="star5" title="5 stars">★</label>
-              <input type="radio" id="star4" name="rating" value="4" />
-              <label for="star4" title="4 stars">★</label>
-              <input type="radio" id="star3" name="rating" value="3" />
-              <label for="star3" title="3 stars">★</label>
-              <input type="radio" id="star2" name="rating" value="2" />
-              <label for="star2" title="2 stars">★</label>
-              <input type="radio" id="star1" name="rating" value="1" />
-              <label for="star1" title="1 star">★</label>
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="media">Upload Photo or Video (optional)</label>
-            <input type="file" id="media" name="media" accept="image/*,video/*" />
-            <small style="color: var(--text-muted);">Max. 5 MB (images), no limit (videos)</small>
-            <div class="media-preview" id="media-preview"></div>
-          </div>
-
-          <div id="progressContainer">
-            <div id="progressBar"></div>
-          </div>
-
-          <button type="submit" id="submitBtn">Submit for Review</button>
-        </form>
-        <div id="submitAlert"></div>
-      </div>
-
-      <section id="testimonialsSection" data-aos="fade-up" data-aos-delay="600">
-        <h2 style="font-family: 'Poppins', sans-serif; color: var(--gold); margin-bottom: 30px; text-transform: uppercase; letter-spacing: 1.2px;">
-          Approved Testimonials
-        </h2>
-        <div class="testimonials-grid" id="testimonialsGrid"></div>
-      </section>
     </main>
 
-    <!-- Footer -->
-    <footer class="section section-dark site-footer" data-aos="fade-up" data-aos-delay="900">
-      <div class="footer-content">
-        <p class="utc-time">UTC Time: <span id="utcTime"></span></p>
-        <p class="local-time">Local Time: <span id="localTime"></span></p>
-        <p class="local-date">Local Date: <span id="localDate"></span></p>
-        <nav class="footer-links">
-          <a href="about.html">About Us</a>
-          <a href="testimonials.html">Testimonials</a>
-          <a href="privacy.html">Privacy Policy</a>
-          <a href="terms.html">Terms & Conditions</a>
-        </nav>
-        <div class="gtranslate_wrapper"></div>
-        <script>window.gtranslateSettings = {"default_language":"en","native_language_names":true,"detect_browser_language":true,"wrapper_selector":".gtranslate_wrapper","flag_style":"3d"}</script>
-        <script src="https://cdn.gtranslate.net/widgets/latest/float.js" defer></script>
-        <p class="copyright">© 2025 PrudentProExchange. All Rights Reserved. SEC Registration #0001230714</p>
+    <!-- Response Modal -->
+    <div class="modal fade" id="responseModal">
+      <div class="modal-dialog modal-dialog-centered">
+        <form class="modal-content glass p-4" id="response-form">
+          <div class="modal-header">
+            <h5 class="modal-title">Add / Edit Company Response</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" id="resp-testimonial-id">
+            <div class="mb-3">
+              <label class="form-label">Response</label>
+              <textarea id="resp-body" class="form-control" rows="5" required></textarea>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-success">Save Response</button>
+          </div>
+        </form>
       </div>
-    </footer>
+    </div>
+  </div>
 
-    <!-- Back to Top Button -->
-    <button id="back-to-top" aria-label="Back to top" style="position: fixed; bottom: 80px; right: 20px; z-index: 1000;">🚀</button>
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.bootstrap5.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
+  <script src="https://cdn.datatables.net/select/1.7.0/js/dataTables.select.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+  <script>
+    // Initialize Supabase globally
+    const supabase = window.supabase.createClient(
+      'https://iwkdznjqfbsfkscnbrkc.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU'
+    );
 
-    <!-- Crisp Chat Widget -->
-    <script type="text/javascript">
-      window.$crisp = [];
-      window.CRISP_WEBSITE_ID = "599e8216-ab4f-4d4f-bb22-5d47cf14031f";
-      (function() {
-        d = document;
-        s = d.createElement("script");
-        s.src = "https://client.crisp.chat/l.js";
-        s.async = 1;
-        d.getElementsByTagName("head")[0].appendChild(s);
-      })();
-    </script>
+    // Load checkAdmin() from external script (adjust path as needed)
+    // Ensure this script contains the checkAdmin() function
+    document.write('<script src="js/auth.js"></' + 'script>');
 
-    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js" defer></script>
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js" defer></script>
-    <script defer>
-      document.addEventListener("DOMContentLoaded", () => {
-        // Initialize AOS
-        AOS.init({ duration: 800, once: true });
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Check admin access using checkAdmin()
+      const isAdmin = await checkAdmin();
+      console.log('checkAdmin result:', isAdmin);
+      if (!isAdmin) {
+        console.warn('Admin access denied, redirecting to login');
+        document.location.replace('admin-login.html?redirect=' + encodeURIComponent(document.location.pathname));
+        return;
+      }
 
-        // Theme Toggle
-        const toggle = document.getElementById("theme-toggle");
-        const setTheme = (t) => {
-          document.documentElement.setAttribute("data-theme", t);
-          localStorage.setItem("theme", t);
-          toggle.innerHTML = t === "dark" ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
-        };
-        toggle.addEventListener("click", () =>
-          setTheme(document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark")
-        );
-        setTheme(localStorage.getItem("theme") || "dark");
+      // Sidebar toggle
+      const toggleBtn = document.getElementById('toggle-btn');
+      const sidebar = document.getElementById('sidebar');
+      const backdrop = document.getElementById('backdrop');
+      toggleBtn.addEventListener('click', () => {
+        sidebar.classList.toggle('active');
+        backdrop.classList.toggle('active');
+      });
+      backdrop.addEventListener('click', () => {
+        sidebar.classList.remove('active');
+        backdrop.classList.remove('active');
+      });
 
-        // Hamburger Menu
-        const hamburgerBtn = document.getElementById('hamburgerBtn');
-        const navDrawer = document.getElementById('navDrawer');
-        hamburgerBtn.addEventListener('click', () => {
-          navDrawer.classList.toggle('open');
-          hamburgerBtn.classList.toggle('active');
-        });
-
-        // Close Nav When Clicking Outside
-        document.addEventListener('click', (event) => {
-          const isClickInsideNav = navDrawer.contains(event.target);
-          const isClickOnHamburger = hamburgerBtn.contains(event.target);
-          if (!isClickInsideNav && !isClickOnHamburger && navDrawer.classList.contains('open')) {
-            navDrawer.classList.remove('open');
-            hamburgerBtn.classList.remove('active');
-          }
-        });
-
-        // Back to Top
-        document.getElementById('back-to-top').addEventListener('click', () => {
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-
-        // Time and Date
-        function updateLocalTime() {
-          const now = new Date();
-          document.getElementById('localTime').textContent = now.toLocaleTimeString();
-          document.getElementById('localDate').textContent = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-        }
-        setInterval(updateLocalTime, 1000);
-        updateLocalTime();
-
-        function updateUTCTime() {
-          document.getElementById('utcTime').textContent = new Date().toUTCString();
-        }
-        setInterval(updateUTCTime, 1000);
-        updateUTCTime();
-
-        // Character Counters
-        function updateCharCounter(input, counter, max) {
-          counter.textContent = `${input.value.length}/${max}`;
-        }
-        const nameInput = document.getElementById('name');
-        const testimonialInput = document.getElementById('testimonial');
-        const nameCounter = nameInput.nextElementSibling;
-        const testimonialCounter = testimonialInput.nextElementSibling;
-        nameInput.addEventListener('input', () => updateCharCounter(nameInput, nameCounter, 255));
-        testimonialInput.addEventListener('input', () => updateCharCounter(testimonialInput, testimonialCounter, 1000));
-        updateCharCounter(nameInput, nameCounter, 255);
-        updateCharCounter(testimonialInput, testimonialCounter, 1000);
-
-        // Media Preview
-        const mediaInput = document.getElementById('media');
-        const mediaPreview = document.getElementById('media-preview');
-        mediaInput.addEventListener('change', () => {
-          mediaPreview.innerHTML = '';
-          const file = mediaInput.files[0];
-          if (file) {
-            const url = URL.createObjectURL(file);
-            if (file.type.startsWith('image/')) {
-              mediaPreview.innerHTML = `<img src="${url}" alt="Preview" />`;
-            } else if (file.type.startsWith('video/')) {
-              mediaPreview.innerHTML = `<video src="${url}" controls></video>`;
-            }
-          }
-        });
-
-        // Supabase Client
-        const SUPABASE_URL = "https://iwkdznjqfbsfkscnbrkc.supabase.co";
-        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU";
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-        // Load Testimonials
-        async function loadTestimonials() {
-          const { data, error } = await supabase
-            .from("testimonials")
-            .select("id,name,testimonial_text,screenshot_url,video_url,company_response,status,rating")
-            .eq("status", "approved")
-            .order("created_at", { ascending: false });
-          if (error) {
-            console.error("Fetch error:", error);
-            return;
-          }
-          const grid = document.getElementById("testimonialsGrid");
-          grid.innerHTML = "";
-          data.forEach((t) => {
-            const card = document.createElement("div");
-            card.className = "testimonial-card";
-            card.setAttribute("data-aos", "fade-up");
-            let html = `<blockquote>${t.testimonial_text}</blockquote>`;
-            html += `<div class="byline">— ${t.name}</div>`;
-            if (t.rating) {
-              const stars = '★'.repeat(t.rating) + '☆'.repeat(5 - t.rating);
-              html += `<div class="review-rating">${stars}</div>`;
-            }
-            if (t.screenshot_url) {
-              html += `<img src="${t.screenshot_url}" alt="testimonial image"/>`;
-            } else if (t.video_url) {
-              html += `<video controls><source src="${t.video_url}" type="video/mp4"/></video>`;
-            }
-            if (t.company_response) {
-              html += `<div class="company-response"><strong>Our Response:</strong><p>${t.company_response}</p></div>`;
-            }
-            card.innerHTML = html;
-            grid.appendChild(card);
-          });
-        }
-        loadTestimonials();
-
-        // Form Submission
-        const form = document.getElementById("testimonialForm");
-        const alertDiv = document.getElementById("submitAlert");
-        const submitBtn = document.getElementById("submitBtn");
-        const progressContainer = document.getElementById("progressContainer");
-        const progressBar = document.getElementById("progressBar");
-
-        form.addEventListener("submit", async (e) => {
-          e.preventDefault();
-          alertDiv.textContent = "";
-          submitBtn.disabled = true;
-          progressBar.style.width = "0%";
-          progressContainer.style.display = "block";
-          alertDiv.style.color = "var(--text)";
-          alertDiv.textContent = "Uploading…";
-
-          const name = form.name.value.trim();
-          const text = form.testimonial.value.trim();
-          const rating = form.querySelector('input[name="rating"]:checked')?.value;
-          if (!name || !text || !rating) {
-            alertDiv.style.color = "crimson";
-            alertDiv.textContent = "Please fill all required fields.";
-            submitBtn.disabled = false;
-            progressContainer.style.display = "none";
-            return;
-          }
-
-          let screenshot_url = null, video_url = null;
-          const file = form.media.files[0];
-          if (file) {
-            if (file.type.startsWith("image/") && file.size > 5 * 1024 * 1024) {
-              alertDiv.style.color = "crimson";
-              alertDiv.textContent = "Image must be under 5 MB.";
-              submitBtn.disabled = false;
-              progressContainer.style.display = "none";
-              return;
-            }
-            const bucket = file.type.startsWith("image/") ? "testimonial-screenshots" : "testimonial-videos";
-            const path = `${bucket}/${Date.now()}_${file.name}`;
-            const { error: uploadErr } = await supabase.storage
-              .from(bucket)
-              .upload(path, file, {
-                onProgress: (evt) => {
-                  const pct = Math.round((evt.loaded / evt.total) * 100);
-                  progressBar.style.width = pct + "%";
-                  alertDiv.textContent = `Uploading… ${pct}%`;
-                },
-              });
-            if (uploadErr) {
-              console.error("Upload Error →", uploadErr);
-              alertDiv.style.color = "crimson";
-              alertDiv.textContent = `Upload failed: ${uploadErr.message}`;
-              submitBtn.disabled = false;
-              progressContainer.style.display = "none";
-              return;
-            }
-            const { data: urlData, error: urlErr } = await supabase.storage.from(bucket).getPublicUrl(path);
-            if (urlErr) {
-              console.error("GetPublicUrl Error →", urlErr);
-              alertDiv.style.color = "crimson";
-              alertDiv.textContent = `Couldn’t get URL: ${urlErr.message}`;
-              submitBtn.disabled = false;
-              progressContainer.style.display = "none";
-              return;
-            }
-            if (file.type.startsWith("image/")) screenshot_url = urlData.publicUrl;
-            else video_url = urlData.publicUrl;
-          }
-
-          const { error: insertErr } = await supabase
-            .from("testimonials")
-            .insert([{ name, testimonial_text: text, screenshot_url, video_url, rating: parseInt(rating), status: "pending" }]);
-          if (insertErr) {
-            console.error("Insert Error →", insertErr);
-            alertDiv.style.color = "crimson";
-            alertDiv.textContent = `Submit failed: ${insertErr.message}`;
-          } else {
-            alertDiv.style.color = "lightgreen";
-            alertDiv.textContent = "Thanks—awaiting approval!";
-            form.reset();
-            mediaPreview.innerHTML = '';
-            updateCharCounter(nameInput, nameCounter, 255);
-            updateCharCounter(testimonialInput, testimonialCounter, 1000);
-          }
-          submitBtn.disabled = false;
-          progressContainer.style.display = "none";
-        });
-
-        // Video Playback Optimization
-        const video = document.querySelector('.bg-video');
-        let retryCount = 0;
-        const maxRetries = 3;
-        const retryDelay = 1000; // 1 second
-
-        if (video) {
-          // Attempt to play video
-          const playVideo = () => {
-            video.play()
-              .then(() => {
-                console.log('Background video is playing successfully');
-                retryCount = 0; // Reset retry count on success
-              })
-              .catch(error => {
-                console.error(`Background video play failed (attempt ${retryCount + 1}):`, error);
-                if (retryCount < maxRetries) {
-                  retryCount++;
-                  setTimeout(playVideo, retryDelay);
-                } else {
-                  console.error('Max retries reached. Video playback failed.');
-                }
-              });
-          };
-
-          // Initial play attempt
-          playVideo();
-
-          // Event listeners for monitoring
-          video.addEventListener('canplay', () => console.log('Background video can play'));
-          video.addEventListener('playing', () => console.log('Background video is actively playing'));
-          video.addEventListener('error', (e) => console.error('Background video error:', e));
-          video.addEventListener('stalled', () => console.warn('Background video stalled'));
-          video.addEventListener('loadeddata', () => console.log('Background video data loaded'));
-
-          // Handle page visibility to optimize performance
-          document.addEventListener('visibilitychange', () => {
-            if (document.visibilityState === 'visible') {
-              if (video.paused) {
-                playVideo();
+      // Video playback
+      const video = document.getElementById('bg-video');
+      let retryCount = 0;
+      const maxRetries = 3;
+      const retryDelay = 1000;
+      if (video) {
+        const playVideo = () => {
+          video.play()
+            .then(() => console.log('Background video playing'))
+            .catch(error => {
+              console.error(`Video play failed (attempt ${retryCount + 1}):`, error);
+              if (retryCount < maxRetries) {
+                retryCount++;
+                setTimeout(playVideo, retryDelay);
               }
-            } else {
-              video.pause();
-              console.log('Background video paused due to tab inactivity');
+            });
+        };
+        playVideo();
+        document.addEventListener('visibilitychange', () => {
+          if (document.visibilityState === 'visible' && video.paused) playVideo();
+          else video.pause();
+        });
+        const forcePlay = () => video.paused && playVideo();
+        window.addEventListener('scroll', forcePlay, { once: true });
+        window.addEventListener('click', forcePlay, { once: true });
+      }
+
+      // Theme toggle
+      const applyTheme = t => {
+        document.documentElement.setAttribute('data-theme', t);
+        localStorage.setItem('theme', t);
+      };
+      document.getElementById('theme-toggle')?.onclick = () => applyTheme(
+        document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'
+      );
+      applyTheme(localStorage.getItem('theme') || 'dark');
+
+      // Toast helper
+      function showToast(msg, ok = true) {
+        const t = document.createElement('div');
+        t.className = `toast align-items-center text-white ${ok ? 'bg-success' : 'bg-danger'} border-0 position-fixed top-0 end-0 m-3`;
+        t.innerHTML = `
+          <div class="d-flex">
+            <div class="toast-body">${msg}</div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+          </div>`;
+        document.body.append(t);
+        new bootstrap.Toast(t, { delay: 3000 }).show();
+      }
+
+      // DataTable setup
+      const table = $('#testimonials-table').DataTable({
+        dom: `<"d-flex justify-content-between mb-3"frt>`,
+        paging: true,
+        searching: true,
+        select: { style: 'multi', selector: 'td:first-child input' },
+        columnDefs: [
+          { orderable: false, targets: [0, 9] },
+          { searchable: false, targets: 0 }
+        ],
+        columns: [
+          {
+            data: null,
+            render: (_, __, row) => `<input type="checkbox" class="row-select" data-id="${row.id}">`
+          },
+          { data: 'id' },
+          { data: 'name', defaultContent: 'Anonymous' },
+          {
+            data: 'testimonial_text',
+            render: text => text.length > 100 ? text.slice(0, 100) + '...' : text
+          },
+          {
+            data: 'rating',
+            render: rating => rating ? '★'.repeat(rating) + '☆'.repeat(5 - rating) : 'N/A'
+          },
+          {
+            data: null,
+            render: async (_, __, row) => {
+              const cleanPath = path => path ? path.replace(/^(testimonial-screenshots|testimonial-videos)\//, '').replace(/^\/+/, '') : null;
+              if (row.screenshot_url) {
+                const cleanPathVal = cleanPath(row.screenshot_url);
+                console.log(`Fetching screenshot signed URL for path: ${cleanPathVal}`);
+                const { data, error } = await supabase.storage.from('testimonial-screenshots').createSignedUrl(cleanPathVal, 60);
+                if (error) {
+                  console.warn(`Screenshot error for ${row.id}: ${error.message}`);
+                  return 'Error: Image not accessible';
+                }
+                return `<a href="${data.signedUrl}" target="_blank"><img src="${data.signedUrl}" alt="Screenshot" class="media-img"></a>`;
+              }
+              if (row.video_url) {
+                const cleanPathVal = cleanPath(row.video_url);
+                console.log(`Fetching video signed URL for path: ${cleanPathVal}`);
+                const { data, error } = await supabase.storage.from('testimonial-videos').createSignedUrl(cleanPathVal, 60);
+                if (error) {
+                  console.warn(`Video error for ${row.id}: ${error.message}`);
+                  return 'Error: Video not accessible';
+                }
+                return `<video width="150" controls class="media-video"><source src="${data.signedUrl}" type="video/mp4">Video not supported</video>`;
+              }
+              return '—';
             }
+          },
+          { data: 'company_response', defaultContent: '—' },
+          {
+            data: 'created_at',
+            render: d => new Date(d).toLocaleDateString()
+          },
+          { data: 'status' },
+          {
+            data: null,
+            render: (_, __, row) => {
+              const actions = [];
+              if (row.status === 'pending') {
+                actions.push(`<button class="btn btn-sm btn-success me-1" onclick="window.updateStatus('${row.id}', 'approved')">Approve</button>`);
+                actions.push(`<button class="btn btn-sm btn-danger me-1" onclick="window.updateStatus('${row.id}', 'rejected')">Reject</button>`);
+              } else if (row.status === 'approved') {
+                actions.push(`<button class="btn btn-sm btn-warning me-1" onclick="window.openResponseModal('${row.id}', '${row.company_response || ''}')">Respond</button>`);
+                actions.push(`<button class="btn btn-sm btn-danger me-1" onclick="window.updateStatus('${row.id}', 'rejected')">Reject</button>`);
+              } else {
+                actions.push(`<button class="btn btn-sm btn-outline-danger" onclick="window.deleteTestimonial('${row.id}')">Delete</button>`);
+              }
+              return actions.join('');
+            }
+          }
+        ]
+      });
+
+      // Select all checkbox
+      document.getElementById('select-all').addEventListener('change', e => {
+        const checked = e.target.checked;
+        table.rows().every(function () {
+          this.nodes().to$().find('input[type="checkbox"]').prop('checked', checked);
+          this.select(checked);
+        });
+      });
+
+      // Load testimonials
+      async function loadTestimonials(filter = 'all') {
+        try {
+          let query = supabase
+            .from('testimonials')
+            .select('id,name,testimonial_text,rating,screenshot_url,video_url,company_response,status,created_at')
+            .order('created_at', { ascending: false });
+          if (filter !== 'all') query = query.eq('status', filter);
+          const { data, error } = await query;
+          if (error) throw error;
+          table.clear().rows.add(data).draw();
+          $('.row-select').off('change').on('change', function () {
+            const row = table.row($(this).closest('tr'));
+            row.select(this.checked);
           });
+        } catch (err) {
+          console.error('Error loading testimonials:', err);
+          showToast('Error loading testimonials', false);
+        }
+      }
 
-          // Force playback on user interaction if autoplay fails
-          const forcePlayOnInteraction = () => {
-            if (video.paused) {
-              playVideo();
-              console.log('Attempting to play background video on user interaction');
-            }
-          };
+      // Update status
+      window.updateStatus = async (id, newStatus) => {
+        try {
+          const { error } = await supabase
+            .from('testimonials')
+            .update({ status: newStatus })
+            .eq('id', id);
+          if (error) throw error;
+          showToast(`Testimonial marked as "${newStatus}"`);
+          loadTestimonials($('.filter-btn.active').data('filter'));
+        } catch (err) {
+          console.error('Error updating status:', err);
+          showToast(`Error updating status: ${err.message}`, false);
+        }
+      };
 
-          // Add interaction listeners (scroll or click)
-          window.addEventListener('scroll', forcePlayOnInteraction, { once: true });
-          window.addEventListener('click', forcePlayOnInteraction, { once: true });
-        } else {
-          console.error('Background video element not found');
+      // Delete testimonial
+      window.deleteTestimonial = async id => {
+        if (!confirm('Delete this testimonial forever?')) return;
+        try {
+          const { error } = await supabase
+            .from('testimonials')
+            .delete()
+            .eq('id', id);
+          if (error) throw error;
+          showToast('Testimonial deleted');
+          loadTestimonials($('.filter-btn.active').data('filter'));
+        } catch (err) {
+          console.error('Error deleting testimonial:', err);
+          showToast('Error deleting testimonial', false);
+        }
+      };
+
+      // Response modal
+      window.openResponseModal = (id, existing) => {
+        document.getElementById('resp-testimonial-id').value = id;
+        document.getElementById('resp-body').value = existing || '';
+        new bootstrap.Modal(document.getElementById('responseModal')).show();
+      };
+
+      document.getElementById('response-form').addEventListener('submit', async e => {
+        e.preventDefault();
+        const id = document.getElementById('resp-testimonial-id').value;
+        const response = document.getElementById('resp-body').value;
+        try {
+          const { error } = await supabase
+            .from('testimonials')
+            .update({ company_response: response })
+            .eq('id', id);
+          if (error) throw error;
+          showToast('Response saved');
+          bootstrap.Modal.getInstance(document.getElementById('responseModal')).hide();
+          loadTestimonials($('.filter-btn.active').data('filter'));
+        } catch (err) {
+          console.error('Error saving response:', err);
+          showToast('Error saving response', false);
         }
       });
-    </script>
-  </body>
+
+      // Bulk actions
+      document.getElementById('bulk-approve').addEventListener('click', async () => {
+        const selectedIds = table.rows({ selected: true }).data().toArray().map(row => row.id);
+        if (!selectedIds.length) return showToast('No testimonials selected', false);
+        try {
+          const { error } = await supabase.from('testimonials').update({ status: 'approved' }).in('id', selectedIds);
+          if (error) throw error;
+          showToast('Selected testimonials approved');
+          loadTestimonials($('.filter-btn.active').data('filter'));
+        } catch (err) {
+          console.error('Error approving testimonials:', err);
+          showToast('Error approving testimonials', false);
+        }
+      });
+
+      document.getElementById('bulk-reject').addEventListener('click', async () => {
+        const selectedIds = table.rows({ selected: true }).data().toArray().map(row => row.id);
+        if (!selectedIds.length) return showToast('No testimonials selected', false);
+        try {
+          const { error } = await supabase.from('testimonials').update({ status: 'rejected' }).in('id', selectedIds);
+          if (error) throw error;
+          showToast('Selected testimonials rejected');
+          loadTestimonials($('.filter-btn.active').data('filter'));
+        } catch (err) {
+          console.error('Error rejecting testimonials:', err);
+          showToast('Error rejecting testimonials', false);
+        }
+      });
+
+      document.getElementById('bulk-delete').addEventListener('click', async () => {
+        if (!confirm('Delete selected testimonials forever?')) return;
+        const selectedIds = table.rows({ selected: true }).data().toArray().map(row => row.id);
+        if (!selectedIds.length) return showToast('No testimonials selected', false);
+        try {
+          const { error } = await supabase.from('testimonials').delete().in('id', selectedIds);
+          if (error) throw error;
+          showToast('Selected testimonials deleted');
+          loadTestimonials($('.filter-btn.active').data('filter'));
+        } catch (err) {
+          console.error('Error deleting testimonials:', err);
+          showToast('Error deleting testimonials', false);
+        }
+      });
+
+      // Filter buttons
+      $('.filter-btn').on('click', function () {
+        $('.filter-btn').removeClass('active');
+        $(this).addClass('active');
+        loadTestimonials($(this).data('filter'));
+      });
+
+      // Initial load
+      loadTestimonials();
+    });
+  </script>
+</body>
 </html>
