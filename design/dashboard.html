@@ -48,7 +48,7 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      z-index: -1;
+      z-index: -1; /* Ensure video stays behind */
       opacity: 0.5; /* Matches existing opacity */
     }
 
@@ -56,6 +56,7 @@
       position: relative;
       min-height: 100vh;
       background: rgba(0, 0, 0, 0.7); /* Dark overlay for black background */
+      z-index: 1; /* Lower than header */
     }
 
     .container {
@@ -71,9 +72,11 @@
       padding: 2rem; /* Matches invest.css .invest-page.container */
       background: var(--glass-bg);
       backdrop-filter: blur(10px); /* Matches invest.css */
-      position: sticky;
+      position: fixed; /* Fixed to stay at top */
       top: 0;
-      z-index: 1000;
+      left: 0;
+      width: 100%;
+      z-index: 1000; /* High z-index to stay in front */
       border-bottom: 1px solid rgba(255, 215, 0, 0.2); /* Matches invest.css */
       max-width: 1200px; /* Matches invest.css */
       margin: 0 auto;
@@ -85,7 +88,7 @@
     }
 
     .logo {
-      height: 160px; /* 4x original 40px */
+      height: 80px; /* Adjusted to 2x original 40px, matches Account Balance */
       transition: transform 0.3s ease; /* Matches invest.css */
     }
 
@@ -109,7 +112,7 @@
       border: none;
       cursor: pointer;
       padding: 0;
-      z-index: 1001;
+      z-index: 1001; /* Above header */
     }
 
     .hamburger span {
@@ -137,6 +140,7 @@
       align-items: center;
       overflow-y: auto; /* Scrollable navigation */
       max-height: 80px; /* Prevent overflow */
+      z-index: 1001; /* Above overlay and video */
     }
 
     .nav-drawer a {
@@ -169,7 +173,7 @@
       border: 1px solid var(--primary);
       border-radius: 8px;
       min-width: 200px;
-      z-index: 1000;
+      z-index: 1002; /* Above nav-drawer */
       box-shadow: 0 4px 8px var(--shadow);
     }
 
@@ -202,7 +206,7 @@
       width: 100%;
       height: 100%;
       background: rgba(0, 0, 0, 0.7);
-      z-index: 999;
+      z-index: 999; /* Below nav-drawer */
     }
 
     .nav-overlay.nav-open {
@@ -219,6 +223,7 @@
       border-bottom: 1px solid rgba(255, 215, 0, 0.2); /* Matches invest.css */
       max-width: 1200px; /* Matches invest.css */
       margin: 0 auto;
+      margin-top: 120px; /* Offset for fixed header */
     }
 
     .profile-container {
@@ -571,7 +576,7 @@
         flex-direction: column;
         padding: 2rem;
         transition: right 0.3s ease;
-        z-index: 1000;
+        z-index: 1001; /* Above overlay */
         overflow-y: auto; /* Scrollable navigation */
       }
 
@@ -589,6 +594,7 @@
         background: transparent;
         border: none;
         box-shadow: none;
+        z-index: 1002; /* Above nav-drawer */
       }
 
       .cards-grid {
@@ -613,13 +619,14 @@
       }
 
       .logo {
-        height: 140px; /* 4x proportionality for mobile */
+        height: 70px; /* Adjusted for mobile */
       }
 
       .profile-section {
         flex-direction: column; /* Matches invest.css */
         align-items: flex-start;
         padding: 1rem; /* Matches invest.css */
+        margin-top: 100px; /* Adjust for fixed header */
       }
 
       .profile-container {
@@ -670,7 +677,7 @@
       }
 
       .logo {
-        height: 120px; /* 4x proportionality for small screens */
+        height: 60px; /* Adjusted for small screens */
       }
 
       .card {
@@ -1275,7 +1282,8 @@
     const navDrawer = document.getElementById('navDrawer');
     const overlay = document.querySelector('.nav-overlay');
     if (hamburgerBtn && navDrawer && overlay) {
-      hamburgerBtn.addEventListener('click', () => {
+      hamburgerBtn.addEventListener('click', (e) => {
+        e.preventDefault();
         navDrawer.classList.toggle('open');
         hamburgerBtn.classList.toggle('active');
         overlay.classList.toggle('nav-open');
