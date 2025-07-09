@@ -21,6 +21,43 @@
     .card { background: var(--glass-bg); padding: 2rem; border: 1px solid var(--primary); border-radius: 20px; backdrop-filter: blur(10px); transition: transform 0.3s ease, box-shadow 0.3s ease; box-shadow: 0 4px 8px var(--shadow); }
     .investment-item { margin: 1rem 0; padding: 1rem; border: 1px solid var(--primary); border-radius: 10px; }
     .status-message { color: var(--text-color); }
+    /* Enhanced investment input field */
+    #invest-amount {
+      width: 100%;
+      padding: 10px;
+      font-size: 18px;
+      border-radius: 5px;
+      border: 1px solid var(--primary);
+    }
+    /* Click to Invest button styles */
+    .investment-call-to-action {
+      text-align: center;
+      margin: 20px 0;
+    }
+    #click-to-invest-btn {
+      background: linear-gradient(45deg, #000000, #ffd700); /* Black to gold gradient */
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      font-size: 18px;
+      border-radius: 50px; /* Pill-shaped button */
+      cursor: pointer;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      50% {
+        transform: scale(1.05);
+        opacity: 0.9;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
   </style>
 </head>
 <body class="dashboard-page">
@@ -69,6 +106,10 @@
         <span id="defaultProfileIcon" class="avatar">👤</span>
       </div>
       <div class="welcome-message">Welcome to Your Account Balance! <span id="welcomeName"></span></div>
+    </div>
+    <!-- Click to Invest Button -->
+    <div class="investment-call-to-action">
+      <button id="click-to-invest-btn" class="btn invest-btn">Click to Invest</button>
     </div>
     <main class="container">
       <section class="cards-grid" data-aos="fade-up">
@@ -134,6 +175,18 @@
   <script>window.gtranslateSettings = {"default_language":"en","native_language_names":true,"detect_browser_language":true,"wrapper_selector":".gtranslate_wrapper","flag_style":"3d"}</script>
   <script src="https://cdn.gtranslate.net/widgets/latest/float.js" defer></script>
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <!-- Crisp Chat widget -->
+  <script type="text/javascript">
+    window.$crisp = [];
+    window.CRISP_WEBSITE_ID = "peclwowoqcbxhfe3wbowfneh1rabrdjz";
+    (function () {
+      d = document;
+      s = d.createElement("script");
+      s.src = "https://client.crisp.chat/l.js";
+      s.async = 1;
+      d.getElementsByTagName("head")[0].appendChild(s);
+    })();
+  </script>
   <script>
     // Initialize AOS
     AOS.init({ duration: 800, once: true });
@@ -737,6 +790,16 @@
         } else {
           video.pause();
         }
+      });
+    }
+
+    // Click to Invest Button Functionality
+    const clickToInvestBtn = document.getElementById('click-to-invest-btn');
+    const investAmountInput = document.getElementById('invest-amount');
+    if (clickToInvestBtn && investAmountInput) {
+      clickToInvestBtn.addEventListener('click', () => {
+        investAmountInput.scrollIntoView({ behavior: 'smooth' });
+        investAmountInput.focus();
       });
     }
 
