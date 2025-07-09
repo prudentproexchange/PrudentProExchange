@@ -161,12 +161,12 @@ async function checkKYCStatus(userId) {
     const latest = kycRequests[0];
     document.getElementById('kyc-status').style.display = 'block';
     if (latest.status === 'approved') {
-      statusMessage.textContent = 'Your KYC is approved.';
+      statusMessage.textContent = 'KYC Approved ✅';
       document.getElementById('kyc-form').style.display = 'none';
     } else if (latest.status === 'rejected') {
       statusMessage.textContent = `Your KYC was rejected. Reason: ${latest.admin_notes || 'None'}`;
     } else {
-      statusMessage.textContent = 'Your KYC request is pending approval.';
+      statusMessage.textContent = 'Pending Admin Approval';
       document.getElementById('kyc-form').style.display = 'none';
     }
   }
@@ -267,7 +267,9 @@ function initForm() {
       try {
         const formData = new FormData(e.target);
         const data = Object.fromEntries(formData);
-        const userId = (await supabaseClient.auth.getSession()).data.session.user.id;
+        const { data: { session } } = await supabaseClient.auth.getSession();
+        const userId = session.user.id;
+        const email = session.user.email;
 
         const documentFile = formData.get('document_scan');
         const addressFile = formData.get('proof_of_address');
@@ -284,6 +286,7 @@ function initForm() {
 
         const { error } = await supabaseClient.from('kyc_requests').insert({
           user_id: userId,
+          email: email,
           ...data,
           date_of_birth: convertToUTC(data.date_of_birth),
           status: 'pending',
@@ -438,7 +441,7 @@ function showMessage(text, isError) {
   if (existing) existing.remove();
   const msg = document.createElement('div');
   msg.className = `message ${isError ? 'error' : 'success'}`;
-  msg.text1 = text;
+  msg.textContent = text;
   document.querySelector('.kyc-section').prepend(msg);
   setTimeout(() => msg.remove(), 3000);
 }
