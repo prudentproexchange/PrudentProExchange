@@ -15,20 +15,33 @@ function formatCurrency(amount) {
 
 function showError(elementId, message) {
   const errorDiv = document.getElementById(elementId);
-  errorDiv.textContent = message;
-  errorDiv.style.display = 'block';
-  setTimeout(() => errorDiv.style.display = 'none', 5000);
+  if (errorDiv) {
+    errorDiv.textContent = message;
+    errorDiv.style.display = 'block';
+    setTimeout(() => errorDiv.style.display = 'none', 5000);
+  } else {
+    console.error(`Error element ${elementId} not found`);
+  }
 }
 
 function showSuccess(elementId, message) {
   const successDiv = document.getElementById(elementId);
-  successDiv.textContent = message;
-  successDiv.style.display = 'block';
-  setTimeout(() => successDiv.style.display = 'none', 5000);
+  if (successDiv) {
+    successDiv.textContent = message;
+    successDiv.style.display = 'block';
+    setTimeout(() => successDiv.style.display = 'none', 5000);
+  } else {
+    console.error(`Success element ${elementId} not found`);
+  }
 }
 
 function showLoading(elementId, show) {
-  document.getElementById(elementId).style.display = show ? 'block' : 'none';
+  const loadingDiv = document.getElementById(elementId);
+  if (loadingDiv) {
+    loadingDiv.style.display = show ? 'block' : 'none';
+  } else {
+    console.error(`Loading element ${elementId} not found`);
+  }
 }
 
 // Investment plans (for frontend validation only)
@@ -48,39 +61,70 @@ async function initAccountBalance() {
   try {
     // Auth guard
     const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
-    if (!user || authError) {
-      window.location.href = 'login.html';
+    if (authError || !user) {
+      showError('invest-error', 'Please log in to access your account.');
+      setTimeout(() => window.location.href = 'login.html', 2000);
       return;
     }
     const userId = user.id;
+    console.log('Authenticated user ID:', userId);
+
     // Load profile
-    const { data: profile, error: profileError } = await supabaseClient
+    let { data: profile, error: profileError } = await supabaseClient
       .from('profiles')
       .select('first_name, photo_url, deposit_wallet, interest_wallet')
       .eq('id', userId)
       .single();
-    if (profileError) throw profileError;
-    document.getElementById('welcomeName').textContent = profile.first_name || 'User';
-    const totalBalance = (profile.deposit_wallet || 0) + (profile.interest_wallet || 0);
-    document.getElementById('totalBalance').textContent = formatCurrency(totalBalance);
-    document.getElementById('depositWallet').textContent = formatCurrency(profile.deposit_wallet || 0);
-    document.getElementById('accountBalance').textContent = formatCurrency(totalBalance);
-    if (profile.photo_url) {
+      
+    if (profileError || !profile) {
+      console.warn('Profile not found, creating default profile:', profileError?.message);
+      const { data: newProfile, error: insertError } = await supabaseClient
+        .from('profiles')
+        .insert({ id: userId, first_name: 'User', deposit_wallet: 0, interest_wallet: 0 })
+        .select('first_name, photo_url, deposit_wallet, interest_wallet')
+        .single();
+      if (insertError) throw new Error(`Failed to create profile: ${insertError.message}`);
+      profile = newProfile;
+    }
+
+    // Update UI
+    const welcomeName = document.getElementById('welcomeName');
+    const totalBalance = document.getElementById('totalBalance');
+    const depositWallet = document.getElementById('depositWallet');
+    const accountBalance = document.getElementById('accountBalance');
+    const navProfilePhoto = document.getElementById('navProfilePhoto');
+    const defaultProfileIcon = document.getElementById('defaultProfileIcon');
+
+    if (!welcomeName || !totalBalance || !depositWallet || !accountBalance) {
+      throw new Error('Required UI elements are missing');
+    }
+
+    welcomeName.textContent = profile.first_name || 'User';
+    const totalBalanceValue = (profile.deposit_wallet || 0) + (profile.interest_wallet || 0);
+    totalBalance.textContent = formatCurrency(totalBalanceValue);
+    depositWallet.textContent = formatCurrency(profile.deposit_wallet || 0);
+    accountBalance.textContent = formatCurrency(totalBalanceValue);
+
+    if (profile.photo_url && navProfilePhoto && defaultProfileIcon) {
       const { data: urlData } = supabaseClient.storage
         .from('profile-photos')
         .getPublicUrl(profile.photo_url);
-      document.getElementById('navProfilePhoto').src = urlData.publicUrl;
-      document.getElementById('navProfilePhoto').style.display = 'block';
-      document.getElementById('defaultProfileIcon').style.display = 'none';
+      navProfilePhoto.src = urlData.publicUrl;
+      navProfilePhoto.style.display = 'block';
+      defaultProfileIcon.style.display = 'none';
+    } else if (navProfilePhoto && defaultProfileIcon) {
+      navProfilePhoto.style.display = 'none';
+      defaultProfileIcon.style.display = 'block';
     }
+
     // Initialize investment form
     initInvestmentForm(profile.deposit_wallet || 0, userId);
     // Load active investments
     await loadActiveInvestments(userId);
     // Setup real-time subscriptions
-    setupRealtimeSubscriptions(userId);
+    await setupRealtimeSubscriptions(userId);
   } catch (err) {
-    showError('invest-error', 'Error initializing page: ' + err.message);
+    showError('invest-error', `Error loading profile: ${err.message}`);
     console.error('Init error:', err);
   } finally {
     showLoading('invest-loading', false);
@@ -96,6 +140,13 @@ function initInvestmentForm(depositWallet, userId) {
   const selectedPlan = document.getElementById('selected-plan');
   const weeklyRoi = document.getElementById('weekly-roi');
   const weeklyProfit = document.getElementById('weekly-profit');
+
+  if (!investForm || !investAmount || !investBtn || !validationMessage || !investmentDetails || !selectedPlan || !weeklyRoi || !weeklyProfit) {
+    console.error('Investment form elements missing');
+    showError('invest-error', 'Investment form is not properly configured');
+    return;
+  }
+
   investAmount.addEventListener('input', () => {
     const amount = parseFloat(investAmount.value);
     validationMessage.textContent = '';
@@ -120,6 +171,7 @@ function initInvestmentForm(depositWallet, userId) {
     investmentDetails.style.display = 'block';
     investBtn.disabled = false;
   });
+
   investForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     showLoading('invest-loading', true);
@@ -184,7 +236,7 @@ function initInvestmentForm(depositWallet, userId) {
       investmentDetails.style.display = 'none';
       await loadActiveInvestments(userId);
     } catch (err) {
-      showError('invest-error', 'Error starting investment: ' + err.message);
+      showError('invest-error', `Error starting investment: ${err.message}`);
       console.error('Investment error:', err);
     } finally {
       showLoading('invest-loading', false);
@@ -207,6 +259,9 @@ async function loadActiveInvestments(userId) {
     if (error) throw error;
     const container = document.getElementById('investments-container');
     const noInvestmentsDiv = document.getElementById('no-investments');
+    if (!container || !noInvestmentsDiv) {
+      throw new Error('Investment container elements missing');
+    }
     container.innerHTML = '';
     noInvestmentsDiv.style.display = investments.length ? 'none' : 'block';
     if (investments.length) {
@@ -252,14 +307,14 @@ async function loadActiveInvestments(userId) {
             showSuccess('invest-success', 'Reinvestment successful!');
             await loadActiveInvestments(userId);
           } catch (err) {
-            showError('invest-error', 'Error during reinvestment: ' + err.message);
+            showError('invest-error', `Error during reinvestment: ${err.message}`);
           }
         });
       });
       container.appendChild(fragment);
     }
   } catch (err) {
-    showError('investments-error', 'Error loading investments: ' + err.message);
+    showError('investments-error', `Error loading investments: ${err.message}`);
     console.error('Load investments error:', err);
   } finally {
     showLoading('investments-loading', false);
@@ -334,6 +389,7 @@ async function setupRealtimeSubscriptions(userId) {
       document.getElementById('totalBalance').textContent = formatCurrency(totalBalance);
       document.getElementById('depositWallet').textContent = formatCurrency(payload.new.deposit_wallet || 0);
       document.getElementById('accountBalance').textContent = formatCurrency(totalBalance);
+      document.getElementById('welcomeName').textContent = payload.new.first_name || 'User';
     })
     .subscribe();
   const investmentSubscription = supabaseClient
@@ -392,6 +448,7 @@ function refreshSingleInvestment(investment) {
 function addNewInvestment(investment) {
   const container = document.getElementById('investments-container');
   const noInvestmentsDiv = document.getElementById('no-investments');
+  if (!container || !noInvestmentsDiv) return;
   if (noInvestmentsDiv.style.display !== 'none') {
     noInvestmentsDiv.style.display = 'none';
   }
@@ -435,7 +492,7 @@ function addNewInvestment(investment) {
       showSuccess('invest-success', 'Reinvestment successful!');
       await loadActiveInvestments(userId);
     } catch (err) {
-      showError('invest-error', 'Error during reinvestment: ' + err.message);
+      showError('invest-error', `Error during reinvestment: ${err.message}`);
     }
   });
 }
@@ -452,63 +509,91 @@ function removeInvestment(investmentId) {
 const hamburgerBtn = document.getElementById('hamburgerBtn');
 const navDrawer = document.getElementById('navDrawer');
 const overlay = document.querySelector('.nav-overlay');
-hamburgerBtn.addEventListener('click', () => {
-  navDrawer.classList.toggle('open');
-  hamburgerBtn.classList.toggle('active');
-  overlay.classList.toggle('nav-open');
-  if (navDrawer.classList.contains('open')) {
-    navDrawer.scrollTop = 0;
-  }
-});
-document.addEventListener('click', (event) => {
-  const isClickInsideNav = navDrawer.contains(event.target);
-  const isClickOnHamburger = hamburgerBtn.contains(event.target);
-  if (!isClickInsideNav && !isClickOnHamburger && navDrawer.classList.contains('open')) {
-    navDrawer.classList.remove('open');
-    hamburgerBtn.classList.remove('active');
-    overlay.classList.remove('nav-open');
-  }
-});
+if (hamburgerBtn && navDrawer && overlay) {
+  hamburgerBtn.addEventListener('click', () => {
+    navDrawer.classList.toggle('open');
+    hamburgerBtn.classList.toggle('active');
+    overlay.classList.toggle('nav-open');
+    if (navDrawer.classList.contains('open')) {
+      navDrawer.scrollTop = 0;
+    }
+  });
+  document.addEventListener('click', (event) => {
+    const isClickInsideNav = navDrawer.contains(event.target);
+    const isClickOnHamburger = hamburgerBtn.contains(event.target);
+    if (!isClickInsideNav && !isClickOnHamburger && navDrawer.classList.contains('open')) {
+      navDrawer.classList.remove('open');
+      hamburgerBtn.classList.remove('active');
+      overlay.classList.remove('nav-open');
+    }
+  });
+}
+
 const themeToggle = document.getElementById('theme-toggle');
-themeToggle.addEventListener('click', () => {
-  document.body.classList.toggle('light-theme');
-  const icon = themeToggle.querySelector('i');
-  icon.classList.toggle('fa-moon');
-  icon.classList.toggle('fa-sun');
-});
+if (themeToggle) {
+  themeToggle.addEventListener('click', () => {
+    document.body.classList.toggle('light-theme');
+    const icon = themeToggle.querySelector('i');
+    if (icon) {
+      icon.classList.toggle('fa-moon');
+      icon.classList.toggle('fa-sun');
+    }
+  });
+}
+
 const accountToggle = document.getElementById('account-toggle');
-const submenu = accountToggle.nextElementSibling;
-accountToggle.addEventListener('click', (e) => {
-  e.preventDefault();
-  submenu.classList.toggle('open');
-});
-document.getElementById('back-to-top').addEventListener('click', () => {
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-});
-document.getElementById('logout-btn').addEventListener('click', async () => {
-  try {
-    const { error } = await supabaseClient.auth.signOut();
-    if (error) throw error;
-    window.location.href = 'login.html';
-  } catch (err) {
-    showError('invest-error', 'Error logging out: ' + err.message);
-  }
-});
+const submenu = accountToggle?.nextElementSibling;
+if (accountToggle && submenu) {
+  accountToggle.addEventListener('click', (e) => {
+    e.preventDefault();
+    submenu.classList.toggle('open');
+  });
+}
+
+const backToTop = document.getElementById('back-to-top');
+if (backToTop) {
+  backToTop.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+}
+
+const logoutBtn = document.getElementById('logout-btn');
+if (logoutBtn) {
+  logoutBtn.addEventListener('click', async () => {
+    try {
+      const { error } = await supabaseClient.auth.signOut();
+      if (error) throw error;
+      window.location.href = 'login.html';
+    } catch (err) {
+      showError('invest-error', `Error logging out: ${err.message}`);
+    }
+  });
+}
+
 function updateTimes() {
   const now = new Date();
-  document.getElementById('localTime').textContent = now.toLocaleTimeString();
-  document.getElementById('localDate').textContent = now.toLocaleDateString('en-US', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  });
-  document.getElementById('utcTime').textContent = now.toUTCString();
+  const localTime = document.getElementById('localTime');
+  const localDate = document.getElementById('localDate');
+  const utcTime = document.getElementById('utcTime');
+  if (localTime) localTime.textContent = now.toLocaleTimeString();
+  if (localDate) {
+    localDate.textContent = now.toLocaleDateString('en-US', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  }
+  if (utcTime) utcTime.textContent = now.toUTCString();
 }
 setInterval(updateTimes, 1000);
 updateTimes();
+
 const video = document.querySelector('.bg-video');
-video.addEventListener('canplay', () => {
-  video.play().catch(error => console.error('Error playing video:', error));
-});
+if (video) {
+  video.addEventListener('canplay', () => {
+    video.play().catch(error => console.error('Error playing video:', error));
+  });
+}
+
 initAccountBalance();
