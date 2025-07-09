@@ -10,18 +10,18 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <style>
     :root {
-      --primary: #ffd700; /* Golden primary color */
-      --secondary: #b8860b; /* Darker gold for hover effects */
-      --gold: #ffd700; /* Rich gold */
-      --gold-dark: #daa520; /* Darker gold for hover */
-      --text-color: #ffffff; /* White text for contrast */
-      --text-secondary: #d4af37; /* Light gold for secondary text */
-      --bg-dark: #000000; /* Pure black background */
-      --bg-light: #1c2526; /* Darker shade for light theme */
-      --glass-bg: rgba(255, 215, 0, 0.1); /* Gold-tinted glass effect */
-      --shadow: rgba(0, 0, 0, 0.5); /* Stronger shadow for depth */
-      --error: #ff4444; /* Error color remains red */
-      --success: #44ff44; /* Success color remains green */
+      --primary: #00aaff;
+      --secondary: #0055aa;
+      --gold: #ffd700;
+      --gold-dark: #e6c200;
+      --text-color: #ffffff;
+      --text-secondary: #b0b0b0;
+      --bg-dark: #1a1a2e;
+      --bg-light: #f0f2f5;
+      --glass-bg: rgba(255, 255, 255, 0.1);
+      --shadow: rgba(0, 0, 0, 0.2);
+      --error: #ff4444;
+      --success: #44ff44;
     }
 
     * {
@@ -41,7 +41,7 @@
 
     body.light-theme {
       background: var(--bg-light);
-      color: #ffffff; /* Maintain white text for contrast in light theme */
+      color: #333;
     }
 
     .bg-video {
@@ -52,13 +52,13 @@
       height: 100%;
       object-fit: cover;
       z-index: -1;
-      opacity: 0.3; /* Reduced opacity for better contrast with black/gold theme */
+      opacity: 0.5;
     }
 
     .overlay {
       position: relative;
       min-height: 100vh;
-      background: rgba(0, 0, 0, 0.7); /* Darker overlay for gold accents */
+      background: rgba(0, 0, 0, 0.5);
     }
 
     .container {
@@ -77,7 +77,7 @@
       position: sticky;
       top: 0;
       z-index: 1000;
-      border-bottom: 2px solid var(--primary); /* Golden border */
+      border-bottom: 1px solid var(--primary);
     }
 
     .logo-link {
@@ -86,13 +86,12 @@
     }
 
     .logo {
-      height: 160px; /* 4x original size (40px * 4) */
-      transition: transform 0.3s ease, filter 0.3s ease;
+      height: 40px;
+      transition: transform 0.3s ease;
     }
 
     .logo:hover {
       transform: scale(1.05);
-      filter: drop-shadow(0 0 10px var(--gold)); /* Golden glow effect */
     }
 
     .header-right {
@@ -117,7 +116,7 @@
     .hamburger span {
       width: 100%;
       height: 3px;
-      background: var(--gold);
+      background: var(--text-color);
       transition: all 0.3s ease;
     }
 
@@ -137,24 +136,6 @@
       display: flex;
       gap: 1.5rem;
       align-items: center;
-      overflow-x: auto; /* Enable horizontal scrolling for navigation */
-      white-space: nowrap;
-      padding-bottom: 0.5rem;
-      scrollbar-width: thin;
-      scrollbar-color: var(--gold) var(--bg-dark);
-    }
-
-    .nav-drawer::-webkit-scrollbar {
-      height: 8px;
-    }
-
-    .nav-drawer::-webkit-scrollbar-track {
-      background: var(--bg-dark);
-    }
-
-    .nav-drawer::-webkit-scrollbar-thumb {
-      background: var(--gold);
-      border-radius: 4px;
     }
 
     .nav-drawer a {
@@ -162,7 +143,7 @@
       text-decoration: none;
       font-size: 1rem;
       font-weight: 500;
-      transition: color 0.ubu3s ease;
+      transition: color 0.3s ease;
     }
 
     .nav-drawer a:hover, .nav-drawer a.active {
@@ -209,7 +190,7 @@
 
     .submenu a:hover {
       background: var(--primary);
-      color: #000; /* Black text on gold background for contrast */
+      color: #fff;
     }
 
     .nav-overlay {
@@ -217,7 +198,7 @@
       position: fixed;
       top: 0;
       left: 0;
-      width:  Ascendancy
+      width: 100%;
       height: 100%;
       background: rgba(0, 0, 0, 0.7);
       z-index: 999;
@@ -234,7 +215,7 @@
       padding: 1.5rem;
       background: var(--glass-bg);
       backdrop-filter: blur(10px);
-      border-bottom: 2px solid var(--primary);
+      border-bottom: 1px solid var(--primary);
     }
 
     .profile-container {
@@ -260,7 +241,6 @@
       font-size: 1.2rem;
       font-weight: 500;
       font-family: 'Playfair Display', serif;
-      color: var(--gold);
     }
 
     .cards-grid {
@@ -307,7 +287,7 @@
       display: inline-block;
       padding: 0.75rem 1.5rem;
       background: var(--primary);
-      color: #000; /* Black text for contrast */
+      color: #fff;
       text-decoration: none;
       border-radius: 8px;
       font-weight: 500;
@@ -328,18 +308,155 @@
       margin: 1rem 0;
       padding: 1rem;
       border: 1px solid var(--primary);
- tfoot {
+      border-radius: 10px;
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .investment-item p {
+      margin: 0.5rem 0;
+    }
+
+    .referral-link-container {
+      display: flex;
+      gap: 0.5rem;
+      margin: 1rem 0;
+    }
+
+    .referral-link-container input {
+      flex: 1;
+      padding: 0.5rem;
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid var(--primary);
+      border-radius: 5px;
+      color: var(--text-color);
+      font-size: 0.9rem;
+    }
+
+    .copy-btn {
+      padding: 0.5rem 1rem;
+      background: var(--primary);
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      color: #fff;
+      transition: background 0.3s ease;
+    }
+
+    .copy-btn:hover {
+      background: var(--secondary);
+    }
+
+    details {
+      margin: 2rem 0;
+    }
+
+    summary {
+      cursor: pointer;
+      font-size: 1.8rem;
+      color: var(--primary);
+      font-family: 'Playfair Display', serif;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      list-style: none;
+    }
+
+    summary::before {
+      content: '▶';
+      color: var(--primary);
+      transition: transform 0.3s ease;
+    }
+
+    details[open] summary::before {
+      transform: rotate(90deg);
+    }
+
+    .investment-content {
+      overflow: hidden;
+      transition: max-height 0.5s ease, opacity 0.5s ease;
+      max-height: 0;
+      opacity: 0;
+    }
+
+    details[open] .investment-content {
+      max-height: 1000px;
+      opacity: 1;
+    }
+
+    .blink {
+      animation: blink 2s infinite;
+    }
+
+    @keyframes blink {
+      0% { opacity: 1; }
+      50% { opacity: 0.5; }
+      100% { opacity: 1; }
+    }
+
+    details[open] .blink {
+      display: none;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      background: var(--glass-bg);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--primary);
+    }
+
+    th {
+      background: var(--primary);
+      color: #fff;
+      font-weight: 600;
+    }
+
+    td {
+      color: var(--text-secondary);
+    }
+
+    .loading-spinner {
+      border: 4px solid rgba(255, 255, 255, 0.3);
+      border-top: 4px solid var(--primary);
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      animation: spin 1s linear infinite;
+      margin: 1rem auto;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .error-message {
+      color: var(--error);
+      background: rgba(255, 0, 0, 0.1);
+      padding: 10px;
+      border-radius: 5px;
+      margin: 10px 0;
+      display: none;
+    }
+
+    .site-footer {
       background: var(--glass-bg);
       backdrop-filter: blur(10px);
       padding: 2rem 1.5rem;
-      border-top: 2px solid var(--primary);
+      border-top: 1px solid var(--primary);
       text-align: center;
     }
 
     .footer-content p {
       margin: 0.5rem 0;
       font-size: 0.9rem;
-      color: var(--text-secondary);
     }
 
     .footer-links {
@@ -393,7 +510,7 @@
     #theme-toggle {
       background: transparent;
       border: none;
-      color: var(--gold);
+      color: var(--text-color);
       font-size: 1.2rem;
       cursor: pointer;
       transition: color 0.3s ease;
@@ -421,7 +538,6 @@
         padding: 2rem;
         transition: right 0.3s ease;
         z-index: 1000;
-        overflow-y: auto; /* Enable vertical scrolling for mobile nav */
       }
 
       .nav-drawer.open {
@@ -462,7 +578,7 @@
       }
 
       .logo {
-        height: 120px; /* Adjusted for mobile (3x original size) */
+        height: 35px;
       }
 
       .profile-section {
@@ -520,10 +636,6 @@
 
       .footer-content p, .footer-links a {
         font-size: 0.8rem;
-      }
-
-      .logo {
-        height: 80px; /* Further adjusted for smaller screens */
       }
     }
   </style>
@@ -1065,6 +1177,7 @@
             ? `Capital transfer in ${Math.ceil((capitalDate - now) / (1000 * 60 * 60 * 24))} days`
             : 'Capital transferring soon';
         }
+      }
     }
 
     function addNewInvestment(investment) {
@@ -1213,7 +1326,7 @@
     document.addEventListener('DOMContentLoaded', () => {
       const video = document.querySelector('.bg-video');
       let retryCount = 0;
-      const maxRetries = 5; /* Increased retries for reliability */
+      const maxRetries = 3;
       const retryDelay = 1000;
       if (video) {
         const playVideo = () => {
@@ -1229,21 +1342,13 @@
                 setTimeout(playVideo, retryDelay);
               } else {
                 console.error('Max retries reached. Video playback failed.');
-                // Fallback: hide video and ensure black background
-                video.style.display = 'none';
-                document.body.style.background = 'var(--bg-dark)';
               }
             });
         };
         playVideo();
         video.addEventListener('canplay', () => console.log('Background video can play'));
         video.addEventListener('playing', () => console.log('Background video is actively playing'));
-        video.addEventListener('error', (e) => {
-          console.error('Background video error:', e);
-          // Fallback to black background on error
-          video.style.display = 'none';
-          document.body.style.background = 'var(--bg-dark)';
-        });
+        video.addEventListener('error', (e) => console.error('Background video error:', e));
         video.addEventListener('stalled', () => console.warn('Background video stalled'));
         video.addEventListener('loadeddata', () => console.log('Background video data loaded'));
         document.addEventListener('visibilitychange', () => {
@@ -1262,10 +1367,8 @@
         };
         window.addEventListener('scroll', forcePlayOnInteraction, { once: true });
         window.addEventListener('click', forcePlayOnInteraction, { once: true });
-        window.addEventListener('touchstart', forcePlayOnInteraction, { once: true }); /* Added touch support for mobile */
       } else {
         console.error('Background video element not found');
-        document.body.style.background = 'var(--bg-dark)'; /* Fallback to black background */
       }
     });
 
