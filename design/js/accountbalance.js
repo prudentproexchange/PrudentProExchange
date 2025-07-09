@@ -15,33 +15,20 @@ function formatCurrency(amount) {
 
 function showError(elementId, message) {
   const errorDiv = document.getElementById(elementId);
-  if (errorDiv) {
-    errorDiv.textContent = message;
-    errorDiv.style.display = 'block';
-    setTimeout(() => errorDiv.style.display = 'none', 5000);
-  } else {
-    console.error(`Error element ${elementId} not found`);
-  }
+  errorDiv.textContent = message;
+  errorDiv.style.display = 'block';
+  setTimeout(() => errorDiv.style.display = 'none', 5000);
 }
 
 function showSuccess(elementId, message) {
   const successDiv = document.getElementById(elementId);
-  if (successDiv) {
-    successDiv.textContent = message;
-    successDiv.style.display = 'block';
-    setTimeout(() => successDiv.style.display = 'none', 5000);
-  } else {
-    console.error(`Success element ${elementId} not found`);
-  }
+  successDiv.textContent = message;
+  successDiv.style.display = 'block';
+  setTimeout(() => successDiv.style.display = 'none', 5000);
 }
 
 function showLoading(elementId, show) {
-  const loadingDiv = document.getElementById(elementId);
-  if (loadingDiv) {
-    loadingDiv.style.display = show ? 'block' : 'none';
-  } else {
-    console.error(`Loading element ${elementId} not found`);
-  }
+  document.getElementById(elementId).style.display = show ? 'block' : 'none';
 }
 
 // Investment plans (for frontend validation only)
@@ -61,77 +48,50 @@ async function initAccountBalance() {
   try {
     // Auth guard
     const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
-    if (authError || !user) {
-      showError('invest-error', 'Please log in to access your account.');
-      setTimeout(() => window.location.href = 'login.html', 2000);
+    if (!user || authError) {
+      window.location.href = 'login.html';
       return;
     }
+
     const userId = user.id;
-    console.log('Authenticated user ID:', userId);
 
     // Load profile
-    let { data: profile, error: profileError } = await supabaseClient
+    const { data: profile, error: profileError } = await supabaseClient
       .from('profiles')
-      .select('first_name, photo_url, deposit_wallet, interest_wallet')
+      .select('first_name, photo_url, deposit_wallet, account_balance')
       .eq('id', userId)
       .single();
-      
-    if (profileError || !profile) {
-      console.warn('Profile not found, creating default profile:', profileError?.message);
-      const { data: newProfile, error: insertError } = await supabaseClient
-        .from('profiles')
-        .insert({ id: userId, first_name: 'User', deposit_wallet: 0, interest_wallet: 0 })
-        .select('first_name, photo_url, deposit_wallet, interest_wallet')
-        .single();
-      if (insertError) throw new Error(`Failed to create profile: ${insertError.message}`);
-      profile = newProfile;
-    }
+    if (profileError) throw profileError;
 
-    // Update UI
-    const welcomeName = document.getElementById('welcomeName');
-    const totalBalance = document.getElementById('totalBalance');
-    const depositWallet = document.getElementById('depositWallet');
-    const accountBalance = document.getElementById('accountBalance');
-    const navProfilePhoto = document.getElementById('navProfilePhoto');
-    const defaultProfileIcon = document.getElementById('defaultProfileIcon');
+    document.getElementById('welcomeName').textContent = profile.first_name || 'User';
+    const totalBalance = (profile.deposit_wallet || 0) + (profile.account_balance || 0);
+    document.getElementById('totalBalance').textContent = formatCurrency(totalBalance);
+    document.getElementById('depositWallet').textContent = formatCurrency(profile.deposit_wallet || 0);
+    document.getElementById('accountBalance').textContent = formatCurrency(profile.account_balance || 0);
 
-    if (!welcomeName || !totalBalance || !depositWallet || !accountBalance) {
-      throw new Error('Required UI elements are missing');
-    }
-
-    welcomeName.textContent = profile.first_name || 'User';
-    const totalBalanceValue = (profile.deposit_wallet || 0) + (profile.interest_wallet || 0);
-    totalBalance.textContent = formatCurrency(totalBalanceValue);
-    depositWallet.textContent = formatCurrency(profile.deposit_wallet || 0);
-    accountBalance.textContent = formatCurrency(totalBalanceValue);
-
-    if (profile.photo_url && navProfilePhoto && defaultProfileIcon) {
+    if (profile.photo_url) {
       const { data: urlData } = supabaseClient.storage
         .from('profile-photos')
         .getPublicUrl(profile.photo_url);
-      navProfilePhoto.src = urlData.publicUrl;
-      navProfilePhoto.style.display = 'block';
-      defaultProfileIcon.style.display = 'none';
-    } else if (navProfilePhoto && defaultProfileIcon) {
-      navProfilePhoto.style.display = 'none';
-      defaultProfileIcon.style.display = 'block';
+      document.getElementById('navProfilePhoto').src = urlData.publicUrl;
+      document.getElementById('navProfilePhoto').style.display = 'block';
+      document.getElementById('defaultProfileIcon').style.display = 'none';
     }
 
     // Initialize investment form
-    initInvestmentForm(profile.deposit_wallet || 0, userId);
+    initInvestmentForm(totalBalance, userId);
+
     // Load active investments
     await loadActiveInvestments(userId);
-    // Setup real-time subscriptions
-    await setupRealtimeSubscriptions(userId);
   } catch (err) {
-    showError('invest-error', `Error loading profile: ${err.message}`);
+    showError('invest-error', 'Error initializing page: ' + err.message);
     console.error('Init error:', err);
   } finally {
     showLoading('invest-loading', false);
   }
 }
 
-function initInvestmentForm(depositWallet, userId) {
+function initInvestmentForm(totalBalance, userId) {
   const investForm = document.getElementById('invest-form');
   const investAmount = document.getElementById('invest-amount');
   const investBtn = document.getElementById('invest-btn');
@@ -141,30 +101,27 @@ function initInvestmentForm(depositWallet, userId) {
   const weeklyRoi = document.getElementById('weekly-roi');
   const weeklyProfit = document.getElementById('weekly-profit');
 
-  if (!investForm || !investAmount || !investBtn || !validationMessage || !investmentDetails || !selectedPlan || !weeklyRoi || !weeklyProfit) {
-    console.error('Investment form elements missing');
-    showError('invest-error', 'Investment form is not properly configured');
-    return;
-  }
-
   investAmount.addEventListener('input', () => {
     const amount = parseFloat(investAmount.value);
     validationMessage.textContent = '';
     investmentDetails.style.display = 'none';
     investBtn.disabled = true;
+
     if (isNaN(amount) || amount < 200) {
       validationMessage.textContent = 'Amount must be at least $200';
       return;
     }
-    if (amount > depositWallet) {
-      validationMessage.textContent = 'Amount exceeds your deposit wallet balance';
+    if (amount > totalBalance) {
+      validationMessage.textContent = 'Amount exceeds your total balance';
       return;
     }
+
     const plan = plans.find(p => amount >= p.min && amount <= p.max);
     if (!plan) {
       validationMessage.textContent = 'Invalid amount for any investment plan';
       return;
     }
+
     selectedPlan.textContent = plan.name;
     weeklyRoi.textContent = `${plan.weeklyRoi}%`;
     weeklyProfit.textContent = formatCurrency((amount * plan.weeklyRoi) / 100);
@@ -177,29 +134,27 @@ function initInvestmentForm(depositWallet, userId) {
     showLoading('invest-loading', true);
     try {
       const amount = parseFloat(investAmount.value);
-      if (isNaN(amount) || amount < 200 || amount > depositWallet) {
+      if (isNaN(amount) || amount < 200 || amount > totalBalance) {
         throw new Error('Invalid investment amount');
       }
-      const { data: profile, error: profileError } = await supabaseClient
-        .from('profiles')
-        .select('deposit_wallet, interest_wallet')
-        .eq('id', userId)
-        .single();
-      if (profileError) throw profileError;
-      if (amount > (profile.deposit_wallet || 0)) {
-        throw new Error('Insufficient deposit wallet balance');
-      }
+
       const plan = plans.find(p => amount >= p.min && amount <= p.max);
       if (!plan) throw new Error('No matching investment plan');
+
+      // Fetch the plan's UUID from Supabase
       const { data: planData, error: planError } = await supabaseClient
         .from('plans')
         .select('id')
         .eq('name', plan.name)
         .single();
       if (planError || !planData) throw new Error('Plan not found in database');
-      const totalProfit = (amount * plan.weeklyRoi * 16) / 100; // 16 weeks
+
+      // Calculate total profit (4 months = 16 weeks)
+      const totalProfit = (amount * plan.weeklyRoi * 16) / 100;
       const startTime = new Date();
       const endTime = new Date(startTime.getTime() + 16 * 7 * 24 * 60 * 60 * 1000); // 16 weeks
+
+      // Insert investment with the correct UUID
       const { error: investError } = await supabaseClient
         .from('investments')
         .insert({
@@ -212,31 +167,24 @@ function initInvestmentForm(depositWallet, userId) {
           status: 'active'
         });
       if (investError) throw investError;
-      const newDepositWallet = (profile.deposit_wallet || 0) - amount;
+
+      // Update profile balance
+      const newBalance = totalBalance - amount;
       const { error: profileError } = await supabaseClient
         .from('profiles')
-        .update({ deposit_wallet: newDepositWallet })
+        .update({ account_balance: newBalance })
         .eq('id', userId);
       if (profileError) throw profileError;
-      await supabaseClient
-        .from('transactions')
-        .insert({
-          user_id: userId,
-          type: 'investment',
-          amount: amount,
-          status: 'completed',
-          created_at: new Date().toISOString()
-        });
-      const newTotalBalance = newDepositWallet + (profile.interest_wallet || 0);
-      document.getElementById('totalBalance').textContent = formatCurrency(newTotalBalance);
-      document.getElementById('depositWallet').textContent = formatCurrency(newDepositWallet);
-      document.getElementById('accountBalance').textContent = formatCurrency(newTotalBalance);
+
+      // Update UI
+      document.getElementById('totalBalance').textContent = formatCurrency(newBalance);
+      document.getElementById('accountBalance').textContent = formatCurrency(newBalance);
       showSuccess('invest-success', 'Investment started successfully!');
       investForm.reset();
       investmentDetails.style.display = 'none';
       await loadActiveInvestments(userId);
     } catch (err) {
-      showError('invest-error', `Error starting investment: ${err.message}`);
+      showError('invest-error', 'Error starting investment: ' + err.message);
       console.error('Investment error:', err);
     } finally {
       showLoading('invest-loading', false);
@@ -250,71 +198,40 @@ async function loadActiveInvestments(userId) {
     const { data: investments, error } = await supabaseClient
       .from('investments')
       .select(`
-        id, user_id, plan_id, principal, total_profit, start_time, end_time, status,
-        plan:plans (name)
+        *,
+        plan:plans (
+          name
+        )
       `)
       .eq('user_id', userId)
-      .in('status', ['active', 'profit_ready', 'profit_transferred'])
+      .in('status', ['active', 'profit_ready'])
       .order('start_time', { ascending: false });
     if (error) throw error;
+
     const container = document.getElementById('investments-container');
     const noInvestmentsDiv = document.getElementById('no-investments');
-    if (!container || !noInvestmentsDiv) {
-      throw new Error('Investment container elements missing');
-    }
     container.innerHTML = '';
     noInvestmentsDiv.style.display = investments.length ? 'none' : 'block';
+
     if (investments.length) {
       const fragment = document.createDocumentFragment();
       investments.forEach(investment => {
         const investmentDiv = document.createElement('div');
         investmentDiv.className = 'investment-item';
         investmentDiv.dataset.id = investment.id;
-        const now = new Date();
-        const start = new Date(investment.start_time);
-        const daysSinceStart = (now - start) / (1000 * 60 * 60 * 24);
-        const canReinvest = daysSinceStart >= 7 && daysSinceStart <= 120 && investment.status === 'active';
         investmentDiv.innerHTML = `
           <p>Plan: <span>${investment.plan?.name ?? 'Unknown'}</span></p>
           <p>Invested Amount: <span>${formatCurrency(investment.principal)}</span></p>
           <p>Current Profit: <span class="current-profit">${formatCurrency(0)}</span></p>
           <p>Time Remaining: <span class="time-left"></span></p>
-          <p class="status-message"></p>
-          <button class="reinvest-btn" ${canReinvest ? '' : 'disabled'}>Reinvest</button>
         `;
         fragment.appendChild(investmentDiv);
         startInvestmentCalculator(investment, investmentDiv);
-        const reinvestBtn = investmentDiv.querySelector('.reinvest-btn');
-        reinvestBtn.addEventListener('click', async () => {
-          if (!canReinvest) return;
-          if (!confirm('Do you want to reinvest your capital and profits into a new investment?')) return;
-          try {
-            const { data, error } = await supabaseClient.rpc('reinvest_investment', {
-              user_uuid: userId,
-              old_investment_id: investment.id,
-              reinvest_amount: investment.principal + investment.total_profit
-            });
-            if (error) throw error;
-            await supabaseClient
-              .from('transactions')
-              .insert({
-                user_id: userId,
-                type: 'investment',
-                amount: investment.principal + investment.total_profit,
-                status: 'completed',
-                created_at: new Date().toISOString()
-              });
-            showSuccess('invest-success', 'Reinvestment successful!');
-            await loadActiveInvestments(userId);
-          } catch (err) {
-            showError('invest-error', `Error during reinvestment: ${err.message}`);
-          }
-        });
       });
       container.appendChild(fragment);
     }
   } catch (err) {
-    showError('investments-error', `Error loading investments: ${err.message}`);
+    showError('investments-error', 'Error loading investments: ' + err.message);
     console.error('Load investments error:', err);
   } finally {
     showLoading('investments-loading', false);
@@ -322,45 +239,41 @@ async function loadActiveInvestments(userId) {
 }
 
 function startInvestmentCalculator(investment, investmentDiv) {
-  const { start_time, end_time, principal, total_profit, status } = investment;
+  const { start_time, end_time, principal, total_profit } = investment;
   const startTime = new Date(start_time);
   const endTime = new Date(end_time);
   const totalSeconds = (endTime - startTime) / 1000;
   const profitPerSecond = total_profit / totalSeconds;
+
   const currentProfitSpan = investmentDiv.querySelector('.current-profit');
   const timeLeftSpan = investmentDiv.querySelector('.time-left');
-  const statusMessage = investmentDiv.querySelector('.status-message');
-  const updateInvestment = () => {
+
+  const updateInvestment = async () => {
     const now = new Date();
-    const daysSinceEnd = (now - endTime) / (1000 * 60 * 60 * 24);
-    if (status === 'active') {
+    if (now >= endTime && investment.status === 'active') {
+      currentProfitSpan.textContent = formatCurrency(total_profit);
+      timeLeftSpan.textContent = '0d 0h 0m 0s';
+      if (!investment.completed) {
+        investment.completed = true;
+        const message = document.createElement('p');
+        message.textContent = 'Investment cycle completed. Profits ready to claim after 14 days.';
+        investmentDiv.appendChild(message);
+
+        await supabaseClient
+          .from('investments')
+          .update({ status: 'profit_ready' })
+          .eq('id', investment.id);
+      }
+      clearInterval(interval);
+    } else if (investment.status === 'active') {
       const elapsedSeconds = (now - startTime) / 1000;
       const currentProfit = Math.min(elapsedSeconds * profitPerSecond, total_profit);
       currentProfitSpan.textContent = formatCurrency(currentProfit);
       const timeLeftMs = endTime - now;
       timeLeftSpan.textContent = formatTimeLeft(timeLeftMs);
-      statusMessage.textContent = 'Investment in progress';
-    } else if (status === 'profit_ready') {
-      currentProfitSpan.textContent = formatCurrency(total_profit);
-      timeLeftSpan.textContent = 'Investment ended';
-      const profitDate = new Date(endTime.getTime() + 7 * 24 * 60 * 60 * 1000);
-      statusMessage.textContent = now < profitDate 
-        ? `Profits transfer in ${Math.ceil((profitDate - now) / (1000 * 60 * 60 * 24))} days`
-        : 'Profits transferring soon';
-    } else if (status === 'profit_transferred') {
-      currentProfitSpan.textContent = formatCurrency(total_profit);
-      timeLeftSpan.textContent = 'Profits transferred';
-      const capitalDate = new Date(endTime.getTime() + 14 * 24 * 60 * 60 * 1000);
-      statusMessage.textContent = now < capitalDate 
-        ? `Capital transfer in ${Math.ceil((capitalDate - now) / (1000 * 60 * 60 * 24))} days`
-        : 'Capital transferring soon';
-    } else if (status === 'completed') {
-      currentProfitSpan.textContent = formatCurrency(total_profit);
-      timeLeftSpan.textContent = 'Investment completed';
-      statusMessage.textContent = 'Profits and capital transferred';
-      clearInterval(investmentIntervals.find(id => id));
     }
   };
+
   const interval = setInterval(updateInvestment, 500);
   investmentIntervals.push(interval);
   updateInvestment();
@@ -380,220 +293,76 @@ function clearAllInvestmentIntervals() {
   investmentIntervals = [];
 }
 
-async function setupRealtimeSubscriptions(userId) {
-  const profileSubscription = supabaseClient
-    .channel(`profiles:id=eq.${userId}`)
-    .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'profiles', filter: `id=eq.${userId}` }, async payload => {
-      console.log('Profile updated:', payload.new);
-      const totalBalance = (payload.new.deposit_wallet || 0) + (payload.new.interest_wallet || 0);
-      document.getElementById('totalBalance').textContent = formatCurrency(totalBalance);
-      document.getElementById('depositWallet').textContent = formatCurrency(payload.new.deposit_wallet || 0);
-      document.getElementById('accountBalance').textContent = formatCurrency(totalBalance);
-      document.getElementById('welcomeName').textContent = payload.new.first_name || 'User';
-    })
-    .subscribe();
-  const investmentSubscription = supabaseClient
-    .channel(`investments:user_id=eq.${userId}`)
-    .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'investments', filter: `user_id=eq.${userId}` }, payload => {
-      console.log('Investment updated:', payload.new);
-      refreshSingleInvestment(payload.new);
-    })
-    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'investments', filter: `user_id=eq.${userId}` }, payload => {
-      console.log('New investment:', payload.new);
-      addNewInvestment(payload.new);
-    })
-    .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'investments', filter: `user_id=eq.${userId}` }, payload => {
-      console.log('Investment deleted:', payload.old);
-      removeInvestment(payload.old.id);
-    })
-    .subscribe();
-  window.addEventListener('beforeunload', () => {
-    supabaseClient.removeChannel(profileSubscription);
-    supabaseClient.removeChannel(investmentSubscription);
-  });
-}
-
-function refreshSingleInvestment(investment) {
-  const investmentDiv = document.querySelector(`.investment-item[data-id="${investment.id}"]`);
-  if (investmentDiv) {
-    const currentProfitSpan = investmentDiv.querySelector('.current-profit');
-    const timeLeftSpan = investmentDiv.querySelector('.time-left');
-    const statusMessage = investmentDiv.querySelector('.status-message');
-    const now = new Date();
-    const endTime = new Date(investment.end_time);
-    const daysSinceEnd = (now - endTime) / (1000 * 60 * 60 * 24);
-    currentProfitSpan.textContent = formatCurrency(investment.total_profit || 0);
-    if (investment.status === 'active') {
-      timeLeftSpan.textContent = formatTimeLeft(endTime - now);
-      statusMessage.textContent = 'Investment in progress';
-    } else if (investment.status === 'profit_ready') {
-      timeLeftSpan.textContent = 'Investment ended';
-      const profitDate = new Date(endTime.getTime() + 7 * 24 * 60 * 60 * 1000);
-      statusMessage.textContent = now < profitDate 
-        ? `Profits transfer in ${Math.ceil((profitDate - now) / (1000 * 60 * 60 * 24))} days`
-        : 'Profits transferring soon';
-    } else if (investment.status === 'profit_transferred') {
-      timeLeftSpan.textContent = 'Profits transferred';
-      const capitalDate = new Date(endTime.getTime() + 14 * 24 * 60 * 60 * 1000);
-      statusMessage.textContent = now < capitalDate 
-        ? `Capital transfer in ${Math.ceil((capitalDate - now) / (1000 * 60 * 60 * 24))} days`
-        : 'Capital transferring soon';
-    } else if (investment.status === 'completed') {
-      timeLeftSpan.textContent = 'Investment completed';
-      statusMessage.textContent = 'Profits and capital transferred';
-    }
-  }
-}
-
-function addNewInvestment(investment) {
-  const container = document.getElementById('investments-container');
-  const noInvestmentsDiv = document.getElementById('no-investments');
-  if (!container || !noInvestmentsDiv) return;
-  if (noInvestmentsDiv.style.display !== 'none') {
-    noInvestmentsDiv.style.display = 'none';
-  }
-  const investmentDiv = document.createElement('div');
-  investmentDiv.className = 'investment-item';
-  investmentDiv.dataset.id = investment.id;
-  const now = new Date();
-  const start = new Date(investment.start_time);
-  const daysSinceStart = (now - start) / (1000 * 60 * 60 * 24);
-  const canReinvest = daysSinceStart >= 7 && daysSinceStart <= 120 && investment.status === 'active';
-  investmentDiv.innerHTML = `
-    <p>Plan: <span>${investment.plan?.name ?? 'Unknown'}</span></p>
-    <p>Invested Amount: <span>${formatCurrency(investment.principal)}</span></p>
-    <p>Current Profit: <span class="current-profit">${formatCurrency(0)}</span></p>
-    <p>Time Remaining: <span class="time-left"></span></p>
-    <p class="status-message"></p>
-    <button class="reinvest-btn" ${canReinvest ? '' : 'disabled'}>Reinvest</button>
-  `;
-  container.appendChild(investmentDiv);
-  startInvestmentCalculator(investment, investmentDiv);
-  const reinvestBtn = investmentDiv.querySelector('.reinvest-btn');
-  reinvestBtn.addEventListener('click', async () => {
-    if (!canReinvest) return;
-    if (!confirm('Do you want to reinvest your capital and profits into a new investment?')) return;
-    try {
-      const { data, error } = await supabaseClient.rpc('reinvest_investment', {
-        user_uuid: userId,
-        old_investment_id: investment.id,
-        reinvest_amount: investment.principal + investment.total_profit
-      });
-      if (error) throw error;
-      await supabaseClient
-        .from('transactions')
-        .insert({
-          user_id: userId,
-          type: 'investment',
-          amount: investment.principal + investment.total_profit,
-          status: 'completed',
-          created_at: new Date().toISOString()
-        });
-      showSuccess('invest-success', 'Reinvestment successful!');
-      await loadActiveInvestments(userId);
-    } catch (err) {
-      showError('invest-error', `Error during reinvestment: ${err.message}`);
-    }
-  });
-}
-
-function removeInvestment(investmentId) {
-  const investmentDiv = document.querySelector(`.investment-item[data-id="${investmentId}"]`);
-  if (investmentDiv) investmentDiv.remove();
-  if (!document.querySelector('.investment-item')) {
-    document.getElementById('no-investments').style.display = 'block';
-  }
-}
-
 // UI Interactions
 const hamburgerBtn = document.getElementById('hamburgerBtn');
 const navDrawer = document.getElementById('navDrawer');
 const overlay = document.querySelector('.nav-overlay');
-if (hamburgerBtn && navDrawer && overlay) {
-  hamburgerBtn.addEventListener('click', () => {
-    navDrawer.classList.toggle('open');
-    hamburgerBtn.classList.toggle('active');
-    overlay.classList.toggle('nav-open');
-    if (navDrawer.classList.contains('open')) {
-      navDrawer.scrollTop = 0;
-    }
-  });
-  document.addEventListener('click', (event) => {
-    const isClickInsideNav = navDrawer.contains(event.target);
-    const isClickOnHamburger = hamburgerBtn.contains(event.target);
-    if (!isClickInsideNav && !isClickOnHamburger && navDrawer.classList.contains('open')) {
-      navDrawer.classList.remove('open');
-      hamburgerBtn.classList.remove('active');
-      overlay.classList.remove('nav-open');
-    }
-  });
-}
+hamburgerBtn.addEventListener('click', () => {
+  navDrawer.classList.toggle('open');
+  hamburgerBtn.classList.toggle('active');
+  overlay.classList.toggle('nav-open');
+  if (navDrawer.classList.contains('open')) {
+    navDrawer.scrollTop = 0;
+  }
+});
+
+document.addEventListener('click', (event) => {
+  const isClickInsideNav = navDrawer.contains(event.target);
+  const isClickOnHamburger = hamburgerBtn.contains(event.target);
+  if (!isClickInsideNav && !isClickOnHamburger && navDrawer.classList.contains('open')) {
+    navDrawer.classList.remove('open');
+    hamburgerBtn.classList.remove('active');
+    overlay.classList.remove('nav-open');
+  }
+});
 
 const themeToggle = document.getElementById('theme-toggle');
-if (themeToggle) {
-  themeToggle.addEventListener('click', () => {
-    document.body.classList.toggle('light-theme');
-    const icon = themeToggle.querySelector('i');
-    if (icon) {
-      icon.classList.toggle('fa-moon');
-      icon.classList.toggle('fa-sun');
-    }
-  });
-}
+themeToggle.addEventListener('click', () => {
+  document.body.classList.toggle('light-theme');
+  const icon = themeToggle.querySelector('i');
+  icon.classList.toggle('fa-moon');
+  icon.classList.toggle('fa-sun');
+});
 
 const accountToggle = document.getElementById('account-toggle');
-const submenu = accountToggle?.nextElementSibling;
-if (accountToggle && submenu) {
-  accountToggle.addEventListener('click', (e) => {
-    e.preventDefault();
-    submenu.classList.toggle('open');
-  });
-}
+const submenu = accountToggle.nextElementSibling;
+accountToggle.addEventListener('click', (e) => {
+  e.preventDefault();
+  submenu.classList.toggle('open');
+});
 
-const backToTop = document.getElementById('back-to-top');
-if (backToTop) {
-  backToTop.addEventListener('click', () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
-}
+document.getElementById('back-to-top').addEventListener('click', () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
 
-const logoutBtn = document.getElementById('logout-btn');
-if (logoutBtn) {
-  logoutBtn.addEventListener('click', async () => {
-    try {
-      const { error } = await supabaseClient.auth.signOut();
-      if (error) throw error;
-      window.location.href = 'login.html';
-    } catch (err) {
-      showError('invest-error', `Error logging out: ${err.message}`);
-    }
-  });
-}
+document.getElementById('logout-btn').addEventListener('click', async () => {
+  try {
+    const { error } = await supabaseClient.auth.signOut();
+    if (error) throw error;
+    window.location.href = 'login.html';
+  } catch (err) {
+    showError('invest-error', 'Error logging out: ' + err.message);
+  }
+});
 
 function updateTimes() {
   const now = new Date();
-  const localTime = document.getElementById('localTime');
-  const localDate = document.getElementById('localDate');
-  const utcTime = document.getElementById('utcTime');
-  if (localTime) localTime.textContent = now.toLocaleTimeString();
-  if (localDate) {
-    localDate.textContent = now.toLocaleDateString('en-US', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-  }
-  if (utcTime) utcTime.textContent = now.toUTCString();
+  document.getElementById('localTime').textContent = now.toLocaleTimeString();
+  document.getElementById('localDate').textContent = now.toLocaleDateString('en-US', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+  document.getElementById('utcTime').textContent = now.toUTCString();
 }
 setInterval(updateTimes, 1000);
 updateTimes();
 
 const video = document.querySelector('.bg-video');
-if (video) {
-  video.addEventListener('canplay', () => {
-    video.play().catch(error => console.error('Error playing video:', error));
-  });
-}
+video.addEventListener('canplay', () => {
+  video.play().catch(error => console.error('Error playing video:', error));
+});
 
+// Initialize page
 initAccountBalance();
