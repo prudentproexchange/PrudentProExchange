@@ -132,13 +132,15 @@ async function initWithdraw() {
     // Load profile
     const { data: profile, error: profileError } = await supabaseClient
       .from('profiles')
-      .select('first_name, photo_url, balance, withdrawal_pin')
+      .select('first_name, photo_url, deposit_wallet, interest_wallet, withdrawal_pin')
       .eq('id', userId)
       .single();
     if (profileError) throw profileError;
 
     document.getElementById('welcomeName').textContent = profile.first_name || 'User';
-    document.getElementById('user-balance').textContent = profile.balance ? profile.balance.toFixed(2) : '0.00';
+    // Sum deposit_wallet and interest_wallet for total balance
+    const totalBalance = (profile.deposit_wallet || 0) + (profile.interest_wallet || 0);
+    document.getElementById('user-balance').textContent = totalBalance.toFixed(2);
     if (profile.photo_url) {
       const { data: urlData } = supabaseClient.storage
         .from('profile-photos')
@@ -350,7 +352,9 @@ async function initWithdrawalForm(userId, profile) {
       if (!walletId) {
         throw new Error('Please select a wallet address');
       }
-      if (amount > profile.balance) {
+      // Validate against total balance (deposit_wallet + interest_wallet)
+      const totalBalance = (profile.deposit_wallet || 0) + (profile.interest_wallet || 0);
+      if (amount > totalBalance) {
         throw new Error('Insufficient balance');
       }
 
