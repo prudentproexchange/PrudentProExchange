@@ -70,8 +70,7 @@
       justify-content: space-between;
       align-items: center;
       padding: 2rem; /* Matches invest.css .invest-page.container */
-      background: var(--glass-bg);
-      backdrop-filter: blur(10px); /* Matches invest.css */
+      background: rgba(0, 0, 0, 0.8); /* Changed to remove glass effect */
       position: fixed; /* Fixed to stay at top */
       top: 0;
       left: 0;
@@ -110,7 +109,7 @@
       height: 20px;
       background: transparent;
       border: none;
-      cursor: pointer;
+      cursor:-pointer;
       padding: 0;
       z-index: 1001; /* Above header */
     }
@@ -138,15 +137,9 @@
       display: flex;
       gap: 1.5rem;
       align-items: center;
-      padding: 1rem 2rem;
-      background: transparent;
-      position: fixed;
-      top: 100px; /* Below header */
-      left: 0;
-      width: 100%;
-      z-index: 1001; /* Above overlay and video */
       overflow-y: auto; /* Scrollable navigation */
       max-height: 80px; /* Prevent overflow */
+      z-index: 1001; /* Above overlay and video */
     }
 
     .nav-drawer a {
@@ -229,7 +222,7 @@
       border-bottom: 1px solid rgba(255, 215, 0, 0.2); /* Matches invest.css */
       max-width: 1200px; /* Matches invest.css */
       margin: 0 auto;
-      margin-top: 180px; /* Adjusted for nav-drawer */
+      margin-top: 120px; /* Offset for fixed header */
     }
 
     .profile-container {
@@ -389,7 +382,7 @@
 
     .copy-btn:hover {
       background: linear-gradient(45deg, var(--primary-dark), var(--primary)); /* Matches invest.css select-plan-btn */
-      transform: scaleimplified: 1.05); /* Matches invest.css select-plan-btn */
+      transform: scale(1.05); /* Matches invest.css select-plan-btn */
     }
 
     details {
@@ -418,14 +411,14 @@
     }
 
     .investment-content {
-      overflow-y: auto; /* Enable vertical scrolling */
-      max-height: 400px; /* Fixed height for scrollable content */
+      overflow: hidden;
       transition: max-height 0.5s ease, opacity 0.5s ease;
+      max-height: 0;
       opacity: 0;
     }
 
     details[open] .investment-content {
-      max-height: 400px; /* Maintain fixed height when open */
+      max-height: 1000px;
       opacity: 1;
     }
 
@@ -565,6 +558,12 @@
       color: var(--primary-dark); /* Darker gold */
     }
 
+    /* Added for scrollable investments */
+    #investments-container {
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
     /* Responsive Design */
     @media (max-width: 768px) {
       .hamburger {
@@ -577,7 +576,8 @@
         right: -100%;
         height: 100vh; /* Full height for mobile */
         width: 250px;
-        background: var(--bg-dark); /* Matches body background */
+        background: var(--glass-bg);
+        backdrop-filter: blur(10px); /* Matches invest.css */
         flex-direction: column;
         padding: 2rem;
         transition: right 0.3s ease;
@@ -726,29 +726,29 @@
           <span></span><span></span><span></span>
         </button>
       </div>
+      <nav class="nav-drawer" id="navDrawer">
+        <a href="dashboard.html" class="active">Dashboard</a>
+        <a href="invest.html">Invest via Cryptocurrency Payment</a>
+        <a href="withdraw.html">Withdraw</a>
+        <a href="transactions.html">Transactions</a>
+        <a href="referrals.html">Referrals</a>
+        <a href="accountbalance.html">Account Balance/Invest</a>
+        <div class="account-menu">
+          <a href="#" class="account-toggle" id="account-toggle">Account ▾</a>
+          <ul class="submenu">
+            <li><a href="profile-settings.html">Profile Settings</a></li>
+            <li><a href="transfer.html">Transfer Balance</a></li>
+            <li><a href="change-password.html">Change Password</a></li>
+            <li><a href="support.html">Support Ticket</a></li>
+            <li><a href="promo-tools.html">Promotional Tools</a></li>
+            <li><a href="2fa.html">2FA Security</a></li>
+            <li><a href="#" id="logout-btn">Logout</a></li>
+          </ul>
+        </div>
+        <a href="kyc.html">KYC Verification</a>
+        <a href="transfer.html">Transfer</a>
+      </nav>
     </header>
-    <nav class="nav-drawer" id="navDrawer">
-      <a href="dashboard.html" class="active">Dashboard</a>
-      <a href="invest.html">Invest via Cryptocurrency Payment</a>
-      <a href="withdraw.html">Withdraw</a>
-      <a href="transactions.html">Transactions</a>
-      <a href="referrals.html">Referrals</a>
-      <a href="accountbalance.html">Account Balance/Invest</a>
-      <div class="account-menu">
-        <a href="#" class="account-toggle" id="account-toggle">Account ▾</a>
-        <ul class="submenu">
-          <li><a href="profile-settings.html">Profile Settings</a></li>
-          <li><a href="transfer.html">Transfer Balance</a></li>
-          <li><a href="change-password.html">Change Password</a></li>
-          <li><a href="support.html">Support Ticket</a></li>
-          <li><a href="promo-tools.html">Promotional Tools</a></li>
-          <li><a href="2fa.html">2FA Security</a></li>
-          <li><a href="#" id="logout-btn">Logout</a></li>
-        </ul>
-      </div>
-      <a href="kyc.html">KYC Verification</a>
-      <a href="transfer.html">Transfer</a>
-    </nav>
     <div class="nav-overlay"></div>
     <div class="profile-section">
       <div class="profile-container">
@@ -901,7 +901,7 @@
       const errorDiv = document.getElementById(elementId);
       if (errorDiv) {
         errorDiv.textContent = message;
-        error affiche: 'block';
+        errorDiv.style.display = 'block';
         setTimeout(() => errorDiv.style.display = 'none', 5000);
       }
     }
@@ -915,7 +915,7 @@
       if (txLoading) txLoading.style.display = 'block';
 
       try {
-        clearAllinvestmentIntervals();
+        clearAllInvestmentIntervals();
         const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
         if (!user || authError) {
           window.location.href = 'login.html';
@@ -964,7 +964,7 @@
         if (totalWithdrawals) totalWithdrawals.textContent = formatCurrency(profile.total_withdrawals || 0);
 
         const totalBalance = (profile.deposit_wallet || 0) + (profile.interest_wallet || 0);
-        const accountBalance = document.getElementById("accountBalance");
+        const accountBalance = document.getElementById('accountBalance');
         if (accountBalance) accountBalance.textContent = formatCurrency(totalBalance);
 
         const { data: allInvestments, error: allInvError } = await supabaseClient
@@ -1141,14 +1141,14 @@
 
       const updateInvestment = () => {
         const now = new Date();
-        let timeLeftMs = endTime - now;
-        const maxMs = 7 * 24 * 60 * 60 * 1000;
-        if (timeLeftMs > maxMs) timeLeftMs = maxMs;
-        timeLeftSpan.textContent = formatTimeLeft(timeLeftMs);
         if (status === 'active') {
           const elapsedSeconds = (now - startTime) / 1000;
           const currentProfit = Math.min(elapsedSeconds * profitPerSecond, total_profit);
           currentProfitSpan.textContent = formatCurrency(currentProfit);
+          let timeLeftMs = endTime - now;
+          const maxMs = 7 * 24 * 60 * 60 * 1000;
+          if (timeLeftMs > maxMs) timeLeftMs = maxMs;
+          timeLeftSpan.textContent = formatTimeLeft(timeLeftMs);
           statusMessage.textContent = 'Investment in progress';
         } else if (status === 'profit_ready') {
           currentProfitSpan.textContent = formatCurrency(total_profit);
