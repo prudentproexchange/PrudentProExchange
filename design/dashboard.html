@@ -36,8 +36,6 @@
       margin: 10px 0;
       display: none;
     }
-
-    /* New Styles for Investment Card */
     .blink {
       animation: blink 2s infinite;
     }
@@ -53,7 +51,7 @@
       opacity: 0;
     }
     details[open] .investment-content {
-      max-height: 1000px; /* Large enough to accommodate content */
+      max-height: 1000px;
       opacity: 1;
     }
     details[open] .blink {
@@ -77,27 +75,21 @@
     details[open] summary::before {
       transform: rotate(90deg);
     }
-
-    /* Updated .card Style for Spherical Look */
     .card {
       background: var(--glass-bg);
       padding: 2rem;
       border: 1px solid var(--primary);
-      border-radius: 20px; /* Increased for spherical effect */
+      border-radius: 20px;
       backdrop-filter: blur(10px);
       transition: transform 0.3s ease, box-shadow 0.3s ease;
-      box-shadow: 0 4px 8px var(--shadow); /* Added default shadow */
+      box-shadow: 0 4px 8px var(--shadow);
     }
-
-    /* GTranslate Widget Positioning */
     .gtranslate_wrapper {
       position: fixed;
       bottom: 20px;
       left: 20px;
       z-index: 1000;
     }
-
-    /* Back-to-Top Button Styling */
     #back-to-top {
       position: fixed !important;
       bottom: 80px !important;
@@ -121,8 +113,6 @@
       background: var(--gold-dark);
       transform: scale(1.1);
     }
-
-    /* Responsive Adjustments */
     @media (max-width: 768px) {
       .gtranslate_wrapper {
         bottom: 10px;
@@ -139,15 +129,12 @@
   </style>
 </head>
 <body class="dashboard-page">
-  <!-- Video Background -->
   <video class="bg-video" autoplay muted loop playsinline preload="auto">
     <source src="assets/videos/background.webm" type="video/webm">
     <source src="assets/videos/background.mp4" type="video/mp4">
     Your browser does not support the video tag.
   </video>
-
   <div class="overlay">
-    <!-- Header -->
     <header class="site-header">
       <a href="dashboard.html" class="logo-link">
         <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo"/>
@@ -182,8 +169,6 @@
       </nav>
     </header>
     <div class="nav-overlay"></div>
-
-    <!-- Profile Section -->
     <div class="profile-section">
       <div class="profile-container">
         <img id="navProfilePhoto" src="" alt="Profile" class="avatar" style="display: none;"/>
@@ -191,11 +176,8 @@
       </div>
       <div class="welcome-message">Welcome to Your Dashboard! <span id="welcomeName"></span></div>
     </div>
-
-    <!-- Main Content -->
     <main class="dashboard-page container">
       <section class="cards-grid" data-aos="fade-up">
-        <!-- Updated Investments Dashboard -->
         <div class="card investment-card" data-aos="zoom-in">
           <details>
             <summary>
@@ -218,7 +200,6 @@
             </div>
           </details>
         </div>
-
         <div class="card how-it-works" data-aos="zoom-in">
           <h2>How It Works</h2>
           <p>Here’s how to invest with PrudentProExchange:</p>
@@ -232,7 +213,6 @@
           <p class="brand">PrudentProExchange.net</p>
           <a href="invest.html" class="btn">Explore Plans</a>
         </div>
-
         <div class="card affiliate" data-aos="zoom-in">
           <h2>Affiliate Program</h2>
           <p>Share your unique referral link and earn a 10% commission on every deposit:</p>
@@ -242,35 +222,29 @@
           </div>
           <p>Referral Earnings: <span id="refEarnings">0.00</span></p>
         </div>
-
         <div class="card deposit-wallet" data-aos="zoom-in">
           <h2>Deposit Wallet</h2>
           <span id="depositWallet">0.00</span>
           <p>Total Deposits: <span id="totalDeposits">0.00</span></p>
           <a href="deposit.html" class="btn">Add Funds</a>
         </div>
-
         <div class="card interest-wallet" data-aos="zoom-in">
           <h2>Interest Wallet</h2>
           <span id="interestWallet">0.00</span>
           <p>Total Withdrawals: <span id="totalWithdrawals">0.00</span></p>
           <a href="withdraw.html" class="btn">Withdraw Funds</a>
         </div>
-
         <div class="card account-balance" data-aos="zoom-in">
           <h2>Account Balance</h2>
           <span id="accountBalance">0.00</span>
           <a href="withdraw.html" class="btn">Withdraw Funds</a>
         </div>
-
         <div class="card investments" data-aos="zoom-in">
           <h2>Total Invested: <span id="totalInvested">0.00</span></h2>
           <p>Promotional Offer: <span id="promoOffer">0.00</span> (<span id="promoPct">0</span>%)</p>
           <a href="promo.html" class="btn">Claim Offer</a>
         </div>
       </section>
-
-      <!-- Transaction History -->
       <details class="transaction-history" data-aos="fade-up">
         <summary>Transaction History</summary>
         <table id="txTable">
@@ -288,8 +262,6 @@
         <div class="error-message" id="tx-error"></div>
       </details>
     </main>
-
-    <!-- Footer -->
     <footer class="section section-dark site-footer" data-aos="fade-up">
       <div class="footer-content">
         <p class="UTC-time">UTC Time: <span id="utcTime"></span></p>
@@ -304,16 +276,10 @@
       </div>
     </footer>
   </div>
-
-  <!-- Back to Top Button -->
   <button id="back-to-top" aria-label="Back to top">🚀</button>
-
-  <!-- GTranslate Widget -->
   <div class="gtranslate_wrapper"></div>
   <script>window.gtranslateSettings = {"default_language":"en","native_language_names":true,"detect_browser_language":true,"wrapper_selector":".gtranslate_wrapper","flag_style":"3d"}</script>
   <script src="https://cdn.gtranslate.net/widgets/latest/float.js" defer></script>
-
-  <!-- Crisp Chat Widget -->
   <script type="text/javascript">
     window.$crisp = [];
     window.CRISP_WEBSITE_ID = "599e8216-ab4f-4d4f-bb22-5d47cf14031f";
@@ -325,13 +291,9 @@
       d.getElementsByTagName("head")[0].appendChild(s);
     })();
   </script>
-
-  <!-- Scripts -->
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
     AOS.init({ duration: 800, once: true });
-
-    // Hamburger toggle
     const hamburgerBtn = document.getElementById('hamburgerBtn');
     const navDrawer = document.getElementById('navDrawer');
     const overlay = document.querySelector('.overlay');
@@ -343,8 +305,6 @@
         navDrawer.scrollTop = 0;
       }
     });
-
-    // Close nav when clicking outside
     document.addEventListener('click', (event) => {
       const isClickInsideNav = navDrawer.contains(event.target);
       const isClickOnHamburger = hamburgerBtn.contains(event.target);
@@ -354,8 +314,6 @@
         overlay.classList.remove('nav-open');
       }
     });
-
-    // Theme toggle
     const themeToggle = document.getElementById('theme-toggle');
     themeToggle.addEventListener('click', () => {
       document.body.classList.toggle('light-theme');
@@ -363,21 +321,15 @@
       icon.classList.toggle('fa-moon');
       icon.classList.toggle('fa-sun');
     });
-
-    // Account menu toggle
     const accountToggle = document.getElementById('account-toggle');
     const submenu = accountToggle.nextElementSibling;
     accountToggle.addEventListener('click', (e) => {
       e.preventDefault();
       submenu.classList.toggle('open');
     });
-
-    // Back to top
     document.getElementById('back-to-top').addEventListener('click', () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
-
-    // Copy referral link
     const copyBtn = document.querySelector('.copy-btn');
     const affiliateLinkInput = document.getElementById('affiliateLink');
     if (copyBtn && affiliateLinkInput) {
@@ -389,8 +341,6 @@
         setTimeout(() => copyBtn.innerHTML = originalContent, 2000);
       });
     }
-
-    // Time updates
     function updateLocalTime() {
       const now = new Date();
       document.getElementById('localTime').textContent = now.toLocaleTimeString();
@@ -400,61 +350,47 @@
     }
     setInterval(updateLocalTime, 1000);
     updateLocalTime();
-
     function updateUTCTime() {
       document.getElementById('utcTime').textContent = new Date().toUTCString();
     }
     setInterval(updateUTCTime, 1000);
     updateUTCTime();
-
-    // Supabase client
     const { createClient } = supabase;
     const supabaseClient = createClient(
       'https://iwkdznjqfbsfkscnbrkc.supabase.co',
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU'
     );
-
     let investmentIntervals = [];
     let isDashboardLoading = false;
-
-    // Utility functions
     function formatCurrency(amount) {
       return amount.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
     }
-
     function showError(elementId, message) {
       const errorDiv = document.getElementById(elementId);
       errorDiv.textContent = message;
       errorDiv.style.display = 'block';
       setTimeout(() => errorDiv.style.display = 'none', 5000);
     }
-
-    // Initialize dashboard
     async function initDashboard() {
       if (isDashboardLoading) return;
       isDashboardLoading = true;
-
       const investmentsLoading = document.getElementById('investments-loading');
       const txLoading = document.getElementById('tx-loading');
       investmentsLoading.style.display = 'block';
       txLoading.style.display = 'block';
-
       try {
         clearAllInvestmentIntervals();
-
         const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
         if (!user || authError) {
           window.location.href = 'login.html';
           return;
         }
-
         const { data: profile, error: profileError } = await supabaseClient
           .from('profiles')
           .select('*')
           .eq('id', user.id)
           .single();
         if (profileError) throw profileError;
-
         document.getElementById('welcomeName').textContent = profile.first_name || 'User';
         if (profile.photo_url) {
           const { data: urlData } = supabaseClient.storage
@@ -464,33 +400,26 @@
           document.getElementById('navProfilePhoto').style.display = 'block';
           document.getElementById('defaultProfileIcon').style.display = 'none';
         }
-
         document.getElementById('affiliateLink').value = profile.referral_link || '';
         document.getElementById('refEarnings').textContent = formatCurrency(profile.referral_earnings || 0);
         document.getElementById('depositWallet').textContent = formatCurrency(profile.deposit_wallet || 0);
         document.getElementById('totalDeposits').textContent = formatCurrency(profile.total_deposits || 0);
         document.getElementById('interestWallet').textContent = formatCurrency(profile.interest_wallet || 0);
         document.getElementById('totalWithdrawals').textContent = formatCurrency(profile.total_withdrawals || 0);
-        document.getElementById('accountBalance').textContent = formatCurrency(profile.account_balance || 0);
-
-        // Calculate total invested
+        const totalBalance = (profile.deposit_wallet || 0) + (profile.interest_wallet || 0);
+        document.getElementById('accountBalance').textContent = formatCurrency(totalBalance);
         const { data: allInvestments, error: allInvError } = await supabaseClient
           .from('investments')
           .select('principal')
           .eq('user_id', user.id);
         if (allInvError) throw allInvError;
-
-        // Ensure numeric sum
         const totalEverInvested = allInvestments.reduce(
           (acc, inv) => acc + parseFloat(inv.principal),
           0
         );
         document.getElementById('totalInvested').textContent = formatCurrency(totalEverInvested);
-
         document.getElementById('promoOffer').textContent = formatCurrency(profile.promo_offer || 0);
         document.getElementById('promoPct').textContent = profile.promo_pct || 0;
-
-        // Fetch active investments with plan names
         const { data: investments, error: invError } = await supabaseClient
           .from('investments')
           .select(`
@@ -503,19 +432,16 @@
           .in('status', ['active', 'profit_ready'])
           .order('start_time', { ascending: false });
         if (invError) throw invError;
-
         const container = document.getElementById('investments-container');
         const noInvestmentsDiv = document.getElementById('no-investments');
         container.innerHTML = '';
         noInvestmentsDiv.style.display = 'none';
-
         if (investments.length > 0) {
           const fragment = document.createDocumentFragment();
           investments.forEach(investment => {
             const investmentDiv = document.createElement('div');
             investmentDiv.className = 'investment-item';
             investmentDiv.dataset.id = investment.id;
-
             const now = new Date();
             const start = new Date(investment.start_time);
             const end = new Date(investment.end_time);
@@ -524,12 +450,10 @@
             const daysSinceEnd = (now - end) / (1000 * 60 * 60 * 24);
             const canWithdraw = daysSinceStart >= 14 && investment.status === 'active';
             const canReinvest = daysSinceStart >= 7 && daysSinceStart <= 120 && investment.status === 'active';
-
             let profitButtonHtml = '';
-            if (investment.status === 'profit_ready' && daysSinceEnd >= 14) {
+            if (investment.status === 'profit_ready' && daysSinceEnd >= 7) {
               profitButtonHtml = `<button class="claim-profit-btn">Claim Profit</button>`;
             }
-
             investmentDiv.innerHTML = `
               <p>Plan: <span>${investment.plan?.name ?? 'Unknown'}</span></p>
               <p>Invested Amount: <span>${formatCurrency(investment.principal)}</span></p>
@@ -539,38 +463,46 @@
               <button class="withdraw-btn" ${canWithdraw ? '' : 'disabled'}>Withdraw Capital</button>
               <button class="reinvest-btn" ${canReinvest ? '' : 'disabled'}>Reinvest</button>
             `;
-
             fragment.appendChild(investmentDiv);
             startInvestmentCalculator(investment, investmentDiv);
-
             const withdrawBtn = investmentDiv.querySelector('.withdraw-btn');
             withdrawBtn.addEventListener('click', async () => {
               if (!canWithdraw) return;
               if (!confirm('Are you sure you want to withdraw your capital?')) return;
               try {
-                const { error } = await supabaseClient.rpc('transfer_profit_to_account', {
-                  user_uuid: user.id,
-                  invest_id: investment.id,
-                  profit_amount: investment.total_profit
-                });
-                if (error) throw error;
-
-                const currentAccount = parseFloat(document.getElementById('accountBalance').textContent.replace(/[^0-9.-]+/g, ''));
-                const newAccount = currentAccount + investment.principal;
-                document.getElementById('accountBalance').textContent = formatCurrency(newAccount);
-
+                const { data: profile, error: profileError } = await supabaseClient
+                  .from('profiles')
+                  .select('interest_wallet')
+                  .eq('id', user.id)
+                  .single();
+                if (profileError) throw profileError;
+                const currentInterest = profile.interest_wallet || 0;
+                const newInterest = currentInterest + investment.principal;
+                await supabaseClient
+                  .from('profiles')
+                  .update({ interest_wallet: newInterest })
+                  .eq('id', user.id);
+                await supabaseClient
+                  .from('transactions')
+                  .insert({
+                    user_id: user.id,
+                    type: 'capital',
+                    amount: investment.principal,
+                    status: 'completed',
+                    created_at: new Date().toISOString()
+                  });
+                document.getElementById('interestWallet').textContent = formatCurrency(newInterest);
+                document.getElementById('accountBalance').textContent = formatCurrency((profile.deposit_wallet || 0) + newInterest);
                 await supabaseClient
                   .from('investments')
                   .update({ status: 'withdrawn' })
                   .eq('id', investment.id);
-
                 investmentDiv.innerHTML += '<p>Capital withdrawn.</p>';
                 withdrawBtn.disabled = true;
               } catch (err) {
                 showError('investments-error', 'Error withdrawing capital: ' + err.message);
               }
             });
-
             const reinvestBtn = investmentDiv.querySelector('.reinvest-btn');
             reinvestBtn.addEventListener('click', async () => {
               if (!canReinvest) return;
@@ -582,27 +514,51 @@
                   reinvest_amount: investment.principal + investment.total_profit
                 });
                 if (error) throw error;
+                await supabaseClient
+                  .from('transactions')
+                  .insert({
+                    user_id: user.id,
+                    type: 'investment',
+                    amount: investment.principal + investment.total_profit,
+                    status: 'completed',
+                    created_at: new Date().toISOString()
+                  });
                 alert('Reinvestment successful!');
                 await initDashboard();
               } catch (err) {
                 showError('investments-error', 'Error during reinvestment: ' + err.message);
               }
             });
-
             const claimProfitBtn = investmentDiv.querySelector('.claim-profit-btn');
             if (claimProfitBtn) {
               claimProfitBtn.addEventListener('click', async () => {
                 if (!confirm('Are you sure you want to claim your profit?')) return;
                 try {
-                  const { error } = await supabaseClient.rpc('transfer_profit_to_account', {
-                    user_uuid: user.id,
-                    invest_id: investment.id,
-                    profit_amount: investment.total_profit
-                  });
-                  if (error) throw error;
+                  const { data: profile, error: profileError } = await supabaseClient
+                    .from('profiles')
+                    .select('interest_wallet')
+                    .eq('id', user.id)
+                    .single();
+                  if (profileError) throw profileError;
+                  const currentInterest = profile.interest_wallet || 0;
+                  const newInterest = currentInterest + investment.total_profit;
+                  await supabaseClient
+                    .from('profiles')
+                    .update({ interest_wallet: newInterest })
+                    .eq('id', user.id);
+                  await supabaseClient
+                    .from('transactions')
+                    .insert({
+                      user_id: user.id,
+                      type: 'profit',
+                      amount: investment.total_profit,
+                      status: 'completed',
+                      created_at: new Date().toISOString()
+                    });
+                  document.getElementById('interestWallet').textContent = formatCurrency(newInterest);
+                  document.getElementById('accountBalance').textContent = formatCurrency((profile.deposit_wallet || 0) + newInterest);
                   claimProfitBtn.disabled = true;
                   claimProfitBtn.textContent = 'Profit Claimed';
-                  await initDashboard();
                 } catch (err) {
                   showError('investments-error', 'Error claiming profit: ' + err.message);
                 }
@@ -613,23 +569,21 @@
         } else {
           noInvestmentsDiv.style.display = 'block';
         }
-
         const { data: txns, error: txnsError } = await supabaseClient
           .from('transactions')
           .select('*')
           .eq('user_id', user.id)
           .order('created_at', { ascending: false });
         if (txnsError) throw txnsError;
-
         const tbody = document.querySelector('#txTable tbody');
         tbody.innerHTML = '';
         txns.forEach(t => {
           tbody.insertAdjacentHTML('beforeend', `
             <tr>
               <td>${new Date(t.created_at).toLocaleString()}</td>
-              <td>${t.type}</td>
+              <td>${t.type.charAt(0).toUpperCase() + t.type.slice(1).replace('_', ' ')}</td>
               <td>${formatCurrency(t.amount)}</td>
-              <td>${t.status}</td>
+              <td>${t.status.charAt(0).toUpperCase() + t.status.slice(1)}</td>
             </tr>
           `);
         });
@@ -642,43 +596,30 @@
         txLoading.style.display = 'none';
       }
     }
-
     function startInvestmentCalculator(investment, investmentDiv) {
       const { start_time, end_time, principal, total_profit } = investment;
       const startTime = new Date(start_time);
       const endTime = new Date(end_time);
       const totalSeconds = (endTime - startTime) / 1000;
       const profitPerSecond = total_profit / totalSeconds;
-
       const currentProfitSpan = investmentDiv.querySelector('.current-profit');
       const timeLeftSpan = investmentDiv.querySelector('.time-left');
-
       const updateInvestment = async () => {
         const now = new Date();
+        const daysSinceEnd = (now - endTime) / (1000 * 60 * 60 * 24);
         if (now >= endTime && investment.status === 'active') {
           currentProfitSpan.textContent = formatCurrency(total_profit);
           timeLeftSpan.textContent = '0d 0h 0m 0s';
           if (!investment.completed) {
             investment.completed = true;
             const message = document.createElement('p');
-            message.textContent = 'Investment cycle completed. Profits are ready to be claimed after 14 days.';
+            message.textContent = 'Investment cycle completed. Profits ready to claim after 7 days, capital after 14 days.';
             investmentDiv.appendChild(message);
-
-            const currentInterest = parseFloat(document.getElementById('interestWallet').textContent.replace(/[^0-9.-]+/g, ''));
-            const newInterest = currentInterest + total_profit;
-            document.getElementById('interestWallet').textContent = formatCurrency(newInterest);
-
-            await supabaseClient
-              .from('profiles')
-              .update({ interest_wallet: newInterest })
-              .eq('id', investment.user_id);
-
             await supabaseClient
               .from('investments')
               .update({ status: 'profit_ready' })
               .eq('id', investment.id);
           }
-          clearInterval(interval);
         } else if (investment.status === 'active') {
           const elapsedSeconds = (now - startTime) / 1000;
           const currentProfit = Math.min(elapsedSeconds * profitPerSecond, total_profit);
@@ -686,13 +627,77 @@
           const timeLeftMs = endTime - now;
           timeLeftSpan.textContent = formatTimeLeft(timeLeftMs);
         }
+        if (investment.status === 'profit_ready' && daysSinceEnd >= 7 && !investment.profit_transferred) {
+          try {
+            const { data: profile, error: profileError } = await supabaseClient
+              .from('profiles')
+              .select('interest_wallet')
+              .eq('id', investment.user_id)
+              .single();
+            if (profileError) throw profileError;
+            const currentInterest = profile.interest_wallet || 0;
+            const newInterest = currentInterest + total_profit;
+            await supabaseClient
+              .from('profiles')
+              .update({ interest_wallet: newInterest })
+              .eq('id', investment.user_id);
+            await supabaseClient
+              .from('transactions')
+              .insert({
+                user_id: investment.user_id,
+                type: 'profit',
+                amount: total_profit,
+                status: 'completed',
+                created_at: new Date().toISOString()
+              });
+            document.getElementById('interestWallet').textContent = formatCurrency(newInterest);
+            document.getElementById('accountBalance').textContent = formatCurrency((profile.deposit_wallet || 0) + newInterest);
+            investment.profit_transferred = true;
+          } catch (err) {
+            console.error('Profit transfer error:', err);
+          }
+        }
+        if (investment.status === 'profit_ready' && daysSinceEnd >= 14 && !investment.capital_transferred) {
+          try {
+            const { data: profile, error: profileError } = await supabaseClient
+              .from('profiles')
+              .select('interest_wallet')
+              .eq('id', investment.user_id)
+              .single();
+            if (profileError) throw profileError;
+            const currentInterest = profile.interest_wallet || 0;
+            const newInterest = currentInterest + principal;
+            await supabaseClient
+              .from('profiles')
+              .update({ interest_wallet: newInterest })
+              .eq('id', investment.user_id);
+            await supabaseClient
+              .from('transactions')
+              .insert({
+                user_id: investment.user_id,
+                type: 'capital',
+                amount: principal,
+                status: 'completed',
+                created_at: new Date().toISOString()
+              });
+            document.getElementById('interestWallet').textContent = formatCurrency(newInterest);
+            document.getElementById('accountBalance').textContent = formatCurrency((profile.deposit_wallet || 0) + newInterest);
+            investment.capital_transferred = true;
+            await supabaseClient
+              .from('investments')
+              .update({ status: 'completed' })
+              .eq('id', investment.id);
+            investmentDiv.innerHTML += '<p>Capital transferred to interest wallet.</p>';
+            clearInterval(interval);
+          } catch (err) {
+            console.error('Capital transfer error:', err);
+          }
+        }
       };
-
       const interval = setInterval(updateInvestment, 500);
       investmentIntervals.push(interval);
       updateInvestment();
     }
-
     function formatTimeLeft(ms) {
       const seconds = Math.floor(ms / 1000);
       const days = Math.floor(seconds / (24 * 3600));
@@ -701,13 +706,10 @@
       const secs = seconds % 60;
       return `${days}d ${hours}h ${minutes}m ${secs}s`;
     }
-
     function clearAllInvestmentIntervals() {
       investmentIntervals.forEach(id => clearInterval(id));
       investmentIntervals = [];
     }
-
-    // Real-time subscriptions
     async function setupRealtimeSubscriptions(userId) {
       const investmentSubscription = supabaseClient
         .channel(`investments:user_id=eq.${userId}`)
@@ -724,23 +726,27 @@
           removeInvestment(payload.old.id);
         })
         .subscribe();
-
+      const transactionSubscription = supabaseClient
+        .channel(`transactions:user_id=eq.${userId}`)
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'transactions', filter: `user_id=eq.${userId}` }, payload => {
+          console.log('Transaction updated:', payload);
+          initDashboard();
+        })
+        .subscribe();
       window.addEventListener('beforeunload', () => {
         supabaseClient.removeChannel(investmentSubscription);
+        supabaseClient.removeChannel(transactionSubscription);
       });
     }
-
     function refreshSingleInvestment(investment) {
       const investmentDiv = document.querySelector(`.investment-item[data-id="${investment.id}"]`);
       if (investmentDiv) {
-        // Update existing investment UI
         const currentProfitSpan = investmentDiv.querySelector('.current-profit');
         const timeLeftSpan = investmentDiv.querySelector('.time-left');
         currentProfitSpan.textContent = formatCurrency(investment.total_profit || 0);
         timeLeftSpan.textContent = investment.status === 'profit_ready' ? 'Completed' : formatTimeLeft(new Date(investment.end_time) - new Date());
       }
     }
-
     function addNewInvestment(investment) {
       const container = document.getElementById('investments-container');
       const noInvestmentsDiv = document.getElementById('no-investments');
@@ -759,7 +765,6 @@
       container.appendChild(investmentDiv);
       startInvestmentCalculator(investment, investmentDiv);
     }
-
     function removeInvestment(investmentId) {
       const investmentDiv = document.querySelector(`.investment-item[data-id="${investmentId}"]`);
       if (investmentDiv) investmentDiv.remove();
@@ -767,15 +772,11 @@
         document.getElementById('no-investments').style.display = 'block';
       }
     }
-
-    // Logout
     document.getElementById('logout-btn').addEventListener('click', async () => {
       const { error } = await supabaseClient.auth.signOut();
       if (!error) window.location.href = 'login.html';
       else showError('investments-error', 'Error logging out: ' + error.message);
     });
-
-    // Invest now button
     document.getElementById('invest-now-btn').addEventListener('click', (e) => {
       e.preventDefault();
       const investOption = document.getElementById('invest-option').value;
@@ -785,21 +786,16 @@
       }
       window.location.href = investOption === 'accountbalance' ? 'accountbalance.html' : 'invest.html';
     });
-
-    // Initialize and setup subscriptions
     (async () => {
       await initDashboard();
       const { data: { user } } = await supabaseClient.auth.getUser();
       if (user) setupRealtimeSubscriptions(user.id);
     })();
-
-    // Video Playback Optimization
     document.addEventListener('DOMContentLoaded', () => {
       const video = document.querySelector('.bg-video');
       let retryCount = 0;
       const maxRetries = 3;
-      const retryDelay = 1000; // 1 second
-
+      const retryDelay = 1000;
       if (video) {
         const playVideo = () => {
           video.play()
@@ -817,15 +813,12 @@
               }
             });
         };
-
         playVideo();
-
         video.addEventListener('canplay', () => console.log('Background video can play'));
         video.addEventListener('playing', () => console.log('Background video is actively playing'));
         video.addEventListener('error', (e) => console.error('Background video error:', e));
         video.addEventListener('stalled', () => console.warn('Background video stalled'));
         video.addEventListener('loadeddata', () => console.log('Background video data loaded'));
-
         document.addEventListener('visibilitychange', () => {
           if (document.visibilityState === 'visible') {
             if (video.paused) {
@@ -836,14 +829,12 @@
             console.log('Background video paused due to tab inactivity');
           }
         });
-
         const forcePlayOnInteraction = () => {
           if (video.paused) {
             playVideo();
             console.log('Attempting to play background video on user interaction');
           }
         };
-
         window.addEventListener('scroll', forcePlayOnInteraction, { once: true });
         window.addEventListener('click', forcePlayOnInteraction, { once: true });
       } else {
