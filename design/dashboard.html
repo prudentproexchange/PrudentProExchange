@@ -4,21 +4,25 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Dashboard • PrudentProExchange</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     :root {
       --primary: #ffd700; /* Gold */
       --primary-dark: #cca300; /* Darker gold */
       --text-color: #ffffff; /* White for text */
-      --text-secondary: #e0e0ff; /* Light purple */
-      --bg-dark: #000; /* Black background */
-      --glass-bg: rgba(255, 255, 255, 0.1);
-      --shadow: rgba(0, 0, 0, 0.37);
+      --text-secondary: #d0d0ff; /* Brighter light purple for readability */
+      --bg-dark: #0a0a0f; /* Dark blue background */
+      --glass-bg: rgba(255, 255, 255, 0.05);
+      --card-bg: rgba(15, 15, 25, 0.8);
+      --shadow: rgba(0, 0, 0, 0.5);
       --error: #ff6b6b;
       --success: #44ff44;
+      --gradient-start: rgba(255, 215, 0, 0.15);
+      --gradient-end: rgba(255, 215, 0, 0.05);
     }
 
     * {
@@ -33,12 +37,10 @@
       color: var(--text-color);
       line-height: 1.6;
       overflow-x: hidden;
-      position: relative;
-    }
-
-    body.light-theme {
-      background: #f0f2f5;
-      color: #333;
+      background-image: 
+        radial-gradient(circle at 10% 20%, var(--gradient-start) 0%, transparent 20%),
+        radial-gradient(circle at 90% 80%, var(--gradient-start) 0%, transparent 20%),
+        linear-gradient(to bottom, #0a0a0f, #05050a);
     }
 
     .bg-video {
@@ -49,34 +51,36 @@
       height: 100%;
       object-fit: cover;
       z-index: -1;
-      opacity: 0.5;
+      opacity: 0.1; /* Reduced opacity for better content visibility */
     }
 
     .overlay {
       position: relative;
       min-height: 100vh;
-      background: rgba(0, 0, 0, 0.7);
     }
 
     .container {
-      max-width: 1200px;
+      max-width: 1400px;
       margin: 0 auto;
-      padding: 1.5rem;
+      padding: 1rem;
     }
 
+    /* Header Styles */
     .site-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1rem 2rem;
+      padding: 1rem;
       background: var(--glass-bg);
       backdrop-filter: blur(10px);
       position: sticky;
       top: 0;
       z-index: 1000;
       border-bottom: 1px solid rgba(255, 215, 0, 0.2);
-      max-width: 1200px;
+      max-width: 1400px;
       margin: 0 auto;
+      border-radius: 0 0 12px 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     }
 
     .logo-link {
@@ -85,7 +89,7 @@
     }
 
     .logo {
-      height: 120px;
+      height: 60px; /* Reduced logo size */
       transition: transform 0.3s ease;
     }
 
@@ -103,8 +107,8 @@
       display: none;
       flex-direction: column;
       justify-content: space-around;
-      width: 30px;
-      height: 20px;
+      width: 28px;
+      height: 18px;
       background: transparent;
       border: none;
       cursor: pointer;
@@ -114,7 +118,7 @@
 
     .hamburger span {
       width: 100%;
-      height: 3px;
+      height: 2px;
       background: var(--primary);
       transition: all 0.3s ease;
     }
@@ -133,22 +137,25 @@
 
     .nav-drawer {
       display: flex;
-      gap: 1.5rem;
+      gap: 1rem;
       align-items: center;
       overflow-y: auto;
-      max-height: 80px;
+      max-height: 60px;
     }
 
     .nav-drawer a {
       color: var(--text-color);
       text-decoration: none;
-      font-size: 1rem;
+      font-size: 0.9rem; /* Reduced font size */
       font-weight: 500;
-      transition: color 0.3s ease;
+      transition: color 0.3s ease, background 0.3s ease;
+      padding: 0.5rem 0.8rem;
+      border-radius: 6px;
     }
 
     .nav-drawer a:hover, .nav-drawer a.active {
       color: var(--primary);
+      background: rgba(255, 215, 0, 0.1);
     }
 
     .account-menu {
@@ -157,6 +164,14 @@
 
     .account-toggle {
       cursor: pointer;
+      padding: 0.5rem 0.8rem;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+    }
+
+    .account-toggle:hover {
+      background: rgba(255, 215, 0, 0.1);
     }
 
     .submenu {
@@ -164,13 +179,14 @@
       position: absolute;
       top: 100%;
       right: 0;
-      background: var(--glass-bg);
+      background: var(--card-bg);
       backdrop-filter: blur(10px);
       border: 1px solid var(--primary);
       border-radius: 8px;
-      min-width: 200px;
+      min-width: 180px;
       z-index: 1000;
-      box-shadow: 0 4px 8px var(--shadow);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+      padding: 0.5rem 0;
     }
 
     .submenu.open {
@@ -183,10 +199,11 @@
 
     .submenu a {
       display: block;
-      padding: 0.75rem 1rem;
+      padding: 0.6rem 1rem;
       color: var(--text-color);
       text-decoration: none;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
+      transition: all 0.3s ease;
     }
 
     .submenu a:hover {
@@ -201,7 +218,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.8);
+      background: rgba(0, 0, 0, 0.7);
       z-index: 999;
     }
 
@@ -209,31 +226,52 @@
       display: block;
     }
 
+    /* Profile Section */
     .profile-section {
       display: flex;
       align-items: center;
       gap: 1rem;
-      padding: 1.5rem 2rem;
+      padding: 1rem;
       background: var(--glass-bg);
       backdrop-filter: blur(10px);
       border-bottom: 1px solid rgba(255, 215, 0, 0.2);
-      max-width: 1200px;
-      margin: 0 auto;
+      max-width: 1400px;
+      margin: 1rem auto;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
+      position: relative;
+      overflow: hidden;
+    }
+
+    .profile-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at top right, rgba(255, 215, 0, 0.1), transparent 60%);
+      pointer-events: none;
     }
 
     .profile-container {
-      width: 100px;
-      height: 100px;
+      width: 80px;
+      height: 80px;
       border-radius: 50%;
       overflow: hidden;
       border: 2px solid var(--primary);
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .avatar {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      font-size: 60px;
+      font-size: 48px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -248,78 +286,157 @@
 
     .welcome-message {
       font-size: 1.5rem;
-      font-weight: 500;
+      font-weight: 600;
       font-family: 'Playfair Display', serif;
       color: var(--primary);
     }
 
-    .cards-grid {
+    .welcome-message span {
+      font-weight: 500;
+      font-size: 1.2rem;
+      color: var(--text-secondary);
+      display: block;
+      margin-top: 0.2rem;
+    }
+
+    /* Dashboard Layout */
+    .dashboard-layout {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
-      padding: 1.5rem 0;
-      margin-bottom: 2rem;
+      grid-template-columns: 2fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
     }
 
+    .dashboard-main {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .dashboard-sidebar {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    /* Card Styles */
     .card {
-      background: var(--glass-bg);
-      padding: 1.5rem;
-      border: 1px solid var(--primary);
-      border-radius: 15px;
-      backdrop-filter: blur(15px);
-      transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-      box-shadow: 0 4px 8px var(--shadow);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      cursor: pointer;
-      outline: none;
+      background: var(--card-bg);
+      padding: 1rem;
+      border: 1px solid rgba(255, 215, 0, 0.2);
+      border-radius: 12px;
+      backdrop-filter: blur(12px);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      position: relative;
+      overflow: hidden;
     }
 
-    .card:hover,
-    .card:focus {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 16px rgba(255, 215, 0, 0.3);
-      border-color: var(--primary-dark);
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(255, 215, 0, 0.2);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.8rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 1px solid rgba(255, 215, 0, 0.1);
     }
 
     .card h2 {
       font-family: 'Playfair Display', serif;
-      font-size: 1.5rem;
-      margin-bottom: 0.5rem;
+      font-size: 1.4rem; /* Reduced font size */
       color: var(--primary);
-      font-weight: 700;
+      font-weight: 600;
+    }
+
+    .card-icon {
+      font-size: 1.5rem;
+      color: var(--primary);
     }
 
     .card p {
-      font-size: 1rem;
+      font-size: 0.9rem;
       color: var(--text-secondary);
-      margin-bottom: 0.75rem;
-      font-weight: 500;
+      margin-bottom: 0.5rem;
+      font-weight: 400;
     }
 
-    .card span {
-      font-weight: 600;
+    .card .value {
+      font-size: 1.8rem; /* Reduced font size */
+      font-weight: 700;
+      color: var(--primary);
+      margin: 0.4rem 0;
+    }
+
+    .card .label {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      opacity: 0.9;
+    }
+
+    .card .sub-value {
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--text-color);
+    }
+
+    .chart-container {
+      width: 100%;
+      height: 180px; /* Slightly smaller chart */
+      margin: 0.8rem 0;
+    }
+
+    /* Collapsible Investment Card */
+    .investment-card.collapsed .investment-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+
+    .investment-card .investment-content {
+      max-height: 1000px; /* Arbitrary large value for expansion */
+      transition: max-height 0.3s ease;
+    }
+
+    .toggle-btn {
+      background: none;
+      border: none;
+      color: var(--primary);
+      font-size: 1.2rem;
+      cursor: pointer;
+      padding: 0.5rem;
+    }
+
+    .toggle-btn:hover {
       color: var(--text-color);
     }
 
     .btn {
       display: inline-block;
-      padding: 0.6rem 1.2rem;
+      padding: 0.7rem 1.2rem;
       background: linear-gradient(45deg, var(--primary), var(--primary-dark));
       color: #000;
       text-decoration: none;
-      border-radius: 5px;
+      border-radius: 6px;
       font-weight: 600;
       font-size: 0.9rem;
       font-family: 'Poppins', sans-serif;
-      transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+      text-align: center;
+      margin-top: 0.8rem;
+      box-shadow: 0 3px 8px rgba(255, 215, 0, 0.2);
     }
 
     .btn:hover {
       background: linear-gradient(45deg, var(--primary-dark), var(--primary));
-      transform: scale(1.05);
-      box-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(255, 215, 0, 0.3);
     }
 
     .btn:disabled {
@@ -329,139 +446,156 @@
       box-shadow: none;
     }
 
+    .btn-small {
+      padding: 0.5rem 0.8rem;
+      font-size: 0.85rem;
+    }
+
+    /* Investments */
     .investment-item {
-      margin: 1rem 0;
+      margin: 0.8rem 0;
       padding: 1rem;
-      border: 1px solid var(--primary);
-      border-radius: 5px;
-      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 215, 0, 0.2);
+      border-radius: 8px;
+      background: rgba(10, 10, 20, 0.6);
+      position: relative;
+    }
+
+    .investment-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 3px;
+      height: 100%;
+      background: var(--primary);
     }
 
     .investment-item p {
-      margin: 0.5rem 0;
-      font-size: 1rem;
+      margin: 0.4rem 0;
+      font-size: 0.85rem;
       color: var(--text-secondary);
+    }
+
+    .investment-item span {
+      color: var(--text-color);
       font-weight: 500;
     }
 
+    .investment-actions {
+      display: flex;
+      gap: 0.6rem;
+      margin-top: 0.6rem;
+    }
+
+    .investment-actions button {
+      flex: 1;
+    }
+
+    /* Referral Section */
     .referral-link-container {
       display: flex;
       gap: 0.5rem;
-      margin: 1rem 0;
+      margin: 0.8rem 0;
     }
 
     .referral-link-container input {
       flex: 1;
-      padding: 0.6rem;
+      padding: 0.7rem;
       background: rgba(255, 255, 255, 0.1);
       border: 1px solid var(--primary);
-      border-radius: 5px;
+      border-radius: 6px;
       color: var(--text-secondary);
-      font-size: 0.9rem;
-      font-family: 'Poppins', sans-serif;
+      font-size: 0.85rem;
     }
 
     .copy-btn {
-      padding: 0.6rem 1.2rem;
+      padding: 0.7rem 1rem;
       background: linear-gradient(45deg, var(--primary), var(--primary-dark));
       border: none;
-      border-radius: 5px;
+      border-radius: 6px;
       cursor: pointer;
       color: #000;
-      transition: background 0.3s ease, transform 0.3s ease;
+      transition: all 0.3s ease;
       display: flex;
       align-items: center;
       gap: 0.4rem;
-      font-size: 0.9rem;
-      font-family: 'Poppins', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
     }
 
     .copy-btn:hover {
       background: linear-gradient(45deg, var(--primary-dark), var(--primary));
-      transform: scale(1.05);
+      transform: translateY(-2px);
     }
 
-    details {
-      margin: 1.5rem 0;
+    /* Transaction History */
+    .transaction-history {
+      background: var(--card-bg);
+      padding: 1rem;
+      border: 1px solid var(--primary);
+      border-radius: 12px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      margin-top: 1rem;
+      position: relative;
     }
 
-    summary {
-      cursor: pointer;
-      font-size: 1.5rem;
-      color: var(--primary);
-      font-family: 'Playfair Display', serif;
+    .transaction-header {
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      gap: 0.5rem;
-      list-style: none;
+      margin-bottom: 0.8rem;
     }
 
-    summary::before {
-      content: '▶';
+    .transaction-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
       color: var(--primary);
-      transition: transform 0.3s ease;
+      font-weight: 600;
     }
 
-    details[open] summary::before {
-      transform: rotate(90deg);
-    }
-
-    .investment-content {
-      overflow: hidden;
-      transition: max-height 0.5s ease, opacity 0.5s ease;
-      max-height: 0;
-      opacity: 0;
-    }
-
-    details[open] .investment-content {
-      max-height: 1000px;
-      opacity: 1;
-    }
-
-    .blink {
-      animation: blink 2s infinite;
-    }
-
-    @keyframes blink {
-      0% { opacity: 1; }
-      50% { opacity: 0.5; }
-      100% { opacity: 1; }
-    }
-
-    details[open] .blink {
-      display: none;
+    .transaction-controls {
+      display: flex;
+      gap: 0.6rem;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      margin: 1rem 0;
-      background: var(--glass-bg);
-      border-radius: 10px;
+      margin: 0.8rem 0;
+      background: rgba(15, 15, 25, 0.5);
+      border-radius: 8px;
       overflow: hidden;
     }
 
     th, td {
-      padding: 0.75rem;
+      padding: 0.8rem;
       text-align: left;
-      border-bottom: 1px solid var(--primary);
+      border-bottom: 1px solid rgba(255, 215, 0, 0.2);
       color: var(--text-secondary);
+      font-size: 0.85rem;
     }
 
     th {
-      background: var(--primary);
-      color: #000;
+      background: rgba(255, 215, 0, 0.15);
+      color: var(--primary);
       font-weight: 600;
     }
 
+    tr:hover {
+      background: rgba(255, 215, 0, 0.05);
+    }
+
+    /* Loading and Messages */
     .loading-spinner {
-      border: 4px solid rgba(255, 255, 255, 0.3);
-      border-top: 4px solid var(--primary);
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-top: 3px solid var(--primary);
       border-radius: 50%;
-      width: 24px;
-      height: 24px;
+      width: 20px;
+      height: 20px;
       animation: spin 1s linear infinite;
-      margin: 1rem auto;
+      margin: 0.8rem auto;
     }
 
     @keyframes spin {
@@ -472,57 +606,66 @@
     .error-message {
       color: var(--error);
       background: rgba(255, 0, 0, 0.1);
-      padding: 10px;
-      border-radius: 5px;
-      margin: 10px 0;
+      padding: 0.8rem;
+      border-radius: 6px;
+      margin: 0.8rem 0;
       display: none;
+      font-size: 0.85rem;
     }
 
+    /* Footer */
     .site-footer {
       background: var(--glass-bg);
       backdrop-filter: blur(10px);
-      padding: 1.5rem;
+      padding: 1rem;
       border-top: 1px solid var(--primary);
       text-align: center;
-      max-width: 1200px;
+      max-width: 1400px;
       margin: 0 auto;
+      border-radius: 12px 12px 0 0;
+      box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.3);
     }
 
     .footer-content p {
-      margin: 0.5rem 0;
-      font-size: 0.9rem;
+      margin: 0.4rem 0;
+      font-size: 0.85rem;
       color: var(--text-secondary);
     }
 
     .footer-links {
-      margin: 1rem 0;
+      margin: 0.8rem 0;
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
     }
 
     .footer-links a {
       color: var(--primary);
       text-decoration: none;
-      margin: 0 0.75rem;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
+      transition: all 0.3s ease;
     }
 
     .footer-links a:hover {
-      color: var(--primary-dark);
+      color: var(--text-color);
+      text-decoration: underline;
     }
 
+    /* Floating Buttons */
     #back-to-top {
       position: fixed;
-      bottom: 80px;
+      bottom: 20px;
       right: 20px;
       z-index: 1000;
       background: var(--primary);
       color: #000;
       border: none;
       border-radius: 50%;
-      width: 40px;
-      height: 40px;
+      width: 45px;
+      height: 45px;
       font-size: 1.2rem;
       cursor: pointer;
-      box-shadow: 0 4px 10px var(--shadow);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
       transition: all 0.3s ease;
       display: flex;
       align-items: center;
@@ -531,7 +674,8 @@
 
     #back-to-top:hover {
       background: var(--primary-dark);
-      transform: scale(1.1);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 15px rgba(255, 215, 0, 0.3);
     }
 
     .gtranslate_wrapper {
@@ -547,25 +691,39 @@
       color: var(--primary);
       font-size: 1.2rem;
       cursor: pointer;
-      transition: color 0.3s ease;
+      transition: all 0.3s ease;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: rgba(255, 215, 0, 0.1);
     }
 
     #theme-toggle:hover {
-      color: var(--primary-dark);
+      color: var(--text-color);
+      background: rgba(255, 215, 0, 0.2);
     }
 
     /* Responsive Design */
+    @media (max-width: 992px) {
+      .dashboard-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
     @media (max-width: 768px) {
       .hamburger {
         display: flex;
       }
 
       .site-header {
-        padding: 1rem;
+        padding: 0.8rem;
       }
 
       .logo {
-        height: 100px;
+        height: 50px;
       }
 
       .nav-drawer {
@@ -575,13 +733,11 @@
         height: 100vh;
         width: 80%;
         background: var(--bg-dark);
-        backdrop-filter: none;
-        box-shadow: 0 0 20px var(--shadow);
+        box-shadow: 0 0 15px var(--shadow);
         flex-direction: column;
-        padding: 2rem;
+        padding: 1.5rem;
         transition: right 0.3s ease;
         z-index: 1001;
-        overflow-y: auto;
       }
 
       .nav-drawer.open {
@@ -589,8 +745,9 @@
       }
 
       .nav-drawer a {
-        font-size: 1.2rem;
-        padding: 1rem 0;
+        font-size: 1rem;
+        padding: 0.8rem 0;
+        width: 100%;
       }
 
       .submenu {
@@ -601,116 +758,79 @@
         width: 100%;
       }
 
-      .nav-overlay {
-        z-index: 999;
-        background: rgba(0, 0, 0, 0.8);
-      }
-
-      .cards-grid {
-        grid-template-columns: 1fr;
-        gap: 1rem;
-      }
-
       .profile-section {
         flex-direction: column;
         align-items: flex-start;
-        padding: 1rem;
+        padding: 0.8rem;
       }
 
       .profile-container {
-        width: 80px;
-        height: 80px;
+        width: 70px;
+        height: 70px;
       }
 
       .avatar {
-        font-size: 48px;
+        font-size: 40px;
       }
 
       .welcome-message {
-        font-size: 1.2rem;
+        font-size: 1.3rem;
       }
 
-      .card {
-        padding: 1rem;
+      .welcome-message span {
+        font-size: 1rem;
       }
 
       .card h2 {
-        font-size: 1.25rem;
+        font-size: 1.2rem;
       }
 
-      .card p {
-        font-size: 0.9rem;
-      }
-
-      .gtranslate_wrapper {
-        bottom: 10px;
-        left: 10px;
-      }
-
-      #back-to-top {
-        bottom: 70px;
-        right: 10px;
-        width: 36px;
-        height: 36px;
-        font-size: 1rem;
+      .card .value {
+        font-size: 1.6rem;
       }
     }
 
     @media (max-width: 480px) {
       .container {
-        padding: 1rem;
+        padding: 0.8rem;
       }
 
       .logo {
-        height: 80px;
-      }
-
-      .nav-drawer {
-        width: 90%;
-        padding: 1.5rem;
+        height: 45px;
       }
 
       .nav-drawer a {
-        font-size: 1.1rem;
-        padding: 0.8rem 0;
-      }
-
-      .cards-grid {
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        font-size: 0.95rem;
       }
 
       .card {
-        padding: 0.75rem;
+        padding: 0.8rem;
       }
 
       .card h2 {
         font-size: 1.1rem;
       }
 
-      .card p {
-        font-size: 0.85rem;
+      .card .value {
+        font-size: 1.4rem;
       }
 
       .btn {
-        padding: 0.5rem 1rem;
+        padding: 0.6rem 1rem;
         font-size: 0.85rem;
       }
 
       .referral-link-container input {
-        font-size: 0.85rem;
+        font-size: 0.8rem;
       }
 
       .copy-btn {
-        padding: 0.5rem 1rem;
-        font-size: 0.85rem;
+        padding: 0.6rem 0.8rem;
+        font-size: 0.8rem;
       }
 
       .investment-item p {
-        font-size: 0.85rem;
-      }
-
-      summary {
-        font-size: 1.2rem;
+        font-size: 0.8rem;
       }
 
       table {
@@ -718,7 +838,7 @@
       }
 
       th, td {
-        padding: 0.5rem;
+        padding: 0.6rem;
       }
 
       .footer-content p, .footer-links a {
@@ -735,27 +855,28 @@
   </video>
   <div class="overlay">
     <header class="site-header">
-      <a href="dashboard.html" class="logo-link">
+      <a href="dashboard.html" class="logo-link" aria-label="PrudentProExchange Home">
         <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo"/>
       </a>
       <div class="header-right">
         <button id="theme-toggle" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
-        <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
+        <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu">
           <span></span><span></span><span></span>
         </button>
       </div>
       <nav class="nav-drawer" id="navDrawer">
         <a href="dashboard.html" class="active">Dashboard</a>
-        <a href="invest.html">Invest via Cryptocurrency Payment</a>
+        <a href="invest.html">Invest</a>
         <a href="withdraw.html">Withdraw</a>
         <a href="transactions.html">Transactions</a>
         <a href="referrals.html">Referrals</a>
-        <a href="accountbalance.html">Account Balance/Invest</a>
+        <a href="kyc.html">KYC Verification</a>
         <div class="account-menu">
           <a href="#" class="account-toggle" id="account-toggle">Account ▾</a>
           <ul class="submenu">
             <li><a href="profile-settings.html">Profile Settings</a></li>
             <li><a href="transfer.html">Transfer Balance</a></li>
+            <li><a href="accountbalance.html">Account Balance</a></li>
             <li><a href="change-password.html">Change Password</a></li>
             <li><a href="support.html">Support Ticket</a></li>
             <li><a href="promo-tools.html">Promotional Tools</a></li>
@@ -763,31 +884,35 @@
             <li><a href="#" id="logout-btn">Logout</a></li>
           </ul>
         </div>
-        <a href="kyc.html">KYC Verification</a>
-        <a href="transfer.html">Transfer</a>
       </nav>
     </header>
     <div class="nav-overlay"></div>
     <div class="profile-section">
       <div class="profile-container">
-        <img id="navProfilePhoto" src="" alt="Profile" class="avatar" style="display: none;"/>
+        <img id="navProfilePhoto" src="" alt="Profile Photo" class="avatar" style="display: none;"/>
         <span id="defaultProfileIcon" class="avatar">👤</span>
       </div>
-      <div class="welcome-message">Welcome to Your Dashboard! <span id="welcomeName"></span></div>
+      <div class="welcome-message">Welcome to Your Dashboard<span id="welcomeName"></span></div>
     </div>
     <main class="dashboard-page container">
-      <section class="cards-grid" data-aos="fade-up">
-        <div class="card investment-card" data-aos="zoom-in">
-          <details>
-            <summary>
-              Investments Dashboard
-              <span class="blink">Click to view your investments</span>
-            </summary>
+      <div class="dashboard-layout">
+        <div class="dashboard-main">
+          <div class="card investment-card collapsed">
+            <div class="card-header">
+              <h2>Investments Dashboard</h2>
+              <div>
+                <i class="fas fa-chart-line card-icon"></i>
+                <button class="toggle-btn" id="toggleInvestmentCard" aria-label="Toggle Investments Dashboard"><i class="fas fa-chevron-down"></i></button>
+              </div>
+            </div>
             <div class="investment-content">
+              <div class="chart-container">
+                <canvas id="investmentChart"></canvas>
+              </div>
               <div id="investments-container" aria-live="polite"></div>
               <div id="no-investments" style="display: none;">
                 <p>No active investments currently.</p>
-                <select id="invest-option" style="margin: 1rem 0; padding: 0.6rem; background: rgba(255, 255, 255, 0.1); border: 1px solid var(--primary); color: var(--text-secondary); border-radius: 5px; font-size: 0.9rem; font-family: 'Poppins', sans-serif;">
+                <select id="invest-option" style="margin: 0.8rem 0; padding: 0.7rem; background: rgba(255, 255, 255, 0.1); border: 1px solid var(--primary); color: var(--text-secondary); border-radius: 6px; font-size: 0.85rem; width: 100%;">
                   <option value="" disabled selected>Select Investment Option</option>
                   <option value="accountbalance">Invest through Account Balance</option>
                   <option value="directly">Invest Directly</option>
@@ -797,55 +922,86 @@
               <div class="loading-spinner" id="investments-loading" style="display: none;"></div>
               <div class="error-message" id="investments-error"></div>
             </div>
-          </details>
-        </div>
-        <div class="card how-it-works" data-aos="zoom-in">
-          <h2>How It Works</h2>
-          <p>Here’s how to invest with PrudentProExchange:</p>
-          <ul>
-            <li>Deposit funds into your account using our secure payment options.</li>
-            <li>Select and activate an investment plan tailored to your goals.</li>
-            <li>Track your earnings directly from your dashboard.</li>
-            <li>Benefit from profit compounding for up to four months.</li>
-            <li>Access our dedicated live support whenever you need assistance.</li>
-          </ul>
-          <p class="brand">PrudentProExchange.net</p>
-          <a href="invest.html" class="btn">Explore Plans</a>
-        </div>
-        <div class="card affiliate" data-aos="zoom-in">
-          <h2>Affiliate Program</h2>
-          <p>Share your unique referral link and earn a 10% commission on every deposit:</p>
-          <div class="referral-link-container">
-            <input type="text" id="affiliateLink" readonly/>
-            <button class="copy-btn" title="Copy referral link" aria-label="Copy referral link"><i class="fas fa-copy"></i> Copy</button>
           </div>
-          <p>Referral Earnings: <span id="refEarnings">0.00</span></p>
+          <div class="card how-it-works">
+            <div class="card-header">
+              <h2>How It Works</h2>
+              <i class="fas fa-info-circle card-icon"></i>
+            </div>
+            <p>Here’s how to invest with PrudentProExchange:</p>
+            <ul style="margin: 0.8rem 0; padding-left: 1.2rem;">
+              <li>Deposit funds using secure payment options.</li>
+              <li>Select an investment plan tailored to your goals.</li>
+              <li>Track earnings directly from your dashboard.</li>
+              <li>Benefit from profit compounding for up to four months.</li>
+              <li>Access dedicated live support anytime.</li>
+            </ul>
+            <p class="brand" style="font-weight: 600; color: var(--primary); margin-top: 0.8rem;">PrudentProExchange.net</p>
+            <a href="invest.html" class="btn">Explore Plans</a>
+          </div>
         </div>
-        <div class="card deposit-wallet" data-aos="zoom-in">
-          <h2>Deposit Wallet</h2>
-          <span id="depositWallet">0.00</span>
-          <p>Total Deposits: <span id="totalDeposits">0.00</span></p>
-          <a href="deposit.html" class="btn">Add Funds</a>
+        <div class="dashboard-sidebar">
+          <div class="card affiliate">
+            <div class="card-header">
+              <h2>Affiliate Program</h2>
+              <i class="fas fa-share-alt card-icon"></i>
+            </div>
+            <p>Earn 10% commission on every deposit via your referral link:</p>
+            <div class="referral-link-container">
+              <input type="text" id="affiliateLink" readonly aria-label="Referral Link"/>
+              <button class="copy-btn" title="Copy referral link" aria-label="Copy referral link"><i class="fas fa-copy"></i> Copy</button>
+            </div>
+            <div class="label">Referral Earnings</div>
+            <div class="value" id="refEarnings">0.00</div>
+          </div>
+          <div class="card deposit-wallet">
+            <div class="card-header">
+              <h2>Deposit Wallet</h2>
+              <i class="fas fa-wallet card-icon"></i>
+            </div>
+            <div class="value" id="depositWallet">0.00</div>
+            <div class="label">Total Deposits</div>
+            <div class="sub-value" id="totalDeposits">0.00</div>
+            <a href="deposit.html" class="btn">Add Funds</a>
+          </div>
+          <div class="card interest-wallet">
+            <div class="card-header">
+              <h2>Interest Wallet</h2>
+              <i class="fas fa-coins card-icon"></i>
+            </div>
+            <div class="value" id="interestWallet">0.00</div>
+            <div class="label">Total Withdrawals</div>
+            <div class="sub-value" id="totalWithdrawals">0.00</div>
+            <a href="withdraw.html" class="btn">Withdraw Funds</a>
+          </div>
+          <div class="card account-balance">
+            <div class="card-header">
+              <h2>Account Balance</h2>
+              <i class="fas fa-balance-scale card-icon"></i>
+            </div>
+            <div class="value" id="accountBalance">0.00</div>
+            <a href="withdraw.html" class="btn">Withdraw Funds</a>
+          </div>
+          <div class="card investments">
+            <div class="card-header">
+              <h2>Total Invested</h2>
+              <i class="fas fa-chart-pie card-icon"></i>
+            </div>
+            <div class="value" id="totalInvested">0.00</div>
+            <div class="label">Promotional Offer</div>
+            <div class="sub-value"><span id="promoOffer">0.00</span> (<span id="promoPct">0</span>%)</div>
+            <a href="promo.html" class="btn">Claim Offer</a>
+          </div>
         </div>
-        <div class="card interest-wallet" data-aos="zoom-in">
-          <h2>Interest Wallet</h2>
-          <span id="interestWallet">0.00</span>
-          <p>Total Withdrawals: <span id="totalWithdrawals">0.00</span></p>
-          <a href="withdraw.html" class="btn">Withdraw Funds</a>
+      </div>
+      <div class="transaction-history">
+        <div class="transaction-header">
+          <h2>Transaction History</h2>
+          <div class="transaction-controls">
+            <button class="btn btn-small">Last 30 Days</button>
+            <button class="btn btn-small">Export</button>
+          </div>
         </div>
-        <div class="card account-balance" data-aos="zoom-in">
-          <h2>Account Balance</h2>
-          <span id="accountBalance">0.00</span>
-          <a href="withdraw.html" class="btn">Withdraw Funds</a>
-        </div>
-        <div class="card investments" data-aos="zoom-in">
-          <h2>Total Invested: <span id="totalInvested">0.00</span></h2>
-          <p>Promotional Offer: <span id="promoOffer">0.00</span> (<span id="promoPct">0</span>%)</p>
-          <a href="promo.html" class="btn">Claim Offer</a>
-        </div>
-      </section>
-      <details class="transaction-history" data-aos="fade-up">
-        <summary>Transaction History</summary>
         <table id="txTable">
           <thead>
             <tr>
@@ -859,13 +1015,13 @@
         </table>
         <div class="loading-spinner" id="tx-loading" style="display: none;"></div>
         <div class="error-message" id="tx-error"></div>
-      </details>
+      </div>
     </main>
-    <footer class="section section-dark site-footer" data-aos="fade-up">
+    <footer class="site-footer">
       <div class="footer-content">
-        <p class="UTC-time">UTC Time: <span id="utcTime"></span></p>
-        <p class="local-time">Local Time: <span id="localTime"></span></p>
         <p class="local-date">Local Date: <span id="localDate"></span></p>
+        <p class="local-time">Local Time: <span id="localTime"></span></p>
+        <p class="UTC-time">UTC Time: <span id="utcTime"></span></p>
         <nav class="footer-links">
           <a href="about.html">About Us</a>
           <a href="privacy.html">Privacy Policy</a>
@@ -875,7 +1031,7 @@
       </div>
     </footer>
   </div>
-  <button id="back-to-top" aria-label="Back to top">🚀</button>
+  <button id="back-to-top" aria-label="Back to top">↑</button>
   <div class="gtranslate_wrapper"></div>
   <script>
     window.gtranslateSettings = {
@@ -900,7 +1056,7 @@
   </script>
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
-    AOS.init({ duration: 800, once: true });
+    AOS.init({ duration: 600, once: true });
 
     const { createClient } = supabase;
     const supabaseClient = createClient(
@@ -910,6 +1066,7 @@
 
     let investmentIntervals = [];
     let isDashboardLoading = false;
+    let investmentChart = null;
 
     function formatCurrency(amount) {
       return amount.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
@@ -920,8 +1077,81 @@
       if (errorDiv) {
         errorDiv.textContent = message;
         errorDiv.style.display = 'block';
-        setTimeout(() => errorDiv.style.display = 'none', 5000);
+        setTimeout(() => errorDiv.style.display = 'none', 3000);
       }
+    }
+
+    function renderInvestmentChart(investmentData) {
+      const ctx = document.getElementById('investmentChart').getContext('2d');
+      if (investmentChart) investmentChart.destroy();
+
+      const startDate = new Date(investmentData.start_time);
+      const endDate = new Date(investmentData.end_time);
+      const days = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
+      const dailyRate = Math.pow(1 + (investmentData.total_profit / investmentData.principal), 1 / days) - 1;
+      const labels = [];
+      const data = [];
+
+      for (let i = 0; i <= days; i++) {
+        labels.push(`Day ${i}`);
+        const compoundValue = investmentData.principal * Math.pow(1 + dailyRate, i);
+        data.push(compoundValue);
+      }
+
+      ```chartjs
+      {
+        "type": "line",
+        "data": {
+          "labels": labels,
+          "datasets": [{
+            "label": "Investment Growth",
+            "data": data,
+            "borderColor": "#ffd700",
+            "backgroundColor": "rgba(255, 215, 0, 0.2)",
+            "borderWidth": 2,
+            "pointRadius": 0,
+            "pointHoverRadius": 5,
+            "tension": 0.3,
+            "fill": true
+          }]
+        },
+        "options": {
+          "responsive": true,
+          "maintainAspectRatio": false,
+          "plugins": {
+            "legend": { "display": false },
+            "tooltip": {
+              "backgroundColor": "rgba(15, 15, 25, 0.9)",
+              "titleColor": "#ffd700",
+              "bodyColor": "#ffffff",
+              "borderColor": "#ffd700",
+              "borderWidth": 1,
+              "displayColors": false,
+              "callbacks": {
+                "label": function(context) {
+                  return `Value: ${formatCurrency(context.parsed.y)}`;
+                }
+              }
+            }
+          },
+          "scales": {
+            "x": {
+              "grid": { "color": "rgba(255, 255, 255, 0.1)" },
+              "ticks": { "color": "#d0d0ff" }
+            },
+            "y": {
+              "grid": { "color": "rgba(255, 255, 255, 0.1)" },
+              "ticks": {
+                "color": "#d0d0ff",
+                "callback": function(value) {
+                  return formatCurrency(value);
+                }
+              }
+            }
+          }
+        }
+      }
+      ```
     }
 
     async function initDashboard() {
@@ -948,7 +1178,7 @@
         if (profileError) throw profileError;
 
         const welcomeName = document.getElementById('welcomeName');
-        if (welcomeName) welcomeName.textContent = profile.first_name || 'User';
+        if (welcomeName) welcomeName.textContent = profile.first_name ? `, ${profile.first_name}` : '';
 
         if (profile.photo_url) {
           const { data: urlData } = supabaseClient.storage
@@ -963,43 +1193,22 @@
           }
         }
 
-        const affiliateLink = document.getElementById('affiliateLink');
-        if (affiliateLink) affiliateLink.value = profile.referral_link || '';
-        
-        const refEarnings = document.getElementById('refEarnings');
-        if (refEarnings) refEarnings.textContent = formatCurrency(profile.referral_earnings || 0);
-        
-        const depositWallet = document.getElementById('depositWallet');
-        if (depositWallet) depositWallet.textContent = formatCurrency(profile.deposit_wallet || 0);
-        
-        const totalDeposits = document.getElementById('totalDeposits');
-        if (totalDeposits) totalDeposits.textContent = formatCurrency(profile.total_deposits || 0);
-        
-        const interestWallet = document.getElementById('interestWallet');
-        if (interestWallet) interestWallet.textContent = formatCurrency(profile.interest_wallet || 0);
-        
-        const totalWithdrawals = document.getElementById('totalWithdrawals');
-        if (totalWithdrawals) totalWithdrawals.textContent = formatCurrency(profile.total_withdrawals || 0);
-
-        const totalBalance = (profile.deposit_wallet || 0) + (profile.interest_wallet || 0);
-        const accountBalance = document.getElementById('accountBalance');
-        if (accountBalance) accountBalance.textContent = formatCurrency(totalBalance);
+        document.getElementById('affiliateLink').value = profile.referral_link || '';
+        document.getElementById('refEarnings').textContent = formatCurrency(profile.referral_earnings || 0);
+        document.getElementById('depositWallet').textContent = formatCurrency(profile.deposit_wallet || 0);
+        document.getElementById('totalDeposits').textContent = formatCurrency(profile.total_deposits || 0);
+        document.getElementById('interestWallet').textContent = formatCurrency(profile.interest_wallet || 0);
+        document.getElementById('totalWithdrawals').textContent = formatCurrency(profile.total_withdrawals || 0);
+        document.getElementById('accountBalance').textContent = formatCurrency((profile.deposit_wallet || 0) + (profile.interest_wallet || 0));
+        document.getElementById('promoOffer').textContent = formatCurrency(profile.promo_offer || 0);
+        document.getElementById('promoPct').textContent = profile.promo_pct || 0;
 
         const { data: allInvestments, error: allInvError } = await supabaseClient
           .from('investments')
           .select('principal')
           .eq('user_id', user.id);
         if (allInvError) throw allInvError;
-
-        const totalEverInvested = allInvestments.reduce((acc, inv) => acc + parseFloat(inv.principal), 0);
-        const totalInvested = document.getElementById('totalInvested');
-        if (totalInvested) totalInvested.textContent = formatCurrency(totalEverInvested);
-
-        const promoOffer = document.getElementById('promoOffer');
-        if (promoOffer) promoOffer.textContent = formatCurrency(profile.promo_offer || 0);
-        
-        const promoPct = document.getElementById('promoPct');
-        if (promoPct) promoPct.textContent = profile.promo_pct || 0;
+        document.getElementById('totalInvested').textContent = formatCurrency(allInvestments.reduce((acc, inv) => acc + parseFloat(inv.principal), 0));
 
         const { data: investments, error: invError } = await supabaseClient
           .from('investments')
@@ -1014,11 +1223,15 @@
 
         const container = document.getElementById('investments-container');
         const noInvestmentsDiv = document.getElementById('no-investments');
-        if (container && noInvestmentsDiv) {
+        const investmentChartCanvas = document.getElementById('investmentChart');
+        if (container && noInvestmentsDiv && investmentChartCanvas) {
           container.innerHTML = '';
           noInvestmentsDiv.style.display = 'none';
+          investmentChartCanvas.style.display = 'none';
 
           if (investments.length > 0) {
+            investmentChartCanvas.style.display = 'block';
+            renderInvestmentChart(investments[0]);
             const fragment = document.createDocumentFragment();
             investments.forEach(investment => {
               const investmentDiv = document.createElement('div');
@@ -1037,14 +1250,15 @@
                 <p>Current Profit: <span class="current-profit">${formatCurrency(0)}</span></p>
                 <p>Time Remaining: <span class="time-left"></span></p>
                 <p class="status-message"></p>
-                <button class="withdraw-btn" ${canWithdraw ? '' : 'disabled'}>Withdraw Capital</button>
-                <button class="reinvest-btn" ${canReinvest ? '' : 'disabled'}>Reinvest</button>
+                <div class="investment-actions">
+                  <button class="btn btn-small withdraw-btn" ${canWithdraw ? '' : 'disabled'} aria-label="Withdraw Capital">Withdraw</button>
+                  <button class="btn btn-small reinvest-btn" ${canReinvest ? '' : 'disabled'} aria-label="Reinvest">Reinvest</button>
+                </div>
               `;
               fragment.appendChild(investmentDiv);
               startInvestmentCalculator(investment, investmentDiv);
 
-              const withdrawBtn = investmentDiv.querySelector('.withdraw-btn');
-              withdrawBtn.addEventListener('click', async () => {
+              investmentDiv.querySelector('.withdraw-btn').addEventListener('click', async () => {
                 if (!canWithdraw) return;
                 if (!confirm('Are you sure you want to withdraw your capital?')) return;
                 try {
@@ -1069,23 +1283,22 @@
                       status: 'completed',
                       created_at: new Date().toISOString()
                     });
-                  if (interestWallet) interestWallet.textContent = formatCurrency(newInterest);
-                  if (accountBalance) accountBalance.textContent = formatCurrency((profile.deposit_wallet || 0) + newInterest);
+                  document.getElementById('interestWallet').textContent = formatCurrency(newInterest);
+                  document.getElementById('accountBalance').textContent = formatCurrency((profile.deposit_wallet || 0) + newInterest);
                   await supabaseClient
                     .from('investments')
                     .update({ status: 'withdrawn' })
                     .eq('id', investment.id);
                   investmentDiv.innerHTML += '<p>Capital withdrawn.</p>';
-                  withdrawBtn.disabled = true;
+                  investmentDiv.querySelector('.withdraw-btn').disabled = true;
                 } catch (err) {
                   showError('investments-error', 'Error withdrawing capital: ' + err.message);
                 }
               });
 
-              const reinvestBtn = investmentDiv.querySelector('.reinvest-btn');
-              reinvestBtn.addEventListener('click', async () => {
+              investmentDiv.querySelector('.reinvest-btn').addEventListener('click', async () => {
                 if (!canReinvest) return;
-                if (!confirm('Do you want to reinvest your capital and profits into a new investment?')) return;
+                if (!confirm('Do you want to reinvest your capital and profits?')) return;
                 try {
                   const { data, error } = await supabaseClient.rpc('reinvest_investment', {
                     user_uuid: user.id,
@@ -1138,19 +1351,19 @@
           });
         }
       } catch (error) {
-        console.error('Dashboard initialization error:', error);
-        showError('investments-error', 'An error occurred while loading the dashboard.');
+        console.error('Dashboard error:', error);
+        showError('investments-error', 'Failed to load dashboard.');
       } finally {
         isDashboardLoading = false;
-        if (investmentsLoading) investmentsLoading.style.display = 'none';
-        if (txLoading) txLoading.style.display = 'none';
+        investmentsLoading.style.display = 'none';
+        txLoading.style.display = 'none';
       }
     }
 
     function startInvestmentCalculator(investment, investmentDiv) {
       const { start_time, end_time, principal, total_profit, status } = investment;
       const startTime = new Date(start_time);
-      const endTime = new Date(end_time);
+      const endTime = new Date(investment.end_time);
       const totalSeconds = (endTime - startTime) / 1000;
       const profitPerSecond = total_profit / totalSeconds;
       const currentProfitSpan = investmentDiv.querySelector('.current-profit');
@@ -1208,99 +1421,7 @@
       investmentIntervals = [];
     }
 
-    async function setupRealtimeSubscriptions(userId) {
-      const investmentSubscription = supabaseClient
-        .channel(`investments:user_id=eq.${userId}`)
-        .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'investments', filter: `user_id=eq.${userId}` }, payload => {
-          console.log('Investment updated:', payload.new);
-          refreshSingleInvestment(payload.new);
-        })
-        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'investments', filter: `user_id=eq.${userId}` }, payload => {
-          console.log('New investment:', payload.new);
-          addNewInvestment(payload.new);
-        })
-        .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'investments', filter: `user_id=eq.${userId}` }, payload => {
-          console.log('Investment deleted:', payload.old);
-          removeInvestment(payload.old.id);
-        })
-        .subscribe();
-
-      const transactionSubscription = supabaseClient
-        .channel(`transactions:user_id=eq.${userId}`)
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'transactions', filter: `user_id=eq.${userId}` }, payload => {
-          console.log('Transaction updated:', payload);
-          initDashboard();
-        })
-        .subscribe();
-
-      window.addEventListener('beforeunload', () => {
-        supabaseClient.removeChannel(investmentSubscription);
-        supabaseClient.removeChannel(transactionSubscription);
-      });
-    }
-
-    function refreshSingleInvestment(investment) {
-      const investmentDiv = document.querySelector(`.investment-item[data-id="${investment.id}"]`);
-      if (investmentDiv) {
-        const currentProfitSpan = investmentDiv.querySelector('.current-profit');
-        const timeLeftSpan = investmentDiv.querySelector('.time-left');
-        const statusMessage = investmentDiv.querySelector('.status-message');
-        const now = new Date();
-        const endTime = new Date(investment.end_time);
-        currentProfitSpan.textContent = formatCurrency(investment.total_profit || 0);
-        if (investment.status === 'active') {
-          timeLeftSpan.textContent = formatTimeLeft(endTime - now);
-          statusMessage.textContent = 'Investment in progress';
-        } else if (investment.status === 'profit_ready') {
-          timeLeftSpan.textContent = 'Investment ended';
-          const profitDate = new Date(endTime.getTime() + 7 * 24 * 60 * 60 * 1000);
-          statusMessage.textContent = now < profitDate 
-            ? `Profits transfer in ${Math.ceil((profitDate - now) / (1000 * 60 * 60 * 24))} days`
-            : 'Profits transferring soon';
-        } else if (investment.status === 'profit_transferred') {
-          timeLeftSpan.textContent = 'Profits transferred';
-          const capitalDate = new Date(endTime.getTime() + 14 * 24 * 60 * 60 * 1000);
-          statusMessage.textContent = now < capitalDate 
-            ? `Capital transfer in ${Math.ceil((capitalDate - now) / (1000 * 60 * 60 * 24))} days`
-            : 'Capital transferring soon';
-        }
-      }
-    }
-
-    function addNewInvestment(investment) {
-      const container = document.getElementById('investments-container');
-      const noInvestmentsDiv = document.getElementById('no-investments');
-      if (container && noInvestmentsDiv) {
-        if (noInvestmentsDiv.style.display !== 'none') {
-          noInvestmentsDiv.style.display = 'none';
-        }
-        const investmentDiv = document.createElement('div');
-        investmentDiv.className = 'investment-item';
-        investmentDiv.dataset.id = investment.id;
-        investmentDiv.innerHTML = `
-          <p>Plan: <span>${investment.plan?.name ?? 'Unknown'}</span></p>
-          <p>Invested Amount: <span>${formatCurrency(investment.principal)}</span></p>
-          <p>Current Profit: <span class="current-profit">${formatCurrency(0)}</span></p>
-          <p>Time Remaining: <span class="time-left"></span></p>
-          <p class="status-message"></p>
-          <button class="withdraw-btn" disabled>Withdraw Capital</button>
-          <button class="reinvest-btn" disabled>Reinvest</button>
-        `;
-        container.appendChild(investmentDiv);
-        startInvestmentCalculator(investment, investmentDiv);
-      }
-    }
-
-    function removeInvestment(investmentId) {
-      const investmentDiv = document.querySelector(`.investment-item[data-id="${investmentId}"]`);
-      if (investmentDiv) investmentDiv.remove();
-      const container = document.getElementById('investments-container');
-      if (container && !container.querySelector('.investment-item')) {
-        const noInvestmentsDiv = document.getElementById('no-investments');
-        if (noInvestmentsDiv) noInvestmentsDiv.style.display = 'block';
-      }
-    }
-
+    // UI Event Handlers
     const hamburgerBtn = document.getElementById('hamburgerBtn');
     const navDrawer = document.getElementById('navDrawer');
     const overlay = document.querySelector('.nav-overlay');
@@ -1309,19 +1430,23 @@
         navDrawer.classList.toggle('open');
         hamburgerBtn.classList.toggle('active');
         overlay.classList.toggle('nav-open');
-        if (navDrawer.classList.contains('open')) {
-          navDrawer.scrollTop = 0;
-        }
       });
 
       document.addEventListener('click', (event) => {
-        const isClickInsideNav = navDrawer.contains(event.target);
-        const isClickOnHamburger = hamburgerBtn.contains(event.target);
-        if (!isClickInsideNav && !isClickOnHamburger && navDrawer.classList.contains('open')) {
+        if (!navDrawer.contains(event.target) && !hamburgerBtn.contains(event.target) && navDrawer.classList.contains('open')) {
           navDrawer.classList.remove('open');
           hamburgerBtn.classList.remove('active');
           overlay.classList.remove('nav-open');
         }
+      });
+
+      // Close nav on link click
+      navDrawer.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+          navDrawer.classList.remove('open');
+          hamburgerBtn.classList.remove('active');
+          overlay.classList.remove('nav-open');
+        });
       });
     }
 
@@ -1341,6 +1466,17 @@
       accountToggle.addEventListener('click', (e) => {
         e.preventDefault();
         submenu.classList.toggle('open');
+      });
+    }
+
+    const toggleInvestmentCard = document.getElementById('toggleInvestmentCard');
+    if (toggleInvestmentCard) {
+      toggleInvestmentCard.addEventListener('click', () => {
+        const card = document.querySelector('.investment-card');
+        const icon = toggleInvestmentCard.querySelector('i');
+        card.classList.toggle('collapsed');
+        icon.classList.toggle('fa-chevron-down');
+        icon.classList.toggle('fa-chevron-up');
       });
     }
 
@@ -1412,58 +1548,14 @@
 
     document.addEventListener('DOMContentLoaded', () => {
       const video = document.querySelector('.bg-video');
-      let retryCount = 0;
-      const maxRetries = 3;
-      const retryDelay = 1000;
       if (video) {
-        const playVideo = () => {
-          video.play()
-            .then(() => {
-              console.log('Background video is playing successfully');
-              retryCount = 0;
-            })
-            .catch(error => {
-              console.error(`Background video play failed (attempt ${retryCount + 1}):`, error);
-              if (retryCount < maxRetries) {
-                retryCount++;
-                setTimeout(playVideo, retryDelay);
-              } else {
-                console.error('Max retries reached. Video playback failed.');
-              }
-            });
-        };
-        playVideo();
-        video.addEventListener('canplay', () => console.log('Background video can play'));
-        video.addEventListener('playing', () => console.log('Background video is actively playing'));
-        video.addEventListener('error', (e) => console.error('Background video error:', e));
-        video.addEventListener('stalled', () => console.warn('Background video stalled'));
-        video.addEventListener('loadeddata', () => console.log('Background video data loaded'));
-        document.addEventListener('visibilitychange', () => {
-          if (document.visibilityState === 'visible') {
-            if (video.paused) playVideo();
-          } else {
-            video.pause();
-            console.log('Background video paused due to tab inactivity');
-          }
+        video.play().catch(error => {
+          console.log('Video autoplay prevented, attempting to play on interaction');
+          document.addEventListener('click', () => video.play(), { once: true });
         });
-        const forcePlayOnInteraction = () => {
-          if (video.paused) {
-            playVideo();
-            console.log('Attempting to play background video on user interaction');
-          }
-        };
-        window.addEventListener('scroll', forcePlayOnInteraction, { once: true });
-        window.addEventListener('click', forcePlayOnInteraction, { once: true });
-      } else {
-        console.error('Background video element not found');
       }
+      initDashboard();
     });
-
-    (async () => {
-      await initDashboard();
-      const { data: { user } } = await supabaseClient.auth.getUser();
-      if (user) setupRealtimeSubscriptions(user.id);
-    })();
   </script>
 </body>
 </html>
