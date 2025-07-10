@@ -6,21 +6,21 @@
     <title>PrudentProExchange Company Profile</title>
     <!-- Include Chart.js for dynamic charts -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Inline CSS for simplicity; extract to assets/css/styles.css for production -->
+    <!-- Inline CSS with targeted background adjustments -->
     <style>
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: #E8ECEF;
+            background-color: #E8ECEF; /* Original light gray background for body */
             margin: 0;
             padding: 0;
-            color: #333333;
+            color: #333333; /* Original dark text color */
         }
         h1, h2, h3 {
             font-family: 'Playfair Display', serif;
-            color: #1A3C6E;
+            color: #1A3C6E; /* Original dark blue for headers */
         }
         a {
-            color: #D4A017;
+            color: #D4A017; /* Original gold for links */
             text-decoration: none;
         }
         a:hover {
@@ -28,7 +28,7 @@
         }
         .glass-card {
             background: rgba(255, 255, 255, 0.1);
-            border: 1px solid #1A3C6E;
+            border: 1px solid #1A3C6E; /* Original dark blue border */
             backdrop-filter: blur(10px);
             padding: 20px;
             margin: 20px auto;
@@ -36,25 +36,52 @@
             border-radius: 10px;
             max-width: 800px;
         }
+        /* Black background for specific sections */
+        #about, #services, #charts, #legal, #contact {
+            background-color: #000000; /* Black background for specified sections */
+            color: #E8ECEF; /* Light gray text for readability */
+        }
+        #about h2, #about h3, #services h2, #services h3, #charts h2, #charts h3, #legal h2, #legal h3, #contact h2, #contact h3 {
+            color: #D4A017; /* Gold headers for contrast in black sections */
+        }
+        #about a, #services a, #charts a, #legal a, #contact a {
+            color: #FFD700; /* Brighter gold for links in black sections */
+        }
+        #about a:hover, #services a:hover, #charts a:hover, #legal a:hover, #contact a:hover {
+            color: #FFC107; /* Lighter gold on hover */
+        }
+        #about .glass-card, #services .glass-card, #charts .glass-card, #legal .glass-card, #contact .glass-card {
+            background: rgba(255, 255, 255, 0.05); /* Subtle glass effect for black background */
+            border: 1px solid #D4A017; /* Gold border for contrast */
+            color: #E8ECEF; /* Light gray text in cards */
+        }
+        /* Hero section with video background */
         #cover {
             position: relative;
             height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            background-image: url('assets/images/cover-background.JPG');
-            background-size: cover;
-            background-position: center;
+            overflow: hidden;
+        }
+        #cover video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
         }
         #cover .glass-card {
-            background: rgba(26, 60, 110, 0.7);
+            background: rgba(26, 60, 110, 0.7); /* Original semi-transparent dark blue */
             color: #FFFFFF;
             text-align: center;
         }
         #cover h1 {
             font-size: 28pt;
             font-weight: 700;
-            color: #D4A017;
+            color: #D4A017; /* Original gold */
             margin-bottom: 20px;
         }
         #cover p {
@@ -74,7 +101,6 @@
         h3 {
             font-size: 16pt;
             font-weight: 500;
-            color: #1A3C6E;
             margin-top: 20px;
         }
         p, li {
@@ -91,9 +117,12 @@
         .chart-card canvas {
             max-width: 600px;
             margin: 20px auto;
+            background: rgba(255, 255, 255, 0.05); /* Match glass-card in black sections */
+            border-radius: 8px;
+            padding: 10px;
         }
         footer {
-            background: #1A3C6E;
+            background: #1A3C6E; /* Original dark blue footer background */
             color: #FFFFFF;
             padding: 20px;
             text-align: center;
@@ -109,6 +138,10 @@
 <body>
     <!-- Cover Page -->
     <section id="cover">
+        <video autoplay muted loop playsinline>
+            <source src="assets/videos/cover-background.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
         <div class="glass-card">
             <img src="assets/images/logo.svg" alt="PrudentProExchange Logo">
             <h1>PrudentProExchange Ltd: Your Partner in Wealth Creation</h1>
@@ -154,7 +187,6 @@
             <h3>Loan Grant Program</h3>
             <p>Our Loan Grant Program offers loans from $200,000 to $1,000,000 annually at a 5% monthly interest rate for investors with portfolios over $50,000.</p>
             <img src="assets/images/loan_grant.JPG" alt="Loan Grant Program">
-            <!-- Add other services similarly -->
         </div>
     </section>
 
@@ -223,17 +255,30 @@
                 datasets: [{
                     label: 'Market Cap (Trillions USD)',
                     data: [0.76, 2.25, 1.68, 2.43, 3.15, 4.02],
-                    borderColor: '#1A3C6E',
-                    backgroundColor: 'rgba(26, 60, 110, 0.2)',
-                    pointBackgroundColor: '#D4A017',
-                    pointBorderColor: '#1A3C6E',
+                    borderColor: '#D4A017', /* Gold border for visibility */
+                    backgroundColor: 'rgba(212, 160, 23, 0.2)', /* Semi-transparent gold fill */
+                    pointBackgroundColor: '#E8ECEF', /* Light gray points */
+                    pointBorderColor: '#D4A017', /* Gold point borders */
                     tension: 0.1
                 }]
             },
             options: {
                 responsive: true,
                 scales: {
-                    y: { beginAtZero: true }
+                    y: {
+                        beginAtZero: true,
+                        ticks: { color: '#E8ECEF' }, /* Light gray for y-axis labels */
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' } /* Subtle grid lines */
+                    },
+                    x: {
+                        ticks: { color: '#E8ECEF' }, /* Light gray for x-axis labels */
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: { color: '#E8ECEF' } /* Light gray for legend */
+                    }
                 }
             }
         });
@@ -247,13 +292,26 @@
                 datasets: [{
                     label: 'Savings Amount (USD)',
                     data: [100000, 545000],
-                    backgroundColor: ['#1A3C6E', '#D4A017']
+                    backgroundColor: ['#1A3C6E', '#D4A017'] /* Dark blue and gold bars */
                 }]
             },
             options: {
                 responsive: true,
                 scales: {
-                    y: { beginAtZero: true }
+                    y: {
+                        beginAtZero: true,
+                        ticks: { color: '#E8ECEF' },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                    },
+                    x: {
+                        ticks: { color: '#E8ECEF' },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: { color: '#E8ECEF' }
+                    }
                 }
             }
         });
