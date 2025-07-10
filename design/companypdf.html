@@ -6,65 +6,37 @@
     <title>PrudentProExchange Company Profile</title>
     <!-- Include Chart.js for dynamic charts -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Inline CSS for simplicity; extract to assets/css/styles.css for production -->
+    <!-- Inline CSS with black background adjustments -->
     <style>
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: #000000;
+            background-color: #000000; /* Changed to black background */
             margin: 0;
             padding: 0;
-            color: #FFFFFF;
+            color: #E8ECEF; /* Light gray text for readability on black */
         }
         h1, h2, h3 {
             font-family: 'Playfair Display', serif;
-            color: #D4A017;
+            color: #D4A017; /* Gold accent for headers */
         }
         a {
-            color: #D4A017;
+            color: #FFD700; /* Brighter gold for links */
             text-decoration: none;
-            transition: color 0.3s ease;
         }
         a:hover {
-            color: #FFFFFF;
             text-decoration: underline;
+            color: #FFC107; /* Slightly lighter gold on hover */
         }
         .glass-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid #1A3C6E;
-            backdrop-filter: blur(15px);
+            background: rgba(255, 255, 255, 0.05); /* Semi-transparent white for glass effect */
+            border: 1px solid #D4A017; /* Gold border for contrast */
+            backdrop-filter: blur(10px);
             padding: 20px;
             margin: 20px auto;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Darker shadow for depth */
             border-radius: 10px;
             max-width: 800px;
-        }
-        #cover {
-            position: relative;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('assets/images/cover-background.jpg');
-            background-size: cover;
-            background-position: center;
-        }
-        #cover .glass-card {
-            background: rgba(26, 60, 110, 0.5);
-            color: #FFFFFF;
-            text-align: center;
-        }
-        #cover h1 {
-            font-size: 28pt;
-            font-weight: 700;
-            color: #D4A017;
-            margin-bottom: 20px;
-        }
-        #cover p {
-            font-size: 12pt;
-            font-weight: 300;
-            margin: 5px 0;
+            color: #E8ECEF; /* Light gray text for card content */
         }
         section {
             padding: 40px 20px;
@@ -78,7 +50,7 @@
         h3 {
             font-size: 16pt;
             font-weight: 500;
-            color: #FFFFFF;
+            color: #D4A017; /* Gold for subheadings */
             margin-top: 20px;
         }
         p, li {
@@ -91,84 +63,17 @@
             height: auto;
             display: block;
             margin: 20px auto;
-            border-radius: 5px;
         }
         .chart-card canvas {
             max-width: 600px;
             margin: 20px auto;
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.05); /* Match glass-card background */
+            border-radius: 8px;
             padding: 10px;
-            border-radius: 10px;
-        }
-        footer {
-            background: #0F2447;
-            color: #FFFFFF;
-            padding: 20px;
-            text-align: center;
-            font-size: 10pt;
-            font-weight: 300;
-        }
-        footer img {
-            width: 100px;
-            margin-bottom: 10px;
-        }
-        .toc {
-            text-align: center;
-            margin: 20px auto;
-        }
-        .toc a {
-            display: block;
-            margin: 5px 0;
-            font-size: 12pt;
-        }
-        .btn {
-            background: #D4A017;
-            color: #1A3C6E;
-            padding: 10px 20px;
-            border-radius: 5px;
-            display: inline-block;
-            margin: 10px 0;
-            font-weight: 500;
-            transition: background 0.3s ease;
-        }
-        .btn:hover {
-            background: #FFFFFF;
-            color: #1A3C6E;
-            text-decoration: none;
-        }
-        .fa-icon {
-            margin-right: 8px;
-            color: #D4A017;
         }
     </style>
 </head>
 <body>
-    <!-- Table of Contents -->
-    <section id="toc" class="toc">
-        <h2>Table of Contents</h2>
-        <div class="glass-card">
-            <a href="#about">About PrudentProExchange</a>
-            <a href="#services">Our Services</a>
-            <a href="#charts">Market Insights</a>
-            <a href="#testimonials">Testimonials</a>
-            <a href="#case-studies">Case Studies</a>
-            <a href="#legal">Legal Details</a>
-            <a href="#contact">Contact Us</a>
-        </div>
-    </section>
-
-    <!-- Cover Page -->
-    <section id="cover">
-        <div class="glass-card">
-            <img src="assets/images/logo.svg" alt="PrudentProExchange Logo">
-            <h1>PrudentProExchange Ltd: Your Partner in Wealth Creation</h1>
-            <p>Website: <a href="https://prudentproexchange.net">https://prudentproexchange.net</a></p>
-            <p>Email: <a href="mailto:support@prudentproexchange.net">support@prudentproexchange.net</a></p>
-            <p>Address: 1770 Olive Street, Suite 3016, Dallas, Texas, USA 75201</p>
-            <p>Phone: +1 (214) 555-1234 (Toll-Free)</p>
-        </div>
-    </section>
-
     <!-- About Section -->
     <section id="about">
         <h2>About PrudentProExchange</h2>
@@ -177,11 +82,11 @@
             <p>Our mission is to empower wealth creation through innovative, secure, and transparent financial products. With a team of seasoned professionals, cutting-edge technology, and a client-first philosophy, PrudentProExchange is redefining the future of financial success. We combine expertise, integrity, and innovation to deliver unparalleled value to our clients.</p>
             <h3>Core Values</h3>
             <ul>
-                <li><i class="fa-solid fa-shield-halved fa-icon"></i><strong>Integrity:</strong> Upholding the highest ethical standards with full transparency.</li>
-                <li><i class="fa-solid fa-lightbulb fa-icon"></i><strong>Innovation:</strong> Leveraging advanced technology to provide seamless financial solutions.</li>
-                <li><i class="fa-solid fa-users fa-icon"></i><strong>Client-Centricity:</strong> Prioritizing personalized service and client satisfaction.</li>
-                <li><i class="fa-solid fa-star fa-icon"></i><strong>Excellence:</strong> Committing to perfection in every facet of our operations.</li>
-                <li><i class="fa-solid fa-leaf fa-icon"></i><strong>Sustainability:</strong> Promoting responsible and forward-thinking investment practices.</li>
+                <li><strong>Integrity:</strong> Upholding the highest ethical standards with full transparency.</li>
+                <li><strong>Innovation:</strong> Leveraging advanced technology to provide seamless financial solutions.</li>
+                <li><strong>Client-Centricity:</strong> Prioritizing personalized service and client satisfaction.</li>
+                <li><strong>Excellence:</strong> Committing to perfection in every facet of our operations.</li>
+                <li><strong>Sustainability:</strong> Promoting responsible and forward-thinking investment practices.</li>
             </ul>
             <h3>Why Choose PrudentProExchange?</h3>
             <ol>
@@ -191,7 +96,6 @@
                 <li><strong>Anonymity and Modern Payment Solutions:</strong> Fast, secure cryptocurrency transactions.</li>
                 <li><strong>High Returns with Managed Risk:</strong> Consistent growth through diversified investments.</li>
             </ol>
-            <a href="https://prudentproexchange.net" class="btn">Start Investing Now</a>
         </div>
     </section>
 
@@ -199,27 +103,12 @@
     <section id="services">
         <h2>Our Services</h2>
         <div class="glass-card">
-            <h3><i class="fa-solid fa-bitcoin fa-icon"></i>Cryptocurrency Trading</h3>
+            <h3>Cryptocurrency Trading</h3>
             <p>Cryptocurrencies are shaping the future of finance. PrudentProExchange offers a secure, user-friendly platform to trade top digital currencies, including Bitcoin (BTC), Ethereum (ETH), Binance Coin (BNB), Tron (TRX), Litecoin (LTC), XRP, USD Coin (USDC), Solana (SOL), and Tether (USDT).</p>
-            <img src="assets/images/cryptocurrency.jpg" alt="Digital wallet interface with holographic effects">
-            <h3><i class="fa-solid fa-handshake fa-icon"></i>Loan Grant Program</h3>
+            <img src="assets/images/cryptocurrency.JPG" alt="Cryptocurrency Trading">
+            <h3>Loan Grant Program</h3>
             <p>Our Loan Grant Program offers loans from $200,000 to $1,000,000 annually at a 5% monthly interest rate for investors with portfolios over $50,000.</p>
-            <img src="assets/images/loan_grant.jpg" alt="Business handshake on glassmorphism background">
-            <h3><i class="fa-solid fa-leaf fa-icon"></i>Medical Cannabis Investment</h3>
-            <p>We pioneer medical cannabis investments using blockchain for transparency. Support research and development for innovative therapies.</p>
-            <img src="assets/images/medical_cannabis.jpg" alt="Cannabis lab with blockchain data overlay">
-            <h3><i class="fa-solid fa-exchange-alt fa-icon"></i>Forex Trading</h3>
-            <p>Trade major, minor, and exotic currency pairs in the world’s largest financial market with low spreads and advanced tools.</p>
-            <img src="assets/images/forex.jpg" alt="Currency exchange chart with dynamic graphs">
-            <h3><i class="fa-solid fa-coins fa-icon"></i>Gold Investment</h3>
-            <p>Invest in gold as a safe-haven asset with flexible options, from physical bars to gold-backed ETFs.</p>
-            <img src="assets/images/gold.jpg" alt="Stacks of gold bars with glowing effect">
-            <h3><i class="fa-solid fa-oil-can fa-icon"></i>Oil and Gas Trading</h3>
-            <p>Profit from oil and gas markets through CFDs with low entry barriers and high liquidity.</p>
-            <img src="assets/images/oil_gas.jpg" alt="Oil rig at sunset with digital overlay">
-            <h3><i class="fa-solid fa-piggy-bank fa-icon"></i>Retirement Program</h3>
-            <p>Plan for the future with personalized strategies, achieving up to 445% larger nest eggs.</p>
-            <img src="assets/images/retirement.jpg" alt="Happy retiree with financial advisor">
+            <img src="assets/images/loan_grant.JPG" alt="Loan Grant Program">
         </div>
     </section>
 
@@ -228,83 +117,11 @@
         <h2>Market Insights</h2>
         <div class="glass-card chart-card">
             <h3>Cryptocurrency Market Growth</h3>
-            ```chartjs
-            {
-                "type": "line",
-                "data": {
-                    "labels": ["2020", "2021", "2022", "2023", "2024", "2025"],
-                    "datasets": [{
-                        "label": "Market Cap (Trillions USD)",
-                        "data": [0.76, 2.25, 1.68, 2.43, 3.15, 4.02],
-                        "borderColor": "#D4A017",
-                        "backgroundColor": "rgba(212, 160, 23, 0.2)",
-                        "pointBackgroundColor": "#FFFFFF",
-                        "pointBorderColor": "#1A3C6E",
-                        "tension": 0.1
-                    }]
-                },
-                "options": {
-                    "responsive": true,
-                    "scales": {
-                        "y": { "beginAtZero": true, "grid": { "color": "rgba(255, 255, 255, 0.1)" } },
-                        "x": { "grid": { "color": "rgba(255, 255, 255, 0.1)" } }
-                    },
-                    "plugins": {
-                        "legend": { "labels": { "color": "#FFFFFF" } }
-                    }
-                }
-            }
-            ```
+            <canvas id="cryptoGrowthChart"></canvas>
         </div>
         <div class="glass-card chart-card">
             <h3>Retirement Savings Impact</h3>
-            ```chartjs-complete
-            {
-                "type": "bar",
-                "data": {
-                    "labels": ["Without Plan", "With Plan"],
-                    "datasets": [{
-                        "label": "Savings Amount (USD)",
-                        "data": [100000, 545000],
-                        "backgroundColor": ["#1A3C6E", "#D4A017"]
-                    }]
-                },
-                "options": {
-                    "responsive": true,
-                    "scales": {
-                        "y": { "beginAtZero": true, "grid": { "color": "rgba(255, 255, 255, 0.1)" } },
-                        "x": { "grid": { "color": "rgba(255, 255, 255, 0.1)" } }
-                    },
-                    "plugins": {
-                        "legend": { "labels": { "color": "#FFFFFF" } }
-                    }
-                }
-            }
-            ```
-        </div>
-    </section>
-
-    <!-- Testimonials Section -->
-    <section id="testimonials">
-        <h2>Testimonials</h2>
-        <div class="glass-card">
-            <p><i class="fa-solid fa-quote-left fa-icon"></i>“PrudentProExchange’s crypto trading platform doubled my investment in six months!” – Sarah M., Investor.</p>
-            <p><i class="fa-solid fa-quote-left fa-icon"></i>“Their loan program helped me expand my business effortlessly.” – James T., Entrepreneur.</p>
-            <p><i class="fa-solid fa-quote-left fa-icon"></i>“The retirement planning advice transformed my future.” – Linda K., Retiree.</p>
-            <p><i class="fa-solid fa-quote-left fa-icon"></i>“I trust PrudentProExchange for secure gold investments.” – Michael R., Investor.</p>
-        </div>
-    </section>
-
-    <!-- Case Studies Section -->
-    <section id="case-studies">
-        <h2>Case Studies</h2>
-        <div class="glass-card">
-            <h3>Crypto Success</h3>
-            <p>A $10,000 investment in Bitcoin yielded a 150% return in 18 months.</p>
-            <h3>Loan Impact</h3>
-            <p>A $500,000 loan launched a successful startup.</p>
-            <h3>Retirement Growth</h3>
-            <p>A client’s nest egg grew from $100,000 to $545,000 with our plan.</p>
+            <canvas id="retirementSavingsChart"></canvas>
         </div>
     </section>
 
@@ -313,17 +130,17 @@
         <h2>Legal Details</h2>
         <div class="glass-card">
             <h3>Certificate of Incorporation</h3>
-            <img src="assets/images/Certificate_of_Incorporation.png" alt="Certificate of Incorporation">
+            <img src="assets/images/Certificate_of_Incorporation.PNG" alt="Certificate of Incorporation">
             <h3>ARTICLE II - SHAREHOLDERS</h3>
-            <img src="assets/images/Shareholders_Article.png" alt="ARTICLE II - SHAREHOLDERS">
+            <img src="assets/images/Shareholders_Article.PNG" alt="ARTICLE II - SHAREHOLDERS">
             <h3>SEC Registration</h3>
-            <img src="assets/images/SEC_Registration.png" alt="SEC Registration Certificate">
+            <img src="assets/images/SEC_Registration.PNG" alt="SEC Registration Certificate">
             <h3>AML/KYC Compliance</h3>
-            <img src="assets/images/AML_KYC_Compliance.png" alt="AML/KYC Compliance Certificate">
+            <img src="assets/images/AML_KYC_Compliance.PNG" alt="AML/KYC Compliance Certificate">
             <h3>ISO 27001 Certification</h3>
-            <img src="assets/images/ISO_27001_Certification.png" alt="ISO 27001 Certification">
+            <img src="assets/images/ISO_27001_Certification.PNG" alt="ISO 27001 Certification">
             <h3>Texas Banking License</h3>
-            <img src="assets/images/Texas_Banking_License.png" alt="Texas Banking License">
+            <img src="assets/images/Texas_Banking_License.PNG" alt="Texas Banking License">
         </div>
     </section>
 
@@ -331,25 +148,87 @@
     <section id="contact">
         <h2>Contact Us</h2>
         <div class="glass-card">
-            <p><i class="fa-solid fa-globe fa-icon"></i>Website: <a href="https://prudentproexchange.net">https://prudentproexchange.net</a></p>
-            <p><i class="fa-solid fa-envelope fa-icon"></i>Email: <a href="mailto:support@prudentproexchange.net">support@prudentproexchange.net</a></p>
-            <p><i class="fa-solid fa-map-marker-alt fa-icon"></i>Address: 1770 Olive Street, Suite 3016, Dallas, Texas, USA 75201</p>
-            <p><i class="fa-solid fa-phone fa-icon"></i>Phone: +1 (214) 555-1234 (Toll-Free)</p>
-            <p><i class="fa-solid fa-clock fa-icon"></i>Support Hours: 24/7</p>
-            <p><i class="fa-brands fa-telegram fa-icon"></i>Telegram: <a href="https://t.me/PrudentProExchangeSupport">@PrudentProExchangeSupport</a></p>
-            <img src="assets/images/map.png" alt="Map of 1770 Olive Street, Dallas, TX 75201">
-            <img src="assets/images/qrcode.png" alt="QR Code to PrudentProExchange Website">
-            <a href="https://prudentproexchange.net" class="btn">Contact Support</a>
+            <p>Website: <a href="https://prudentproexchange.net">https://prudentproexchange.net</a></p>
+            <p>Email: <a href="mailto:support@prudentproexchange.net">support@prudentproexchange.net</a></p>
+            <p>Address: 1770 Olive Street, Suite 3016, Dallas, Texas, USA 75201</p>
+            <p>Phone: +1 (214) 555-1234 (Toll-Free)</p>
+            <p>Support Hours: 24/7</p>
+            <img src="assets/images/map.PNG" alt="Map of 1770 Olive Street, Dallas, TX 75201">
+            <img src="assets/images/qrcode.PNG" alt="QR Code to PrudentProExchange Website">
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer>
-        <img src="assets/images/logo.svg" alt="PrudentProExchange Logo">
-        <p>1770 Olive Street, Suite 3016, Dallas, Texas, USA 75201</p>
-        <p>Email: <a href="mailto:support@prudentproexchange.net">support@prudentproexchange.net</a> | Phone: +1 (214) 555-1234</p>
-        <p>PrudentProExchange: Building Wealth, Securing Futures</p>
-        <p>© 2025 PrudentProExchange. All Rights Reserved. SEC Registration #0001230714</p>
-    </footer>
+    <!-- Chart.js Scripts -->
+    <script>
+        // Cryptocurrency Market Growth Chart
+        const cryptoCtx = document.getElementById('cryptoGrowthChart').getContext('2d');
+        new Chart(cryptoCtx, {
+            type: 'line',
+            data: {
+                labels: ['2020', '2021', '2022', '2023', '2024', '2025'],
+                datasets: [{
+                    label: 'Market Cap (Trillions USD)',
+                    data: [0.76, 2.25, 1.68, 2.43, 3.15, 4.02],
+                    borderColor: '#D4A017', /* Gold border for visibility */
+                    backgroundColor: 'rgba(212, 160, 23, 0.2)', /* Semi-transparent gold fill */
+                    pointBackgroundColor: '#E8ECEF', /* Light gray points */
+                    pointBorderColor: '#D4A017', /* Gold point borders */
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { color: '#E8ECEF' }, /* Light gray for y-axis labels */
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' } /* Subtle grid lines */
+                    },
+                    x: {
+                        ticks: { color: '#E8ECEF' }, /* Light gray for x-axis labels */
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: { color: '#E8ECEF' } /* Light gray for legend */
+                    }
+                }
+            }
+        });
+
+        // Retirement Savings Impact Chart
+        const retirementCtx = document.getElementById('retirementSavingsChart').getContext('2d');
+        new Chart(retirementCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Without Plan', 'With Plan'],
+                datasets: [{
+                    label: 'Savings Amount (USD)',
+                    data: [100000, 545000],
+                    backgroundColor: ['#1A3C6E', '#D4A017'] /* Dark blue and gold bars */
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { color: '#E8ECEF' },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                    },
+                    x: {
+                        ticks: { color: '#E8ECEF' },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: { color: '#E8ECEF' }
+                    }
+                }
+            }
+        });
+    </script>
 </body>
 </html>
