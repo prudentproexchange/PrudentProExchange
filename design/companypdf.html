@@ -10,17 +10,17 @@
     <style>
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: #E8ECEF; /* Original light gray background for body */
+            background-color: #E8ECEF; /* Light gray background for body */
             margin: 0;
             padding: 0;
-            color: #333333; /* Original dark text color */
+            color: #333333; /* Dark text color */
         }
         h1, h2, h3 {
             font-family: 'Playfair Display', serif;
-            color: #1A3C6E; /* Original dark blue for headers */
+            color: #1A3C6E; /* Dark blue for headers */
         }
         a {
-            color: #D4A017; /* Original gold for links */
+            color: #D4A017; /* Gold for links */
             text-decoration: none;
         }
         a:hover {
@@ -28,7 +28,7 @@
         }
         .glass-card {
             background: rgba(255, 255, 255, 0.1);
-            border: 1px solid #1A3C6E; /* Original dark blue border */
+            border: 1px solid #1A3C6E; /* Dark blue border */
             backdrop-filter: blur(10px);
             padding: 20px;
             margin: 20px auto;
@@ -36,24 +36,36 @@
             border-radius: 10px;
             max-width: 800px;
         }
-        /* Black background for specific sections */
+        /* Video background for content sections */
         #about, #services, #charts, #legal, #contact {
-            background-color: #000000; /* Black background for specified sections */
+            position: relative;
+            background-color: #000000; /* Black base for video overlay */
             color: #E8ECEF; /* Light gray text for readability */
+            overflow: hidden;
+        }
+        #about video, #services video, #charts video, #legal video, #contact video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+            opacity: 0.3; /* Subtle opacity to ensure text readability */
         }
         #about h2, #about h3, #services h2, #services h3, #charts h2, #charts h3, #legal h2, #legal h3, #contact h2, #contact h3 {
-            color: #D4A017; /* Gold headers for contrast in black sections */
+            color: #D4A017; /* Gold headers for contrast */
         }
         #about a, #services a, #charts a, #legal a, #contact a {
-            color: #FFD700; /* Brighter gold for links in black sections */
+            color: #FFD700; /* Brighter gold for links */
         }
         #about a:hover, #services a:hover, #charts a:hover, #legal a:hover, #contact a:hover {
             color: #FFC107; /* Lighter gold on hover */
         }
         #about .glass-card, #services .glass-card, #charts .glass-card, #legal .glass-card, #contact .glass-card {
-            background: rgba(255, 255, 255, 0.05); /* Subtle glass effect for black background */
-            border: 1px solid #D4A017; /* Gold border for contrast */
-            color: #E8ECEF; /* Light gray text in cards */
+            background: rgba(255, 255, 255, 0.15); /* Slightly stronger glass effect for contrast */
+            border: 1px solid #D4A017; /* Gold border */
+            color: #E8ECEF; /* Light gray text */
         }
         /* Hero section with video background */
         #cover {
@@ -74,14 +86,14 @@
             z-index: -1;
         }
         #cover .glass-card {
-            background: rgba(26, 60, 110, 0.7); /* Original semi-transparent dark blue */
+            background: rgba(26, 60, 110, 0.7); /* Semi-transparent dark blue */
             color: #FFFFFF;
             text-align: center;
         }
         #cover h1 {
             font-size: 28pt;
             font-weight: 700;
-            color: #D4A017; /* Original gold */
+            color: #D4A017; /* Gold */
             margin-bottom: 20px;
         }
         #cover p {
@@ -113,30 +125,46 @@
             height: auto;
             display: block;
             margin: 20px auto;
+            border-radius: 8px; /* Subtle rounding for images */
         }
         .chart-card canvas {
             max-width: 600px;
             margin: 20px auto;
-            background: rgba(255, 255, 255, 0.05); /* Match glass-card in black sections */
+            background: rgba(255, 255, 255, 0.05);
             border-radius: 8px;
             padding: 10px;
         }
+        /* Service item styling for balanced layout */
+        .service-item {
+            margin-bottom: 40px;
+        }
+        .service-item img {
+            max-width: 400px;
+            margin: 20px auto;
+        }
         footer {
-            background: #1A3C6E; /* Original dark blue footer background */
-            color: #FFFFFF;
-            padding: 20px;
+            background: #0F254B; /* Slightly lighter dark blue for balance */
+            color: #E8ECEF; /* Light gray text */
+            padding: 30px 20px;
             text-align: center;
             font-size: 10pt;
             font-weight: 300;
+            border-top: 2px solid #D4A017; /* Gold accent */
         }
         footer img {
             width: 100px;
             margin-bottom: 10px;
         }
+        footer a {
+            color: #FFD700; /* Gold links */
+        }
+        footer a:hover {
+            color: #FFC107; /* Lighter gold on hover */
+        }
     </style>
 </head>
 <body>
-    <!-- Cover Page -->
+    <!-- Cover Page (Unchanged) -->
     <section id="cover">
         <video autoplay muted loop playsinline>
             <source src="assets/videos/cover-background.mp4" type="video/mp4">
@@ -154,6 +182,248 @@
 
     <!-- About Section -->
     <section id="about">
+        <video autoplay muted loop playsinline>
+            <source src="assets/videos/background.webm" type="video/webm">
+            Your browser does not support the video tag.
+        </video>
+        <h2>About PrudentProExchange</h2>
+        <div class="glass-card">
+            <p>PrudentProExchange Ltd is a premier global financial institution, delivering a comprehensive suite of financial services across investment banking, securities, investment management, and consumer banking. Headquartered in Dallas, Texas, we cater to a diverse clientele, including corporations, financial institutions, governments, and individual investors, providing tailored solutions to achieve their financial aspirations.</p>
+            <p>Our mission is to empower wealth creation through innovative, secure, and transparent financial products. With a team of seasoned professionals, cutting-edge technology, and a client-first philosophy, PrudentProExchange is redefining the future of financial success. We combine expertise, integrity, and innovation to deliver unparalleled value to our clients.</p>
+            <h3>Core Values</h3>
+            <ul>
+                <li><strong>Integrity:</strong> Upholding the highest ethical standards with full transparency.</li>
+                <li><strong>Innovation:</strong> Leveraging advanced technology to provide seamless financial solutions.</li>
+                <li><strong>Client-Centricity:</strong> Prioritizing personalized service and client satisfaction.</li>
+                <li><strong>Excellence:</strong> Committing to perfection in every facet of our operations.</li>
+                <li><strong>Sustainability:</strong> Promoting responsible and forward-thinking investment practices.</li>
+            </ul>
+            <h3>Why Choose PrudentProExchange?</h3>
+            <ol>
+                <li><strong>Fully Legal and Compliant:</strong> Incorporated under Delaware laws, ensuring compliance with U.S. and international regulations.</li>
+                <li><strong>Unwavering Reliability:</strong> Trusted globally with robust risk management and encryption.</li>
+                <li><strong>24/7 Premium Support:</strong> Round-the-clock assistance via email and Telegram.</li>
+                <li><strong>Anonymity and Modern Payment Solutions:</strong> Lumber, secure cryptocurrency transactions.</li>
+                <li><strong>High Returns with Managed Risk:</strong> Consistent growth through diversified investments.</li>
+            </ol>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services">
+        <video autoplay muted loop playsinline>
+            <source src="assets/videos/background.webm" type="video/webm">
+            Your browser does not support the video tag.
+        </video>
+        <h2>Our Services</h2>
+        <div class="glass-card">
+            <div class="service-item">
+                <h3>Cryptocurrency Trading</h3>
+                <p>Cryptocurrencies could potentially be the currency of the future with more people gaining interest and price value going up. Blanassets offers competitive spreads, with no commissions charged on transactions making it more profitable. When trading with Blanassets you are trading on the price changes of the digital coin, and not physically purchasing it. Trading with Blanassets ensures that you will trade with a 100% reputable broker. Blanassets now offers all traders the opportunity to trade a wide range of the top ranked digital coins 24/7. Today cryptocurrencies have become known to most people as a conventional and popular investment option. The main purpose of this new technology is to allow people to buy, trade, and invest without the need for banks or any other financial institution.</p>
+                <img src="assets/images/cryptocurrency.jpg" alt="Cryptocurrency Trading">
+            </div>
+            <div class="service-item">
+                <h3>Forex Trading</h3>
+                <p>Forex is a portmanteau of foreign currency and exchange. Foreign exchange is the process of changing one currency into another currency for a variety of reasons, usually for commerce, trading, or tourism. According to a recent triennial report from the Bank for International Settlements (a global bank for national central banks), the average was more than $5.1 trillion in daily forex trading volume. Because of the worldwide reach of trade, commerce, and finance, forex markets tend to be the largest and most liquid asset markets in the world. Market participants use forex to hedge against international currency and interest rate risk, to speculate on geopolitical events, and to diversify portfolios, among several other reasons.</p>
+                <img src="assets/images/forex_trading.jpg" alt="Forex Trading">
+            </div>
+            <div class="service-item">
+                <h3>Gold Investment</h3>
+                <p>Commonly seen as a great store of wealth, this precious metal is also known as a reliable safe-haven asset. With a rich history amongst almost all global cultures, gold remains a highly popular investment. Although it has multiple uses, its primary function is typically to hedge against inflation in an often volatile futures market, as well as to diversify existing Precious Metals Investment Retirement Accounts. Gold–
+
+System: I notice the response was cut off. Let me complete the revised HTML code and provide the full explanation, ensuring all requested changes are implemented professionally. I'll continue from where the code left off, completing the services section and the remaining sections, incorporating the video background, updating the footer, and providing guidance on images.
+
+### Complete Revised HTML Code
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrudentProExchange Company Profile</title>
+    <!-- Include Chart.js for dynamic charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Inline CSS with targeted background adjustments -->
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #E8ECEF; /* Light gray background for body */
+            margin: 0;
+            padding: 0;
+            color: #333333; /* Dark text color */
+        }
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif;
+            color: #1A3C6E; /* Dark blue for headers */
+        }
+        a {
+            color: #D4A017; /* Gold for links */
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid #1A3C6E; /* Dark blue border */
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            margin: 20px auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            max-width: 800px;
+        }
+        /* Video background for content sections */
+        #about, #services, #charts, #legal, #contact {
+            position: relative;
+            background-color: #000000; /* Black base for video overlay */
+            color: #E8ECEF; /* Light gray text for readability */
+            overflow: hidden;
+        }
+        #about video, #services video, #charts video, #legal video, #contact video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+            opacity: 0.3; /* Subtle opacity to ensure text readability */
+        }
+        #about h2, #about h3, #services h2, #services h3, #charts h2, #charts h3, #legal h2, #legal h3, #contact h2, #contact h3 {
+            color: #D4A017; /* Gold headers for contrast */
+        }
+        #about a, #services a, #charts a, #legal a, #contact a {
+            color: #FFD700; /* Brighter gold for links */
+        }
+        #about a:hover, #services a:hover, #charts a:hover, #legal a:hover, #contact a:hover {
+            color: #FFC107; /* Lighter gold on hover */
+        }
+        #about .glass-card, #services .glass-card, #charts .glass-card, #legal .glass-card, #contact .glass-card {
+            background: rgba(255, 255, 255, 0.15); /* Slightly stronger glass effect for contrast */
+            border: 1px solid #D4A017; /* Gold border */
+            color: #E8ECEF; /* Light gray text */
+        }
+        /* Hero section with video background */
+        #cover {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        #cover video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+        #cover .glass-card {
+            background: rgba(26, 60, 110, 0.7); /* Semi-transparent dark blue */
+            color: #FFFFFF;
+            text-align: center;
+        }
+        #cover h1 {
+            font-size: 28pt;
+            font-weight: 700;
+            color: #D4A017; /* Gold */
+            margin-bottom: 20px;
+        }
+        #cover p {
+            font-size: 12pt;
+            font-weight: 300;
+            margin: 5px 0;
+        }
+        section {
+            padding: 40px 20px;
+        }
+        h2 {
+            font-size: 20pt;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        h3 {
+            font-size: 16pt;
+            font-weight: 500;
+            margin-top: 20px;
+        }
+        p, li {
+            font-size: 12pt;
+            font-weight: 400;
+            line-height: 1.6;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+            border-radius: 8px; /* Subtle rounding for images */
+        }
+        .chart-card canvas {
+            max-width: 600px;
+            margin: 20px auto;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 10px;
+        }
+        /* Service item styling for balanced layout */
+        .service-item {
+            margin-bottom: 40px;
+        }
+        .service-item img {
+            max-width: 400px;
+            margin: 20px auto;
+        }
+        footer {
+            background: #0F254B; /* Slightly lighter dark blue for balance */
+            color: #E8ECEF; /* Light gray text */
+            padding: 30px 20px;
+            text-align: center;
+            font-size: 10pt;
+            font-weight: 300;
+            border-top: 2px solid #D4A017; /* Gold accent */
+        }
+        footer img {
+            width: 100px;
+            margin-bottom: 10px;
+        }
+        footer a {
+            color: #FFD700; /* Gold links */
+        }
+        footer a:hover {
+            color: #FFC107; /* Lighter gold on hover */
+        }
+    </style>
+</head>
+<body>
+    <!-- Cover Page (Unchanged) -->
+    <section id="cover">
+        <video autoplay muted loop playsinline>
+            <source src="assets/videos/cover-background.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="glass-card">
+            <img src="assets/images/logo.svg" alt="PrudentProExchange Logo">
+            <h1>PrudentProExchange Ltd: Your Partner in Wealth Creation</h1>
+            <p>Website: <a href="https://prudentproexchange.net">https://prudentproexchange.net</a></p>
+            <p>Email: <a href="mailto:support@prudentproexchange.net">support@prudentproexchange.net</a></p>
+            <p>Address: 1770 Olive Street, Suite 3016, Dallas, Texas, USA 75201</p>
+            <p>Phone: +1 (214) 555-1234 (Toll-Free)</p>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about">
+        <video autoplay muted loop playsinline>
+            <source src="assets/videos/background.webm" type="video/webm">
+            Your browser does not support the video tag.
+        </video>
         <h2>About PrudentProExchange</h2>
         <div class="glass-card">
             <p>PrudentProExchange Ltd is a premier global financial institution, delivering a comprehensive suite of financial services across investment banking, securities, investment management, and consumer banking. Headquartered in Dallas, Texas, we cater to a diverse clientele, including corporations, financial institutions, governments, and individual investors, providing tailored solutions to achieve their financial aspirations.</p>
@@ -179,19 +449,46 @@
 
     <!-- Services Section -->
     <section id="services">
+        <video autoplay muted loop playsinline>
+            <source src="assets/videos/background.webm" type="video/webm">
+            Your browser does not support the video tag.
+        </video>
         <h2>Our Services</h2>
         <div class="glass-card">
-            <h3>Cryptocurrency Trading</h3>
-            <p>Cryptocurrencies are shaping the future of finance. PrudentProExchange offers a secure, user-friendly platform to trade top digital currencies, including Bitcoin (BTC), Ethereum (ETH), Binance Coin (BNB), Tron (TRX), Litecoin (LTC), XRP, USD Coin (USDC), Solana (SOL), and Tether (USDT).</p>
-            <img src="assets/images/cryptocurrency.JPG" alt="Cryptocurrency Trading">
-            <h3>Loan Grant Program</h3>
-            <p>Our Loan Grant Program offers loans from $200,000 to $1,000,000 annually at a 5% monthly interest rate for investors with portfolios over $50,000.</p>
-            <img src="assets/images/loan_grant.JPG" alt="Loan Grant Program">
+            <div class="service-item">
+                <h3>Cryptocurrency Trading</h3>
+                <p>Cryptocurrencies could potentially be the currency of the future with more people gaining interest and price value going up. Blanassets offers competitive spreads, with no commissions charged on transactions making it more profitable. When trading with Blanassets you are trading on the price changes of the digital coin, and not physically purchasing it. Trading with Blanassets ensures that you will trade with a 100% reputable broker. Blanassets now offers all traders the opportunity to trade a wide range of the top ranked digital coins 24/7. Today cryptocurrencies have become known to most people as a conventional and popular investment option. The main purpose of this new technology is to allow people to buy, trade, and invest without the need for banks or any other financial institution.</p>
+                <img src="assets/images/cryptocurrency.jpg" alt="Cryptocurrency Trading">
+            </div>
+            <div class="service-item">
+                <h3>Forex Trading</h3>
+                <p>Forex is a portmanteau of foreign currency and exchange. Foreign exchange is the process of changing one currency into another currency for a variety of reasons, usually for commerce, trading, or tourism. According to a recent triennial report from the Bank for International Settlements (a global bank for national central banks), the average was more than $5.1 trillion in daily forex trading volume. Because of the worldwide reach of trade, commerce, and finance, forex markets tend to be the largest and most liquid asset markets in the world. Market participants use forex to hedge against international currency and interest rate risk, to speculate on geopolitical events, and to diversify portfolios, among several other reasons.</p>
+                <img src="assets/images/forex_trading.jpg" alt="Forex Trading">
+            </div>
+            <div class="service-item">
+                <h3>Gold Investment</h3>
+                <p>Commonly seen as a great store of wealth, this precious metal is also known as a reliable safe-haven asset. With a rich history amongst almost all global cultures, gold remains a highly popular investment. Although it has multiple uses, its primary function is typically to hedge against inflation in an often volatile futures market, as well as to diversify existing Precious Metals Investment Retirement Accounts. Gold has been one of the most valuable precious metals throughout human history, used by elites as a symbol of wealth for centuries due to its rarity and its ability to hold its worth for a long time. Historically, it has been the most common way to pass on one’s wealth as an inheritance from one generation to the next. Gold is considered a worthy investment, with coins and bars available for purchase in various sizes, ranging from one gram to a whopping 400 ounces. Being the most reliable investment commodity available, gold has proven to be a perfect way to diversify your investment portfolio and an excellent safeguard against volatile currency.</p>
+                <img src="assets/images/gold_investment.jpg" alt="Gold Investment">
+            </div>
+            <div class="service-item">
+                <h3>Oil and Gas</h3>
+                <p>Surprising as it might be, anyone can invest in the oil market to make a profit. Indeed, the development of online trading platforms has allowed individuals to use their savings to speculate on rising or falling oil prices. To this end, simply choose your method of trading between the CFDs offered by Forex brokers, which are specifically designed for beginners. Invest-oil.co.uk makes a point to explain how these two trading tools work and how best to use them for profit. Traded oil has many advantages compared to other popular assets such as stocks. Speculating with oil only requires some basic technical and fundamental analysis of the market. The website invest-oil.co.uk was specifically created to assist investors in understanding the rules of investing in black gold and thereby enable them to easily gain access to this opportunity. You will have the upper hand to quickly make profits and earn money simply through oil price changes.</p>
+                <img src="assets/images/oil_gas.jpg" alt="Oil and Gas Investment">
+            </div>
+            <div class="service-item">
+                <h3>Retirement Program</h3>
+                <p>Saving for retirement can be a daunting task, but with a sound strategy, it’s well within reach. Blanassets is here to bring clarity to retirement planning and set you on your path to success. Here you’ll better understand your options and find the right investment. If you had the chance to double—or even quadruple—your retirement savings, you’d probably jump at that opportunity, right? Well, there’s one simple change you can make today that’s sure to boost your retirement savings. Blanassets study of worldwide retirement saving habits discovered that people with some kind of retirement plan have more than three times as much in their nest egg than those with no plan at all. And savers who take it one step further by working with an investing advisor to put their plan to paper? Their average nest egg is a whopping 445% bigger than non-planners. That’s a big deal! Now, did you catch that? By working with an advisor and by having a plan in place, you can supercharge your retirement savings.</p>
+                <img src="assets/images/retirement_program.jpg" alt="Retirement Program">
+            </div>
         </div>
     </section>
 
     <!-- Charts Section -->
     <section id="charts">
+        <video autoplay muted loop playsinline>
+            <source src="assets/videos/background.webm" type="video/webm">
+            Your browser does not support the video tag.
+        </video>
         <h2>Market Insights</h2>
         <div class="glass-card chart-card">
             <h3>Cryptocurrency Market Growth</h3>
@@ -205,6 +502,10 @@
 
     <!-- Legal Details Section -->
     <section id="legal">
+        <video autoplay muted loop playsinline>
+            <source src="assets/videos/background.webm" type="video/webm">
+            Your browser does not support the video tag.
+        </video>
         <h2>Legal Details</h2>
         <div class="glass-card">
             <h3>Certificate of Incorporation</h3>
@@ -224,6 +525,10 @@
 
     <!-- Contact Section -->
     <section id="contact">
+        <video autoplay muted loop playsinline>
+            <source src="assets/videos/background.webm" type="video/webm">
+            Your browser does not support the video tag.
+        </video>
         <h2>Contact Us</h2>
         <div class="glass-card">
             <p>Website: <a href="https://prudentproexchange.net">https://prudentproexchange.net</a></p>
@@ -240,7 +545,7 @@
     <footer>
         <img src="assets/images/logo.svg" alt="PrudentProExchange Logo">
         <p>1770 Olive Street, Suite 3016, Dallas, Texas, USA 75201</p>
-        <p>Email: support@prudentproexchange.net | Phone: +1 (214) 555-1234</p>
+        <p>Email: <a href="mailto:support@prudentproexchange.net">support@prudentproexchange.net</a> | Phone: +1 (214) 555-1234</p>
         <p>© 2025 PrudentProExchange. All Rights Reserved. SEC Registration #0001230714</p>
     </footer>
 
@@ -255,10 +560,10 @@
                 datasets: [{
                     label: 'Market Cap (Trillions USD)',
                     data: [0.76, 2.25, 1.68, 2.43, 3.15, 4.02],
-                    borderColor: '#D4A017', /* Gold border for visibility */
-                    backgroundColor: 'rgba(212, 160, 23, 0.2)', /* Semi-transparent gold fill */
-                    pointBackgroundColor: '#E8ECEF', /* Light gray points */
-                    pointBorderColor: '#D4A017', /* Gold point borders */
+                    borderColor: '#D4A017',
+                    backgroundColor: 'rgba(212, 160, 23, 0.2)',
+                    pointBackgroundColor: '#E8ECEF',
+                    pointBorderColor: '#D4A017',
                     tension: 0.1
                 }]
             },
@@ -267,17 +572,17 @@
                 scales: {
                     y: {
                         beginAtZero: true,
-                        ticks: { color: '#E8ECEF' }, /* Light gray for y-axis labels */
-                        grid: { color: 'rgba(255, 255, 255, 0.1)' } /* Subtle grid lines */
+                        ticks: { color: '#E8ECEF' },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
                     },
                     x: {
-                        ticks: { color: '#E8ECEF' }, /* Light gray for x-axis labels */
+                        ticks: { color: '#E8ECEF' },
                         grid: { color: 'rgba(255, 255, 255, 0.1)' }
                     }
                 },
                 plugins: {
                     legend: {
-                        labels: { color: '#E8ECEF' } /* Light gray for legend */
+                        labels: { color: '#E8ECEF' }
                     }
                 }
             }
@@ -292,7 +597,7 @@
                 datasets: [{
                     label: 'Savings Amount (USD)',
                     data: [100000, 545000],
-                    backgroundColor: ['#1A3C6E', '#D4A017'] /* Dark blue and gold bars */
+                    backgroundColor: ['#1A3C6E', '#D4A017']
                 }]
             },
             options: {
