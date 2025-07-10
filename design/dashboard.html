@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Dashboard • PrudentProExchange</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
@@ -14,14 +14,14 @@
       --primary: #ffd700; /* Gold */
       --primary-dark: #cca300; /* Darker gold */
       --text-color: #ffffff; /* White for text */
-      --text-secondary: #d0d0ff; /* Brighter light purple for readability */
+      --text-secondary: #e0e0ff; /* Light purple */
       --bg-dark: #0a0a0f; /* Dark blue background */
       --glass-bg: rgba(255, 255, 255, 0.05);
       --card-bg: rgba(15, 15, 25, 0.8);
       --shadow: rgba(0, 0, 0, 0.5);
       --error: #ff6b6b;
       --success: #44ff44;
-      --gradient-start: rgba(255, 215, 0, 0.15);
+      --gradient-start: rgba(255, 215, 0, 0.2);
       --gradient-end: rgba(255, 215, 0, 0.05);
     }
 
@@ -37,6 +37,7 @@
       color: var(--text-color);
       line-height: 1.6;
       overflow-x: hidden;
+      position: relative;
       background-image: 
         radial-gradient(circle at 10% 20%, var(--gradient-start) 0%, transparent 20%),
         radial-gradient(circle at 90% 80%, var(--gradient-start) 0%, transparent 20%),
@@ -51,12 +52,13 @@
       height: 100%;
       object-fit: cover;
       z-index: -1;
-      opacity: 0.1; /* Reduced opacity for better content visibility */
+      opacity: 0.15;
     }
 
     .overlay {
       position: relative;
       min-height: 100vh;
+      padding-top: 60px; /* Space for fixed nav */
     }
 
     .container {
@@ -65,97 +67,38 @@
       padding: 1rem;
     }
 
-    /* Header Styles */
-    .site-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem;
-      background: var(--glass-bg);
-      backdrop-filter: blur(10px);
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      border-bottom: 1px solid rgba(255, 215, 0, 0.2);
-      max-width: 1400px;
-      margin: 0 auto;
-      border-radius: 0 0 12px 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    }
-
-    .logo-link {
-      display: flex;
-      align-items: center;
-    }
-
-    .logo {
-      height: 60px; /* Reduced logo size */
-      transition: transform 0.3s ease;
-    }
-
-    .logo:hover {
-      transform: scale(1.05);
-    }
-
-    .header-right {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      justify-content: space-around;
-      width: 28px;
-      height: 18px;
-      background: transparent;
-      border: none;
-      cursor: pointer;
-      padding: 0;
-      z-index: 1002;
-    }
-
-    .hamburger span {
-      width: 100%;
-      height: 2px;
-      background: var(--primary);
-      transition: all 0.3s ease;
-    }
-
-    .hamburger.active span:nth-child(1) {
-      transform: rotate(45deg) translate(5px, 5px);
-    }
-
-    .hamburger.active span:nth-child(2) {
-      opacity: 0;
-    }
-
-    .hamburger.active span:nth-child(3) {
-      transform: rotate(-45deg) translate(7px, -7px);
-    }
-
+    /* Navigation */
     .nav-drawer {
       display: flex;
-      gap: 1rem;
+      justify-content: center;
       align-items: center;
-      overflow-y: auto;
-      max-height: 60px;
+      gap: 1rem;
+      background: var(--glass-bg);
+      backdrop-filter: blur(10px);
+      padding: 0.8rem 1rem;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1001;
+      border-bottom: 1px solid var(--gradient-start);
+      box-shadow: 0 4px 12px var(--shadow);
     }
 
     .nav-drawer a {
       color: var(--text-color);
       text-decoration: none;
-      font-size: 0.9rem; /* Reduced font size */
+      font-size: 0.9rem;
       font-weight: 500;
-      transition: color 0.3s ease, background 0.3s ease;
       padding: 0.5rem 0.8rem;
       border-radius: 6px;
+      transition: all 0.3s ease;
     }
 
-    .nav-drawer a:hover, .nav-drawer a.active {
+    .nav-drawer a:hover,
+    .nav-drawer a.active {
       color: var(--primary);
-      background: rgba(255, 215, 0, 0.1);
+      background: var(--gradient-start);
     }
 
     .account-menu {
@@ -164,14 +107,9 @@
 
     .account-toggle {
       cursor: pointer;
+      font-size: 0.9rem;
       padding: 0.5rem 0.8rem;
       border-radius: 6px;
-      font-size: 0.9rem;
-      transition: all 0.3s ease;
-    }
-
-    .account-toggle:hover {
-      background: rgba(255, 215, 0, 0.1);
     }
 
     .submenu {
@@ -184,8 +122,8 @@
       border: 1px solid var(--primary);
       border-radius: 8px;
       min-width: 180px;
-      z-index: 1000;
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+      z-index: 1002;
+      box-shadow: 0 8px 20px var(--shadow);
       padding: 0.5rem 0;
     }
 
@@ -201,9 +139,8 @@
       display: block;
       padding: 0.6rem 1rem;
       color: var(--text-color);
-      text-decoration: none;
       font-size: 0.85rem;
-      transition: all 0.3s ease;
+      font-weight: 400;
     }
 
     .submenu a:hover {
@@ -211,48 +148,77 @@
       color: #000;
     }
 
-    .nav-overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.7);
-      z-index: 999;
+    /* Header */
+    .site-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      background: var(--glass-bg);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 60px;
+      z-index: 1000;
+      max-width: 1400px;
+      margin: 0 auto;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px var(--shadow);
     }
 
-    .nav-overlay.nav-open {
-      display: block;
+    .logo-link {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo {
+      height: 70px;
+      transition: transform 0.3s ease;
+    }
+
+    .logo:hover {
+      transform: scale(1.05);
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    #theme-toggle {
+      background: transparent;
+      border: none;
+      color: var(--primary);
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: var(--gradient-start);
+    }
+
+    #theme-toggle:hover {
+      color: var(--text-color);
+      background: var(--primary-dark);
     }
 
     /* Profile Section */
     .profile-section {
       display: flex;
       align-items: center;
-      gap: 1rem;
-      padding: 1rem;
-      background: var(--glass-bg);
+      gap: 1.2rem;
+      padding: 1.2rem;
+      background: var(--card-bg);
       backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+      border-radius: 12px;
       max-width: 1400px;
       margin: 1rem auto;
-      border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 4px 15px var(--shadow);
       background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
-      position: relative;
-      overflow: hidden;
-    }
-
-    .profile-section::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: radial-gradient(circle at top right, rgba(255, 215, 0, 0.1), transparent 60%);
-      pointer-events: none;
     }
 
     .profile-container {
@@ -285,18 +251,17 @@
     }
 
     .welcome-message {
-      font-size: 1.5rem;
+      font-size: 1.6rem;
       font-weight: 600;
       font-family: 'Playfair Display', serif;
       color: var(--primary);
     }
 
     .welcome-message span {
-      font-weight: 500;
       font-size: 1.2rem;
       color: var(--text-secondary);
       display: block;
-      margin-top: 0.2rem;
+      font-weight: 400;
     }
 
     /* Dashboard Layout */
@@ -304,15 +269,10 @@
       display: grid;
       grid-template-columns: 2fr 1fr;
       gap: 1rem;
-      margin-bottom: 1.5rem;
+      margin: 1rem 0;
     }
 
-    .dashboard-main {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 1rem;
-    }
-
+    .dashboard-main,
     .dashboard-sidebar {
       display: grid;
       grid-template-columns: 1fr;
@@ -322,39 +282,40 @@
     /* Card Styles */
     .card {
       background: var(--card-bg);
-      padding: 1rem;
-      border: 1px solid rgba(255, 215, 0, 0.2);
+      padding: 1.2rem;
+      border: 1px solid var(--gradient-start);
       border-radius: 12px;
-      backdrop-filter: blur(12px);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 15px var(--shadow);
+      transition: all 0.3s ease;
       position: relative;
       overflow: hidden;
     }
 
     .card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 20px rgba(255, 215, 0, 0.2);
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px var(--shadow);
+      border-color: var(--primary);
     }
 
     .card-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 0.8rem;
-      padding-bottom: 0.6rem;
-      border-bottom: 1px solid rgba(255, 215, 0, 0.1);
+      margin-bottom: 1rem;
+      padding-bottom: 0.8rem;
+      border-bottom: 1px solid var(--gradient-start);
     }
 
     .card h2 {
       font-family: 'Playfair Display', serif;
-      font-size: 1.4rem; /* Reduced font size */
+      font-size: 1.4rem;
       color: var(--primary);
-      font-weight: 600;
+      font-weight: 700;
     }
 
     .card-icon {
-      font-size: 1.5rem;
+      font-size: 1.4rem;
       color: var(--primary);
     }
 
@@ -366,130 +327,124 @@
     }
 
     .card .value {
-      font-size: 1.8rem; /* Reduced font size */
+      font-size: 1.8rem;
       font-weight: 700;
       color: var(--primary);
-      margin: 0.4rem 0;
+      margin: 0.5rem 0;
     }
 
     .card .label {
       font-size: 0.85rem;
       color: var(--text-secondary);
-      opacity: 0.9;
+      opacity: 0.8;
     }
 
     .card .sub-value {
       font-size: 1rem;
-      font-weight: 500;
+      font-weight: 600;
       color: var(--text-color);
+    }
+
+    /* Collapsible Investment Card */
+    .investment-card details {
+      width: 100%;
+    }
+
+    .investment-card summary {
+      cursor: pointer;
+      font-size: 1.4rem;
+      font-family: 'Playfair Display', serif;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0;
+    }
+
+    .investment-card summary::before {
+      content: '▶';
+      font-size: 1rem;
+      color: var(--primary);
+      transition: transform 0.3s ease;
+    }
+
+    .investment-card details[open] summary::before {
+      transform: rotate(90deg);
+    }
+
+    .investment-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s ease, opacity 0.5s ease;
+      opacity: 0;
+    }
+
+    .investment-card details[open] .investment-content {
+      max-height: 1000px;
+      opacity: 1;
+      padding-top: 1rem;
     }
 
     .chart-container {
       width: 100%;
-      height: 180px; /* Slightly smaller chart */
+      height: 250px;
+      margin: 1rem 0;
+    }
+
+    /* Investment Item */
+    .investment-item {
       margin: 0.8rem 0;
+      padding: 1rem;
+      border: 1px solid var(--gradient-start);
+      border-radius: 8px;
+      background: rgba(10, 10, 20, 0.7);
     }
 
-    /* Collapsible Investment Card */
-    .investment-card.collapsed .investment-content {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.3s ease;
+    .investment-item p {
+      font-size: 0.9rem;
+      margin: 0.4rem 0;
     }
 
-    .investment-card .investment-content {
-      max-height: 1000px; /* Arbitrary large value for expansion */
-      transition: max-height 0.3s ease;
-    }
-
-    .toggle-btn {
-      background: none;
-      border: none;
-      color: var(--primary);
-      font-size: 1.2rem;
-      cursor: pointer;
-      padding: 0.5rem;
-    }
-
-    .toggle-btn:hover {
+    .investment-item span {
       color: var(--text-color);
+      font-weight: 600;
+    }
+
+    .investment-actions {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.8rem;
     }
 
     .btn {
-      display: inline-block;
-      padding: 0.7rem 1.2rem;
+      padding: 0.6rem 1.2rem;
       background: linear-gradient(45deg, var(--primary), var(--primary-dark));
       color: #000;
       text-decoration: none;
       border-radius: 6px;
-      font-weight: 600;
       font-size: 0.9rem;
-      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
       transition: all 0.3s ease;
       border: none;
       cursor: pointer;
-      text-align: center;
-      margin-top: 0.8rem;
-      box-shadow: 0 3px 8px rgba(255, 215, 0, 0.2);
+      box-shadow: 0 4px 10px var(--shadow);
     }
 
     .btn:hover {
       background: linear-gradient(45deg, var(--primary-dark), var(--primary));
       transform: translateY(-2px);
-      box-shadow: 0 6px 15px rgba(255, 215, 0, 0.3);
+      box-shadow: 0 6px 15px var(--shadow);
     }
 
     .btn:disabled {
       background: #666;
       cursor: not-allowed;
-      transform: none;
       box-shadow: none;
     }
 
     .btn-small {
-      padding: 0.5rem 0.8rem;
+      padding: 0.5rem 1rem;
       font-size: 0.85rem;
-    }
-
-    /* Investments */
-    .investment-item {
-      margin: 0.8rem 0;
-      padding: 1rem;
-      border: 1px solid rgba(255, 215, 0, 0.2);
-      border-radius: 8px;
-      background: rgba(10, 10, 20, 0.6);
-      position: relative;
-    }
-
-    .investment-item::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 3px;
-      height: 100%;
-      background: var(--primary);
-    }
-
-    .investment-item p {
-      margin: 0.4rem 0;
-      font-size: 0.85rem;
-      color: var(--text-secondary);
-    }
-
-    .investment-item span {
-      color: var(--text-color);
-      font-weight: 500;
-    }
-
-    .investment-actions {
-      display: flex;
-      gap: 0.6rem;
-      margin-top: 0.6rem;
-    }
-
-    .investment-actions button {
-      flex: 1;
     }
 
     /* Referral Section */
@@ -501,27 +456,27 @@
 
     .referral-link-container input {
       flex: 1;
-      padding: 0.7rem;
-      background: rgba(255, 255, 255, 0.1);
+      padding: 0.6rem;
+      background: rgba(255, 255, 255, 0.08);
       border: 1px solid var(--primary);
       border-radius: 6px;
       color: var(--text-secondary);
       font-size: 0.85rem;
+      font-family: 'Poppins', sans-serif;
     }
 
     .copy-btn {
-      padding: 0.7rem 1rem;
+      padding: 0.6rem 1rem;
       background: linear-gradient(45deg, var(--primary), var(--primary-dark));
       border: none;
       border-radius: 6px;
       cursor: pointer;
       color: #000;
-      transition: all 0.3s ease;
+      font-size: 0.85rem;
+      font-weight: 600;
       display: flex;
       align-items: center;
       gap: 0.4rem;
-      font-size: 0.85rem;
-      font-weight: 600;
     }
 
     .copy-btn:hover {
@@ -532,38 +487,28 @@
     /* Transaction History */
     .transaction-history {
       background: var(--card-bg);
-      padding: 1rem;
-      border: 1px solid var(--primary);
+      padding: 1.2rem;
+      border: 1px solid var(--gradient-start);
       border-radius: 12px;
-      backdrop-filter: blur(12px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 4px 15px var(--shadow);
       margin-top: 1rem;
-      position: relative;
     }
 
     .transaction-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 0.8rem;
-    }
-
-    .transaction-header h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.4rem;
-      color: var(--primary);
-      font-weight: 600;
+      margin-bottom: 1rem;
     }
 
     .transaction-controls {
       display: flex;
-      gap: 0.6rem;
+      gap: 0.5rem;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      margin: 0.8rem 0;
       background: rgba(15, 15, 25, 0.5);
       border-radius: 8px;
       overflow: hidden;
@@ -572,30 +517,30 @@
     th, td {
       padding: 0.8rem;
       text-align: left;
-      border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+      border-bottom: 1px solid var(--gradient-start);
+      font-size: 0.9rem;
       color: var(--text-secondary);
-      font-size: 0.85rem;
     }
 
     th {
-      background: rgba(255, 215, 0, 0.15);
+      background: var(--gradient-start);
       color: var(--primary);
       font-weight: 600;
     }
 
     tr:hover {
-      background: rgba(255, 215, 0, 0.05);
+      background: var(--gradient-end);
     }
 
     /* Loading and Messages */
     .loading-spinner {
-      border: 3px solid rgba(255, 255, 255, 0.3);
-      border-top: 3px solid var(--primary);
+      border: 4px solid rgba(255, 255, 255, 0.3);
+      border-top: 4px solid var(--primary);
       border-radius: 50%;
-      width: 20px;
-      height: 20px;
+      width: 24px;
+      height: 24px;
       animation: spin 1s linear infinite;
-      margin: 0.8rem auto;
+      margin: 1rem auto;
     }
 
     @keyframes spin {
@@ -617,33 +562,33 @@
     .site-footer {
       background: var(--glass-bg);
       backdrop-filter: blur(10px);
-      padding: 1rem;
-      border-top: 1px solid var(--primary);
+      padding: 1.2rem;
+      border-top: 1px solid var(--gradient-start);
       text-align: center;
       max-width: 1400px;
-      margin: 0 auto;
+      margin: 1rem auto 0;
       border-radius: 12px 12px 0 0;
-      box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 -4px 12px var(--shadow);
     }
 
     .footer-content p {
-      margin: 0.4rem 0;
       font-size: 0.85rem;
       color: var(--text-secondary);
+      margin: 0.4rem 0;
     }
 
     .footer-links {
-      margin: 0.8rem 0;
       display: flex;
       justify-content: center;
       gap: 1rem;
+      margin: 0.8rem 0;
     }
 
     .footer-links a {
       color: var(--primary);
       text-decoration: none;
       font-size: 0.85rem;
-      transition: all 0.3s ease;
+      font-weight: 500;
     }
 
     .footer-links a:hover {
@@ -656,26 +601,21 @@
       position: fixed;
       bottom: 20px;
       right: 20px;
-      z-index: 1000;
       background: var(--primary);
       color: #000;
       border: none;
       border-radius: 50%;
-      width: 45px;
-      height: 45px;
+      width: 40px;
+      height: 40px;
       font-size: 1.2rem;
       cursor: pointer;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 4px 10px var(--shadow);
       transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
     }
 
     #back-to-top:hover {
       background: var(--primary-dark);
       transform: translateY(-3px);
-      box-shadow: 0 6px 15px rgba(255, 215, 0, 0.3);
     }
 
     .gtranslate_wrapper {
@@ -683,27 +623,6 @@
       bottom: 20px;
       left: 20px;
       z-index: 1000;
-    }
-
-    #theme-toggle {
-      background: transparent;
-      border: none;
-      color: var(--primary);
-      font-size: 1.2rem;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      width: 36px;
-      height: 36px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-      background: rgba(255, 215, 0, 0.1);
-    }
-
-    #theme-toggle:hover {
-      color: var(--text-color);
-      background: rgba(255, 215, 0, 0.2);
     }
 
     /* Responsive Design */
@@ -714,8 +633,22 @@
     }
 
     @media (max-width: 768px) {
-      .hamburger {
-        display: flex;
+      .nav-drawer {
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        padding: 0.6rem;
+        overflow-x: auto;
+        white-space: nowrap;
+      }
+
+      .nav-drawer a,
+      .account-toggle {
+        font-size: 0.85rem;
+        padding: 0.4rem 0.6rem;
+      }
+
+      .submenu a {
+        font-size: 0.8rem;
       }
 
       .site-header {
@@ -723,45 +656,13 @@
       }
 
       .logo {
-        height: 50px;
-      }
-
-      .nav-drawer {
-        position: fixed;
-        top: 0;
-        right: -100%;
-        height: 100vh;
-        width: 80%;
-        background: var(--bg-dark);
-        box-shadow: 0 0 15px var(--shadow);
-        flex-direction: column;
-        padding: 1.5rem;
-        transition: right 0.3s ease;
-        z-index: 1001;
-      }
-
-      .nav-drawer.open {
-        right: 0;
-      }
-
-      .nav-drawer a {
-        font-size: 1rem;
-        padding: 0.8rem 0;
-        width: 100%;
-      }
-
-      .submenu {
-        position: static;
-        background: transparent;
-        border: none;
-        box-shadow: none;
-        width: 100%;
+        height: 60px;
       }
 
       .profile-section {
         flex-direction: column;
         align-items: flex-start;
-        padding: 0.8rem;
+        padding: 1rem;
       }
 
       .profile-container {
@@ -774,11 +675,15 @@
       }
 
       .welcome-message {
-        font-size: 1.3rem;
+        font-size: 1.4rem;
       }
 
       .welcome-message span {
         font-size: 1rem;
+      }
+
+      .card {
+        padding: 1rem;
       }
 
       .card h2 {
@@ -788,6 +693,15 @@
       .card .value {
         font-size: 1.6rem;
       }
+
+      .card .label,
+      .card p {
+        font-size: 0.85rem;
+      }
+
+      .chart-container {
+        height: 200px;
+      }
     }
 
     @media (max-width: 480px) {
@@ -795,12 +709,10 @@
         padding: 0.8rem;
       }
 
-      .logo {
-        height: 45px;
-      }
-
-      .nav-drawer a {
-        font-size: 0.95rem;
+      .nav-drawer a,
+      .account-toggle {
+        font-size: 0.8rem;
+        padding: 0.3rem 0.5rem;
       }
 
       .card {
@@ -816,21 +728,12 @@
       }
 
       .btn {
-        padding: 0.6rem 1rem;
+        padding: 0.5rem 1rem;
         font-size: 0.85rem;
       }
 
-      .referral-link-container input {
-        font-size: 0.8rem;
-      }
-
-      .copy-btn {
-        padding: 0.6rem 0.8rem;
-        font-size: 0.8rem;
-      }
-
       .investment-item p {
-        font-size: 0.8rem;
+        font-size: 0.85rem;
       }
 
       table {
@@ -839,10 +742,6 @@
 
       th, td {
         padding: 0.6rem;
-      }
-
-      .footer-content p, .footer-links a {
-        font-size: 0.8rem;
       }
     }
   </style>
@@ -854,76 +753,69 @@
     Your browser does not support the video tag.
   </video>
   <div class="overlay">
+    <nav class="nav-drawer" id="navDrawer">
+      <a href="dashboard.html" class="active">Dashboard</a>
+      <a href="invest.html">Invest</a>
+      <a href="withdraw.html">Withdraw</a>
+      <a href="transactions.html">Transactions</a>
+      <a href="referrals.html">Referrals</a>
+      <a href="accountbalance.html">Account Balance</a>
+      <div class="account-menu">
+        <a href="#" class="account-toggle" id="account-toggle">Account ▾</a>
+        <ul class="submenu">
+          <li><a href="profile-settings.html">Profile Settings</a></li>
+          <li><a href="transfer.html">Transfer Balance</a></li>
+          <li><a href="change-password.html">Change Password</a></li>
+          <li><a href="support.html">Support Ticket</a></li>
+          <li><a href="promo-tools.html">Promotional Tools</a></li>
+          <li><a href="2fa.html">2FA Security</a></li>
+          <li><a href="#" id="logout-btn">Logout</a></li>
+        </ul>
+      </div>
+      <a href="kyc.html">KYC Verification</a>
+      <a href="transfer.html">Transfer</a>
+    </nav>
     <header class="site-header">
-      <a href="dashboard.html" class="logo-link" aria-label="PrudentProExchange Home">
+      <a href="dashboard.html" class="logo-link">
         <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo"/>
       </a>
       <div class="header-right">
         <button id="theme-toggle" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
-        <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu">
-          <span></span><span></span><span></span>
-        </button>
       </div>
-      <nav class="nav-drawer" id="navDrawer">
-        <a href="dashboard.html" class="active">Dashboard</a>
-        <a href="invest.html">Invest</a>
-        <a href="withdraw.html">Withdraw</a>
-        <a href="transactions.html">Transactions</a>
-        <a href="referrals.html">Referrals</a>
-        <a href="kyc.html">KYC Verification</a>
-        <div class="account-menu">
-          <a href="#" class="account-toggle" id="account-toggle">Account ▾</a>
-          <ul class="submenu">
-            <li><a href="profile-settings.html">Profile Settings</a></li>
-            <li><a href="transfer.html">Transfer Balance</a></li>
-            <li><a href="accountbalance.html">Account Balance</a></li>
-            <li><a href="change-password.html">Change Password</a></li>
-            <li><a href="support.html">Support Ticket</a></li>
-            <li><a href="promo-tools.html">Promotional Tools</a></li>
-            <li><a href="2fa.html">2FA Security</a></li>
-            <li><a href="#" id="logout-btn">Logout</a></li>
-          </ul>
-        </div>
-      </nav>
     </header>
-    <div class="nav-overlay"></div>
-    <div class="profile-section">
-      <div class="profile-container">
-        <img id="navProfilePhoto" src="" alt="Profile Photo" class="avatar" style="display: none;"/>
-        <span id="defaultProfileIcon" class="avatar">👤</span>
+    <main class="container">
+      <div class="profile-section" data-aos="fade-up">
+        <div class="profile-container">
+          <img id="navProfilePhoto" src="" alt="Profile" class="avatar" style="display: none;"/>
+          <span id="defaultProfileIcon" class="avatar">👤</span>
+        </div>
+        <div class="welcome-message">Welcome to Your Dashboard<span id="welcomeName"></span></div>
       </div>
-      <div class="welcome-message">Welcome to Your Dashboard<span id="welcomeName"></span></div>
-    </div>
-    <main class="dashboard-page container">
-      <div class="dashboard-layout">
+      <div class="dashboard-layout" data-aos="fade-up">
         <div class="dashboard-main">
-          <div class="card investment-card collapsed">
-            <div class="card-header">
-              <h2>Investments Dashboard</h2>
-              <div>
-                <i class="fas fa-chart-line card-icon"></i>
-                <button class="toggle-btn" id="toggleInvestmentCard" aria-label="Toggle Investments Dashboard"><i class="fas fa-chevron-down"></i></button>
+          <div class="card investment-card" data-aos="fade-up">
+            <details>
+              <summary>Investments Dashboard</summary>
+              <div class="investment-content">
+                <div class="chart-container">
+                  <canvas id="investmentChart"></canvas>
+                </div>
+                <div id="investments-container" aria-live="polite"></div>
+                <div id="no-investments" style="display: none;">
+                  <p>No active investments currently.</p>
+                  <select id="invest-option" class="btn" style="width: 100%; margin: 0.8rem 0;">
+                    <option value="" disabled selected>Select Investment Option</option>
+                    <option value="accountbalance">Invest through Account Balance</option>
+                    <option value="directly">Invest Directly</option>
+                  </select>
+                  <a href="#" class="btn" id="invest-now-btn">Invest Now</a>
+                </div>
+                <div class="loading-spinner" id="investments-loading" style="display: none;"></div>
+                <div class="error-message" id="investments-error"></div>
               </div>
-            </div>
-            <div class="investment-content">
-              <div class="chart-container">
-                <canvas id="investmentChart"></canvas>
-              </div>
-              <div id="investments-container" aria-live="polite"></div>
-              <div id="no-investments" style="display: none;">
-                <p>No active investments currently.</p>
-                <select id="invest-option" style="margin: 0.8rem 0; padding: 0.7rem; background: rgba(255, 255, 255, 0.1); border: 1px solid var(--primary); color: var(--text-secondary); border-radius: 6px; font-size: 0.85rem; width: 100%;">
-                  <option value="" disabled selected>Select Investment Option</option>
-                  <option value="accountbalance">Invest through Account Balance</option>
-                  <option value="directly">Invest Directly</option>
-                </select>
-                <a href="#" class="btn" id="invest-now-btn">Invest Now</a>
-              </div>
-              <div class="loading-spinner" id="investments-loading" style="display: none;"></div>
-              <div class="error-message" id="investments-error"></div>
-            </div>
+            </details>
           </div>
-          <div class="card how-it-works">
+          <div class="card how-it-works" data-aos="fade-up">
             <div class="card-header">
               <h2>How It Works</h2>
               <i class="fas fa-info-circle card-icon"></i>
@@ -931,30 +823,30 @@
             <p>Here’s how to invest with PrudentProExchange:</p>
             <ul style="margin: 0.8rem 0; padding-left: 1.2rem;">
               <li>Deposit funds using secure payment options.</li>
-              <li>Select an investment plan tailored to your goals.</li>
-              <li>Track earnings directly from your dashboard.</li>
+              <li>Select a tailored investment plan.</li>
+              <li>Track earnings from your dashboard.</li>
               <li>Benefit from profit compounding for up to four months.</li>
               <li>Access dedicated live support anytime.</li>
             </ul>
-            <p class="brand" style="font-weight: 600; color: var(--primary); margin-top: 0.8rem;">PrudentProExchange.net</p>
+            <p class="brand" style="font-weight: 600; color: var(--primary);">PrudentProExchange.net</p>
             <a href="invest.html" class="btn">Explore Plans</a>
           </div>
         </div>
         <div class="dashboard-sidebar">
-          <div class="card affiliate">
+          <div class="card affiliate" data-aos="fade-up">
             <div class="card-header">
               <h2>Affiliate Program</h2>
               <i class="fas fa-share-alt card-icon"></i>
             </div>
-            <p>Earn 10% commission on every deposit via your referral link:</p>
+            <p>Earn 10% commission on every deposit via your referral link.</p>
             <div class="referral-link-container">
-              <input type="text" id="affiliateLink" readonly aria-label="Referral Link"/>
+              <input type="text" id="affiliateLink" readonly/>
               <button class="copy-btn" title="Copy referral link" aria-label="Copy referral link"><i class="fas fa-copy"></i> Copy</button>
             </div>
             <div class="label">Referral Earnings</div>
             <div class="value" id="refEarnings">0.00</div>
           </div>
-          <div class="card deposit-wallet">
+          <div class="card deposit-wallet" data-aos="fade-up">
             <div class="card-header">
               <h2>Deposit Wallet</h2>
               <i class="fas fa-wallet card-icon"></i>
@@ -964,7 +856,7 @@
             <div class="sub-value" id="totalDeposits">0.00</div>
             <a href="deposit.html" class="btn">Add Funds</a>
           </div>
-          <div class="card interest-wallet">
+          <div class="card interest-wallet" data-aos="fade-up">
             <div class="card-header">
               <h2>Interest Wallet</h2>
               <i class="fas fa-coins card-icon"></i>
@@ -974,7 +866,7 @@
             <div class="sub-value" id="totalWithdrawals">0.00</div>
             <a href="withdraw.html" class="btn">Withdraw Funds</a>
           </div>
-          <div class="card account-balance">
+          <div class="card account-balance" data-aos="fade-up">
             <div class="card-header">
               <h2>Account Balance</h2>
               <i class="fas fa-balance-scale card-icon"></i>
@@ -982,7 +874,7 @@
             <div class="value" id="accountBalance">0.00</div>
             <a href="withdraw.html" class="btn">Withdraw Funds</a>
           </div>
-          <div class="card investments">
+          <div class="card investments" data-aos="fade-up">
             <div class="card-header">
               <h2>Total Invested</h2>
               <i class="fas fa-chart-pie card-icon"></i>
@@ -994,7 +886,7 @@
           </div>
         </div>
       </div>
-      <div class="transaction-history">
+      <div class="transaction-history" data-aos="fade-up">
         <div class="transaction-header">
           <h2>Transaction History</h2>
           <div class="transaction-controls">
@@ -1017,11 +909,11 @@
         <div class="error-message" id="tx-error"></div>
       </div>
     </main>
-    <footer class="site-footer">
+    <footer class="site-footer" data-aos="fade-up">
       <div class="footer-content">
-        <p class="local-date">Local Date: <span id="localDate"></span></p>
-        <p class="local-time">Local Time: <span id="localTime"></span></p>
         <p class="UTC-time">UTC Time: <span id="utcTime"></span></p>
+        <p class="local-time">Local Time: <span id="localTime"></span></p>
+        <p class="local-date">Local Date: <span id="localDate"></span></p>
         <nav class="footer-links">
           <a href="about.html">About Us</a>
           <a href="privacy.html">Privacy Policy</a>
@@ -1056,7 +948,7 @@
   </script>
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
-    AOS.init({ duration: 600, once: true });
+    AOS.init({ duration: 800, once: true });
 
     const { createClient } = supabase;
     const supabaseClient = createClient(
@@ -1077,81 +969,97 @@
       if (errorDiv) {
         errorDiv.textContent = message;
         errorDiv.style.display = 'block';
-        setTimeout(() => errorDiv.style.display = 'none', 3000);
+        setTimeout(() => errorDiv.style.display = 'none', 5000);
       }
     }
 
-    function renderInvestmentChart(investmentData) {
+    function renderInvestmentChart(investments) {
       const ctx = document.getElementById('investmentChart').getContext('2d');
       if (investmentChart) investmentChart.destroy();
 
-      const startDate = new Date(investmentData.start_time);
-      const endDate = new Date(investmentData.end_time);
-      const days = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
-      const dailyRate = Math.pow(1 + (investmentData.total_profit / investmentData.principal), 1 / days) - 1;
-      const labels = [];
-      const data = [];
+      const datasets = investments.map((inv, index) => {
+        const startDate = new Date(inv.start_time);
+        const endDate = new Date(inv.end_time);
+        const days = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
+        const dailyProfit = inv.total_profit / days;
+        const labels = Array.from({ length: days + 1 }, (_, i) => `Day ${i}`);
+        const profitData = Array.from({ length: days + 1 }, (_, i) => dailyProfit * i);
+        const principalData = Array(days + 1).fill(inv.principal);
 
-      for (let i = 0; i <= days; i++) {
-        labels.push(`Day ${i}`);
-        const compoundValue = investmentData.principal * Math.pow(1 + dailyRate, i);
-        data.push(compoundValue);
-      }
+        return [
+          {
+            label: `Investment ${index + 1} Profit`,
+            data: profitData,
+            borderColor: `hsl(${index * 60}, 70%, 60%)`,
+            backgroundColor: `hsla(${index * 60}, 70%, 60%, 0.2)`,
+            borderWidth: 2,
+            pointRadius: 0,
+            fill: true,
+            tension: 0.3
+          },
+          {
+            label: `Investment ${index + 1} Principal`,
+            data: principalData,
+            borderColor: `hsl(${index * 60}, 50%, 40%)`,
+            backgroundColor: `hsla(${index * 60}, 50%, 40%, 0.2)`,
+            borderWidth: 2,
+            pointRadius: 0,
+            fill: true,
+            tension: 0.3
+          }
+        ];
+      }).flat();
 
-      ```chartjs
-      {
-        "type": "line",
-        "data": {
-          "labels": labels,
-          "datasets": [{
-            "label": "Investment Growth",
-            "data": data,
-            "borderColor": "#ffd700",
-            "backgroundColor": "rgba(255, 215, 0, 0.2)",
-            "borderWidth": 2,
-            "pointRadius": 0,
-            "pointHoverRadius": 5,
-            "tension": 0.3,
-            "fill": true
-          }]
+      investmentChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: datasets.length ? Array.from({ length: Math.max(...datasets.map(d => d.data.length)) }, (_, i) => `Day ${i}`) : [],
+          datasets: datasets
         },
-        "options": {
-          "responsive": true,
-          "maintainAspectRatio": false,
-          "plugins": {
-            "legend": { "display": false },
-            "tooltip": {
-              "backgroundColor": "rgba(15, 15, 25, 0.9)",
-              "titleColor": "#ffd700",
-              "bodyColor": "#ffffff",
-              "borderColor": "#ffd700",
-              "borderWidth": 1,
-              "displayColors": false,
-              "callbacks": {
-                "label": function(context) {
-                  return `Value: ${formatCurrency(context.parsed.y)}`;
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: true,
+              labels: {
+                color: var(--text-secondary),
+                font: { size: 12 }
+              }
+            },
+            tooltip: {
+              backgroundColor: 'rgba(15, 15, 25, 0.9)',
+              titleColor: var(--primary),
+              bodyColor: var(--text-color),
+              borderColor: var(--primary),
+              borderWidth: 1,
+              callbacks: {
+                label: function(context) {
+                  return `${context.dataset.label}: ${formatCurrency(context.parsed.y)}`;
                 }
               }
             }
           },
-          "scales": {
-            "x": {
-              "grid": { "color": "rgba(255, 255, 255, 0.1)" },
-              "ticks": { "color": "#d0d0ff" }
+          scales: {
+            x: {
+              grid: { color: 'rgba(255, 255, 255, 0.1)' },
+              ticks: { color: var(--text-secondary), font: { size: 12 } }
             },
-            "y": {
-              "grid": { "color": "rgba(255, 255, 255, 0.1)" },
-              "ticks": {
-                "color": "#d0d0ff",
-                "callback": function(value) {
-                  return formatCurrency(value);
-                }
+            y: {
+              grid: { color: 'rgba(255, 255, 255, 0.1)' },
+              ticks: {
+                color: var(--text-secondary),
+                font: { size: 12 },
+                callback: value => formatCurrency(value)
               }
             }
+          },
+          animation: {
+            duration: 1000,
+            easing: 'easeOutQuart'
           }
         }
-      }
-      ```
+      });
     }
 
     async function initDashboard() {
@@ -1193,22 +1101,43 @@
           }
         }
 
-        document.getElementById('affiliateLink').value = profile.referral_link || '';
-        document.getElementById('refEarnings').textContent = formatCurrency(profile.referral_earnings || 0);
-        document.getElementById('depositWallet').textContent = formatCurrency(profile.deposit_wallet || 0);
-        document.getElementById('totalDeposits').textContent = formatCurrency(profile.total_deposits || 0);
-        document.getElementById('interestWallet').textContent = formatCurrency(profile.interest_wallet || 0);
-        document.getElementById('totalWithdrawals').textContent = formatCurrency(profile.total_withdrawals || 0);
-        document.getElementById('accountBalance').textContent = formatCurrency((profile.deposit_wallet || 0) + (profile.interest_wallet || 0));
-        document.getElementById('promoOffer').textContent = formatCurrency(profile.promo_offer || 0);
-        document.getElementById('promoPct').textContent = profile.promo_pct || 0;
+        const affiliateLink = document.getElementById('affiliateLink');
+        if (affiliateLink) affiliateLink.value = profile.referral_link || '';
+
+        const refEarnings = document.getElementById('refEarnings');
+        if (refEarnings) refEarnings.textContent = formatCurrency(profile.referral_earnings || 0);
+
+        const depositWallet = document.getElementById('depositWallet');
+        if (depositWallet) depositWallet.textContent = formatCurrency(profile.deposit_wallet || 0);
+
+        const totalDeposits = document.getElementById('totalDeposits');
+        if (totalDeposits) totalDeposits.textContent = formatCurrency(profile.total_deposits || 0);
+
+        const interestWallet = document.getElementById('interestWallet');
+        if (interestWallet) interestWallet.textContent = formatCurrency(profile.interest_wallet || 0);
+
+        const totalWithdrawals = document.getElementById('totalWithdrawals');
+        if (totalWithdrawals) totalWithdrawals.textContent = formatCurrency(profile.total_withdrawals || 0);
+
+        const totalBalance = (profile.deposit_wallet || 0) + (profile.interest_wallet || 0);
+        const accountBalance = document.getElementById('accountBalance');
+        if (accountBalance) accountBalance.textContent = formatCurrency(totalBalance);
 
         const { data: allInvestments, error: allInvError } = await supabaseClient
           .from('investments')
           .select('principal')
           .eq('user_id', user.id);
         if (allInvError) throw allInvError;
-        document.getElementById('totalInvested').textContent = formatCurrency(allInvestments.reduce((acc, inv) => acc + parseFloat(inv.principal), 0));
+
+        const totalEverInvested = allInvestments.reduce((acc, inv) => acc + parseFloat(inv.principal), 0);
+        const totalInvested = document.getElementById('totalInvested');
+        if (totalInvested) totalInvested.textContent = formatCurrency(totalEverInvested);
+
+        const promoOffer = document.getElementById('promoOffer');
+        if (promoOffer) promoOffer.textContent = formatCurrency(profile.promo_offer || 0);
+
+        const promoPct = document.getElementById('promoPct');
+        if (promoPct) promoPct.textContent = profile.promo_pct || 0;
 
         const { data: investments, error: invError } = await supabaseClient
           .from('investments')
@@ -1223,15 +1152,15 @@
 
         const container = document.getElementById('investments-container');
         const noInvestmentsDiv = document.getElementById('no-investments');
-        const investmentChartCanvas = document.getElementById('investmentChart');
-        if (container && noInvestmentsDiv && investmentChartCanvas) {
+        const chartCanvas = document.getElementById('investmentChart');
+        if (container && noInvestmentsDiv && chartCanvas) {
           container.innerHTML = '';
           noInvestmentsDiv.style.display = 'none';
-          investmentChartCanvas.style.display = 'none';
+          chartCanvas.style.display = 'none';
 
           if (investments.length > 0) {
-            investmentChartCanvas.style.display = 'block';
-            renderInvestmentChart(investments[0]);
+            chartCanvas.style.display = 'block';
+            renderInvestmentChart(investments);
             const fragment = document.createDocumentFragment();
             investments.forEach(investment => {
               const investmentDiv = document.createElement('div');
@@ -1251,14 +1180,15 @@
                 <p>Time Remaining: <span class="time-left"></span></p>
                 <p class="status-message"></p>
                 <div class="investment-actions">
-                  <button class="btn btn-small withdraw-btn" ${canWithdraw ? '' : 'disabled'} aria-label="Withdraw Capital">Withdraw</button>
-                  <button class="btn btn-small reinvest-btn" ${canReinvest ? '' : 'disabled'} aria-label="Reinvest">Reinvest</button>
+                  <button class="btn btn-small withdraw-btn" ${canWithdraw ? '' : 'disabled'}>Withdraw Capital</button>
+                  <button class="btn btn-small reinvest-btn" ${canReinvest ? '' : 'disabled'}>Reinvest</button>
                 </div>
               `;
               fragment.appendChild(investmentDiv);
               startInvestmentCalculator(investment, investmentDiv);
 
-              investmentDiv.querySelector('.withdraw-btn').addEventListener('click', async () => {
+              const withdrawBtn = investmentDiv.querySelector('.withdraw-btn');
+              withdrawBtn.addEventListener('click', async () => {
                 if (!canWithdraw) return;
                 if (!confirm('Are you sure you want to withdraw your capital?')) return;
                 try {
@@ -1283,22 +1213,23 @@
                       status: 'completed',
                       created_at: new Date().toISOString()
                     });
-                  document.getElementById('interestWallet').textContent = formatCurrency(newInterest);
-                  document.getElementById('accountBalance').textContent = formatCurrency((profile.deposit_wallet || 0) + newInterest);
+                  if (interestWallet) interestWallet.textContent = formatCurrency(newInterest);
+                  if (accountBalance) accountBalance.textContent = formatCurrency((profile.deposit_wallet || 0) + newInterest);
                   await supabaseClient
                     .from('investments')
                     .update({ status: 'withdrawn' })
                     .eq('id', investment.id);
                   investmentDiv.innerHTML += '<p>Capital withdrawn.</p>';
-                  investmentDiv.querySelector('.withdraw-btn').disabled = true;
+                  withdrawBtn.disabled = true;
                 } catch (err) {
                   showError('investments-error', 'Error withdrawing capital: ' + err.message);
                 }
               });
 
-              investmentDiv.querySelector('.reinvest-btn').addEventListener('click', async () => {
+              const reinvestBtn = investmentDiv.querySelector('.reinvest-btn');
+              reinvestBtn.addEventListener('click', async () => {
                 if (!canReinvest) return;
-                if (!confirm('Do you want to reinvest your capital and profits?')) return;
+                if (!confirm('Do you want to reinvest your capital and profits into a new investment?')) return;
                 try {
                   const { data, error } = await supabaseClient.rpc('reinvest_investment', {
                     user_uuid: user.id,
@@ -1351,19 +1282,19 @@
           });
         }
       } catch (error) {
-        console.error('Dashboard error:', error);
-        showError('investments-error', 'Failed to load dashboard.');
+        console.error('Dashboard initialization error:', error);
+        showError('investments-error', 'An error occurred while loading the dashboard.');
       } finally {
         isDashboardLoading = false;
-        investmentsLoading.style.display = 'none';
-        txLoading.style.display = 'none';
+        if (investmentsLoading) investmentsLoading.style.display = 'none';
+        if (txLoading) txLoading.style.display = 'none';
       }
     }
 
     function startInvestmentCalculator(investment, investmentDiv) {
       const { start_time, end_time, principal, total_profit, status } = investment;
       const startTime = new Date(start_time);
-      const endTime = new Date(investment.end_time);
+      const endTime = new Date(end_time);
       const totalSeconds = (endTime - startTime) / 1000;
       const profitPerSecond = total_profit / totalSeconds;
       const currentProfitSpan = investmentDiv.querySelector('.current-profit');
@@ -1421,35 +1352,6 @@
       investmentIntervals = [];
     }
 
-    // UI Event Handlers
-    const hamburgerBtn = document.getElementById('hamburgerBtn');
-    const navDrawer = document.getElementById('navDrawer');
-    const overlay = document.querySelector('.nav-overlay');
-    if (hamburgerBtn && navDrawer && overlay) {
-      hamburgerBtn.addEventListener('click', () => {
-        navDrawer.classList.toggle('open');
-        hamburgerBtn.classList.toggle('active');
-        overlay.classList.toggle('nav-open');
-      });
-
-      document.addEventListener('click', (event) => {
-        if (!navDrawer.contains(event.target) && !hamburgerBtn.contains(event.target) && navDrawer.classList.contains('open')) {
-          navDrawer.classList.remove('open');
-          hamburgerBtn.classList.remove('active');
-          overlay.classList.remove('nav-open');
-        }
-      });
-
-      // Close nav on link click
-      navDrawer.querySelectorAll('a').forEach(link => {
-        link.addEventListener('click', () => {
-          navDrawer.classList.remove('open');
-          hamburgerBtn.classList.remove('active');
-          overlay.classList.remove('nav-open');
-        });
-      });
-    }
-
     const themeToggle = document.getElementById('theme-toggle');
     if (themeToggle) {
       themeToggle.addEventListener('click', () => {
@@ -1466,17 +1368,6 @@
       accountToggle.addEventListener('click', (e) => {
         e.preventDefault();
         submenu.classList.toggle('open');
-      });
-    }
-
-    const toggleInvestmentCard = document.getElementById('toggleInvestmentCard');
-    if (toggleInvestmentCard) {
-      toggleInvestmentCard.addEventListener('click', () => {
-        const card = document.querySelector('.investment-card');
-        const icon = toggleInvestmentCard.querySelector('i');
-        card.classList.toggle('collapsed');
-        icon.classList.toggle('fa-chevron-down');
-        icon.classList.toggle('fa-chevron-up');
       });
     }
 
@@ -1554,8 +1445,15 @@
           document.addEventListener('click', () => video.play(), { once: true });
         });
       }
-      initDashboard();
     });
+
+    (async () => {
+      await initDashboard();
+      const { data: { user } } = await supabaseClient.auth.getUser();
+      if (user) {
+        // Setup realtime subscriptions would go here
+      }
+    })();
   </script>
 </body>
 </html>
