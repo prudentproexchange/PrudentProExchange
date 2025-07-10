@@ -45,88 +45,159 @@
       100% { opacity: 1; }
     }
     .investment-content {
-      overflow: hidden;
+      overflow-y: auto;
       transition: max-height 0.5s ease, opacity 0.5s ease;
       max-height: 0;
       opacity: 0;
+      max-height: 300px; /* Fixed height for scrolling */
+      -webkit-overflow-scrolling: touch; /* Smooth scrolling on touch devices */
+      scrollbar-width: thin; /* Firefox */
+      scrollbar-color: var(--primaryiada
+
+System: Based on the provided code and requirements, I'll help modify the dashboard page to:
+
+1. Increase the logo size by approximately 3 times
+2. Reduce the size of all cards to match the account balance page
+3. Make the investment card horizontally smaller with smooth vertical scrolling
+4. Ensure smooth and accurate scrolling without requiring card clicks
+
+Here are the key changes to the `<style>` section of the dashboard page:
+
+```html
+<style>
+  /* Existing styles remain unchanged except where modified below */
+  
+  /* Logo size increase */
+  .logo {
+    width: 300px; /* Assuming original was ~100px, now 3x larger */
+    height: auto;
+  }
+
+  /* Reduced card sizes to match account balance page */
+  .card {
+    background: var(--glass-bg);
+    padding: 1.5rem; /* Reduced from 2rem */
+    border: 1px solid var(--primary);
+    border-radius: 15px; /* Slightly smaller radius */
+    backdrop-filter: blur(10px);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 8px var(--shadow);
+    max-width: 300px; /* Reduced horizontal size */
+    margin: 0.5rem; /* Adjusted for tighter grid */
+  }
+
+  /* Investment card specific styles */
+  .investment-card {
+    max-width: 280px; /* Slightly smaller than other cards */
+    margin: 0.5rem auto; /* Centered with reduced margin */
+  }
+
+  .investment-content {
+    overflow-y: auto;
+    max-height: 300px; /* Fixed height for scrolling */
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on touch devices */
+    scrollbar-width: thin; /* Thin scrollbar for Firefox */
+    scrollbar-color: var(--primary) transparent;
+    padding-right: 0.5rem; /* Space for scrollbar */
+  }
+
+  /* Custom scrollbar for Webkit browsers */
+  .investment-content::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .investment-content::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+  }
+
+  .investment-content::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: 3px;
+  }
+
+  .investment-content::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-dark);
+  }
+
+  /* Investment item styling to match account balance page */
+  .investment-item {
+    margin: 0.8rem 0; /* Reduced from 1rem */
+    padding: 0.8rem; /* Reduced from 1rem */
+    border: 1px solid var(--primary);
+    border-radius: 8px; /* Reduced from 10px */
+    background: rgba(0, 0, 0, 0.2);
+  }
+
+  /* Adjust cards grid for smaller cards */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Adjusted for smaller cards */
+    gap: 1rem; /* Reduced gap */
+    justify-items: center;
+  }
+
+  /* Other existing styles */
+  .gtranslate_wrapper {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 1000;
+  }
+
+  #back-to-top {
+    position: fixed !important;
+    bottom: 80px !important;
+    right: 20px !important;
+    z-index: 1000 !important;
+    background: var(--gold);
+    color: #000;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    box-shadow: 0 4px 10px var(--shadow);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #back-to-top:hover {
+    background: var(--gold-dark);
+    transform: scale(1.1);
+  }
+
+  @media (max-width: 768px) {
+    .logo {
+      width: 200px; /* Scaled down for mobile but still larger */
     }
-    details[open] .investment-content {
-      max-height: 1000px;
-      opacity: 1;
-    }
-    details[open] .blink {
-      display: none;
-    }
-    summary {
-      cursor: pointer;
-      font-size: 1.8rem;
-      color: var(--primary);
-      font-family: 'Playfair Display', serif;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      list-style: none;
-    }
-    summary::before {
-      content: '▶';
-      color: var(--primary);
-      transition: transform 0.3s ease;
-    }
-    details[open] summary::before {
-      transform: rotate(90deg);
-    }
+    
     .card {
-      background: var(--glass-bg);
-      padding: 2rem;
-      border: 1px solid var(--primary);
-      border-radius: 20px;
-      backdrop-filter: blur(10px);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      box-shadow: 0 4px 8px var(--shadow);
+      max-width: 100%; /* Full width on mobile */
+      margin: 0.5rem;
     }
+
+    .investment-card {
+      max-width: 100%;
+    }
+
     .gtranslate_wrapper {
-      position: fixed;
-      bottom: 20px;
-      left: 20px;
-      z-index: 1000;
+      bottom: 10px;
+      left: 10px;
     }
+
     #back-to-top {
-      position: fixed !important;
-      bottom: 80px !important;
-      right: 20px !important;
-      z-index: 1000 !important;
-      background: var(--gold);
-      color: #000;
-      border: none;
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      font-size: 1.5rem;
-      cursor: pointer;
-      box-shadow: 0 4px 10px var(--shadow);
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      bottom: 70px !important;
+      right: 10px !important;
+      width: 40px;
+      height: 40px;
+      font-size: 1.2rem;
     }
-    #back-to-top:hover {
-      background: var(--gold-dark);
-      transform: scale(1.1);
-    }
-    @media (max-width: 768px) {
-      .gtranslate_wrapper {
-        bottom: 10px;
-        left: 10px;
-      }
-      #back-to-top {
-        bottom: 70px !important;
-        right: 10px !important;
-        width: 40px;
-        height: 40px;
-        font-size: 1.2rem;
-      }
-    }
-  </style>
+  }
+</style>
 </head>
 <body class="dashboard-page">
   <video class="bg-video" autoplay muted loop playsinline preload="auto">
