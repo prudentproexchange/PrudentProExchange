@@ -42,14 +42,12 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-image: url('assets/images/cover-background.JPG');
-            background-size: cover;
-            background-position: center;
         }
         #cover .glass-card {
             background: rgba(26, 60, 110, 0.7);
             color: #FFFFFF;
             text-align: center;
+            z-index: 1; /* Ensure content is above the video */
         }
         #cover h1 {
             font-size: 28pt;
@@ -111,7 +109,8 @@
             position: relative;
             z-index: 1;
         }
-        .video-background {
+        .video-background,
+        .hero-video {
             position: absolute;
             top: 0;
             left: 0;
@@ -119,13 +118,18 @@
             height: 100%;
             object-fit: cover;
             z-index: -1;
-            filter: brightness(0.9); /* Slightly darken for readability */
+            filter: brightness(0.9);
+            pointer-events: none; /* Prevent interaction with the video */
         }
     </style>
 </head>
 <body>
-    <!-- Cover Page (Unchanged) -->
+    <!-- Cover Page with Video Background -->
     <section id="cover">
+        <video class="hero-video" autoplay muted loop playsinline poster="assets/images/cover-background.JPG">
+            <source src="assets/videos/backgroundvideo.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
         <div class="glass-card">
             <img src="assets/images/logo.svg" alt="PrudentProExchange Logo">
             <h1>PrudentProExchange Ltd: Your Partner in Wealth Creation</h1>
@@ -138,8 +142,8 @@
 
     <!-- Content Wrapper with Video Background -->
     <div class="content-wrapper">
-        <video class="video-background" autoplay muted loop>
-            <source src="assets/videos/background.webm" type="video/webm">
+        <video class="video-background" autoplay muted loop playsinline>
+            <source src="assets/videos/background.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
 
@@ -181,15 +185,15 @@
                 <img src="assets/images/forex_trading.jpg" alt="Forex Trading">
 
                 <h3>Gold Investment</h3>
-                <p>Commonly seen as a great store of wealth, this precious metal is also known as a reliable safe-haven asset. With a rich history amongst almost all global cultures, gold remains a highly popular investment. Although it has multiple uses, its primary function is typically to hedge against inflation in an often volatile futures market, as well as to diversify existing Precious Metals Investment Retirement Accounts. Gold has been one of the most valuable precious metals throughout human history, used by elites as a symbol of wealth for centuries due to its rarity and its ability to hold its worth for a long time. Historically, it has been the most common way to pass on one’s wealth as an inheritance from one generation to the next. Gold is considered a worthy investment, with coins and bars available for purchase in various sizes, ranging from one gram to a whopping 400 ounces. Being the most reliable investment commodity available, gold has proven to be a perfect way to diversify your investment portfolio and an excellent safeguard against volatile currency.</p>
+                <p>Commonly seen as a great store of wealth, this precious metal is also known as a reliable safe-haven asset. With a rich history amongst almost all global cultures, gold remains a highly popular investment. Although it has multiple uses, its primary function is typically to hedge against inflation in an often volatile futures market, as well as to diversify existing Precious Metals Investment Retirement Accounts. Gold has been one of the most valuable precious metals throughout human history, used by elites as a symbol of wealth for its rarity and its ability to hold its worth for a long time.</p>
                 <img src="assets/images/gold_investment.jpg" alt="Gold Investment">
 
                 <h3>Oil and Gas</h3>
-                <p>Surprising as it might be, anyone can invest in the oil market to make a profit. Indeed, the development of online trading platforms has allowed individuals to use their savings to speculate on rising or falling oil prices. To this end, simply choose your method of trading between the CFDs offered by Forex brokers, which are specifically designed for beginners. Invest-oil.co.uk makes a point to explain how these two trading tools work and how best to use them for profit. Benefits of investing in oil: Traded oil has many advantages compared to other popular assets such as stocks. Speculating with oil only requires some basic technical and fundamental analysis of the market. Terms seem complicated? Not to worry! The website invest-oil.co.uk was specifically created to assist investors in understanding the rules of investing in black gold and thereby enable them to easily gain access to this opportunity. You will have the upper hand to quickly make profits and earn money simply through oil price changes.</p>
+                <p>Surprising as it might be, anyone can invest in the oil market to make a profit. Indeed, the development of online trading platforms has allowed individuals to use their savings to speculate on rising or falling oil prices. Invest-oil.co.uk makes a point to explain how these trading tools work and how best to use them for profit. Benefits of investing in oil: Traded oil has many advantages compared to other popular assets such as stocks. Speculating with oil only requires some basic technical and fundamental analysis of the market.</p>
                 <img src="assets/images/oil_and_gas.jpg" alt="Oil and Gas">
 
                 <h3>Retirement Program</h3>
-                <p>Saving for retirement can be a daunting task, but with a sound strategy, it’s well within reach. PrudentProExchange is here to bring clarity to retirement planning and set you on your path to success. Here you’ll better understand your options and find the right investment. If you had the chance to double—or even quadruple—your retirement savings, you’d probably jump at that opportunity, right? Well, there’s one simple change you can make today that’s sure to boost your retirement savings. PrudentProExchange’s study of worldwide retirement saving habits discovered that people with some kind of retirement plan have more than three times as much in their nest egg than those with no plan at all. And savers who take it one step further by working with an investing advisor to put their plan to paper? Their average nest egg is a whopping 445% bigger than non-planners. That’s a big deal! Now, did you catch that? By working with an advisor and by having a plan in place, you can supercharge your retirement savings.</p>
+                <p>Saving for retirement can be a daunting task, but with a sound strategy, it’s well within reach. PrudentProExchange is here to bring clarity to retirement planning and set you on your path to success. Here you’ll better understand your options and find the right investment. By working with an advisor and by having a plan in place, you can supercharge your retirement savings.</p>
                 <img src="assets/images/retirement_program.jpg" alt="Retirement Program">
 
                 <h3>Loan Grant Program</h3>
