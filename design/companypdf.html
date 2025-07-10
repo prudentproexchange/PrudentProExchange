@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>PrudentProExchange Company Profile</title>
   <!-- Include Chart.js for dynamic charts -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -13,7 +13,7 @@
       margin: 0;
       padding: 0;
       color: #333333;
-      background-color: #E8ECEF; /* Fallback background */
+      background-color: #E8ECEF;
     }
     h1, h2, h3 {
       font-family: 'Playfair Display', serif;
@@ -44,10 +44,8 @@
     }
     #cover video {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
       object-fit: cover;
       z-index: -1;
     }
@@ -119,10 +117,8 @@
     }
     .video-background {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
       object-fit: cover;
       z-index: -1;
       filter: brightness(0.9);
@@ -134,7 +130,7 @@
   <section id="cover">
     <video autoplay muted loop playsinline>
       <source src="assets/videos/backgroundvideo.mp4" type="video/mp4">
-      <!-- fallback if video not supported -->
+      <!-- fallback image -->
       <img src="assets/images/cover-background.JPG" alt="Cover background">
     </video>
     <div class="glass-card">
@@ -266,44 +262,32 @@
 
   <!-- Chart.js Scripts -->
   <script>
-    // Cryptocurrency Market Growth Chart
     const cryptoCtx = document.getElementById('cryptoGrowthChart').getContext('2d');
     new Chart(cryptoCtx, {
       type: 'line',
       data: {
-        labels: ['2020', '2021', '2022', '2023', '2024', '2025'],
-        datasets: [{
-          label: 'Market Cap (Trillions USD)',
-          data: [0.76, 2.25, 1.68, 2.43, 3.15, 4.02],
-          borderColor: '#1A3C6E',
-          backgroundColor: 'rgba(26, 60, 110, 0.2)',
-          pointBackgroundColor: '#D4A017',
-          pointBorderColor: '#1A3C6E',
-          tension: 0.1
+        labels: ['2020','2021','2022','2023','2024','2025'],
+        datasets:[{
+          label:'Market Cap (Trillions USD)',
+          data:[0.76,2.25,1.68,2.43,3.15,4.02],
+          borderColor:'#1A3C6E',
+          backgroundColor:'rgba(26,60,110,0.2)',
+          pointBackgroundColor:'#D4A017',
+          pointBorderColor:'#1A3C6E',
+          tension:0.1
         }]
       },
-      options: {
-        responsive: true,
-        scales: { y: { beginAtZero: true } }
-      }
+      options:{ responsive:true, scales:{ y:{ beginAtZero:true } } }
     });
 
-    // Retirement Savings Impact Chart
     const retirementCtx = document.getElementById('retirementSavingsChart').getContext('2d');
-    new Chart(retirementCtx, {
-      type: 'bar',
-      data: {
-        labels: ['Without Plan', 'With Plan'],
-        datasets: [{
-          label: 'Savings Amount (USD)',
-          data: [100000, 545000],
-          backgroundColor: ['#1A3C6E', '#D4A017']
-        }]
+    new Chart(retirementCtx,{
+      type:'bar',
+      data:{
+        labels:['Without Plan','With Plan'],
+        datasets:[{ label:'Savings Amount (USD)', data:[100000,545000], backgroundColor:['#1A3C6E','#D4A017'] }]
       },
-      options: {
-        responsive: true,
-        scales: { y: { beginAtZero: true } }
-      }
+      options:{ responsive:true, scales:{ y:{ beginAtZero:true } } }
     });
   </script>
 </body>
