@@ -6,37 +6,61 @@
     <title>PrudentProExchange Company Profile</title>
     <!-- Include Chart.js for dynamic charts -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Inline CSS with black background adjustments -->
+    <!-- Inline CSS for simplicity; extract to assets/css/styles.css for production -->
     <style>
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: #000000; /* Changed to black background */
+            background-color: #E8ECEF;
             margin: 0;
             padding: 0;
-            color: #E8ECEF; /* Light gray text for readability on black */
+            color: #333333;
         }
         h1, h2, h3 {
             font-family: 'Playfair Display', serif;
-            color: #D4A017; /* Gold accent for headers */
+            color: #1A3C6E;
         }
         a {
-            color: #FFD700; /* Brighter gold for links */
+            color: #D4A017;
             text-decoration: none;
         }
         a:hover {
             text-decoration: underline;
-            color: #FFC107; /* Slightly lighter gold on hover */
         }
         .glass-card {
-            background: rgba(255, 255, 255, 0.05); /* Semi-transparent white for glass effect */
-            border: 1px solid #D4A017; /* Gold border for contrast */
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid #1A3C6E;
             backdrop-filter: blur(10px);
             padding: 20px;
             margin: 20px auto;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Darker shadow for depth */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             border-radius: 10px;
             max-width: 800px;
-            color: #E8ECEF; /* Light gray text for card content */
+        }
+        #cover {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: url('assets/images/cover-background.JPG');
+            background-size: cover;
+            background-position: center;
+        }
+        #cover .glass-card {
+            background: rgba(26, 60, 110, 0.7);
+            color: #FFFFFF;
+            text-align: center;
+        }
+        #cover h1 {
+            font-size: 28pt;
+            font-weight: 700;
+            color: #D4A017;
+            margin-bottom: 20px;
+        }
+        #cover p {
+            font-size: 12pt;
+            font-weight: 300;
+            margin: 5px 0;
         }
         section {
             padding: 40px 20px;
@@ -50,7 +74,7 @@
         h3 {
             font-size: 16pt;
             font-weight: 500;
-            color: #D4A017; /* Gold for subheadings */
+            color: #1A3C6E;
             margin-top: 20px;
         }
         p, li {
@@ -67,13 +91,34 @@
         .chart-card canvas {
             max-width: 600px;
             margin: 20px auto;
-            background: rgba(255, 255, 255, 0.05); /* Match glass-card background */
-            border-radius: 8px;
-            padding: 10px;
+        }
+        footer {
+            background: #1A3C6E;
+            color: #FFFFFF;
+            padding: 20px;
+            text-align: center;
+            font-size: 10pt;
+            font-weight: 300;
+        }
+        footer img {
+            width: 100px;
+            margin-bottom: 10px;
         }
     </style>
 </head>
 <body>
+    <!-- Cover Page -->
+    <section id="cover">
+        <div class="glass-card">
+            <img src="assets/images/logo.svg" alt="PrudentProExchange Logo">
+            <h1>PrudentProExchange Ltd: Your Partner in Wealth Creation</h1>
+            <p>Website: <a href="https://prudentproexchange.net">https://prudentproexchange.net</a></p>
+            <p>Email: <a href="mailto:support@prudentproexchange.net">support@prudentproexchange.net</a></p>
+            <p>Address: 1770 Olive Street, Suite 3016, Dallas, Texas, USA 75201</p>
+            <p>Phone: +1 (214) 555-1234 (Toll-Free)</p>
+        </div>
+    </section>
+
     <!-- About Section -->
     <section id="about">
         <h2>About PrudentProExchange</h2>
@@ -109,6 +154,7 @@
             <h3>Loan Grant Program</h3>
             <p>Our Loan Grant Program offers loans from $200,000 to $1,000,000 annually at a 5% monthly interest rate for investors with portfolios over $50,000.</p>
             <img src="assets/images/loan_grant.JPG" alt="Loan Grant Program">
+            <!-- Add other services similarly -->
         </div>
     </section>
 
@@ -158,6 +204,14 @@
         </div>
     </section>
 
+    <!-- Footer -->
+    <footer>
+        <img src="assets/images/logo.svg" alt="PrudentProExchange Logo">
+        <p>1770 Olive Street, Suite 3016, Dallas, Texas, USA 75201</p>
+        <p>Email: support@prudentproexchange.net | Phone: +1 (214) 555-1234</p>
+        <p>© 2025 PrudentProExchange. All Rights Reserved. SEC Registration #0001230714</p>
+    </footer>
+
     <!-- Chart.js Scripts -->
     <script>
         // Cryptocurrency Market Growth Chart
@@ -169,30 +223,17 @@
                 datasets: [{
                     label: 'Market Cap (Trillions USD)',
                     data: [0.76, 2.25, 1.68, 2.43, 3.15, 4.02],
-                    borderColor: '#D4A017', /* Gold border for visibility */
-                    backgroundColor: 'rgba(212, 160, 23, 0.2)', /* Semi-transparent gold fill */
-                    pointBackgroundColor: '#E8ECEF', /* Light gray points */
-                    pointBorderColor: '#D4A017', /* Gold point borders */
+                    borderColor: '#1A3C6E',
+                    backgroundColor: 'rgba(26, 60, 110, 0.2)',
+                    pointBackgroundColor: '#D4A017',
+                    pointBorderColor: '#1A3C6E',
                     tension: 0.1
                 }]
             },
             options: {
                 responsive: true,
                 scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: { color: '#E8ECEF' }, /* Light gray for y-axis labels */
-                        grid: { color: 'rgba(255, 255, 255, 0.1)' } /* Subtle grid lines */
-                    },
-                    x: {
-                        ticks: { color: '#E8ECEF' }, /* Light gray for x-axis labels */
-                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        labels: { color: '#E8ECEF' } /* Light gray for legend */
-                    }
+                    y: { beginAtZero: true }
                 }
             }
         });
@@ -206,26 +247,13 @@
                 datasets: [{
                     label: 'Savings Amount (USD)',
                     data: [100000, 545000],
-                    backgroundColor: ['#1A3C6E', '#D4A017'] /* Dark blue and gold bars */
+                    backgroundColor: ['#1A3C6E', '#D4A017']
                 }]
             },
             options: {
                 responsive: true,
                 scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: { color: '#E8ECEF' },
-                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
-                    },
-                    x: {
-                        ticks: { color: '#E8ECEF' },
-                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        labels: { color: '#E8ECEF' }
-                    }
+                    y: { beginAtZero: true }
                 }
             }
         });
