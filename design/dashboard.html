@@ -11,10 +11,13 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <style>
+    /* Button disabled state */
     .btn:disabled {
       opacity: 0.5;
       cursor: not-allowed;
     }
+
+    /* Loading spinner */
     .loading-spinner {
       border: 4px solid rgba(255, 255, 255, 0.3);
       border-top: 4px solid var(--primary);
@@ -28,6 +31,8 @@
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
+
+    /* Error message */
     .error-message {
       color: #ff4444;
       background: rgba(255, 0, 0, 0.1);
@@ -36,168 +41,143 @@
       margin: 10px 0;
       display: none;
     }
-    .blink {
-      animation: blink 2s infinite;
-    }
-    @keyframes blink {
-      0% { opacity: 1; }
-      50% { opacity: 0.5; }
-      100% { opacity: 1; }
-    }
-    .investment-content {
-      overflow-y: auto;
-      transition: max-height 0.5s ease, opacity 0.5s ease;
-      max-height: 0;
-      opacity: 0;
-      max-height: 300px; /* Fixed height for scrolling */
-      -webkit-overflow-scrolling: touch; /* Smooth scrolling on touch devices */
-      scrollbar-width: thin; /* Firefox */
-      scrollbar-color: var(--primaryiada
 
-System: Based on the provided code and requirements, I'll help modify the dashboard page to:
-
-1. Increase the logo size by approximately 3 times
-2. Reduce the size of all cards to match the account balance page
-3. Make the investment card horizontally smaller with smooth vertical scrolling
-4. Ensure smooth and accurate scrolling without requiring card clicks
-
-Here are the key changes to the `<style>` section of the dashboard page:
-
-```html
-<style>
-  /* Existing styles remain unchanged except where modified below */
-  
-  /* Logo size increase */
-  .logo {
-    width: 300px; /* Assuming original was ~100px, now 3x larger */
-    height: auto;
-  }
-
-  /* Reduced card sizes to match account balance page */
-  .card {
-    background: var(--glass-bg);
-    padding: 1.5rem; /* Reduced from 2rem */
-    border: 1px solid var(--primary);
-    border-radius: 15px; /* Slightly smaller radius */
-    backdrop-filter: blur(10px);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 4px 8px var(--shadow);
-    max-width: 300px; /* Reduced horizontal size */
-    margin: 0.5rem; /* Adjusted for tighter grid */
-  }
-
-  /* Investment card specific styles */
-  .investment-card {
-    max-width: 280px; /* Slightly smaller than other cards */
-    margin: 0.5rem auto; /* Centered with reduced margin */
-  }
-
-  .investment-content {
-    overflow-y: auto;
-    max-height: 300px; /* Fixed height for scrolling */
-    -webkit-overflow-scrolling: touch; /* Smooth scrolling on touch devices */
-    scrollbar-width: thin; /* Thin scrollbar for Firefox */
-    scrollbar-color: var(--primary) transparent;
-    padding-right: 0.5rem; /* Space for scrollbar */
-  }
-
-  /* Custom scrollbar for Webkit browsers */
-  .investment-content::-webkit-scrollbar {
-    width: 6px;
-  }
-
-  .investment-content::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 3px;
-  }
-
-  .investment-content::-webkit-scrollbar-thumb {
-    background: var(--primary);
-    border-radius: 3px;
-  }
-
-  .investment-content::-webkit-scrollbar-thumb:hover {
-    background: var(--primary-dark);
-  }
-
-  /* Investment item styling to match account balance page */
-  .investment-item {
-    margin: 0.8rem 0; /* Reduced from 1rem */
-    padding: 0.8rem; /* Reduced from 1rem */
-    border: 1px solid var(--primary);
-    border-radius: 8px; /* Reduced from 10px */
-    background: rgba(0, 0, 0, 0.2);
-  }
-
-  /* Adjust cards grid for smaller cards */
-  .cards-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Adjusted for smaller cards */
-    gap: 1rem; /* Reduced gap */
-    justify-items: center;
-  }
-
-  /* Other existing styles */
-  .gtranslate_wrapper {
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    z-index: 1000;
-  }
-
-  #back-to-top {
-    position: fixed !important;
-    bottom: 80px !important;
-    right: 20px !important;
-    z-index: 1000 !important;
-    background: var(--gold);
-    color: #000;
-    border: none;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    font-size: 1.5rem;
-    cursor: pointer;
-    box-shadow: 0 4px 10px var(--shadow);
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  #back-to-top:hover {
-    background: var(--gold-dark);
-    transform: scale(1.1);
-  }
-
-  @media (max-width: 768px) {
+    /* Logo size increase */
     .logo {
-      width: 200px; /* Scaled down for mobile but still larger */
+      width: 300px; /* Increased 3x from assumed ~100px */
+      height: auto;
     }
-    
+
+    /* Reduced card sizes to match account balance page */
     .card {
-      max-width: 100%; /* Full width on mobile */
+      background: var(--glass-bg);
+      padding: 1.5rem; /* Reduced from 2rem */
+      border: 1px solid var(--primary);
+      border-radius: 15px;
+      backdrop-filter: blur(10px);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 4px 8px var(--shadow);
+      max-width: 300px; /* Reduced horizontal size */
       margin: 0.5rem;
     }
 
+    /* Investment card specific styles */
     .investment-card {
-      max-width: 100%;
+      max-width: 280px; /* Slightly smaller than other cards */
+      margin: 0.5rem auto;
     }
 
+    /* Investment content with smooth scrolling */
+    .investment-content {
+      overflow-y: auto; /* Enable vertical scrolling */
+      max-height: 300px; /* Fixed height for scrolling */
+      opacity: 1; /* Always visible */
+      transition: opacity 0.5s ease;
+      -webkit-overflow-scrolling: touch; /* Smooth scrolling on touch devices */
+      scrollbar-width: thin; /* Thin scrollbar for Firefox */
+      scrollbar-color: var(--primary) transparent; /* Custom scrollbar colors */
+      padding-right: 0.5rem; /* Space for scrollbar */
+    }
+
+    /* Custom scrollbar for Webkit browsers */
+    .investment-content::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .investment-content::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+    }
+
+    .investment-content::-webkit-scrollbar-thumb {
+      background: var(--primary);
+      border-radius: 3px;
+    }
+
+    .investment-content::-webkit-scrollbar-thumb:hover {
+      background: var(--primary-dark);
+    }
+
+    /* Investment item styling */
+    .investment-item {
+      margin: 0.8rem 0;
+      padding: 0.8rem;
+      border: 1px solid var(--primary);
+      border-radius: 8px;
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    /* Cards grid */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+      justify-items: center;
+    }
+
+    /* Gtranslate wrapper */
     .gtranslate_wrapper {
-      bottom: 10px;
-      left: 10px;
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      z-index: 1000;
     }
 
+    /* Back to top button */
     #back-to-top {
-      bottom: 70px !important;
-      right: 10px !important;
-      width: 40px;
-      height: 40px;
-      font-size: 1.2rem;
+      position: fixed !important;
+      bottom: 80px !important;
+      right: 20px !important;
+      z-index: 1000 !important;
+      background: var(--gold);
+      color: #000;
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      font-size: 1.5rem;
+      cursor: pointer;
+      box-shadow: 0 4px 10px var(--shadow);
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-  }
-</style>
+
+    #back-to-top:hover {
+      background: var(--gold-dark);
+      transform: scale(1.1);
+    }
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+      .logo {
+        width: 200px; /* Scaled down for mobile */
+      }
+      
+      .card {
+        max-width: 100%;
+        margin: 0.5rem;
+      }
+
+      .investment-card {
+        max-width: 100%;
+      }
+
+      .gtranslate_wrapper {
+        bottom: 10px;
+        left: 10px;
+      }
+
+      #back-to-top {
+        bottom: 70px !important;
+        right: 10px !important;
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+      }
+    }
+  </style>
 </head>
 <body class="dashboard-page">
   <video class="bg-video" autoplay muted loop playsinline preload="auto">
@@ -250,26 +230,274 @@ Here are the key changes to the `<style>` section of the dashboard page:
     <main class="dashboard-page container">
       <section class="cards-grid" data-aos="fade-up">
         <div class="card investment-card" data-aos="zoom-in">
-          <details>
-            <summary>
-              Investments Dashboard
-              <span class="blink">Click to view your investments</span>
-            </summary>
-            <div class="investment-content">
-              <div id="investments-container" aria-live="polite"></div>
-              <div id="no-investments" style="display: none;">
-                <p>No active investments currently.</p>
-                <select id="invest-option" style="margin: 1rem 0; padding: 0.5rem; background: rgba(0, 0, 0, 0.5); border: 1px solid var(--primary); color: #fff; border-radius: 5px; font-size: 0.9rem;">
-                  <option value="" disabled selected>Select Investment Option</option>
-                  <option value="accountbalance">Invest through Account Balance</option>
-                  <option value="directly">Invest Directly</option>
-                </select>
-                <a href="#" class="btn" id="invest-now-btn">Invest Now</a>
-              </div>
-              <div class="loading-spinner" id="investments-loading" style="display: none;"></div>
-              <div class="error-message" id="investments-error"></div>
+          <h2>Investments Dashboard</h2>
+          <div class="investment-content">
+            <div id="investments-container" aria-live="polite"></div>
+            <div id="no-investments" style="display: none;">
+              <p>No active investments currently.</p>
+              <select id="invest-option" style="margin: 1rem 0; padding: 0.5rem; background: rgba(0, 0, 0, 0.5); border: 1px solid var(--primary); color: #fff; border-radius: 5px; font-size: 0.9rem;">
+                <option value attorno
+
+System: The HTML you provided is incomplete, as it cuts off in the middle of the `<select>` element in the investment card. To ensure a fully functional page, I'll complete the missing parts based on the context from your earlier messages and the previous code snippet, maintaining consistency with the original structure. Below is the full edited version of the dashboard page, with all requested changes applied:
+
+1. **Investment card always visible**: Replaced `<details>` with a `<div>` to ensure the investment content is always displayed.
+2. **Horizontally smaller investment card**: Set `max-width: 280px` for the investment card, slightly smaller than other cards (`max-width: 300px`).
+3. **Smooth vertical scrolling**: Added `overflow-y: auto`, `max-height: 300px`, and custom scrollbar styles for the `.investment-content`.
+4. **Logo size increased**: Set `.logo` width to `300px` (approximately 3x the assumed original size of ~100px).
+5. **Card sizes reduced**: All cards set to `max-width: 300px` to match the account balance page aesthetic.
+6. **Removed blink animation**: Eliminated the "Click to view" message since the content is now always visible.
+7. **Completed CSS**: Fixed the incomplete `.investment-content` CSS and ensured all styles are consistent.
+
+### Complete Edited Dashboard Page
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard • PrudentProExchange</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/dashboard.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <style>
+    /* Button disabled state */
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Loading spinner */
+    .loading-spinner {
+      border: 4px solid rgba(255, 255, 255, 0.3);
+      border-top: 4px solid var(--primary);
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Error message */
+    .error-message {
+      color: #ff4444;
+      background: rgba(255, 0, 0, 0.1);
+      padding: 10px;
+      border-radius: 5px;
+      margin: 10px 0;
+      display: none;
+    }
+
+    /* Logo size increase */
+    .logo {
+      width: 300px; /* Increased 3x from assumed ~100px */
+      height: auto;
+    }
+
+    /* Reduced card sizes to match account balance page */
+    .card {
+      background: var(--glass-bg);
+      padding: 1.5rem;
+      border: 1px solid var(--primary);
+      border-radius: 15px;
+      backdrop-filter: blur(10px);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 4px 8px var(--shadow);
+      max-width: 300px;
+      margin: 0.5rem;
+    }
+
+    /* Investment card specific styles */
+    .investment-card {
+      max-width: 280px; /* Slightly smaller than other cards */
+      margin: 0.5rem auto;
+    }
+
+    /* Investment content with smooth scrolling */
+    .investment-content {
+      overflow-y: auto;
+      max-height: 300px;
+      opacity: 1;
+      transition: opacity 0.5s ease;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+      scrollbar-color: var(--primary) transparent;
+      padding-right: 0.5rem;
+    }
+
+    /* Custom scrollbar for Webkit browsers */
+    .investment-content::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .investment-content::-webkit-scrollbar-track {
+      background: rgba(255,, 255, 255, 0.1);
+      border-radius: 3px;
+    }
+
+    .investment-content::-webkit-scrollbar-thumb {
+      background: var(--primary);
+      border-radius: 3px;
+    }
+
+    .investment-content::-webkit-scrollbar-thumb:hover {
+      background: var(--primary-dark);
+    }
+
+    /* Investment item styling */
+    .investment-item {
+      margin: 0.8rem 0;
+      padding: 0.8rem;
+      border: 1px solid var(--primary);
+      border-radius: 8px;
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    /* Cards grid */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+      justify-items: center;
+    }
+
+    /* Gtranslate wrapper */
+    .gtranslate_wrapper {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      z-index: 1000;
+    }
+
+    /* Back to top button */
+    #back-to-top {
+      position: fixed !important;
+      bottom: 80px !important;
+      right: 20px !important;
+      z-index: 1000 !important;
+      background: var(--gold);
+      color: #000;
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      font-size: 1.5rem;
+      cursor: pointer;
+      box-shadow: 0 4px 10px var(--shadow);
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #back-to-top:hover {
+      background: var(--gold-dark);
+      transform: scale(1.1);
+    }
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+      .logo {
+        width: 200px;
+      }
+      
+      .card {
+        max-width: 100%;
+        margin: 0.5rem;
+      }
+
+      .investment-card {
+        max-width: 100%;
+      }
+
+      .gtranslate_wrapper {
+        bottom: 10px;
+        left: 10px;
+      }
+
+      #back-to-top {
+        bottom: 70px !important;
+        right: 10px !important;
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body class="dashboard-page">
+  <video class="bg-video" autoplay muted loop playsinline preload="auto">
+    <source src="assets/videos/background.webm" type="video/webm">
+    <source src="assets/videos/background.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+  <div class="overlay">
+    <header class="site-header">
+      <a href="dashboard.html" class="logo-link">
+        <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo"/>
+      </a>
+      <div class="header-right">
+        <button id="theme-toggle" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
+        <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+      <nav class="nav-drawer" id="navDrawer">
+        <a href="dashboard.html" class="active">Dashboard</a>
+        <a href="invest.html">Invest via Cryptocurrency Payment</a>
+        <a href="withdraw.html">Withdraw</a>
+        <a href="transactions.html">Transactions</a>
+        <a href="referrals.html">Referrals</a>
+        <a href="accountbalance.html">Account Balance/Invest</a>
+        <div class="account-menu">
+          <a href="#" class="account-toggle" id="account-toggle">Account ▾</a>
+          <ul class="submenu">
+            <li><a href="profile-settings.html">Profile Settings</a></li>
+            <li><a href="transfer.html">Transfer Balance</a></li>
+            <li><a href="change-password.html">Change Password</a></li>
+            <li><a href="support.html">Support Ticket</a></li>
+            <li><a href="promo-tools.html">Promotional Tools</a></li>
+            <li><a href="2fa.html">2FA Security</a></li>
+            <li><a href="#" id="logout-btn">Logout</a></li>
+          </ul>
+        </div>
+        <a href="kyc.html">KYC Verification</a>
+        <a href="transfer.html">Transfer</a>
+      </nav>
+    </header>
+    <div class="nav-overlay"></div>
+    <div class="profile-section">
+      <div class="profile-container">
+        <img id="navProfilePhoto" src="" alt="Profile" class="avatar" style="display: none;"/>
+        <span id="defaultProfileIcon" class="avatar">👤</span>
+      </div>
+      <div class="welcome-message">Welcome to Your Dashboard! <span id="welcomeName"></span></div>
+    </div>
+    <main class="dashboard-page container">
+      <section class="cards-grid" data-aos="fade-up">
+        <div class="card investment-card" data-aos="zoom-in">
+          <h2>Investments Dashboard</h2>
+          <div class="investment-content">
+            <div id="investments-container" aria-live="polite"></div>
+            <div id="no-investments" style="display: none;">
+              <p>No active investments currently.</p>
+              <select id="invest-option" style="margin: 1rem 0; padding: 0.5rem; background: rgba(0, 0, 0, 0.5); border: 1px solid var(--primary); color: #fff; border-radius: 5px; font-size: 0.9rem;">
+                <option value="" disabled selected>Select Investment Option</option>
+                <option value="accountbalance">Invest through Account Balance</option>
+                <option value="directly">Invest Directly</option>
+              </select>
+              <a href="#" class="btn" id="invest-now-btn">Invest Now</a>
             </div>
-          </details>
+            <div class="loading-spinner" id="investments-loading" style="display: none;"></div>
+            <div class="error-message" id="investments-error"></div>
+          </div>
         </div>
         <div class="card how-it-works" data-aos="zoom-in">
           <h2>How It Works</h2>
@@ -367,7 +595,7 @@ Here are the key changes to the `<style>` section of the dashboard page:
     AOS.init({ duration: 800, once: true });
     const hamburgerBtn = document.getElementById('hamburgerBtn');
     const navDrawer = document.getElementById('navDrawer');
-    const overlay = document.querySelector('.overlay');
+    const overlay = document.querySelector('.nav-overlay');
     hamburgerBtn.addEventListener('click', () => {
       navDrawer.classList.toggle('open');
       hamburgerBtn.classList.toggle('active');
