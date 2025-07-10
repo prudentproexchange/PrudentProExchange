@@ -218,7 +218,9 @@
           <p>Share your unique referral link and earn a 10% commission on every deposit:</p>
           <div class="referral-link-container">
             <input type="text" id="affiliateLink" readonly/>
-            <button class="copy-btn" title="Copy referral link" aria-label="Copy referral link"><i class="fas fa-copy"></i> Copy</button>
+            <button class="copy-btn" title="Copy referral link" aria-label="Copy referral link"><i class="fas fa-copy
+
+"></i> Copy</button>
           </div>
           <p>Referral Earnings: <span id="refEarnings">0.00</span></p>
         </div>
@@ -268,7 +270,9 @@
         <p class="local-time">Local Time: <span id="localTime"></span></p>
         <p class="local-date">Local Date: <span id="localDate"></span></p>
         <nav class="footer-links">
-          <a href="about.html">About Us</a>
+          <a
+
+ href="about.html">About Us</a>
           <a href="privacy.html">Privacy Policy</a>
           <a href="terms.html">Terms & Conditions</a>
         </nav>
@@ -380,7 +384,7 @@
       txLoading.style.display = 'block';
       try {
         clearAllInvestmentIntervals();
-        const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
+        const { data: { user }, error Progressive: authError } = await supabaseClient.auth.getUser();
         if (!user || authError) {
           window.location.href = 'login.html';
           return;
@@ -567,12 +571,14 @@
       const statusMessage = investmentDiv.querySelector('.status-message');
       const updateInvestment = () => {
         const now = new Date();
-        const daysSinceEnd = (now - endTime) / (1000 * 60 * 60 * 24);
+        let timeLeftMs = endTime - now;
+        // Clamp to at most 7 days
+        const maxMs = 7 * 24 * 60 * 60 * 1000;
+        if (timeLeftMs > maxMs) timeLeftMs = maxMs;
         if (status === 'active') {
           const elapsedSeconds = (now - startTime) / 1000;
           const currentProfit = Math.min(elapsedSeconds * profitPerSecond, total_profit);
           currentProfitSpan.textContent = formatCurrency(currentProfit);
-          const timeLeftMs = endTime - now;
           timeLeftSpan.textContent = formatTimeLeft(timeLeftMs);
           statusMessage.textContent = 'Investment in progress';
         } else if (status === 'profit_ready') {
@@ -651,7 +657,10 @@
         const daysSinceEnd = (now - endTime) / (1000 * 60 * 60 * 24);
         currentProfitSpan.textContent = formatCurrency(investment.total_profit || 0);
         if (investment.status === 'active') {
-          timeLeftSpan.textContent = formatTimeLeft(endTime - now);
+          let timeLeftMs = endTime - now;
+          const maxMs = 7 * 24 * 60 * 60 * 1000;
+          if (timeLeftMs > maxMs) timeLeftMs = maxMs;
+          timeLeftSpan.textContent = formatTimeLeft(timeLeftMs);
           statusMessage.textContent = 'Investment in progress';
         } else if (investment.status === 'profit_ready') {
           timeLeftSpan.textContent = 'Investment ended';
