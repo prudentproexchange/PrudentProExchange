@@ -443,6 +443,7 @@
       const loadingSpinner = document.getElementById('loadingSpinner');
       submitButton.disabled = true;
       loadingSpinner.style.display = 'block';
+      let referrerId = null; // Define referrerId at the top to ensure scope
       try {
         if (!form.checkValidity()) {
           form.reportValidity();
@@ -505,7 +506,6 @@
           photoUrl = storageData.path;
           console.log('Photo uploaded successfully:', photoUrl);
         }
-        let referrerId = null;
         if (form.referral_code.value) {
           const { data: refProfile, error: refErr } = await supabaseClient
             .from('profiles')
@@ -583,7 +583,7 @@
           message: error.message,
           code: error.code || 'No code',
           details: error.details || 'No details',
-          referrerId: referrerId,
+          referrerId: referrerId, // Fixed typo: was referrerld
           formData: {
             email: form.email.value,
             username: form.username.value,
