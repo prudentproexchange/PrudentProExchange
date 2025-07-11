@@ -443,10 +443,9 @@
             const now = new Date();
             const start = new Date(investment.start_time);
             const end = new Date(investment.end_time);
-            const msSinceStart = now - start;
-            const daysSinceStart = msSinceStart / (1000 * 60 * 60 * 24);
+            const daysSinceStart = (now - start) / (1000 * 60 * 60 * 24);
             const daysSinceEnd = (now - end) / (1000 * 60 * 60 * 24);
-            const canWithdraw = daysSinceStart >= 14 && investment.status === 'profit_transferred';
+            const canWithdraw = investment.status === 'profit_transferred' && daysSinceEnd >= 14;
             const canReinvest = daysSinceStart >= 7 && daysSinceStart <= 120 && investment.status === 'active';
             investmentDiv.innerHTML = `
               <p>Plan: <span>${investment.plan?.name ?? 'Unknown'}</span></p>
@@ -454,7 +453,7 @@
               <p>Current Profit: <span class="current-profit">${formatCurrency(0)}</span></p>
               <p>Time Remaining: <span class="time-left"></span></p>
               <p class="status-message"></p>
-              <button class="withdraw-btn" ${canWithdraw ? '' : 'disabled'}>Withdraw Capital</button>
+              <button class="withdraw-btn" ${canWithdraw ? '' : 'disabled'} title="Auto-transfer occurs 14 days after end_time">Withdraw Capital</button>
               <button class="reinvest-btn" ${canReinvest ? '' : 'disabled'}>Reinvest</button>
             `;
             fragment.appendChild(investmentDiv);
@@ -464,35 +463,13 @@
               if (!canWithdraw) return;
               if (!confirm('Are you sure you want to withdraw your capital?')) return;
               try {
-                const { data: profile, error: profileError } = await supabaseClient
-                  .from('profiles')
-                  .select('interest_wallet')
-                  .eq('id', user.id)
-                  .single();
-                if (profileError) throw profileError;
-                const currentInterest = profile.interest_wallet || 0;
-                const newInterest = currentInterest + investment.principal;
-                await supabaseClient
-                  .from('profiles')
-                  .update({ interest_wallet: newInterest })
-                  .eq('id', user.id);
-                await supabaseClient
-                  .from('transactions')
-                  .insert({
-                    user_id: user.id,
-                    type: 'capital',
-                    amount: investment.principal,
-                    status: 'completed',
-                    created_at: new Date().toISOString()
-                  });
-                document.getElementById('interestWallet').textContent = formatCurrency(newInterest);
-                document.getElementById('accountBalance').textContent = formatCurrency((profile.deposit_wallet || 0) + newInterest);
-                await supabaseClient
-                  .from('investments')
-                  .update({ status: 'withdrawn' })
-                  .eq('id', investment.id);
-                investmentDiv.innerHTML += '<p>Capital withdrawn.</p>';
-                withdrawBtn.disabled = true;
+                const { error } = await supabaseClient.rpc('process_investment_transfer', {
+                  p_user_id: user.id,
+                  p_investment_id: investment.id,
+                  p_transfer_type: 'capital'
+                });
+                if (error) throw error;
+                await initDashboard();
               } catch (err) {
                 showError('investments-error', 'Error withdrawing capital: ' + err.message);
               }
@@ -547,8 +524,7 @@
             </tr>
           `);
         });
-        // Periodically check for investment updates
-        setInterval(() => checkAndUpdateInvestments(user.id), 60000); // Check every 60 seconds
+        await checkAndUpdateInvestments(user.id);
       } catch (error) {
         console.error('Dashboard initialization error:', error);
         showError('investments-error', 'An error occurred while loading the dashboard.');
@@ -579,7 +555,7 @@
           timeLeftSpan.textContent = formatTimeLeft(endTime - now);
           statusMessage.textContent = 'Investment in progress';
           withdrawBtn.disabled = true;
-          reinvestBtn.disabled = now - startTime < 7 * 24 * 60 * 60 * 1000 || now > endTime;
+          reinvestBtn.disabled = (now - startTime) < 7 * 24 * 60 * 60 * 1000 || now > endTime;
         } else if (status === 'profit_ready') {
           currentProfitSpan.textContent = formatCurrency(total_profit);
           timeLeftSpan.textContent = 'Investment ended';
@@ -598,17 +574,19 @@
             : 'Capital transferring soon';
           withdrawBtn.disabled = daysSinceEnd < 14;
           reinvestBtn.disabled = true;
-        } else if (status === 'withdrawn' || status === 'completed') {
+        } else if (status === 'completed') {
           currentProfitSpan.textContent = formatCurrency(total_profit);
           timeLeftSpan.textContent = 'Investment completed';
           statusMessage.textContent = 'Profits and capital transferred';
           withdrawBtn.disabled = true;
           reinvestBtn.disabled = true;
-          clearInterval(investmentIntervals.find(id => id === interval));
+          clearInterval(intervalId);
+          const index = investmentIntervals.indexOf(intervalId);
+          if (index !== -1) investmentIntervals.splice(index, 1);
         }
       };
-      const interval = setInterval(updateInvestment, 500);
-      investmentIntervals.push(interval);
+      const intervalId = setInterval(updateInvestment, 500);
+      investmentIntervals.push(intervalId);
       updateInvestment();
     }
     function formatTimeLeft(ms) {
@@ -635,7 +613,6 @@
         for (const investment of investments) {
           const endTime = new Date(investment.end_time);
           const daysSinceEnd = (now - endTime) / (1000 * 60 * 60 * 24);
-          // Handle profit transfer after 7 days
           if (investment.status === 'active' && now >= endTime) {
             await supabaseClient
               .from('investments')
@@ -643,68 +620,23 @@
               .eq('id', investment.id);
             console.log(`Investment ${investment.id} status updated to profit_ready`);
           } else if (investment.status === 'profit_ready' && daysSinceEnd >= 7) {
-            const { data: profile, error: profileError } = await supabaseClient
-              .from('profiles')
-              .select('interest_wallet')
-              .eq('id', userId)
-              .single();
-            if (profileError) throw profileError;
-            const currentInterest = profile.interest_wallet || 0;
-            const newInterest = currentInterest + investment.total_profit;
-            // Update interest wallet
-            await supabaseClient
-              .from('profiles')
-              .update({ interest_wallet: newInterest })
-              .eq('id', userId);
-            // Record transaction
-            await supabaseClient
-              .from('transactions')
-              .insert({
-                user_id: userId,
-                type: 'profit',
-                amount: investment.total_profit,
-                status: 'completed',
-                created_at: new Date().toISOString(),
-              });
-            // Update investment status
-            await supabaseClient
-              .from('investments')
-              .update({ status: 'profit_transferred' })
-              .eq('id', investment.id);
-            console.log(`Investment ${investment.id}: Profit of ${investment.total_profit} transferred to interest wallet`);
+            const { error } = await supabaseClient.rpc('process_investment_transfer', {
+              p_user_id: userId,
+              p_investment_id: investment.id,
+              p_transfer_type: 'profit'
+            });
+            if (error) throw error;
+            console.log(`Investment ${investment.id}: Profit transferred`);
           } else if (investment.status === 'profit_transferred' && daysSinceEnd >= 14) {
-            const { data: profile, error: profileError } = await supabaseClient
-              .from('profiles')
-              .select('interest_wallet, deposit_wallet')
-              .eq('id', userId)
-              .single();
-            if (profileError) throw profileError;
-            const currentInterest = profile.interest_wallet || 0;
-            const newInterest = currentInterest + investment.principal;
-            // Update interest wallet
-            await supabaseClient
-              .from('profiles')
-              .update({ interest_wallet: newInterest })
-              .eq('id', userId);
-            // Record transaction
-            await supabaseClient
-              .from('transactions')
-              .insert({
-                user_id: userId,
-                type: 'capital',
-                amount: investment.principal,
-                status: 'completed',
-                created_at: new Date().toISOString(),
-              });
-            // Update investment status
-            await supabaseClient
-              .from('investments')
-              .update({ status: 'withdrawn' })
-              .eq('id', investment.id);
-            console.log(`Investment ${investment.id}: Capital of ${investment.principal} transferred to interest wallet`);
+            const { error } = await supabaseClient.rpc('process_investment_transfer', {
+              p_user_id: userId,
+              p_investment_id: investment.id,
+              p_transfer_type: 'capital'
+            });
+            if (error) throw error;
+            console.log(`Investment ${investment.id}: Capital transferred`);
           }
         }
-        // Refresh the dashboard to reflect changes
         await initDashboard();
       } catch (error) {
         console.error('Error checking investments:', error);
@@ -755,7 +687,7 @@
           timeLeftSpan.textContent = formatTimeLeft(endTime - now);
           statusMessage.textContent = 'Investment in progress';
           withdrawBtn.disabled = true;
-          reinvestBtn.disabled = now - new Date(investment.start_time) < 7 * 24 * 60 * 60 * 1000 || now > endTime;
+          reinvestBtn.disabled = (now - new Date(investment.start_time)) < 7 * 24 * 60 * 60 * 1000 || now > endTime;
         } else if (investment.status === 'profit_ready') {
           timeLeftSpan.textContent = 'Investment ended';
           const profitDate = new Date(endTime.getTime() + 7 * 24 * 60 * 60 * 1000);
@@ -772,7 +704,7 @@
             : 'Capital transferring soon';
           withdrawBtn.disabled = daysSinceEnd < 14;
           reinvestBtn.disabled = true;
-        } else if (investment.status === 'withdrawn' || investment.status === 'completed') {
+        } else if (investment.status === 'completed') {
           timeLeftSpan.textContent = 'Investment completed';
           statusMessage.textContent = 'Profits and capital transferred';
           withdrawBtn.disabled = true;
@@ -795,7 +727,7 @@
         <p>Current Profit: <span class="current-profit">${formatCurrency(0)}</span></p>
         <p>Time Remaining: <span class="time-left"></span></p>
         <p class="status-message"></p>
-        <button class="withdraw-btn" disabled>Withdraw Capital</button>
+        <button class="withdraw-btn" disabled title="Auto-transfer occurs 14 days after end_time">Withdraw Capital</button>
         <button class="reinvest-btn" disabled>Reinvest</button>
       `;
       container.appendChild(investmentDiv);
@@ -825,7 +757,10 @@
     (async () => {
       await initDashboard();
       const { data: { user } } = await supabaseClient.auth.getUser();
-      if (user) setupRealtimeSubscriptions(user.id);
+      if (user) {
+        setupRealtimeSubscriptions(user.id);
+        setInterval(() => checkAndUpdateInvestments(user.id), 60000);
+      }
     })();
     document.addEventListener('DOMContentLoaded', () => {
       const video = document.querySelector('.bg-video');
