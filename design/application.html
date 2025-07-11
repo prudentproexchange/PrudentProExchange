@@ -580,7 +580,7 @@
           referral_code: form.referral_code.value || null,
           referral_link: referralLink,
           photo_url: photoUrl,
-          referrer_id: referrerId,
+          referred_by: referrerId, // Updated to match new column name
           deposit_wallet: 0.00,
           total_deposits: 0.00,
           total_withdrawals: 0.00,
@@ -604,7 +604,7 @@
             p_referral_code: profileData.referral_code,
             p_referral_link: profileData.referral_link,
             p_photo_url: profileData.photo_url,
-            p_referrer_id: profileData.referrer_id,
+            p_referred_by: profileData.referred_by, // Updated parameter name
             p_deposit_wallet: profileData.deposit_wallet,
             p_total_deposits: profileData.total_deposits,
             p_total_withdrawals: profileData.total_withdrawals,
