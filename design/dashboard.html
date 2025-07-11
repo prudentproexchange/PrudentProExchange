@@ -113,6 +113,20 @@
       background: var(--gold-dark);
       transform: scale(1.1);
     }
+    .site-header .header-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem; /* Space between logo and theme toggle */
+    }
+    .site-header .logo {
+      width: calc(var(--original-logo-width, 80px) * 3); /* Default to 80px if variable not set */
+      height: auto;
+    }
+    #theme-toggle {
+      font-size: 1.2rem; /* Scale icon size */
+      padding: 0.5rem;
+      margin-left: 0.5rem; /* Additional spacing from the logo */
+    }
     @media (max-width: 768px) {
       .gtranslate_wrapper {
         bottom: 10px;
@@ -125,6 +139,17 @@
         height: 40px;
         font-size: 1.2rem;
       }
+      .site-header .logo {
+        width: calc(var(--original-logo-width, 80px) * 2); /* Scale to 2x on mobile */
+      }
+      .site-header .header-left {
+        gap: 0.5rem; /* Reduce gap on smaller screens */
+      }
+      #theme-toggle {
+        font-size: 1rem; /* Slightly smaller icon on mobile */
+        padding: 0.3rem;
+        margin-left: 0.3rem;
+      }
     }
   </style>
 </head>
@@ -136,11 +161,15 @@
   </video>
   <div class="overlay">
     <header class="site-header">
-      <a href="dashboard.html" class="logo-link">
-        <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo"/>
-      </a>
+      <div class="header-left">
+        <a href="dashboard.html" class="logo-link">
+          <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo"/>
+        </a>
+        <button id="theme-toggle" aria-label="Toggle theme">
+          <i class="fas fa-moon"></i>
+        </button>
+      </div>
       <div class="header-right">
-        <button id="theme-toggle" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
         <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
           <span></span><span></span><span></span>
         </button>
@@ -296,7 +325,7 @@
     AOS.init({ duration: 800, once: true });
     const hamburgerBtn = document.getElementById('hamburgerBtn');
     const navDrawer = document.getElementById('navDrawer');
-    const overlay = document.querySelector('.overlay');
+    const overlay = document.querySelector('.nav-overlay');
     hamburgerBtn.addEventListener('click', () => {
       navDrawer.classList.toggle('open');
       hamburgerBtn.classList.toggle('active');
