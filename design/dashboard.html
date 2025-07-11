@@ -113,11 +113,18 @@
       background: var(--gold-dark);
       transform: scale(1.1);
     }
-    /* New styles for logo and theme toggle */
+    /* Updated styles for header, logo, and theme toggle */
+    .site-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem; /* Space between logo, theme toggle, and hamburger */
+      padding: 1rem;
+    }
     .logo {
-      height: 50px; /* Standard height for header logo */
+      height: 150px; /* Tripled from 50px */
       width: auto; /* Maintain aspect ratio */
-      max-width: 200px; /* Prevent overly wide logos */
+      max-width: 600px; /* Tripled from 200px */
       transition: transform 0.3s ease;
     }
     .logo-link:hover .logo {
@@ -128,33 +135,39 @@
       border: none;
       padding: 10px;
       cursor: pointer;
-      font-size: 1.2rem; /* Matches typical header icon size */
-      color: var(--primary, #fff); /* Use primary color or fallback to white */
+      font-size: 1.2rem;
+      color: var(--primary, #fff);
       transition: color 0.3s ease, transform 0.3s ease;
       display: flex;
       align-items: center;
       justify-content: center;
       width: 40px;
       height: 40px;
-      border-radius: 50%; /* Circular button */
+      border-radius: 50%;
+      margin: 0 1rem; /* Add spacing to prevent closeness */
     }
     #theme-toggle:hover {
-      color: var(--gold, #ffd700); /* Gold hover effect, matching site theme */
-      transform: scale(1.1); /* Subtle zoom on hover */
+      color: var(--gold, #ffd700);
+      transform: scale(1.1);
     }
     #theme-toggle i {
-      font-size: 1.2rem; /* Ensure icon size is consistent */
+      font-size: 1.2rem;
+    }
+    .header-right {
+      display: flex;
+      align-items: center;
     }
     /* Responsive adjustments */
     @media (max-width: 768px) {
       .logo {
-        height: 40px; /* Smaller logo on mobile */
-        max-width: 150px;
+        height: 120px; /* Adjusted for mobile, still larger than original 40px */
+        max-width: 450px;
       }
       #theme-toggle {
         width: 36px;
         height: 36px;
         font-size: 1rem;
+        margin: 0 0.5rem; /* Reduced spacing for mobile */
       }
       #theme-toggle i {
         font-size: 1rem;
@@ -170,6 +183,9 @@
         height: 40px;
         font-size: 1.2rem;
       }
+      .site-header {
+        gap: 0.5rem; /* Tighter spacing on mobile */
+      }
     }
   </style>
 </head>
@@ -184,8 +200,8 @@
       <a href="dashboard.html" class="logo-link">
         <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo"/>
       </a>
+      <button id="theme-toggle" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
       <div class="header-right">
-        <button id="theme-toggle" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
         <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
           <span></span><span></span><span></span>
         </button>
@@ -241,7 +257,7 @@
                 <a href="#" class="btn" id="invest-now-btn">Invest Now</a>
               </div>
               <div class="loading-spinner" id="investments-loading" style="display: none;"></div>
-              <-string class="error-message" id="investments-error"></string>
+              <div class="error-message" id="investments-error"></div>
             </div>
           </details>
         </div>
@@ -833,7 +849,7 @@
         video.addEventListener('canplay', () => console.log('Background video can play'));
         video.addEventListener('playing', () => console.log('Background video is actively playing'));
         video.addEventListener('error', (e) => console.error('Background video error:', e));
-        video.addEventListener('stalled', () => console.warn('BACKGROUND video stalled'));
+        video.addEventListener('stalled', () => console.warn('Background video stalled'));
         video.addEventListener('loadeddata', () => console.log('Background video data loaded'));
         document.addEventListener('visibilitychange', () => {
           if (document.visibilityState === 'visible') {
