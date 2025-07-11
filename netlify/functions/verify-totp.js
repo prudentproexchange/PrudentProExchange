@@ -1,7 +1,7 @@
 // netlify/functions/verify-totp.js
 
-const { createClient } = require('@supabase/supabase-js');
-const { authenticator } = require('otplib');
+import { createClient }      from '@supabase/supabase-js';
+import { authenticator }     from 'otplib';
 
 // Initialize Supabase with the service‐role key
 const supabase = createClient(
@@ -13,16 +13,22 @@ const supabase = createClient(
 authenticator.options = {
   digits: 6,
   step: 30,
-  algorithm: 'sha1'
+  algorithm: 'sha1',
 };
 
-exports.handler = async (event) => {
+export default async function handler(event) {
   try {
     if (event.httpMethod !== 'POST') {
-      return { statusCode: 405, body: JSON.stringify({ ok: false, error: 'Method not allowed' }) };
+      return {
+        statusCode: 405,
+        body: JSON.stringify({ ok: false, error: 'Method not allowed' }),
+      };
     }
     if (!event.body) {
-      return { statusCode: 400, body: JSON.stringify({ ok: false, error: 'No request body' }) };
+      return {
+        statusCode: 400,
+        body: JSON.stringify({ ok: false, error: 'No request body' }),
+      };
     }
 
     const { user_id, token } = JSON.parse(event.body);
@@ -36,19 +42,34 @@ exports.handler = async (event) => {
 
     if (dbError) {
       console.error('DB error fetching 2FA secret:', dbError);
-      return { statusCode: 500, body: JSON.stringify({ ok: false, error: 'Database error' }) };
+      return {
+        statusCode: 500,
+        body: JSON.stringify({ ok: false, error: 'Database error' }),
+      };
     }
     if (!data || !data.secret) {
       console.warn('No 2FA secret found for user:', user_id);
-      return { statusCode: 200, body: JSON.stringify({ ok: false, error: 'No secret found; please enable 2FA first.' }) };
+      return {
+        statusCode: 200,
+        body: JSON.stringify({
+          ok: false,
+          error: 'No secret found; please enable 2FA first.',
+        }),
+      };
     }
 
     // Verify the TOTP code
     const valid = authenticator.verify({ token, secret: data.secret });
-    return { statusCode: 200, body: JSON.stringify({ ok: valid }) };
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ ok: valid }),
+    };
 
   } catch (err) {
     console.error('Unexpected error in verify-totp:', err);
-    return { statusCode: 500, body: JSON.stringify({ ok: false, error: 'Internal server error' }) };
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ ok: false, error: 'Internal server error' }),
+    };
   }
-};
+}
