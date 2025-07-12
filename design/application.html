@@ -3,649 +3,154 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Apply • PrudentProExchange</title>
-  <link rel="stylesheet" href="css/style.css"/>
-  <link rel="stylesheet" href="css/application.css"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <title>Test Apply • PrudentProExchange</title>
   <style>
-    .loading-spinner {
-      display: none;
-      text-align: center;
-      margin-top: 20px;
-    }
-    .loading-spinner i {
-      font-size: 24px;
-      color: #ffd700;
-      margin-right: 8px;
-    }
-    .gtranslate_wrapper {
-      position: fixed;
-      bottom: 20px;
-      left: 20px;
-      z-index: 1000;
-    }
-    #back-to-top {
-      position: fixed !important;
-      bottom: 80px !important;
-      right: 20px !important;
-      z-index: 1000 !important;
-      background: var(--gold);
-      color: #000;
-      border: none;
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      font-size: 1.5rem;
-      cursor: pointer;
-      box-shadow: 0 4px 10px var(--shadow);
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    #back-to-top:hover {
-      background: var(--gold-dark);
-      transform: scale(1.1);
-    }
-    .crisp-client .cc-unoo {
-      background: var(--gold) !important;
-      border-radius: 50% !important;
-      box-shadow: 0 4px 10px var(--shadow) !important;
-    }
-    .crisp-client .cc-unoo:hover {
-      background: var(--gold-dark) !important;
-      transform: scale(1.1) !important;
-    }
-    .crisp-client .cc-conv {
-      background: var(--glass-bg) !important;
-      backdrop-filter: blur(10px) !important;
-      border-radius: 15px !important;
-      box-shadow: 0 4px 20px var(--shadow) !important;
-      color: var(--text) !important;
-    }
-    @media (max-width: 768px) {
-      .gtranslate_wrapper {
-        bottom: 10px;
-        left: 10px;
-      }
-      #back-to-top {
-        bottom: 70px !important;
-        right: 10px !important;
-        width: 40px;
-        height: 40px;
-        font-size: 1.2rem;
-      }
-    }
+    body { font-family: sans-serif; padding: 2rem; background: #f5f5f5; }
+    form { max-width: 400px; margin: auto; background: #fff; padding: 1.5rem; border-radius: 8px; }
+    label { display: block; margin-bottom: .75rem; }
+    input, select { width: 100%; padding: .5rem; margin-top: .25rem; }
+    button { margin-top: 1rem; padding: .75rem 1.5rem; }
+    .error { color: red; margin-top: .5rem; }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-<body class="application-page">
-  <video class="bg-video" autoplay muted loop playsinline preload="auto">
-    <source src="assets/videos/background.webm" type="video/webm">
-    <source src="assets/videos/background.mp4" type="video/mp4">
-  </video>
-  <div class="overlay">
-    <header class="site-header">
-      <button id="theme-toggle" aria-label="Toggle theme"><i class="fas fa-moon"></i></button>
-      <a href="/" class="logo-link">
-        <img src="assets/images/logo.svg" alt="PrudentProExchange Logo" class="logo"/>
-      </a>
-      <button class="hamburger" id="hamburgerApp" aria-label="Menu">
-        <span></span><span></span><span></span>
-      </button>
-      <nav class="nav-drawer" id="navDrawerApp">
-        <a href="application.html" class="active">Apply</a>
-        <a href="about.html">About</a>
-        <a href="privacy.html">Privacy Policy</a>
-        <a href="terms.html">Terms & Conditions</a>
-        <a href="login.html">Login</a>
-        <a href="plans.html">Investment Plans</a>
-      </nav>
-    </header>
-    <main class="form-page container">
-      <section class="section section-light" data-aos="fade-up">
-        <h1 class="section-title gold">👋 Create an Account</h1>
-        <p class="section-text">
-          Register to continue with PrudentProExchange and unlock personalized investment opportunities.
-        </p>
-        <div class="form-wrapper">
-          <form id="applicationForm" class="form-container">
-            <div class="form-grid">
-              <label>
-                First Name*
-                <input type="text" name="first_name" required aria-label="First Name"/>
-              </label>
-              <label>
-                Last Name*
-                <input type="text" name="last_name" required aria-label="Last Name"/>
-              </label>
-              <label>
-                Email Address*
-                <input type="email" name="email" required aria-label="Email Address"/>
-              </label>
-              <label>
-                Username*
-                <input type="text" name="username" required aria-label="Username"/>
-              </label>
-              <label>
-                Select Country*
-                <select name="country" required aria-label="Select Country">
-                  <option value="" disabled selected>Select your country</option>
-                  <option value="AF">Afghanistan</option>
-                  <option value="AL">Albania</option>
-                  <option value="DZ">Algeria</option>
-                  <option value="AD">Andorra</option>
-                  <option value="AO">Angola</option>
-                  <option value="AG">Antigua and Barbuda</option>
-                  <option value="AR">Argentina</option>
-                  <option value="AM">Armenia</option>
-                  <option value="AU">Australia</option>
-                  <option value="AT">Austria</option>
-                  <option value="AZ">Azerbaijan</option>
-                  <option value="BS">Bahamas</option>
-                  <option value="BH">Bahrain</option>
-                  <option value="BD">Bangladesh</option>
-                  <option value="BB">Barbados</option>
-                  <option value="BY">Belarus</option>
-                  <option value="BE">Belgium</option>
-                  <option value="BZ">Belize</option>
-                  <option value="BJ">Benin</option>
-                  <option value="BT">Bhutan</option>
-                  <option value="BO">Bolivia</option>
-                  <option value="BA">Bosnia and Herzegovina</option>
-                  <option value="BW">Botswana</option>
-                  <option value="BR">Brazil</option>
-                  <option value="BN">Brunei</option>
-                  <option value="BG">Bulgaria</option>
-                  <option value="BF">Burkina Faso</option>
-                  <option value="BI">Burundi</option>
-                  <option value="CV">Cabo Verde</option>
-                  <option value="KH">Cambodia</option>
-                  <option value="CM">Cameroon</option>
-                  <option value="CA">Canada</option>
-                  <option value="CF">Central African Republic</option>
-                  <option value="TD">Chad</option>
-                  <option value="CL">Chile</option>
-                  <option value="CN">China</option>
-                  <option value="CO">Colombia</option>
-                  <option value="KM">Comoros</option>
-                  <option value="CG">Congo</option>
-                  <option value="CD">Congo, Democratic Republic of the</option>
-                  <option value="CR">Costa Rica</option>
-                  <option value="HR">Croatia</option>
-                  <option value="CU">Cuba</option>
-                  <option value="CY">Cyprus</option>
-                  <option value="CZ">Czech Republic</option>
-                  <option value="DK">Denmark</option>
-                  <option value="DJ">Djibouti</option>
-                  <option value="DM">Dominica</option>
-                  <option value="DO">Dominican Republic</option>
-                  <option value="EC">Ecuador</option>
-                  <option value="EG">Egypt</option>
-                  <option value="SV">El Salvador</option>
-                  <option value="GQ">Equatorial Guinea</option>
-                  <option value="ER">Eritrea</option>
-                  <option value="EE">Estonia</option>
-                  <option value="SZ">Eswatini</option>
-                  <option value="ET">Ethiopia</option>
-                  <option value="FJ">Fiji</option>
-                  <option value="FI">Finland</option>
-                  <option value="FR">France</option>
-                  <option value="GA">Gabon</option>
-                  <option value="GM">Gambia</option>
-                  <option value="GE">Georgia</option>
-                  <option value="DE">Germany</option>
-                  <option value="GH">Ghana</option>
-                  <option value="GR">Greece</option>
-                  <option value="GD">Grenada</option>
-                  <option value="GT">Guatemala</option>
-                  <option value="GN">Guinea</option>
-                  <option value="GW">Guinea-Bissau</option>
-                  <option value="GY">Guyana</option>
-                  <option value="HT">Haiti</option>
-                  <option value="HN">Honduras</option>
-                  <option value="HU">Hungary</option>
-                  <option value="IS">Iceland</option>
-                  <option value="IN">India</option>
-                  <option value="ID">Indonesia</option>
-                  <option value="IR">Iran</option>
-                  <option value="IQ">Iraq</option>
-                  <option value="IE">Ireland</option>
-                  <option value="IL">Israel</option>
-                  <option value="IT">Italy</option>
-                  <option value="JM">Jamaica</option>
-                  <option value="JP">Japan</option>
-                  <option value="JO">Jordan</option>
-                  <option value="KZ">Kazakhstan</option>
-                  <option value="KE">Kenya</option>
-                  <option value="KI">Kiribati</option>
-                  <option value="KP">Korea, North</option>
-                  <option value="KR">Korea, South</option>
-                  <option value="KW">Kuwait</option>
-                  <option value="KG">Kyrgyzstan</option>
-                  <option value="LA">Laos</option>
-                  <option value="LV">Latvia</option>
-                  <option value="LB">Lebanon</option>
-                  <option value="LS">Lesotho</option>
-                  <option value="LR">Liberia</option>
-                  <option value="LY">Libya</option>
-                  <option value="LI">Liechtenstein</option>
-                  <option value="LT">Lithuania</option>
-                  <option value="LU">Luxembourg</option>
-                  <option value="MG">Madagascar</option>
-                  <option value="MW">Malawi</option>
-                  <option value="MY">Malaysia</option>
-                  <option value="MV">Maldives</option>
-                  <option value="ML">Mali</option>
-                  <option value="MT">Malta</option>
-                  <option value="MH">Marshall Islands</option>
-                  <option value="MR">Mauritania</option>
-                  <option value="MU">Mauritius</option>
-                  <option value="MX">Mexico</option>
-                  <option value="FM">Micronesia</option>
-                  <option value="MD">Moldova</option>
-                  <option value="MC">Monaco</option>
-                  <option value="MN">Mongolia</option>
-                  <option value="ME">Montenegro</option>
-                  <option value="MA">Morocco</option>
-                  <option value="MZ">Mozambique</option>
-                  <option value="MM">Myanmar</option>
-                  <option value="NA">Namibia</option>
-                  <option value="NR">Nauru</option>
-                  <option value="NP">Nepal</option>
-                  <option value="NL">Netherlands</option>
-                  <option value="NZ">New Zealand</option>
-                  <option value="NI">Nicaragua</option>
-                  <option value="NE">Niger</option>
-                  <option value="NG">Nigeria</option>
-                  <option value="NO">Norway</option>
-                  <option value="OM">Oman</option>
-                  <option value="PK">Pakistan</option>
-                  <option value="PW">Palau</option>
-                  <option value="PA">Panama</option>
-                  <option value="PG">Papua New Guinea</option>
-                  <option value="PY">Paraguay</option>
-                  <option value="PE">Peru</option>
-                  <option value="PH">Philippines</option>
-                  <option value="PL">Poland</option>
-                  <option value="PT">Portugal</option>
-                  <option value="QA">Qatar</option>
-                  <option value="RO">Romania</option>
-                  <option value="RU">Russia</option>
-                  <option value="RW">Rwanda</option>
-                  <option value="KN">Saint Kitts and Nevis</option>
-                  <option value="LC">Saint Lucia</option>
-                  <option value="VC">Saint Vincent and the Grenadines</option>
-                  <option value="WS">Samoa</option>
-                  <option value="SM">San Marino</option>
-                  <option value="ST">Sao Tome and Principe</option>
-                  <option value="SA">Saudi Arabia</option>
-                  <option value="SN">Senegal</option>
-                  <option value="RS">Serbia</option>
-                  <option value="SC">Seychelles</option>
-                  <option value="SL">Sierra Leone</option>
-                  <option value="SG">Singapore</option>
-                  <option value="SK">Slovakia</option>
-                  <option value="SI">Slovenia</option>
-                  <option value="SB">Solomon Islands</option>
-                  <option value="SO">Somalia</option>
-                  <option value="ZA">South Africa</option>
-                  <option value="SS">South Sudan</option>
-                  <option value="ES">Spain</option>
-                  <option value="LK">Sri Lanka</option>
-                  <option value="SD">Sudan</option>
-                  <option value="SR">Suriname</option>
-                  <option value="SE">Sweden</option>
-                  <option value="CH">Switzerland</option>
-                  <option value="SY">Syria</option>
-                  <option value="TJ">Tajikistan</option>
-                  <option value="TZ">Tanzania</option>
-                  <option value="TH">Thailand</option>
-                  <option value="TL">Timor-Leste</option>
-                  <option value="TG">Togo</option>
-                  <option value="TO">Tonga</option>
-                  <option value="TT">Trinidad and Tobago</option>
-                  <option value="TN">Tunisia</option>
-                  <option value="TR">Turkey</option>
-                  <option value="TM">Turkmenistan</option>
-                  <option value="TV">Tuvalu</option>
-                  <option value="UG">Uganda</option>
-                  <option value="UA">Ukraine</option>
-                  <option value="AE">United Arab Emirates</option>
-                  <option value="GB">United Kingdom</option>
-                  <option value="US">United States</option>
-                  <option value="UY">Uruguay</option>
-                  <option value="UZ">Uzbekistan</option>
-                  <option value="VU">Vanuatu</option>
-                  <option value="VE">Venezuela</option>
-                  <option value="VN">Vietnam</option>
-                  <option value="YE">Yemen</option>
-                  <option value="ZM">Zambia</option>
-                  <option value="ZW">Zimbabwe</option>
-                </select>
-              </label>
-              <label>
-                Referral Code (optional)
-                <input type="text" name="referral_code" aria-label="Referral Code"/>
-              </label>
-              <label>
-                Password*
-                <input type="password" name="password" required aria-label="Password"/>
-              </label>
-              <label>
-                Confirm Password*
-                <input type="password" name="confirm_password" required aria-label="Confirm Password"/>
-              </label>
-              <label class="photo-upload">
-                Profile Photo (optional)
-                <input type="file" name="photo" accept="image/*" aria-label="Profile Photo"/>
-              </label>
-            </div>
-            <label class="terms-agreement">
-              <input type="checkbox" name="terms" required aria-label="Terms Agreement"/>
-              I agree with the <a href="privacy.html">Privacy Policy</a> and <a href="terms.html">Terms & Conditions</a>
-            </label>
-            <button type="submit" class="cta primary" id="submitButton">Create Account</button>
-            <p class="login-link">Already have an account? <a href="login.html">Login</a></p>
-            <div class="loading-spinner" id="loadingSpinner">
-              <i class="fas fa-spinner fa-spin"></i> Processing your application...
-            </div>
-          </form>
-        </div>
-      </section>
-    </main>
-  </div>
-  <button id="back-to-top" aria-label="Back to top">🚀</button>
-  <div class="gtranslate_wrapper"></div>
-  <script>window.gtranslateSettings = {"default_language":"en","native_language_names":true,"detect_browser_language":true,"wrapper_selector":".gtranslate_wrapper","flag_style":"3d"}</script>
-  <script src="https://cdn.gtranslate.net/widgets/latest/float.js" defer></script>
-  <script type="text/javascript">
-    window.$crisp = [];
-    window.CRISP_WEBSITE_ID = "599e8216-ab4f-4d4f-bb22-5d47cf14031f";
-    (function() {
-      d = document;
-      s = d.createElement("script");
-      s.src = "https://client.crisp.chat/l.js";
-      s.async = 1;
-      d.getElementsByTagName("head")[0].appendChild(s);
-    })();
-  </script>
-  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<body>
+
+  <h2>Test Sign-Up Form</h2>
+  <form id="testForm">
+    <label>
+      First Name
+      <input type="text" name="first_name" required />
+    </label>
+    <label>
+      Last Name
+      <input type="text" name="last_name" required />
+    </label>
+    <label>
+      Email Address
+      <input type="email" name="email" required />
+    </label>
+    <label>
+      Username
+      <input type="text" name="username" required />
+    </label>
+    <label>
+      Select Country
+      <select name="country" required>
+        <option value="">-- choose --</option>
+        <option value="GB">United Kingdom</option>
+        <option value="US">United States</option>
+        <option value="NG">Nigeria</option>
+        <!-- add more as needed -->
+      </select>
+    </label>
+    <label>
+      Referral Code (optional)
+      <input type="text" name="referral_code" />
+    </label>
+    <label>
+      Password
+      <input type="password" name="password" required />
+    </label>
+    <label>
+      Confirm Password
+      <input type="password" name="confirm_password" required />
+    </label>
+    <label>
+      Profile Photo (optional)
+      <input type="file" name="photo" accept="image/*" />
+    </label>
+    <button type="submit">Create Account</button>
+    <p class="error" id="errorMsg"></p>
+  </form>
+
   <script>
-    AOS.init({ duration: 800, once: true });
-    document.getElementById('back-to-top').addEventListener('click', () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-    window.addEventListener('error', event => {
-      alert(`Error: ${event.message}\nFile: ${event.filename}:${event.lineno}`);
-    });
-    window.addEventListener('unhandledrejection', event => {
-      alert(`Unhandled promise rejection:\n${event.reason}`);
-    });
-    const btnApp = document.getElementById('hamburgerApp'),
-          drawerApp = document.getElementById('navDrawerApp');
-    btnApp.addEventListener('click', () => {
-      drawerApp.classList.toggle('open');
-      btnApp.classList.toggle('active');
-    });
-    const themeToggle = document.getElementById('theme-toggle');
-    themeToggle.addEventListener('click', () => {
-      document.body.classList.toggle('light-theme');
-      const icon = themeToggle.querySelector('i');
-      icon.classList.toggle('fa-moon');
-      icon.classList.toggle('fa-sun');
-    });
-    function generateReferralCode(length = 8) {
-      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-      let code = '';
-      for (let i = 0; i < length; i++) {
-        code += chars.charAt(Math.floor(Math.random() * chars.length));
-      }
-      return code;
-    }
-    const { createClient } = supabase;
-    const supabaseClient = createClient(
+    // Initialize Supabase
+    const supabase = supabase.createClient(
       'https://iwkdznjqfbsfkscnbrkc.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3a2R6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU'
+      'PUBLIC_ANON_KEY' // replace with your anon key
     );
-    const usernameInput = document.querySelector('input[name="username"]');
-    usernameInput.addEventListener('blur', async () => {
-      const username = usernameInput.value.trim();
-      if (username) {
-        try {
-          const { data, error } = await supabaseClient
-            .from('profiles')
-            .select('username')
-            .eq('username', username)
-            .single();
-          if (error && error.code !== 'PGRST116') {
-            throw error;
-          }
-          if (data) {
-            usernameInput.setCustomValidity('Username already taken.');
-            alert('Username already taken. Please choose another.');
-          } else {
-            usernameInput.setCustomValidity('');
-          }
-        } catch (error) {
-          console.error('Error checking username:', error);
-          usernameInput.setCustomValidity('Error checking username availability.');
-          alert('Error checking username availability. Please try again.');
-        }
+
+    function generateReferralCode(len = 8) {
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      return Array.from({length: len}, () => chars.charAt(Math.floor(Math.random()*chars.length))).join('');
+    }
+
+    document.getElementById('testForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      document.getElementById('errorMsg').textContent = '';
+      const f = e.target;
+      // basic validation
+      if (f.password.value !== f.confirm_password.value) {
+        return document.getElementById('errorMsg').textContent = "Passwords don't match.";
       }
-    });
-    document.getElementById('applicationForm').addEventListener('submit', async (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-      const form = event.target;
-      const submitButton = document.getElementById('submitButton');
-      const loadingSpinner = document.getElementById('loadingSpinner');
-      submitButton.disabled = true;
-      loadingSpinner.style.display = 'block';
-      let referrerId = null;
-      try {
-        if (!form.checkValidity()) {
-          form.reportValidity();
-          throw new Error('Please fill in all required fields correctly.');
-        }
-        if (form.password.value !== form.confirm_password.value) {
-          throw new Error('Passwords do not match.');
-        }
-        if (!form.terms.checked) {
-          throw new Error('You must agree to the Privacy Policy and Terms & Conditions.');
-        }
-        if (!form.country.value) {
-          throw new Error('Please select a country.');
-        }
-        if (form.password.value.length < 8) {
-          throw new Error('Password must be at least 8 characters long.');
-        }
-        console.log('Form data:', {
-          email: form.email.value,
-          first_name: form.first_name.value,
-          last_name: form.last_name.value,
-          username: form.username.value,
-          country: form.country.value,
-          referral_code: form.referral_code.value,
-        });
-        const referralCode = generateReferralCode();
-        const referralLink = `https://prudentproexchange.net/referral/${referralCode}`;
-        const { data: authData, error: signUpError } = await supabaseClient.auth.signUp({
-          email: form.email.value,
-          password: form.password.value,
-          options: {
-            emailRedirectTo: 'https://prudentproexchange.com/login.html',
-          },
-        });
-        if (signUpError) {
-          console.error('Sign-up error:', signUpError);
-          if (signUpError.message.includes('already')) {
-            throw new Error('A user with this email already exists. Please log in or contact support.');
-          }
-          throw new Error(`Sign-up failed: ${signUpError.message}`);
-        }
-        const user = authData.user;
-        if (!user) {
-          console.error('No user returned from signUp');
-          throw new Error('User creation failed: No user data returned.');
-        }
-        console.log('User signed up successfully:', user.id);
-        let photoUrl = null;
-        if (form.photo.files[0]) {
-          console.log('Uploading photo for user:', user.id);
-          const file = form.photo.files[0];
-          const filePath = `${user.id}/${Date.now()}_${file.name}`;
-          const { data: storageData, error: uploadError } = await supabaseClient.storage
-            .from('profile-photos')
-            .upload(filePath, file, { upsert: true });
-          if (uploadError) {
-            console.error('Photo upload error:', uploadError);
-            throw new Error(`Photo upload failed: ${uploadError.message}`);
-          }
-          photoUrl = storageData.path;
-          console.log('Photo uploaded successfully:', photoUrl);
-        }
-        if (form.referral_code.value) {
-          const { data: refProfile, error: refErr } = await supabaseClient
-            .from('profiles')
-            .select('id')
-            .eq('referral_code', form.referral_code.value)
-            .single();
-          if (refErr && refErr.code !== 'PGRST116') {
-            console.warn('Referral code check error:', refErr.message);
-            throw new Error(`Referral code validation failed: ${refErr.message}`);
-          } else if (refProfile) {
-            referrerId = refProfile.id;
-          }
-        }
-        const profileData = {
-          id: user.id,
-          email: form.email.value.toLowerCase(),
-          first_name: form.first_name.value,
-          last_name: form.last_name.value,
-          username: form.username.value,
-          country: form.country.value,
-          referral_code: referralCode,
-          referral_link: referralLink,
-          photo_url: photoUrl,
-          referred_by: referrerId,
-          deposit_wallet: 0.00,
-          total_deposits: 0.00,
-          total_withdrawals: 0.00,
-          total_invested: 0.00,
-          promo_pct: 0,
-          promo_offer: 0.00,
-          referral_earnings: 0.00,
-          status: 'active',
-          password: form.password.value
-        };
-        const { error: profileError } = await supabaseClient
-          .rpc('insert_profile_with_password', {
-            p_id: profileData.id,
-            p_email: profileData.email,
-            p_first_name: profileData.first_name,
-            p_last_name: profileData.last_name,
-            p_username: profileData.username,
-            p_country: profileData.country,
-            p_referral_code: profileData.referral_code,
-            p_referral_link: profileData.referral_link,
-            p_photo_url: profileData.photo_url,
-            p_referred_by: profileData.referred_by,
-            p_deposit_wallet: profileData.deposit_wallet,
-            p_total_deposits: profileData.total_deposits,
-            p_total_withdrawals: profileData.total_withdrawals,
-            p_total_invested: profileData.total_invested,
-            p_promo_pct: profileData.promo_pct,
-            p_promo_offer: profileData.promo_offer,
-            p_referral_earnings: profileData.referral_earnings,
-            p_status: profileData.status,
-            p_password: profileData.password
-          });
-        if (profileError) {
-          console.error('Profile insertion error:', {
-            message: profileError.message,
-            code: profileError.code,
-            details: profileError.details || 'No details',
-            hint: profileError.hint || 'No hint'
-          });
-          await supabaseClient.auth.admin.deleteUser(user.id);
-          if (profileError.code === '23505') {
-            throw new Error('Username or email already exists');
-          }
-          throw new Error(`Profile creation failed: ${profileError.message}`);
-        }
-        console.log('Profile inserted successfully');
-        alert('Sign-up successful! Please check your email to confirm your account, then log in.');
-        window.location.href = 'login.html';
-      } catch (error) {
-        console.error('Error during sign-up process:', {
-          message: error.message,
-          code: error.code || 'No code',
-          details: error.details || 'No details',
-          referrerId: referrerId,
-          formData: {
-            email: form.email.value,
-            username: form.username.value,
-            referral_code: form.referral_code.value
-          }
-        });
-        alert(error.message || 'An unexpected error occurred. Please try again.');
-      } finally {
-        submitButton.disabled = false;
-        loadingSpinner.style.display = 'none';
+
+      // 1) sign up
+      const { data: authData, error: signErr } = await supabase.auth.signUp({
+        email: f.email.value,
+        password: f.password.value,
+        options: { emailRedirectTo: window.location.href }
+      });
+      if (signErr) {
+        console.error(signErr);
+        return document.getElementById('errorMsg').textContent = signErr.message;
       }
-    });
-    document.addEventListener('DOMContentLoaded', () => {
-      const video = document.querySelector('.bg-video');
-      let retryCount = 0;
-      const maxRetries = 3;
-      const retryDelay = 1000;
-      if (video) {
-        const playVideo = () => {
-          video.play()
-            .then(() => {
-              console.log('Background video is playing successfully');
-              retryCount = 0;
-            })
-            .catch(error => {
-              console.error(`Background video play failed (attempt ${retryCount + 1}):`, error);
-              if (retryCount < maxRetries) {
-                retryCount++;
-                setTimeout(playVideo, retryDelay);
-              } else {
-                console.error('Max retries reached. Video playback failed.');
-              }
-            });
-        };
-        playVideo();
-        video.addEventListener('canplay', () => console.log('Background video can play'));
-        video.addEventListener('playing', () => console.log('Background video is actively playing'));
-        video.addEventListener('error', (e) => console.error('Background video error:', e));
-        video.addEventListener('stalled', () => console.warn('Background video stalled'));
-        video.addEventListener('loadeddata', () => console.log('Background video data loaded'));
-        document.addEventListener('visibilitychange', () => {
-          if (document.visibilityState === 'visible') {
-            if (video.paused) {
-              playVideo();
-            }
-          } else {
-            video.pause();
-            console.log('Background video paused due to tab inactivity');
-          }
-        });
-        const forcePlayOnInteraction = () => {
-          if (video.paused) {
-            playVideo();
-            console.log('Attempting to play background video on user interaction');
-          }
-        };
-        window.addEventListener('scroll', forcePlayOnInteraction, { once: true });
-        window.addEventListener('click', forcePlayOnInteraction, { once: true });
+      const user = authData.user;
+      console.log('Auth user:', user);
+
+      // 2) build profile payload
+      const code = generateReferralCode();
+      const link = `https://prudentproexchange.net/referral/${code}`;
+      let photoUrl = null;
+      if (f.photo.files[0]) {
+        const file = f.photo.files[0];
+        const { data: upData, error: upErr } = await supabase.storage
+          .from('profile-photos')
+          .upload(`${user.id}/${file.name}`, file, { upsert: true });
+        if (upErr) console.warn('Upload err:', upErr);
+        else photoUrl = upData.path;
+      }
+      // lookup referrer id
+      let refId = null;
+      if (f.referral_code.value) {
+        const { data: ref, error: refErr } = await supabase
+          .from('profiles')
+          .select('id').eq('referral_code', f.referral_code.value)
+          .single();
+        if (ref && ref.id) refId = ref.id;
+      }
+
+      // 3) call RPC
+      const { error: profErr } = await supabase.rpc('insert_profile_with_password', {
+        p_id:               user.id,
+        p_email:            f.email.value.toLowerCase(),
+        p_first_name:       f.first_name.value,
+        p_last_name:        f.last_name.value,
+        p_username:         f.username.value,
+        p_country:          f.country.value,
+        p_referral_code:    code,
+        p_referral_link:    link,
+        p_photo_url:        photoUrl,
+        p_referred_by:      refId,
+        p_deposit_wallet:   0,
+        p_total_deposits:   0,
+        p_total_withdrawals:0,
+        p_total_invested:   0,
+        p_promo_pct:        0,
+        p_promo_offer:      0,
+        p_referral_earnings:0,
+        p_status:           'active',
+        p_password:         f.password.value
+      });
+      if (profErr) {
+        console.error(profErr);
+        document.getElementById('errorMsg').textContent = profErr.message;
       } else {
-        console.error('Background video element not found');
+        alert('✅ Test account created!');
+        console.log('Profile row should now exist.');
       }
     });
   </script>
+
 </body>
 </html>
