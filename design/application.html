@@ -5,19 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Test Apply • PrudentProExchange</title>
   <style>
-    body { font-family: sans-serif; padding: 2rem; background: #f5f5f5; }
-    form { max-width: 400px; margin: auto; background: #fff; padding: 1.5rem; border-radius: 8px; }
-    label { display: block; margin-bottom: .75rem; }
-    input, select { width: 100%; padding: .5rem; margin-top: .25rem; }
-    button { margin-top: 1rem; padding: .75rem 1.5rem; }
-    .error { color: red; margin-top: .5rem; }
+    body { font-family: sans-serif; padding: 2rem; background: #f0f2f5; }
+    form { max-width: 400px; margin: auto; background: #fff; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);}
+    label { display: block; margin-bottom: 1rem; }
+    input, select { width: 100%; padding: .5rem; margin-top: .25rem; border: 1px solid #ccc; border-radius: 4px; }
+    button { margin-top: 1rem; padding: .75rem 1.5rem; background: #0069d9; color: #fff; border: none; border-radius: 4px; cursor: pointer; }
+    button:disabled { background: #999; }
+    .error { color: #b00020; margin-top: .5rem; }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
-  <h2>Test Sign-Up Form</h2>
-  <form id="testForm">
+  <h2 style="text-align:center;">PrudentProExchange Test Sign-Up</h2>
+  <form id="testForm" novalidate>
     <label>
       First Name
       <input type="text" name="first_name" required />
@@ -41,7 +42,6 @@
         <option value="GB">United Kingdom</option>
         <option value="US">United States</option>
         <option value="NG">Nigeria</option>
-        <!-- add more as needed -->
       </select>
     </label>
     <label>
@@ -60,7 +60,7 @@
       Profile Photo (optional)
       <input type="file" name="photo" accept="image/*" />
     </label>
-    <button type="submit">Create Account</button>
+    <button type="submit" id="submitBtn">Create Account</button>
     <p class="error" id="errorMsg"></p>
   </form>
 
@@ -68,7 +68,7 @@
     // Initialize Supabase
     const supabase = supabase.createClient(
       'https://iwkdznjqfbsfkscnbrkc.supabase.co',
-      'PUBLIC_ANON_KEY' // replace with your anon key
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3Znp6bmpxZmJzZmtzY25icmtjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2Mjk2ODgsImV4cCI6MjA2NjIwNTY4OH0.eRiXpUKP0zAMI9brPHFMxdSwZITGHxu8BPRQprkAbiU'
     );
 
     function generateReferralCode(len = 8) {
@@ -78,76 +78,84 @@
 
     document.getElementById('testForm').addEventListener('submit', async e => {
       e.preventDefault();
-      document.getElementById('errorMsg').textContent = '';
       const f = e.target;
-      // basic validation
+      const errorEl = document.getElementById('errorMsg');
+      errorEl.textContent = '';
+      document.getElementById('submitBtn').disabled = true;
+
+      // Basic validation
       if (f.password.value !== f.confirm_password.value) {
-        return document.getElementById('errorMsg').textContent = "Passwords don't match.";
+        errorEl.textContent = "Passwords don't match.";
+        document.getElementById('submitBtn').disabled = false;
+        return;
       }
 
-      // 1) sign up
-      const { data: authData, error: signErr } = await supabase.auth.signUp({
-        email: f.email.value,
-        password: f.password.value,
-        options: { emailRedirectTo: window.location.href }
-      });
-      if (signErr) {
-        console.error(signErr);
-        return document.getElementById('errorMsg').textContent = signErr.message;
-      }
-      const user = authData.user;
-      console.log('Auth user:', user);
+      try {
+        // 1) Auth signup
+        const { data: authData, error: signErr } = await supabase.auth.signUp({
+          email: f.email.value,
+          password: f.password.value,
+          options: { emailRedirectTo: window.location.href }
+        });
+        if (signErr) throw signErr;
+        const user = authData.user;
 
-      // 2) build profile payload
-      const code = generateReferralCode();
-      const link = `https://prudentproexchange.net/referral/${code}`;
-      let photoUrl = null;
-      if (f.photo.files[0]) {
-        const file = f.photo.files[0];
-        const { data: upData, error: upErr } = await supabase.storage
-          .from('profile-photos')
-          .upload(`${user.id}/${file.name}`, file, { upsert: true });
-        if (upErr) console.warn('Upload err:', upErr);
-        else photoUrl = upData.path;
-      }
-      // lookup referrer id
-      let refId = null;
-      if (f.referral_code.value) {
-        const { data: ref, error: refErr } = await supabase
-          .from('profiles')
-          .select('id').eq('referral_code', f.referral_code.value)
-          .single();
-        if (ref && ref.id) refId = ref.id;
-      }
+        // 2) Photo upload
+        let photoUrl = null;
+        if (f.photo.files[0]) {
+          const file = f.photo.files[0];
+          const { data: upData, error: upErr } = await supabase.storage
+            .from('profile-photos')
+            .upload(`${user.id}/${file.name}`, file, { upsert: true });
+          if (upErr) console.warn('Upload error:', upErr);
+          else photoUrl = upData.path;
+        }
 
-      // 3) call RPC
-      const { error: profErr } = await supabase.rpc('insert_profile_with_password', {
-        p_id:               user.id,
-        p_email:            f.email.value.toLowerCase(),
-        p_first_name:       f.first_name.value,
-        p_last_name:        f.last_name.value,
-        p_username:         f.username.value,
-        p_country:          f.country.value,
-        p_referral_code:    code,
-        p_referral_link:    link,
-        p_photo_url:        photoUrl,
-        p_referred_by:      refId,
-        p_deposit_wallet:   0,
-        p_total_deposits:   0,
-        p_total_withdrawals:0,
-        p_total_invested:   0,
-        p_promo_pct:        0,
-        p_promo_offer:      0,
-        p_referral_earnings:0,
-        p_status:           'active',
-        p_password:         f.password.value
-      });
-      if (profErr) {
-        console.error(profErr);
-        document.getElementById('errorMsg').textContent = profErr.message;
-      } else {
+        // 3) Lookup referrer
+        let refId = null;
+        if (f.referral_code.value) {
+          const { data: ref, error: refErr } = await supabase
+            .from('profiles')
+            .select('id')
+            .eq('referral_code', f.referral_code.value)
+            .single();
+          if (refErr && refErr.code !== 'PGRST116') throw refErr;
+          if (ref) refId = ref.id;
+        }
+
+        // 4) Prepare and call RPC
+        const code = generateReferralCode();
+        const link = `https://prudentproexchange.net/referral/${code}`;
+
+        const { error: profErr } = await supabase.rpc('insert_profile_with_password', {
+          p_id:                user.id,
+          p_email:             f.email.value.toLowerCase(),
+          p_first_name:        f.first_name.value,
+          p_last_name:         f.last_name.value,
+          p_username:          f.username.value,
+          p_country:           f.country.value,
+          p_referral_code:     code,
+          p_referral_link:     link,
+          p_photo_url:         photoUrl,
+          p_referred_by:       refId,
+          p_deposit_wallet:    0,
+          p_total_deposits:    0,
+          p_total_withdrawals: 0,
+          p_total_invested:    0,
+          p_promo_pct:         0,
+          p_promo_offer:       0,
+          p_referral_earnings: 0,
+          p_status:            'active',
+          p_password:          f.password.value
+        });
+        if (profErr) throw profErr;
+
         alert('✅ Test account created!');
-        console.log('Profile row should now exist.');
+      } catch (err) {
+        console.error(err);
+        errorEl.textContent = err.message || JSON.stringify(err);
+      } finally {
+        document.getElementById('submitBtn').disabled = false;
       }
     });
   </script>
