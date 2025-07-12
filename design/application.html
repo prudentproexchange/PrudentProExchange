@@ -443,7 +443,7 @@
       const loadingSpinner = document.getElementById('loadingSpinner');
       submitButton.disabled = true;
       loadingSpinner.style.display = 'block';
-      let referrerId = null; // Define referrerId at the top to ensure scope
+      let referrerId = null;
       try {
         if (!form.checkValidity()) {
           form.reportValidity();
@@ -526,7 +526,7 @@
           last_name: form.last_name.value,
           username: form.username.value,
           country: form.country.value,
-          referral_code: form.referral_code.value || null,
+          referral_code: referralCode,
           referral_link: referralLink,
           photo_url: photoUrl,
           referred_by: referrerId,
@@ -583,7 +583,7 @@
           message: error.message,
           code: error.code || 'No code',
           details: error.details || 'No details',
-          referrerId: referrerId, // Fixed typo: was referrerld
+          referrerId: referrerId,
           formData: {
             email: form.email.value,
             username: form.username.value,
