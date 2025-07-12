@@ -16,6 +16,7 @@
       border-radius: 4px;
       text-align: center;
       display: none;
+      white-space: pre-wrap; /* Preserve newlines in error details */
     }
     .message.error {
       background-color: #f8d7da;
@@ -192,7 +193,7 @@
                   <option value="NG">Nigeria</option>
                 </select>
               </label>
-              < label>
+              <label>
                 Referral Code (optional)
                 <input type="text" name="referral_code" aria-label="Referral Code"/>
               </label>
@@ -331,7 +332,17 @@
           password: f.password.value,
           options: { emailRedirectTo: window.location.href }
         });
-        if (signErr) throw new Error(`Authentication Error: ${signErr.message}`);
+        if (signErr) {
+          console.error('❌ signUp error object:', signErr);
+          // Display every field returned
+          const details = [
+            `message: ${signErr.message}`,
+            `status:  ${signErr.status || '–'}`,
+            `code:    ${signErr.code || '–'}`,
+            `details: ${signErr.details || '–'}`
+          ].join('\n');
+          throw new Error(`Authentication Error:\n${details}`);
+        }
 
         const user = authData.user;
 
@@ -397,7 +408,7 @@
           window.location.href = 'dashboard.html'; // Replace with your success page URL
         }, 2000);
       } catch (err) {
-        showMessage(`Failed to Create Account: ${err.message}`);
+        showMessage(`Failed to Create Account:\n${err.message}`);
         submitBtn.classList.remove('loading');
         submitBtn.disabled = false;
       }
