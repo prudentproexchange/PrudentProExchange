@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet"/>
+  <!-- Supabase loaded first -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <style>
     /* Inline styles for consistency with dashboard */
@@ -21,7 +22,6 @@
     .card { background: var(--glass-bg); padding: 2rem; border: 1px solid var(--primary); border-radius: 20px; backdrop-filter: blur(10px); transition: transform 0.3s ease, box-shadow 0.3s ease; box-shadow: 0 4px 8px var(--shadow); }
     .investment-item { margin: 1rem 0; padding: 1rem; border: 1px solid var(--primary); border-radius: 10px; }
     .status-message { color: var(--text-color); }
-    /* Enhanced investment input field */
     #invest-amount {
       width: 100%;
       padding: 10px;
@@ -29,18 +29,61 @@
       border-radius: 5px;
       border: 1px solid var(--primary);
     }
-    /* Click to Invest button styles */
+    /* Ensure overlay is above video */
+    .overlay {
+      position: relative;
+    }
+    .bg-video {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      min-width: 100%;
+      min-height: 100%;
+      width: auto;
+      height: auto;
+      z-index: -1;
+      object-fit: cover;
+    }
+    /* NAV-drawer and dimming layer */
+    .nav-drawer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 250px;
+      transform: translateX(-100%);
+      transition: transform 0.3s;
+      z-index: 2;
+    }
+    .nav-drawer.open {
+      transform: translateX(0);
+    }
+    .nav-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 1;
+    }
+    .nav-overlay.nav-open {
+      display: block;
+    }
+    /* Click to Invest button */
     .investment-call-to-action {
+      position: relative;
       text-align: center;
       margin: 20px 0;
     }
     #click-to-invest-btn {
-      background: linear-gradient(45deg, #000000, #ffd700); /* Black to gold gradient */
+      background: linear-gradient(45deg, #000000, #ffd700);
       color: white;
       border: none;
       padding: 15px 30px;
       font-size: 18px;
-      border-radius: 50px; /* Pill-shaped button */
+      border-radius: 50px;
       cursor: pointer;
       animation: pulse 2s infinite;
     }
@@ -98,7 +141,6 @@
       </div>
       <div class="welcome-message">Welcome to Your Account Balance! <span id="welcomeName"></span></div>
     </div>
-    <!-- Click to Invest Button -->
     <div class="investment-call-to-action">
       <button id="click-to-invest-btn" class="btn invest-btn">Click to Invest</button>
     </div>
@@ -166,7 +208,7 @@
   <script>window.gtranslateSettings = {"default_language":"en","native_language_names":true,"detect_browser_language":true,"wrapper_selector":".gtranslate_wrapper","flag_style":"3d"}</script>
   <script src="https://cdn.gtranslate.net/widgets/latest/float.js" defer></script>
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-  <!-- Crisp Chat widget (corrected to match dashboard) -->
+  <!-- Crisp Chat widget -->
   <script type="text/javascript">
     window.$crisp = [];
     window.CRISP_WEBSITE_ID = "599e8216-ab4f-4d4f-bb22-5d47cf14031f";
@@ -178,6 +220,7 @@
       d.getElementsByTagName("head")[0].appendChild(s);
     })();
   </script>
+  <!-- Inline script after Supabase -->
   <script>
     // Initialize AOS
     AOS.init({ duration: 800, once: true });
@@ -230,85 +273,7 @@
 
     let investmentIntervals = [];
 
-    // Initialize page
-    async function initAccountBalance() {
-      showLoading('invest-loading', true);
-      try {
-        // Auth guard
-        const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
-        if (!user || authError) {
-          window.location.href = 'login.html';
-          return;
-        }
-
-        const userId = user.id;
-
-        // Load profile
-        const { data: profile, error: profileError } = await supabaseClient
-          .from('profiles')
-          .select('first_name, photo_url, deposit_wallet, interest_wallet')
-          .eq('id', userId)
-          .single();
-        if (profileError) throw profileError;
-
-        // Calculate total account balance
-        const depositWallet = profile.deposit_wallet || 0;
-        const interestWallet = profile.interest_wallet || 0;
-        const totalBalance = depositWallet + interestWallet;
-
-        // Update UI with null checks
-        const welcomeName = document.getElementById('welcomeName');
-        if (welcomeName) {
-          welcomeName.textContent = profile.first_name || 'User';
-        }
-
-        const depositWalletElement = document.getElementById('depositWallet');
-        if (depositWalletElement) {
-          depositWalletElement.textContent = formatCurrency(depositWallet);
-        }
-
-        const interestWalletElement = document.getElementById('interestWallet');
-        if (interestWalletElement) {
-          interestWalletElement.textContent = formatCurrency(interestWallet);
-        }
-
-        const accountBalanceElement = document.getElementById('accountBalance');
-        if (accountBalanceElement) {
-          accountBalanceElement.textContent = formatCurrency(totalBalance);
-        }
-
-        // Load profile photo with null checks
-        const navProfilePhoto = document.getElementById('navProfilePhoto');
-        const defaultProfileIcon = document.getElementById('defaultProfileIcon');
-        if (profile.photo_url && navProfilePhoto && defaultProfileIcon) {
-          const { data: urlData } = supabaseClient.storage
-            .from('profile-photos')
-            .getPublicUrl(profile.photo_url);
-          navProfilePhoto.src = urlData.publicUrl;
-          navProfilePhoto.style.display = 'block';
-          defaultProfileIcon.style.display = 'none';
-        } else if (navProfilePhoto && defaultProfileIcon) {
-          navProfilePhoto.style.display = 'none';
-          defaultProfileIcon.style.display = 'block';
-        }
-
-        // Initialize investment form with depositWallet and userId
-        initInvestmentForm(depositWallet, userId);
-
-        // Load active investments
-        await loadActiveInvestments(userId);
-
-        // Setup real-time subscriptions
-        setupRealtimeSubscriptions(userId);
-      } catch (err) {
-        showError('invest-error', 'Error initializing page: ' + err.message);
-        console.error('Init error:', err);
-      } finally {
-        showLoading('invest-loading', false);
-      }
-    }
-
-    // Updated initInvestmentForm to fetch plans and calculate dynamically
+    // Initialize investment form
     async function initInvestmentForm(depositWallet, userId) {
       const form = document.getElementById('invest-form');
       const amtInput = form.querySelector('#invest-amount');
@@ -393,7 +358,7 @@
           return;
         }
 
-        // Update UI immediately for feedback
+        // Update UI immediately
         document.getElementById('depositWallet').textContent = formatCurrency(newDepositWallet);
         const interestWallet = parseFloat(document.getElementById('interestWallet').textContent.replace(/[^0-9.-]+/g, '')) || 0;
         document.getElementById('accountBalance').textContent = formatCurrency(newDepositWallet + interestWallet);
@@ -643,67 +608,78 @@
     }
 
     // UI Interactions
-    const hamburgerBtn = document.getElementById('hamburgerBtn');
-    const navDrawer = document.getElementById('navDrawer');
-    const overlay = document.querySelector('.nav-overlay');
-    if (hamburgerBtn && navDrawer && overlay) {
-      hamburgerBtn.addEventListener('click', () => {
-        navDrawer.classList.toggle('open');
-        hamburgerBtn.classList.toggle('active');
-        overlay.classList.toggle('nav-open');
-        if (navDrawer.classList.contains('open')) {
-          navDrawer.scrollTop = 0;
-        }
-      });
+    function setupUIInteractions() {
+      const hamburgerBtn = document.getElementById('hamburgerBtn');
+      const navDrawer = document.getElementById('navDrawer');
+      const overlay = document.querySelector('.nav-overlay');
+      if (hamburgerBtn && navDrawer && overlay) {
+        hamburgerBtn.addEventListener('click', () => {
+          navDrawer.classList.toggle('open');
+          hamburgerBtn.classList.toggle('active');
+          overlay.classList.toggle('nav-open');
+          if (navDrawer.classList.contains('open')) {
+            navDrawer.scrollTop = 0;
+          }
+        });
 
-      document.addEventListener('click', (event) => {
-        const isClickInsideNav = navDrawer.contains(event.target);
-        const isClickOnHamburger = hamburgerBtn.contains(event.target);
-        if (!isClickInsideNav && !isClickOnHamburger && navDrawer.classList.contains('open')) {
-          navDrawer.classList.remove('open');
-          hamburgerBtn.classList.remove('active');
-          overlay.classList.remove('nav-open');
-        }
-      });
-    }
+        document.addEventListener('click', (event) => {
+          const isClickInsideNav = navDrawer.contains(event.target);
+          const isClickOnHamburger = hamburgerBtn.contains(event.target);
+          if (!isClickInsideNav && !isClickOnHamburger && navDrawer.classList.contains('open')) {
+            navDrawer.classList.remove('open');
+            hamburgerBtn.classList.remove('active');
+            overlay.classList.remove('nav-open');
+          }
+        });
+      }
 
-    const themeToggle = document.getElementById('theme-toggle');
-    if (themeToggle) {
-      themeToggle.addEventListener('click', () => {
-        document.body.classList.toggle('light-theme');
-        const icon = themeToggle.querySelector('i');
-        icon.classList.toggle('fa-moon');
-        icon.classList.toggle('fa-sun');
-      });
-    }
+      const themeToggle = document.getElementById('theme-toggle');
+      if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+          document.body.classList.toggle('light-theme');
+          const icon = themeToggle.querySelector('i');
+          icon.classList.toggle('fa-moon');
+          icon.classList.toggle('fa-sun');
+        });
+      }
 
-    const accountToggle = document.getElementById('account-toggle');
-    const submenu = accountToggle ? accountToggle.nextElementSibling : null;
-    if (accountToggle && submenu) {
-      accountToggle.addEventListener('click', (e) => {
-        e.preventDefault();
-        submenu.classList.toggle('open');
-      });
-    }
+      const accountToggle = document.getElementById('account-toggle');
+      const submenu = accountToggle ? accountToggle.nextElementSibling : null;
+      if (accountToggle && submenu) {
+        accountToggle.addEventListener('click', (e) => {
+          e.preventDefault();
+          submenu.classList.toggle('open');
+        });
+      }
 
-    const backToTop = document.getElementById('back-to-top');
-    if (backToTop) {
-      backToTop.addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      });
-    }
+      const backToTop = document.getElementById('back-to-top');
+      if (backToTop) {
+        backToTop.addEventListener('click', () => {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      }
 
-    const logoutBtn = document.getElementById('logout-btn');
-    if (logoutBtn) {
-      logoutBtn.addEventListener('click', async () => {
-        try {
-          const { error } = await supabaseClient.auth.signOut();
-          if (error) throw error;
-          window.location.href = 'login.html';
-        } catch (err) {
-          showError('invest-error', 'Error logging out: ' + err.message);
-        }
-      });
+      const logoutBtn = document.getElementById('logout-btn');
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', async () => {
+          try {
+            const { error } = await supabaseClient.auth.signOut();
+            if (error) throw error;
+            window.location.href = 'login.html';
+          } catch (err) {
+            showError('invest-error', 'Error logging out: ' + err.message);
+          }
+        });
+      }
+
+      const clickToInvestBtn = document.getElementById('click-to-invest-btn');
+      const investAmountInput = document.getElementById('invest-amount');
+      if (clickToInvestBtn && investAmountInput) {
+        clickToInvestBtn.addEventListener('click', () => {
+          investAmountInput.scrollIntoView({ behavior: 'smooth' });
+          investAmountInput.focus();
+        });
+      }
     }
 
     function updateTimes() {
@@ -726,47 +702,117 @@
         utcTime.textContent = now.toUTCString();
       }
     }
-    setInterval(updateTimes, 1000);
-    updateTimes();
 
-    const video = document.querySelector('.bg-video');
-    if (video) {
-      let retryCount = 0;
-      const maxRetries = 3;
-      const retryDelay = 1000;
-      const playVideo = () => {
-        video.play()
-          .then(() => retryCount = 0)
-          .catch(error => {
-            console.error(`Video play failed (attempt ${retryCount + 1}):`, error);
-            if (retryCount < maxRetries) {
-              retryCount++;
-              setTimeout(playVideo, retryDelay);
-            }
-          });
-      };
-      playVideo();
-      document.addEventListener('visibilitychange', () => {
-        if (document.visibilityState === 'visible' && video.paused) {
-          playVideo();
-        } else {
-          video.pause();
-        }
-      });
-    }
-
-    // Click to Invest Button Functionality
-    const clickToInvestBtn = document.getElementById('click-to-invest-btn');
-    const investAmountInput = document.getElementById('invest-amount');
-    if (clickToInvestBtn && investAmountInput) {
-      clickToInvestBtn.addEventListener('click', () => {
-        investAmountInput.scrollIntoView({ behavior: 'smooth' });
-        investAmountInput.focus();
-      });
+    function setupVideoPlayback() {
+      const video = document.querySelector('.bg-video');
+      if (video) {
+        let retryCount = 0;
+        const maxRetries = 3;
+        const retryDelay = 1000;
+        const playVideo = () => {
+          video.play()
+            .then(() => retryCount = 0)
+            .catch(error => {
+              console.error(`Video play failed (attempt ${retryCount + 1}):`, error);
+              if (retryCount < maxRetries) {
+                retryCount++;
+                setTimeout(playVideo, retryDelay);
+              }
+            });
+        };
+        playVideo();
+        document.addEventListener('visibilitychange', () => {
+          if (document.visibilityState === 'visible' && video.paused) {
+            playVideo();
+          } else {
+            video.pause();
+          }
+        });
+      }
     }
 
     // Initialize page
-    initAccountBalance();
+    async function initAccountBalance() {
+      showLoading('invest-loading', true);
+      try {
+        // Auth guard
+        const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
+        if (!user || authError) {
+          window.location.href = 'login.html';
+          return;
+        }
+
+        const userId = user.id;
+
+        // Load profile
+        const { data: profile, error: profileError } = await supabaseClient
+          .from('profiles')
+          .select('first_name, photo_url, deposit_wallet, interest_wallet')
+          .eq('id', userId)
+          .single();
+        if (profileError) throw profileError;
+
+        // Calculate total account balance
+        const depositWallet = profile.deposit_wallet || 0;
+        const interestWallet = profile.interest_wallet || 0;
+        const totalBalance = depositWallet + interestWallet;
+
+        // Update UI
+        const welcomeName = document.getElementById('welcomeName');
+        if (welcomeName) {
+          welcomeName.textContent = profile.first_name || 'User';
+        }
+
+        const depositWalletElement = document.getElementById('depositWallet');
+        if (depositWalletElement) {
+          depositWalletElement.textContent = formatCurrency(depositWallet);
+        }
+
+        const interestWalletElement = document.getElementById('interestWallet');
+        if (interestWalletElement) {
+          interestWalletElement.textContent = formatCurrency(interestWallet);
+        }
+
+        const accountBalanceElement = document.getElementById('accountBalance');
+        if (accountBalanceElement) {
+          accountBalanceElement.textContent = formatCurrency(totalBalance);
+        }
+
+        // Load profile photo
+        const navProfilePhoto = document.getElementById('navProfilePhoto');
+        const defaultProfileIcon = document.getElementById('defaultProfileIcon');
+        if (profile.photo_url && navProfilePhoto && defaultProfileIcon) {
+          const { data: urlData } = supabaseClient.storage
+            .from('profile-photos')
+            .getPublicUrl(profile.photo_url);
+          navProfilePhoto.src = urlData.publicUrl;
+          navProfilePhoto.style.display = 'block';
+          defaultProfileIcon.style.display = 'none';
+        } else if (navProfilePhoto && defaultProfileIcon) {
+          navProfilePhoto.style.display = 'none';
+          defaultProfileIcon.style.display = 'block';
+        }
+
+        // Initialize investment form and load investments
+        await initInvestmentForm(depositWallet, userId);
+        await loadActiveInvestments(userId);
+        setupRealtimeSubscriptions(userId);
+      } catch (err) {
+        showError('invest-error', 'Error initializing page: ' + err.message);
+        console.error('Init error:', err);
+      } finally {
+        showLoading('invest-loading', false);
+      }
+    }
+
+    // Run initialization after DOM is loaded
+    document.addEventListener('DOMContentLoaded', () => {
+      initAccountBalance();
+      setupUIInteractions();
+      setInterval(updateTimes, 1000);
+      updateTimes();
+      setupVideoPlayback();
+    });
   </script>
 </body>
 </html>
