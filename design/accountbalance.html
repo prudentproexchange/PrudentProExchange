@@ -45,18 +45,9 @@
       animation: pulse 2s infinite;
     }
     @keyframes pulse {
-      0% {
-        transform: scale(1);
-        opacity: 1;
-      }
-      50% {
-        transform: scale(1.05);
-        opacity: 0.9;
-      }
-      100% {
-        transform: scale(1);
-        opacity: 1;
-      }
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.05); opacity: 0.9; }
+      100% { transform: scale(1); opacity: 1; }
     }
   </style>
 </head>
@@ -137,8 +128,8 @@
           <p id="invest-validation" class="error-message"></p>
           <div id="investment-details" style="display: none;">
             <p>Selected Plan: <span id="selected-plan"></span></p>
-            <p>ROI: <span id="weekly-roi"></span></p>
-            <p>Profit: <span id="weekly-profit"></span></p>
+            <p>Weekly ROI: <span id="weekly-roi"></span></p>
+            <p>Weekly Profit: <span id="weekly-profit"></span></p>
           </div>
           <button type="submit" id="invest-btn" class="btn" disabled>Start Investment</button>
         </form>
@@ -175,10 +166,10 @@
   <script>window.gtranslateSettings = {"default_language":"en","native_language_names":true,"detect_browser_language":true,"wrapper_selector":".gtranslate_wrapper","flag_style":"3d"}</script>
   <script src="https://cdn.gtranslate.net/widgets/latest/float.js" defer></script>
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-  <!-- Crisp Chat widget -->
+  <!-- Crisp Chat widget (corrected to match dashboard) -->
   <script type="text/javascript">
     window.$crisp = [];
-    window.CRISP_WEBSITE_ID = "peclwowoqcbxhfe3wbowfneh1rabrdjz";
+    window.CRISP_WEBSITE_ID = "599e8216-ab4f-4d4f-bb22-5d47cf14031f";
     (function () {
       d = document;
       s = d.createElement("script");
@@ -301,8 +292,8 @@
           defaultProfileIcon.style.display = 'block';
         }
 
-        // Initialize investment form
-        await initInvestmentForm(totalBalance, userId, depositWallet);
+        // Initialize investment form with depositWallet and userId
+        initInvestmentForm(depositWallet, userId);
 
         // Load active investments
         await loadActiveInvestments(userId);
@@ -317,133 +308,102 @@
       }
     }
 
-    async function initInvestmentForm(totalBalance, userId, depositWallet) {
-      const investForm = document.getElementById('invest-form');
-      const investAmount = document.getElementById('invest-amount');
-      const investBtn = document.getElementById('invest-btn');
-      const validationMessage = document.getElementById('invest-validation');
-      const investmentDetails = document.getElementById('investment-details');
-      const selectedPlan = document.getElementById('selected-plan');
-      const weeklyRoi = document.getElementById('weekly-roi');
-      const weeklyProfit = document.getElementById('weekly-profit');
+    // Updated initInvestmentForm to fetch plans and calculate dynamically
+    async function initInvestmentForm(depositWallet, userId) {
+      const form = document.getElementById('invest-form');
+      const amtInput = form.querySelector('#invest-amount');
+      const btn = form.querySelector('#invest-btn');
+      const details = document.getElementById('investment-details');
+      const selPlan = document.getElementById('selected-plan');
+      const roiEl = document.getElementById('weekly-roi');
+      const profitEl = document.getElementById('weekly-profit');
+      let chosenPlan = null;
 
-      if (!investForm || !investAmount || !investBtn || !validationMessage || !investmentDetails || !selectedPlan || !weeklyRoi || !weeklyProfit) {
-        console.error('Investment form elements missing');
-        showError('invest-error', 'Investment form setup failed. Please try again.');
+      // Fetch real plans from the database
+      const { data: allPlans, error: plansError } = await supabaseClient
+        .from('plans')
+        .select('id,name,min_amount,max_amount,roi_pct,duration_days');
+      if (plansError) {
+        showError('invest-error', 'Error fetching plans: ' + plansError.message);
         return;
       }
 
-      // Fetch plans from Supabase
-      let plans = [];
-      try {
-        const { data, error } = await supabaseClient
-          .from('plans')
-          .select('id, name, min_investment, max_investment, roi_pct, duration_days')
-          .order('min_investment', { ascending: true });
-        if (error) throw error;
-        if (!data || data.length === 0) {
-          throw new Error('No investment plans available.');
-        }
-        plans = data;
-      } catch (err) {
-        showError('invest-error', 'Error fetching investment plans: ' + err.message);
-        console.error('Plan fetch error:', err);
-        return;
-      }
-
-      investAmount.addEventListener('input', () => {
-        const amount = parseFloat(investAmount.value);
-        validationMessage.textContent = '';
-        investmentDetails.style.display = 'none';
-        investBtn.disabled = true;
-
-        if (isNaN(amount) || amount < plans[0].min_investment) {
-          validationMessage.textContent = `Amount must be at least $${plans[0].min_investment}`;
+      amtInput.oninput = () => {
+        const v = parseFloat(amtInput.value);
+        if (isNaN(v) || v < 200 || v > depositWallet) {
+          btn.disabled = true;
+          details.style.display = 'none';
           return;
         }
-        if (amount > totalBalance) {
-          validationMessage.textContent = 'Amount exceeds your total account balance';
+        chosenPlan = allPlans.find(p => v >= p.min_amount && v <= p.max_amount);
+        if (!chosenPlan) {
+          btn.disabled = true;
+          details.style.display = 'none';
           return;
         }
-        if (amount > depositWallet) {
-          validationMessage.textContent = 'Amount exceeds your deposit wallet balance';
-          return;
-        }
+        selPlan.textContent = chosenPlan.name;
+        roiEl.textContent = `${chosenPlan.roi_pct}%`;
+        profitEl.textContent = formatCurrency((v * chosenPlan.roi_pct) / 100);
+        details.style.display = 'block';
+        btn.disabled = false;
+      };
 
-        const plan = plans.find(p => amount >= p.min_investment && (amount <= p.max_investment || p.max_investment === null));
-        if (!plan) {
-          validationMessage.textContent = 'Invalid amount for any investment plan';
-          return;
-        }
-
-        selectedPlan.textContent = plan.name;
-        weeklyRoi.textContent = `${plan.roi_pct}%`;
-        weeklyProfit.textContent = formatCurrency((amount * plan.roi_pct) / 100);
-        investmentDetails.style.display = 'block';
-        investBtn.disabled = false;
-      });
-
-      investForm.addEventListener('submit', async (e) => {
+      form.onsubmit = async e => {
         e.preventDefault();
-        showLoading('invest-loading', true);
-        try {
-          const amount = parseFloat(investAmount.value);
-          if (isNaN(amount) || amount < plans[0].min_investment || amount > totalBalance || amount > depositWallet) {
-            throw new Error('Invalid investment amount');
-          }
-
-          const plan = plans.find(p => amount >= p.min_investment && (amount <= p.max_investment || p.max_investment === null));
-          if (!plan) throw new Error('No matching investment plan');
-
-          // Calculate investment details
-          const totalProfit = (amount * plan.roi_pct) / 100;
-          const startTime = new Date();
-          const endTime = new Date(startTime.getTime() + plan.duration_days * 24 * 60 * 60 * 1000);
-
-          // Insert investment
-          const { error: investError } = await supabaseClient
-            .from('investments')
-            .insert({
-              user_id: userId,
-              plan_id: plan.id,
-              principal: amount,
-              total_profit: totalProfit,
-              start_time: startTime.toISOString(),
-              end_time: endTime.toISOString(),
-              status: 'active'
-            });
-          if (investError) throw investError;
-
-          // Update deposit wallet
-          const newDepositWallet = depositWallet - amount;
-          const { error: profileError } = await supabaseClient
-            .from('profiles')
-            .update({ deposit_wallet: newDepositWallet })
-            .eq('id', userId);
-          if (profileError) throw profileError;
-
-          // Update UI
-          const depositWalletElement = document.getElementById('depositWallet');
-          const interestWalletElement = document.getElementById('interestWallet');
-          const accountBalanceElement = document.getElementById('accountBalance');
-          if (depositWalletElement) {
-            depositWalletElement.textContent = formatCurrency(newDepositWallet);
-          }
-          if (interestWalletElement && accountBalanceElement) {
-            const currentInterest = parseFloat(interestWalletElement.textContent.replace(/[^0-9.-]+/g, '')) || 0;
-            accountBalanceElement.textContent = formatCurrency(newDepositWallet + currentInterest);
-          }
-          showSuccess('invest-success', 'Investment started successfully!');
-          investForm.reset();
-          investmentDetails.style.display = 'none';
-          await loadActiveInvestments(userId);
-        } catch (err) {
-          showError('invest-error', 'Error starting investment: ' + err.message);
-          console.error('Investment error:', err);
-        } finally {
-          showLoading('invest-loading', false);
+        btn.disabled = true;
+        const v = parseFloat(amtInput.value);
+        if (!chosenPlan) {
+          showError('invest-error', 'Please select a valid plan');
+          btn.disabled = false;
+          return;
         }
-      });
+
+        // Calculate profit and maturity date
+        const profit = (v * chosenPlan.roi_pct) / 100;
+        const start = new Date();
+        const end = new Date(start.getTime() + chosenPlan.duration_days * 24 * 60 * 60 * 1000);
+
+        // Insert investment into the investments table
+        const { error: invErr } = await supabaseClient
+          .from('investments')
+          .insert({
+            user_id: userId,
+            plan_id: chosenPlan.id,
+            principal: v,
+            total_profit: profit,
+            start_time: start.toISOString(),
+            end_time: end.toISOString(),
+            status: 'active'
+          });
+        if (invErr) {
+          showError('invest-error', 'Error starting investment: ' + invErr.message);
+          btn.disabled = false;
+          return;
+        }
+
+        // Update deposit wallet in the database
+        const newDepositWallet = depositWallet - v;
+        const { error: profileError } = await supabaseClient
+          .from('profiles')
+          .update({ deposit_wallet: newDepositWallet })
+          .eq('id', userId);
+        if (profileError) {
+          showError('invest-error', 'Error updating wallet: ' + profileError.message);
+          btn.disabled = false;
+          return;
+        }
+
+        // Update UI immediately for feedback
+        document.getElementById('depositWallet').textContent = formatCurrency(newDepositWallet);
+        const interestWallet = parseFloat(document.getElementById('interestWallet').textContent.replace(/[^0-9.-]+/g, '')) || 0;
+        document.getElementById('accountBalance').textContent = formatCurrency(newDepositWallet + interestWallet);
+
+        showSuccess('invest-success', 'Investment started successfully!');
+        await loadActiveInvestments(userId);
+        form.reset();
+        details.style.display = 'none';
+        btn.disabled = false;
+      };
     }
 
     async function loadActiveInvestments(userId) {
@@ -586,7 +546,8 @@
           const elapsedSeconds = (now - startTime) / 1000;
           const currentProfit = Math.min(elapsedSeconds * profitPerSecond, total_profit);
           currentProfitSpan.textContent = formatCurrency(currentProfit);
-          timeLeftSpan.textContent = formatTimeLeft(endTime - now);
+          const timeLeftMs = endTime - now;
+          timeLeftSpan.textContent = formatTimeLeft(timeLeftMs);
           statusMessage.textContent = 'Investment in progress';
         } else if (status === 'profit_ready') {
           currentProfitSpan.textContent = formatCurrency(total_profit);
@@ -633,7 +594,7 @@
           if (accountBalanceElement) {
             accountBalanceElement.textContent = formatCurrency(totalBalance);
           }
-          await initInvestmentForm(totalBalance, userId, deposit_wallet || 0);
+          initInvestmentForm(deposit_wallet || 0, userId);
         })
         .subscribe();
 
@@ -672,7 +633,7 @@
             ? `Profits transfer in ${Math.ceil((profitDate - now) / (1000 * 60 * 60 * 24))} days`
             : 'Profits transferring soon';
         } else if (investment.status === 'profit_transferred') {
-.          timeLeftSpan.textContent = 'Profits transferred';
+          timeLeftSpan.textContent = 'Profits transferred';
           const capitalDate = new Date(endTime.getTime() + 14 * 24 * 60 * 60 * 1000);
           statusMessage.textContent = now < capitalDate 
             ? `Capital transfer in ${Math.ceil((capitalDate - now) / (1000 * 60 * 60 * 24))} days`
