@@ -137,8 +137,8 @@
           <p id="invest-validation" class="error-message"></p>
           <div id="investment-details" style="display: none;">
             <p>Selected Plan: <span id="selected-plan"></span></p>
-            <p>Weekly ROI: <span id="weekly-roi"></span></p>
-            <p>Weekly Profit: <span id="weekly-profit"></span></p>
+            <p>ROI: <span id="weekly-roi"></span></p>
+            <p>Profit: <span id="weekly-profit"></span></p>
           </div>
           <button type="submit" id="invest-btn" class="btn" disabled>Start Investment</button>
         </form>
@@ -237,15 +237,6 @@
       return `${days}d ${hours}h ${minutes}m ${secs}s`;
     }
 
-    // Investment plans (for frontend validation)
-    const plans = [
-      { name: 'The Dawn Star (Basic)', min: 200, max: 4999, weeklyRoi: 5 },
-      { name: 'The Nebula Glow (Standard)', min: 5000, max: 14999, weeklyRoi: 6.5 },
-      { name: 'The Lunar Crest (Silver)', min: 15000, max: 49999, weeklyRoi: 7.5 },
-      { name: 'The Solar Flare (Gold)', min: 50000, max: 99999, weeklyRoi: 8.5 },
-      { name: 'The Galactic Crown (Diamond)', min: 100000, max: Infinity, weeklyRoi: 10 }
-    ];
-
     let investmentIntervals = [];
 
     // Initialize page
@@ -311,7 +302,7 @@
         }
 
         // Initialize investment form
-        initInvestmentForm(totalBalance, userId, depositWallet);
+        await initInvestmentForm(totalBalance, userId, depositWallet);
 
         // Load active investments
         await loadActiveInvestments(userId);
@@ -326,7 +317,7 @@
       }
     }
 
-    function initInvestmentForm(totalBalance, userId, depositWallet) {
+    async function initInvestmentForm(totalBalance, userId, depositWallet) {
       const investForm = document.getElementById('invest-form');
       const investAmount = document.getElementById('invest-amount');
       const investBtn = document.getElementById('invest-btn');
@@ -338,6 +329,25 @@
 
       if (!investForm || !investAmount || !investBtn || !validationMessage || !investmentDetails || !selectedPlan || !weeklyRoi || !weeklyProfit) {
         console.error('Investment form elements missing');
+        showError('invest-error', 'Investment form setup failed. Please try again.');
+        return;
+      }
+
+      // Fetch plans from Supabase
+      let plans = [];
+      try {
+        const { data, error } = await supabaseClient
+          .from('plans')
+          .select('id, name, min_investment, max_investment, roi_pct, duration_days')
+          .order('min_investment', { ascending: true });
+        if (error) throw error;
+        if (!data || data.length === 0) {
+          throw new Error('No investment plans available.');
+        }
+        plans = data;
+      } catch (err) {
+        showError('invest-error', 'Error fetching investment plans: ' + err.message);
+        console.error('Plan fetch error:', err);
         return;
       }
 
@@ -347,8 +357,8 @@
         investmentDetails.style.display = 'none';
         investBtn.disabled = true;
 
-        if (isNaN(amount) || amount < 200) {
-          validationMessage.textContent = 'Amount must be at least $200';
+        if (isNaN(amount) || amount < plans[0].min_investment) {
+          validationMessage.textContent = `Amount must be at least $${plans[0].min_investment}`;
           return;
         }
         if (amount > totalBalance) {
@@ -360,15 +370,15 @@
           return;
         }
 
-        const plan = plans.find(p => amount >= p.min && amount <= p.max);
+        const plan = plans.find(p => amount >= p.min_investment && (amount <= p.max_investment || p.max_investment === null));
         if (!plan) {
           validationMessage.textContent = 'Invalid amount for any investment plan';
           return;
         }
 
         selectedPlan.textContent = plan.name;
-        weeklyRoi.textContent = `${plan.weeklyRoi}%`;
-        weeklyProfit.textContent = formatCurrency((amount * plan.weeklyRoi) / 100);
+        weeklyRoi.textContent = `${plan.roi_pct}%`;
+        weeklyProfit.textContent = formatCurrency((amount * plan.roi_pct) / 100);
         investmentDetails.style.display = 'block';
         investBtn.disabled = false;
       });
@@ -378,32 +388,24 @@
         showLoading('invest-loading', true);
         try {
           const amount = parseFloat(investAmount.value);
-          if (isNaN(amount) || amount < 200 || amount > totalBalance || amount > depositWallet) {
+          if (isNaN(amount) || amount < plans[0].min_investment || amount > totalBalance || amount > depositWallet) {
             throw new Error('Invalid investment amount');
           }
 
-          const plan = plans.find(p => amount >= p.min && amount <= p.max);
+          const plan = plans.find(p => amount >= p.min_investment && (amount <= p.max_investment || p.max_investment === null));
           if (!plan) throw new Error('No matching investment plan');
 
-          // Fetch plan UUID from Supabase
-          const { data: planData, error: planError } = await supabaseClient
-            .from('plans')
-            .select('id')
-            .eq('name', plan.name)
-            .single();
-          if (planError || !planData) throw new Error('Plan not found in database');
-
           // Calculate investment details
-          const totalProfit = (amount * plan.weeklyRoi * 16) / 100; // 16 weeks = 4 months
+          const totalProfit = (amount * plan.roi_pct) / 100;
           const startTime = new Date();
-          const endTime = new Date(startTime.getTime() + 16 * 7 * 24 * 60 * 60 * 1000); // 16 weeks
+          const endTime = new Date(startTime.getTime() + plan.duration_days * 24 * 60 * 60 * 1000);
 
           // Insert investment
           const { error: investError } = await supabaseClient
             .from('investments')
             .insert({
               user_id: userId,
-              plan_id: planData.id,
+              plan_id: plan.id,
               principal: amount,
               total_profit: totalProfit,
               start_time: startTime.toISOString(),
@@ -584,8 +586,7 @@
           const elapsedSeconds = (now - startTime) / 1000;
           const currentProfit = Math.min(elapsedSeconds * profitPerSecond, total_profit);
           currentProfitSpan.textContent = formatCurrency(currentProfit);
-          const timeLeftMs = endTime - now;
-          timeLeftSpan.textContent = formatTimeLeft(timeLeftMs);
+          timeLeftSpan.textContent = formatTimeLeft(endTime - now);
           statusMessage.textContent = 'Investment in progress';
         } else if (status === 'profit_ready') {
           currentProfitSpan.textContent = formatCurrency(total_profit);
@@ -632,7 +633,7 @@
           if (accountBalanceElement) {
             accountBalanceElement.textContent = formatCurrency(totalBalance);
           }
-          initInvestmentForm(totalBalance, userId, deposit_wallet || 0);
+          await initInvestmentForm(totalBalance, userId, deposit_wallet || 0);
         })
         .subscribe();
 
@@ -671,7 +672,7 @@
             ? `Profits transfer in ${Math.ceil((profitDate - now) / (1000 * 60 * 60 * 24))} days`
             : 'Profits transferring soon';
         } else if (investment.status === 'profit_transferred') {
-          timeLeftSpan.textContent = 'Profits transferred';
+.          timeLeftSpan.textContent = 'Profits transferred';
           const capitalDate = new Date(endTime.getTime() + 14 * 24 * 60 * 60 * 1000);
           statusMessage.textContent = now < capitalDate 
             ? `Capital transfer in ${Math.ceil((capitalDate - now) / (1000 * 60 * 60 * 24))} days`
