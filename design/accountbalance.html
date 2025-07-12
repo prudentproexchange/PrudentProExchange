@@ -32,6 +32,7 @@
     /* Ensure overlay is above video */
     .overlay {
       position: relative;
+      z-index: 1;
     }
     .bg-video {
       position: fixed;
@@ -58,7 +59,7 @@
     .nav-drawer.open {
       transform: translateX(0);
     }
-    .nav-overlay {
+    .drawer-backdrop {
       display: none;
       position: fixed;
       top: 0;
@@ -68,7 +69,7 @@
       background: rgba(0,0,0,0.5);
       z-index: 1;
     }
-    .nav-overlay.nav-open {
+    .drawer-backdrop.open {
       display: block;
     }
     /* Click to Invest button */
@@ -133,7 +134,7 @@
         <a href="transfer.html">Transfer</a>
       </nav>
     </header>
-    <div class="nav-overlay"></div>
+    <div class="drawer-backdrop"></div>
     <div class="profile-section">
       <div class="profile-container">
         <img id="navProfilePhoto" src="" alt="Profile" class="avatar" style="display: none;"/>
@@ -222,7 +223,15 @@
   </script>
   <!-- Inline script after Supabase -->
   <script>
-    // Initialize AOS
+    /*
+     * IMPORTANT: Verify Supabase RLS Policies in Supabase Dashboard -> Authentication -> Policies:
+     * - 'profiles' table: Ensure a policy allows users to select their own row (e.g., SELECT with auth.uid() = id).
+     * - 'plans' table: Ensure a public SELECT policy for authenticated users.
+     * - 'investments' table: Ensure policies allow INSERT for authenticated users and SELECT where user_id = auth.uid().
+     * Silent failures may occur if these policies are not correctly set.
+     */
+
+    // Initialize AOS (loaded after AOS script)
     AOS.init({ duration: 800, once: true });
 
     // Supabase client
@@ -290,8 +299,10 @@
         .select('id,name,min_amount,max_amount,roi_pct,duration_days');
       if (plansError) {
         showError('invest-error', 'Error fetching plans: ' + plansError.message);
+        console.error('Plans fetch error:', plansError);
         return;
       }
+      console.log('Plans fetched:', allPlans);
 
       amtInput.oninput = () => {
         const v = parseFloat(amtInput.value);
@@ -342,6 +353,7 @@
           });
         if (invErr) {
           showError('invest-error', 'Error starting investment: ' + invErr.message);
+          console.error('Investment insert error:', invErr);
           btn.disabled = false;
           return;
         }
@@ -354,6 +366,7 @@
           .eq('id', userId);
         if (profileError) {
           showError('invest-error', 'Error updating wallet: ' + profileError.message);
+          console.error('Profile update error:', profileError);
           btn.disabled = false;
           return;
         }
@@ -384,6 +397,7 @@
           .in('status', ['active', 'profit_ready', 'profit_transferred'])
           .order('start_time', { ascending: false });
         if (error) throw error;
+        console.log('Investments loaded:', investments);
 
         const container = document.getElementById('investments-container');
         const noInvestmentsDiv = document.getElementById('no-investments');
@@ -452,6 +466,7 @@
                   showSuccess('invest-success', 'Capital withdrawn successfully!');
                 } catch (err) {
                   showError('investments-error', 'Error withdrawing capital: ' + err.message);
+                  console.error('Withdraw error:', err);
                 }
               });
 
@@ -480,6 +495,7 @@
                   await loadActiveInvestments(userId);
                 } catch (err) {
                   showError('investments-error', 'Error during reinvestment: ' + err.message);
+                  console.error('Reinvest error:', err);
                 }
               });
             });
@@ -611,12 +627,12 @@
     function setupUIInteractions() {
       const hamburgerBtn = document.getElementById('hamburgerBtn');
       const navDrawer = document.getElementById('navDrawer');
-      const overlay = document.querySelector('.nav-overlay');
-      if (hamburgerBtn && navDrawer && overlay) {
+      const backdrop = document.querySelector('.drawer-backdrop');
+      if (hamburgerBtn && navDrawer && backdrop) {
         hamburgerBtn.addEventListener('click', () => {
           navDrawer.classList.toggle('open');
           hamburgerBtn.classList.toggle('active');
-          overlay.classList.toggle('nav-open');
+          backdrop.classList.toggle('open');
           if (navDrawer.classList.contains('open')) {
             navDrawer.scrollTop = 0;
           }
@@ -628,7 +644,7 @@
           if (!isClickInsideNav && !isClickOnHamburger && navDrawer.classList.contains('open')) {
             navDrawer.classList.remove('open');
             hamburgerBtn.classList.remove('active');
-            overlay.classList.remove('nav-open');
+            backdrop.classList.remove('open');
           }
         });
       }
@@ -668,6 +684,7 @@
             window.location.href = 'login.html';
           } catch (err) {
             showError('invest-error', 'Error logging out: ' + err.message);
+            console.error('Logout error:', err);
           }
         });
       }
@@ -733,16 +750,19 @@
 
     // Initialize page
     async function initAccountBalance() {
+      console.log('DOMContentLoaded, initializing...');
       showLoading('invest-loading', true);
       try {
         // Auth guard
         const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
         if (!user || authError) {
+          console.error('Auth check failed:', authError);
           window.location.href = 'login.html';
           return;
         }
 
         const userId = user.id;
+        console.log('User authenticated:', userId);
 
         // Load profile
         const { data: profile, error: profileError } = await supabaseClient
@@ -751,6 +771,7 @@
           .eq('id', userId)
           .single();
         if (profileError) throw profileError;
+        console.log('Profile loaded:', profile);
 
         // Calculate total account balance
         const depositWallet = profile.deposit_wallet || 0;
@@ -807,6 +828,7 @@
 
     // Run initialization after DOM is loaded
     document.addEventListener('DOMContentLoaded', () => {
+      console.log('DOMContentLoaded event fired');
       initAccountBalance();
       setupUIInteractions();
       setInterval(updateTimes, 1000);
