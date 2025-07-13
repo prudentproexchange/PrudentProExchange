@@ -3,61 +3,52 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Smartsupp Test Page</title>
+  <title>Smartsupp Live Chat Test</title>
   <style>
     body {
-      font-family: sans-serif;
+      font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
       display: flex;
       height: 100vh;
       align-items: center;
       justify-content: center;
-      background: #f0f0f0;
+      background: #eef2f5;
       color: #333;
     }
     .container {
       text-align: center;
-      padding: 2rem;
       background: #fff;
+      padding: 2rem 3rem;
       border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
     }
-    h1 { margin-bottom: .5rem; }
-    p { margin-top: 0; }
-    button {
-      margin-top: 1.5rem;
-      padding: .75rem 1.5rem;
-      border: none;
-      background: #007bcc;
-      color: #fff;
-      border-radius: 4px;
+    h1 {
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+    }
+    p {
       font-size: 1rem;
-      cursor: pointer;
-    }
-    button:hover {
-      background: #005fa3;
     }
   </style>
 </head>
 <body>
 
   <div class="container">
-    <h1>Welcome to Smartsupp Test</h1>
-    <p>If the chat widget is working, it should appear shortly in the bottom-right corner.</p>
-    <button onclick="alert('Test button clicked!')">Click Me</button>
+    <h1>Smartsupp Test Page</h1>
+    <p>If everything is correct, you should see the chat widget in the bottom-right corner.</p>
   </div>
 
-  <!-- Smartsupp Live Chat script (new key) -->
+  <!-- ✅ Smartsupp Live Chat script (working key) -->
   <script type="text/javascript">
     var _smartsupp = _smartsupp || {};
-    _smartsupp.key = '3153404f2fffa8b3332029c7c60110eb7f4f03cd';
-    window.smartsupp||(function(d) {
-      var s,c,o=smartsupp=function(){ o._.push(arguments)};o._=[];
-      s=d.getElementsByTagName('script')[0];c=d.createElement('script');
-      c.type='text/javascript';c.charset='utf-8';c.async=true;
-      c.src='https://www.smartsuppchat.com/loader.js?';
-      s.parentNode.insertBefore(c,s);
+    _smartsupp.key = '693fa0bf28467463eda0cb4f11fcde135c3675a6';
+    window.smartsupp || (function(d) {
+      var s, c, o = smartsupp = function () { o._.push(arguments) }; o._ = [];
+      s = d.getElementsByTagName('script')[0]; c = d.createElement('script');
+      c.type = 'text/javascript'; c.charset = 'utf-8'; c.async = true;
+      c.src = 'https://www.smartsuppchat.com/loader.js?';
+      s.parentNode.insertBefore(c, s);
     })(document);
   </script>
 
